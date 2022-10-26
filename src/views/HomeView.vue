@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { NDivider } from "naive-ui";
-import { NButton } from "naive-ui";
 </script>
 
 <template>
@@ -18,9 +17,5 @@ import { NButton } from "naive-ui";
     <p class="text-xl">Coming soon...</p>
 
     <NDivider class="my-8 w-1/2" />
-
-    <a href="https://fairdataihub.org/blog/bridge2AI-fairdataihub" target="_blank">
-      <n-button secondary type="primary" size="large">Learn more about fairhub.io...</n-button>
-    </a>
   </main>
 </template>
