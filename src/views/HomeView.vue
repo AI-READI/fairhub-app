@@ -1,6 +1,4 @@
-<script setup lang="ts">
-import { NDivider } from "naive-ui";
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <main class="flex h-screen w-screen flex-col items-center justify-center">
@@ -14,8 +12,6 @@ import { NDivider } from "naive-ui";
     <h1 class="pb-4 text-center text-4xl font-bold">
       A platform for sharing FAIR and AI-ready datasets
     </h1>
-    <p class="text-xl">Coming soon...</p>
-
-    <NDivider class="my-8 w-1/2" />
+    <p class="text-2xl">Coming soon...</p>
   </main>
 </template>
