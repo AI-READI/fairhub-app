@@ -1,0 +1,246 @@
+import { Meta, Canvas, Story } from "@storybook/addon-docs";
+import { NButton, NSpace, NDivider } from "naive-ui";
+import { html } from "code-tag";
+
+<Meta
+  title="Components/Button"
+  component={NButton}
+  argTypes={{
+    type: {
+      control: { type: "select" },
+      options: [
+        "default",
+        "primary",
+        "tertiary",
+        "info",
+        "success",
+        "warning",
+        "error",
+      ],
+    },
+    size: {
+      control: { type: "select" },
+      options: ["tiny", "small", "medium", "large"],
+    },
+    disabled: { control: { type: "boolean" } },
+    loading: { control: { type: "boolean" } },
+    circle: { control: { type: "boolean" } },
+    round: { control: { type: "boolean" } },
+  }}
+/>
+
+
+
+# Overview
+
+Buttons allow users to trigger an action or event with a single click. For example, you can use a button for allowing the functionality of submitting a form, opening a dialog, canceling an action, or performing a delete operation.
+
+<Canvas>
+  <Story name="Overview">
+    {() => {
+      return {
+        components: { NButton },
+        template: html`<n-button type="primary">Button</n-button>`,
+      };
+    }}
+  </Story>
+</Canvas>
+
+
+# Usage
+
+- Buttons may contain icon, on the left or the right side
+- Use 8 px spacing between buttons
+- Replace text with a loader if action is submitted, but still processing
+- Button width is set by it’s content, avoid changing it width
+- Use only one primary button, and any remaining calls to action should be represented as lower emphasis buttons
+
+# Variants
+
+There can be more than one button in a screen, but to create the hierarchy of actions we need to use different button styles.
+
+## Primary Buttons
+
+Our buttons should follow a specific type for each purpose. The primary button is used for the main action of the page.
+
+export const PrimaryTemplate = (args) => ({
+  components: { NButton, NSpace, NDivider },
+  setup() {
+    return { args };
+  },
+  template: html`<div>
+    <n-button v-bind="args">{{args.type}}</n-button>
+    <n-divider></n-divider>
+    <n-space>
+      <n-button type="default"> Default </n-button>
+      <n-button type="tertiary"> Tertiary </n-button>
+      <n-button type="primary"> Primary </n-button>
+      <n-button type="info"> Info </n-button>
+      <n-button type="success"> Success </n-button>
+      <n-button type="warning"> Warning </n-button>
+      <n-button type="error"> Error </n-button>
+    </n-space>
+  </div> `,
+});
+
+<Canvas>
+  <Story name="Primary" args={{ type: "default" }}>
+    {PrimaryTemplate.bind({})}
+  </Story>
+</Canvas>
+
+## Secondary Buttons
+
+Use secondary buttons for actions that are not the main focus of the page. This will help users to understand the hierarchy of actions and prevent them from mistaking their purpose in that specific component.
+
+export const SecondaryTemplate = (args) => ({
+  components: { NButton, NSpace, NDivider },
+  setup() {
+    return { args };
+  },
+  template: html`<div>
+    <n-button v-bind="args" secondary>{{args.type}}</n-button>
+    <n-divider></n-divider>
+    <n-space>
+      <n-button secondary> Default </n-button>
+      <n-button secondary type="tertiary"> Tertiary </n-button>
+      <n-button secondary type="primary"> Primary </n-button>
+      <n-button secondary type="info"> Info </n-button>
+      <n-button secondary type="success"> Success </n-button>
+      <n-button secondary type="warning"> Warning </n-button>
+      <n-button secondary type="error"> Error </n-button>
+      <n-button secondary round> Default </n-button>
+      <n-button secondary round type="primary"> Primary </n-button>
+      <n-button secondary round type="info"> Info </n-button>
+      <n-button secondary round type="success"> Success </n-button>
+      <n-button secondary round type="warning"> Warning </n-button>
+      <n-button secondary round type="error"> Error </n-button>
+    </n-space>
+  </div>`,
+});
+
+<Canvas>
+  <Story name="Secondary" args={{ type: "default" }}>
+    {SecondaryTemplate.bind({})}
+  </Story>
+</Canvas>
+
+## Tertiary Buttons
+
+This is a third type of button that is used for less important actions. It is used to reduce the visual weight of the button in the interface.  Use this as a secondary button, but with less emphasis.
+
+export const TertiaryTemplate = (args) => ({
+  components: { NButton, NSpace, NDivider },
+  setup() {
+    return { args };
+  },
+  template: html`<div>
+    <n-button v-bind="args" tertiary>{{args.type}}</n-button>
+    <n-divider></n-divider>
+    <n-space>
+      <n-button tertiary> Default </n-button>
+      <n-button tertiary type="primary"> Primary </n-button>
+      <n-button tertiary type="info"> Info </n-button>
+      <n-button tertiary type="success"> Success </n-button>
+      <n-button tertiary type="warning"> Warning </n-button>
+      <n-button tertiary type="error"> Error </n-button>
+      <n-button tertiary round> Default </n-button>
+      <n-button tertiary round type="primary"> Primary </n-button>
+      <n-button tertiary round type="info"> Info </n-button>
+      <n-button tertiary round type="success"> Success </n-button>
+      <n-button tertiary round type="warning"> Warning </n-button>
+      <n-button tertiary round type="error"> Error </n-button>
+    </n-space>
+  </div>`,
+});
+
+<Canvas>
+  <Story name="Tertiary" args={{ type: "default" }}>
+    {TertiaryTemplate.bind({})}
+  </Story>
+</Canvas>
+
+## Ghost Buttons
+
+Primarily supposed to be used in areas where adding contrast to the text is more important.
+
+export const GhostTemplate = (args) => ({
+  components: { NButton, NSpace, NDivider },
+  setup() {
+    return { args };
+  },
+  template: html`<div>
+    <n-button v-bind="args" ghost>{{args.type}}</n-button>
+    <n-divider></n-divider>
+    <n-space>
+      <n-button ghost> Default </n-button>
+      <n-button type="primary" ghost> Primary </n-button>
+      <n-button type="info" ghost> Info </n-button>
+      <n-button type="success" ghost> Success </n-button>
+      <n-button type="warning" ghost> Warning </n-button>
+      <n-button type="error" ghost> Error </n-button>
+    </n-space>
+  </div>`,
+});
+
+<Canvas>
+  <Story name="Ghost" args={{ type: "default" }}>
+    {GhostTemplate.bind({})}
+  </Story>
+</Canvas>
+
+## Dashed Buttons
+
+Dashed buttons are used to show that the action is not the main action of the page. An alternate style that can be used to show minor functions. Do not use this style of button too often.
+
+export const DashedTemplate = (args) => ({
+  components: { NButton, NSpace, NDivider },
+  setup() {
+    return { args };
+  },
+  template: html`<div>
+    <n-button v-bind="args" dashed>{{args.type}}</n-button>
+    <n-divider></n-divider>
+    <n-space>
+      <n-button dashed> Default </n-button>
+      <n-button type="primary" dashed> Primary </n-button>
+      <n-button type="info" dashed> Info </n-button>
+      <n-button type="success" dashed> Success </n-button>
+      <n-button type="warning" dashed> Warning </n-button>
+      <n-button type="error" dashed> Error </n-button>
+    </n-space>
+  </div>`,
+});
+
+<Canvas>
+  <Story name="Dashed" args={{ type: "default" }}>
+    {DashedTemplate.bind({})}
+  </Story>
+</Canvas>
+
+# Size
+
+When using buttons, you can choose from 4 different sizes. The default size is medium. The size of the button is determined by the height of the button. The width of the button is determined by the content.
+
+Use the appropriate size for the context. For example, use a large button for a page header, and use a small button for a form.
+
+export const SizesTemplate = (args) => ({
+  components: { NButton, NSpace, NDivider },
+  setup() {
+    return { args };
+  },
+  template: html`
+    <div class="flex justify-start items-center space-x-2">
+      <n-button v-bind="args" size="large">Large</n-button>
+      <n-button v-bind="args" size="medium">Medium</n-button>
+      <n-button v-bind="args" size="small">Small</n-button>
+      <n-button v-bind="args" size="tiny">Tiny</n-button>
+    </div>
+  `,
+});
+
+<Canvas>
+  <Story name="Sizes" args={{ type: "primary" }}>
+    {SizesTemplate.bind({})}
+  </Story>
+</Canvas>

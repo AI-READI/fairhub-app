@@ -1,0 +1,39 @@
+@import "./base.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.sb-show-main {
+  @apply bg-transparent font-sans;
+}
+
+.sbdocs.sbdocs-content > * {
+  @apply !font-sans !text-slate-700;
+}
+
+.story-content {
+  @apply w-full text-slate-700;
+  @apply mx-auto max-w-5xl;
+}
+
+.story-content > h1 {
+  @apply pb-4 text-3xl !font-semibold !text-slate-700;
+}
+
+.story-content > h2,
+.story-content > div > h2 {
+  @apply pb-4 text-2xl !font-semibold !text-slate-700;
+}
+
+.story-content > p {
+  @apply !pb-4 text-base;
+}
+
+.story-content > hr {
+  @apply !mt-4 mb-8 border-t-2 !border-slate-200;
+}
+
+.sbdocs.sbdocs-p > strong {
+  @apply font-bold;
+}
