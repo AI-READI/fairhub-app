@@ -13,6 +13,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api
 
     steps:
       - uses: actions/checkout@v2
@@ -21,12 +24,6 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: "3.8"
-
-      - name: Navigate to api folder
-        run: cd api
-
-      - name: List folder content
-        run: ls -la
 
       - name: Create and start virtual environment
         run: |
