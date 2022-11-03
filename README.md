@@ -62,7 +62,7 @@ npm run lint
 
 This repository is automatically deployed to [Azure](https://www.netlify.com/) on every push to the repository. If you need to reference a specific branch or pull request, you can do so by using the following URL pattern:
 
-https://brave-ground-07b6bfb10-<BRANCH_NAME>.centralus.2.azurestaticapps.net/
-https://brave-ground-07b6bfb10-<GITHUB_PR_NUMBER>.centralus.2.azurestaticapps.net/
+- https://brave-ground-07b6bfb10-<BRANCH_NAME>.centralus.2.azurestaticapps.net/
+- https://brave-ground-07b6bfb10-<GITHUB_PR_NUMBER>.centralus.2.azurestaticapps.net/
 
 The `production` branch is automatically deployed to the following URL: https://fairhub.io
