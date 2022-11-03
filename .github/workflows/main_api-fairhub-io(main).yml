@@ -25,6 +25,9 @@ jobs:
       - name: Navigate to api folder
         run: cd api
 
+      - name: List folder content
+        run: ls -la
+
       - name: Create and start virtual environment
         run: |
           python -m venv venv
