@@ -12,6 +12,6 @@
     <h1 class="pb-4 text-center text-4xl font-bold">
       A platform for sharing FAIR and AI-ready datasets
     </h1>
-    <p class="text-2xl">Coming soon...</p>
+    <p class="px-2 text-2xl">Coming soon...</p>
   </main>
 </template>
