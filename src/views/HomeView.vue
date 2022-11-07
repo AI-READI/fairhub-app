@@ -1,4 +1,16 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import axios from "axios";
+import { NButton, NDivider } from "naive-ui";
+import { ref } from "vue";
+
+const message = ref("");
+
+const pingServer = () => {
+  axios.get("https://api-fairhub-io-main.azurewebsites.net/hello").then((res) => {
+    message.value = res.data;
+  });
+};
+</script>
 
 <template>
   <main class="flex h-screen w-screen flex-col items-center justify-center">
@@ -13,5 +25,15 @@
       A platform for sharing FAIR and AI-ready datasets
     </h1>
     <p class="px-2 text-2xl">Coming soon...</p>
+
+    <NDivider class="my-8 w-1/2" />
+
+    <n-button secondary type="primary" size="large" @click="pingServer">
+      Ping api.fairhub.io
+    </n-button>
+
+    <span class="py-8 text-lg" v-if="message != ''">
+      Response from api.fairhub.io: {{ message }}
+    </span>
   </main>
 </template>
