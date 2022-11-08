@@ -3,11 +3,11 @@ name: Azure Static Web Apps CI/CD
 on:
   push:
     branches:
-      - production
+      - "**"
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
-      - production
+      - "**"
 
 jobs:
   build_and_deploy_job:
@@ -30,6 +30,7 @@ jobs:
           app_location: "/" # App source code path
           api_location: "" # Api source code path - optional
           output_location: "storybook-static" # Built app content directory - optional
+          app_build_command: "npm run build-storybook" # Build script (optional)
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
