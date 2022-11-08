@@ -1,4 +1,4 @@
-name: Azure Static Web Apps CI/CD
+name: Build frontend and deploy to Azure Static Web Apps (brave-ground-07b6bfb10)
 
 on:
   push:

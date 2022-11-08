@@ -1,4 +1,4 @@
-name: Azure Static Web Apps CI/CD
+name: Build Storybook and deploy to Azure Static Web Apps (white-ocean-00e852610)
 
 on:
   push:
