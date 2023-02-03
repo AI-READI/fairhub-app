@@ -5,7 +5,8 @@ import {
   WineOutline as WineIcon,
 } from "@vicons/ionicons5";
 import { NIcon, NLayout, NLayoutContent, NLayoutSider, NMenu, NSpace } from "naive-ui";
-import { Component, h } from "vue";
+import type { Component } from "vue";
+import { h } from "vue";
 import { RouterView } from "vue-router";
 
 // eslint-disable-next-line no-undef
