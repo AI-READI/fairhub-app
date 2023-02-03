@@ -14042,7 +14042,7 @@ vue-tsc@^0.40.7:
     "@volar/vue-language-core" "0.40.13"
     "@volar/vue-typescript" "0.40.13"
 
-vue3-lottie@^2.3.4:
+vue3-lottie@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/vue3-lottie/-/vue3-lottie-2.4.0.tgz#84fecd68d22beae808a9cc0ee89112435347e242"
   integrity sha512-arNBADu3vW+1Lf+Pw32mU9T6X7c1bMn1tBvJ0/uo+W0G/0UxHyCwoXzyYIKZWB0WoeEvdo5x7HCf8VH0J7rLsw==
