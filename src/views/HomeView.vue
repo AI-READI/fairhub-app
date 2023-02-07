@@ -13,7 +13,7 @@ const pingServer = () => {
 </script>
 
 <template>
-  <main class="flex h-screen w-screen flex-col items-center justify-center">
+  <main class="flex h-full w-full flex-col items-center justify-center">
     <div class="pb-3">
       <Vue3Lottie
         animationLink="https://assets8.lottiefiles.com/private_files/lf30_lbLg6b.json"
@@ -28,9 +28,15 @@ const pingServer = () => {
 
     <NDivider class="my-8 w-1/2" />
 
-    <n-button secondary type="primary" size="large" @click="pingServer">
-      Ping api.fairhub.io
-    </n-button>
+    <div class="flex space-x-4">
+      <n-button secondary type="primary" size="large" @click="pingServer">
+        Ping api.fairhub.io
+      </n-button>
+
+      <router-link to="/studies">
+        <n-button secondary type="primary" size="large"> Go to studies </n-button>
+      </router-link>
+    </div>
 
     <span class="py-8 text-lg" v-if="message != ''">
       Response from api.fairhub.io: {{ message }}

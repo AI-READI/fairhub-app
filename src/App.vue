@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import {
-  BookOutline as BookIcon,
-  PersonOutline as PersonIcon,
-  WineOutline as WineIcon,
-} from "@vicons/ionicons5";
-import { NIcon, NLayout, NLayoutContent, NLayoutSider, NMenu, NSpace } from "naive-ui";
+import { ChartNetwork } from "@vicons/carbon";
+import { PersonCircleOutline, SearchSharp } from "@vicons/ionicons5";
+import { LogOutSharp } from "@vicons/material";
+import { NAvatar, NDropdown, NIcon, NInput, NLayout, NLayoutContent, NSpace } from "naive-ui";
 import type { Component } from "vue";
 import { h } from "vue";
 import { RouterView } from "vue-router";
+
+import AppSidebar from "./components/sidebar/AppSidebar.vue";
 
 // eslint-disable-next-line no-undef
 const development = process.env.NODE_ENV === "development";
@@ -16,114 +16,104 @@ function renderIcon(icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) });
 }
 
-const menuOptions = [
+const profileOptions = [
   {
-    label: "Hear the Wind Sing",
-    key: "hear-the-wind-sing",
-    icon: renderIcon(BookIcon),
+    label: "View Profile",
+    key: "view-profile",
+    icon: renderIcon(PersonCircleOutline),
   },
   {
-    label: "Pinball 1973",
-    key: "pinball-1973",
-    icon: renderIcon(BookIcon),
-    disabled: true,
-    children: [
-      {
-        label: "Rat",
-        key: "rat",
-      },
-    ],
+    label: "Integrations",
+    key: "integrations",
+    icon: renderIcon(ChartNetwork),
   },
   {
-    label: "A Wild Sheep Chase",
-    key: "a-wild-sheep-chase",
-    disabled: true,
-    icon: renderIcon(BookIcon),
+    type: "divider",
+    key: "d1",
   },
   {
-    label: "Dance Dance Dance",
-    key: "Dance Dance Dance",
-    icon: renderIcon(BookIcon),
-    children: [
-      {
-        type: "group",
-        label: "People",
-        key: "people",
-        children: [
-          {
-            label: "Narrator",
-            key: "narrator",
-            icon: renderIcon(PersonIcon),
-          },
-          {
-            label: "Sheep Man",
-            key: "sheep-man",
-            icon: renderIcon(PersonIcon),
-          },
-        ],
-      },
-      {
-        label: "Beverage",
-        key: "beverage",
-        icon: renderIcon(WineIcon),
-        children: [
-          {
-            label: "Whisky",
-            key: "whisky",
-          },
-        ],
-      },
-      {
-        label: "Food",
-        key: "food",
-        children: [
-          {
-            label: "Sandwich",
-            key: "sandwich",
-          },
-        ],
-      },
-      {
-        label: "The past increases. The future recedes.",
-        key: "the-past-increases-the-future-recedes",
-      },
-    ],
+    label: "Logout",
+    key: "logout",
+    icon: renderIcon(LogOutSharp),
   },
+  // {
+  //   label: "Others",
+  //   key: "others1",
+  //   children: [
+  //     {
+  //       label: "Jordan Baker",
+  //       key: "jordan baker",
+  //     },
+  //     {
+  //       label: "Tom Buchanan",
+  //       key: "tom buchanan",
+  //     },
+  //     {
+  //       label: "Others",
+  //       key: "others2",
+  //       disabled: true,
+  //       children: [
+  //         {
+  //           label: "Chicken",
+  //           key: "chicken",
+  //         },
+  //         {
+  //           label: "Beef",
+  //           key: "beef",
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
 ];
 
-const onCollapsed = (collapsed: boolean) => {
-  console.log(collapsed);
+const handleSelect = (key: string | number) => {
+  console.info(String(key));
 };
 </script>
 
 <template>
-  <n-space vertical size="large" :class="{ 'debug-screens': development }">
-    <n-layout has-sider>
-      <div class="max-h-screen">
-        <header :class="{ 'debug-screens': development }">
-          <h1 class="ml-7 p-2 text-3xl font-black">fairhub.io</h1>
-        </header>
-        <n-layout-sider
-          bordered
-          show-trigger
-          collapse-mode="width"
-          :collapsed-width="64"
-          :width="240"
-          :native-scrollbar="true"
-          @update:collapsed="onCollapsed"
-        >
-          <n-menu :collapsed-width="64" :collapsed-icon-size="22" :options="menuOptions" />
-        </n-layout-sider>
-      </div>
-      <n-layout-content>
-        <RouterView />
-      </n-layout-content>
-    </n-layout>
-  </n-space>
-  <!-- <header :class="{ 'debug-screens': development }">
-    <h1 class="relative top-0 left-0 p-2 text-4xl font-black">fairhub.io</h1>
-  </header>
-  <RouterView /> -->
+  <div>
+    <header :class="{ 'debug-screens': development }">
+      <n-space justify="space-between" align="center" class="pl-4 pr-2">
+        <h1 class="relative top-0 left-0 p-2 text-4xl font-black">fairhub.io</h1>
+
+        <n-space justify="space-between" align="center">
+          <n-input size="large" placeholder="Search">
+            <template #suffix>
+              <n-icon :component="SearchSharp" />
+            </template>
+          </n-input>
+
+          <div class="flex justify-center space-x-3">
+            <n-dropdown
+              :options="profileOptions"
+              placement="bottom-start"
+              trigger="hover"
+              @select="handleSelect"
+              :show-arrow="true"
+            >
+              <n-avatar
+                :size="48"
+                src="https://api.dicebear.com/5.x/lorelei/svg?seed=fairhubio"
+                class="hover:cursor-pointer hover:opacity-80"
+              />
+            </n-dropdown>
+          </div>
+        </n-space>
+      </n-space>
+    </header>
+
+    <n-space vertical size="large" :class="{ 'debug-screens': development }">
+      <n-layout has-sider>
+        <AppSidebar />
+
+        <n-layout-content class="h-[calc(100vh-56px)] px-6 pt-5 pb-3">
+          <RouterView />
+        </n-layout-content>
+      </n-layout>
+    </n-space>
+  </div>
 </template>
 
 <style scoped></style>

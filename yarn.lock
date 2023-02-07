@@ -12750,6 +12750,13 @@ storybook-tailwind-foundations@^1.1.2:
   resolved "https://registry.yarnpkg.com/storybook-tailwind-foundations/-/storybook-tailwind-foundations-1.1.2.tgz#40058e6a47deae382df3948743f77904a5be809b"
   integrity sha512-Bp8SVFL06PmZCsgTuCZoOt4k1Ja4rXD+RxaY9IzOKgl13zJnVHPdkPQsarqpb1Bl2YetfYZCVneFSv3u8jPrxw==
 
+storybook-vue3-router@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/storybook-vue3-router/-/storybook-vue3-router-2.3.1.tgz#41b235a16c09787dce8550b43cebff77e04139f4"
+  integrity sha512-e+nhYUoJJCW85TBrKnpaa4Wc6FAiiXFaYFdC49EY7n28jIEabPGq7j1isJN226QfFP45HLpcZb5i8z1Q1+LPUg==
+  dependencies:
+    vue-router "4.x"
+
 stream-browserify@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/stream-browserify/-/stream-browserify-2.0.2.tgz#87521d38a44aa7ee91ce1cd2a47df0cb49dd660b"
@@ -14027,7 +14034,7 @@ vue-loader@^16.4.1, vue-loader@^16.8.3:
     hash-sum "^2.0.0"
     loader-utils "^2.0.0"
 
-vue-router@^4.1.5:
+vue-router@4.x, vue-router@^4.1.5:
   version "4.1.6"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.1.6.tgz#b70303737e12b4814578d21d68d21618469375a1"
   integrity sha512-DYWYwsG6xNPmLq/FmZn8Ip+qrhFEzA14EI12MsMgVxvHFDYvlr4NXpVF5hrRH1wVcDP8fGi5F4rxuJSl8/r+EQ==
