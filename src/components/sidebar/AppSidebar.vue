@@ -11,8 +11,8 @@ import { Help, History, Home2, ListDetails } from "@vicons/tabler";
 import type { MenuOption } from "naive-ui";
 import { NIcon, NLayoutSider, NMenu, NSpace } from "naive-ui";
 import type { Component } from "vue";
-import { h, ref } from "vue";
-import { RouterLink } from "vue-router";
+import { computed, h, ref } from "vue";
+import { RouterLink, useRoute } from "vue-router";
 
 const sidebarCollapsed = ref(false);
 
@@ -197,10 +197,23 @@ const toggleSidebar = (collapsed: boolean) => {
   sidebarCollapsed.value = collapsed;
   return;
 };
+
+/**
+ * A computed property that returns true if the sidebar should be completely hidden
+ * @returns {boolean}
+ */
+const hideSidebar = computed(() => {
+  const currentRoute = useRoute();
+  if (currentRoute.path === "/") {
+    return false;
+  }
+  return true;
+});
 </script>
 
 <template>
   <n-layout-sider
+    v-if="hideSidebar"
     bordered
     show-trigger
     :collapsed="sidebarCollapsed"
@@ -218,6 +231,7 @@ const toggleSidebar = (collapsed: boolean) => {
         :collapsed="sidebarCollapsed"
         :options="upperMenuOptions"
       />
+
       <n-menu
         :collapsed-width="64"
         :collapsed-icon-size="22"
