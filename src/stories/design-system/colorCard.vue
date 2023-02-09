@@ -6,12 +6,4 @@
   </div>
 </template>
 
-<script setup lang="ts">
-const props = defineProps({
-  colorClass: {
-    type: String,
-    required: true,
-    default: "bg-red-500",
-  },
-});
-</script>
+<script setup lang="ts"></script>
