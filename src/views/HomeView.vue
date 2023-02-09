@@ -4,9 +4,11 @@ import { NImage, NSpace } from "naive-ui";
 
 <template>
   <main class="flex h-full w-full flex-col">
-    <div class="mx-auto flex w-full max-w-screen-xl justify-between pt-8">
-      <n-space mode="vertical" class="max-w-screen-sm">
-        <h1 class="pb-4 text-4xl font-bold">A platform for sharing FAIR and AI-ready datasets</h1>
+    <div class="mx-auto flex h-full w-full max-w-screen-xl items-center justify-between space-x-5">
+      <n-space mode="vertical" class="max-w-screen-md">
+        <h1 class="pb-4 text-5xl font-bold">
+          Your new home for sharing FAIR and AI-ready datasets
+        </h1>
 
         <p>
           Revolutionize the way you store and manage your research data with our cutting-edge
@@ -18,12 +20,7 @@ import { NImage, NSpace } from "naive-ui";
         </p>
       </n-space>
 
-      <n-image
-        src="https://images.unsplash.com/photo-1674420628423-bf7a338af32d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2064&q=80"
-        alt=""
-        width="400"
-        class=""
-      />
+      <n-image src="https://i.imgur.com/qZXbRGF.jpg" alt="" width="400" class="" />
     </div>
   </main>
 </template>
