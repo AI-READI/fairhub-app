@@ -7,14 +7,16 @@ import { NButton, NImage } from "naive-ui";
     <div class="mx-auto flex h-full w-full max-w-screen-xl items-center justify-between space-x-5">
       <div class="flex max-w-screen-md flex-col">
         <h1 class="pb-4 text-5xl font-bold">
-          Your new home for sharing FAIR and AI-ready datasets
+          Your new home for sharing FAIR and AI-ready clinical research datasets
         </h1>
 
         <p class="text-lg">
-          fairhub.io is a community-driven platform for sharing FAIR and AI-ready datasets. This
-          platform has been built from the ground up to be a more FAIR alternative to the current
-          data sharing platforms. Your clincal research data can be shared with the world in a way
-          that accessible for both future researchers and machine learning applications.
+          fairhub.io is an open source platform for sharing FAIR and AI-ready datasets developed as
+          part of AI-READI, a data generation project of the NIH-funded Bridge2AI program. This
+          platform has been built from the ground up to include convenient and efficient tools for
+          data management, tracking, curation, and sharing. Your clinical research data can be
+          shared with the world through fairhub.io in a way that it is accessible and reusable by
+          both researchers and machine learning applications.
         </p>
 
         <div class="w-max pt-4">
