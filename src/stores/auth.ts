@@ -1,14 +1,16 @@
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
 export const useAuthStore = defineStore("auth", () => {
-  const count = ref(0);
+  const isAuthenticated = ref(false);
 
-  const doubleCount = computed(() => count.value * 2);
-
-  function increment() {
-    count.value++;
+  function setLoggedIn() {
+    isAuthenticated.value = true;
   }
 
-  return { count, doubleCount, increment };
+  function setLoggedOut() {
+    isAuthenticated.value = false;
+  }
+
+  return { isAuthenticated, setLoggedIn, setLoggedOut };
 });

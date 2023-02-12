@@ -18,6 +18,12 @@ import {
 } from "naive-ui";
 import type { Component } from "vue";
 import { h, ref } from "vue";
+import { useRouter } from "vue-router";
+
+import { useAuthStore } from "@/stores/auth";
+
+const authStore = useAuthStore();
+const router = useRouter();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -42,7 +48,6 @@ const rules = {
 // eslint-disable-next-line no-undef
 const development = process.env.NODE_ENV === "development";
 
-const loggedIn = ref(false);
 const showModal = ref(false);
 const showErrorAlert = ref(false);
 
@@ -103,6 +108,11 @@ function renderIcon(icon: Component) {
 
 const handleSelect = (key: string | number) => {
   console.info(String(key));
+
+  if (key === "logout") {
+    authStore.setLoggedOut();
+    router.push("/");
+  }
 };
 
 const showLoginModal = () => {
@@ -122,7 +132,12 @@ const handleLogin = (e: MouseEvent) => {
         showErrorAlert.value = false;
 
         showModal.value = false;
-        loggedIn.value = true;
+
+        authStore.setLoggedIn();
+
+        router.push({
+          path: "/studies",
+        });
       } else {
         showErrorAlert.value = true;
         console.log("Invalid credentials");
@@ -147,7 +162,12 @@ const handleLogin = (e: MouseEvent) => {
         </n-input>
 
         <div class="flex items-center justify-center space-x-3">
-          <n-button type="primary" secondary v-if="!loggedIn" @click="showLoginModal">
+          <n-button
+            type="primary"
+            secondary
+            v-if="!authStore.isAuthenticated"
+            @click="showLoginModal"
+          >
             Login
           </n-button>
           <n-dropdown

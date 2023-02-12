@@ -1,5 +1,48 @@
 <script setup lang="ts">
-import { NButton, NImage } from "naive-ui";
+import type { MessageRenderMessage } from "naive-ui";
+import { NAlert, NButton, NImage, useMessage } from "naive-ui";
+import { h } from "vue";
+import { RouterLink, useRouter } from "vue-router";
+
+import { useAuthStore } from "@/stores/auth";
+
+const authStore = useAuthStore();
+const router = useRouter();
+const { error } = useMessage();
+
+const renderMessage: MessageRenderMessage = (props) => {
+  const { type } = props;
+  return h(
+    NAlert,
+    {
+      closable: props.closable,
+      onClose: props.onClose,
+      type: type === "loading" ? "default" : type,
+      title: "401: Unauthorized",
+      style: {
+        boxShadow: "var(--n-box-shadow)",
+        maxWidth: "calc(100vw - 32px)",
+        width: "480px",
+      },
+    },
+    {
+      default: () => props.content,
+    }
+  );
+};
+
+const navigateToStudies = () => {
+  if (authStore.isAuthenticated) {
+    router.push("/studies");
+  } else {
+    error("You must be logged in to view studies", {
+      render: renderMessage,
+    });
+    /**
+     * TODO: Attach the login method to this component
+     */
+  }
+};
 </script>
 
 <template>
@@ -19,8 +62,16 @@ import { NButton, NImage } from "naive-ui";
           both researchers and machine learning applications.
         </p>
 
-        <div class="w-max pt-4">
-          <n-button type="primary" size="large" class="w-full"> Start a study </n-button>
+        <div class="flex w-max space-x-4 pt-4">
+          <div>
+            <n-button type="primary" size="large" class="w-full" @click="navigateToStudies">
+              Share data
+            </n-button>
+          </div>
+
+          <RouterLink to="/#">
+            <n-button type="info" size="large" class="w-full"> Access data </n-button>
+          </RouterLink>
         </div>
       </div>
 
