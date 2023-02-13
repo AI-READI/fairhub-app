@@ -20,6 +20,16 @@ function renderIcon(icon: Component) {
   return () => h(NIcon, null, { default: () => h(icon) });
 }
 
+const route = useRoute();
+
+const hideMenuOptions = computed(() => {
+  if (route.path === "/studies") {
+    return false;
+  } else {
+    return true;
+  }
+});
+
 // const menuOptions = [
 //   {
 //     label: "All Studies",
@@ -95,21 +105,24 @@ function renderIcon(icon: Component) {
 //   },
 // ];
 
-const upperMenuOptions: MenuOption[] = [
+const staticUpperMenuOptions: MenuOption[] = [
   {
     label: () =>
       h(
         RouterLink,
         {
           to: {
-            name: "home",
+            name: "all-studies",
           },
         },
-        { default: () => "Home" }
+        { default: () => "All Studies" }
       ),
-    key: "home",
+    key: "all-studies",
     icon: renderIcon(Home2),
   },
+];
+
+const dynamicUpperMenuOptions: MenuOption[] = [
   {
     label: "Study Info",
     key: "study-info",
@@ -146,9 +159,9 @@ const upperMenuOptions: MenuOption[] = [
         {
           to: {
             name: "add-participant",
-            params: {
-              lang: "en-US",
-            },
+            // params: {
+            //   lang: "en-US",
+            // },
           },
         },
         { default: () => "Add Participant" }
@@ -225,12 +238,22 @@ const hideSidebar = computed(() => {
     class="h-[calc(100vh-56px)]"
   >
     <n-space vertical justify="space-between" class="h-full">
-      <n-menu
-        :collapsed-width="64"
-        :collapsed-icon-size="22"
-        :collapsed="sidebarCollapsed"
-        :options="upperMenuOptions"
-      />
+      <div>
+        <n-menu
+          :collapsed-width="64"
+          :collapsed-icon-size="22"
+          :collapsed="sidebarCollapsed"
+          :options="staticUpperMenuOptions"
+          class="mb-0 pb-0"
+        />
+        <n-menu
+          v-if="hideMenuOptions"
+          :collapsed-width="64"
+          :collapsed-icon-size="22"
+          :collapsed="sidebarCollapsed"
+          :options="dynamicUpperMenuOptions"
+        />
+      </div>
 
       <n-menu
         :collapsed-width="64"

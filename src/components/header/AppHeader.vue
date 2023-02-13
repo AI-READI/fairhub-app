@@ -28,8 +28,8 @@ const router = useRouter();
 const formRef = ref<FormInst | null>(null);
 
 const formValue = ref({
-  username: "",
-  password: "",
+  username: "admin",
+  password: "admin",
 });
 
 const rules = {

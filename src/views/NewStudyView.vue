@@ -126,7 +126,7 @@ const handleUpdateValue = (value: string[]) => {
         />
       </n-form-item>
 
-      <div class="flex justify-center">
+      <div class="flex justify-start">
         <n-button type="primary" size="large" @click="handleValidateButtonClick">
           Create Study
         </n-button>

@@ -2,7 +2,7 @@
 import { AddCircleOutline } from "@vicons/ionicons5";
 import { NButton, NIcon, NImage, NSpace, useMessage } from "naive-ui";
 import { onBeforeMount } from "vue";
-import { useRouter } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 
@@ -43,17 +43,19 @@ const studies = [
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col space-y-8">
+  <main class="flex h-full w-full flex-col space-y-8 pr-5">
     <n-space justify="space-between">
       <h1>All Studies</h1>
-      <n-button icon-placement="left" size="large" type="primary">
-        <template #icon>
-          <n-icon>
-            <add-circle-outline />
-          </n-icon>
-        </template>
-        New Study
-      </n-button>
+      <RouterLink :to="{ name: 'new-study' }">
+        <n-button icon-placement="left" size="large" type="primary">
+          <template #icon>
+            <n-icon>
+              <add-circle-outline />
+            </n-icon>
+          </template>
+          New Study
+        </n-button>
+      </RouterLink>
     </n-space>
 
     <div
