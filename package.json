@@ -36,6 +36,7 @@
     "code-tag": "^1.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "pinia": "^2.0.21",
+    "pinia-plugin-persistedstate": "^3.0.2",
     "storybook-tailwind-foundations": "^1.1.2",
     "vue": "^3.2.38",
     "vue-router": "^4.1.5",
