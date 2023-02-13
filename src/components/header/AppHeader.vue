@@ -153,7 +153,9 @@ const handleLogin = (e: MouseEvent) => {
   <header :class="{ 'debug-screens': development }">
     <n-space justify="space-between" align="center" class="pl-4 pr-2">
       <RouterLink to="/">
-        <h1 class="relative top-0 left-0 p-2 text-4xl font-black text-sky-900">fairhub.io</h1>
+        <h1 class="relative top-0 left-0 p-2 text-4xl font-black text-[#565656]">
+          <span class="text-4xl font-black text-primary-900"> fair</span>hub.io
+        </h1>
       </RouterLink>
 
       <n-space justify="space-between" align="center">

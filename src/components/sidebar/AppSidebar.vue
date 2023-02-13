@@ -23,7 +23,8 @@ function renderIcon(icon: Component) {
 const route = useRoute();
 
 const hideMenuOptions = computed(() => {
-  if (route.path === "/studies") {
+  const hiddenRoutes = ["/studies", "/studies/new"];
+  if (hiddenRoutes.includes(route.path)) {
     return false;
   } else {
     return true;

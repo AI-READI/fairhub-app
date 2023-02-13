@@ -31,7 +31,7 @@ const studies = [
     size: "2.8 GB",
     lastUpdated: "2023-02-13",
     lastPublished: {
-      version: "1.0.0",
+      version: "v1.0.0",
       date: "2023-01-13",
       doi: "10.1234/1234",
     },
@@ -88,7 +88,7 @@ const studies = [
           <p>
             <span class="font-bold">Latest published version: </span>
             <span v-if="study.lastPublished"
-              >{{ study.lastPublished.version }} {{ study.lastPublished.date }}</span
+              >{{ study.lastPublished.version }} ({{ study.lastPublished.date }})</span
             >
             <span v-else>Not published yet</span>
           </p>
