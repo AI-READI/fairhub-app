@@ -1,6 +1,21 @@
 <script setup lang="ts">
 import { AddCircleOutline } from "@vicons/ionicons5";
-import { NButton, NIcon, NImage, NSpace } from "naive-ui";
+import { NButton, NIcon, NImage, NSpace, useMessage } from "naive-ui";
+import { onBeforeMount } from "vue";
+import { useRouter } from "vue-router";
+
+import { useAuthStore } from "@/stores/auth";
+
+const router = useRouter();
+const authStore = useAuthStore();
+const { error } = useMessage();
+
+onBeforeMount(() => {
+  if (!authStore.isAuthenticated) {
+    error("You are not logged in.");
+    router.push({ name: "home" });
+  }
+});
 
 const studies = [
   {

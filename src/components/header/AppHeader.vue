@@ -18,7 +18,7 @@ import {
 } from "naive-ui";
 import type { Component } from "vue";
 import { h, ref } from "vue";
-import { useRouter } from "vue-router";
+import { RouterLink, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 
@@ -152,7 +152,9 @@ const handleLogin = (e: MouseEvent) => {
 <template>
   <header :class="{ 'debug-screens': development }">
     <n-space justify="space-between" align="center" class="pl-4 pr-2">
-      <h1 class="relative top-0 left-0 p-2 text-4xl font-black">fairhub.io</h1>
+      <RouterLink to="/">
+        <h1 class="relative top-0 left-0 p-2 text-4xl font-black text-sky-900">fairhub.io</h1>
+      </RouterLink>
 
       <n-space justify="space-between" align="center">
         <n-input size="large" placeholder="Search">

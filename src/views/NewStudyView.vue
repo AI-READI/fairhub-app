@@ -1,7 +1,21 @@
 <script setup lang="ts">
 import type { FormInst, FormItemRule, FormRules } from "naive-ui";
-import { NButton, NForm, NFormItem, NInput, NSelect, NSpace } from "naive-ui";
-import { ref } from "vue";
+import { NButton, NForm, NFormItem, NInput, NSelect, NSpace, useMessage } from "naive-ui";
+import { onBeforeMount, ref } from "vue";
+import { useRouter } from "vue-router";
+
+import { useAuthStore } from "@/stores/auth";
+
+const router = useRouter();
+const authStore = useAuthStore();
+const { error } = useMessage();
+
+onBeforeMount(() => {
+  if (!authStore.isAuthenticated) {
+    error("You are not logged in.");
+    router.push({ name: "home" });
+  }
+});
 
 const formRef = ref<FormInst | null>(null);
 

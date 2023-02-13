@@ -70,7 +70,7 @@ const navigateToStudies = () => {
           </div>
 
           <RouterLink to="/#">
-            <n-button type="info" size="large" class="w-full"> Access data </n-button>
+            <n-button type="info" size="large" class="w-full" disabled> Access data </n-button>
           </RouterLink>
         </div>
       </div>
