@@ -20,14 +20,15 @@ onBeforeMount(() => {
 const studies = [
   {
     id: 1,
-    name: "Study 1",
-    description: "Study 1 description",
-    image: `https://api.dicebear.com/5.x/shapes/svg?seed=${Math.random()}`,
-    size: "1.2 GB",
-    lastUpdated: "2021-08-01",
+    name: "AI-READI",
+    description:
+      "The AI-READI project seeks to create and share a flagship ethically-sourced dataset of type 2 diabetes.",
+    image: `https://fairdataihub.org/images/hero/aireadi-logo.png`,
+    size: "2.8 GB",
+    lastUpdated: "2023-02-13",
     lastPublished: {
       version: "1.0.0",
-      date: "2021-08-01",
+      date: "2023-01-13",
       doi: "10.1234/1234",
     },
   },
@@ -37,7 +38,7 @@ const studies = [
     description: "Study 2 description",
     image: `https://api.dicebear.com/5.x/shapes/svg?seed=${Math.random()}`,
     size: "1.2 GB",
-    lastUpdated: "2021-08-01",
+    lastUpdated: "2023-02-05",
   },
 ];
 </script>
@@ -63,7 +64,7 @@ const studies = [
       v-for="study in studies"
       :key="study.id"
     >
-      <n-image width="100" src="https://api.dicebear.com/5.x/shapes/svg?seed=fairhubio" />
+      <n-image width="100" :src="study.image" />
       <div class="flex w-full grow flex-col space-y-2 divide-y">
         <div class="flex flex-col space-y-2">
           <n-space justify="space-between">
