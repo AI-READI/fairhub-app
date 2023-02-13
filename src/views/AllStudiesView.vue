@@ -17,6 +17,10 @@ onBeforeMount(() => {
   }
 });
 
+const navigateToStudy = (id: number) => {
+  router.push({ name: "study", params: { id: id.toString() } });
+};
+
 const studies = [
   {
     id: 1,
@@ -60,11 +64,12 @@ const studies = [
     </n-space>
 
     <div
-      class="flex w-full items-start space-x-8 rounded-md border border-slate-100 px-4 py-3 transition-all hover:border-slate-200 hover:bg-slate-50"
+      class="flex w-full cursor-pointer items-start space-x-8 rounded-md border border-slate-100 px-4 py-3 transition-all hover:border-slate-200 hover:bg-slate-50"
       v-for="study in studies"
       :key="study.id"
+      @click="navigateToStudy(study.id)"
     >
-      <n-image width="100" :src="study.image" />
+      <n-image width="100" :src="study.image" preview-disabled />
       <div class="flex w-full grow flex-col space-y-2 divide-y">
         <div class="flex flex-col space-y-2">
           <n-space justify="space-between">
