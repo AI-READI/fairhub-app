@@ -21,7 +21,7 @@ export default {
   },
 };
 
-const HorizontalTemplate = (args) => ({
+const HorizontalTemplate = () => ({
   components: { NThing, CashIcon, NButton, NIcon, NSpace, NCheckbox, NCol, NRow, NAvatar },
   data() {},
   setup() {
@@ -112,4 +112,3 @@ const HorizontalTemplate = (args) => ({
 });
 
 export const Horizontal = HorizontalTemplate.bind({});
-Horizontal.args = {};
