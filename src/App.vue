@@ -14,7 +14,7 @@ import AppSidebar from "./components/sidebar/AppSidebar.vue";
       <n-layout has-sider>
         <AppSidebar />
 
-        <n-layout-content class="h-[calc(100vh-56px)] px-6 pt-5 pb-3">
+        <n-layout-content class="h-[calc(100vh-56px)] pl-6 pt-5 pb-3">
           <RouterView />
         </n-layout-content>
       </n-layout>

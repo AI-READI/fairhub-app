@@ -42,6 +42,10 @@
   @apply flex grow;
 }
 
+.n-base-select-option__content {
+  @apply flex-grow;
+}
+
 @layer base {
   /* inter var - latin */
   @font-face {

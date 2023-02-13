@@ -1,0 +1,122 @@
+<script setup lang="ts">
+import type { FormInst, FormItemRule, FormRules } from "naive-ui";
+import { NButton, NForm, NFormItem, NInput, NSelect, NSpace } from "naive-ui";
+import { ref } from "vue";
+
+const formRef = ref<FormInst | null>(null);
+
+const study = ref({
+  title: null,
+  description: null,
+  keywords: null,
+});
+
+const generalOptions = [
+  "Artifical Intelligence",
+  "Dataset",
+  "Diabetes",
+  "Ethics",
+  "Health",
+  "Machine Learning",
+].map((v) => ({
+  label: v,
+  value: v,
+}));
+
+const rules: FormRules = {
+  inputValue: [
+    {
+      required: true,
+      trigger: ["blur", "input"],
+      message: "Please add a study title",
+    },
+  ],
+  description: [
+    {
+      required: true,
+      trigger: ["blur", "input"],
+      message: "Please input a study description",
+    },
+  ],
+  keywords: [
+    {
+      required: true,
+      trigger: ["blur", "change"],
+      validator: (rule: FormItemRule, value) => {
+        if (value !== null && value.length > 0) {
+          return Promise.resolve();
+        }
+        return Promise.reject("Please select at least one keyword");
+      },
+    },
+  ],
+};
+
+const handleValidateButtonClick = (e: MouseEvent) => {
+  e.preventDefault();
+  formRef.value?.validate((errors) => {
+    if (!errors) {
+      console.log("success");
+    } else {
+      console.log("error");
+      console.log(errors);
+    }
+  });
+};
+
+const handleUpdateValue = (value: string[]) => {
+  console.log(value);
+};
+</script>
+
+<template>
+  <main class="flex h-full w-full flex-col space-y-8">
+    <n-space justify="space-between">
+      <h1>Create a Study</h1>
+    </n-space>
+
+    <n-form
+      ref="formRef"
+      :model="study"
+      :rules="rules"
+      size="large"
+      label-placement="top"
+      class="pr-4"
+    >
+      <n-form-item :span="12" label="Title" path="title">
+        <n-input v-model:value="study.title" placeholder="Add a study title" />
+      </n-form-item>
+
+      <n-form-item :span="12" label="Description" path="description">
+        <n-input
+          v-model:value="study.description"
+          placeholder="Add a study description"
+          type="textarea"
+          :autosize="{
+            minRows: 3,
+            maxRows: 5,
+          }"
+        />
+      </n-form-item>
+
+      <n-form-item :span="12" label="Keywords" path="keywords">
+        <n-select
+          v-model:value="study.keywords"
+          placeholder="Salutogenesis"
+          multiple
+          tag
+          filterable
+          clearable
+          :options="generalOptions"
+          @update:value="handleUpdateValue"
+        />
+      </n-form-item>
+
+      <div class="flex justify-center">
+        <n-button type="primary" size="large" @click="handleValidateButtonClick">
+          Create Study
+        </n-button>
+      </div>
+    </n-form>
+  </main>
+</template>
