@@ -17,6 +17,6 @@ export const useAuthStore = defineStore(
     return { isAuthenticated, setLoggedIn, setLoggedOut };
   },
   {
-    persist: true,
+    persist: { storage: sessionStorage },
   }
 );
