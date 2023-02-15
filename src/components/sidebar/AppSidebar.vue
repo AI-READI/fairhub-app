@@ -135,7 +135,16 @@ const dynamicUpperMenuOptions: MenuOption[] = [
     icon: renderIcon(PeopleTeamToolbox24Regular),
   },
   {
-    label: "Contributors",
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: "/studies/1/contributors",
+          },
+        },
+        { default: () => "Contributors" }
+      ),
     key: "contributors",
     icon: renderIcon(PeopleCheckmark16Regular),
   },

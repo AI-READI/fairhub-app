@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import AllStudiesView from "../views/AllStudiesView.vue";
-import HomeView from "../views/HomeView.vue";
-import NewStudyView from "../views/NewStudyView.vue";
-import StudyOverviewView from "../views/StudyOverviewView.vue";
+import AllContributors from "../views/AllContributors.vue";
+import AllStudies from "../views/AllStudies.vue";
+import DashBoard from "../views/DashBoard.vue";
+import LandingPage from "../views/LandingPage.vue";
+import NewStudy from "../views/NewStudy.vue";
+import StudyOverview from "../views/StudyOverview.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,32 +13,37 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: HomeView,
+      component: LandingPage,
     },
     {
       path: "/studies",
       name: "all-studies",
-      component: AllStudiesView,
+      component: AllStudies,
     },
     {
       path: "/studies/new",
       name: "new-study",
-      component: NewStudyView,
+      component: NewStudy,
     },
     {
       path: "/studies/:id",
       name: "study",
-      component: StudyOverviewView,
+      component: StudyOverview,
     },
     {
       path: "/dashboard",
       name: "dashboard",
-      component: AllStudiesView,
+      component: DashBoard,
     },
     {
       path: "/participants",
       name: "add-participant",
-      component: AllStudiesView,
+      component: AllStudies,
+    },
+    {
+      path: "/studies/:id/contributors",
+      name: "all-contributors",
+      component: AllContributors,
     },
   ],
 });
