@@ -10,6 +10,10 @@
     "esbenp.prettier-vscode",
     "rvest.vs-code-prettier-eslint",
     "bradlc.vscode-tailwindcss",
-    "austenc.tailwind-docs"
+    "austenc.tailwind-docs",
+    "kamikillerto.vscode-colorize",
+    "wix.vscode-import-cost",
+    "DavidAnson.vscode-markdownlint",
+    "csstools.postcss"
   ]
 }
