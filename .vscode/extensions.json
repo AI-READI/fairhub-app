@@ -1,3 +1,15 @@
 {
-  "recommendations": ["Vue.volar", "Vue.vscode-typescript-vue-plugin"]
+  "recommendations": [
+    "Vue.volar",
+    "Vue.vscode-typescript-vue-plugin",
+    "aaron-bond.better-comments",
+    "dbaeumer.vscode-eslint",
+    "lottiefiles.vscode-lottie",
+    "unifiedjs.vscode-mdx",
+    "bpruitt-goddard.mermaid-markdown-syntax-highlighting",
+    "esbenp.prettier-vscode",
+    "rvest.vs-code-prettier-eslint",
+    "bradlc.vscode-tailwindcss",
+    "austenc.tailwind-docs"
+  ]
 }
