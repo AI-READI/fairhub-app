@@ -108,6 +108,8 @@ const hideMenuOptions = computed(() => {
 
 const staticUpperMenuOptions: MenuOption[] = [
   {
+    icon: renderIcon(Home2),
+    key: "all-studies",
     label: () =>
       h(
         RouterLink,
@@ -118,23 +120,23 @@ const staticUpperMenuOptions: MenuOption[] = [
         },
         { default: () => "All Studies" }
       ),
-    key: "all-studies",
-    icon: renderIcon(Home2),
   },
 ];
 
 const dynamicUpperMenuOptions: MenuOption[] = [
   {
-    label: "Study Info",
-    key: "study-info",
     icon: renderIcon(ListDetails),
+    key: "study-info",
+    label: "Study Info",
   },
   {
-    label: "Participants and Data",
-    key: "participants-and-data",
     icon: renderIcon(PeopleTeamToolbox24Regular),
+    key: "participants-and-data",
+    label: "Participants and Data",
   },
   {
+    icon: renderIcon(PeopleCheckmark16Regular),
+    key: "contributors",
     label: () =>
       h(
         RouterLink,
@@ -145,10 +147,10 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         },
         { default: () => "Contributors" }
       ),
-    key: "contributors",
-    icon: renderIcon(PeopleCheckmark16Regular),
   },
   {
+    icon: renderIcon(DashboardRound),
+    key: "dashboard",
     label: () =>
       h(
         RouterLink,
@@ -159,10 +161,10 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         },
         { default: () => "Dashboard" }
       ),
-    key: "dashboard",
-    icon: renderIcon(DashboardRound),
   },
   {
+    icon: renderIcon(PeopleAdd24Regular),
+    key: "add-participant",
     label: () =>
       h(
         RouterLink,
@@ -176,38 +178,36 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         },
         { default: () => "Add Participant" }
       ),
-    key: "add-participant",
-    icon: renderIcon(PeopleAdd24Regular),
   },
 ];
 
 const lowerMenuOptions: MenuOption[] = [
   {
-    label: "Report an Issue",
-    key: "report-an-issue",
     icon: renderIcon(BugReportOutlined),
+    key: "report-an-issue",
+    label: "Report an Issue",
   },
   {
-    label: "Help",
-    key: "help",
-    icon: renderIcon(Help),
     children: [
       {
-        label: "Documentation",
-        key: "documentation",
         icon: renderIcon(DocumentFlowchart24Regular),
+        key: "documentation",
+        label: "Documentation",
       },
       {
-        label: "Changelog",
-        key: "changelog",
         icon: renderIcon(History),
+        key: "changelog",
+        label: "Changelog",
       },
     ],
+    icon: renderIcon(Help),
+    key: "help",
+    label: "Help",
   },
   {
-    label: "Settings",
-    key: "settings",
     icon: renderIcon(Settings24Regular),
+    key: "settings",
+    label: "Settings",
   },
 ];
 

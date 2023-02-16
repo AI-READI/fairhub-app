@@ -35,7 +35,6 @@
 <script setup lang="ts">
 const allColors = [
   {
-    label: "Primary Colors",
     colors: [
       "bg-primary-50",
       "bg-primary-100",
@@ -48,9 +47,9 @@ const allColors = [
       "bg-primary-800",
       "bg-primary-900",
     ],
+    label: "Primary Colors",
   },
   {
-    label: "Secondary Colors",
     colors: [
       "bg-secondary-50",
       "bg-secondary-100",
@@ -63,6 +62,7 @@ const allColors = [
       "bg-secondary-800",
       "bg-secondary-900",
     ],
+    label: "Secondary Colors",
   },
 ];
 </script>

@@ -5,13 +5,13 @@ import { h } from "vue";
 
 export default {
   title: "Components/Menu",
-  component: NMenu,
   argTypes: {
     mode: {
       control: { type: "select" },
       options: ["horizontal", "vertical"],
     },
   },
+  component: NMenu,
 };
 
 function renderIcon(icon) {
@@ -24,14 +24,14 @@ const HorizontalTemplate = (args) => ({
     return {
       menuOptions: [
         {
-          label: "Menu Option 1",
-          key: "1",
           icon: renderIcon(AddReactionRound),
+          key: "1",
+          label: "Menu Option 1",
         },
         {
-          label: "Menu Option 2",
-          key: "2",
           icon: renderIcon(AddReactionRound),
+          key: "2",
+          label: "Menu Option 2",
         },
       ],
     };
@@ -51,14 +51,14 @@ const VerticalTemplate = (args) => ({
     return {
       menuOptions: [
         {
-          label: "Menu Option 1",
-          key: "1",
           icon: renderIcon(AddReactionRound),
+          key: "1",
+          label: "Menu Option 1",
         },
         {
-          label: "Menu Option 2",
-          key: "2",
           icon: renderIcon(AddReactionRound),
+          key: "2",
+          label: "Menu Option 2",
         },
       ],
     };
@@ -78,31 +78,31 @@ const SubMenuTemplate = (args) => ({
     return {
       menuOptions: [
         {
-          label: "Menu Option 1",
+          icon: renderIcon(AddReactionRound),
           key: "1",
-          icon: renderIcon(AddReactionRound),
+          label: "Menu Option 1",
         },
         {
-          label: "Menu Option 2",
+          icon: renderIcon(AddReactionRound),
           key: "2",
-          icon: renderIcon(AddReactionRound),
+          label: "Menu Option 2",
         },
         {
-          label: "Menu Option 3",
-          key: "3",
-          icon: renderIcon(AddReactionRound),
           children: [
             {
-              label: "Menu Option 3.1",
-              key: "3.1",
               icon: renderIcon(AddReactionRound),
+              key: "3.1",
+              label: "Menu Option 3.1",
             },
             {
-              label: "Menu Option 3.2",
-              key: "3.2",
               icon: renderIcon(AddReactionRound),
+              key: "3.2",
+              label: "Menu Option 3.2",
             },
           ],
+          icon: renderIcon(AddReactionRound),
+          key: "3",
+          label: "Menu Option 3",
         },
       ],
     };

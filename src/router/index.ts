@@ -1,49 +1,49 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import AllContributors from "../views/AllContributors.vue";
 import AllStudies from "../views/AllStudies.vue";
 import DashBoard from "../views/DashBoard.vue";
 import LandingPage from "../views/LandingPage.vue";
 import NewStudy from "../views/NewStudy.vue";
+import StudyContributors from "../views/StudyContributors.vue";
 import StudyOverview from "../views/StudyOverview.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/",
       name: "home",
       component: LandingPage,
+      path: "/",
     },
     {
-      path: "/studies",
       name: "all-studies",
       component: AllStudies,
+      path: "/studies",
     },
     {
-      path: "/studies/new",
       name: "new-study",
       component: NewStudy,
+      path: "/studies/new",
     },
     {
-      path: "/studies/:id",
       name: "study",
       component: StudyOverview,
+      path: "/studies/:id",
     },
     {
-      path: "/dashboard",
       name: "dashboard",
       component: DashBoard,
+      path: "/dashboard",
     },
     {
-      path: "/participants",
       name: "add-participant",
       component: AllStudies,
+      path: "/participants",
     },
     {
+      name: "study-contributors",
+      component: StudyContributors,
       path: "/studies/:id/contributors",
-      name: "all-contributors",
-      component: AllContributors,
     },
   ],
 });

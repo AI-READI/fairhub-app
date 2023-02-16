@@ -2,10 +2,10 @@ import BorderRadii from "./BorderRadii.vue";
 
 export default {
   title: "Design System",
-  component: BorderRadii,
   argTypes: {
     colorClass: { table: { disable: true } },
   },
+  component: BorderRadii,
 };
 
 const Template = (args) => ({

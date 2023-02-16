@@ -2,10 +2,10 @@ import BorderColor from "./BorderColor.vue";
 
 export default {
   title: "Design System",
-  component: BorderColor,
   argTypes: {
     colorClass: { table: { disable: true } },
   },
+  component: BorderColor,
 };
 
 const Template = (args) => ({

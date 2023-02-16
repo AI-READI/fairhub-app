@@ -34,13 +34,13 @@ const formValue = ref({
 
 const rules = {
   username: {
-    required: true,
     message: "Please input your username",
+    required: true,
     trigger: ["input"],
   },
   password: {
-    required: true,
     message: "Please input your password",
+    required: true,
     trigger: ["input"],
   },
 };
@@ -53,23 +53,23 @@ const showErrorAlert = ref(false);
 
 const profileOptions = [
   {
-    label: "View Profile",
-    key: "view-profile",
     icon: renderIcon(PersonCircleOutline),
+    key: "view-profile",
+    label: "View Profile",
   },
   {
-    label: "Integrations",
-    key: "integrations",
     icon: renderIcon(ChartNetwork),
+    key: "integrations",
+    label: "Integrations",
   },
   {
-    type: "divider",
     key: "d1",
+    type: "divider",
   },
   {
-    label: "Logout",
-    key: "logout",
     icon: renderIcon(LogOutSharp),
+    key: "logout",
+    label: "Logout",
   },
   // {
   //   label: "Others",

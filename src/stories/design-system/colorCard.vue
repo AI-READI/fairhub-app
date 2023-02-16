@@ -9,9 +9,9 @@
 <script setup lang="ts">
 const props = defineProps({
   colorClass: {
-    type: String,
-    required: true,
     default: "bg-red-500",
+    required: true,
+    type: String,
   },
 });
 </script>

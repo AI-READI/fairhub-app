@@ -2,10 +2,10 @@ import TextSize from "./TextSize.vue";
 
 export default {
   title: "Design System",
-  component: TextSize,
   argTypes: {
     colorClass: { table: { disable: true } },
   },
+  component: TextSize,
 };
 
 const Template = (args) => ({

@@ -15,15 +15,15 @@ const renderMessage: MessageRenderMessage = (props) => {
   return h(
     NAlert,
     {
+      title: "401: Unauthorized",
       closable: props.closable,
       onClose: props.onClose,
-      type: type === "loading" ? "default" : type,
-      title: "401: Unauthorized",
       style: {
         boxShadow: "var(--n-box-shadow)",
         maxWidth: "calc(100vw - 32px)",
         width: "480px",
       },
+      type: type === "loading" ? "default" : type,
     },
     {
       default: () => props.content,

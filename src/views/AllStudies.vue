@@ -5,9 +5,11 @@ import { onBeforeMount } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
+import { useStudiesStore } from "@/stores/studies";
 
 const router = useRouter();
 const authStore = useAuthStore();
+const studiesStore = useStudiesStore();
 const { error } = useMessage();
 
 onBeforeMount(() => {
@@ -20,31 +22,6 @@ onBeforeMount(() => {
 const navigateToStudy = (id: number) => {
   router.push({ name: "study", params: { id: id.toString() } });
 };
-
-const studies = [
-  {
-    id: 1,
-    name: "AI-READI",
-    description:
-      "The AI-READI project seeks to create and share a flagship ethically-sourced dataset of type 2 diabetes.",
-    image: `https://fairdataihub.org/images/hero/aireadi-logo.png`,
-    size: "2.8 GB",
-    lastUpdated: "2023-02-13",
-    lastPublished: {
-      version: "v1.0.0",
-      date: "2023-01-13",
-      doi: "10.1234/1234",
-    },
-  },
-  {
-    id: 2,
-    name: "Study 2",
-    description: "Study 2 description",
-    image: `https://api.dicebear.com/5.x/shapes/svg?seed=${Math.random()}`,
-    size: "1.2 GB",
-    lastUpdated: "2023-02-05",
-  },
-];
 </script>
 
 <template>
@@ -65,7 +42,7 @@ const studies = [
 
     <div
       class="flex w-full cursor-pointer items-start space-x-8 rounded-md border border-slate-100 px-4 py-3 transition-all hover:border-slate-200 hover:bg-slate-50"
-      v-for="study in studies"
+      v-for="study in studiesStore.studies"
       :key="study.id"
       @click="navigateToStudy(study.id)"
     >
@@ -73,7 +50,7 @@ const studies = [
       <div class="flex w-full grow flex-col space-y-2 divide-y">
         <div class="flex flex-col space-y-2">
           <n-space justify="space-between">
-            <h3>{{ study.name }}</h3>
+            <h3>{{ study.title }}</h3>
             <span>{{ study.size }}</span>
           </n-space>
           <p>{{ study.description }}</p>

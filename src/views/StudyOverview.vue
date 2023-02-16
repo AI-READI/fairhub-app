@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { NSkeleton, NSpace, useMessage } from "naive-ui";
 import { onBeforeMount } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
+import { useStudiesStore } from "@/stores/studies";
 
 const router = useRouter();
+const route = useRoute();
 const authStore = useAuthStore();
+const studiesStore = useStudiesStore();
 const { error } = useMessage();
 
 onBeforeMount(() => {
@@ -16,20 +19,11 @@ onBeforeMount(() => {
   }
 });
 
-const study = {
-  id: 1,
-  title: "AI-READI",
-  description:
-    "The AI-READI project seeks to create and share a flagship ethically-sourced dataset of type 2 diabetes.",
-  image: `https://fairdataihub.org/images/hero/aireadi-logo.png`,
-  size: "2.8 GB",
-  lastUpdated: "2023-02-13",
-  lastPublished: {
-    version: "1.0.0",
-    date: "2023-01-13",
-    doi: "10.1234/1234",
-  },
+const routeParams = {
+  id: route.params.id.toString(),
 };
+
+const study = studiesStore.getStudy(parseInt(routeParams.id));
 </script>
 
 <template>

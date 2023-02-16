@@ -2,10 +2,10 @@ import TextWeight from "./TextWeight.vue";
 
 export default {
   title: "Design System",
-  component: TextWeight,
   argTypes: {
     colorClass: { table: { disable: true } },
   },
+  component: TextWeight,
 };
 
 const Template = (args) => ({

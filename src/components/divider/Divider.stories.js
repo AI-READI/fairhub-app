@@ -3,7 +3,6 @@ import { NDivider } from "naive-ui";
 
 export default {
   title: "Components/Divider",
-  component: NDivider,
   argTypes: {
     dashed: {
       control: {
@@ -12,11 +11,12 @@ export default {
     },
     "title-placement": {
       control: {
-        type: "select",
         options: ["left", "right"],
+        type: "select",
       },
     },
   },
+  component: NDivider,
 };
 
 const BasicTemplate = (args) => ({

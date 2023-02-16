@@ -3,12 +3,12 @@ import { NCarousel } from "naive-ui";
 
 export default {
   title: "Components/Carousel",
-  component: NCarousel,
   argTypes: {
     autoPlay: { control: { type: "boolean" } },
     "show-arrow": { control: { type: "boolean" } },
     vertical: { control: { type: "boolean" } },
   },
+  component: NCarousel,
 };
 
 const Template = (args) => ({

@@ -43,7 +43,11 @@
 }
 
 .n-base-select-option__content {
-  @apply flex-grow;
+  @apply flex w-full flex-grow;
+}
+
+.n-base-select-menu .n-base-select-option.n-base-select-option--show-checkmark {
+  @apply pr-2;
 }
 
 @layer base {

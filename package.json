@@ -38,6 +38,7 @@
     "pinia": "^2.0.21",
     "pinia-plugin-persistedstate": "^3.0.2",
     "storybook-tailwind-foundations": "^1.1.2",
+    "validator": "^13.9.0",
     "vue": "^3.2.38",
     "vue-router": "^4.1.5",
     "vue3-lottie": "^2.4.0"
@@ -60,6 +61,7 @@
     "@tailwindcss/typography": "^0.5.7",
     "@types/jsdom": "^20.0.0",
     "@types/node": "^18.11.5",
+    "@types/validator": "^13.7.12",
     "@vicons/antd": "^0.12.0",
     "@vicons/carbon": "^0.12.0",
     "@vicons/fa": "^0.12.0",
@@ -82,6 +84,7 @@
     "eslint": "^8.22.0",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-simple-import-sort": "^8.0.0",
+    "eslint-plugin-sort-keys-custom-order": "^1.0.5",
     "eslint-plugin-storybook": "^0.6.8",
     "eslint-plugin-unused-imports": "^2.0.0",
     "eslint-plugin-vue": "^9.3.0",

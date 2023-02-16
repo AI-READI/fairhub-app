@@ -3,13 +3,13 @@ import { NCollapse, NCollapseItem } from "naive-ui";
 
 export default {
   title: "Components/Collapse",
-  component: NCollapse,
   argTypes: {
     "arrow-placement": {
       control: { type: "select" },
       options: ["right", "left"],
     },
   },
+  component: NCollapse,
 };
 
 const BasicTemplate = (args) => ({

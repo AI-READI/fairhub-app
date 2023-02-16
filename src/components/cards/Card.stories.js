@@ -2,14 +2,14 @@ import { NCard } from "naive-ui";
 
 export default {
   title: "Components/Card",
-  component: NCard,
   argTypes: {
+    hoverable: { control: { type: "boolean" } },
     size: {
       control: { type: "select" },
       options: ["small", "medium", "large", "huge"],
     },
-    hoverable: { control: { type: "boolean" } },
   },
+  component: NCard,
 };
 
 const TitleTemplate = (args) => ({

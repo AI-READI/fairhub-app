@@ -38,18 +38,18 @@ const generalOptions = [
 }));
 
 const rules: FormRules = {
-  inputValue: [
-    {
-      required: true,
-      trigger: ["blur", "input"],
-      message: "Please add a study title",
-    },
-  ],
   description: [
     {
+      message: "Please input a study description",
       required: true,
       trigger: ["blur", "input"],
-      message: "Please input a study description",
+    },
+  ],
+  inputValue: [
+    {
+      message: "Please add a study title",
+      required: true,
+      trigger: ["blur", "input"],
     },
   ],
   keywords: [
