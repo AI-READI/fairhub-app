@@ -1,14 +1,15 @@
 import PaginationElement from "./pagination-element.vue";
+
 export default {
   components: { PaginationElement },
   title: "Components/Pagination",
   component: PaginationElement,
   argTypes: {
-    backgroundColor: { control: "color" },
-    onClick: {},
+    disabled: { control: { type: "boolean" } },
+    simple: { control: { type: "boolean" } },
     size: {
       control: { type: "select" },
-      options: ["medium"],
+      options: ["small", "medium", "large"],
     },
   },
 };
