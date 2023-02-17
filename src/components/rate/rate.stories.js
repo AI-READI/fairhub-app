@@ -1,13 +1,16 @@
+import { html } from "code-tag";
 import { NRate } from "naive-ui";
 
 export default {
-  title: "Components/Switch",
+  title: "Components/Rate",
   component: NRate,
   argTypes: {
     size: {
       control: { type: "select" },
-      options: ["medium"],
+      options: ["small", "medium", "large"],
     },
+    clearable: { control: { type: "boolean" } },
+    "allow-half": { control: { type: "boolean" } },
   },
 };
 
@@ -16,7 +19,7 @@ const TitleTemplate = (args) => ({
   setup() {
     return { args };
   },
-  template: "  <n-rate />",
+  template: html` <n-rate v-bind="args" />`,
 });
 
 export const Title = TitleTemplate.bind({});
@@ -27,12 +30,11 @@ const SizeTemplate = (args) => ({
   setup() {
     return { args };
   },
-  template:
-    '  <n-space align="center">\n' +
-    '    <n-rate size="small" />\n' +
-    '    <n-rate size="medium" />\n' +
-    '    <n-rate size="large" />\n' +
-    "  </n-space>",
+  template: html` 
+    <n-space align="center">
+    <n-rate v-bind='args'>
+    <n-rate v-bind='args' size="medium" >
+    </n-space>`,
 });
 
 export const Size = SizeTemplate.bind({});
