@@ -6,7 +6,7 @@ import {
   PeopleTeamToolbox24Regular,
   Settings24Regular,
 } from "@vicons/fluent";
-import { BugReportOutlined, DashboardRound } from "@vicons/material";
+import { BugReportOutlined, DashboardRound, PublishedWithChangesFilled } from "@vicons/material";
 import { Help, History, Home2, ListDetails } from "@vicons/tabler";
 import type { MenuOption } from "naive-ui";
 import { NIcon, NLayoutSider, NMenu, NSpace } from "naive-ui";
@@ -21,6 +21,13 @@ function renderIcon(icon: Component) {
 }
 
 const route = useRoute();
+
+const studyID = computed(() => {
+  if (route.params.id === undefined) {
+    return "null";
+  }
+  return route.params.id;
+});
 
 const hideMenuOptions = computed(() => {
   const hiddenRoutes = ["/studies", "/studies/new"];
@@ -142,7 +149,10 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            path: "/studies/1/contributors",
+            name: "study-contributors",
+            params: {
+              id: studyID.value,
+            },
           },
         },
         { default: () => "Contributors" }
@@ -177,6 +187,23 @@ const dynamicUpperMenuOptions: MenuOption[] = [
           },
         },
         { default: () => "Add Participant" }
+      ),
+  },
+  {
+    icon: renderIcon(PublishedWithChangesFilled),
+    key: "publish-study",
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: "publish-study",
+            params: {
+              id: studyID.value,
+            },
+          },
+        },
+        { default: () => "Publish Study" }
       ),
   },
 ];
@@ -248,13 +275,13 @@ const hideSidebar = computed(() => {
     class="h-[calc(100vh-56px)]"
   >
     <n-space vertical justify="space-between" class="h-full">
-      <div>
+      <div class="flex flex-col justify-start divide-y">
         <n-menu
           :collapsed-width="64"
           :collapsed-icon-size="22"
           :collapsed="sidebarCollapsed"
           :options="staticUpperMenuOptions"
-          class="mb-0 pb-0"
+          class="mb-1 pb-1"
         />
         <n-menu
           v-if="hideMenuOptions"

@@ -4,6 +4,7 @@ import AllStudies from "../views/AllStudies.vue";
 import DashBoard from "../views/DashBoard.vue";
 import LandingPage from "../views/LandingPage.vue";
 import NewStudy from "../views/NewStudy.vue";
+import PublishStudy from "../views/PublishStudy.vue";
 import StudyContributors from "../views/StudyContributors.vue";
 import StudyOverview from "../views/StudyOverview.vue";
 
@@ -44,6 +45,11 @@ const router = createRouter({
       name: "study-contributors",
       component: StudyContributors,
       path: "/studies/:id/contributors",
+    },
+    {
+      name: "publish-study",
+      component: PublishStudy,
+      path: "/studies/:id/publish",
     },
   ],
 });

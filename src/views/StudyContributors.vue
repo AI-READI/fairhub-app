@@ -192,16 +192,17 @@ const getFirstLetters = (name: string) => {
 
     <n-divider />
 
-    <n-form ref="formRef" inline :model="formValue" :rules="rules" size="large" :label-width="100">
+    <n-form ref="formRef" inline :model="formValue" :rules="rules" size="large">
       <n-form-item label="Email Address" path="email">
         <n-input v-model:value="formValue.email" placeholder="someone@email.org" class="w-60" />
       </n-form-item>
-      <n-form-item label="Permission" path="role">
+      <n-form-item label="Permission" path="role" class="w-60">
         <n-select
           v-model:value="formValue.role"
           placeholder=""
           :options="invitationRoles"
-          class="w-60"
+          :consistent-menu-width="false"
+          class="!w-40"
         />
       </n-form-item>
 
