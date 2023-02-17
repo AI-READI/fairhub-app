@@ -1,3 +1,4 @@
+import { html } from "code-tag";
 import { NEmpty } from "naive-ui";
 
 export default {
@@ -6,8 +7,9 @@ export default {
   argTypes: {
     size: {
       control: { type: "select" },
-      options: ["medium"],
+      options: ["small", "medium", "large"],
     },
+    "show-icon": { control: { type: "boolean" } },
   },
 };
 
@@ -16,33 +18,27 @@ const BasicTemplate = (args) => ({
   setup() {
     return { args };
   },
-  template:
-    '  <n-empty description="You can\'t find anything">\n' +
-    "    <template #extra>\n" +
-    '      <n-button size="small">\n' +
-    "        Find Something New\n" +
-    "      </n-button>\n" +
-    "    </template>\n" +
-    "  </n-empty>",
+  template: html` <n-empty description="You can't find anything" v-bind="args">
+    <template #extra>
+      <n-button size="small"> Find Something New </n-button>
+    </template>
+  </n-empty>`,
 });
 
 export const Title = BasicTemplate.bind({});
-Title.args = { title: "Empty" };
+Title.args = {};
 
 const SizeTemplate = (args) => ({
   components: { NEmpty },
   setup() {
     return { args };
   },
-  template:
-    '    <n-empty size="large" description="can be large">\n' +
-    "    <template #extra>\n" +
-    '      <n-button size="small">\n' +
-    "        Find Something New\n" +
-    "      </n-button>\n" +
-    "    </template>\n" +
-    "  </n-empty>",
+  template: html` <n-empty size="large" description="You can't find anything" v-bind="args">
+    <template #extra>
+      <n-button size="small"> Find Something New </n-button>
+    </template>
+  </n-empty>`,
 });
 
 export const Size = SizeTemplate.bind({});
-Size.args = { size: "medium" };
+Size.args = {};
