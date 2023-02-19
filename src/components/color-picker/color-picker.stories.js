@@ -1,3 +1,4 @@
+import { html } from "code-tag";
 import { NColorPicker } from "naive-ui";
 
 export default {
@@ -6,8 +7,10 @@ export default {
   argTypes: {
     size: {
       control: { type: "select" },
-      options: ["medium"],
+      options: ["small", "medium", "large"],
     },
+    disabled: { control: { type: "boolean" } },
+    show: { control: { type: "boolean" } },
   },
 };
 
@@ -16,12 +19,11 @@ const SizeTemplate = (args) => ({
   setup() {
     return { args };
   },
-  template:
-    "  <n-space vertical>\n" +
-    '    <n-color-picker size="small" />\n' +
-    "    <n-color-picker />\n" +
-    '    <n-color-picker size="large" />\n' +
-    "  </n-space>",
+  template: html` <n-space vertical>
+    <n-color-picker size="small" v-bind="args" />
+    <n-color-picker v-bind="args" />
+    <n-color-picker size="large" />
+  </n-space>`,
 });
 
 export const Size = SizeTemplate.bind({});
@@ -38,12 +40,12 @@ const AlphaTemplate = (args) => ({
       },
     };
   },
-  template:
-    "  <n-color-picker\n" +
-    '    :show-alpha="false"\n' +
-    "    :actions=\"['confirm']\"\n" +
-    '    @confirm="handleConfirm"\n' +
-    "  />",
+  template: html` <n-color-picker
+    v-bind="args"
+    :show-alpha="false"
+    :actions="['confirm']"
+    @confirm="handleConfirm"
+  />`,
 });
 
 export const Alpha = AlphaTemplate.bind({});
