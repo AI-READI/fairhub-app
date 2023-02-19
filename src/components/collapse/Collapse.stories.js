@@ -10,6 +10,8 @@ export default {
       options: ["right", "left"],
     },
     accordion: { control: { type: "boolean" } },
+    filterable: { control: { type: "boolean" } },
+    multiple: { control: { type: "boolean" } },
   },
 };
 
