@@ -1,13 +1,12 @@
 import Select from "./select-element.vue";
+
 export default {
   title: "Components/Select",
   component: Select,
   argTypes: {
-    backgroundColor: { control: "color" },
-    onClick: {},
     size: {
       control: { type: "select" },
-      options: ["medium"],
+      options: ["small", "medium", "large"],
     },
   },
 };

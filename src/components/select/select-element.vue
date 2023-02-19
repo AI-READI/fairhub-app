@@ -1,11 +1,12 @@
 <script lang="ts">
-import { NButton, NSelect } from "naive-ui";
+import { NButton, NSelect, NSpace } from "naive-ui";
+import type { PropType } from "vue";
 import { defineComponent, ref } from "vue";
-
 export default defineComponent({
   components: {
     NButton,
     NSelect,
+    NSpace,
   },
   props: {
     mode: {
@@ -14,7 +15,11 @@ export default defineComponent({
         return ["basic", "size"].indexOf(value) !== -1;
       },
     },
+    disabled: { type: Boolean },
+    clearable: { type: Boolean },
+    size: { type: String as PropType<"tiny" | "small" | "medium" | "large"> },
   },
+
   setup() {
     return {
       value: ref(null),
@@ -44,9 +49,15 @@ export default defineComponent({
 </script>
 
 <template>
-  <n-button v-if="mode === 'basic'">Basic</n-button>
+  <n-select
+    v-model:value="value"
+    :disabled="disabled"
+    :size="size"
+    :clearable="clearable"
+    :options="options"
+    v-if="mode === 'basic'"
+  />
   <n-select v-model:value="value" :options="options" v-if="mode === 'basic'" />
-  <n-select v-model:value="value" disabled :options="options" v-if="mode === 'basic'" />
   <n-button v-if="mode === 'size'">Size</n-button>
   <n-space vertical v-if="mode === 'size'">
     <n-select
