@@ -1,3 +1,4 @@
+import { html } from "code-tag";
 import { NSwitch } from "naive-ui";
 
 export default {
@@ -6,38 +7,39 @@ export default {
   argTypes: {
     size: {
       control: { type: "select" },
-      options: ["medium"],
+      options: ["medium", "large"],
     },
+    round: { control: { type: "boolean" } },
+    "default-value": { control: { type: "boolean" } },
+    loading: { control: { type: "boolean" } },
   },
 };
 
-const TitleTemplate = (args) => ({
+const BasicTemplate = (args) => ({
   components: { NSwitch },
   setup() {
     return { args };
   },
-  template:
-    ' <n-space v-bind="args"> \n' +
-    '    <n-switch v-model:value="active" />\n' +
-    '    <n-switch v-model:value="active" disabled />\n' +
-    "  </n-space>",
+  template: html` <n-space>
+    <n-switch v-model:value="active" v-bind="args" />
+    <n-switch v-model:value="active" disabled />
+  </n-space>`,
 });
 
-export const Title = TitleTemplate.bind({});
-Title.args = { title: "Switch" };
+export const Basic = BasicTemplate.bind({});
+Basic.args = {};
 
 const SizeTemplate = (args) => ({
   components: { NSwitch },
   setup() {
     return { args };
   },
-  template:
-    '  <n-space v-bind="args">\n' +
-    '    <n-switch size="small" />\n' +
-    '    <n-switch size="medium" />\n' +
-    '    <n-switch size="large" />\n' +
-    "  </n-space>",
+  template: html` <n-space>
+    <n-switch size="small" v-bind="args" />
+    <n-switch size="medium" v-bind="args" />
+    <n-switch size="large" v-bind="args" />
+  </n-space>`,
 });
 
 export const Size = SizeTemplate.bind({});
-Size.args = { size: "medium" };
+Size.args = {};
