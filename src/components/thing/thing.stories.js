@@ -6,19 +6,7 @@ import { ref } from "vue";
 export default {
   title: "Components/Thing",
   component: NThing,
-  NButton,
-  NIcon,
-  NSpace,
-  NCheckbox,
-  NCol,
-  NRow,
-  NAvatar,
-  argTypes: {
-    mode: {
-      control: { type: "select" },
-      options: ["horizontal", "vertical"],
-    },
-  },
+  argTypes: {},
 };
 
 const HorizontalTemplate = () => ({
@@ -59,7 +47,7 @@ const HorizontalTemplate = () => ({
       </n-col>
     </n-row>
     <n-divider />
-    <n-thing>
+    <n-thing v-bind="args">
       <template v-if="avatar" #avatar>
         <n-avatar>
           <n-icon>
