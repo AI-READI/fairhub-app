@@ -6,9 +6,9 @@ export default {
   title: "Components/Dynamic inputs",
   component: NDynamicInput,
   argTypes: {
-    size: {
+    preset: {
       control: { type: "select" },
-      options: ["medium"],
+      options: ["input", "pair"],
     },
   },
 };
@@ -18,17 +18,17 @@ const BasicTemplate = (args) => ({
   setup() {
     return { args, value: ref(["", "", ""]) };
   },
-  template:
-    " <n-dynamic-input\n" +
-    '    v-model:value="value"\n' +
-    '    placeholder="Please type here"\n' +
-    '    :min="3"\n' +
-    '    :max="6"\n' +
-    "  />",
+  template: html` <n-dynamic-input
+    v-bind="args"
+    v-model:value="value"
+    placeholder="Please type here"
+    :min="3"
+    :max="6"
+  />`,
 });
 
 export const Basic = BasicTemplate.bind({});
-Basic.args = { title: "Dynamic input" };
+Basic.args = {};
 
 const PairTemplate = (args) => ({
   components: { NDynamicInput },
@@ -45,6 +45,7 @@ const PairTemplate = (args) => ({
   },
   template: html` <n-dynamic-input
     v-model:value="value"
+    v-bind="args"
     preset="pair"
     key-placeholder="Please input the key"
     value-placeholder="Please input the value"
@@ -52,4 +53,4 @@ const PairTemplate = (args) => ({
 });
 
 export const Pair = PairTemplate.bind({});
-Pair.args = { size: "medium" };
+Pair.args = {};
