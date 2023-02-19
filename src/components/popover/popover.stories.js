@@ -1,13 +1,27 @@
+import { html } from "code-tag";
 import { NButton, NPopover } from "naive-ui";
+import { ref } from "vue";
 
 export default {
   title: "Components/Popover",
   component: NPopover,
   argTypes: {
-    size: {
+    trigger: {
       control: { type: "select" },
-      options: ["medium"],
+      options: ["hover", "click", "focus", "manual"],
     },
+    placement: {
+      control: { type: "select" },
+      options: ["top-start", "top", "right", "bottom", "left", "left-end"],
+    },
+    width: {
+      control: { type: "select" },
+      options: ["number", "trigger"],
+    },
+    scrollable: { control: { type: "boolean" } },
+    overlap: { control: { type: "boolean" } },
+    disabled: { control: { type: "boolean" } },
+    animated: { control: { type: "boolean" } },
   },
 };
 
@@ -16,32 +30,55 @@ const BasicTemplate = (args) => ({
   setup() {
     return { args };
   },
-  template:
-    '  <n-popover trigger="hover">\n' +
-    "    <template #trigger>\n" +
-    "      <n-button> Hover </n-button>\n" +
-    "    </template>\n" +
-    "    <span>Maybe I don't really want to know how your garden grows</span>\n" +
-    "  </n-popover>",
+  template: html` <n-popover trigger="hover" v-bind="args">
+    <template #trigger>
+      <n-button> Hover </n-button>
+    </template>
+    <span>Maybe I don't really want to know how your garden grows</span>
+  </n-popover>`,
 });
 
 export const Basic = BasicTemplate.bind({});
-Basic.args = { title: "Popover" };
+Basic.args = {};
 
 const TriggerTemplate = (args) => ({
   components: { NPopover, NButton },
   setup() {
-    return { args };
+    return { args, showPopover: ref(false) };
   },
-  template:
-    '  <n-popover width="trigger">\n' +
-    "    <template #trigger>\n" +
-    "      <n-button>City</n-button>\n" +
-    "    </template>\n" +
-    "    This old town don't smell too pretty and I can feel the warning signs\n" +
-    "    running around my mind\n" +
-    "  </n-popover>",
+  template: html` <n-space>
+    <n-popover trigger="hover" v-bind="args">
+      <template #trigger>
+        <n-button>Hover</n-button>
+      </template>
+      <span>I wish they all could be California girls</span>
+    </n-popover>
+    <n-popover trigger="hover" :keep-alive-on-hover="false">
+      <template #trigger>
+        <n-button>Hover (ignore popup)</n-button>
+      </template>
+      <span>I wish they all could be California girls</span>
+    </n-popover>
+    <n-popover trigger="click">
+      <template #trigger>
+        <n-button>Click</n-button>
+      </template>
+      <span>I wish they all could be California girls</span>
+    </n-popover>
+    <n-popover trigger="focus">
+      <template #trigger>
+        <n-button>Focus</n-button>
+      </template>
+      <span>I wish they all could be California girls</span>
+    </n-popover>
+    <n-popover trigger="manual" :show="showPopover">
+      <template #trigger>
+        <n-button @click="showPopover = !showPopover"> Manual </n-button>
+      </template>
+      <span>I wish they all could be California girls</span>
+    </n-popover>
+  </n-space>`,
 });
 
 export const Trigger = TriggerTemplate.bind({});
-Trigger.args = { size: "medium" };
+Trigger.args = {};
