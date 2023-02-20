@@ -1,13 +1,10 @@
+import { html } from "code-tag";
 import { NGradientText } from "naive-ui";
+
 export default {
   title: "Components/Gradient Text",
   component: NGradientText,
-  argTypes: {
-    size: {
-      control: { type: "select" },
-      options: ["medium"],
-    },
-  },
+  argTypes: {},
 };
 
 const TypeTemplate = (args) => ({
@@ -15,90 +12,83 @@ const TypeTemplate = (args) => ({
   setup() {
     return { args };
   },
-  template:
-    '  <n-gradient-text type="error">\n' +
-    "    Boom!\n" +
-    "  </n-gradient-text>\n" +
-    "  <br>\n" +
-    '  <n-gradient-text type="info">\n' +
-    "    Emmm\n" +
-    "  </n-gradient-text>\n" +
-    "  <br>\n" +
-    '  <n-gradient-text type="warning">\n' +
-    "    Oops!\n" +
-    "  </n-gradient-text>\n" +
-    "  <br>\n" +
-    '  <n-gradient-text type="success">\n' +
-    "    Haha!\n" +
-    "  </n-gradient-text>",
+  template: html` <n-gradient-text
+      :gradient="{
+      from: 'rgb(85, 85, 85)',
+      to: 'rgb(170, 170, 170)'
+    }"
+      v-bind="args"
+    >
+      Custom Color
+    </n-gradient-text>
+
+    <n-gradient-text
+      v-bind="args"
+      :gradient="{
+      from: 'rgb(85, 85, 85)',
+      to: 'rgb(170, 170, 170)'
+    }"
+    >
+      Custom Color
+    </n-gradient-text>
+    <n-gradient-text gradient="linear-gradient(90deg, red 0%, green 50%, blue 100%)">
+      A Scribbled Color
+    </n-gradient-text>`,
 });
 
 export const Type = TypeTemplate.bind({});
-Type.args = { title: "Basic" };
+Type.args = {};
 
 const CustomTemplate = (args) => ({
   components: { NGradientText },
   setup() {
     return { args };
   },
-  template:
-    " <n-gradient-text\n" +
-    '    :gradient="{\n' +
-    "      from: 'rgb(85, 85, 85)',\n" +
-    "      to: 'rgb(170, 170, 170)'\n" +
-    '    }"\n' +
-    "  >\n" +
-    "    Custom Color\n" +
-    "  </n-gradient-text>\n" +
-    "  <br>\n" +
-    "  <n-gradient-text\n" +
-    '    :gradient="{\n' +
-    "      deg: 180,\n" +
-    "      from: 'rgb(85, 85, 85)',\n" +
-    "      to: 'rgb(170, 170, 170)'\n" +
-    '    }"\n' +
-    "  >\n" +
-    "    Custom Color\n" +
-    "  </n-gradient-text>\n" +
-    "  <br>\n" +
-    "  <n-gradient-text\n" +
-    '    gradient="linear-gradient(90deg, red 0%, green 50%, blue 100%)"\n' +
-    "  >\n" +
-    "    A Scribbled Color\n" +
-    "  </n-gradient-text>\n" +
-    "</template>\n" +
-    "\n" +
-    "<style scoped>\n" +
-    ".n-gradient-text {\n" +
-    "  font-size: 24px;\n" +
-    "}\n" +
-    "</style>",
+  template: html` 
+     <n-gradient-text v-bind="args"
+    :gradient="{
+      from: 'rgb(85, 85, 85)',
+      to: 'rgb(170, 170, 170)'
+    }"
+  >
+    Custom Color
+  </n-gradient-text>
+  <br>
+  <n-gradient-text
+      v-bind="args"
+    :gradient="{
+      deg: 180,
+      from: 'rgb(85, 85, 85)',
+      to: 'rgb(170, 170, 170)'
+    }"
+  >
+    Custom Color
+  </n-gradient-text>
+  <br>
+  <n-gradient-text
+       v-bind="args"
+    gradient="linear-gradient(90deg, red 0%, green 50%, blue 100%)"
+  >
+    A Scribbled Color
+  </n-gradient-text>
+</template>`,
 });
 
 export const Custom = CustomTemplate.bind({});
-Custom.args = { size: "medium" };
+Custom.args = {};
 
 const SizeTemplate = (args) => ({
   components: { NGradientText },
   setup() {
     return { args };
   },
-  template:
-    '  <n-gradient-text type="info">\n' +
-    "    Live Forever\n" +
-    "  </n-gradient-text>\n" +
-    '  <n-gradient-text type="danger">\n' +
-    "    Live Forever\n" +
-    "  </n-gradient-text>\n" +
-    "  <br>\n" +
-    '  <n-gradient-text :size="24" type="warning">\n' +
-    "    Married with Children\n" +
-    "  </n-gradient-text>\n" +
-    "  <br>\n" +
-    '  <n-gradient-text :size="24" type="success">\n' +
-    "    Back in the USSR\n" +
-    "  </n-gradient-text>",
+  template: html` <n-gradient-text type="info" v-bind="args"> Live Forever </n-gradient-text>
+    <n-gradient-text v-bind="args"> Live Forever </n-gradient-text>
+    <br />
+    <n-gradient-text v-bind="args"> Married with Children </n-gradient-text>
+    <br />
+    <n-gradient-text v-bind="args"> Back in the USSR </n-gradient-text>`,
 });
 
 export const Size = SizeTemplate.bind({});
-Size.args = { title: "Basic" };
+Size.args = {};

@@ -4,6 +4,7 @@ require("storybook-tailwind-foundations/initialize.js").default(tailwindConfigPa
 
 module.exports = {
   stories: [
+    "../src/stories/about/Welcome.stories.mdx",
     "../src/**/*.stories.mdx",
     "../src/**/*.stories.@(js|jsx|ts|tsx)",
     "../node_modules/storybook-tailwind-foundations/**/*.stories.js",
