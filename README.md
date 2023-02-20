@@ -66,3 +66,4 @@ This repository is automatically deployed to [Azure](https://www.netlify.com/) o
 - https://brave-ground-07b6bfb10-<GITHUB_PR_NUMBER>.centralus.2.azurestaticapps.net/
 
 The `production` branch is automatically deployed to the following URL: https://fairhub.io
+ 
