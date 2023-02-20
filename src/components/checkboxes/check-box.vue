@@ -1,11 +1,12 @@
 <script lang="ts">
 import { NCheckbox, NSpace } from "naive-ui";
+import type { PropType } from "vue";
 import { defineComponent, ref } from "vue";
 export default defineComponent({
   setup() {
     return {
       value: ref(false),
-      disabled: ref(true),
+      disable: ref(true),
     };
   },
   components: {
@@ -19,16 +20,28 @@ export default defineComponent({
         return ["basic", "size"].indexOf(value) !== -1;
       },
     },
+    size: { type: String as PropType<"small" | "medium" | "large"> },
+    focusable: { type: Boolean },
+    disabled: { type: Boolean },
+    indeterminate: { type: Boolean },
   },
 });
 </script>
 
 <template>
   <n-space item-style="display: flex;" align="center" v-if="mode === 'basic'">
-    <n-checkbox v-model:checked="value"> Checkbox </n-checkbox>
+    <n-checkbox
+      v-model:checked="value"
+      :size="size"
+      :focusable="focusable"
+      :disabled="disabled"
+      :indeterminate="indeterminate"
+    >
+      Checkbox
+    </n-checkbox>
     <n-checkbox v-model:checked="value" />
-    <n-checkbox v-model:checked="value" :disabled="disabled"> Checkbox </n-checkbox>
-    <n-button size="small" @click="disabled = !disabled"> Disabled </n-button>
+    <n-checkbox v-model:checked="value"> Checkbox </n-checkbox>
+    <n-button size="small" @click="disable = !disable"> Disabled </n-button>
   </n-space>
 
   <n-space item-style="display: flex;" align="center" v-if="mode === 'size'">
