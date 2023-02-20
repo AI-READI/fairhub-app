@@ -1,5 +1,6 @@
 <script lang="ts">
 import { type CascaderOption, NCascader, NSpace, NSwitch } from "naive-ui";
+import type { PropType } from "vue";
 import { defineComponent, ref } from "vue";
 
 function getOptions(depth = 3, iterator = 1, prefix = "") {
@@ -43,6 +44,8 @@ export default defineComponent({
         return ["basic", "slot", "picker"].indexOf(value) !== -1;
       },
     },
+    size: { type: String as PropType<"small" | "medium" | "large"> },
+    status: { type: String as PropType<"success" | "warning" | "error"> },
   },
   setup() {
     return {
@@ -63,12 +66,19 @@ export default defineComponent({
 <template>
   <n-space vertical>
     <n-space>
-      <n-space> <n-switch v-model:value="checkStrategyIsChild" />Child Check Strategy </n-space>
-      <n-space><n-switch v-model:value="showPath" />Show Path</n-space>
-      <n-space><n-switch v-model:value="hoverTrigger" />Hover Trigger</n-space>
+      <n-space>
+        <n-switch :size="size" :status="status" v-model:value="checkStrategyIsChild" />Child Check
+        Strategy
+      </n-space>
+      <n-space
+        ><n-switch v-model:value="showPath" :status="status" :size="size" />Show Path</n-space
+      >
+      <n-space><n-switch v-model:value="hoverTrigger" :status="status" />Hover Trigger</n-space>
       <n-space><n-switch v-model:value="filterable" />Filterable</n-space>
     </n-space>
     <n-cascader
+      :status="status"
+      :size="size"
       v-model:value="value"
       placeholder="Meaningless values"
       :expand-trigger="hoverTrigger ? 'hover' : 'click'"

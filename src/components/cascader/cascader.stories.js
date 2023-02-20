@@ -5,11 +5,16 @@ export default {
   title: "Components/Cascader",
   component: Cascader,
   argTypes: {
-    backgroundColor: { control: "color" },
-    onClick: {},
     size: {
       control: { type: "select" },
-      options: ["medium"],
+      options: ["small", "medium", "large"],
+    },
+    status: {
+      control: { type: "select" },
+      options: ["success", "warning", "error"],
+    },
+    mode: {
+      table: { disable: true },
     },
   },
 };
