@@ -1,13 +1,19 @@
 import Input from "./input-element.vue";
+
 export default {
   title: "Components/Input",
   component: Input,
   argTypes: {
-    backgroundColor: { control: "color" },
-    onClick: {},
     size: {
       control: { type: "select" },
-      options: ["medium"],
+      options: ["small", "medium", "large"],
+    },
+    status: {
+      control: { type: "select" },
+      options: ["success", "warning", "error"],
+    },
+    mode: {
+      table: { disable: true },
     },
   },
 };
