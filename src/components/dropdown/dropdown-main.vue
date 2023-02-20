@@ -1,6 +1,7 @@
 <script lang="ts">
 import { NButton, NDropdown } from "naive-ui";
 import { useMessage } from "naive-ui";
+import type { PropType } from "vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -15,6 +16,10 @@ export default defineComponent({
         return ["basic", "trigger", "icon", "arrow"].indexOf(value) !== -1;
       },
     },
+    size: { type: String as PropType<"small" | "medium" | "large"> },
+    animated: { type: Boolean },
+    keyboard: { type: Boolean },
+    inverted: { type: Boolean },
   },
   setup() {
     const message = useMessage();
@@ -48,7 +53,16 @@ export default defineComponent({
 </script>
 
 <template>
-  <n-dropdown trigger="hover" :options="options" @select="handleSelect" v-if="mode === 'basic'">
+  <n-dropdown
+    trigger="hover"
+    :options="options"
+    @select="handleSelect"
+    v-if="mode === 'basic'"
+    :size="size"
+    :animated="animated"
+    :keyboard="keyboard"
+    :inverted="inverted"
+  >
     <n-button>Basic</n-button>
   </n-dropdown>
 

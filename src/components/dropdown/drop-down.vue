@@ -1,5 +1,6 @@
 <script lang="ts">
 import { NMessageProvider } from "naive-ui";
+import type { PropType } from "vue";
 import { defineComponent } from "vue";
 
 import DropdownMain from "./dropdown-main.vue";
@@ -14,6 +15,10 @@ export default defineComponent({
         return ["basic", "trigger", "size", "arrow"].indexOf(value) !== -1;
       },
     },
+    size: { type: String as PropType<"small" | "medium" | "large"> },
+    animated: { type: Boolean },
+    keyboard: { type: Boolean },
+    inverted: { type: Boolean },
   },
 });
 </script>
@@ -21,7 +26,13 @@ export default defineComponent({
 <script lang="ts"></script>
 <template>
   <n-message-provider>
-    <DropdownMain :mode="mode" />
+    <DropdownMain
+      :mode="mode"
+      :size="size"
+      :animated="animated"
+      :keyboard="keyboard"
+      :inverted="inverted"
+    />
   </n-message-provider>
 </template>
 

@@ -1,14 +1,16 @@
 import Dropdown from "./drop-down.vue";
+
 export default {
   title: "Components/Dropdown",
   component: Dropdown,
   argTypes: {
-    backgroundColor: { control: "color" },
-    onClick: {},
     size: {
       control: { type: "select" },
-      options: ["medium"],
+      options: ["small", "medium", "large"],
     },
+    animated: { control: { type: "boolean" } },
+    keyboard: { control: { type: "boolean" } },
+    inverted: { control: { type: "boolean" } },
   },
 };
 const Template = (args) => ({
