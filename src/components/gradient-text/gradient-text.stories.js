@@ -38,40 +38,33 @@ const TypeTemplate = (args) => ({
 
 export const Type = TypeTemplate.bind({});
 Type.args = {};
-
 const CustomTemplate = (args) => ({
   components: { NGradientText },
   setup() {
     return { args };
   },
-  template: html` 
-     <n-gradient-text v-bind="args"
-    :gradient="{
+  template: html` <n-gradient-text
+      :gradient="{
       from: 'rgb(85, 85, 85)',
       to: 'rgb(170, 170, 170)'
     }"
-  >
-    Custom Color
-  </n-gradient-text>
-  <br>
-  <n-gradient-text
       v-bind="args"
-    :gradient="{
-      deg: 180,
+    >
+      Custom Color
+    </n-gradient-text>
+
+    <n-gradient-text
+      v-bind="args"
+      :gradient="{
       from: 'rgb(85, 85, 85)',
       to: 'rgb(170, 170, 170)'
     }"
-  >
-    Custom Color
-  </n-gradient-text>
-  <br>
-  <n-gradient-text
-       v-bind="args"
-    gradient="linear-gradient(90deg, red 0%, green 50%, blue 100%)"
-  >
-    A Scribbled Color
-  </n-gradient-text>
-</template>`,
+    >
+      Custom Color
+    </n-gradient-text>
+    <n-gradient-text gradient="linear-gradient(90deg, red 0%, green 50%, blue 100%)">
+      A Scribbled Color
+    </n-gradient-text>`,
 });
 
 export const Custom = CustomTemplate.bind({});
