@@ -12,28 +12,13 @@ const TypeTemplate = (args) => ({
   setup() {
     return { args };
   },
-  template: html` <n-gradient-text
-      :gradient="{
-      from: 'rgb(85, 85, 85)',
-      to: 'rgb(170, 170, 170)'
-    }"
-      v-bind="args"
-    >
-      Custom Color
-    </n-gradient-text>
-
-    <n-gradient-text
-      v-bind="args"
-      :gradient="{
-      from: 'rgb(85, 85, 85)',
-      to: 'rgb(170, 170, 170)'
-    }"
-    >
-      Custom Color
-    </n-gradient-text>
-    <n-gradient-text gradient="linear-gradient(90deg, red 0%, green 50%, blue 100%)">
-      A Scribbled Color
-    </n-gradient-text>`,
+  template: html` <n-gradient-text type="error"> Boom! </n-gradient-text>
+    <br />
+    <n-gradient-text type="info"> Emmm </n-gradient-text>
+    <br />
+    <n-gradient-text type="warning"> Oops! </n-gradient-text>
+    <br />
+    <n-gradient-text type="success"> Haha! </n-gradient-text>`,
 });
 
 export const Type = TypeTemplate.bind({});
