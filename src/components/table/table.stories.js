@@ -3,12 +3,12 @@ export default {
   title: "Components/Table",
   component: Table,
   argTypes: {
-    backgroundColor: { control: "color" },
-    onClick: {},
     size: {
       control: { type: "select" },
-      options: ["medium"],
+      options: ["small", "medium", "large"],
     },
+    bordered: { control: { type: "boolean" } },
+    "single-column": { control: { type: "boolean" } },
   },
 };
 const Template = (args) => ({
