@@ -11,6 +11,7 @@ export default {
       control: { type: "select" },
       options: ["horizontal", "vertical"],
     },
+    accordion: { control: { type: "boolean" } },
   },
 };
 
@@ -39,7 +40,7 @@ const HorizontalTemplate = (args) => ({
   setup() {
     return { args };
   },
-  template: html`<n-menu mode="horizontal" :options="menuOptions" />`,
+  template: html` <n-menu v-bind="args" :options="menuOptions" />`,
 });
 
 export const Horizontal = HorizontalTemplate.bind({});
@@ -66,7 +67,7 @@ const VerticalTemplate = (args) => ({
   setup() {
     return { args };
   },
-  template: html`<n-menu mode="vertical" :options="menuOptions" />`,
+  template: html`<n-menu v-bind="args" :options="menuOptions" />`,
 });
 
 export const Vertical = VerticalTemplate.bind({});
@@ -110,7 +111,7 @@ const SubMenuTemplate = (args) => ({
   setup() {
     return { args };
   },
-  template: html`<n-menu mode="vertical" :options="menuOptions" />`,
+  template: html`<n-menu v-bind="args" :options="menuOptions" />`,
 });
 
 export const SubMenu = SubMenuTemplate.bind({});
