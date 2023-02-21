@@ -5,6 +5,7 @@ import type { FormInst, FormItemRule } from "naive-ui";
 import {
   NAvatar,
   NButton,
+  NCard,
   NDivider,
   NForm,
   NFormItem,
@@ -83,12 +84,6 @@ const owner = {
   status: "active",
 };
 
-// add owner to beginning of contributors array
-/**
- * TODO: Might need to make this seperate from the contributors array
- */
-contributors.unshift(owner);
-
 const contributorRoles = [
   {
     disabled: authStore.user !== study.owner?.email,
@@ -135,7 +130,28 @@ const getFirstLetters = (name: string) => {
       <h1>Invite people to contribute to the {{ study.title }} study</h1>
     </n-space>
 
-    Add Owner here
+    <n-card class="!mt-4">
+      <h3>Current owner of the study</h3>
+
+      <n-divider />
+
+      <n-space align="center">
+        <n-avatar
+          round
+          class="flex items-center justify-center"
+          :class="{
+            'bg-sky-900': owner.status === 'active',
+            'text-slate-50': owner.status === 'active',
+          }"
+        >
+          {{ getFirstLetters(owner.name) }}
+        </n-avatar>
+        <div class="flex flex-col">
+          <span class="text-lg font-semibold">{{ owner.name }}</span>
+          <span>{{ owner.email }}</span>
+        </div>
+      </n-space>
+    </n-card>
 
     <n-divider />
 
@@ -193,8 +209,8 @@ const getFirstLetters = (name: string) => {
     <n-divider />
 
     <n-form ref="formRef" inline :model="formValue" :rules="rules" size="large">
-      <n-form-item label="Email Address" path="email">
-        <n-input v-model:value="formValue.email" placeholder="someone@email.org" class="w-60" />
+      <n-form-item label="Email Address" path="email" :label-width="200">
+        <n-input v-model:value="formValue.email" placeholder="someone@email.org" class="w-80" />
       </n-form-item>
       <n-form-item label="Permission" path="role" class="w-60">
         <n-select
