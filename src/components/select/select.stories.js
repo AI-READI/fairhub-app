@@ -8,6 +8,7 @@ export default {
       control: { type: "select" },
       options: ["small", "medium", "large"],
     },
+    mode: { table: { disable: true } },
   },
 };
 const Template = (args) => ({
