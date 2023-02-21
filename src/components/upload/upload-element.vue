@@ -15,6 +15,10 @@ export default defineComponent({
         return ["basic", "draggable"].indexOf(value) !== -1;
       },
     },
+    showPreviewButton: { type: Boolean },
+    multiple: { type: Boolean },
+    directory: { type: Boolean },
+    disabled: { type: Boolean },
   },
 });
 </script>
@@ -22,6 +26,10 @@ export default defineComponent({
 <template>
   <n-button v-if="mode === 'size'">Basic</n-button>
   <n-upload
+    :show-preview-button="showPreviewButton"
+    :multiple="multiple"
+    :directory="directory"
+    :disabled="disabled"
     v-if="mode === 'basic'"
     action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
     :headers="{

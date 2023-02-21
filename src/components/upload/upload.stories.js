@@ -4,11 +4,18 @@ export default {
   title: "Components/Upload",
   component: UploadElement,
   argTypes: {
-    backgroundColor: { control: "color" },
-    onClick: {},
-    size: {
-      control: { type: "select" },
-      options: ["medium"],
+    showPreviewButton: {
+      control: { type: "boolean" },
+    },
+    multiple: {
+      control: { type: "boolean" },
+    },
+    directory: {
+      control: { type: "boolean" },
+    },
+    mode: { table: { disable: true } },
+    disabled: {
+      control: { type: "boolean" },
     },
   },
 };
