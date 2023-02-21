@@ -1,5 +1,5 @@
 import { html } from "code-tag";
-import { NRate } from "naive-ui";
+import { NRate, NSpace } from "naive-ui";
 
 export default {
   title: "Components/Rate",
@@ -23,19 +23,18 @@ const TitleTemplate = (args) => ({
 });
 
 export const Title = TitleTemplate.bind({});
-Title.args = { title: "Rate" };
+Title.args = {};
 
 const SizeTemplate = (args) => ({
-  components: { NRate },
+  components: { NRate, NSpace },
   setup() {
     return { args };
   },
-  template: html` 
-    <n-space align="center">
-    <n-rate v-bind='args'>
-    <n-rate v-bind='args' size="medium" >
-    </n-space>`,
+  template: html` <n-space align="center">
+    <n-rate v-bind="args" />
+    <n-rate size="medium" />
+  </n-space>`,
 });
 
 export const Size = SizeTemplate.bind({});
-Size.args = { size: "medium" };
+Size.args = {};
