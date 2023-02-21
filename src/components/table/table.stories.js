@@ -3,12 +3,13 @@ export default {
   title: "Components/Table",
   component: Table,
   argTypes: {
+    bordered: { control: { type: "boolean" } },
+    cascade: { control: { type: "boolean" } },
+    mode: { table: { disable: true } },
     size: {
       control: { type: "select" },
       options: ["small", "medium", "large"],
     },
-    bordered: { control: { type: "boolean" } },
-    "single-column": { control: { type: "boolean" } },
   },
 };
 const Template = (args) => ({

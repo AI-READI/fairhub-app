@@ -1,6 +1,8 @@
 <script lang="ts">
 import { NTable } from "naive-ui";
+import type { PropType } from "vue";
 import { defineComponent } from "vue";
+
 export default defineComponent({
   components: {
     NTable,
@@ -12,12 +14,21 @@ export default defineComponent({
         return ["basic", "border", "size", "stripe"].indexOf(value) !== -1;
       },
     },
+    bordered: { type: Boolean },
+    cascade: { type: Boolean },
+    size: { type: String as PropType<"small" | "medium" | "large"> },
   },
 });
 </script>
 
 <template>
-  <n-table :bordered="false" :single-line="false" v-if="mode === 'basic'">
+  <n-table
+    :single-line="false"
+    v-if="mode === 'basic'"
+    :bordered="bordered"
+    :cascade="cascade"
+    :size="size"
+  >
     <thead>
       <tr>
         <th>Basic</th>
@@ -45,7 +56,13 @@ export default defineComponent({
     </tbody>
   </n-table>
 
-  <n-table :single-line="false" v-if="mode === 'border'">
+  <n-table
+    :single-line="false"
+    v-if="mode === 'border'"
+    :bordered="bordered"
+    :cascade="cascade"
+    :size="size"
+  >
     <thead>
       <tr>
         <th>border</th>
@@ -74,7 +91,7 @@ export default defineComponent({
   </n-table>
 
   <n-space vertical v-if="mode === 'size'">
-    <n-table :bordered="false" :single-line="false" size="small">
+    <n-table :single-line="false" :bordered="bordered" :cascade="cascade" :size="size">
       <thead>
         <tr>
           <th>size</th>
@@ -104,7 +121,7 @@ export default defineComponent({
   </n-space>
 
   <n-space vertical v-if="mode === 'stripe'">
-    <n-table striped>
+    <n-table striped :bordered="bordered" :cascade="cascade" :size="size">
       <thead>
         <tr>
           <th>stripe</th>
