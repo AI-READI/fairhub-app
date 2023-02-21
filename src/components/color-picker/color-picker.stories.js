@@ -27,7 +27,7 @@ const SizeTemplate = (args) => ({
 });
 
 export const Size = SizeTemplate.bind({});
-Size.args = { title: "Size" };
+Size.args = {};
 
 const AlphaTemplate = (args) => ({
   components: { NColorPicker },
@@ -49,4 +49,4 @@ const AlphaTemplate = (args) => ({
 });
 
 export const Alpha = AlphaTemplate.bind({});
-Alpha.args = { size: "medium" };
+Alpha.args = {};

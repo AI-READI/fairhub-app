@@ -11,6 +11,7 @@ export default {
     animated: { control: { type: "boolean" } },
     keyboard: { control: { type: "boolean" } },
     inverted: { control: { type: "boolean" } },
+    mode: { table: { disable: true } },
   },
 };
 const Template = (args) => ({
