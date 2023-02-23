@@ -104,4 +104,14 @@
   .animated-underline:focus-visible {
     background-size: 0 2px, 100% 2px;
   }
+
+  .bg-primary {
+    @apply bg-primary-500;
+  }
+
+    .bg-secondary {
+    @apply bg-secondary-500;
+  }
 }
+
+

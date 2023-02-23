@@ -9,6 +9,20 @@
 
     <hr />
 
+    <h2>Default colors</h2>
+    <p>These colors are used as default colors.</p>
+    <div class="grid grid-cols-4 gap-4">
+      <div class="flex w-max flex-col py-3">
+        <div class="bg-primary h-[80px] w-[250px]" />
+        <span class="mt-2 w-auto text-sm font-medium">bg-primary</span>
+      </div>
+
+      <div class="flex w-max flex-col py-3">
+        <div class="bg-secondary h-[80px] w-[250px]" />
+        <span class="mt-2 w-auto text-sm font-medium">bg-secondary</span>
+      </div>
+    </div>
+
     <div v-for="item in allColors" :key="item.label" class="py-4">
       <h2>{{ item.label }}</h2>
 
@@ -23,11 +37,12 @@
       </div>
     </div>
 
-    <h2 class="pt-8">Tailwind Colors</h2>
+    <h2 class="pt-8">Extended Colors</h2>
 
     <p>
-      The entire Tailwind color palette is also available for use in the app. As we develop more
-      components, we will add them to the design system.
+      The entire Tailwind color palette is also available for use in the app. You can refer to the
+      <a href="/?path=/story/design-system--extended-colors"> extended colors</a> section to find
+      whole color palette.
     </p>
   </article>
 </template>
@@ -53,23 +68,15 @@ const allColors = [
     label: "Secondary Colors",
     colors: [
       "bg-secondary-50",
-      "bg-secondary-60",
       "bg-secondary-100",
-      "bg-secondary-110",
       "bg-secondary-200",
       "bg-secondary-300",
       "bg-secondary-400",
-      "bg-secondary-410",
       "bg-secondary-500",
-      "bg-secondary-510",
       "bg-secondary-600",
-      "bg-secondary-610",
       "bg-secondary-700",
-      "bg-secondary-710",
       "bg-secondary-800",
-      "bg-secondary-810",
       "bg-secondary-900",
-      "bg-secondary-910",
     ],
   },
 ];

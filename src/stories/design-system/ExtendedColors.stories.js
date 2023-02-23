@@ -14,7 +14,7 @@ const Template = (args) => ({
   template: '<ColorsFoundation v-bind="args" />',
 });
 
-export const Colors = Template.bind({});
-Colors.args = {
+export const ExtendedColors = Template.bind({});
+ExtendedColors.args = {
   colors: getTheme("colors"),
 };
