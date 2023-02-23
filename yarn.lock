@@ -1452,11 +1452,6 @@
     "@semantic-release/git" "^10.0.1"
     megasanjay-devmoji "^1.2.1"
 
-"@fairdataihub/storybook-tailwind-foundations@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@fairdataihub/storybook-tailwind-foundations/-/storybook-tailwind-foundations-3.0.1.tgz#a43b03457d184f09ade47d53a652543cec2dd58e"
-  integrity sha512-JmCPw4HbT//YnDufo3MIyzzUYglu9613s8QgtkwcVOz5Qb70b9Aa28cvKpYB2oauLidQ5NUtOn6DJgBnAyr5PQ==
-
 "@gar/promisify@^1.0.1":
   version "1.1.3"
   resolved "https://registry.npmjs.org/@gar/promisify/-/promisify-1.1.3.tgz"
