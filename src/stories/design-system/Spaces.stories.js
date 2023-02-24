@@ -2,7 +2,7 @@ import { getTheme } from "./getTheme.js";
 import SpacesFoundation from "./SpacesFoundation.vue";
 
 export default {
-  title: "Design System",
+  title: "Design System/ Spaces",
   component: SpacesFoundation,
 };
 

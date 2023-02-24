@@ -2,7 +2,7 @@ import ColorsFoundation from "./ColorsFoundation.vue";
 import { getTheme } from "./getTheme.js";
 
 export default {
-  title: "Design System",
+  title: "Design System/Extended Colors",
   component: ColorsFoundation,
 };
 
