@@ -112,6 +112,24 @@
     .bg-secondary {
     @apply bg-secondary-500;
   }
+
+   .border-primary {
+    @apply border-primary-500;
+  }
+
+    .border-secondary {
+    @apply border-secondary-500;
+  }
+
+     .text-primary {
+    @apply text-primary-500;
+  }
+
+    .text-secondary {
+    @apply text-secondary-500;
+  }
+
+
 }
 
 

@@ -9,7 +9,23 @@
 
     <hr />
 
-    <div v-for="item in allColors" :key="item.label" class="py-4">
+    <h2>Default colors</h2>
+
+    <div class="grid grid-cols-4 gap-4">
+      <div class="flex w-max flex-col py-3">
+        <span class="text-primary text-5xl"> Aa </span>
+        <span>text-primary</span>
+
+        <span class="text-secondary text-5xl"> Aa </span>
+        <div>text-secondary</div>
+      </div>
+    </div>
+    <p>
+      If you need to control over shades you can use the following classes to stay in primary color
+      range.
+    </p>
+
+    <div v-for="item in allColors" :key="item.colors[5]" class="py-4">
       <h2>{{ item.label }}</h2>
 
       <div class="grid grid-cols-4 gap-4">
@@ -20,11 +36,12 @@
       </div>
     </div>
 
-    <h2 class="pt-8">Tailwind Colors</h2>
+    <h2 class="pt-8">Extended Colors</h2>
 
     <p>
-      The entire Tailwind color palette is also available for use in the app. As we develop more
-      components, we will add them to the design system.
+      The entire Tailwind color palette is also available for use in the app. You can refer to the
+      <a href="/?path=/story/design-system--extended-colors"> extended colors</a> section to find
+      whole color palette.
     </p>
   </article>
 </template>

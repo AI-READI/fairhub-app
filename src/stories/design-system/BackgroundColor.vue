@@ -6,7 +6,6 @@
       The consistent use of color in our product keeps cognitive loads low, and makes for a unified
       and engaging user experience. The colors are designed to be clear and accessible.
     </p>
-
     <hr />
 
     <h2>Default colors</h2>
@@ -23,6 +22,10 @@
       </div>
     </div>
 
+    <p>
+      If you need to control over shades you can use the following classes to stay in primary color
+      range.
+    </p>
     <div v-for="item in allColors" :key="item.label" class="py-4">
       <h2>{{ item.label }}</h2>
 
