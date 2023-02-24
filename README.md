@@ -1,15 +1,17 @@
-# Best practices assessment
+# Description
 ## fairhub.io
 
 Cloud-based platform for easily preparing and sharing FAIR and AI-ready datasets.
 
-## 1. Project Setup
+# Getting started
+We use Storybook for documenting our design system. You can refer to that for design guidelines, component documentation, and resources for editing components locally.
 
-## Recommended IDE Setup
+## Prerequisites/Dependencies
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
-## Type Support for `.vue` Imports in TS
+
+### Type Support for `.vue` Imports in TS
 
 TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
 
@@ -20,7 +22,7 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
    2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
 2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
 
-## Code development
+## Installing
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
 
@@ -58,7 +60,7 @@ npm run test:e2e # or `npm run test:e2e:ci` for headless testing
 ```sh
 npm run lint
 ```
-## 3. Pushing changes to GitHub repository
+
 ## Deployment
 
 This repository is automatically deployed to [Azure](https://www.netlify.com/) on every push to the repository. If you need to reference a specific branch or pull request, you can do so by using the following URL pattern:
@@ -68,9 +70,10 @@ This repository is automatically deployed to [Azure](https://www.netlify.com/) o
 
 The `production` branch is automatically deployed to the following URL: https://fairhub.io
  
-## 4. Documenting
-## 5. Adding metadata
-## 6. Version release
-## 7. Suggested automation tools
-# Additional information
-We use Storybook for documenting our design system. You can refer to that for design guidelines, component documentation, and resources for editing components locally.
+## Inputs and Outputs
+## Contributing
+## Issues and Feedback
+If you have any questions or suggestions, please contact us using [GitHub issues](https://github.com/AI-READI/fairhub.io/issues/new)
+## How to cite
+## Acknowledgements
+This project is supported by the NIH-funded Bridge2AI program (1OT2OD032644). The content is solely the responsibility of the authors and does not necessarily represent the official views of the NIH.
