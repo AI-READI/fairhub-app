@@ -1,6 +1,9 @@
-# fairhub.io
+# Best practices assessment
+## fairhub.io
 
-Cloud-based platform for easily preparing and sharing FAIR and AI-ready datasets
+Cloud-based platform for easily preparing and sharing FAIR and AI-ready datasets.
+
+## 1. Project Setup
 
 ## Recommended IDE Setup
 
@@ -17,11 +20,9 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
    2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
 2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
 
-## Customize configuration
+## Code development
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
 
 ```sh
 npm install
@@ -57,8 +58,8 @@ npm run test:e2e # or `npm run test:e2e:ci` for headless testing
 ```sh
 npm run lint
 ```
-
-# Deployment
+## 3. Pushing changes to GitHub repository
+## Deployment
 
 This repository is automatically deployed to [Azure](https://www.netlify.com/) on every push to the repository. If you need to reference a specific branch or pull request, you can do so by using the following URL pattern:
 
@@ -67,3 +68,9 @@ This repository is automatically deployed to [Azure](https://www.netlify.com/) o
 
 The `production` branch is automatically deployed to the following URL: https://fairhub.io
  
+## 4. Documenting
+## 5. Adding metadata
+## 6. Version release
+## 7. Suggested automation tools
+# Additional information
+We use Storybook for documenting our design system. You can refer to that for design guidelines, component documentation, and resources for editing components locally.
