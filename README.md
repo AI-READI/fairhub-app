@@ -113,6 +113,16 @@ The `production` branch is automatically deployed to the following URL: https://
 ## Contributing
 ## Issues and Feedback
 If you have any questions or suggestions, please contact us using [GitHub issues](https://github.com/AI-READI/fairhub.io/issues/new)
+
+## License
+
+This work is licensed under
+[MIT](https://opensource.org/licenses/mit). See [LICENSE](https://github.com/AI-READI/template/blob/main/LICENSE) for more information.
+
+<a href="https://aireadi.org" >
+  <img src="https://www.channelfutures.com/files/2017/04/3_0.png" height="30" />
+</a>
+
 ## How to cite
 ## Acknowledgements
 This project is supported by the NIH-funded Bridge2AI program (1OT2OD032644). The content is solely the responsibility of the authors and does not necessarily represent the official views of the NIH.
