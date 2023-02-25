@@ -1,8 +1,47 @@
+<div align="center">
+
+<img src="https://fairdataihub.org/_next/image?url=%2Fimages%2Fhero%2Faireadi-logo.png&w=640&q=75" alt="logo" width="200" height="auto" />
+
+<br />
+
+<h1>Fairhub.io</h1>
+
+<p>
+Cloud-based platform for easily preparing and sharing datasets.</p>
+
+<p>
+  <a href="https://github.com/AI-READI/fairhub.io/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/AI-READI/template.svg?style=flat-square" alt="contributors" />
+  </a>
+  <a href="https://github.com/AI-READI/fairhub.io/stargazers">
+    <img src="https://img.shields.io/github/stars/AI-READI/template.svg?style=flat-square" alt="stars" />
+  </a>
+  <a href="https://github.com/AI-READI/fairhub.io/issues/">
+    <img src="https://img.shields.io/github/issues/AI-READI/template.svg?style=flat-square" alt="open issues" />
+  </a>
+  <a href="https://github.com/AI-READI/fairhub.io/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/AI-READI/template.svg?style=flat-square" alt="license" />
+  </a>
+  <a href="https://doi.org/10.5281/zenodo.6407300">
+    <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.6407300.svg" alt="doi" />
+  </a>
+</p>
+
+<h4>
+    <a href="#">Sublink 1</a>
+  <span> · </span>
+    <a href="#">Documentation</a>
+  <span> · </span>
+    <a href="#">Changelog</a>
+  <span> · </span>
+    <a href="https://github.com/AI-READI/fairhub.io/issues/">Report Bug</a>
+  <span> · </span>
+    <a href="#">Request Feature</a>
+  </h4>
+</div>
+
 # Description
-## fairhub.io
-
 Cloud-based platform for easily preparing and sharing FAIR and AI-ready datasets.
-
 # Getting started
 We use Storybook for documenting our design system. You can refer to that for design guidelines, component documentation, and resources for editing components locally.
 
@@ -77,3 +116,11 @@ If you have any questions or suggestions, please contact us using [GitHub issues
 ## How to cite
 ## Acknowledgements
 This project is supported by the NIH-funded Bridge2AI program (1OT2OD032644). The content is solely the responsibility of the authors and does not necessarily represent the official views of the NIH.
+
+<div align="center">
+
+<a href="https://aireadi.org">
+  <img src="https://raw.githubusercontent.com/AI-READI/Bridge2AI-logo/main/logo-color-upscaled.png" height="200" />
+</a>
+
+</div>
