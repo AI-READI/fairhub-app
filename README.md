@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="https://fairdataihub.org/_next/image?url=%2Fimages%2Fhero%2Faireadi-logo.png&w=640&q=75" alt="logo" width="200" height="auto" />
-
 <br />
 
 <h1>Fairhub.io</h1>
@@ -126,6 +124,17 @@ We use Storybook for documenting our design system. It is available at [style.fa
 The typical inputs out fairhub.io will be clinical and biomedical research related data uploaded by the users. The typical output of fairhub.io will be FAIR and AI-ready datasets shared by the users. 
 
 ## Contributing
+<a href="https://github.com/AI-READI/aireadi.org/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=AI-READI/aireadi.org" />
+</a>
+
+Contributions are always welcome!
+
+If you are interested in reporting/fixing issues and contributing directly to the code base, please see [CONTRIBUTING.md](CONTRIBUTING.md) for more information on what we're looking for and how to get started.
+
+For any developmental standards to follow, add them directly to the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+
+We recommend to look at the [documentation](https://nextjs.org/docs/getting-started).
 
 ## Issues and Feedback
 If you have any questions or suggestions, please contact us using [GitHub issues](https://github.com/AI-READI/fairhub.io/issues/new)
@@ -154,7 +163,8 @@ This project is supported by the NIH-funded Bridge2AI program (1OT2OD032644). Th
 <div align="center">
 
 <a href="https://aireadi.org">
-  <img src="https://raw.githubusercontent.com/AI-READI/Bridge2AI-logo/main/logo-color-upscaled.png" height="200" />
+<img src="https://fairdataihub.org/_next/image?url=%2Fimages%2Fhero%2Faireadi-logo.png&w=640&q=75" alt="logo" width="200" height="auto" />
+
 </a>
 
 </div>
