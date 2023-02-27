@@ -1,24 +1,27 @@
 <script setup lang="ts">
-import { NSpace, useMessage } from "naive-ui";
-import { onBeforeMount } from "vue";
-import { useRouter } from "vue-router";
+import { NCard } from "naive-ui";
+import { ref } from "vue";
 
-import { useAuthStore } from "@/stores/auth";
+const checkingForPreviousVersions = ref(true);
 
-const router = useRouter();
-const authStore = useAuthStore();
-const { error } = useMessage();
-
-onBeforeMount(() => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
-  }
-});
+setTimeout(() => {
+  checkingForPreviousVersions.value = false;
+}, 3000);
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
-    <n-space vertical> new version layout </n-space>
+    <n-card v-if="checkingForPreviousVersions">
+      <div class="flex flex-col items-center pb-3">
+        <Vue3Lottie
+          animationLink="https://assets2.lottiefiles.com/private_files/lf30_b0iey3ml.json"
+          :height="200"
+          :width="200"
+        />
+
+        <p>Checking for previously published versions of this dataset</p>
+      </div>
+    </n-card>
+    <div v-else></div>
   </main>
 </template>

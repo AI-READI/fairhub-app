@@ -50,6 +50,10 @@
   @apply pr-2;
 }
 
+.n-step-content-header__title {
+  @apply text-sm;
+}
+
 @layer base {
   /* inter var - latin */
   @font-face {
