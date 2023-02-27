@@ -7,7 +7,7 @@
 <h1>Fairhub.io</h1>
 
 <p>
-Cloud-based platform for easily preparing and sharing datasets.</p>
+Easily manage, curate, and share FAIR clinical and biomedical research data.</p>
 
 <p>
   <a href="https://github.com/AI-READI/fairhub.io/graphs/contributors">
@@ -28,29 +28,27 @@ Cloud-based platform for easily preparing and sharing datasets.</p>
 </p>
 
 <h4>
-    <a href="#">Sublink 1</a>
+    <a href="https://fairhub.io/"> fairhub.io </a>
   <span> · </span>
-    <a href="#">Documentation</a>
+    <a href="https://docs.fairhub.io/"> User Documentation</a>
   <span> · </span>
-    <a href="#">Changelog</a>
+    <a href="#"> Changelog </a>
   <span> · </span>
-    <a href="https://github.com/AI-READI/fairhub.io/issues/">Report Bug</a>
-  <span> · </span>
-    <a href="#">Request Feature</a>
+    <a href="https://github.com/AI-READI/fairhub.io/issues/">Report Bug or Make Suggestions</a>
   </h4>
 </div>
 
-# Description
+## Description
 Cloud-based platform for easily preparing and sharing FAIR and AI-ready datasets.
-# Getting started
-We use Storybook for documenting our design system. You can refer to that for design guidelines, component documentation, and resources for editing components locally.
 
-## Prerequisites/Dependencies
+## Getting started
+
+### Prerequisites/Dependencies
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
 
-### Type Support for `.vue` Imports in TS
+#### Type Support for `.vue` Imports in TS
 
 TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
 
@@ -61,7 +59,7 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
    2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
 2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
 
-## Installing
+### Installing
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
 
@@ -69,32 +67,32 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+#### Compile and Hot-Reload for Development
 
 ```sh
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+#### Type-Check, Compile and Minify for Production
 
 ```sh
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+#### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
 npm run test:unit
 ```
 
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+#### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
 
 ```sh
 npm run build
 npm run test:e2e # or `npm run test:e2e:ci` for headless testing
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+#### Lint with [ESLint](https://eslint.org/)
 
 ```sh
 npm run lint
@@ -114,6 +112,17 @@ The `production` branch is automatically deployed to the following URL: https://
 ## Issues and Feedback
 If you have any questions or suggestions, please contact us using [GitHub issues](https://github.com/AI-READI/fairhub.io/issues/new)
 
+## Documentation
+
+### User documentation
+Our user documentation for fairhub.io will be available at [docs.fairhub.io](https://docs.fairhub.io/) (STATUS: not active)
+
+### Developer documentation
+The basic instructions for running a local version of fairhub.io for development purposes are provided above in this README. Details about our high-level development best practices are available at [dev.aireadi.org](https://dev.aireadi.org) and details about our development practices specific to fairhub.io are available at [dev.fairhub.io](https://dev.fairhub.io/)
+
+### Style guide
+We use Storybook for documenting our design system. It is available at [style.fairhub.io](https://style.fairhub.io/). You can refer to that for design guidelines, component documentation, and resources for editing components locally. Instructions for running the storybook locally to suggest changes are provided below.
+
 ## License
 
 This work is licensed under
@@ -124,6 +133,14 @@ This work is licensed under
 </a>
 
 ## How to cite
+
+
+If you are using this fairhub.io or reusing the source code from this repository for any purpose, please cite:
+
+```bash
+    ADD Citation here
+```
+
 ## Acknowledgements
 This project is supported by the NIH-funded Bridge2AI program (1OT2OD032644). The content is solely the responsibility of the authors and does not necessarily represent the official views of the NIH.
 
