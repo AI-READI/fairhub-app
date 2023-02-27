@@ -142,7 +142,7 @@ If you have any questions or suggestions, please contact us using [GitHub issues
 ## License
 
 This work is licensed under
-[MIT](https://opensource.org/licenses/mit). See [LICENSE](https://github.com/AI-READI/template/blob/main/LICENSE) for more information.
+[MIT](https://opensource.org/licenses/mit). See [LICENSE](https://github.com/AI-READI/fairhub.io/blob/main/LICENSE) for more information.
 
 <a href="https://aireadi.org" >
   <img src="https://www.channelfutures.com/files/2017/04/3_0.png" height="30" />
