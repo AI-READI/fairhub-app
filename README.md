@@ -127,7 +127,13 @@ The APIs of fairhub.io are documented at [api.fairhub.io](https://api.fairhub.io
 
 ### Style guide
 
-We use Storybook for documenting our design system. It is available at [style.fairhub.io](https://style.fairhub.io/). You can refer to that for design guidelines, component documentation, and resources for editing components locally. Instructions for running the storybook locally to suggest changes are provided at [dev.fairhub.io/storybook](https://dev.fairhub.io/storybook).
+We use Storybook for documenting our design system. It is available at [style.fairhub.io](https://style.fairhub.io/). You can refer to that for design guidelines, component documentation, and resources for editing components locally. Instructions for running the storybook locally to suggest changes are provided below.
+
+```sh
+yarn install
+
+yarn storybook
+```
 
 ## Inputs and Outputs
 
