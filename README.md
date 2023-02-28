@@ -2,7 +2,7 @@
 <br />
 
 
-<a href="https://aireadi.org">
+<a>
   <img src="https://github.com/AI-READI/fairhub.io-logo/blob/main/logo-with-text.png?raw=true" 
 height="80" width="250"/>
 </a>
