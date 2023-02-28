@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
-import { NButton, NCard } from "naive-ui";
+import { NButton, NForm, NFormItem, NInput } from "naive-ui";
 import { ref } from "vue";
 
 const checkingForPreviousVersions = ref(true);
@@ -53,33 +53,31 @@ const handleValidateClick = (e: MouseEvent) => {
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
-    <n-card v-if="checkingForPreviousVersions">
-      <div class="flex flex-col items-center pb-3">
-        <Vue3Lottie
-          animationLink="https://assets2.lottiefiles.com/private_files/lf30_b0iey3ml.json"
-          :height="200"
-          :width="200"
-        />
+    <div>
+      <h3 class="pb-4">Add/Edit Participants</h3>
 
-        <p>Checking for previously published versions of this dataset</p>
-      </div>
-    </n-card>
-    <n-card v-else>
-      <div class="flex flex-col items-center pb-3">
-        <Vue3Lottie
-          animationLink="https://assets8.lottiefiles.com/packages/lf20_tmsiddoc.json"
-          :height="200"
-          :width="200"
-        />
+      <!-- <n-data-table
+        :columns="columns"
+        :data="data"
+        :pagination="pagination"
+        :row-key="rowKey"
+        @update:checked-row-keys="handleCheck"
+      /> -->
 
-        <p>Could not find any old versions.</p>
-
-        <p>Proceed to publish new version.</p>
-
-        <n-button type="primary" class="mt-4" @click="handleValidateClick">
-          Create new version
-        </n-button>
-      </div>
-    </n-card>
+      <n-form ref="formRef" :label-width="80" :model="formValue" :rules="rules" size="large">
+        <n-form-item label="Name" path="user.name">
+          <n-input v-model:value="formValue.user.name" placeholder="Input Name" />
+        </n-form-item>
+        <n-form-item label="Age" path="user.age">
+          <n-input v-model:value="formValue.user.age" placeholder="Input Age" />
+        </n-form-item>
+        <n-form-item label="Phone" path="phone">
+          <n-input v-model:value="formValue.phone" placeholder="Phone Number" />
+        </n-form-item>
+        <n-form-item>
+          <n-button @click="handleValidateClick"> Validate </n-button>
+        </n-form-item>
+      </n-form>
+    </div>
   </main>
 </template>

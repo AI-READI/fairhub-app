@@ -5,6 +5,7 @@ import DashBoard from "../views/DashBoard.vue";
 import LandingPage from "../views/LandingPage.vue";
 import NewStudy from "../views/NewStudy.vue";
 import PublishNewVersion from "../views/PublishNewVersion.vue";
+import PublishSelectParticipants from "../views/PublishSelectParticipants.vue";
 import PublishStudy from "../views/PublishStudy.vue";
 import StudyContributors from "../views/StudyContributors.vue";
 import StudyOverview from "../views/StudyOverview.vue";
@@ -53,13 +54,12 @@ const router = createRouter({
         {
           name: "publish-new-version",
           component: PublishNewVersion,
-          // UserProfile will be rendered inside User's <router-view>
           path: "version/new",
         },
         {
-          component: PublishStudy,
-          // UserPosts will be rendered inside User's <router-view>
-          path: "posts",
+          name: "publish-select-participants",
+          component: PublishSelectParticipants,
+          path: "version/:versionId/participants",
         },
       ],
       component: PublishStudy,
