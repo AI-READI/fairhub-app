@@ -8,10 +8,8 @@ height="80" width="250"/>
 </a>
 
 
-<h1>FAIRhub.io</h1>
-
 <p>
-Easily manage, curate, and share FAIR clinical and biomedical research data.</p>
+Easily manage, curate, and share FAIR and AI-ready clinical and biomedical research data.</p>
 
 <p>
   <a href="https://github.com/AI-READI/FAIRhub.io/graphs/contributors">
