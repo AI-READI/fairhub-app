@@ -24,9 +24,12 @@ Easily manage, curate, and share FAIR and AI-ready clinical and biomedical resea
   <a href="https://github.com/AI-READI/fairhub.io/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/AI-READI/template.svg?style=flat-square" alt="license" />
   </a>
-  <a href="https://doi.org/10.5281/zenodo.6407300">
-    <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.6407300.svg" alt="doi" />
-  </a>
+
+[//]: # (  <a href="https://doi.org/10.5281/zenodo.6407300">)
+
+[//]: # (    <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.6407300.svg" alt="doi" />)
+
+[//]: # (  </a>)
 </p>
 
 <h4>
