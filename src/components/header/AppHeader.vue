@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { ChartNetwork } from "@vicons/carbon";
-import { PersonCircleOutline, SearchSharp } from "@vicons/ionicons5";
-import { LogOutSharp } from "@vicons/material";
+import { Icon } from "@iconify/vue";
 import type { FormInst } from "naive-ui";
 import {
   NAlert,
@@ -11,12 +9,10 @@ import {
   NDropdown,
   NForm,
   NFormItem,
-  NIcon,
   NInput,
   NModal,
   NSpace,
 } from "naive-ui";
-import type { Component } from "vue";
 import { h, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
@@ -53,12 +49,12 @@ const showErrorAlert = ref(false);
 
 const profileOptions = [
   {
-    icon: renderIcon(PersonCircleOutline),
+    icon: renderIcon("ion:person-circle-outline"),
     key: "view-profile",
     label: "View Profile",
   },
   {
-    icon: renderIcon(ChartNetwork),
+    icon: renderIcon("carbon:chart-network"),
     key: "integrations",
     label: "Integrations",
   },
@@ -67,43 +63,14 @@ const profileOptions = [
     type: "divider",
   },
   {
-    icon: renderIcon(LogOutSharp),
+    icon: renderIcon("ion:log-out-sharp"),
     key: "logout",
     label: "Logout",
   },
-  // {
-  //   label: "Others",
-  //   key: "others1",
-  //   children: [
-  //     {
-  //       label: "Jordan Baker",
-  //       key: "jordan baker",
-  //     },
-  //     {
-  //       label: "Tom Buchanan",
-  //       key: "tom buchanan",
-  //     },
-  //     {
-  //       label: "Others",
-  //       key: "others2",
-  //       disabled: true,
-  //       children: [
-  //         {
-  //           label: "Chicken",
-  //           key: "chicken",
-  //         },
-  //         {
-  //           label: "Beef",
-  //           key: "beef",
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
 ];
 
-function renderIcon(icon: Component) {
-  return () => h(NIcon, null, { default: () => h(icon) });
+function renderIcon(icon: string) {
+  return () => h(Icon, { icon });
 }
 
 const handleSelect = (key: string | number) => {
@@ -161,7 +128,7 @@ const handleLogin = (e: MouseEvent) => {
       <n-space justify="space-between" align="center">
         <n-input size="large" placeholder="Search">
           <template #suffix>
-            <n-icon :component="SearchSharp" />
+            <Icon icon="ion:search-sharp" />
           </template>
         </n-input>
 

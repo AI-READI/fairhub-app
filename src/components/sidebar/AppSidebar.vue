@@ -1,23 +1,14 @@
 <script setup lang="ts">
-import {
-  DocumentFlowchart24Regular,
-  PeopleAdd24Regular,
-  PeopleCheckmark16Regular,
-  PeopleTeamToolbox24Regular,
-  Settings24Regular,
-} from "@vicons/fluent";
-import { BugReportOutlined, DashboardRound, PublishedWithChangesFilled } from "@vicons/material";
-import { Help, History, Home2, ListDetails } from "@vicons/tabler";
+import { Icon } from "@iconify/vue";
 import type { MenuOption } from "naive-ui";
-import { NIcon, NLayoutSider, NMenu, NSpace } from "naive-ui";
-import type { Component } from "vue";
+import { NLayoutSider, NMenu, NSpace } from "naive-ui";
 import { computed, h, ref } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 
 const sidebarCollapsed = ref(false);
 
-function renderIcon(icon: Component) {
-  return () => h(NIcon, null, { default: () => h(icon) });
+function renderIcon(icon: string) {
+  return () => h(Icon, { icon });
 }
 
 const route = useRoute();
@@ -115,7 +106,7 @@ const hideMenuOptions = computed(() => {
 
 const staticUpperMenuOptions: MenuOption[] = [
   {
-    icon: renderIcon(Home2),
+    icon: renderIcon("tabler:home-2"),
     key: "all-studies",
     label: () =>
       h(
@@ -132,17 +123,17 @@ const staticUpperMenuOptions: MenuOption[] = [
 
 const dynamicUpperMenuOptions: MenuOption[] = [
   {
-    icon: renderIcon(ListDetails),
+    icon: renderIcon("tabler:list-details"),
     key: "study-info",
     label: "Study Info",
   },
   {
-    icon: renderIcon(PeopleTeamToolbox24Regular),
+    icon: renderIcon("fluent:people-team-toolbox-24-regular"),
     key: "participants-and-data",
     label: "Participants and Data",
   },
   {
-    icon: renderIcon(PeopleCheckmark16Regular),
+    icon: renderIcon("fluent:people-checkmark-24-regular"),
     key: "contributors",
     label: () =>
       h(
@@ -159,7 +150,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
       ),
   },
   {
-    icon: renderIcon(DashboardRound),
+    icon: renderIcon("material-symbols:dashboard-rounded"),
     key: "dashboard",
     label: () =>
       h(
@@ -173,7 +164,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
       ),
   },
   {
-    icon: renderIcon(PeopleAdd24Regular),
+    icon: renderIcon("fluent:people-add-24-regular"),
     key: "add-participant",
     label: () =>
       h(
@@ -190,7 +181,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
       ),
   },
   {
-    icon: renderIcon(PublishedWithChangesFilled),
+    icon: renderIcon("material-symbols:published-with-changes-rounded"),
     key: "publish-study",
     label: () =>
       h(
@@ -210,29 +201,29 @@ const dynamicUpperMenuOptions: MenuOption[] = [
 
 const lowerMenuOptions: MenuOption[] = [
   {
-    icon: renderIcon(BugReportOutlined),
+    icon: renderIcon("material-symbols:bug-report-outline"),
     key: "report-an-issue",
     label: "Report an Issue",
   },
   {
     children: [
       {
-        icon: renderIcon(DocumentFlowchart24Regular),
+        icon: renderIcon("fluent:document-flowchart-24-regular"),
         key: "documentation",
         label: "Documentation",
       },
       {
-        icon: renderIcon(History),
+        icon: renderIcon("tabler:history"),
         key: "changelog",
         label: "Changelog",
       },
     ],
-    icon: renderIcon(Help),
+    icon: renderIcon("tabler:help"),
     key: "help",
     label: "Help",
   },
   {
-    icon: renderIcon(Settings24Regular),
+    icon: renderIcon("fluent:settings-24-regular"),
     key: "settings",
     label: "Settings",
   },

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { UserFollow } from "@vicons/carbon";
-import { PersonDelete16Regular } from "@vicons/fluent";
+import { Icon } from "@iconify/vue";
 import type { FormInst, FormItemRule } from "naive-ui";
 import {
   NAvatar,
@@ -9,7 +8,6 @@ import {
   NDivider,
   NForm,
   NFormItem,
-  NIcon,
   NInput,
   NPopconfirm,
   NSelect,
@@ -124,9 +122,7 @@ const getFirstLetters = (name: string) => {
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
     <n-space justify="start" align="end">
-      <n-icon size="30">
-        <UserFollow />
-      </n-icon>
+      <Icon icon="carbon:user-follow" width="30" height="30" />
       <h1>Invite people to contribute to the {{ study.title }} study</h1>
     </n-space>
 
@@ -193,12 +189,12 @@ const getFirstLetters = (name: string) => {
             v-if="contributor.role !== 'owner'"
           >
             <template #trigger>
-              <n-icon
-                size="20"
+              <Icon
+                icon="fluent:person-delete-16-regular"
+                width="20"
+                height="20"
                 class="transtition-all flex cursor-pointer items-center justify-center text-slate-400 hover:text-sky-300"
-              >
-                <PersonDelete16Regular />
-              </n-icon>
+              />
             </template>
             Are you sure you want to remove this user from the study?
           </n-popconfirm>

@@ -1,6 +1,6 @@
-import { AddReactionRound } from "@vicons/material";
+import { Icon } from "@iconify/vue";
 import { html } from "code-tag";
-import { NIcon, NMenu } from "naive-ui";
+import { NMenu } from "naive-ui";
 import { h } from "vue";
 
 export default {
@@ -15,7 +15,7 @@ export default {
 };
 
 function renderIcon(icon) {
-  return () => h(NIcon, null, { default: () => h(icon) });
+  return () => h(Icon, { icon });
 }
 
 const HorizontalTemplate = (args) => ({
@@ -24,12 +24,12 @@ const HorizontalTemplate = (args) => ({
     return {
       menuOptions: [
         {
-          icon: renderIcon(AddReactionRound),
+          icon: renderIcon("fe:layer"),
           key: "1",
           label: "Menu Option 1",
         },
         {
-          icon: renderIcon(AddReactionRound),
+          icon: renderIcon("fe:octpus"),
           key: "2",
           label: "Menu Option 2",
         },
@@ -51,12 +51,12 @@ const VerticalTemplate = (args) => ({
     return {
       menuOptions: [
         {
-          icon: renderIcon(AddReactionRound),
+          icon: renderIcon("majesticons:shield"),
           key: "1",
           label: "Menu Option 1",
         },
         {
-          icon: renderIcon(AddReactionRound),
+          icon: renderIcon("majesticons:table-heart-line"),
           key: "2",
           label: "Menu Option 2",
         },
@@ -78,29 +78,29 @@ const SubMenuTemplate = (args) => ({
     return {
       menuOptions: [
         {
-          icon: renderIcon(AddReactionRound),
+          icon: renderIcon("clarity:accessibility-2-solid"),
           key: "1",
           label: "Menu Option 1",
         },
         {
-          icon: renderIcon(AddReactionRound),
+          icon: renderIcon("clarity:administrator-solid"),
           key: "2",
           label: "Menu Option 2",
         },
         {
           children: [
             {
-              icon: renderIcon(AddReactionRound),
+              icon: renderIcon("clarity:airplane-solid"),
               key: "3.1",
               label: "Menu Option 3.1",
             },
             {
-              icon: renderIcon(AddReactionRound),
+              icon: renderIcon("clarity:alarm-clock-solid"),
               key: "3.2",
               label: "Menu Option 3.2",
             },
           ],
-          icon: renderIcon(AddReactionRound),
+          icon: renderIcon("clarity:atom-solid"),
           key: "3",
           label: "Menu Option 3",
         },

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { AddCircleOutline } from "@vicons/ionicons5";
-import { NButton, NIcon, NImage, NSpace, useMessage } from "naive-ui";
+import { Icon } from "@iconify/vue";
+import { NButton, NImage, NSpace, useMessage } from "naive-ui";
 import { onBeforeMount } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
@@ -31,9 +31,7 @@ const navigateToStudy = (id: number) => {
       <RouterLink :to="{ name: 'new-study' }">
         <n-button icon-placement="left" size="large" type="primary">
           <template #icon>
-            <n-icon>
-              <add-circle-outline />
-            </n-icon>
+            <Icon icon="ion:add-circle-outline" />
           </template>
           New Study
         </n-button>
