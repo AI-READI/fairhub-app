@@ -1,12 +1,10 @@
 <div align="center">
 <br />
 
-
 <a>
-  <img src="https://github.com/AI-READI/fairhub.io-logo/blob/main/logo-with-text.png?raw=true" 
+  <img src="https://github.com/AI-READI/fairhub.io-logo/blob/main/logo-with-text.png?raw=true"
 height="80" width="250"/>
 </a>
-
 
 <p>
 Easily manage, curate, and share FAIR and AI-ready clinical and biomedical research data.</p>
@@ -25,11 +23,10 @@ Easily manage, curate, and share FAIR and AI-ready clinical and biomedical resea
     <img src="https://img.shields.io/github/license/AI-READI/template.svg?style=flat-square" alt="license" />
   </a>
 
-[//]: # (  <a href="https://doi.org/10.5281/zenodo.6407300">)
+[//]: # '  <a href="https://doi.org/10.5281/zenodo.6407300">'
+[//]: # '    <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.6407300.svg" alt="doi" />'
+[//]: # "  </a>"
 
-[//]: # (    <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.6407300.svg" alt="doi" />)
-
-[//]: # (  </a>)
 </p>
 
 <h4>
@@ -37,7 +34,7 @@ Easily manage, curate, and share FAIR and AI-ready clinical and biomedical resea
   <span> · </span>
     <a href="https://docs.fairhub.io/"> User Documentation</a>
   <span> · </span>
-    <a href="CHANGELOG.md"> Changelog </a> 
+    <a href="CHANGELOG.md"> Changelog </a>
   <span> · </span>
     <a href="https://github.com/AI-READI/fairhub.io/issues/">Report Bug or Make Suggestions</a>
   </h4>
@@ -69,48 +66,59 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
 See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ```sh
-npm install
+yarn install
 ```
 
 #### Compile and Hot-Reload for Development
 
 ```sh
-npm run dev
+yarn dev
 ```
 
 #### Type-Check, Compile and Minify for Production
 
 ```sh
-npm run build
+yarn build
 ```
 
 #### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
-npm run test:unit
+yarn test:unit
 ```
 
 #### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
 
 ```sh
-npm run build
-npm run test:e2e # or `npm run test:e2e:ci` for headless testing
+yarn build
+yarn test:e2e # or `npm run test:e2e:ci` for headless testing
 ```
 
 #### Lint with [ESLint](https://eslint.org/)
 
 ```sh
-npm run lint
+yarn lint
 ```
 
 ## Deployment
 
-This repository is automatically deployed to [Azure](https://www.netlify.com/) on every push to the repository. If you need to reference a specific branch or pull request, you can do so by using the following URL pattern:
+### fairhub.io
 
-- <https://brave-ground-07b6bfb10-<BRANCH_NAME>.centralus.2.azurestaticapps.net/>
-- <https://brave-ground-07b6bfb10-<GITHUB_PR_NUMBER>.centralus.2.azurestaticapps.net/>
+This repository is automatically deployed to [Azure](https://azure.microsoft.com/en-us/products/app-service/static/) on every push to the repository. If you need to reference a specific branch or pull request, you can do so by using the following URL pattern:
 
-The `production` branch is automatically deployed to the following URL: <https://fairhub.io>.
+- <https://brave-ground-07b6bfb10->`BRANCH_NAME`.centralus.2.azurestaticapps.net
+- <https://brave-ground-07b6bfb10->`GITHUB_PR_NUMBER`.centralus.2.azurestaticapps.net
+
+The `production` branch is automatically deployed to the following URL: [fairhub.io](https://fairhub.io).
+
+### style.fairhub.io
+
+The storybook for the FAIRhub UI library is automatically deployed to [Azure](https://azure.microsoft.com/en-us/products/app-service/static) on every push to the repository. If you need to reference a specific branch or pull request, you can do so by using the following URL pattern:
+
+- <https://white-ocean-00e852610-->`BRANCH_NAME`.centralus.2.azurestaticapps.net
+- <https://white-ocean-00e852610-->`GITHUB_PR_NUMBER`.centralus.2.azurestaticapps.net
+
+The `production` branch is automatically deployed to the following URL: [style.fairhub.io](https://style.fairhub.io).
 
 ## Documentation
 
@@ -120,17 +128,19 @@ Our user documentation for FAIRhub is available at [docs.fairhub.io](https://doc
 
 ### Developer documentation
 
-The basic instructions for running a local version of FAIRhub for development purposes are provided above in this README. Details about our high-level development best practices and standards are available at [dev.aireadi.org](https://dev.aireadi.org) (the source code is maintained from its dedicated [GitHub repository](https://github.com/AI-READI/docs.fairhub.io)). Details about our development practices specific to FAIRhub are available at [dev.fairhub.io](https://github.com/AI-READI/dev.aireadi.org) (the source code is maintained from its dedicated [GitHub repository](https://github.com/AI-READI/dev.fairhub.io)). 
+The basic instructions for running a local version of FAIRhub for development purposes are provided above in this README. Details about our high-level development best practices and standards are available at [dev.aireadi.org](https://dev.aireadi.org) (the source code is maintained from its dedicated [GitHub repository](https://github.com/AI-READI/docs.fairhub.io)). Details about our development practices specific to FAIRhub are available at [dev.fairhub.io](https://github.com/AI-READI/dev.aireadi.org) (the source code is maintained from its dedicated [GitHub repository](https://github.com/AI-READI/dev.fairhub.io)).
 
 ### APIs documentation
 
-The APIs of FAIRhub are documented at [api.fairhub.io](https://api.fairhub.io/) (STATUS: not active). The source code of the API documentation is maintained from its dedicated [GitHub repository](https://github.com/AI-READI/api.fairhub.io). 
+The APIs of FAIRhub are documented at [api.fairhub.io](https://api.fairhub.io/) (STATUS: not active). The source code of the API documentation is maintained from its dedicated [GitHub repository](https://github.com/AI-READI/api.fairhub.io).
 
 ### Style guide
 
 We use Storybook for documenting our design system. It is available at [style.fairhub.io](https://style.FAIRhub.io/). You can refer to that for design guidelines, component documentation, and resources for editing components locally. The source code of the storybook in included in this repository in the [storybook](.storybook) folder. Changes between different versions of the storybook are documented in its dedicated [CHANGELOG](CHANGELOG.stories.mdx). Instructions for running the storybook locally for editing and suggesting changes are provided below:
 
 ```sh
+// You will need to be on node 16.13.0 or higher
+
 yarn install
 
 yarn storybook
