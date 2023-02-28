@@ -9,6 +9,9 @@ export default {
       control: { type: "select" },
       options: ["right", "left"],
     },
+    accordion: { control: { type: "boolean" } },
+    filterable: { control: { type: "boolean" } },
+    multiple: { control: { type: "boolean" } },
   },
 };
 
@@ -17,7 +20,7 @@ const BasicTemplate = (args) => ({
   setup() {
     return { args };
   },
-  template: html`<n-collapse>
+  template: html`<n-collapse v-bind="args">
     <n-collapse-item title="First" name="1">
       <div>good</div>
     </n-collapse-item>
@@ -38,7 +41,7 @@ const AccordionTemplate = (args) => ({
   setup() {
     return { args };
   },
-  template: html`<n-collapse accordion default-expanded-names="1">
+  template: html`<n-collapse accordion default-expanded-names="1" v-bind="args">
     <n-collapse-item title="First" name="1">
       <div>good</div>
     </n-collapse-item>
@@ -59,7 +62,7 @@ const ArrowPlacementTemplate = (args) => ({
   setup() {
     return { args };
   },
-  template: html`<n-collapse>
+  template: html`<n-collapse v-bind="args">
     <n-collapse-item title="First" name="1">
       <div>good</div>
     </n-collapse-item>

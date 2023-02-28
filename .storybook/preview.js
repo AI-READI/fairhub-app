@@ -3,6 +3,11 @@ import { themes } from "@storybook/theming";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
+  options: {
+    storySort: {
+      order: ["Welcome", "Design System", "Components"],
+    },
+  },
   controls: {
     matchers: {
       color: /(background|color)$/i,
