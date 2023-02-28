@@ -1,4 +1,4 @@
-import { CashOutline as CashIcon } from "@vicons/ionicons5";
+import { Icon } from "@iconify/vue";
 import { html } from "code-tag";
 import { NAvatar, NButton, NCheckbox, NCol, NIcon, NRow, NSpace, NThing } from "naive-ui";
 import { ref } from "vue";
@@ -10,7 +10,7 @@ export default {
 };
 
 const HorizontalTemplate = () => ({
-  components: { CashIcon, NAvatar, NButton, NCheckbox, NCol, NIcon, NRow, NSpace, NThing },
+  components: { Icon, NAvatar, NButton, NCheckbox, NCol, NIcon, NRow, NSpace, NThing },
   data() {},
   setup() {
     return {
@@ -50,16 +50,14 @@ const HorizontalTemplate = () => ({
     <n-thing v-bind="args">
       <template v-if="avatar" #avatar>
         <n-avatar>
-          <n-icon>
-            <cash-icon />
-          </n-icon>
+          <Icon icon="ion:cash" />
         </n-avatar>
       </template>
       <template v-if="header" #header> Money </template>
       <template v-if="headerExtra" #header-extra>
         <n-button circle size="small">
           <template #icon>
-            <cash-icon />
+            <Icon icon="ion:cash" />
           </template>
         </n-button>
       </template>
@@ -72,25 +70,19 @@ const HorizontalTemplate = () => ({
         <n-space>
           <n-button size="small">
             <template #icon>
-              <n-icon>
-                <cash-icon />
-              </n-icon>
+              <Icon icon="ion:cash" />
             </template>
             1$
           </n-button>
           <n-button size="small">
             <template #icon>
-              <n-icon>
-                <cash-icon />
-              </n-icon>
+              <Icon icon="ion:cash" />
             </template>
             10$
           </n-button>
           <n-button size="small">
             <template #icon>
-              <n-icon>
-                <cash-icon />
-              </n-icon>
+              <Icon icon="ion:cash" />
             </template>
             100$
           </n-button>
