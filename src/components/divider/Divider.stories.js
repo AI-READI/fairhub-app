@@ -5,17 +5,13 @@ export default {
   title: "Components/Divider",
   component: NDivider,
   argTypes: {
-    dashed: {
-      control: {
-        type: "boolean",
-      },
-    },
     "title-placement": {
       control: {
         type: "select",
         options: ["left", "right"],
       },
     },
+    vertical: { control: { type: "boolean" } },
   },
 };
 
@@ -24,7 +20,7 @@ const BasicTemplate = (args) => ({
   setup() {
     return { args };
   },
-  template: html`<div class="text-black">Oops<n-divider />Oops</div>`,
+  template: html`<div class="text-black" v-bind="args">Oops<n-divider />Oops</div>`,
 });
 
 export const Basic = BasicTemplate.bind({});
@@ -36,7 +32,7 @@ const VerticalTemplate = (args) => ({
     return { args };
   },
   template: html`<div class="text-black">
-    It is<n-divider vertical />not clear<n-divider vertical />to see, emmm...
+    It is<n-divider vertical v-bind="args" />not clear<n-divider vertical />to see, emmm...
   </div>`,
 });
 
@@ -50,11 +46,11 @@ const TitleTemplate = (args) => ({
   },
   template: html`<div class="text-black">
     Oops
-    <n-divider title-placement="left"> Left </n-divider>
+    <n-divider title-placement="left" v-bind="args"> Left </n-divider>
     Oops
-    <n-divider title-placement="right"> Right </n-divider>
+    <n-divider title-placement="right" v-bind="args"> Right </n-divider>
     Oops
-    <n-divider> Middle </n-divider>
+    <n-divider v-bind="args"> Middle </n-divider>
     Oops
   </div>`,
 });
@@ -69,7 +65,7 @@ const DashedTemplate = (args) => ({
   },
   template: html`<div class="text-black">
     Oops
-    <n-divider dashed> Hello </n-divider>
+    <n-divider dashed v-bind="args"> Hello </n-divider>
     Oops
   </div>`,
 });

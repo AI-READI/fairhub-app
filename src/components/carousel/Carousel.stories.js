@@ -5,9 +5,13 @@ export default {
   title: "Components/Carousel",
   component: NCarousel,
   argTypes: {
-    autoPlay: { control: { type: "boolean" } },
-    "show-arrow": { control: { type: "boolean" } },
-    vertical: { control: { type: "boolean" } },
+    draggable: { control: { type: "boolean" } },
+    autoplay: { control: { type: "boolean" } },
+    loop: { control: { type: "boolean" } },
+    "dot-placement": {
+      control: { type: "select" },
+      options: ["top", "bottom", "left", "right"],
+    },
   },
 };
 
@@ -16,18 +20,18 @@ const Template = (args) => ({
   setup() {
     return { args };
   },
-  template: html`<n-carousel>
+  template: html` <n-carousel :loop="false" draggable v-bind="args">
     <img
-      src="https://images.unsplash.com/photo-1666126452579-f032d653c7f1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
+      class="carousel-img"
+      src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel2.jpeg"
     />
     <img
-      src="https://images.unsplash.com/photo-1665947676650-dd8b68e4519b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
+      class="carousel-img"
+      src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel3.jpeg"
     />
     <img
-      src="https://images.unsplash.com/photo-1665944763019-437c1dc48320?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
-    />
-    <img
-      src="https://images.unsplash.com/photo-1538577772734-5fe3b8b8df03?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
+      class="carousel-img"
+      src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel4.jpeg"
     />
   </n-carousel>`,
 });

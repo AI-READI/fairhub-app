@@ -1,7 +1,7 @@
 import TextColor from "./TextColor.vue";
 
 export default {
-  title: "Design System",
+  title: "Design System/Text Colors",
   component: TextColor,
   argTypes: {
     colorClass: { table: { disable: true } },
