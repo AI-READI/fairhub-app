@@ -1,0 +1,92 @@
+import { Meta } from "@storybook/addon-docs";
+
+<Meta title="Design System/Accessibility" />
+
+# Accessibility
+
+## Introduction
+
+Web Accessibility is focused on ensuring people with disabilities can equally perceive, understand, navigate, and interact with digital content. It also means that they can contribute equally like anyone else. Web Accessibility is based on guidelines published by The World Wide Web Consortium (W3C) for accessible content called Web Content Accessibility Guidelines or WCAG.
+
+[WCAG Quick Reference](https://www.w3.org/WAI/WCAG21/quickref/?currentsidebar=%23col_customize#principle1)
+
+## Accessibility principles
+
+- Clear
+  - Make content clear and simple to understand.
+- Operable
+  - Make all functionality available from a keyboard or keyboard equivalent.
+- Understandable
+  - Make content easy to understand and navigate by all users.
+- Robust
+  - Make content work with a wide variety of user agents, including assistive technologies.
+
+## Color contrast
+
+### Text Color Contrast
+
+Applies to text in the page, including placeholder text, hover text and text shown on keyboard focus. The visual presentation of text and images should have a contrast ratio of at least 4.5:1 with the background
+
+![](https://style.monday.com/static/media/color-contrast_text.f3e33a13.png)
+
+Except for:
+
+- Large Text - at least 18pt (typically 24px) or 14pt (typically 18.66px) and bold must have a contrast ratio of at least 3:1
+- Incidental - inactive user interface (disabled items), decorative (icons, illustrations) non-visible, insignificant part of a picture
+- Logotypes - Text that is part of a logo or brand name
+
+### Non-Text Color Contrast
+
+The visual presentation of the following have a contrast ratio of at least 3:1 against adjacent color.
+
+![](https://style.monday.com/static/media/color-contrast_image.9382f7e8.png)
+
+## Images
+
+People with visual impairments may use screen readers to read the content of images. Therefore, it is important to provide alternative text for images. This text should be short and descriptive. It should also be relevant to the image and not just a description of the image file name.
+
+![](https://style.monday.com/static/media/imagery_alt.1d031b0d.png)
+
+### Information Images
+
+Are all images that convey important information and communicate information visually:
+
+- The alt-text needs to convey the same information as the image
+- Ensure the alt-text is short and appropriate to the context
+- If the same information already is present as text on the screen, the image becomes decorative
+- Do not use the words like "graphic", "An image of", "A picture of", "an icon of"
+
+![](https://style.monday.com/static/media/imagery_descriptive.3ce86621.png)
+
+### Decorative Images
+
+These are images that are used for decoration and do not convey important information. Decorative images should be ignored by screen readers. To do so, add an empty alt attribute to the image.
+
+- Can be defined as background image in the stylesheet
+- Should use `role="presentation"`
+
+You can also refer to the Tailwind documentation for [Screen Readers](https://tailwindcss.com/docs/screen-readers) to learn more about how to use tailwind specific classes for this purpose.
+
+## Hierarchy
+
+### Headings
+
+Headings are used to structure the content of a page. They are used to create a hierarchy of information. Headings should be used in a logical order, starting with the most important heading and ending with the least important heading. Headings should be used to group related content.
+
+- Arrange the headings on the page according to their level (`H1...H6`).
+- The most important heading on the page is heading level 1 (`H1`).
+- Only one heading level 1 `H1` is allowed on a page.
+- Headings should be placed at the start of new sections of content not for decoration
+- Avoid skipping heading levels. Ensure that a heading level 1 `H1` is not followed directly by an `H3`, for example.
+
+## Navigation
+
+### Keyboard Navigation
+
+Keyboard navigation is the ability to navigate a website using only the keyboard. It is important to ensure that all functionality is available from a keyboard or keyboard equivalent. This includes the ability to navigate the website using the tab key. All active elements that can be activated with a mouse have to be operable by keyboard, or have a keyboard equivalent. Dynamic components such as dialogs, not initially in the tab order must also receive keyboard focus. Elements that show content on mouse hover needs to be added to the tab-order and be operable with the keyboard. In your design, annotate the tab-order and number the tab stops.
+
+![](https://style.monday.com/static/media/navigation_tabs.f7a04355.png)
+
+### Focus Management
+
+Keyboard navigation in a rich internet application is different from tabbing in a website. In rich internet applications, users tab to complex components such as comboboxes, grids, menus etc. then use the arrow keys to navigate within the component. Dynamic components such as dialogs, not initially in the tab order have to receive keyboard focus. When dynamic components are closed, focus shifts back to the point where interaction started. Receiving focus or interacting with an input element must not result in a substantial change to the page like invoking a dialog or sending focus somewhere else on the page.

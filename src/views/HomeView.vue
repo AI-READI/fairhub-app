@@ -1,39 +1,29 @@
 <script setup lang="ts">
-import axios from "axios";
-import { NButton, NDivider } from "naive-ui";
-import { ref } from "vue";
-
-const message = ref("");
-
-const pingServer = () => {
-  axios.get("https://api-fairhub-io-main.azurewebsites.net/hello").then((res) => {
-    message.value = res.data;
-  });
-};
+import { NImage, NSpace } from "naive-ui";
 </script>
 
 <template>
-  <main class="flex h-screen w-screen flex-col items-center justify-center">
-    <div class="pb-3">
-      <Vue3Lottie
-        animationLink="https://assets8.lottiefiles.com/private_files/lf30_lbLg6b.json"
-        :height="200"
-        :width="200"
+  <main class="flex h-full w-full flex-col">
+    <div class="mx-auto flex w-full max-w-screen-xl justify-between pt-8">
+      <n-space mode="vertical" class="max-w-screen-sm">
+        <h1 class="pb-4 text-4xl font-bold">A platform for sharing FAIR and AI-ready datasets</h1>
+
+        <p>
+          Revolutionize the way you store and manage your research data with our cutting-edge
+          platform. Our platform offers secure, scalable, and easy-to-use solutions for researchers
+          and organizations, ensuring your data is always accessible, organized, and protected. Say
+          goodbye to the hassle of manual data management and experience the power of advanced
+          technology to advance your research. Sign up now and start exploring the limitless
+          possibilities of our research data storage platform.
+        </p>
+      </n-space>
+
+      <n-image
+        src="https://images.unsplash.com/photo-1674420628423-bf7a338af32d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2064&q=80"
+        alt=""
+        width="400"
+        class=""
       />
     </div>
-    <h1 class="pb-4 text-center text-4xl font-bold">
-      A platform for sharing FAIR and AI-ready datasets
-    </h1>
-    <p class="px-2 text-2xl">Coming soon...</p>
-
-    <NDivider class="my-8 w-1/2" />
-
-    <n-button secondary type="primary" size="large" @click="pingServer">
-      Ping api.fairhub.io
-    </n-button>
-
-    <span class="py-8 text-lg" v-if="message != ''">
-      Response from api.fairhub.io: {{ message }}
-    </span>
   </main>
 </template>

@@ -1,8 +1,7 @@
 /* eslint-disable no-undef */
-/** @type {import('tailwindcss').Config} */
 
-// eslint-disable-next-line no-undef
-const defaultTheme = require("tailwindcss/defaultTheme");
+/** @type {import('tailwindcss').Config} */
+const { fontFamily } = require("tailwindcss/defaultTheme");
 
 // eslint-disable-next-line no-undef
 module.exports = {
@@ -10,32 +9,32 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+        primary: ["Inter", ...fontFamily.sans],
       },
       colors: {
         primary: {
-          50: "#eff6ff",
-          100: "#dbeafe",
-          200: "#bfdbfe",
-          300: "#93c5fd",
-          400: "#60a5fa",
-          500: "#3b82f6",
-          600: "#2563eb",
-          700: "#1d4ed8",
-          800: "#1e40af",
-          900: "#1e3a8a",
+          50: "#57E0FF",
+          100: "#42DCFF",
+          200: "#19D5FF",
+          300: "#00C4F0",
+          400: "#00A2C7",
+          500: "#00819E",
+          600: "#005366",
+          700: "#00252E",
+          800: "#000000",
+          900: "#000000",
         },
         secondary: {
-          50: "#fff7ed",
-          100: "#ffedd5",
-          200: "#fed7aa",
-          300: "#fdba74",
-          400: "#fb923c",
+          50: "#FEDFC9",
+          100: "#FDD3B5",
+          200: "#FCBB8D",
+          300: "#FBA366",
+          400: "#FA8B3E",
           500: "#f97316",
-          600: "#ea580c",
-          700: "#c2410c",
-          800: "#9a3412",
-          900: "#7c2d12",
+          600: "#D25905",
+          700: "#9B4204",
+          800: "#642B03",
+          900: "#2D1301",
         },
       },
     },

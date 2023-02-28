@@ -1,7 +1,7 @@
 import BackgroundColor from "./BackgroundColor.vue";
 
 export default {
-  title: "Design System",
+  title: "Design System/ Background Colors",
   component: BackgroundColor,
   argTypes: {
     colorClass: { table: { disable: true } },

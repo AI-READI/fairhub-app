@@ -1,12 +1,11 @@
 const path = require("path");
 const tailwindConfigPath = path.join(__dirname, "../tailwind.config.js");
-require("storybook-tailwind-foundations/initialize.js").default(tailwindConfigPath);
 
 module.exports = {
   stories: [
+    "../CHANGELOG.stories.mdx",
     "../src/**/*.stories.mdx",
     "../src/**/*.stories.@(js|jsx|ts|tsx)",
-    "../node_modules/storybook-tailwind-foundations/**/*.stories.js",
   ],
   addons: [
     "@storybook/addon-links",

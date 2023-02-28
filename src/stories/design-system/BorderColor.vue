@@ -8,6 +8,22 @@
     </p>
 
     <hr />
+    <h2>Default colors</h2>
+    <div class="grid grid-cols-4 gap-4">
+      <div class="flex w-max flex-col py-3">
+        <div class="border-primary h-[80px] w-[250px] border-2 bg-white" />
+        <span class="mt-2 w-auto text-sm font-medium">border-primary</span>
+      </div>
+
+      <div class="flex w-max flex-col py-3">
+        <div class="border-secondary h-[80px] w-[250px] border-2 bg-white" />
+        <span class="mt-2 w-auto text-sm font-medium">border-secondary</span>
+      </div>
+    </div>
+    <p>
+      If you need to control over shades you can use the following classes to stay in primary color
+      range.
+    </p>
 
     <div v-for="item in allColors" :key="item.label" class="py-4">
       <h2>{{ item.label }}</h2>
@@ -16,18 +32,18 @@
         <div v-for="color in item.colors" :key="color" class="flex flex-col">
           <div class="flex w-max flex-col py-3">
             <div class="h-[80px] w-[250px] border-2 bg-white" :class="color" />
-
             <span class="mt-2 w-auto text-sm font-medium">{{ color }}</span>
           </div>
         </div>
       </div>
     </div>
 
-    <h2 class="pt-8">Tailwind Colors</h2>
+    <h2 class="pt-8">Extended Colors</h2>
 
     <p>
-      The entire Tailwind color palette is also available for use in the app. As we develop more
-      components, we will add them to the design system.
+      The entire Tailwind color palette is also available for use in the app. You can refer to the
+      <a href="/?path=/story/design-system--extended-colors"> extended colors</a> section to find
+      whole color palette.
     </p>
   </article>
 </template>
