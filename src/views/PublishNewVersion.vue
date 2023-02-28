@@ -1,84 +1,39 @@
 <script setup lang="ts">
-import type { FormInst } from "naive-ui";
 import { NButton, NCard } from "naive-ui";
 import { ref } from "vue";
+import { RouterLink } from "vue-router";
 
-const checkingForPreviousVersions = ref(true);
-
-setTimeout(() => {
-  checkingForPreviousVersions.value = false;
-}, 3000);
-
-const formRef = ref<FormInst | null>(null);
-
-const formValue = ref({
-  phone: "",
-  user: {
-    name: "",
-    age: "",
-  },
-});
-const rules = {
-  phone: {
-    message: "Please input your number",
-    required: true,
-    trigger: ["input"],
-  },
-  user: {
-    name: {
-      message: "Please input your name",
-      required: true,
-      trigger: "blur",
-    },
-    age: {
-      message: "Please input your age",
-      required: true,
-      trigger: ["input", "blur"],
-    },
-  },
-};
-
-const handleValidateClick = (e: MouseEvent) => {
-  e.preventDefault();
-  formRef.value?.validate((errors) => {
-    if (!errors) {
-      console.log("Valid");
-    } else {
-      console.log(errors);
-      console.log("Invalid");
-    }
-  });
-};
+const previousVersionFound = ref(true);
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
-    <n-card v-if="checkingForPreviousVersions">
-      <div class="flex flex-col items-center pb-3">
-        <Vue3Lottie
-          animationLink="https://assets2.lottiefiles.com/private_files/lf30_b0iey3ml.json"
-          :height="200"
-          :width="200"
-        />
-
-        <p>Checking for previously published versions of this dataset</p>
-      </div>
-    </n-card>
-    <n-card v-else>
+    <n-card>
       <div class="flex flex-col items-center pb-3">
         <Vue3Lottie
           animationLink="https://assets8.lottiefiles.com/packages/lf20_tmsiddoc.json"
           :height="200"
           :width="200"
+          v-if="previousVersionFound"
+        />
+        <Vue3Lottie
+          animationLink="https://assets4.lottiefiles.com/packages/lf20_rc5d0f61.json"
+          :height="150"
+          :width="150"
+          v-else
         />
 
-        <p>Could not find any old versions.</p>
+        <p>
+          {{
+            previousVersionFound
+              ? "We could not find a previously published version of this study"
+              : "We found a previously published version of this study"
+          }}.
+        </p>
 
-        <p>Proceed to publish new version.</p>
-
-        <n-button type="primary" class="mt-4" @click="handleValidateClick">
-          Create new version
-        </n-button>
+        <RouterLink :to="{ name: 'publish-select-participants', params: { versionId: 'v1' } }">
+          <n-button type="primary" class="mt-4"> Create new version </n-button>
+        </RouterLink>
       </div>
     </n-card>
   </main>
