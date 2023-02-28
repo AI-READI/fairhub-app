@@ -148,7 +148,7 @@ The typical inputs out FAIRhub.io will be clinical and biomedical research relat
 
 Contributions are always welcome!
 
-If you are interested in reporting/fixing issues and contributing directly to the code base, please see [CONTRIBUTING.md](CONTRIBUTING.md) for more information on what we're looking for and how to get started.
+If you are interested in reporting/fixing issues and contributing directly to the code base, please see [CONTRIBUTING.md](./contributing.md) for more information on what we're looking for and how to get started.
 
 We recommend to look at the [documentation](https://dev.FAIRhub.io/) for more information.
 
