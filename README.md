@@ -12,16 +12,16 @@ height="80" width="250"/>
 Easily manage, curate, and share FAIR and AI-ready clinical and biomedical research data.</p>
 
 <p>
-  <a href="https://github.com/AI-READI/FAIRhub.io/graphs/contributors">
+  <a href="https://github.com/AI-READI/fairhub.io/graphs/contributors">
     <img src="https://img.shields.io/github/contributors/AI-READI/template.svg?style=flat-square" alt="contributors" />
   </a>
-  <a href="https://github.com/AI-READI/FAIRhub.io/stargazers">
+  <a href="https://github.com/AI-READI/fairhub.io/stargazers">
     <img src="https://img.shields.io/github/stars/AI-READI/template.svg?style=flat-square" alt="stars" />
   </a>
-  <a href="https://github.com/AI-READI/FAIRhub.io/issues/">
+  <a href="https://github.com/AI-READI/fairhub.io/issues/">
     <img src="https://img.shields.io/github/issues/AI-READI/template.svg?style=flat-square" alt="open issues" />
   </a>
-  <a href="https://github.com/AI-READI/FAIRhub.io/blob/main/LICENSE">
+  <a href="https://github.com/AI-READI/fairhub.io/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/AI-READI/template.svg?style=flat-square" alt="license" />
   </a>
   <a href="https://doi.org/10.5281/zenodo.6407300">
@@ -30,14 +30,14 @@ Easily manage, curate, and share FAIR and AI-ready clinical and biomedical resea
 </p>
 
 <h4>
-    <a href="https://FAIRhub.io/"> FAIRhub.io </a>
+    <a href="https://fairhub.io/"> fairhub.io </a>
   
   <span> · </span>
-    <a href="https://docs.FAIRhub.io/"> User Documentation</a>
+    <a href="https://docs.fairhub.io/"> User Documentation</a>
   <span> · </span>
     <a href="CHANGELOG.md"> Changelog </a> 
   <span> · </span>
-    <a href="https://github.com/AI-READI/FAIRhub.io/issues/">Report Bug or Make Suggestions</a>
+    <a href="https://github.com/AI-READI/fairhub.io/issues/">Report Bug or Make Suggestions</a>
   </h4>
 </div>
 
@@ -108,25 +108,25 @@ This repository is automatically deployed to [Azure](https://www.netlify.com/) o
 - <https://brave-ground-07b6bfb10-<BRANCH_NAME>.centralus.2.azurestaticapps.net/>
 - <https://brave-ground-07b6bfb10-<GITHUB_PR_NUMBER>.centralus.2.azurestaticapps.net/>
 
-The `production` branch is automatically deployed to the following URL: <https://FAIRhub.io>.
+The `production` branch is automatically deployed to the following URL: <https://fairhub.io>.
 
 ## Documentation
 
 ### User documentation
 
-Our user documentation for FAIRhub will be available at [docs.FAIRhub.io](https://docs.FAIRhub.io/) (STATUS: not active).
+Our user documentation for FAIRhub will be available at [docs.fairhub.io](https://docs.fairhub.io/) (STATUS: not active).
 
 ### Developer documentation
 
-The basic instructions for running a local version of FAIRhub for development purposes are provided above in this README. Details about our high-level development best practices are available at [dev.aireadi.org](https://dev.aireadi.org) and details about our development practices specific to FAIRhub are available at [dev.FAIRhub.io](https://dev.FAIRhub.io/).
+The basic instructions for running a local version of FAIRhub for development purposes are provided above in this README. Details about our high-level development best practices are available at [dev.aireadi.org](https://dev.aireadi.org) and details about our development practices specific to FAIRhub are available at [dev.fairhub.io](https://dev.fairhub.io/).
 
 ### APIs documentation
 
-The APIs of FAIRhub are documented at [api.FAIRhub.io](https://api.FAIRhub.io/) (STATUS: not active).
+The APIs of FAIRhub are documented at [api.fairhub.io](https://api.fairhub.io/) (STATUS: not active).
 
 ### Style guide
 
-We use Storybook for documenting our design system. It is available at [style.FAIRhub.io](https://style.FAIRhub.io/). You can refer to that for design guidelines, component documentation, and resources for editing components locally. Instructions for running the storybook locally to suggest changes are provided below:
+We use Storybook for documenting our design system. It is available at [style.fairhub.io](https://style.FAIRhub.io/). You can refer to that for design guidelines, component documentation, and resources for editing components locally. Instructions for running the storybook locally to suggest changes are provided below:
 
 ```sh
 yarn install
@@ -148,16 +148,16 @@ Contributions are always welcome!
 
 If you are interested in reporting/fixing issues and contributing directly to the code base, please see [CONTRIBUTING.md](./contributing.md) for more information on what we're looking for and how to get started.
 
-We recommend to look at the [documentation](https://dev.FAIRhub.io/) for more information.
+We recommend to look at the [documentation](https://dev.fairhub.io/) for more information.
 
 ## Issues and Feedback
 
-If you have any questions or suggestions, please contact us using [GitHub issues](https://github.com/AI-READI/FAIRhub.io/issues/new).
+If you have any questions or suggestions, please contact us using [GitHub issues](https://github.com/AI-READI/fairhub.io/issues/new).
 
 ## License
 
 This work is licensed under
-[MIT](https://opensource.org/licenses/mit). See [LICENSE](https://github.com/AI-READI/FAIRhub.io/blob/main/LICENSE) for more information.
+[MIT](https://opensource.org/licenses/mit). See [LICENSE](https://github.com/AI-READI/fairhub.io/blob/main/LICENSE) for more information.
 
 <a href="https://aireadi.org" >
   <img src="https://www.channelfutures.com/files/2017/04/3_0.png" height="30" />
