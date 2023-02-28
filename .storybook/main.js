@@ -3,7 +3,7 @@ const tailwindConfigPath = path.join(__dirname, "../tailwind.config.js");
 
 module.exports = {
   stories: [
-    "../src/stories/about/Welcome.stories.mdx",
+    "../CHANGELOG.stories.mdx",
     "../src/**/*.stories.mdx",
     "../src/**/*.stories.@(js|jsx|ts|tsx)",
   ],
