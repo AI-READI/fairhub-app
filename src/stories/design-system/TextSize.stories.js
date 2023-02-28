@@ -1,7 +1,7 @@
 import TextSize from "./TextSize.vue";
 
 export default {
-  title: "Design System",
+  title: "Design System/Font Size",
   argTypes: {
     colorClass: { table: { disable: true } },
   },

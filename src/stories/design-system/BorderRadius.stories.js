@@ -1,7 +1,7 @@
 import BorderRadii from "./BorderRadii.vue";
 
 export default {
-  title: "Design System",
+  title: "Design System/ Border Radius",
   argTypes: {
     colorClass: { table: { disable: true } },
   },

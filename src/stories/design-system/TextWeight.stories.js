@@ -1,7 +1,7 @@
 import TextWeight from "./TextWeight.vue";
 
 export default {
-  title: "Design System",
+  title: "Design System/Font Weight",
   argTypes: {
     colorClass: { table: { disable: true } },
   },

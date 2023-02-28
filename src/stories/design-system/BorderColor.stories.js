@@ -1,7 +1,7 @@
 import BorderColor from "./BorderColor.vue";
 
 export default {
-  title: "Design System",
+  title: "Design System/ Border Colors",
   argTypes: {
     colorClass: { table: { disable: true } },
   },

@@ -1,3 +1,4 @@
+import { html } from "code-tag";
 import { NCard } from "naive-ui";
 
 export default {
@@ -17,7 +18,7 @@ const TitleTemplate = (args) => ({
   setup() {
     return { args };
   },
-  template: '<n-card v-bind="args">Card Content</n-card>',
+  template: html`<n-card v-bind="args">Card Content</n-card>`,
 });
 
 export const Title = TitleTemplate.bind({});
@@ -28,7 +29,7 @@ const SizeTemplate = (args) => ({
   setup() {
     return { args };
   },
-  template: '<n-card v-bind="args" :title="`${args.size} Card`">Card Content</n-card>',
+  template: html` <n-card v-bind="args" :title="\`${args.size} Card\`">Card Content</n-card>`,
 });
 
 export const Size = SizeTemplate.bind({});
