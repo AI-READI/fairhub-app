@@ -7,7 +7,7 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 
 const routeParams = {
-  id: route.params.id.toString(),
+  versionId: route.params.versionId.toString(),
 };
 
 const checkingForPreviousVersions = ref(true);
@@ -62,14 +62,6 @@ const handleValidateClick = (e: MouseEvent) => {
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
     <div>
       <h3 class="pb-4">Add/Edit Participants</h3>
-
-      <!-- <n-data-table
-        :columns="columns"
-        :data="data"
-        :pagination="pagination"
-        :row-key="rowKey"
-        @update:checked-row-keys="handleCheck"
-      /> -->
 
       <n-form ref="formRef" :label-width="80" :model="formValue" :rules="rules" size="large">
         <n-form-item label="Name" path="user.name">
