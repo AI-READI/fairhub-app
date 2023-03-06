@@ -13797,7 +13797,7 @@ vue-tsc@^0.40.7:
     "@volar/vue-language-core" "0.40.13"
     "@volar/vue-typescript" "0.40.13"
 
-vue3-lottie@^2.4.0:
+vue3-lottie@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/vue3-lottie/-/vue3-lottie-2.5.0.tgz#0bfa8bffa19235b8593d719b125f9ae0b31c603b"
   integrity sha512-JwlTzykr4ofPnSXsTAPt571RDrtQNy66H8w/zYBVHNgrCRG4RINI30c/oJx3Dj+XpxuktpKzgfI08tv1FjYkAQ==
