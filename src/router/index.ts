@@ -1,5 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+import Changelog from "@/views/ChangeLog.vue";
+import Documentation from "@/views/DocumentationPage.vue";
+import HelpPage from "@/views/HelpPage.vue";
+import Integrations from "@/views/IntegrationPage.vue";
+import ReportIssue from "@/views/ReportIssue.vue";
+import Settings from "@/views/SettingPage.vue";
+import ViewProfile from "@/views/ViewProfile.vue";
+
 import AllStudies from "../views/AllStudies.vue";
 import DashBoard from "../views/DashBoard.vue";
 import LandingPage from "../views/LandingPage.vue";
@@ -45,6 +53,41 @@ const router = createRouter({
       name: "add-participant",
       component: AllStudies,
       path: "/participants",
+    },
+    {
+      name: "add-participant",
+      component: HelpPage,
+      path: "/help",
+    },
+    {
+      name: "view-profile",
+      component: ViewProfile,
+      path: "/viewProfile",
+    },
+    {
+      name: "integrations",
+      component: Integrations,
+      path: "/integrations",
+    },
+    {
+      name: "report-issue",
+      component: ReportIssue,
+      path: "/reportIssue",
+    },
+    {
+      name: "settings",
+      component: Settings,
+      path: "/settings",
+    },
+    {
+      name: "Documentation",
+      component: Documentation,
+      path: "/documentation",
+    },
+    {
+      name: "Changelog",
+      component: Changelog,
+      path: "/changelog",
     },
     {
       name: "study-contributors",

@@ -2,14 +2,13 @@
 import type { FormInst } from "naive-ui";
 import { NButton, NForm, NFormItem, NInput } from "naive-ui";
 import { ref } from "vue";
-import { useRoute } from "vue-router";
 
-const route = useRoute();
+// const route = useRoute();
 
-const routeParams = {
-  versionId: route.params.versionId.toString(),
-};
-
+// const routeParams = {
+//   versionId: route.params.versionId.toString(),
+// };
+//
 const checkingForPreviousVersions = ref(true);
 
 setTimeout(() => {

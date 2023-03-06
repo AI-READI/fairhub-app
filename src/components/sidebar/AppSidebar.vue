@@ -203,29 +203,74 @@ const lowerMenuOptions: MenuOption[] = [
   {
     icon: renderIcon("material-symbols:bug-report-outline"),
     key: "report-an-issue",
-    label: "Report an Issue",
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: "/reportIssue",
+          },
+        },
+        { default: () => "Report an Issue" }
+      ),
   },
   {
     children: [
       {
         icon: renderIcon("fluent:document-flowchart-24-regular"),
         key: "documentation",
-        label: "Documentation",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                path: "/documentation",
+              },
+            },
+            { default: () => "Documentation" }
+          ),
       },
       {
         icon: renderIcon("tabler:history"),
         key: "changelog",
-        label: "Changelog",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                path: "/changelog",
+              },
+            },
+            { default: () => "Changelog" }
+          ),
       },
     ],
     icon: renderIcon("tabler:help"),
     key: "help",
-    label: "Help",
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: "/help",
+          },
+        },
+        { default: () => "Help" }
+      ),
   },
   {
     icon: renderIcon("fluent:settings-24-regular"),
     key: "settings",
-    label: "Settings",
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: "/settings",
+          },
+        },
+        { default: () => "Settings" }
+      ),
   },
 ];
 
