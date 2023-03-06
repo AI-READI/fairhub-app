@@ -125,7 +125,16 @@ const dynamicUpperMenuOptions: MenuOption[] = [
   {
     icon: renderIcon("tabler:list-details"),
     key: "study-info",
-    label: "Study Info",
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: "/studyInfo",
+          },
+        },
+        { default: () => "Study Info" }
+      ),
   },
   {
     icon: renderIcon("fluent:people-team-toolbox-24-regular"),
