@@ -51,12 +51,30 @@ const profileOptions = [
   {
     icon: renderIcon("ion:person-circle-outline"),
     key: "view-profile",
-    label: "View Profile",
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: "/viewProfile",
+          },
+        },
+        { default: () => "View Profile" }
+      ),
   },
   {
     icon: renderIcon("carbon:chart-network"),
     key: "integrations",
-    label: "Integrations",
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: "/integrations",
+          },
+        },
+        { default: () => "Integrations" }
+      ),
   },
   {
     key: "d1",

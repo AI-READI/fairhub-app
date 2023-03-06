@@ -6,6 +6,7 @@ import HelpPage from "@/views/HelpPage.vue";
 import Integrations from "@/views/IntegrationPage.vue";
 import ReportIssue from "@/views/ReportIssue.vue";
 import Settings from "@/views/SettingPage.vue";
+import StudyInfo from "@/views/StudyInfo.vue";
 import ViewProfile from "@/views/ViewProfile.vue";
 
 import AllStudies from "../views/AllStudies.vue";
@@ -55,7 +56,12 @@ const router = createRouter({
       path: "/participants",
     },
     {
-      name: "add-participant",
+      name: "study-info",
+      component: StudyInfo,
+      path: "/studyInfo",
+    },
+    {
+      name: "help",
       component: HelpPage,
       path: "/help",
     },
@@ -80,12 +86,12 @@ const router = createRouter({
       path: "/settings",
     },
     {
-      name: "Documentation",
+      name: "documentation",
       component: Documentation,
       path: "/documentation",
     },
     {
-      name: "Changelog",
+      name: "changelog",
       component: Changelog,
       path: "/changelog",
     },
