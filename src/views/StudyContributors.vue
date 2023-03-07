@@ -123,7 +123,7 @@ const getFirstLetters = (name: string) => {
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
     <n-space justify="start" align="end">
       <Icon icon="carbon:user-follow" width="30" height="30" />
-      <h1>Invite people to contribute to the {{ study.title }} study</h1>
+      <h1>Invite people to contribute to the {{ study.title }}</h1>
     </n-space>
 
     <n-card class="!mt-4">

@@ -11,7 +11,7 @@ import Issue from "../assets/animations/report_issue.json";
   <div class="issue">
     <div class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5">
       <div class="flex h-full w-full flex-col">
-        <h1 class="pt-5 pb-1 text-3xl font-bold text-slate-700">Contact Us</h1>
+        <h1 class="pt-5 pb-1 text-3xl font-bold text-slate-700">Report an issue</h1>
 
         <Vue3Lottie :animationData="Issue" :height="400" :width="500" />
 
