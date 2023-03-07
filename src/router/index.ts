@@ -63,11 +63,6 @@ const router = createRouter({
       path: "/studyInfo",
     },
     {
-      name: "help",
-      component: HelpPage,
-      path: "/help",
-    },
-    {
       name: "view-profile",
       component: ViewProfile,
       path: "/viewProfile",
@@ -82,20 +77,28 @@ const router = createRouter({
       component: ReportIssue,
       path: "/reportIssue",
     },
+
     {
       name: "settings",
       component: Settings,
       path: "/settings",
     },
     {
-      name: "documentation",
-      component: Documentation,
-      path: "/documentation",
-    },
-    {
-      name: "changelog",
-      component: Changelog,
-      path: "/changelog",
+      name: "help",
+      children: [
+        {
+          name: "documentation",
+          component: Documentation,
+          path: "documentation",
+        },
+        {
+          name: "changelog",
+          component: Changelog,
+          path: "changelog",
+        },
+      ],
+      component: HelpPage,
+      path: "/help",
     },
     {
       name: "study-contributors",
