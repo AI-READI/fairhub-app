@@ -8,18 +8,23 @@ import Docs from "../assets/animations/documents_page.json";
 </script>
 
 <template>
-  <h1>Documentation</h1>
-  <n-p>
-    We have created a documentation page for each feature in FAIRhub. You can find the documentation
-    site by clicking on the button below:
-  </n-p>
-  <n-button><n-a href="www.docs.fairhub.io" target="_blank">View the Documentation</n-a> </n-button>
-
+  <div class="docs">
+    <h1>Documentation</h1>
+    <n-p>
+      We have created a documentation page for each feature in FAIRhub. You can find the
+      documentation site by clicking on the button below:
+    </n-p>
+    <n-button>
+      <n-a href="www.docs.fairhub.io" target="_blank">View the Documentation</n-a>
+    </n-button>
+  </div>
   <div><Vue3Lottie :animationData="Docs" :height="400" :width="400" /></div>
 </template>
 
 <style>
-n-a {
-  font-weight: 500;
+.docs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
