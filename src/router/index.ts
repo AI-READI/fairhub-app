@@ -4,6 +4,8 @@ import Changelog from "@/views/ChangeLog.vue";
 import Documentation from "@/views/DocumentationPage.vue";
 import HelpPage from "@/views/HelpPage.vue";
 import Integrations from "@/views/IntegrationPage.vue";
+import NotFound from "@/views/NotFound.vue";
+import ParticipantsData from "@/views/ParticipantsData.vue";
 import ReportIssue from "@/views/ReportIssue.vue";
 import Settings from "@/views/SettingPage.vue";
 import StudyInfo from "@/views/StudyInfo.vue";
@@ -101,6 +103,12 @@ const router = createRouter({
       path: "/studies/:id/contributors",
     },
     {
+      name: "participants-and-data",
+      component: ParticipantsData,
+      path: "/participantsdata",
+    },
+
+    {
       name: "publish-study",
       children: [
         {
@@ -132,6 +140,7 @@ const router = createRouter({
       component: PublishStudy,
       path: "/studies/:id/publish",
     },
+    { name: "not-found", component: NotFound, path: "/:pathMatch(.*)" },
   ],
 });
 
