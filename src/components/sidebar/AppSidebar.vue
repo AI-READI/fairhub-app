@@ -139,7 +139,16 @@ const dynamicUpperMenuOptions: MenuOption[] = [
   {
     icon: renderIcon("fluent:people-team-toolbox-24-regular"),
     key: "participants-and-data",
-    label: "Participants and Data",
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            path: "/participantsdata",
+          },
+        },
+        { default: () => "Participants and Data" }
+      ),
   },
   {
     icon: renderIcon("fluent:people-checkmark-24-regular"),
