@@ -242,7 +242,7 @@ const lowerMenuOptions: MenuOption[] = [
             RouterLink,
             {
               to: {
-                path: "/documentation",
+                path: "/help/documentation",
               },
             },
             { default: () => "Documentation" }
@@ -256,7 +256,7 @@ const lowerMenuOptions: MenuOption[] = [
             RouterLink,
             {
               to: {
-                path: "/changelog",
+                path: "/help/changelog",
               },
             },
             { default: () => "Changelog" }
