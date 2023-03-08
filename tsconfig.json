@@ -2,9 +2,17 @@
   "compilerOptions": {
     "jsx": "preserve",
     "allowJs": true,
-    "types": ["naive-ui/volar", "node"]
+    "types": ["naive-ui/volar", "node"],
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
+  "composite": true,
   "files": [],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "src/**/*.json"],
   "references": [
     {
       "path": "./tsconfig.config.json"

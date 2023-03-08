@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import type { FormInst } from "naive-ui";
-import { NButton, NForm, NFormItem, NInput } from "naive-ui";
+import type { FormInst, FormItemRule } from "naive-ui";
+import { NButton, NForm, NFormItem, NInput, NSelect } from "naive-ui";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
+
+import LANGUAGE_JSON from "@/assets/data/languages.json";
 
 const route = useRoute();
 
@@ -18,31 +20,61 @@ setTimeout(() => {
 
 const formRef = ref<FormInst | null>(null);
 
+const languageOptions = LANGUAGE_JSON.map((v) => ({
+  label: v.name,
+  value: v.alpha2,
+}));
+
+const generalOptions = [
+  "Artifical Intelligence",
+  "Dataset",
+  "Diabetes",
+  "Ethics",
+  "Health",
+  "Machine Learning",
+].map((v) => ({
+  label: v,
+  value: v,
+}));
+
 const formValue = ref({
-  phone: "",
-  user: {
-    name: "",
-    age: "",
-  },
+  title: "",
+  description: "",
+  keywords: [],
+  primaryLanguage: "",
 });
 const rules = {
-  phone: {
-    message: "Please input your number",
+  title: {
+    message: "Please add a Dataset Title",
     required: true,
     trigger: ["input"],
   },
-  user: {
-    name: {
-      message: "Please input your name",
-      required: true,
-      trigger: "blur",
-    },
-    age: {
-      message: "Please input your age",
-      required: true,
-      trigger: ["input", "blur"],
-    },
+  description: {
+    message: "Please add a Dataset Description",
+    required: true,
+    trigger: ["input"],
   },
+  keywords: [
+    {
+      required: true,
+      trigger: ["blur", "change"],
+      validator: (rule: FormItemRule, value: Array<string>) => {
+        if (value !== null && value.length > 0) {
+          return Promise.resolve();
+        }
+        return Promise.reject("Please select at least one keyword");
+      },
+    },
+  ],
+  primaryLanguage: {
+    message: "Please select a primary language",
+    required: true,
+    trigger: ["blur", "change"],
+  },
+};
+
+const handleUpdateValue = (value: string[]) => {
+  console.log(value);
 };
 
 const handleValidateClick = (e: MouseEvent) => {
@@ -64,15 +96,37 @@ const handleValidateClick = (e: MouseEvent) => {
       <h3 class="pb-4">Add/Edit Participants</h3>
 
       <n-form ref="formRef" :label-width="80" :model="formValue" :rules="rules" size="large">
-        <n-form-item label="Name" path="user.name">
-          <n-input v-model:value="formValue.user.name" placeholder="Input Name" />
+        <n-form-item label="Title" path="title">
+          <n-input v-model:value="formValue.title" placeholder="Gene Ontology Data Archive V1" />
         </n-form-item>
-        <n-form-item label="Age" path="user.age">
-          <n-input v-model:value="formValue.user.age" placeholder="Input Age" />
+
+        <n-form-item label="Description" path="description">
+          <n-input v-model:value="formValue.description" type="textarea" placeholder="..." />
         </n-form-item>
-        <n-form-item label="Phone" path="phone">
-          <n-input v-model:value="formValue.phone" placeholder="Phone Number" />
+
+        <n-form-item :span="12" label="Keywords" path="keywords">
+          <n-select
+            v-model:value="formValue.keywords"
+            placeholder="Salutogenesis"
+            multiple
+            tag
+            filterable
+            clearable
+            :options="generalOptions"
+            @update:value="handleUpdateValue"
+          />
         </n-form-item>
+
+        <n-form-item :span="12" label="Primary Language" path="primaryLanguage">
+          <n-select
+            v-model:value="formValue.primaryLanguage"
+            placeholder="English"
+            filterable
+            clearable
+            :options="languageOptions"
+          />
+        </n-form-item>
+
         <n-form-item>
           <n-button @click="handleValidateClick"> Validate </n-button>
         </n-form-item>
