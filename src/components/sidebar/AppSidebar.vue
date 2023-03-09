@@ -265,16 +265,7 @@ const lowerMenuOptions: MenuOption[] = [
     ],
     icon: renderIcon("tabler:help"),
     key: "help",
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            path: "/help",
-          },
-        },
-        { default: () => "Help" }
-      ),
+    label: "Help",
   },
   {
     icon: renderIcon("fluent:settings-24-regular"),
