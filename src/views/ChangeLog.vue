@@ -1,9 +1,23 @@
-<script setup lang="ts">
+<script lang="ts">
 import "vue3-lottie/dist/style.css";
 
-import { Vue3Lottie } from "vue3-lottie";
+import { marked } from "marked";
+import { computed, defineComponent, ref } from "vue";
 
-import Changelog from "../assets/animations/changelog.json";
+import changelog from "../../CHANGELOG.md?raw";
+
+export default defineComponent({
+  name: "App",
+  setup() {
+    const markdown = ref<string>(changelog);
+
+    const markdownToHtml = computed(() => {
+      return marked.parse(markdown.value);
+    });
+    console.log(changelog);
+    return { markdownToHtml };
+  },
+});
 </script>
 
 <template>
@@ -22,5 +36,7 @@ import Changelog from "../assets/animations/changelog.json";
   </n-alert>
   <h2>Feature additions</h2>
   <h2>Bug fixes</h2>
-  <Vue3Lottie :animationData="Changelog" :height="400" :width="400" />
+
+  <div v-html="markdownToHtml"></div>
+  <pre>{{ markdownToHtml }}</pre>
 </template>
