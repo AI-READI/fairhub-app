@@ -1,92 +1,74 @@
 <script lang="ts">
 import type { FormInst, FormItemInst, FormItemRule, FormRules } from "naive-ui";
-import { NButton, NForm, NFormItem, NInput } from "naive-ui";
-import { defineComponent, ref } from "vue";
+import { NButton, NDynamicTags, NForm, NFormItem, NInput, NTag } from "naive-ui";
+import { defineComponent, h, ref } from "vue";
 
 interface ModelType {
-  age: string | null;
+  title: string | null;
   description: string | null;
-  firstname: string | null;
-  lastname: string | null;
-  password: string | null;
-  reenteredPassword: string | null;
+  keywords: string | null;
 }
 
 export default defineComponent({
-  components: { NButton, NForm, NFormItem, NInput },
+  components: { NButton, NDynamicTags, NForm, NFormItem, NInput },
   setup() {
+    const tagsRef = ref(["FAIRhub", "biomedical"]);
     const formRef = ref<FormInst | null>(null);
     const rPasswordFormItemRef = ref<FormItemInst | null>(null);
     // const message = useMessage()
     const modelRef = ref<ModelType>({
-      age: "",
+      title: "",
       description: "",
-      firstname: "",
-      lastname: "",
-      password: "",
-      reenteredPassword: "",
+      keywords: "",
     });
-    function validatePasswordStartWith(rule: FormItemRule, value: string): boolean {
-      return (
-        !!modelRef.value.password &&
-        modelRef.value.password.startsWith(value) &&
-        modelRef.value.password.length >= value.length
-      );
-    }
-    function validatePasswordSame(rule: FormItemRule, value: string): boolean {
-      return value === modelRef.value.password;
-    }
     const rules: FormRules = {
-      age: [
+      title: [
         {
           required: true,
           trigger: ["input", "blur"],
           validator(rule: FormItemRule, value: string) {
             if (!value) {
-              return new Error("Age is required");
-            } else if (!/^\d*$/.test(value)) {
-              return new Error("Age should be an integer");
-            } else if (Number(value) < 18) {
-              return new Error("Age should be above 18");
+              return new Error("keywords is required");
             }
             return true;
           },
         },
       ],
-      password: [
+      description: [
         {
-          message: "Password is required",
-          required: true,
-        },
-      ],
-      reenteredPassword: [
-        {
-          message: "Re-entered password is required",
           required: true,
           trigger: ["input", "blur"],
-        },
-        {
-          message: "Password is not same as re-entered password!",
-          trigger: "input",
-          validator: validatePasswordStartWith,
-        },
-        {
-          message: "Password is not same as re-entered password!",
-          trigger: ["blur", "password-input"],
-          validator: validatePasswordSame,
+          validator(rule: FormItemRule, value: string) {
+            if (!value) {
+              return new Error("keywords is required");
+            }
+            return true;
+          },
         },
       ],
     };
     return {
       formRef,
-      handlePasswordInput() {
-        if (modelRef.value.reenteredPassword) {
-          rPasswordFormItemRef.value?.validate({ trigger: "password-input" });
-        }
-      },
       model: modelRef,
+      renderTag: (tag: string, index: number) => {
+        return h(
+          NTag,
+          {
+            closable: true,
+            disabled: index > 3,
+            onClose: () => {
+              tagsRef.value.splice(index, 1);
+            },
+            type: index < 3 ? "success" : "error",
+          },
+          {
+            default: () => tag,
+          }
+        );
+      },
       rPasswordFormItemRef,
       rules,
+      tags: tagsRef,
       // handleValidateButtonClick (e: MouseEvent) {
       //   e.preventDefault()
       //   formRef.value?.validate(
@@ -108,52 +90,30 @@ export default defineComponent({
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
     <h1>Enter information</h1>
-    <n-form ref="formRef" :model="model.firstname" :rules="rules">
-      <n-form-item path="firstname" label="Firstname">
-        <n-input v-model:value="model.firstname" @keydown.enter.prevent />
-      </n-form-item>
-      <n-form-item path="lastname" label="Lastname">
-        <n-input v-model:value="model.lastname" @keydown.enter.prevent />
+    <n-form ref="formRef" :model="model" :rules="rules">
+      <n-form-item path="title" label="Title">
+        <n-input v-model:value="model.title" @keydown.enter.prevent />
       </n-form-item>
       <n-form-item path="description" label="Description">
         <n-input v-model:value="model.description" @keydown.enter.prevent />
       </n-form-item>
-      <n-form-item path="age" label="Age">
-        <n-input v-model:value="model.age" @keydown.enter.prevent />
+      <n-form-item path="keywords" label="Keywords">
+        <n-input v-model:value="model.keywords" @keydown.enter.prevent />
       </n-form-item>
-      <n-form-item path="password" label="Password">
-        <n-input
-          v-model:value="model.password"
-          type="password"
-          @input="handlePasswordInput"
-          @keydown.enter.prevent
-        />
-      </n-form-item>
-      <n-form-item
-        ref="rPasswordFormItemRef"
-        first
-        path="reenteredPassword"
-        label="Re-enter Password"
-      >
-        <n-input
-          v-model:value="model.reenteredPassword"
-          :disabled="!model.password"
-          type="password"
-          @keydown.enter.prevent
-        />
-      </n-form-item>
+      <n-dynamic-tags v-model:value="tags" :render-tag="renderTag" />
       <n-row :gutter="[0, 24]">
         <n-col :span="24">
           <div style="display: flex; justify-content: flex-end">
-            <n-button :disabled="model.age === null" round type="primary"> Submit </n-button>
+            <n-button
+              :disabled="model.keywords === null && model.title === null"
+              round
+              type="primary"
+            >
+              Submit
+            </n-button>
           </div>
         </n-col>
       </n-row>
     </n-form>
-
-    <pre
-      >{{ JSON.stringify(model, null, 2) }}
-</pre
-    >
   </main>
 </template>
