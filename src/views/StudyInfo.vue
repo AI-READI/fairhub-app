@@ -145,14 +145,7 @@ export default defineComponent({
       <n-row :gutter="[0, 24]">
         <n-col :span="24">
           <div style="display: flex; justify-content: flex-end">
-            <n-button
-              :disabled="model.age === null"
-              round
-              type="primary"
-              @click="handleValidateButtonClick"
-            >
-              Submit
-            </n-button>
+            <n-button :disabled="model.age === null" round type="primary"> Submit </n-button>
           </div>
         </n-col>
       </n-row>
