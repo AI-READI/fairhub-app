@@ -3,31 +3,35 @@ import "vue3-lottie/dist/style.css";
 </script>
 
 <template>
-  <div></div>
-  <div class="not-found">
-    <h1>Page Not Found</h1>
-    <div class="subitem">We could not find what you were looking for.</div>
-    <div class="subitem">
-      Please contact the owner of the site that linked you to the original URL and let them know
-      their link is broken.
+  <div class="column">
+    <div class="row">
+      <h1 class="not-found">Page Not Found</h1>
+      <div class="subitem">We could not find what you were looking for.</div>
+      <div class="subitem">
+        Please contact the owner of the site that linked you to the original URL and let them know
+        their link is broken.
+      </div>
     </div>
   </div>
 </template>
 
 <style>
-.not-found {
-  position: relative;
+.column {
   display: flex;
-  align-items: center;
   flex-direction: column;
-  justify-content: flex-start;
-  left: 0;
+  align-items: center;
 }
-h1 {
+.not-found {
   font-size: 3rem;
   margin-bottom: 2rem;
+  margin-top: 5rem;
 }
 .subitem {
   margin-bottom: 1rem;
+}
+.row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 </style>
