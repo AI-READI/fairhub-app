@@ -95,7 +95,16 @@ export default defineComponent({
         <n-input v-model:value="model.title" @keydown.enter.prevent />
       </n-form-item>
       <n-form-item path="description" label="Description">
-        <n-input v-model:value="model.description" @keydown.enter.prevent />
+        <n-input
+          v-model:value="model.description"
+          placeholder="Add a study description"
+          type="textarea"
+          :autosize="{
+            minRows: 3,
+            maxRows: 5,
+          }"
+          @keydown.enter.prevent
+        />
       </n-form-item>
       <n-form-item path="keywords" label="Keywords">
         <n-input v-model:value="model.keywords" @keydown.enter.prevent />
