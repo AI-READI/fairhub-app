@@ -50,17 +50,17 @@ const router = createRouter({
     {
       name: "dashboard",
       component: DashBoard,
-      path: "/dashboard",
+      path: "/studies/:id/dashboard",
     },
     {
       name: "add-participant",
       component: AllStudies,
-      path: "/participants",
+      path: "/studies/:id/participants",
     },
     {
       name: "study-info",
       component: StudyInfo,
-      path: "/studyInfo",
+      path: "/studies/:id/studyInfo",
     },
     {
       name: "view-profile",
@@ -108,9 +108,8 @@ const router = createRouter({
     {
       name: "participants-and-data",
       component: ParticipantsData,
-      path: "/participantsdata",
+      path: "/studies/:id/participantsdata",
     },
-
     {
       name: "publish-study",
       children: [

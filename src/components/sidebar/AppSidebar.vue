@@ -130,7 +130,10 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            path: "/studyInfo",
+            name: "study-info",
+            params: {
+              id: studyID.value,
+            },
           },
         },
         { default: () => "Study Info" }
@@ -144,10 +147,13 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            path: "/participantsdata",
+            name: "participants-and-data",
+            params: {
+              id: studyID.value,
+            },
           },
         },
-        { default: () => "Participants and Data" }
+        { default: () => "Participants And Data" }
       ),
   },
   {
@@ -175,7 +181,10 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            path: "/dashboard",
+            name: "dashboard",
+            params: {
+              id: studyID.value,
+            },
           },
         },
         { default: () => "Dashboard" }
