@@ -15,12 +15,12 @@ import AllStudies from "../views/AllStudies.vue";
 import DashBoard from "../views/DashBoard.vue";
 import LandingPage from "../views/LandingPage.vue";
 import NewStudy from "../views/NewStudy.vue";
-import PublishCheckForVersion from "../views/PublishCheckForVersion.vue";
-import PublishDatasetMetadata from "../views/PublishDatasetMetadata.vue";
-import PublishNewVersion from "../views/PublishNewVersion.vue";
-import PublishParticipantsConfirm from "../views/PublishParticipantsConfirm.vue";
-import PublishSelectParticipants from "../views/PublishSelectParticipants.vue";
-import PublishStudy from "../views/PublishStudy.vue";
+import PublishCheckForVersion from "../views/publish/PublishCheckForVersion.vue";
+import PublishDatasetMetadata from "../views/publish/PublishDatasetMetadata.vue";
+import PublishNewVersion from "../views/publish/PublishNewVersion.vue";
+import PublishParticipantsConfirm from "../views/publish/PublishParticipantsConfirm.vue";
+import PublishSelectParticipants from "../views/publish/PublishSelectParticipants.vue";
+import PublishStudy from "../views/publish/PublishStudy.vue";
 import StudyContributors from "../views/StudyContributors.vue";
 import StudyOverview from "../views/StudyOverview.vue";
 
@@ -135,7 +135,7 @@ const router = createRouter({
           path: "version/:versionId/participants/confirm",
         },
         {
-          name: "publish-confirm-participants",
+          name: "publish-dataset-metadata",
           component: PublishDatasetMetadata,
           path: "version/:versionId/dataset/metadata",
         },
