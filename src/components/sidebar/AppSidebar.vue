@@ -284,7 +284,7 @@ const lowerMenuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            path: "/settings",
+            name: "settings",
           },
         },
         { default: () => "Settings" }
