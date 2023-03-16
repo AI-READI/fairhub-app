@@ -21,7 +21,15 @@ const studyID = computed(() => {
 });
 
 const hideMenuOptions = computed(() => {
-  const hiddenRoutes = ["/studies", "/studies/new"];
+  const hiddenRoutes = [
+    "/studies",
+    "/studies/new",
+    "/settings",
+    "/reportIssue",
+    "/help/documentation",
+    "/help/changelog",
+    "/viewProfile",
+  ];
   if (hiddenRoutes.includes(route.path)) {
     return false;
   } else {
@@ -199,9 +207,9 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         {
           to: {
             name: "add-participant",
-            // params: {
-            //   lang: "en-US",
-            // },
+            params: {
+              id: studyID.value,
+            },
           },
         },
         { default: () => "Add Participant" }

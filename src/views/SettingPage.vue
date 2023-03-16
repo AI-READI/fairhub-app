@@ -2,6 +2,8 @@
 import "vue3-lottie/dist/style.css";
 
 import { NAlert, NButton, NSpace, NTabPane, NTabs } from "naive-ui";
+import { NConfigProvider } from "naive-ui";
+import { darkTheme } from "naive-ui";
 import { Vue3Lottie } from "vue3-lottie";
 
 import Settings from "../assets/animations/settings.json";
@@ -12,33 +14,23 @@ import Settings from "../assets/animations/settings.json";
     <div><h1>Application Settings</h1></div>
     <div>
       <n-tabs type="segment" class="settings-tab">
-        <n-tab-pane name="General" tab="General">
+        <n-tab-pane name="Theme select or" tab="Theme selector">
           <n-space vertical :size="12">
-            <n-alert title="Allow beta versions?" type="default">
-              Do you want to allow FAIRhub to download and update to beta versions of the
-              application? Beta versions may not yet be stable and may contain bugs but you will be
-              able to preview and test the latest features ahead of time.
-            </n-alert>
-          </n-space>
-        </n-tab-pane>
-        <n-tab-pane name="Advanced" tab="Advanced">
-          <n-space vertical :size="12">
-            <n-alert title="Configuration Folder" type="default">
-              The FAIRhub configuration folder holds key information regarding your projects, access
-              tokens and datasets.
-              <span>You should not modify this folder unless you know what you are doing.</span>
+            <n-alert title="Theme selector" type="default">
+              Choose a theme
               <div>
-                <n-button> Open the config folder </n-button>
+                <n-button>Light</n-button>
+                <n-button>Dark</n-button>
               </div>
             </n-alert>
           </n-space>
+        </n-tab-pane>
+        <n-tab-pane name="Clear a Cache" tab="Clear a Cache">
           <n-space vertical :size="12">
-            <n-alert title="Logs Folder" type="default">
-              Our backend service will create logs for errors that are shown in the UI. Click the
-              button to open the logs folder.
-              <span>This is only intended to be used for debugging purposes.</span>
+            <n-alert title="Configuration Folder" type="default">
+              <span>You should not modify this folder unless you know what you are doing.</span>
               <div>
-                <n-button> Open the logs folder </n-button>
+                <n-button> clear a cache </n-button>
               </div>
             </n-alert>
           </n-space>
@@ -47,6 +39,10 @@ import Settings from "../assets/animations/settings.json";
     </div>
   </div>
   <div class="animation"><Vue3Lottie :animationData="Settings" :height="400" :width="400" /></div>
+  <n-config-provider :theme="darkTheme">
+    <n-button>light</n-button>
+    <n-button>dark</n-button>
+  </n-config-provider>
 </template>
 
 <style>

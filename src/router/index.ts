@@ -62,22 +62,22 @@ const router = createRouter({
       component: StudyInfo,
       path: "/studies/:id/studyInfo",
     },
+
     {
-      name: "view-profile",
-      component: ViewProfile,
-      path: "/viewProfile",
+      name: "study-contributors",
+      component: StudyContributors,
+      path: "/studies/:id/contributors",
     },
     {
-      name: "integrations",
-      component: Integrations,
-      path: "/integrations",
+      name: "participants-and-data",
+      component: ParticipantsData,
+      path: "/studies/:id/participantsdata",
     },
     {
       name: "report-issue",
       component: ReportIssue,
       path: "/reportIssue",
     },
-
     {
       name: "settings",
       component: Settings,
@@ -99,16 +99,6 @@ const router = createRouter({
       ],
       component: HelpPage,
       path: "/help",
-    },
-    {
-      name: "study-contributors",
-      component: StudyContributors,
-      path: "/studies/:id/contributors",
-    },
-    {
-      name: "participants-and-data",
-      component: ParticipantsData,
-      path: "/studies/:id/participantsdata",
     },
     {
       name: "publish-study",
@@ -141,6 +131,17 @@ const router = createRouter({
       ],
       component: PublishStudy,
       path: "/studies/:id/publish",
+    },
+    //header
+    {
+      name: "view-profile",
+      component: ViewProfile,
+      path: "/viewProfile",
+    },
+    {
+      name: "integrations",
+      component: Integrations,
+      path: "/integrations",
     },
     { name: "not-found", component: NotFound, path: "/:pathMatch(.*)" },
   ],
