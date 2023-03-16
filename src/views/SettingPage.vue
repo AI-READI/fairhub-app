@@ -3,11 +3,14 @@ import "vue3-lottie/dist/style.css";
 
 import { NAlert, NButton, NSpace, NTabPane, NTabs } from "naive-ui";
 import { darkTheme, lightTheme } from "naive-ui";
+import { ref } from "vue";
 import { Vue3Lottie } from "vue3-lottie";
 
-import { theme } from "@/stores/theme";
+import { theme } from "@/stores/settings";
 
 import Settings from "../assets/animations/settings.json";
+
+const clearCache = ref(0);
 </script>
 
 <template>
@@ -31,7 +34,7 @@ import Settings from "../assets/animations/settings.json";
             <n-alert title="Configuration Folder" type="default">
               <span>You should not modify this folder unless you know what you are doing.</span>
               <div>
-                <n-button> clear a cache </n-button>
+                <n-button @click="clearCache"> clear a cache </n-button>
               </div>
             </n-alert>
           </n-space>

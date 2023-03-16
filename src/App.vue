@@ -2,7 +2,7 @@
 import { NConfigProvider, NLayout, NLayoutContent, NMessageProvider, NSpace } from "naive-ui";
 import { RouterView } from "vue-router";
 
-import { theme } from "@/stores/theme";
+import { theme } from "@/stores/settings";
 
 import AppHeader from "./components/header/AppHeader.vue";
 import AppSidebar from "./components/sidebar/AppSidebar.vue";
