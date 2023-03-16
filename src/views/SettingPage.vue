@@ -2,9 +2,10 @@
 import "vue3-lottie/dist/style.css";
 
 import { NAlert, NButton, NSpace, NTabPane, NTabs } from "naive-ui";
-import { NConfigProvider } from "naive-ui";
-import { darkTheme } from "naive-ui";
+import { darkTheme, lightTheme } from "naive-ui";
 import { Vue3Lottie } from "vue3-lottie";
+
+import { theme } from "@/stores/theme";
 
 import Settings from "../assets/animations/settings.json";
 </script>
@@ -19,8 +20,8 @@ import Settings from "../assets/animations/settings.json";
             <n-alert title="Theme selector" type="default">
               Choose a theme
               <div>
-                <n-button>Light</n-button>
-                <n-button>Dark</n-button>
+                <n-button @click="theme = lightTheme">Light</n-button>
+                <n-button @click="theme = darkTheme">Dark</n-button>
               </div>
             </n-alert>
           </n-space>
@@ -39,10 +40,6 @@ import Settings from "../assets/animations/settings.json";
     </div>
   </div>
   <div class="animation"><Vue3Lottie :animationData="Settings" :height="400" :width="400" /></div>
-  <n-config-provider :theme="darkTheme">
-    <n-button>light</n-button>
-    <n-button>dark</n-button>
-  </n-config-provider>
 </template>
 
 <style>
