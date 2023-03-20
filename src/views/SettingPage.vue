@@ -19,20 +19,18 @@ function clearCache() {
     <div>
       <h1 class="settings-header">Application Settings</h1>
       <n-tabs type="segment" class="settings-tab">
-        <n-tab-pane name="Theme select or" tab="Theme selector">
-          <n-space vertical :size="12">
-            <n-alert title="Theme selector" type="default">
-              Choose a theme
-              <div class="buttons">
-                <n-button @click="theme = lightTheme" type="primary" class="light">Light</n-button>
-                <n-button @click="theme = darkTheme" type="primary" class="dark">Dark</n-button>
-              </div>
-            </n-alert>
-          </n-space>
+        <n-tab-pane name="General" tab="General">
+          <n-alert title="Theme selector" type="default">
+            Choose a theme
+            <div class="buttons">
+              <n-button @click="theme = lightTheme" type="primary" class="light">Light</n-button>
+              <n-button @click="theme = darkTheme" type="primary" class="dark">Dark</n-button>
+            </div>
+          </n-alert>
         </n-tab-pane>
-        <n-tab-pane name="Clear a Cache" tab="Clear a Cache">
+        <n-tab-pane name="Advanced" tab="Advanced">
           <n-space vertical :size="12">
-            <n-alert title="Configuration Folder" type="default">
+            <n-alert title="Advanced" type="default">
               <span>You should not modify this folder unless you know what you are doing.</span>
               <div class="cache">
                 <n-button type="primary" @click="clearCache"> clear a cache </n-button>
@@ -43,6 +41,7 @@ function clearCache() {
       </n-tabs>
     </div>
   </div>
+
   <div class="animation"><Vue3Lottie :animationData="Settings" :height="400" :width="400" /></div>
 </template>
 
@@ -54,16 +53,17 @@ function clearCache() {
 }
 
 .settings-tab {
-  margin-top: 2rem;
+  margin-top: 1rem;
   width: 700px;
 }
 .buttons,
 .cache {
+  margin-top: 1.5rem;
   display: flex;
   justify-content: center;
 }
 .light {
-  margin-right: 4rem;
+  margin-right: 1.5rem;
 }
 
 .settings-tab {
