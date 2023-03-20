@@ -9,11 +9,13 @@ import Issue from "../assets/animations/report_issue.json";
 
 <template>
   <div class="issue">
-    <div class="flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5">
+    <div
+      class="inner flex h-full w-full max-w-screen-lg flex-col items-center justify-center p-3 pr-5"
+    >
       <div class="flex h-full w-full flex-col">
-        <h1 class="pt-5 pb-1 text-3xl font-bold text-slate-700">Report an issue</h1>
+        <h1>Report an issue</h1>
 
-        <Vue3Lottie :animationData="Issue" :height="400" :width="500" />
+        <Vue3Lottie :animationData="Issue" :height="300" :width="350" />
 
         <n-p>
           If you have any issues with FAIRhub, please create an issue on GitHub. For any other
@@ -44,6 +46,14 @@ import Issue from "../assets/animations/report_issue.json";
   align-items: center;
 }
 .issue h1 {
-  font-size: 3rem;
+  font-weight: 800;
+  font-size: 2.25em;
+  margin-top: 0;
+  margin-bottom: 0.8888889em;
+  line-height: 1.1111111;
+}
+
+.inner {
+  max-width: 48rem;
 }
 </style>

@@ -16,8 +16,8 @@ function clearCache() {
 
 <template>
   <div class="settings">
-    <div><h1>Application Settings</h1></div>
     <div>
+      <h1 class="settings-header">Application Settings</h1>
       <n-tabs type="segment" class="settings-tab">
         <n-tab-pane name="Theme select or" tab="Theme selector">
           <n-space vertical :size="12">
@@ -64,5 +64,17 @@ function clearCache() {
 }
 .light {
   margin-right: 4rem;
+}
+
+.settings-tab {
+  max-width: 48rem;
+}
+
+.settings-header {
+  font-weight: 800;
+  font-size: 2.25em;
+  margin-top: 0;
+  margin-bottom: 0.8888889em;
+  line-height: 1.1111111;
 }
 </style>
