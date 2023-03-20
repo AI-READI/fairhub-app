@@ -131,6 +131,23 @@ const staticUpperMenuOptions: MenuOption[] = [
 
 const dynamicUpperMenuOptions: MenuOption[] = [
   {
+    icon: renderIcon("uil:align-left"),
+    key: "study-home",
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: "study-home",
+            params: {
+              id: studyID.value,
+            },
+          },
+        },
+        { default: () => "Study Home" }
+      ),
+  },
+  {
     icon: renderIcon("tabler:list-details"),
     key: "study-info",
     label: () =>

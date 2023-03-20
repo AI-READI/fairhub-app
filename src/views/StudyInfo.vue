@@ -84,7 +84,7 @@ const handleUpdateValue = (value: string[]) => {
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col space-y-8">
+  <main class="prose flex h-full w-full flex-col space-y-8">
     <n-space justify="space-between">
       <h1>Enter information</h1>
     </n-space>
@@ -100,7 +100,6 @@ const handleUpdateValue = (value: string[]) => {
       <n-form-item :span="12" label="Title" path="title">
         <n-input v-model:value="study.title" placeholder="Add a study title" />
       </n-form-item>
-
       <n-form-item :span="12" label="Description" path="description">
         <n-input
           v-model:value="study.description"

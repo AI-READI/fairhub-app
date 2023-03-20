@@ -8,6 +8,7 @@ import NotFound from "@/views/NotFound.vue";
 import ParticipantsData from "@/views/ParticipantsData.vue";
 import ReportIssue from "@/views/ReportIssue.vue";
 import Settings from "@/views/SettingPage.vue";
+import StudyHome from "@/views/StudyHome.vue";
 import StudyInfo from "@/views/StudyInfo.vue";
 import ViewProfile from "@/views/ViewProfile.vue";
 
@@ -22,7 +23,6 @@ import PublishParticipantsConfirm from "../views/publish/PublishParticipantsConf
 import PublishSelectParticipants from "../views/publish/PublishSelectParticipants.vue";
 import PublishStudy from "../views/publish/PublishStudy.vue";
 import StudyContributors from "../views/StudyContributors.vue";
-import StudyOverview from "../views/StudyOverview.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,7 +44,7 @@ const router = createRouter({
     },
     {
       name: "study",
-      component: StudyOverview,
+      component: StudyHome,
       path: "/studies/:id",
     },
     {
@@ -56,6 +56,11 @@ const router = createRouter({
       name: "add-participant",
       component: AllStudies,
       path: "/studies/:id/participants",
+    },
+    {
+      name: "study-home",
+      component: StudyHome,
+      path: "/studies/:id/studyHome",
     },
     {
       name: "study-info",
