@@ -22,9 +22,9 @@ const clearCache = ref(0);
           <n-space vertical :size="12">
             <n-alert title="Theme selector" type="default">
               Choose a theme
-              <div>
-                <n-button @click="theme = lightTheme">Light</n-button>
-                <n-button @click="theme = darkTheme">Dark</n-button>
+              <div class="buttons">
+                <n-button @click="theme = lightTheme" type="primary" class="light">Light</n-button>
+                <n-button @click="theme = darkTheme" type="primary" class="dark">Dark</n-button>
               </div>
             </n-alert>
           </n-space>
@@ -33,8 +33,8 @@ const clearCache = ref(0);
           <n-space vertical :size="12">
             <n-alert title="Configuration Folder" type="default">
               <span>You should not modify this folder unless you know what you are doing.</span>
-              <div>
-                <n-button @click="clearCache"> clear a cache </n-button>
+              <div class="cache">
+                <n-button type="primary" @click="clearCache"> clear a cache </n-button>
               </div>
             </n-alert>
           </n-space>
@@ -56,9 +56,12 @@ const clearCache = ref(0);
   margin-top: 2rem;
   width: 700px;
 }
-/*.animation {*/
-/*  display: flex;*/
-/*  justify-content: flex-start;*/
-/*  width: 400px;*/
-/*}*/
+.buttons,
+.cache {
+  display: flex;
+  justify-content: center;
+}
+.light {
+  margin-right: 4rem;
+}
 </style>
