@@ -2,15 +2,14 @@
 import type { FormInst, FormItemRule } from "naive-ui";
 import { NButton, NForm, NFormItem, NInput, NSelect } from "naive-ui";
 import { ref } from "vue";
-import { useRoute } from "vue-router";
 
 import LANGUAGE_JSON from "@/assets/data/languages.json";
 
-const route = useRoute();
+// const route = useRoute();
 
-const routeParams = {
-  versionId: route.params.versionId.toString(),
-};
+// const routeParams = {
+//   versionId: route.params.versionId.toString(),
+// };
 
 const checkingForPreviousVersions = ref(true);
 

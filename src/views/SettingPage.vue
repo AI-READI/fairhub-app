@@ -3,14 +3,15 @@ import "vue3-lottie/dist/style.css";
 
 import { NAlert, NButton, NSpace, NTabPane, NTabs } from "naive-ui";
 import { darkTheme, lightTheme } from "naive-ui";
-import { ref } from "vue";
 import { Vue3Lottie } from "vue3-lottie";
 
 import { theme } from "@/stores/settings";
 
 import Settings from "../assets/animations/settings.json";
 
-const clearCache = ref(0);
+function clearCache() {
+  return console.log();
+}
 </script>
 
 <template>
