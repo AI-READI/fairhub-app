@@ -86,7 +86,7 @@ const handleUpdateValue = (value: string[]) => {
 <template>
   <main class="prose flex h-full w-full flex-col space-y-8">
     <n-space justify="space-between">
-      <h1>Enter information</h1>
+      <h1 class="header">Enter information</h1>
     </n-space>
 
     <n-form
@@ -131,3 +131,9 @@ const handleUpdateValue = (value: string[]) => {
     </n-form>
   </main>
 </template>
+
+<style>
+.header {
+  margin-bottom: 0 !important;
+}
+</style>
