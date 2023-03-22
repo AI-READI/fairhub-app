@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NList, NListItem, NThing } from "naive-ui";
+import { NCollapse, NCollapseItem } from "naive-ui";
 import { useRoute } from "vue-router";
 
 import { useStudiesStore } from "@/stores/studies";
@@ -23,37 +23,36 @@ const owner = {
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8">
-    <h1>{{ study.title }}</h1>
-    <div>{{ study.description }}</div>
-    <n-list hoverable>
-      <n-list-item>
-        <n-thing title="Name of the Study Owner">
-          <div>{{ owner.name }}</div>
-        </n-thing>
-      </n-list-item>
-      <n-list-item>
-        <n-thing title="Name of contributors">
+    <div class="studyHome prose">
+      <h1 class="header-study">Homepage</h1>
+      <n-collapse arrow-placement="right" default-expanded-names="1">
+        <n-collapse-item title="Preview" name="1">
+          <div>{{ study.description }}</div>
+        </n-collapse-item>
+
+        <n-collapse-item title="Files" name="1">
+          <div class="files">
+            <div>
+              <dt class="font-bold">Title</dt>
+              <dl>{{ study.title }}</dl>
+              <dt class="font-bold">Last updated date</dt>
+              <dl>{{ study.lastUpdated }}</dl>
+            </div>
+            <div>
+              <dt class="font-bold">Size</dt>
+              <dl>{{ study.size }}</dl>
+              <dt class="font-bold">Image</dt>
+              <dl>{{ study.image }}</dl>
+            </div>
+          </div>
+        </n-collapse-item>
+        <n-collapse-item title="Contributors" name="1">
           <div v-for="contributor in contributors" :key="contributor.email">
             {{ contributor.name }}
           </div>
-        </n-thing>
-      </n-list-item>
-      <n-list-item>
-        <n-thing title="Email of the owner" content-style="margin-top: 10px;">
-          <div>{{ owner.email }}</div>
-        </n-thing>
-      </n-list-item>
-      <n-list-item>
-        <n-thing title="Study image" content-style="margin-top: 10px;">
-          <div>{{ study.image }}</div>
-        </n-thing>
-      </n-list-item>
-      <n-list-item>
-        <n-thing title="Last update date" content-style="margin-top: 10px;">
-          <div>{{ study.lastUpdated }}</div>
-        </n-thing>
-      </n-list-item>
-    </n-list>
+        </n-collapse-item>
+      </n-collapse>
+    </div>
   </main>
 </template>
 
@@ -61,5 +60,25 @@ const owner = {
 .study {
   display: flex;
   flex-direction: column;
+}
+
+.n-collapse-item__header-main {
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  color: rgb(31, 34, 37) !important;
+  justify-content: space-between;
+}
+
+.files {
+  display: flex;
+  gap: 15rem;
+}
+
+.studyHome {
+  max-width: 48rem;
+}
+
+header-study {
+  margin-bottom: 2rem !important;
 }
 </style>
