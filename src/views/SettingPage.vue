@@ -20,8 +20,8 @@ function clearCache() {
       <h1 class="settings-header">Application Settings</h1>
       <n-tabs type="segment" class="settings-tab">
         <n-tab-pane name="General" tab="General">
-          <n-alert title="Theme selector" type="default">
-            Choose a theme
+          <n-alert title="Theme Selector" type="default">
+            Select a theme.
             <div class="buttons">
               <n-button @click="theme = lightTheme" type="primary" class="light">Light</n-button>
               <n-button @click="theme = darkTheme" type="primary" class="dark">Dark</n-button>
@@ -31,9 +31,9 @@ function clearCache() {
         <n-tab-pane name="Advanced" tab="Advanced">
           <n-space vertical :size="12">
             <n-alert title="Advanced" type="default">
-              <span>You should not modify this folder unless you know what you are doing.</span>
+              <span>Click the button to clear a cache of the page.</span>
               <div class="cache">
-                <n-button type="primary" @click="clearCache"> clear a cache </n-button>
+                <n-button type="primary" @click="clearCache"> Clear a Cache </n-button>
               </div>
             </n-alert>
           </n-space>
