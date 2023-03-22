@@ -10,6 +10,7 @@ import ReportIssue from "@/views/ReportIssue.vue";
 import Settings from "@/views/SettingPage.vue";
 import StudyHome from "@/views/StudyHome.vue";
 import StudyInfo from "@/views/StudyInfo.vue";
+import StudyOverview from "@/views/StudyOverview.vue";
 import ViewProfile from "@/views/ViewProfile.vue";
 
 import AllStudies from "../views/AllStudies.vue";
@@ -44,7 +45,7 @@ const router = createRouter({
     },
     {
       name: "study",
-      component: StudyHome,
+      component: StudyOverview,
       path: "/studies/:id",
     },
     {
