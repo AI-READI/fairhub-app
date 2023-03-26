@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { NCollapse, NCollapseItem } from "naive-ui";
-import { useRoute } from "vue-router";
+import { NImage, NSpace, useMessage } from "naive-ui";
+import { useRoute, useRouter } from "vue-router";
 
+import { useAuthStore } from "@/stores/auth";
 import { useStudiesStore } from "@/stores/studies";
-const studiesStore = useStudiesStore();
+const router = useRouter();
 const route = useRoute();
+const authStore = useAuthStore();
+const studiesStore = useStudiesStore();
+const { error } = useMessage();
 
 const routeParams = {
   id: route.params.id.toString(),
@@ -19,66 +23,55 @@ const owner = {
   role: "owner",
   status: "active",
 };
+
+const navigateToStudy = (id: number) => {
+  router.push({ name: "study", params: { id: id.toString() } });
+};
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col space-y-8">
-    <div class="studyHome prose">
-      <h1 class="header-study">Homepage</h1>
-      <n-collapse arrow-placement="right" default-expanded-names="1">
-        <n-collapse-item title="Preview" name="1">
-          <div>{{ study.description }}</div>
-        </n-collapse-item>
+  <main class="flex h-full w-full flex-col space-y-8 pr-8">
+    <n-space vertical>
+      <h1>{{ study.title }}</h1>
+      <p>{{ study.description }}</p>
+    </n-space>
 
-        <n-collapse-item title="Files" name="1">
-          <div class="files">
-            <div>
-              <dt class="font-bold">Title</dt>
-              <dl>{{ study.title }}</dl>
-              <dt class="font-bold">Last updated date</dt>
-              <dl>{{ study.lastUpdated }}</dl>
-            </div>
-            <div>
-              <dt class="font-bold">Size</dt>
-              <dl>{{ study.size }}</dl>
-              <dt class="font-bold">Image</dt>
-              <dl>{{ study.image }}</dl>
-            </div>
+    <n-space vertical>
+      <div
+        class="flex w-full cursor-pointer items-start space-x-8 rounded-md border border-slate-100 px-4 py-3 transition-all hover:border-slate-200 hover:bg-slate-50"
+        :key="study.id"
+        @click="navigateToStudy(study.id)"
+      >
+        <n-image width="100" :src="study.image" preview-disabled />
+        <div class="flex w-full grow flex-col space-y-2 divide-y">
+          <div class="flex flex-col space-y-2">
+            <n-space justify="space-between">
+              <h3>{{ study.title }}</h3>
+              <span>{{ study.size }}</span>
+            </n-space>
+            <p>{{ study.description }}</p>
           </div>
-        </n-collapse-item>
-        <n-collapse-item title="Contributors" name="1">
-          <div v-for="contributor in contributors" :key="contributor.email">
-            {{ contributor.name }}
+          <p class="pt-2">
+            <span class="font-bold">Last Updated: </span>
+            <span>{{ study.lastUpdated }}</span>
+          </p>
+
+          <div class="align-center flex space-x-3 divide-x pt-2">
+            <p>
+              <span class="font-bold">Latest published version: </span>
+              <span v-if="study.lastPublished"
+                >{{ study.lastPublished.version }} ({{ study.lastPublished.date }})</span
+              >
+              <span v-else>Not published yet</span>
+            </p>
+
+            <p class="pl-2" v-if="study.lastPublished">
+              <span class="font-bold">Latest DOI: </span>
+              <span class="text-blue-500">{{ study.lastPublished!.doi }}</span>
+            </p>
           </div>
-        </n-collapse-item>
-      </n-collapse>
-    </div>
+        </div>
+      </div>
+    </n-space>
   </main>
 </template>
-
-<style>
-.study {
-  display: flex;
-  flex-direction: column;
-}
-
-.n-collapse-item__header-main {
-  font-size: 1rem !important;
-  font-weight: 500 !important;
-  color: rgb(31, 34, 37) !important;
-  justify-content: space-between;
-}
-
-.files {
-  display: flex;
-  gap: 15rem;
-}
-
-.studyHome {
-  max-width: 48rem;
-}
-
-header-study {
-  margin-bottom: 2rem !important;
-}
-</style>

@@ -9,6 +9,7 @@ const route = useRoute();
 const authStore = useAuthStore();
 const studiesStore = useStudiesStore();
 const { error } = useMessage();
+
 const routeParams = {
   id: route.params.id.toString(),
 };
@@ -21,6 +22,10 @@ const owner = {
   email: study.owner.email,
   role: "owner",
   status: "active",
+};
+
+const navigateToStudy = (id: number) => {
+  router.push({ name: "study", params: { id: id.toString() } });
 };
 </script>
 
