@@ -5,7 +5,7 @@ import { h } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-
+import { showLogin } from "@/stores/loginAuth";
 const authStore = useAuthStore();
 const router = useRouter();
 const { error } = useMessage();
@@ -35,6 +35,7 @@ const navigateToStudies = () => {
   if (authStore.isAuthenticated) {
     router.push("/studies");
   } else {
+    showLogin.value = true;
     error("You must be logged in to view studies", {
       render: renderMessage,
     });

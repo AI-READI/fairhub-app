@@ -13,10 +13,11 @@ import {
   NModal,
   NSpace,
 } from "naive-ui";
-import { h, ref } from "vue";
+import { h, ref, watch } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
+import { showLogin } from "@/stores/loginAuth";
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -100,8 +101,15 @@ const handleSelect = (key: string | number) => {
   }
 };
 
+//watcher function to
+watch(showLogin, (showLogin) => {
+  if (showLogin) {
+    showModal.value = true;
+  }
+});
+
 const showLoginModal = () => {
-  showModal.value = true;
+  showLogin.value = true;
 };
 
 const handleCancel = () => {
