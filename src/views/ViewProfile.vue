@@ -1,16 +1,7 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
-import {
-  NButton,
-  NForm,
-  NFormItem,
-  NImage,
-  NInput,
-  NSelect,
-  NSpace,
-  NUpload,
-  UploadFileInfo,
-} from "naive-ui";
+import type { UploadFileInfo } from "naive-ui";
+import { NButton, NForm, NFormItem, NImage, NInput, NSelect, NSpace, NUpload } from "naive-ui";
 import type { Ref } from "vue";
 import { ref, toRaw, watch } from "vue";
 
@@ -138,7 +129,7 @@ watch(userProfile, (userProfile) => {
   min-width: 30rem;
 }
 
-n-upload .n-upload-file-info {
+.n-upload-file-list {
   display: none;
 }
 </style>

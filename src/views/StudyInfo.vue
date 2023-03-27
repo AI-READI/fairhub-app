@@ -84,7 +84,7 @@ const handleUpdateValue = (value: string[]) => {
 </script>
 
 <template>
-  <main class="prose flex h-full w-full flex-col space-y-8">
+  <main class="flex h-full w-full flex-col space-y-8">
     <n-space justify="space-between">
       <h1 class="header">Enter information</h1>
     </n-space>
