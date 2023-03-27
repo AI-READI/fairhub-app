@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+import AddParticipant from "@/views/AddParticipant.vue";
 import Changelog from "@/views/ChangeLog.vue";
 import Documentation from "@/views/DocumentationPage.vue";
 import HelpPage from "@/views/HelpPage.vue";
@@ -54,7 +55,7 @@ const router = createRouter({
     },
     {
       name: "add-participant",
-      component: AllStudies,
+      component: AddParticipant,
       path: "/studies/:id/participants",
     },
     {
