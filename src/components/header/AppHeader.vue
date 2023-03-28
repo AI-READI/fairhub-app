@@ -13,7 +13,7 @@ import {
   NModal,
   NSpace,
 } from "naive-ui";
-import { h, ref, watch } from "vue";
+import { h, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
@@ -92,6 +92,22 @@ function renderIcon(icon: string) {
   return () => h(Icon, { icon });
 }
 
+//watcher function to
+// watch(showLogin, (showLogin) => {
+//   if (showLogin) {
+//     showModal.value = true;
+//
+//   }
+// });
+
+const showLoginModal = () => {
+  showLogin.value = true;
+};
+
+const handleCancel = () => {
+  showLogin.value = false;
+};
+
 const handleSelect = (key: string | number) => {
   console.info(String(key));
 
@@ -99,21 +115,6 @@ const handleSelect = (key: string | number) => {
     authStore.setLoggedOut();
     router.push("/");
   }
-};
-
-//watcher function to
-watch(showLogin, (showLogin) => {
-  if (showLogin) {
-    showModal.value = true;
-  }
-});
-
-const showLoginModal = () => {
-  showLogin.value = true;
-};
-
-const handleCancel = () => {
-  showModal.value = false;
 };
 
 const handleLogin = (e: MouseEvent) => {
@@ -124,7 +125,7 @@ const handleLogin = (e: MouseEvent) => {
       if (formValue.value.username === "admin" && formValue.value.password === "admin") {
         showErrorAlert.value = false;
 
-        showModal.value = false;
+        showLogin.value = false;
 
         authStore.setLoggedIn();
 
@@ -182,7 +183,7 @@ const handleLogin = (e: MouseEvent) => {
             />
           </n-dropdown>
 
-          <n-modal v-model:show="showModal">
+          <n-modal v-model:show="showLogin">
             <n-card
               style="width: 600px"
               title="Login to fairhub.io"

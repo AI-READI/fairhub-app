@@ -29,6 +29,7 @@ const hideMenuOptions = computed(() => {
     "/help/documentation",
     "/help/changelog",
     "/viewProfile",
+    "/integrations",
   ];
   if (hiddenRoutes.includes(route.path)) {
     return false;
@@ -182,6 +183,23 @@ const dynamicUpperMenuOptions: MenuOption[] = [
       ),
   },
   {
+    icon: renderIcon("fluent:people-add-24-regular"),
+    key: "add-participant",
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: "add-participant",
+            params: {
+              id: studyID.value,
+            },
+          },
+        },
+        { default: () => "Add Participant" }
+      ),
+  },
+  {
     icon: renderIcon("fluent:people-checkmark-24-regular"),
     key: "contributors",
     label: () =>
@@ -215,23 +233,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         { default: () => "Dashboard" }
       ),
   },
-  {
-    icon: renderIcon("fluent:people-add-24-regular"),
-    key: "add-participant",
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: "add-participant",
-            params: {
-              id: studyID.value,
-            },
-          },
-        },
-        { default: () => "Add Participant" }
-      ),
-  },
+
   {
     icon: renderIcon("material-symbols:published-with-changes-rounded"),
     key: "publish-study",

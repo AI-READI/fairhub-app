@@ -42,7 +42,7 @@ const navigateToStudy = (id: number) => {
         :key="study.id"
         @click="navigateToStudy(study.id)"
       >
-        <n-image width="145" :src="study.image" preview-disabled />
+        <n-image class="studyHome" width="145" :src="study.image" preview-disabled />
         <div class="flex w-full grow flex-col space-y-2 divide-y">
           <div class="flex flex-col space-y-2">
             <n-space justify="space-between">
@@ -81,7 +81,7 @@ const navigateToStudy = (id: number) => {
 </template>
 
 <style>
-.n-image.n-image--preview-disabled img {
+.n-image.studyHome.n-image--preview-disabled img {
   width: 200px;
   height: 210px;
 }
