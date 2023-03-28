@@ -32,23 +32,20 @@ const navigateToStudy = (id: number) => {
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
     <n-space vertical>
-      <h1>{{ study.title }}</h1>
-      <p>{{ study.description }}</p>
+      <h1>Dataset overview</h1>
     </n-space>
 
     <n-space vertical>
       <div
-        class="flex w-full cursor-pointer items-start space-x-8 rounded-md border border-slate-100 px-4 py-3 transition-all hover:border-slate-200 hover:bg-slate-50"
+        class="flex w-full cursor-pointer items-start space-x-8 rounded-md px-4 py-3 transition-all hover:border-slate-200"
         :key="study.id"
         @click="navigateToStudy(study.id)"
       >
         <n-image class="studyHome" width="145" :src="study.image" preview-disabled />
         <div class="flex w-full grow flex-col space-y-2 divide-y">
           <div class="flex flex-col space-y-2">
-            <n-space justify="space-between">
-              <h3>{{ study.title }}</h3>
-              <span>{{ study.size }}</span>
-            </n-space>
+            <n-space justify="space-between"> </n-space>
+            <h2>{{ study.title }}</h2>
             <p class="owner text-sm underline underline-offset-1">{{ study.owner.name }}</p>
             <p class="study-description">{{ study.description }}</p>
           </div>
@@ -74,6 +71,12 @@ const navigateToStudy = (id: number) => {
             </span>
             <span v-else>Not published yet</span>
           </p>
+          <div class="align-center flex pt-2">
+            <p>
+              <span class="font-bold">Study size: </span>
+              <span>{{ study.size }}</span>
+            </p>
+          </div>
         </div>
       </div>
     </n-space>
