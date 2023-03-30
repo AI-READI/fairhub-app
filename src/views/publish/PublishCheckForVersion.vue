@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { NCard } from "naive-ui";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
+import { previousVersionFound } from "@/stores/routing";
+
+const route = useRoute();
 const router = useRouter();
 
 setTimeout(() => {
-  router.push({ name: "publish-new-version" });
-}, 1000);
+  if (previousVersionFound) {
+    router.push({ name: "publish-select-participants", params: { versionId: "v1" } });
+  }
+}, 500);
 </script>
 
 <template>

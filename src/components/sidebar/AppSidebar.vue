@@ -5,13 +5,18 @@ import { NLayoutSider, NMenu, NSpace } from "naive-ui";
 import { computed, h, ref } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 
+import router from "@/router";
+
 const sidebarCollapsed = ref(false);
+const route = useRoute();
+
+const routeParams = {
+  versionId: route.params.versionId,
+};
 
 function renderIcon(icon: string) {
   return () => h(Icon, { icon });
 }
-
-const route = useRoute();
 
 const studyID = computed(() => {
   if (route.params.id === undefined) {
@@ -233,25 +238,20 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         { default: () => "Dashboard" }
       ),
   },
-
   {
     icon: renderIcon("material-symbols:published-with-changes-rounded"),
     key: "publish-study",
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: "publish-study",
-            params: {
-              id: studyID.value,
-            },
-          },
-        },
-        { default: () => "Publish Study" }
-      ),
+    label: "Publish Study",
   },
 ];
+
+function routerLink(key: string) {
+  if (key !== "publish-study") return;
+  router.push({
+    name: "publish-select-participants",
+    params: { versionId: "v1" },
+  });
+}
 
 const lowerMenuOptions: MenuOption[] = [
   {
@@ -370,6 +370,7 @@ const hideSidebar = computed(() => {
           :collapsed-icon-size="22"
           :collapsed="sidebarCollapsed"
           :options="dynamicUpperMenuOptions"
+          @update:value="routerLink"
         />
       </div>
 
