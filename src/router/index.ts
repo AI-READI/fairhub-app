@@ -19,7 +19,6 @@ import LandingPage from "../views/LandingPage.vue";
 import NewStudy from "../views/NewStudy.vue";
 import PublishCheckForVersion from "../views/publish/PublishCheckForVersion.vue";
 import PublishDatasetMetadata from "../views/publish/PublishDatasetMetadata.vue";
-import PublishNewVersion from "../views/publish/PublishNewVersion.vue";
 import PublishParticipantsConfirm from "../views/publish/PublishParticipantsConfirm.vue";
 import PublishSelectParticipants from "../views/publish/PublishSelectParticipants.vue";
 import PublishStudy from "../views/publish/PublishStudy.vue";
@@ -113,11 +112,6 @@ const router = createRouter({
           name: "publish-check-for-previous-version",
           component: PublishCheckForVersion,
           path: "precheck/version",
-        },
-        {
-          name: "publish-new-version",
-          component: PublishNewVersion,
-          path: "version/new",
         },
         {
           name: "publish-select-participants",

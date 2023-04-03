@@ -3,20 +3,19 @@ import type { StepsProps } from "naive-ui";
 import { NDivider, NStep, NSteps, useMessage } from "naive-ui";
 import { onBeforeMount } from "vue";
 import { ref } from "vue";
-import { RouterView, useRouter } from "vue-router";
+import { onBeforeRouteUpdate, RouterView, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-
-const router = useRouter();
-const authStore = useAuthStore();
-const { error } = useMessage();
 
 const currentRef = ref(1);
 
 const currentStatus = ref<StepsProps["status"]>("process");
 const current = currentRef;
+const router = useRouter();
+const authStore = useAuthStore();
+const { error } = useMessage();
 
-onBeforeMount(() => {
+function checkAuth() {
   if (!authStore.isAuthenticated) {
     error("You are not logged in.");
     router.push({ name: "home" });
@@ -25,6 +24,14 @@ onBeforeMount(() => {
      * TODO: Need to save which step the user is on in the store
      */
     router.push({ name: "publish-check-for-previous-version" });
+  }
+}
+
+onBeforeMount(checkAuth);
+
+onBeforeRouteUpdate((to, from) => {
+  if (to.name === "publish-study") {
+    checkAuth();
   }
 });
 </script>

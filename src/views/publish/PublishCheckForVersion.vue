@@ -1,31 +1,58 @@
 <script setup lang="ts">
-import { NCard } from "naive-ui";
-import { useRoute, useRouter } from "vue-router";
+import { NButton, NCard } from "naive-ui";
+import type { Ref } from "vue";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
-import { previousVersionFound } from "@/stores/routing";
-
-const route = useRoute();
 const router = useRouter();
 
+const versionChecked = ref(false);
+const previousVersion: Ref<null | string> = ref(null);
+
 setTimeout(() => {
-  if (previousVersionFound) {
-    router.push({ name: "publish-select-participants", params: { versionId: "v1" } });
+  versionChecked.value = true;
+  previousVersion.value = "v1";
+  if (previousVersion.value) {
+    router.push({
+      name: "publish-select-participants",
+      params: { versionId: previousVersion.value },
+    });
   }
-}, 500);
+}, 1000);
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
     <n-card>
-      <div class="flex flex-col items-center pb-3">
+      <div class="flex flex-col items-center pb-3" v-if="!versionChecked">
         <Vue3Lottie
           animationLink="https://assets2.lottiefiles.com/private_files/lf30_b0iey3ml.json"
           :height="150"
           :width="200"
         />
-
         <p>Checking for previously published versions of this dataset</p>
+      </div>
+      <div v-if="versionChecked && !previousVersion">
+        <Vue3Lottie
+          animationLink="https://assets8.lottiefiles.com/packages/lf20_tmsiddoc.json"
+          :height="150"
+          :width="150"
+        />
+        <div class="new-button">
+          <p>We could not find a previously published version of this study.</p>
+
+          <RouterLink :to="{ name: 'publish-select-participants', params: { versionId: 'v1' } }">
+            <n-button type="primary" class="mt-4"> Create new version </n-button>
+          </RouterLink>
+        </div>
       </div>
     </n-card>
   </main>
 </template>
+<style>
+.new-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+</style>
