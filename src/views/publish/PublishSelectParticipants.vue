@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import type { DataTableColumns, DataTableRowKey } from "naive-ui";
 import { NButton, NDataTable } from "naive-ui";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { currentRef } from "@/stores/publish/currentStep";
 import type { Person } from "@/stores/publish/participants";
 import { selectedParticipants } from "@/stores/publish/participants";
 import { data } from "@/stores/publish/participants";
+import { previousVersion } from "@/stores/publish/version";
 
 const route = useRoute();
 const router = useRouter();
@@ -65,6 +66,14 @@ checkedRowKeysRef.value = selectedParticipants.value.map((p: Person) => {
 // };
 //
 
+function handleBackButton() {
+  currentRef.value--;
+  router.push({
+    name: "publish-check-for-previous-version",
+    params: { versionId: routeParams.versionId },
+  });
+}
+
 function handleNextButton() {
   if (checkedRowKeysRef.value.length === 0) {
     return;
@@ -79,12 +88,18 @@ function handleNextButton() {
     params: { versionId: routeParams.versionId },
   });
 }
+
+const computedClasses = computed(() => {
+  if (!previousVersion.value) {
+    return "back-next-buttons";
+  } else return "next-button";
+});
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
     <div>
-      <h3 class="pb-4">Add/Edit Participants</h3>
+      <h1 class="pb-4">Add/Edit Participants</h1>
 
       <n-data-table
         class="participant-rows"
@@ -94,15 +109,26 @@ function handleNextButton() {
         v-model:checked-row-keys="checkedRowKeysRef"
       />
     </div>
-    <div class="next-button">
+    <div :class="computedClasses">
+      <n-button
+        type="primary"
+        size="large"
+        class="participants-button"
+        :disabled="checkedRowKeysRef.length === 0"
+        v-if="!previousVersion"
+        @click="handleBackButton"
+      >
+        Back
+      </n-button>
       <n-button
         type="primary"
         size="large"
         class="participants-button"
         :disabled="checkedRowKeysRef.length === 0"
         @click="handleNextButton"
-        >Next</n-button
       >
+        Next
+      </n-button>
     </div>
   </main>
 </template>
@@ -114,5 +140,10 @@ function handleNextButton() {
 }
 .participant-rows th:first-child .n-checkbox.n-checkbox--inside-table {
   display: none;
+}
+
+.back-next-buttons {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
