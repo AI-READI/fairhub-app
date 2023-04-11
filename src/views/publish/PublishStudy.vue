@@ -37,10 +37,10 @@ onBeforeRouteUpdate((to) => {
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
-    <n-steps :current="(currentRef as number)" class="pt-2 pl-2 text-sm">
+    <n-steps :current="(currentRef as number)" class="steps pt-2 pl-2 text-sm">
       <n-step title="Versioning" description="" class="!text-sm" />
       <n-step title="Participants" description="" />
-      <!--      <n-step title="Review Participants" description="" />-->
+      <n-step title="Review Participants" description="" />
       <n-step title="Dataset Metadata" description="" />
       <n-step title="Study Metadata" description="" />
       <n-step title="Contributors" description="" />
@@ -60,5 +60,20 @@ onBeforeRouteUpdate((to) => {
 <style>
 .pl-2 {
   padding-left: 0.2rem;
+}
+
+.steps {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.n-step-indicator,
+.n-step-content {
+  margin-top: 1.5rem;
+}
+
+.n-steps .n-step {
+  flex: 0;
 }
 </style>
