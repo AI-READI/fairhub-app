@@ -1,15 +1,21 @@
 <script setup lang="ts">
-import type { FormInst, FormItemRule } from "naive-ui";
+import type { FormInst } from "naive-ui";
 import { NButton, NForm, NFormItem, NInput, NSelect } from "naive-ui";
+import type { SelectMixedOption } from "naive-ui/lib/select/src/interface";
 import { ref } from "vue";
+import { useRoute } from "vue-router";
 
 import LANGUAGE_JSON from "@/assets/data/languages.json";
+import router from "@/router";
+import { currentRef } from "@/stores/publish/currentStep";
+import { formValue } from "@/stores/publish/datasetMetadata";
+import { rules } from "@/stores/publish/datasetMetadata";
 
-// const route = useRoute();
+const route = useRoute();
 
-// const routeParams = {
-//   versionId: route.params.versionId.toString(),
-// };
+const routeParams = {
+  versionId: route.params.versionId.toString(),
+};
 
 const checkingForPreviousVersions = ref(true);
 
@@ -19,7 +25,7 @@ setTimeout(() => {
 
 const formRef = ref<FormInst | null>(null);
 
-const languageOptions = LANGUAGE_JSON.map((v) => ({
+const languageOptions: SelectMixedOption[] = LANGUAGE_JSON.map((v) => ({
   label: v.name,
   value: v.alpha2,
 }));
@@ -36,57 +42,48 @@ const generalOptions = [
   value: v,
 }));
 
-const formValue = ref({
-  title: "",
-  description: "",
-  keywords: [],
-  primaryLanguage: "",
-});
-const rules = {
-  title: {
-    message: "Please add a Dataset Title",
-    required: true,
-    trigger: ["input"],
-  },
-  description: {
-    message: "Please add a Dataset Description",
-    required: true,
-    trigger: ["input"],
-  },
-  keywords: [
-    {
-      required: true,
-      trigger: ["blur", "change"],
-      validator: (rule: FormItemRule, value: Array<string>) => {
-        if (value !== null && value.length > 0) {
-          return Promise.resolve();
-        }
-        return Promise.reject("Please select at least one keyword");
-      },
-    },
-  ],
-  primaryLanguage: {
-    message: "Please select a primary language",
-    required: true,
-    trigger: ["blur", "change"],
-  },
-};
-
 const handleUpdateValue = (value: string[]) => {
   console.log(value);
 };
 
-const handleValidateClick = (e: MouseEvent) => {
-  e.preventDefault();
+// const handleValidateClick = (e: MouseEvent) => {
+//   formRef.value?.validate((errors) => {
+//     if (!errors) {
+//     console.log("Valid");
+//     router.push({
+//     name: "publish-study-metadata",
+//     params: { versionId: routeParams.versionId },
+//   });
+//     } else {
+//       console.log(errors);
+//       console.log("Invalid");
+//     }
+//   });
+// };
+
+function handleBackButton() {
+  currentRef.value--;
+  router.push({
+    name: "publish-select-participants",
+    params: { versionId: routeParams.versionId },
+  });
+}
+
+function handleNextButton() {
   formRef.value?.validate((errors) => {
     if (!errors) {
+      currentRef.value++;
       console.log("Valid");
+      router.push({
+        name: "publish-study-metadata",
+        params: { versionId: routeParams.versionId },
+      });
     } else {
       console.log(errors);
       console.log("Invalid");
     }
   });
-};
+}
 </script>
 
 <template>
@@ -126,10 +123,20 @@ const handleValidateClick = (e: MouseEvent) => {
           />
         </n-form-item>
 
-        <n-form-item>
-          <n-button @click="handleValidateClick"> Validate </n-button>
-        </n-form-item>
+        <!--        <n-form-item>-->
+        <!--          <n-button @click="handleValidateClick"> Validate </n-button>-->
+        <!--        </n-form-item>-->
       </n-form>
+    </div>
+    <div class="back-next-buttons">
+      <n-button type="primary" size="large" @click="handleBackButton">Back</n-button>
+      <n-button type="primary" size="large" @click="handleNextButton">Next</n-button>
     </div>
   </main>
 </template>
+<style>
+.back-next-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+</style>

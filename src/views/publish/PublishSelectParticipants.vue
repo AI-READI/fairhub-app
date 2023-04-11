@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { faker } from "@faker-js/faker";
 import type { DataTableColumns, DataTableRowKey } from "naive-ui";
 import { NButton, NDataTable } from "naive-ui";
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+
+import { currentRef } from "@/stores/publish/currentStep";
+import type { Person } from "@/stores/publish/participants";
+import { selectedParticipants } from "@/stores/publish/participants";
+import { data } from "@/stores/publish/participants";
 
 const route = useRoute();
 const router = useRouter();
@@ -40,26 +44,43 @@ const columns: DataTableColumns<RowData> = [
   },
 ];
 
-const data = Array.from({ length: 8 }).map(() => ({
-  name: faker.name.fullName(),
-  address: faker.address.streetAddress(),
-  age: faker.random.numeric(2),
-}));
+checkedRowKeysRef.value = selectedParticipants.value.map((p: Person) => {
+  return p.address;
+});
 
-const handleCheck = (rowKeys: DataTableRowKey[]) => {
-  /**
-   * TODO: This array needs to be updated when we preselect already selected participants
-   */
-  checkedRowKeysRef.value = rowKeys;
-  console.log("Selected rows: " + rowKeys);
-};
+// const handleCheck = () => {
+//   /**
+//    * TODO: This array needs to be updated when we preselect already selected participants
+//    */
+// };
 
-const ConfirmParticipants = () => {
+// const ConfirmParticipants = () => {
+//   selectedParticipants.value= data.value.filter
+//   ((item:{name: string; address: string; age: string}) =>checkedRowKeysRef.value.includes(item.address) );
+//   currentRef.value++
+//     router.push({
+//     name: "publish-review-participants",
+//     params: { versionId: routeParams.versionId },
+//   });
+// };
+//
+
+function handleNextButton() {
+  if (checkedRowKeysRef.value.length === 0) {
+    return;
+  }
+  selectedParticipants.value = data.value.filter(
+    (item: { name: string; address: string; age: string }) =>
+      checkedRowKeysRef.value.includes(item.address)
+  );
+  currentRef.value++;
   router.push({
     name: "publish-dataset-metadata",
     params: { versionId: routeParams.versionId },
   });
-};
+}
+
+//todo if array is empty? deny selectpartRef
 </script>
 
 <template>
@@ -68,17 +89,32 @@ const ConfirmParticipants = () => {
       <h3 class="pb-4">Add/Edit Participants</h3>
 
       <n-data-table
+        class="participant-rows"
         :columns="columns"
         :data="data"
         :row-key="rowKey"
-        @update:checked-row-keys="handleCheck"
+        v-model:checked-row-keys="checkedRowKeysRef"
       />
-
-      <div class="mt-4 flex justify-center">
-        <n-button type="primary" size="large" class="mt-4" @click="ConfirmParticipants">
-          Confirm participants and continue
-        </n-button>
-      </div>
+    </div>
+    <div class="next-button">
+      <n-button
+        type="primary"
+        size="large"
+        class="participants-button"
+        :disabled="checkedRowKeysRef.length === 0"
+        @click="handleNextButton"
+        >Next</n-button
+      >
     </div>
   </main>
 </template>
+
+<style>
+.next-button {
+  display: flex;
+  justify-content: flex-end !important;
+}
+.participant-rows th:first-child .n-checkbox.n-checkbox--inside-table {
+  display: none;
+}
+</style>
