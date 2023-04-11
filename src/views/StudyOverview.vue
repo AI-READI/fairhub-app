@@ -1,21 +1,17 @@
 <script setup lang="ts">
-import { NImage, NSpace, useMessage } from "naive-ui";
+import { NImage, NSpace } from "naive-ui";
 import { useRoute, useRouter } from "vue-router";
 
-import { useAuthStore } from "@/stores/auth";
 import { useStudiesStore } from "@/stores/studies";
 const router = useRouter();
 const route = useRoute();
-const authStore = useAuthStore();
+
 const studiesStore = useStudiesStore();
-const { error } = useMessage();
 
 const routeParams = {
   id: route.params.id.toString(),
 };
 const study = studiesStore.getStudy(parseInt(routeParams.id));
-
-const contributors = study.contributors;
 
 const owner = {
   name: study.owner.name,
