@@ -4,6 +4,8 @@ import type { Ref } from "vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
+import { currentRef } from "@/stores/publish/currentStep";
+
 const router = useRouter();
 
 const versionChecked = ref(false);
@@ -13,6 +15,7 @@ setTimeout(() => {
   versionChecked.value = true;
   previousVersion.value = "v1";
   if (previousVersion.value) {
+    currentRef.value = 2;
     router.push({
       name: "publish-select-participants",
       params: { versionId: previousVersion.value },
@@ -32,6 +35,7 @@ setTimeout(() => {
         />
         <p>Checking for previously published versions of this dataset</p>
       </div>
+
       <div v-if="versionChecked && !previousVersion">
         <Vue3Lottie
           animationLink="https://assets8.lottiefiles.com/packages/lf20_tmsiddoc.json"
@@ -40,7 +44,6 @@ setTimeout(() => {
         />
         <div class="new-button">
           <p>We could not find a previously published version of this study.</p>
-
           <RouterLink :to="{ name: 'publish-select-participants', params: { versionId: 'v1' } }">
             <n-button type="primary" class="mt-4"> Create new version </n-button>
           </RouterLink>

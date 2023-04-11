@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import type { StepsProps } from "naive-ui";
 import { NDivider, NStep, NSteps, useMessage } from "naive-ui";
 import { onBeforeMount } from "vue";
-import { ref } from "vue";
 import { onBeforeRouteUpdate, RouterView, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
+import { currentRef } from "@/stores/publish/currentStep";
 
-const currentRef = ref(1);
-
-const currentStatus = ref<StepsProps["status"]>("process");
-const current = currentRef;
+// const currentRef = ref(1);
+//
+// const currentStatus = ref<StepsProps["status"]>("process");
+// const current = currentRef;
 const router = useRouter();
 const authStore = useAuthStore();
 const { error } = useMessage();
@@ -29,7 +28,7 @@ function checkAuth() {
 
 onBeforeMount(checkAuth);
 
-onBeforeRouteUpdate((to, from) => {
+onBeforeRouteUpdate((to) => {
   if (to.name === "publish-study") {
     checkAuth();
   }
@@ -38,9 +37,10 @@ onBeforeRouteUpdate((to, from) => {
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
-    <n-steps :current="(current as number)" :status="currentStatus" class="pt-2 pl-2 text-sm">
+    <n-steps :current="(currentRef as number)" class="pt-2 pl-2 text-sm">
       <n-step title="Versioning" description="" class="!text-sm" />
       <n-step title="Participants" description="" />
+      <!--      <n-step title="Review Participants" description="" />-->
       <n-step title="Dataset Metadata" description="" />
       <n-step title="Study Metadata" description="" />
       <n-step title="Contributors" description="" />
@@ -56,3 +56,9 @@ onBeforeRouteUpdate((to, from) => {
     <router-view />
   </main>
 </template>
+
+<style>
+.pl-2 {
+  padding-left: 0.2rem;
+}
+</style>

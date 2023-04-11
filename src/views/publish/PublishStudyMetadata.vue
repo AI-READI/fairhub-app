@@ -4,8 +4,8 @@ import { onBeforeMount, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
+import { currentRef } from "@/stores/publish/currentStep";
 import { formValue } from "@/stores/publish/datasetMetadata";
-import { currentRef } from "@/stores/publish/step";
 
 const router = useRouter();
 const authStore = useAuthStore();
