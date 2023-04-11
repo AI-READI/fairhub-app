@@ -75,12 +75,10 @@ function handleNextButton() {
   );
   currentRef.value++;
   router.push({
-    name: "publish-dataset-metadata",
+    name: "publish-confirm-participants",
     params: { versionId: routeParams.versionId },
   });
 }
-
-//todo if array is empty? deny selectpartRef
 </script>
 
 <template>

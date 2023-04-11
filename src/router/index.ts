@@ -7,7 +7,7 @@ import HelpPage from "@/views/HelpPage.vue";
 import Integrations from "@/views/IntegrationPage.vue";
 import NotFound from "@/views/NotFound.vue";
 import ParticipantsData from "@/views/ParticipantsData.vue";
-import PublishReviewParticipants from "@/views/publish/PublishReviewParticipants.vue";
+import PublishParticipantsConfirm from "@/views/publish/PublishParticipantsConfirm.vue";
 import PublishStudyMetadata from "@/views/publish/PublishStudyMetadata.vue";
 import ReportIssue from "@/views/ReportIssue.vue";
 import Settings from "@/views/SettingPage.vue";
@@ -21,7 +21,6 @@ import LandingPage from "../views/LandingPage.vue";
 import NewStudy from "../views/NewStudy.vue";
 import PublishCheckForVersion from "../views/publish/PublishCheckForVersion.vue";
 import PublishDatasetMetadata from "../views/publish/PublishDatasetMetadata.vue";
-import PublishParticipantsConfirm from "../views/publish/PublishParticipantsConfirm.vue";
 import PublishSelectParticipants from "../views/publish/PublishSelectParticipants.vue";
 import PublishStudy from "../views/publish/PublishStudy.vue";
 import StudyContributors from "../views/StudyContributors.vue";
@@ -135,11 +134,11 @@ const router = createRouter({
           component: PublishDatasetMetadata,
           path: "version/:versionId/dataset/metadata",
         },
-        {
-          name: "publish-review-participants",
-          component: PublishReviewParticipants,
-          path: "version/:versionId/reviewParticipants",
-        },
+        // {
+        //   name: "publish-review-participants",
+        //   component: PublishReviewParticipants,
+        //   path: "version/:versionId/reviewParticipants",
+        // },
       ],
       component: PublishStudy,
       path: "/studies/:id/publish",

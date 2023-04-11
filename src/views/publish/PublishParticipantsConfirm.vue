@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import { faker } from "@faker-js/faker";
-import type { DataTableColumns } from "naive-ui";
-import { NButton, NDataTable } from "naive-ui";
+import { DataTableColumns, NButton } from "naive-ui";
 import { useRoute, useRouter } from "vue-router";
+
+import { currentRef } from "@/stores/publish/currentStep";
+import { selectedParticipants } from "@/stores/publish/participants";
 
 const route = useRoute();
 const router = useRouter();
-
-const routeParams = {
-  versionId: route.params.versionId.toString(),
-};
 
 type RowData = {
   name: string;
@@ -36,40 +33,50 @@ const columns: DataTableColumns<RowData> = [
   },
 ];
 
-const data = Array.from({ length: 8 }).map(() => ({
-  name: faker.name.fullName(),
-  address: faker.address.streetAddress(),
-  age: faker.random.numeric(2),
-}));
-
 const ConfirmParticipants = () => {
   router.push({
     name: "publish-select-participants",
     params: { versionId: routeParams.versionId },
   });
 };
+
+const routeParams = {
+  versionId: route.params.versionId.toString(),
+};
+
+function handleBackButton() {
+  currentRef.value--;
+  router.push({
+    name: "publish-select-participants",
+    params: { versionId: routeParams.versionId },
+  });
+}
+
+function handleNextButton() {
+  currentRef.value++;
+  router.push({
+    name: "publish-dataset-metadata",
+    params: { versionId: routeParams.versionId },
+  });
+}
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
-    <div>
-      <h3 class="pb-4">Add/Edit Participants</h3>
-      <n-data-table :columns="columns" :data="data" :row-key="rowKey" />
-      <div class="mt-4 flex justify-center">
-        <n-button type="primary" size="large" class="mt-4" @click="ConfirmParticipants">
-          Confirm participants and continue
-        </n-button>
-      </div>
+    <h1>Review participants</h1>
+    <div v-for="(item, index) in selectedParticipants" :key="index" style="display: flex">
+      <dd class="font-bold">Selected name:</dd>
+      <dl>{{ item.name }}</dl>
     </div>
-    <div class="previous-back-buttons">
-      <n-button type="primary" size="large">Back</n-button>
-      <n-button type="primary" size="large">Next</n-button>
+    <div>
+      <n-button type="primary" class="mt-1" @click="ConfirmParticipants">
+        Confirm participants and continue
+      </n-button>
+    </div>
+
+    <div class="back-next-buttons">
+      <n-button type="primary" size="large" @click="handleBackButton">Back</n-button>
+      <n-button type="primary" size="large" @click="handleNextButton">Next</n-button>
     </div>
   </main>
 </template>
-<style>
-.previous-back-buttons {
-  display: flex;
-  justify-content: space-between;
-}
-</style>

@@ -64,7 +64,7 @@ const handleUpdateValue = (value: string[]) => {
 function handleBackButton() {
   currentRef.value--;
   router.push({
-    name: "publish-select-participants",
+    name: "publish-confirm-participants",
     params: { versionId: routeParams.versionId },
   });
 }
@@ -89,7 +89,7 @@ function handleNextButton() {
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
     <div>
-      <h3 class="pb-4">Add/Edit Participants</h3>
+      <h1 class="pb-4">Edit/Confirm Dataset</h1>
 
       <n-form ref="formRef" :label-width="80" :model="formValue" :rules="rules" size="large">
         <n-form-item label="Title" path="title">
