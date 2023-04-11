@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { DataTableColumns, NButton } from "naive-ui";
+import type { DataTableColumns } from "naive-ui";
+import { NButton } from "naive-ui";
 import { useRoute, useRouter } from "vue-router";
 
 import { currentRef } from "@/stores/publish/currentStep";
