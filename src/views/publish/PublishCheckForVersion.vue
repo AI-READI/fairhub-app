@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { NButton, NCard } from "naive-ui";
-import type { Ref } from "vue";
-import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 import { currentRef } from "@/stores/publish/currentStep";
+import { previousVersion, versionChecked } from "@/stores/publish/version";
 
 const router = useRouter();
-
-const versionChecked = ref(false);
-const previousVersion: Ref<null | string> = ref(null);
 
 setTimeout(() => {
   versionChecked.value = true;
