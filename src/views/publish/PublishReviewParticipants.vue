@@ -2,8 +2,8 @@
 import { NButton } from "naive-ui";
 import { useRoute, useRouter } from "vue-router";
 
+import { currentRef } from "@/stores/publish/currentStep";
 import { selectedParticipants } from "@/stores/publish/participants";
-import { currentRef } from "@/stores/publish/step";
 
 const route = useRoute();
 const router = useRouter();

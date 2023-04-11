@@ -54,14 +54,22 @@ const ConfirmParticipants = () => {
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
     <div>
       <h3 class="pb-4">Add/Edit Participants</h3>
-
       <n-data-table :columns="columns" :data="data" :row-key="rowKey" />
-
       <div class="mt-4 flex justify-center">
         <n-button type="primary" size="large" class="mt-4" @click="ConfirmParticipants">
           Confirm participants and continue
         </n-button>
       </div>
     </div>
+    <div class="previous-back-buttons">
+      <n-button type="primary" size="large">Back</n-button>
+      <n-button type="primary" size="large">Next</n-button>
+    </div>
   </main>
 </template>
+<style>
+.previous-back-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+</style>
