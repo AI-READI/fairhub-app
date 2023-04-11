@@ -13,7 +13,7 @@ const previousVersion: Ref<null | string> = ref(null);
 
 setTimeout(() => {
   versionChecked.value = true;
-  previousVersion.value = "v1";
+  previousVersion.value = null;
   if (previousVersion.value) {
     currentRef.value = 2;
     router.push({
@@ -22,6 +22,10 @@ setTimeout(() => {
     });
   }
 }, 1000);
+
+function handleNextButton() {
+  currentRef.value++;
+}
 </script>
 
 <template>
@@ -45,7 +49,9 @@ setTimeout(() => {
         <div class="new-button">
           <p>We could not find a previously published version of this study.</p>
           <RouterLink :to="{ name: 'publish-select-participants', params: { versionId: 'v1' } }">
-            <n-button type="primary" class="mt-4"> Create new version </n-button>
+            <n-button type="primary" class="mt-4" @click="handleNextButton">
+              Create new version
+            </n-button>
           </RouterLink>
         </div>
       </div>
