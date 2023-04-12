@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NButton, NCard, NSpace, useMessage } from "naive-ui";
+import { NButton, NCard, useMessage } from "naive-ui";
 import { onBeforeMount, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -41,7 +41,7 @@ function handleBackButton() {
 function handleNextButton() {
   currentRef.value++;
   router.push({
-    name: "publish-study-metadata",
+    name: "publish-contributors",
     params: { versionId: routeParams.versionId },
   });
 }
@@ -50,35 +50,28 @@ function handleNextButton() {
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
     <n-card class="!mt-4">
-      <n-space align="center">
-        <div class="flex flex-col" :key="formValue.title">
-          {{ formValue.title }}
-        </div>
-      </n-space>
+      <div class="flex flex-col" :key="formValue.title">
+        <dd class="font-bold">Selected title:</dd>
+        <dl>{{ formValue.title }}</dl>
+      </div>
     </n-card>
-
-    <n-card class="!mt-4">
-      <n-space align="center">
-        <div class="flex flex-col" :key="formValue.description">
-          {{ formValue.description }}
-        </div>
-      </n-space>
+    <n-card>
+      <div class="flex flex-col" :key="formValue.description">
+        <dd class="font-bold">Selected description:</dd>
+        <dl>{{ formValue.description }}</dl>
+      </div>
     </n-card>
-
-    <n-card class="!mt-4">
-      <n-space align="center" class="keywords">
-        <div class="flex flex-col" :key="index" v-for="(item, index) in formValue.keywords">
-          <div>{{ item }}</div>
-        </div>
-      </n-space>
+    <n-card>
+      <div class="flex flex-col" :key="index" v-for="(item, index) in formValue.keywords">
+        <dd class="font-bold">Selected keyword:</dd>
+        <dl>{{ item }}</dl>
+      </div>
     </n-card>
-
-    <n-card class="!mt-4">
-      <n-space align="center">
-        <div class="flex flex-col" :key="formValue.primaryLanguage">
-          {{ formValue.primaryLanguage }}
-        </div>
-      </n-space>
+    <n-card>
+      <div class="flex flex-col" :key="formValue.primaryLanguage">
+        <dd class="font-bold">Selected primary language:</dd>
+        <dl>{{ formValue.primaryLanguage }}</dl>
+      </div>
     </n-card>
     <div class="back-next-buttons">
       <n-button size="large">Confirm</n-button>

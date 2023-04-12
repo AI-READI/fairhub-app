@@ -7,6 +7,7 @@ import HelpPage from "@/views/HelpPage.vue";
 import Integrations from "@/views/IntegrationPage.vue";
 import NotFound from "@/views/NotFound.vue";
 import ParticipantsData from "@/views/ParticipantsData.vue";
+import PublishContributors from "@/views/publish/PublishContributors.vue";
 import PublishParticipantsConfirm from "@/views/publish/PublishParticipantsConfirm.vue";
 import PublishStudyMetadata from "@/views/publish/PublishStudyMetadata.vue";
 import ReportIssue from "@/views/ReportIssue.vue";
@@ -134,11 +135,11 @@ const router = createRouter({
           component: PublishDatasetMetadata,
           path: "version/:versionId/dataset/metadata",
         },
-        // {
-        //   name: "publish-review-participants",
-        //   component: PublishReviewParticipants,
-        //   path: "version/:versionId/reviewParticipants",
-        // },
+        {
+          name: "publish-contributors",
+          component: PublishContributors,
+          path: "version/:versionId/contributors",
+        },
       ],
       component: PublishStudy,
       path: "/studies/:id/publish",
