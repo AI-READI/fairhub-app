@@ -132,10 +132,6 @@ function handleNextButton() {
 </template>
 
 <style>
-/*.next-button {*/
-/*  display: flex;*/
-/*  justify-content: flex-end !important;*/
-/*}*/
 .participant-rows th:first-child .n-checkbox.n-checkbox--inside-table {
   display: none;
 }

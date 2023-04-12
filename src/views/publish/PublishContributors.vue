@@ -13,7 +13,7 @@ const routeParams = {
 function handleBackButton() {
   currentRef.value--;
   router.push({
-    name: "publish-dataset-metadata",
+    name: "publish-study-metadata",
     params: { versionId: routeParams.versionId },
   });
 }
@@ -37,7 +37,7 @@ function handleNextButton() {
     <div></div>
     <div class="back-next-buttons">
       <n-button type="primary" size="large" @click="handleBackButton">Back</n-button>
-      <n-button type="primary" size="large" @click="handleNextButton">Next</n-button>
+      <!--      <n-button type="primary" size="large" @click="handleNextButton">Next</n-button>-->
     </div>
   </main>
 </template>
@@ -45,5 +45,10 @@ function handleNextButton() {
 .person-detail {
   display: flex;
   flex-direction: column;
+}
+
+.next-button {
+  display: flex;
+  justify-content: flex-end !important;
 }
 </style>
