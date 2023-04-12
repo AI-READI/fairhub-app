@@ -9,18 +9,21 @@ const router = useRouter();
 
 setTimeout(() => {
   versionChecked.value = true;
-  previousVersion.value = null;
-  if (previousVersion.value) {
-    currentRef.value = 2;
-    router.push({
-      name: "publish-select-participants",
-      params: { versionId: previousVersion.value },
-    });
-  }
+  previousVersion.value = "V1";
+  // if (previousVersion.value) {
+  //   router.push({
+  //     name: "publish-select-participants",
+  //     params: { versionId: previousVersion.value },
+  //   });
+  // }
 }, 1000);
 
 function handleNextButton() {
   currentRef.value++;
+  router.push({
+    name: "publish-select-participants",
+    params: { versionId: "v1" },
+  });
 }
 </script>
 
@@ -44,20 +47,38 @@ function handleNextButton() {
         />
         <div class="new-button">
           <p>We could not find a previously published version of this study.</p>
-          <RouterLink :to="{ name: 'publish-select-participants', params: { versionId: 'v1' } }">
+          <n-button type="primary" class="mt-4" @click="handleNextButton">
+            Create new version
+          </n-button>
+        </div>
+      </div>
+      <div v-if="versionChecked && previousVersion">
+        <div class="button-card">
+          <p>What would you like to do?</p>
+          <div class="version-button">
+            <RouterLink :to="{ name: 'publish-select-participants', params: { versionId: 'v1' } }">
+              <n-button type="primary" class="mt-4" @click="handleNextButton">
+                Publish a new dataset
+              </n-button>
+            </RouterLink>
             <n-button type="primary" class="mt-4" @click="handleNextButton">
-              Create new version
+              Publish a new version of previous dataset
             </n-button>
-          </RouterLink>
+          </div>
         </div>
       </div>
     </n-card>
   </main>
 </template>
 <style>
-.new-button {
+.button-card {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.version-button {
+  gap: 3rem;
+  display: flex;
 }
 </style>
