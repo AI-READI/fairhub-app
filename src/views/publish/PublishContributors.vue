@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { NButton, NCard } from "naive-ui";
-const route = useRoute();
-
 import { useRoute } from "vue-router";
 
 import router from "@/router";
 import { currentRef } from "@/stores/publish/currentStep";
+
+const route = useRoute();
 const routeParams = {
   versionId: route.params.versionId.toString(),
 };
@@ -29,7 +29,7 @@ function handleNextButton() {
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
-    <h1>Review participants</h1>
+    <h1>Contributors</h1>
 
     <div class="person-detail">
       <n-card> Contributors </n-card>

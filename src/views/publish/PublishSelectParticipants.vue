@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import type { DataTableColumns, DataTableRowKey } from "naive-ui";
 import { NButton, NDataTable } from "naive-ui";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { currentRef } from "@/stores/publish/currentStep";
 import type { Person } from "@/stores/publish/participants";
 import { selectedParticipants } from "@/stores/publish/participants";
 import { data } from "@/stores/publish/participants";
-import { previousVersion } from "@/stores/publish/version";
 
 const route = useRoute();
 const router = useRouter();
@@ -89,11 +88,11 @@ function handleNextButton() {
   });
 }
 
-const computedClasses = computed(() => {
-  if (!previousVersion.value) {
-    return "back-next-buttons";
-  } else return "next-button";
-});
+// const switchClasses = computed(() => {
+//   if (!previousVersion.value) {
+//     return "back-next-buttons";
+//   } else return "next-button";
+// });
 </script>
 
 <template>
@@ -109,13 +108,12 @@ const computedClasses = computed(() => {
         v-model:checked-row-keys="checkedRowKeysRef"
       />
     </div>
-    <div :class="computedClasses">
+    <div class="back-next-buttons">
       <n-button
         type="primary"
         size="large"
         class="participants-button"
         :disabled="checkedRowKeysRef.length === 0"
-        v-if="!previousVersion"
         @click="handleBackButton"
       >
         Back
@@ -134,10 +132,10 @@ const computedClasses = computed(() => {
 </template>
 
 <style>
-.next-button {
-  display: flex;
-  justify-content: flex-end !important;
-}
+/*.next-button {*/
+/*  display: flex;*/
+/*  justify-content: flex-end !important;*/
+/*}*/
 .participant-rows th:first-child .n-checkbox.n-checkbox--inside-table {
   display: none;
 }

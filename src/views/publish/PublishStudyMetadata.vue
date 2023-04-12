@@ -62,9 +62,9 @@ function handleNextButton() {
       </div>
     </n-card>
     <n-card>
+      <div class="font-bold">Selected keyword:</div>
       <div class="flex flex-col" :key="index" v-for="(item, index) in formValue.keywords">
-        <dd class="font-bold">Selected keyword:</dd>
-        <dl>{{ item }}</dl>
+        <div>{{ item }}</div>
       </div>
     </n-card>
     <n-card>

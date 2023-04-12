@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DataTableColumns } from "naive-ui";
-import { NButton } from "naive-ui";
+import { NButton, NCard } from "naive-ui";
 import { useRoute, useRouter } from "vue-router";
 
 import { currentRef } from "@/stores/publish/currentStep";
@@ -65,19 +65,43 @@ function handleNextButton() {
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
     <h1>Review participants</h1>
-    <div v-for="(item, index) in selectedParticipants" :key="index" style="display: flex">
-      <dd class="font-bold">Selected name:</dd>
-      <dl>{{ item.name }}</dl>
-    </div>
-    <div>
-      <n-button type="primary" class="mt-1" @click="ConfirmParticipants">
-        Confirm participants and continue
-      </n-button>
-    </div>
 
+    <div
+      class="person-detail"
+      v-for="(item, index) in selectedParticipants"
+      :key="index"
+      style="display: flex"
+    >
+      <n-card>
+        <div>
+          <dd class="font-bold">Selected name:</dd>
+          <dl>{{ item.name }}</dl>
+        </div>
+        <div>
+          <dd class="font-bold">Age:</dd>
+          <dl>{{ item.age }}</dl>
+        </div>
+        <div>
+          <dd class="font-bold">Address:</dd>
+          <dl>{{ item.address }}</dl>
+        </div>
+      </n-card>
+    </div>
+    <div></div>
+    <!--    <div>-->
+    <!--      <n-button type="primary" class="mt-1" @click="ConfirmParticipants">-->
+    <!--        Confirm participants and continue-->
+    <!--      </n-button>-->
+    <!--    </div>-->
     <div class="back-next-buttons">
       <n-button type="primary" size="large" @click="handleBackButton">Back</n-button>
       <n-button type="primary" size="large" @click="handleNextButton">Next</n-button>
     </div>
   </main>
 </template>
+<style>
+.person-detail {
+  display: flex;
+  flex-direction: column;
+}
+</style>
