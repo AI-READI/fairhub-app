@@ -7,8 +7,10 @@ import HelpPage from "@/views/HelpPage.vue";
 import Integrations from "@/views/IntegrationPage.vue";
 import NotFound from "@/views/NotFound.vue";
 import ParticipantsData from "@/views/ParticipantsData.vue";
+import PublishAdditionalInfo from "@/views/publish/PublishAdditionalInfo.vue";
 import PublishContributors from "@/views/publish/PublishContributors.vue";
 import PublishParticipantsConfirm from "@/views/publish/PublishParticipantsConfirm.vue";
+import PublishRelatedSources from "@/views/publish/PublishRelatedSources.vue";
 import PublishStudyMetadata from "@/views/publish/PublishStudyMetadata.vue";
 import ReportIssue from "@/views/ReportIssue.vue";
 import Settings from "@/views/SettingPage.vue";
@@ -138,6 +140,16 @@ const router = createRouter({
         {
           name: "publish-contributors",
           component: PublishContributors,
+          path: "version/:versionId/contributors",
+        },
+        {
+          name: "publish-related-sources",
+          component: PublishRelatedSources,
+          path: "version/:versionId/related/sources",
+        },
+        {
+          name: "publish-additional-info",
+          component: PublishAdditionalInfo,
           path: "version/:versionId/contributors",
         },
       ],
