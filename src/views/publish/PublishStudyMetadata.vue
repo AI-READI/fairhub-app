@@ -49,33 +49,25 @@ function handleNextButton() {
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
+    <h1>Review study information</h1>
     <n-card class="!mt-4">
       <div class="flex flex-col" :key="formValue.title">
-        <dd class="font-bold">Selected title:</dd>
+        <dd class="font-bold">Title:</dd>
         <dl>{{ formValue.title }}</dl>
       </div>
-    </n-card>
-    <n-card>
       <div class="flex flex-col" :key="formValue.description">
-        <dd class="font-bold">Selected description:</dd>
+        <dd class="font-bold">Description:</dd>
         <dl>{{ formValue.description }}</dl>
       </div>
-    </n-card>
-    <n-card>
-      <div class="font-bold">Selected keyword:</div>
+      <div class="font-bold">Keyword:</div>
       <div class="flex flex-col" :key="index" v-for="(item, index) in formValue.keywords">
         <div>{{ item }}</div>
       </div>
-    </n-card>
-    <n-card>
       <div class="flex flex-col" :key="formValue.primaryLanguage">
-        <dd class="font-bold">Selected primary language:</dd>
+        <dd class="font-bold">Primary language:</dd>
         <dl>{{ formValue.primaryLanguage }}</dl>
       </div>
     </n-card>
-    <div class="back-next-buttons">
-      <n-button size="large">Confirm</n-button>
-    </div>
 
     <div class="back-next-buttons">
       <n-button type="primary" size="large" @click="handleBackButton">Back</n-button>

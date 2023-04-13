@@ -109,13 +109,7 @@ function handleNextButton() {
       />
     </div>
     <div class="back-next-buttons">
-      <n-button
-        type="primary"
-        size="large"
-        class="participants-button"
-        :disabled="checkedRowKeysRef.length === 0"
-        @click="handleBackButton"
-      >
+      <n-button type="primary" size="large" class="participants-button" @click="handleBackButton">
         Back
       </n-button>
       <n-button
