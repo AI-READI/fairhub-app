@@ -13,7 +13,7 @@ const routeParams = {
 function handleBackButton() {
   currentRef.value--;
   router.push({
-    name: "publish-related-sources",
+    name: "publish-additional-info",
     params: { versionId: routeParams.versionId },
   });
 }
@@ -21,7 +21,7 @@ function handleBackButton() {
 function handleNextButton() {
   currentRef.value++;
   router.push({
-    name: "publish-readme",
+    name: "publish-changelog",
     params: { versionId: routeParams.versionId },
   });
 }
@@ -30,7 +30,7 @@ function handleNextButton() {
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
     <div class="person-detail">
-      <h1>Additional information</h1>
+      <h1>Readme</h1>
     </div>
     <div></div>
     <div class="back-next-buttons">

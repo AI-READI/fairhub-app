@@ -8,8 +8,10 @@ import Integrations from "@/views/IntegrationPage.vue";
 import NotFound from "@/views/NotFound.vue";
 import ParticipantsData from "@/views/ParticipantsData.vue";
 import PublishAdditionalInfo from "@/views/publish/PublishAdditionalInfo.vue";
+import PublishChangelog from "@/views/publish/PublishChangelog.vue";
 import PublishContributors from "@/views/publish/PublishContributors.vue";
 import PublishParticipantsConfirm from "@/views/publish/PublishParticipantsConfirm.vue";
+import PublishReadme from "@/views/publish/PublishReadme.vue";
 import PublishRelatedSources from "@/views/publish/PublishRelatedSources.vue";
 import PublishStudyMetadata from "@/views/publish/PublishStudyMetadata.vue";
 import ReportIssue from "@/views/ReportIssue.vue";
@@ -151,6 +153,16 @@ const router = createRouter({
           name: "publish-additional-info",
           component: PublishAdditionalInfo,
           path: "version/:versionId/contributors",
+        },
+        {
+          name: "publish-readme",
+          component: PublishReadme,
+          path: "version/:versionId/readme",
+        },
+        {
+          name: "publish-changelog",
+          component: PublishChangelog,
+          path: "version/:versionId/changelog",
         },
       ],
       component: PublishStudy,
