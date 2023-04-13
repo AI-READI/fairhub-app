@@ -14,6 +14,7 @@ import PublishParticipantsConfirm from "@/views/publish/PublishParticipantsConfi
 import PublishReadme from "@/views/publish/PublishReadme.vue";
 import PublishRelatedSources from "@/views/publish/PublishRelatedSources.vue";
 import PublishStudyMetadata from "@/views/publish/PublishStudyMetadata.vue";
+import PublishSummary from "@/views/publish/PublishSummary.vue";
 import ReportIssue from "@/views/ReportIssue.vue";
 import Settings from "@/views/SettingPage.vue";
 import StudyHome from "@/views/StudyHome.vue";
@@ -163,6 +164,11 @@ const router = createRouter({
           name: "publish-changelog",
           component: PublishChangelog,
           path: "version/:versionId/changelog",
+        },
+        {
+          name: "publish-summary",
+          component: PublishSummary,
+          path: "version/:versionId/summary",
         },
       ],
       component: PublishStudy,
