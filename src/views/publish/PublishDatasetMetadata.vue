@@ -64,7 +64,7 @@ const handleUpdateValue = (value: string[]) => {
 function handleBackButton() {
   currentRef.value--;
   router.push({
-    name: "publish-confirm-participants",
+    name: "publish-select-participants",
     params: { versionId: routeParams.versionId },
   });
 }

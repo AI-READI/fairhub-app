@@ -40,7 +40,6 @@ onBeforeRouteUpdate((to) => {
     <n-steps :current="(currentRef as number)" class="steps pt-2 pl-2 text-sm">
       <n-step title="Versioning" description="" class="!text-sm" />
       <n-step title="Participants" description="" />
-      <n-step title="Review Participants" description="" />
       <n-step title="Dataset Metadata" description="" />
       <n-step title="Study Metadata" description="" />
       <n-step title="Contributors" description="" />

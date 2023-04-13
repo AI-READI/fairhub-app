@@ -83,7 +83,7 @@ function handleNextButton() {
   );
   currentRef.value++;
   router.push({
-    name: "publish-confirm-participants",
+    name: "publish-dataset-metadata",
     params: { versionId: routeParams.versionId },
   });
 }
@@ -108,6 +108,30 @@ function handleNextButton() {
         v-model:checked-row-keys="checkedRowKeysRef"
       />
     </div>
+
+    <div
+      class="person-detail"
+      v-for="(item, index) in selectedParticipants"
+      :key="index"
+      style="display: flex"
+    >
+      <n-card
+        >df
+        <div>
+          <dd class="font-bold">Selected name:</dd>
+          <dl>{{ item.name }}</dl>
+        </div>
+        <div>
+          <dd class="font-bold">Age:</dd>
+          <dl>{{ item.age }}</dl>
+        </div>
+        <div>
+          <dd class="font-bold">Address:</dd>
+          <dl>{{ item.address }}</dl>
+        </div>
+      </n-card>
+    </div>
+
     <div class="back-next-buttons">
       <n-button type="primary" size="large" class="participants-button" @click="handleBackButton">
         Back

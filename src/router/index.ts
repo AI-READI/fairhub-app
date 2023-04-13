@@ -10,7 +10,6 @@ import ParticipantsData from "@/views/ParticipantsData.vue";
 import PublishAdditionalInfo from "@/views/publish/PublishAdditionalInfo.vue";
 import PublishChangelog from "@/views/publish/PublishChangelog.vue";
 import PublishContributors from "@/views/publish/PublishContributors.vue";
-import PublishParticipantsConfirm from "@/views/publish/PublishParticipantsConfirm.vue";
 import PublishReadme from "@/views/publish/PublishReadme.vue";
 import PublishRelatedSources from "@/views/publish/PublishRelatedSources.vue";
 import PublishStudyMetadata from "@/views/publish/PublishStudyMetadata.vue";
@@ -124,11 +123,6 @@ const router = createRouter({
           name: "publish-select-participants",
           component: PublishSelectParticipants,
           path: "version/:versionId/participants",
-        },
-        {
-          name: "publish-confirm-participants",
-          component: PublishParticipantsConfirm,
-          path: "version/:versionId/participants/confirm",
         },
         {
           name: "publish-study-metadata",
