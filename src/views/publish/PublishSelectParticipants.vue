@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DataTableColumns, DataTableRowKey } from "naive-ui";
-import { NButton, NDataTable } from "naive-ui";
+import { NButton, NCard, NDataTable } from "naive-ui";
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -54,17 +54,6 @@ checkedRowKeysRef.value = selectedParticipants.value.map((p: Person) => {
 //    */
 // };
 
-// const ConfirmParticipants = () => {
-//   selectedParticipants.value= data.value.filter
-//   ((item:{name: string; address: string; age: string}) =>checkedRowKeysRef.value.includes(item.address) );
-//   currentRef.value++
-//     router.push({
-//     name: "publish-review-participants",
-//     params: { versionId: routeParams.versionId },
-//   });
-// };
-//
-
 function handleBackButton() {
   currentRef.value--;
   router.push({
@@ -74,19 +63,42 @@ function handleBackButton() {
 }
 
 function handleNextButton() {
-  if (checkedRowKeysRef.value.length === 0) {
-    return;
-  }
-  selectedParticipants.value = data.value.filter(
-    (item: { name: string; address: string; age: string }) =>
-      checkedRowKeysRef.value.includes(item.address)
-  );
+  // if (checkedRowKeysRef.value.length === 0) {
+  //   return;
+  // }
+  // selectedParticipants.value = data.value.filter(
+  //   (item: { name: string; address: string; age: string }) =>
+  //     checkedRowKeysRef.value.includes(item.address)
+  // );
   currentRef.value++;
   router.push({
     name: "publish-dataset-metadata",
     params: { versionId: routeParams.versionId },
   });
 }
+
+const value = ref(null);
+const choices = [
+  {
+    label: "Choose all participants",
+    value: "Choose all participants",
+  },
+  {
+    label: "Select manually",
+    value: "Select manually",
+  },
+].map((s) => {
+  s.value = s.value.toLowerCase();
+  return s;
+});
+
+function onUpdate() {
+  selectedParticipants.value = data.value.filter((item: Person) =>
+    checkedRowKeysRef.value.includes(item.address)
+  );
+}
+
+function selectAllParticipants() {}
 
 // const switchClasses = computed(() => {
 //   if (!previousVersion.value) {
@@ -97,52 +109,64 @@ function handleNextButton() {
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
+    <h1 class="pb-4">Add/Edit Participants</h1>
+    <div style="display: flex; flex-direction: column; margin-bottom: 1rem; margin-top: 1rem">
+      What part of data would you like to use?
+    </div>
     <div>
-      <h1 class="pb-4">Add/Edit Participants</h1>
-
-      <n-data-table
-        class="participant-rows"
-        :columns="columns"
-        :data="data"
-        :row-key="rowKey"
-        v-model:checked-row-keys="checkedRowKeysRef"
-      />
+      <n-button type="primary">Select all Participants</n-button>
     </div>
 
-    <div
-      class="person-detail"
-      v-for="(item, index) in selectedParticipants"
-      :key="index"
-      style="display: flex"
-    >
-      <n-card
-        >df
+    <div class="participant-choices">
+      <!--            <n-radio-->
+      <!--              v-for="choice in choices"-->
+      <!--              :key="choice.value"-->
+      <!--              :value="choice.value"-->
+      <!--              :label="choice.label"-->
+      <!--            />-->
+      <div class="participant-elements">
         <div>
-          <dd class="font-bold">Selected name:</dd>
-          <dl>{{ item.name }}</dl>
+          <n-data-table
+            class="participant-rows"
+            :columns="columns"
+            :data="data"
+            :row-key="rowKey"
+            v-model:checked-row-keys="checkedRowKeysRef"
+            @update:checked-row-keys="onUpdate"
+          />
         </div>
-        <div>
-          <dd class="font-bold">Age:</dd>
-          <dl>{{ item.age }}</dl>
+        <div class="selected-participants">
+          <div
+            class="person-detail"
+            v-for="(item, index) in selectedParticipants"
+            :key="index"
+            style="display: flex"
+          >
+            <n-card>
+              <div>
+                <dd class="font-bold">Selected name:</dd>
+                <dl>{{ item.name }}</dl>
+              </div>
+              <div>
+                <dd class="font-bold">Age:</dd>
+                <dl>{{ item.age }}</dl>
+              </div>
+              <div>
+                <dd class="font-bold">Address:</dd>
+                <dl>{{ item.address }}</dl>
+              </div>
+            </n-card>
+          </div>
         </div>
-        <div>
-          <dd class="font-bold">Address:</dd>
-          <dl>{{ item.address }}</dl>
-        </div>
-      </n-card>
+      </div>
     </div>
 
     <div class="back-next-buttons">
       <n-button type="primary" size="large" class="participants-button" @click="handleBackButton">
         Back
       </n-button>
-      <n-button
-        type="primary"
-        size="large"
-        class="participants-button"
-        :disabled="checkedRowKeysRef.length === 0"
-        @click="handleNextButton"
-      >
+      <n-button type="primary" size="large" class="participants-button" @click="handleNextButton">
+        <!--        :disabled="checkedRowKeysRef.length === 0"-->
         Next
       </n-button>
     </div>
@@ -157,5 +181,29 @@ function handleNextButton() {
 .back-next-buttons {
   display: flex;
   justify-content: space-between;
+}
+
+.participant-choices {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 1 !important;
+}
+
+.participant-elements {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 5rem;
+}
+
+.selected-participants {
+  display: flex;
+  flex-direction: column;
+}
+
+.person-detail {
+  width: 25rem;
 }
 </style>

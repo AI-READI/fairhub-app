@@ -23,6 +23,7 @@ function checkAuth() {
      * TODO: Need to save which step the user is on in the store
      */
     router.push({ name: "publish-check-for-previous-version" });
+    currentRef.value = 1;
   }
 }
 
