@@ -70,18 +70,18 @@ function handleBackButton() {
 }
 
 function handleNextButton() {
-  formRef.value?.validate((errors) => {
-    if (!errors) {
-      currentRef.value++;
-      console.log("Valid");
-      router.push({
-        name: "publish-study-metadata",
-        params: { versionId: routeParams.versionId },
-      });
-    } else {
-      console.log(errors);
-      console.log("Invalid");
-    }
+  // formRef.value?.validate((errors) => {
+  //   if (!errors) {
+  currentRef.value++;
+  console.log("Valid");
+  router.push({
+    name: "publish-study-metadata",
+    params: { versionId: routeParams.versionId },
+    //   });
+    // } else {
+    //   console.log(errors);
+    //   console.log("Invalid");
+    // }
   });
 }
 </script>
