@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NButton } from "naive-ui";
+import { NButton, NCard, NInput } from "naive-ui";
 import { useRoute } from "vue-router";
 
 import router from "@/router";
@@ -24,25 +24,25 @@ function onsubmit() {
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col space-y-8 pr-8">
-    <div class="person-detail">
-      <h1>Summary</h1>
+  <main class="flex h-full w-full flex-col">
+    <h1>Review Summary</h1>
+    <div class="summary">
+      <n-card title="Confirm dataset details">
+        <n-input placeholder="Confirm details" />
+        <div class="save-related">
+          <n-button type="success">Save</n-button>
+        </div>
+      </n-card>
     </div>
-    <div></div>
     <div class="back-next-buttons">
       <n-button type="primary" size="large" @click="handleBackButton">Back</n-button>
-      <n-button type="primary" size="large" @click="onsubmit">Submit</n-button>
+      <n-button type="primary" size="large" @click="onsubmit">Publish</n-button>
     </div>
   </main>
 </template>
-<style>
-.person-detail {
-  display: flex;
-  flex-direction: column;
-}
 
-.next-button {
-  display: flex;
-  justify-content: flex-end !important;
+<style>
+.summary {
+  margin: 1rem 0 1rem 0;
 }
 </style>
