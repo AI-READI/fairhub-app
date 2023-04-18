@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NButton } from "naive-ui";
+import { NButton, NCard, NInput } from "naive-ui";
 import { useRoute } from "vue-router";
 
 import router from "@/router";
@@ -29,8 +29,50 @@ function handleNextButton() {
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
-    <div class="person-detail">
+    <div class="readme">
       <h1>Readme</h1>
+      <div class="readme">
+        <n-card title="Confirm dataset title">
+          <n-input placeholder="Confirm dataset title" />
+          <div class="save-readme">
+            <n-button type="success">Save</n-button>
+          </div>
+        </n-card>
+        <n-card title="Confirm publication version">
+          <n-input placeholder="Confirm publication version" />
+          <div class="save-readme">
+            <n-button type="success">Save</n-button>
+          </div>
+        </n-card>
+
+        <n-card title="Confirm dataset  structure">
+          <n-input placeholder="Confirm dataset structure" />
+          <div class="save-readme">
+            <n-button type="success">Save</n-button>
+          </div>
+        </n-card>
+
+        <n-card title="Confirm recourses">
+          <n-input type="textarea" placeholder="Confirm dataset recourse" />
+          <div class="save-readme">
+            <n-button type="success">Save</n-button>
+          </div>
+        </n-card>
+
+        <n-card title="Confirm license">
+          <n-input placeholder="Confirm dataset license" />
+          <div class="save-readme">
+            <n-button type="success">Save</n-button>
+          </div>
+        </n-card>
+
+        <n-card title="Confirm citation">
+          <n-input type="textarea" placeholder="Confirm citation" />
+          <div class="save-readme">
+            <n-button type="success">Save</n-button>
+          </div>
+        </n-card>
+      </div>
     </div>
     <div></div>
     <div class="back-next-buttons">
@@ -39,14 +81,11 @@ function handleNextButton() {
     </div>
   </main>
 </template>
-<style>
-.person-detail {
-  display: flex;
-  flex-direction: column;
-}
 
-.next-button {
+<style>
+.save-readme {
+  margin-top: 1rem;
   display: flex;
-  justify-content: flex-end !important;
+  justify-content: flex-end;
 }
 </style>

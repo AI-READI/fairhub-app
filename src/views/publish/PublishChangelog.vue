@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NButton } from "naive-ui";
+import { NButton, NCard, NInput } from "naive-ui";
 import { useRoute } from "vue-router";
 
 import router from "@/router";
@@ -29,10 +29,16 @@ function handleNextButton() {
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
-    <div class="person-detail">
-      <h1>Changelog</h1>
+    <h1>Changelog</h1>
+    <div class="changelog">
+      <n-card title="Enter changes in new version">
+        <n-input type="textarea" placeholder="" />
+        <div class="save-changelog">
+          <n-button type="success">Save</n-button>
+        </div>
+      </n-card>
     </div>
-    <div></div>
+
     <div class="back-next-buttons">
       <n-button type="primary" size="large" @click="handleBackButton">Back</n-button>
       <n-button type="primary" size="large" @click="handleNextButton">Next</n-button>
@@ -40,13 +46,7 @@ function handleNextButton() {
   </main>
 </template>
 <style>
-.person-detail {
-  display: flex;
-  flex-direction: column;
-}
-
-.next-button {
-  display: flex;
-  justify-content: flex-end !important;
+.save-changelog {
+  margin-top: 1rem;
 }
 </style>
