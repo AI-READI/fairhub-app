@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { DataTableColumns } from "naive-ui";
 import { NButton, NCard } from "naive-ui";
 import { useRoute, useRouter } from "vue-router";
 
@@ -14,31 +13,6 @@ type RowData = {
   address: string;
   age: string;
   key: number;
-};
-const rowKey = (row: RowData) => row.address;
-const columns: DataTableColumns<RowData> = [
-  {
-    type: "selection",
-  },
-  {
-    title: "Name",
-    key: "name",
-  },
-  {
-    title: "Age",
-    key: "age",
-  },
-  {
-    title: "Address",
-    key: "address",
-  },
-];
-
-const ConfirmParticipants = () => {
-  router.push({
-    name: "publish-select-participants",
-    params: { versionId: routeParams.versionId },
-  });
 };
 
 const routeParams = {

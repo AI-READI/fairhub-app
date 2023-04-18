@@ -73,20 +73,20 @@ function handleNextButton() {
   });
 }
 
-const value = ref(null);
-const choices = [
-  {
-    label: "Choose all participants",
-    value: "Choose all participants",
-  },
-  {
-    label: "Select manually",
-    value: "Select manually",
-  },
-].map((s) => {
-  s.value = s.value.toLowerCase();
-  return s;
-});
+// const value = ref(null);
+// const choices = [
+//   {
+//     label: "Choose all participants",
+//     value: "Choose all participants",
+//   },
+//   {
+//     label: "Select manually",
+//     value: "Select manually",
+//   },
+// ].map((s) => {
+//   s.value = s.value.toLowerCase();
+//   return s;
+// });
 
 function onUpdate() {
   selectedParticipants.value = data.value.filter((item: Person) =>
@@ -130,7 +130,7 @@ function selectManual(): void {
       <n-button type="primary" @click="selectManual">Select manually</n-button>
     </div>
     <div v-if="showParticipants">
-      <div class="select-all">
+      <div style="margin-bottom: 1rem">
         <n-button type="primary" @click="AllSelected">
           {{ checkedRowKeysRef.length === data.length ? "Deselect" : "Select" }} all
         </n-button>

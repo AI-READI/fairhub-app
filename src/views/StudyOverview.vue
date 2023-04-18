@@ -13,12 +13,12 @@ const routeParams = {
 };
 const study = studiesStore.getStudy(parseInt(routeParams.id));
 
-const owner = {
-  name: study.owner.name,
-  email: study.owner.email,
-  role: "owner",
-  status: "active",
-};
+// const owner = {
+//   name: study.owner.name,
+//   email: study.owner.email,
+//   role: "owner",
+//   status: "active",
+// };
 
 const navigateToStudy = (id: number) => {
   router.push({ name: "study", params: { id: id.toString() } });
