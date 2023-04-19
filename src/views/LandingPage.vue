@@ -34,7 +34,6 @@ const renderMessage: MessageRenderMessage = (props) => {
 const navigateToStudies = () => {
   if (authStore.isAuthenticated) {
     router.push("/studies");
-    console.log(showLogin.value, "landingin ici");
   } else {
     error("You must be logged in to view studies", {
       render: renderMessage,

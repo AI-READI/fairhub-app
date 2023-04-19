@@ -8,8 +8,8 @@ import { useRoute } from "vue-router";
 import LANGUAGE_JSON from "@/assets/data/languages.json";
 import router from "@/router";
 import { currentRef } from "@/stores/publish/currentStep";
-import { formValue } from "@/stores/publish/datasetMetadata";
 import { rules } from "@/stores/publish/datasetMetadata";
+import { studyPublish } from "@/stores/publish/study-state";
 
 const route = useRoute();
 
@@ -31,7 +31,7 @@ const languageOptions: SelectMixedOption[] = LANGUAGE_JSON.map((v) => ({
 }));
 
 const generalOptions = [
-  "Artifical Intelligence",
+  "Artificial Intelligence",
   "Dataset",
   "Diabetes",
   "Ethics",
@@ -91,18 +91,18 @@ function handleNextButton() {
     <div>
       <h1 class="pb-4">Edit/Confirm Dataset</h1>
 
-      <n-form ref="formRef" :label-width="80" :model="formValue" :rules="rules" size="large">
+      <n-form ref="formRef" :label-width="80" :model="studyPublish" :rules="rules" size="large">
         <n-form-item label="Title" path="title">
-          <n-input v-model:value="formValue.title" placeholder="Gene Ontology Data Archive V1" />
+          <n-input v-model:value="studyPublish.title" placeholder="Gene Ontology Data Archive V1" />
         </n-form-item>
 
         <n-form-item label="Description" path="description">
-          <n-input v-model:value="formValue.description" type="textarea" placeholder="..." />
+          <n-input v-model:value="studyPublish.description" type="textarea" placeholder="..." />
         </n-form-item>
 
         <n-form-item :span="12" label="Keywords" path="keywords">
           <n-select
-            v-model:value="formValue.keywords"
+            v-model:value="studyPublish.keywords"
             placeholder="Salutogenesis"
             multiple
             tag
@@ -115,7 +115,7 @@ function handleNextButton() {
 
         <n-form-item :span="12" label="Primary Language" path="primaryLanguage">
           <n-select
-            v-model:value="formValue.primaryLanguage"
+            v-model:value="studyPublish.primaryLanguage"
             placeholder="English"
             filterable
             clearable

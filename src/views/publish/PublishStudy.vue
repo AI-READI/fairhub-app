@@ -1,19 +1,24 @@
 <script setup lang="ts">
 import { NDivider, NStep, NSteps, useMessage } from "naive-ui";
 import { onBeforeMount } from "vue";
-import { onBeforeRouteUpdate, RouterView, useRouter } from "vue-router";
+import { onBeforeRouteUpdate, RouterView, useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import { currentRef } from "@/stores/publish/currentStep";
+import { Study } from "@/stores/publish/study-publish";
+import { studyPublish } from "@/stores/publish/study-state";
+import { useStudiesStore } from "@/stores/studies";
 
-// const currentRef = ref(1);
-//
-// const currentStatus = ref<StepsProps["status"]>("process");
-// const current = currentRef;
 const router = useRouter();
 const authStore = useAuthStore();
 const { error } = useMessage();
 
+const route = useRoute();
+const studiesStore = useStudiesStore();
+
+const routeParams = {
+  id: route.params.id.toString(),
+};
 function checkAuth() {
   if (!authStore.isAuthenticated) {
     error("You are not logged in.");
@@ -29,7 +34,13 @@ function checkAuth() {
 
 onBeforeMount(checkAuth);
 
-onBeforeRouteUpdate((to) => {
+onBeforeRouteUpdate((to, from) => {
+  if (from.params.id !== to.params.id) {
+    // const studyClone= studiesStore.getStudy(parseInt(routeParams.id));
+    studyPublish.value = new Study();
+
+    console.log(from.params.id, "change to", to.params.id);
+  }
   if (to.name === "publish-study") {
     checkAuth();
   }
@@ -50,7 +61,7 @@ onBeforeRouteUpdate((to) => {
       <n-step title="Changelog" description="" />
       <n-step title="Summary" description="" />
     </n-steps>
-
+    <router-link to="/studies/2/publish/precheck/version">Go to About</router-link>
     <n-divider class="w-full" />
 
     <router-view />

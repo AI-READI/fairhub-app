@@ -5,9 +5,9 @@ import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { currentRef } from "@/stores/publish/currentStep";
-import type { Person } from "@/stores/publish/participants";
-import { selectedParticipants } from "@/stores/publish/participants";
 import { data } from "@/stores/publish/participants";
+import type { Person } from "@/stores/publish/study-publish";
+import { studyPublish } from "@/stores/publish/study-state";
 
 const route = useRoute();
 const router = useRouter();
@@ -44,7 +44,7 @@ const columns: DataTableColumns<RowData> = [
   },
 ];
 
-checkedRowKeysRef.value = selectedParticipants.value.map((p: Person) => {
+checkedRowKeysRef.value = studyPublish.value.selectedParticipants.map((p: Person) => {
   return p.address;
 });
 
@@ -89,7 +89,7 @@ function handleNextButton() {
 // });
 
 function onUpdate() {
-  selectedParticipants.value = data.value.filter((item: Person) =>
+  studyPublish.value.selectedParticipants = data.value.filter((item: Person) =>
     checkedRowKeysRef.value.includes(item.address)
   );
 }
@@ -150,7 +150,7 @@ function selectManual(): void {
           <div class="selected-participants">
             <div
               class="person-detail"
-              v-for="(item, index) in selectedParticipants"
+              v-for="(item, index) in studyPublish.selectedParticipants"
               :key="index"
               style="display: flex"
             >

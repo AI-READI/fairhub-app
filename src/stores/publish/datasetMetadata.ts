@@ -1,12 +1,12 @@
 import type { FormItemRule } from "naive-ui";
 import { ref } from "vue";
 
-export const formValue = ref({
-  title: "",
-  description: "",
-  keywords: [],
-  primaryLanguage: "",
-});
+// export const formValue = ref({
+//   title: "",
+//   description: "",
+//   keywords: [],
+//   primaryLanguage: "",
+// });
 
 export const rules = ref({
   title: {

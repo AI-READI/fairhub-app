@@ -1,5 +1,4 @@
 import { faker } from "@faker-js/faker";
-import type { Ref } from "vue";
 import { ref } from "vue";
 export const data = ref(
   Array.from({ length: 10 }).map(() => ({
@@ -9,10 +8,10 @@ export const data = ref(
   }))
 );
 
-export interface Person {
-  name: string;
-  address: string;
-  age: string;
-}
-
-export const selectedParticipants: Ref<Person[]> = ref([]);
+// export interface Person {
+//   name: string;
+//   address: string;
+//   age: string;
+// }
+//
+// export const selectedParticipants: Ref<Person[]> = ref([]);

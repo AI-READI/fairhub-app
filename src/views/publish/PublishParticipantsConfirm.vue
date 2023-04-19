@@ -3,17 +3,17 @@ import { NButton, NCard } from "naive-ui";
 import { useRoute, useRouter } from "vue-router";
 
 import { currentRef } from "@/stores/publish/currentStep";
-import { selectedParticipants } from "@/stores/publish/participants";
+import { studyPublish } from "@/stores/publish/study-state";
 
 const route = useRoute();
 const router = useRouter();
 
-type RowData = {
-  name: string;
-  address: string;
-  age: string;
-  key: number;
-};
+// type RowData = {
+//   name: string;
+//   address: string;
+//   age: string;
+//   key: number;
+// };
 
 const routeParams = {
   versionId: route.params.versionId.toString(),
@@ -42,7 +42,7 @@ function handleNextButton() {
 
     <div
       class="person-detail"
-      v-for="(item, index) in selectedParticipants"
+      v-for="(item, index) in studyPublish"
       :key="index"
       style="display: flex"
     >
