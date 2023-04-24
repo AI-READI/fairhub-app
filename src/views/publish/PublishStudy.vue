@@ -7,18 +7,11 @@ import { useAuthStore } from "@/stores/auth";
 import { currentRef } from "@/stores/publish/currentStep";
 import { Study } from "@/stores/publish/study-publish";
 import { studyPublish } from "@/stores/publish/study-state";
-import { useStudiesStore } from "@/stores/studies";
 
 const router = useRouter();
 const authStore = useAuthStore();
 const { error } = useMessage();
 
-const route = useRoute();
-const studiesStore = useStudiesStore();
-
-const routeParams = {
-  id: route.params.id.toString(),
-};
 function checkAuth() {
   if (!authStore.isAuthenticated) {
     error("You are not logged in.");
@@ -32,14 +25,22 @@ function checkAuth() {
   }
 }
 
-onBeforeMount(checkAuth);
+const route = useRoute();
+function checkStudy() {
+  let id = parseInt(route.params.id.toString());
+  if (id !== studyPublish.value.id) {
+    studyPublish.value = new Study(id);
+  }
+}
+
+onBeforeMount(() => {
+  checkAuth();
+  checkStudy();
+});
 
 onBeforeRouteUpdate((to, from) => {
   if (from.params.id !== to.params.id) {
-    // const studyClone= studiesStore.getStudy(parseInt(routeParams.id));
-    studyPublish.value = new Study();
-
-    console.log(from.params.id, "change to", to.params.id);
+    checkStudy();
   }
   if (to.name === "publish-study") {
     checkAuth();
@@ -61,7 +62,6 @@ onBeforeRouteUpdate((to, from) => {
       <n-step title="Changelog" description="" />
       <n-step title="Summary" description="" />
     </n-steps>
-    <router-link to="/studies/2/publish/precheck/version">Go to About</router-link>
     <n-divider class="w-full" />
 
     <router-view />
