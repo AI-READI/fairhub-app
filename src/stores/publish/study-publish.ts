@@ -5,16 +5,25 @@ export interface Person {
 }
 
 export interface Contributor {
-  affiliation: [];
+  affiliations: string[];
   firstname: string;
   lastname: string;
   ORCID: string;
-  role: string;
+  roles: string[];
 }
 
 export class Study {
   public constructor(
-    public contributors: Contributor[] = [],
+    public id: number,
+    public contributors: Contributor[] = [
+      {
+        affiliations: ["manager"],
+        firstname: "John",
+        lastname: "Doe",
+        ORCID: "N123456789",
+        roles: ["Author", "developer"],
+      },
+    ],
     public title: string = "",
     public description: string = "",
     public keywords: string[] = [],
