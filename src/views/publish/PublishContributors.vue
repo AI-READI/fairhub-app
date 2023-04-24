@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import type { FormInst, FormRules } from "naive-ui";
-import { NButton, NForm, NFormItem, NInput, NModal, NTable } from "naive-ui";
-import { Ref, ref, toRaw } from "vue";
+import type { FormInst } from "naive-ui";
+import { NButton, NForm, NFormItem, NInput, NModal, NSelect, NTable } from "naive-ui";
+import type { Ref } from "vue";
+import { ref, toRaw } from "vue";
 import { useRoute } from "vue-router";
 
 import router from "@/router";
 import { currentRef } from "@/stores/publish/currentStep";
 import type { Contributor } from "@/stores/publish/study-publish";
-import { studyPublish } from "@/stores/publish/study-state";
+import { contributorRules, studyPublish } from "@/stores/publish/study-state";
 
 const route = useRoute();
 const routeParams = {
@@ -15,7 +16,6 @@ const routeParams = {
 };
 
 const headers = ref({
-  affiliations: "Affiliation",
   delete: "Delete",
   firstname: "First name",
   lastname: "Last name",
@@ -39,44 +39,6 @@ function handleNextButton() {
   });
 }
 
-const rules: FormRules = {
-  affiliations: [
-    {
-      message: "Please add an affiliation",
-      required: true,
-      trigger: ["blur", "input"],
-    },
-  ],
-  firstname: [
-    {
-      message: "Please input a first name",
-      required: true,
-      trigger: ["blur", "input"],
-    },
-  ],
-  lastname: [
-    {
-      message: "Please add a last name",
-      required: true,
-      trigger: ["blur", "input"],
-    },
-  ],
-  ORCID: [
-    {
-      message: "Please add a valid ORCID number",
-      required: true,
-      trigger: ["blur", "input"],
-    },
-  ],
-  roles: [
-    {
-      message: "Please add a role",
-      required: true,
-      trigger: ["blur", "input"],
-    },
-  ],
-};
-
 const formRef = ref<FormInst | null>(null);
 const showDialog = ref(false);
 const workingContributor: Ref<Contributor> = ref({
@@ -86,7 +48,9 @@ const workingContributor: Ref<Contributor> = ref({
   ORCID: "",
   roles: [],
 });
+
 let editedContributor: Contributor | null = null;
+
 function add() {
   editedContributor = null;
   workingContributor.value = {
@@ -100,19 +64,41 @@ function add() {
   console.log("ok", showDialog.value, studyPublish.value.contributors);
 }
 
+const handleUpdateValue = (value: string[]) => {
+  console.log(value);
+};
+
+const affiliationOptions = ["AIREADI", "CALMI2"].map((v) => ({
+  label: v,
+  value: v,
+}));
+
+const roleOptions = ["Editor", "Distributor", "Owner", "Manager", "Developer"].map((v) => ({
+  label: v,
+  value: v,
+}));
+
 function onClose() {
   showDialog.value = false;
 }
 
 function saveContributor() {
-  if (editedContributor) {
-    Object.assign(editedContributor, workingContributor.value);
-    showDialog.value = false;
-    return;
-  }
-  studyPublish.value.contributors.push(workingContributor.value);
-  showDialog.value = false;
-  console.log(workingContributor, studyPublish.value.contributors);
+  formRef.value?.validate((errors) => {
+    if (!errors) {
+      console.log("Valid");
+      if (editedContributor) {
+        Object.assign(editedContributor, workingContributor.value);
+        showDialog.value = false;
+        return;
+      }
+      studyPublish.value.contributors.push(workingContributor.value);
+      showDialog.value = false;
+      console.log(workingContributor, studyPublish.value.contributors);
+    } else {
+      console.log(errors);
+      console.log("Invalid");
+    }
+  });
 }
 
 function onEdit(clickedContributor: Contributor) {
@@ -147,11 +133,6 @@ function deleteParticipants(clickedContributor: number) {
               <div v-for="(role, index) in item.roles" :key="index">{{ role }}</div>
             </td>
             <td>
-              <div v-for="(affiliation, index) in item.affiliations" :key="index">
-                {{ affiliation }}
-              </div>
-            </td>
-            <td>
               <n-button type="primary" @click="onEdit(item)"> View/Edit</n-button>
             </td>
             <td>
@@ -176,27 +157,51 @@ function deleteParticipants(clickedContributor: number) {
           :model="workingContributor"
           ref="formRef"
           size="large"
-          :rules="rules"
+          :rules="contributorRules"
           label-placement="top"
           class="pr-4"
         >
-          <n-form-item :span="12" label="First name" path="firstname" :key="workingContributor.id">
+          <n-form-item :span="12" label="First name" path="firstname">
             <n-input v-model:value="workingContributor.firstname" placeholder="First name" />
           </n-form-item>
           <n-form-item :span="12" label="Last name" path="lastname">
             <n-input v-model:value="workingContributor.lastname" placeholder="Last name" />
           </n-form-item>
           <n-form-item :span="12" label="ORCID" path="ORCID">
-            <n-input
-              v-model:value="workingContributor.ORCID"
-              placeholder="https://orcid.org/0000-0001-7032-2732"
+            <div class="input-ORCID">
+              <n-input
+                v-model:value="workingContributor.ORCID"
+                placeholder="https://orcid.org/0000-0000-0000-0000"
+              />
+              <span
+                >If your contributor does not have an ORCID, have the contributor
+                <a href="https://orcid.org/register">sign up for one on orcid.org</a></span
+              >
+            </div>
+          </n-form-item>
+          <n-form-item :span="12" label="Affiliation(s)" path="affiliations">
+            <n-select
+              v-model:value="workingContributor.affiliations"
+              placeholder="Select "
+              multiple
+              tag
+              filterable
+              clearable
+              :options="affiliationOptions"
+              @update:value="handleUpdateValue"
             />
           </n-form-item>
-          <n-form-item :span="12" label="Affiliation" path="affiliations">
-            <n-input v-model:value="workingContributor.affiliations" placeholder="Affiliation" />
-          </n-form-item>
-          <n-form-item :span="12" label="Role" path="roles">
-            <n-input placeholder="Role(s)" v-model:value="workingContributor.roles" />
+          <n-form-item :span="12" label="Role(s)" path="roles">
+            <n-select
+              v-model:value="workingContributor.roles"
+              placeholder="Select "
+              multiple
+              tag
+              filterable
+              clearable
+              :options="roleOptions"
+              @update:value="handleUpdateValue"
+            />
           </n-form-item>
           <div class="add-cancel flex justify-start">
             <n-button type="primary" size="large" @click="saveContributor()"> Save </n-button>
@@ -220,5 +225,10 @@ function deleteParticipants(clickedContributor: number) {
   display: flex;
   gap: 2rem;
   justify-content: flex-end;
+}
+
+.input-ORCID {
+  display: flex;
+  flex-direction: column;
 }
 </style>

@@ -1,4 +1,5 @@
 import type { FormItemRule } from "naive-ui";
+import type { FormRules } from "naive-ui";
 import { ref } from "vue";
 
 import { Study } from "@/stores/publish/study-publish";
@@ -32,5 +33,53 @@ export const rules = ref({
     trigger: ["blur", "change"],
   },
 });
+
+export const contributorRules: FormRules = {
+  affiliations: [
+    {
+      required: true,
+      trigger: ["blur", "change"],
+      validator: (rule: FormItemRule, value) => {
+        if (value !== null && value.length > 0) {
+          return Promise.resolve();
+        }
+        return Promise.reject("Please select at least one affiliation");
+      },
+    },
+  ],
+  firstname: [
+    {
+      message: "Please input a first name",
+      required: true,
+      trigger: ["blur", "input"],
+    },
+  ],
+  lastname: [
+    {
+      message: "Please add a last name",
+      required: true,
+      trigger: ["blur", "input"],
+    },
+  ],
+  ORCID: [
+    {
+      message: "Please add a valid ORCID number",
+      required: true,
+      trigger: ["blur", "input"],
+    },
+  ],
+  roles: [
+    {
+      required: true,
+      trigger: ["blur", "change"],
+      validator: (rule: FormItemRule, value) => {
+        if (value !== null && value.length > 0) {
+          return Promise.resolve();
+        }
+        return Promise.reject("Please select at least one role");
+      },
+    },
+  ],
+};
 
 export const studyPublish = ref(new Study(0));
