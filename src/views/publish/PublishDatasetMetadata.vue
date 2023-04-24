@@ -8,7 +8,7 @@ import { useRoute } from "vue-router";
 import LANGUAGE_JSON from "@/assets/data/languages.json";
 import router from "@/router";
 import { currentRef } from "@/stores/publish/currentStep";
-import { rules } from "@/stores/publish/datasetMetadata";
+import { rules } from "@/stores/publish/study-state";
 import { studyPublish } from "@/stores/publish/study-state";
 
 const route = useRoute();
