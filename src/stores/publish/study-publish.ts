@@ -17,11 +17,11 @@ export class Study {
     public id: number,
     public contributors: Contributor[] = [
       {
-        affiliations: ["manager"],
-        firstname: "John",
-        lastname: "Doe",
+        affiliations: ["Manager"],
+        firstname: "Sanjay",
+        lastname: "Soundarajan",
         ORCID: "https://orcid.org/0000-0001-7032-2732",
-        roles: ["Author", "Developer"],
+        roles: ["Developer"],
       },
     ],
     public title: string = "",
