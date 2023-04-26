@@ -32,15 +32,14 @@ function handleNextButton() {
     <h1>Related Sources</h1>
     <div class="related">
       <n-card title="Edit resources">
-        <n-input placeholder="Edit resources" />
+        <n-input
+          class="identifier-description"
+          type="textarea"
+          placeholder="Identifier description"
+        />
+        <n-input placeholder="Relation type" />
         <div class="save-related">
-          <n-button type="success">Save</n-button>
-        </div>
-      </n-card>
-      <n-card title="Confirm resources">
-        <n-input placeholder="Confirm resources" />
-        <div class="save-related">
-          <n-button type="success">Save</n-button>
+          <n-button type="success">Confirm</n-button>
         </div>
       </n-card>
     </div>
@@ -55,5 +54,9 @@ function handleNextButton() {
   margin-top: 1rem;
   display: flex;
   justify-content: flex-end;
+}
+
+.identifier-description {
+  margin-bottom: 1rem;
 }
 </style>
