@@ -34,42 +34,13 @@ function handleNextButton() {
       <div class="readme">
         <n-card title="Confirm dataset title">
           <n-input placeholder="Confirm dataset title" />
-          <div class="save-readme">
-            <n-button type="success">Save</n-button>
-          </div>
-        </n-card>
-        <n-card title="Confirm publication version">
           <n-input placeholder="Confirm publication version" />
-          <div class="save-readme">
-            <n-button type="success">Save</n-button>
-          </div>
-        </n-card>
-
-        <n-card title="Confirm dataset  structure">
           <n-input placeholder="Confirm dataset structure" />
-          <div class="save-readme">
-            <n-button type="success">Save</n-button>
-          </div>
-        </n-card>
-
-        <n-card title="Confirm recourses">
           <n-input type="textarea" placeholder="Confirm dataset recourse" />
-          <div class="save-readme">
-            <n-button type="success">Save</n-button>
-          </div>
-        </n-card>
-
-        <n-card title="Confirm license">
           <n-input placeholder="Confirm dataset license" />
-          <div class="save-readme">
-            <n-button type="success">Save</n-button>
-          </div>
-        </n-card>
-
-        <n-card title="Confirm citation">
           <n-input type="textarea" placeholder="Confirm citation" />
           <div class="save-readme">
-            <n-button type="success">Save</n-button>
+            <n-button type="success">Confirm</n-button>
           </div>
         </n-card>
       </div>

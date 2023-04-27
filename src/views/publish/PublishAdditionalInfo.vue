@@ -32,28 +32,11 @@ function handleNextButton() {
     <h1>Additional information</h1>
     <div class="additional-info">
       <n-card title="Edit/Add funding">
-        <n-input placeholder="Edit funding" />
-        <div class="save-additional-info">
-          <n-button type="success">Save</n-button>
-        </div>
-      </n-card>
-
-      <n-card title="Update dataset version">
-        <n-input placeholder="Update dataset version" />
-        <div class="save-additional-info">
-          <n-button type="success">Save</n-button>
-        </div>
-      </n-card>
-      <n-card title="Update dataset publication date">
-        <n-input placeholder="Update dataset publication date" />
-        <div class="save-additional-info">
-          <n-button type="success">Save</n-button>
-        </div>
-      </n-card>
-      <n-card title="Select review license and access type">
         <div class="review-and-access">
-          <n-input placeholder="Select review license" />
-          <n-input placeholder="Select access type" />
+          <n-input placeholder="Current version of dataset" />
+          <n-input placeholder="Date of publication of the current version" />
+          <n-input placeholder="Access type" />
+          <n-input placeholder="License" />
         </div>
         <div class="save-additional-info">
           <n-button type="success">Save</n-button>

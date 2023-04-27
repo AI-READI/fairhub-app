@@ -6,7 +6,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import { currentRef } from "@/stores/publish/currentStep";
-import { study } from "@/stores/studyInfo";
+import { study } from "@/stores/publish/studyInfo";
 
 const router = useRouter();
 const authStore = useAuthStore();
