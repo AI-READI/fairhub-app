@@ -31,14 +31,14 @@ function handleNextButton() {
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
     <div class="readme">
       <h1>Readme</h1>
-      <div class="readme">
+      <div>
         <n-card title="Confirm dataset title">
-          <n-input placeholder="Confirm dataset title" />
-          <n-input placeholder="Confirm publication version" />
-          <n-input placeholder="Confirm dataset structure" />
-          <n-input type="textarea" placeholder="Confirm dataset recourse" />
-          <n-input placeholder="Confirm dataset license" />
-          <n-input type="textarea" placeholder="Confirm citation" />
+          <n-input class="readme" placeholder="Confirm dataset title" />
+          <n-input class="readme" placeholder="Confirm publication version" />
+          <n-input class="readme" placeholder="Confirm dataset structure" />
+          <n-input class="readme" type="textarea" placeholder="Confirm dataset recourse" />
+          <n-input class="readme" placeholder="Confirm dataset license" />
+          <n-input class="readme" type="textarea" placeholder="Confirm citation" />
           <div class="save-readme">
             <n-button type="success">Confirm</n-button>
           </div>
@@ -58,5 +58,9 @@ function handleNextButton() {
   margin-top: 1rem;
   display: flex;
   justify-content: flex-end;
+}
+
+.readme {
+  margin-bottom: 1rem;
 }
 </style>
