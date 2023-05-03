@@ -49,7 +49,7 @@ function handleNextButton() {
     </div>
   </main>
 </template>
-<style>
+<style scoped>
 .additional-info {
   display: flex;
   flex-direction: column;

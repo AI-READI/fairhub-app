@@ -216,11 +216,7 @@ function deleteParticipants(clickedContributor: number) {
     </div>
   </main>
 </template>
-<style>
-.n-card.n-modal.custom-card {
-  width: 900px;
-}
-
+<style scoped>
 .add-cancel {
   display: flex;
   gap: 2rem;

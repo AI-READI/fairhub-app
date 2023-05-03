@@ -53,7 +53,7 @@ function handleNextButton() {
   </main>
 </template>
 
-<style>
+<style scoped>
 .save-readme {
   margin-top: 1rem;
   display: flex;

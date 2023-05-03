@@ -173,7 +173,6 @@ function selectManual(): void {
         </div>
       </div>
     </div>
-
     <div class="back-next-buttons">
       <n-button type="primary" size="large" class="participants-button" @click="handleBackButton">
         Back
@@ -186,7 +185,7 @@ function selectManual(): void {
   </main>
 </template>
 
-<style>
+<style scoped>
 .participant-rows th:first-child .n-checkbox.n-checkbox--inside-table {
   display: none;
 }

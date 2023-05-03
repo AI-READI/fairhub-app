@@ -134,9 +134,4 @@ function handleNextButton() {
     </div>
   </main>
 </template>
-<style>
-.back-next-buttons {
-  display: flex;
-  justify-content: space-between;
-}
-</style>
+<style scoped></style>

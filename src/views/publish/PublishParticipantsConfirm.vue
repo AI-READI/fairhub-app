@@ -45,7 +45,7 @@ function handleNextButton() {
     </div>
   </main>
 </template>
-<style>
+<style scoped>
 .person-detail {
   display: flex;
   flex-direction: column;

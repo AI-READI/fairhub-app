@@ -111,7 +111,7 @@ function onsubmit() {
   </main>
 </template>
 
-<style>
+<style scoped>
 .summary {
   margin: 1rem 0 1rem 0;
 }

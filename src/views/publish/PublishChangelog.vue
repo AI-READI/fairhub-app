@@ -45,7 +45,7 @@ function handleNextButton() {
     </div>
   </main>
 </template>
-<style>
+<style scoped>
 .save-changelog {
   margin-top: 1rem;
 }

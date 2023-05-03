@@ -49,7 +49,7 @@ function handleNextButton() {
     </div>
   </main>
 </template>
-<style>
+<style scoped>
 .save-related {
   margin-top: 1rem;
   display: flex;
