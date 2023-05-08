@@ -5,7 +5,7 @@ import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { currentRef } from "@/stores/publish/currentStep";
-import { data } from "@/stores/publish/participants";
+import { participants } from "@/stores/publish/participants";
 import type { Person } from "@/stores/publish/study-publish";
 import { studyPublish } from "@/stores/publish/study-state";
 
@@ -89,23 +89,23 @@ function handleNextButton() {
 // });
 
 function onUpdate() {
-  studyPublish.value.selectedParticipants = data.value.filter((item: Person) =>
+  studyPublish.value.selectedParticipants = participants.value.filter((item: Person) =>
     checkedRowKeysRef.value.includes(item.address)
   );
 }
 
 function AllSelected(): void {
-  if (checkedRowKeysRef.value.length === data.value.length) {
+  if (checkedRowKeysRef.value.length === participants.value.length) {
     checkedRowKeysRef.value = [];
     return;
   }
-  checkedRowKeysRef.value = data.value.map((p: Person) => {
+  checkedRowKeysRef.value = participants.value.map((p: Person) => {
     return p.address;
   });
 }
 
 function selectAllParticipants(): void {
-  checkedRowKeysRef.value = data.value.map((p: Person) => {
+  checkedRowKeysRef.value = participants.value.map((p: Person) => {
     return p.address;
   });
   currentRef.value++;
@@ -132,7 +132,7 @@ function selectManual(): void {
     <div v-if="showParticipants">
       <div style="margin-bottom: 1rem">
         <n-button type="primary" @click="AllSelected">
-          {{ checkedRowKeysRef.length === data.length ? "Deselect" : "Select" }} all
+          {{ checkedRowKeysRef.length === participants.length ? "Deselect" : "Select" }} all
         </n-button>
       </div>
       <div class="participant-choices">
@@ -141,7 +141,7 @@ function selectManual(): void {
             <n-data-table
               class="participant-rows"
               :columns="columns"
-              :data="data"
+              :data="participants"
               :row-key="rowKey"
               v-model:checked-row-keys="checkedRowKeysRef"
               @update:checked-row-keys="onUpdate"
