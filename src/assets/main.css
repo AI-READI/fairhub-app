@@ -140,14 +140,7 @@
     .text-secondary {
     @apply text-secondary-500;
   }
-  .n-step-indicator,
-  .n-step-content {
-    margin-top: 1.5rem;
-  }
 
-  .n-steps .n-step {
-    @apply flex-none 2xl:flex-1
-  }
   .n-card.n-modal.custom-card {
     width: 900px;
   }
@@ -156,6 +149,15 @@
   display: flex;
   justify-content: space-between;
 }
+
+   .steps .n-steps .n-step {
+    @apply flex-none 2xl:flex-1
+  }
+
+   .steps .n-step-indicator, .n-step-content {
+    margin-top: 1rem;
+}
+
 }
 
 

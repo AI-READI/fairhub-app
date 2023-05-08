@@ -52,7 +52,7 @@ onBeforeRouteUpdate((to, from) => {
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
     <n-steps
       :current="(currentRef as number)"
-      class="flex flex-row flex-wrap pt-2 pl-2 text-sm 2xl:justify-between"
+      class="steps flex flex-row flex-wrap pt-2 pl-2 text-sm 2xl:justify-between"
     >
       <n-step title="Versioning" description="" />
       <n-step title="Participants" description="" />
