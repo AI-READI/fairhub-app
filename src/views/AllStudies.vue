@@ -5,11 +5,10 @@ import { onBeforeMount } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-import { useStudiesStore } from "@/stores/studies";
+import { studies } from "@/stores/studies";
 
 const router = useRouter();
 const authStore = useAuthStore();
-const studiesStore = useStudiesStore();
 const { error } = useMessage();
 
 onBeforeMount(() => {
@@ -37,10 +36,9 @@ const navigateToStudy = (id: number) => {
         </n-button>
       </RouterLink>
     </n-space>
-
     <div
       class="flex w-full cursor-pointer items-start space-x-8 rounded-md border border-slate-100 px-4 py-3 transition-all hover:border-slate-200 hover:bg-slate-50"
-      v-for="study in studiesStore.studies"
+      v-for="study in studies"
       :key="study.id"
       @click="navigateToStudy(study.id)"
     >
@@ -67,7 +65,6 @@ const navigateToStudy = (id: number) => {
             >
             <span v-else>Not published yet</span>
           </p>
-
           <p class="pl-2" v-if="study.lastPublished">
             <span class="font-bold">Latest DOI: </span>
             <span class="text-blue-500">{{ study.lastPublished!.doi }}</span>

@@ -19,12 +19,11 @@ import { onBeforeMount, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-import { useStudiesStore } from "@/stores/studies";
+import { getStudy } from "@/stores/studies";
 
 const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
-const studiesStore = useStudiesStore();
 const { error, success } = useMessage();
 
 onBeforeMount(() => {
@@ -71,7 +70,7 @@ const handleValidateClick = (e: MouseEvent) => {
   });
 };
 
-const study = studiesStore.getStudy(parseInt(routeParams.id));
+const study = getStudy(parseInt(routeParams.id));
 
 const contributors = study.contributors;
 

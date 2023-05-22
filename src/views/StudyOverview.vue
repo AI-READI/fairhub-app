@@ -2,16 +2,15 @@
 import { NImage, NSpace } from "naive-ui";
 import { useRoute, useRouter } from "vue-router";
 
-import { useStudiesStore } from "@/stores/studies";
+import { getStudy } from "@/stores/studies";
+
 const router = useRouter();
 const route = useRoute();
-
-const studiesStore = useStudiesStore();
 
 const routeParams = {
   id: route.params.id.toString(),
 };
-const study = studiesStore.getStudy(parseInt(routeParams.id));
+const study = getStudy(parseInt(routeParams.id));
 
 // const owner = {
 //   name: study.owner.name,
