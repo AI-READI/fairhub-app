@@ -73,7 +73,8 @@ function handleNextButton() {
   // formRef.value?.validate((errors) => {
   //   if (!errors) {
   currentRef.value++;
-  console.log("Valid");
+  console.log("Valid", studyPublish);
+
   router.push({
     name: "publish-study-metadata",
     params: { versionId: routeParams.versionId },
@@ -115,7 +116,7 @@ function handleNextButton() {
 
         <n-form-item :span="12" label="Primary Language" path="primaryLanguage">
           <n-select
-            v-model:value="studyPublish.primaryLanguage"
+            v-model:value="studyPublishs"
             placeholder="English"
             filterable
             clearable

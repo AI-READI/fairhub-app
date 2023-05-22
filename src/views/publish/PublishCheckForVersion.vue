@@ -7,9 +7,10 @@ import { previousVersion, versionChecked } from "@/stores/publish/version";
 
 const router = useRouter();
 
+const title = "Study title";
 setTimeout(() => {
   versionChecked.value = true;
-  previousVersion.value = "V1";
+  previousVersion.value = "v1";
   // if (previousVersion.value) {
   //   router.push({
   //     name: "publish-select-participants",
@@ -20,6 +21,13 @@ setTimeout(() => {
 
 function handleNextButton() {
   currentRef.value++;
+  router.push({
+    name: "publish-select-participants",
+    params: { versionId: "v1" },
+  });
+}
+
+function publishDataset() {
   router.push({
     name: "publish-select-participants",
     params: { versionId: "v1" },
@@ -57,7 +65,7 @@ function handleNextButton() {
           <p>What would you like to do?</p>
           <div class="version-button">
             <RouterLink :to="{ name: 'publish-select-participants', params: { versionId: 'v1' } }">
-              <n-button type="primary" class="mt-4" @click="handleNextButton">
+              <n-button type="primary" class="mt-4" @click="publishDataset">
                 Publish a new dataset
               </n-button>
             </RouterLink>
@@ -68,10 +76,15 @@ function handleNextButton() {
         </div>
       </div>
     </n-card>
+    <div>
+      Project currently on progress
+      <n-card :title="title" hoverable> Continue where you left </n-card>
+    </div>
   </main>
 </template>
-<style>
-.button-card {
+<style scoped>
+.button-card,
+.new-button {
   display: flex;
   flex-direction: column;
   align-items: center;

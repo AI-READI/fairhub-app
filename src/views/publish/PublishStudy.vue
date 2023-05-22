@@ -5,7 +5,7 @@ import { onBeforeRouteUpdate, RouterView, useRoute, useRouter } from "vue-router
 
 import { useAuthStore } from "@/stores/auth";
 import { currentRef } from "@/stores/publish/currentStep";
-import { Study } from "@/stores/publish/study-publish";
+import { StudyVersion } from "@/stores/publish/study-publish";
 import { studyPublish } from "@/stores/publish/study-state";
 
 const router = useRouter();
@@ -29,7 +29,7 @@ const route = useRoute();
 function checkStudy() {
   let id = parseInt(route.params.id.toString());
   if (id !== studyPublish.value.id) {
-    studyPublish.value = new Study(id);
+    studyPublish.value = new StudyVersion(id);
   }
 }
 
