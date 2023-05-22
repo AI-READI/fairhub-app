@@ -2,7 +2,7 @@ import type { FormItemRule } from "naive-ui";
 import type { FormRules } from "naive-ui";
 import { ref } from "vue";
 
-import { Study } from "@/stores/publish/study-publish";
+import { StudyVersion } from "@/stores/publish/study-publish";
 
 export const rules = ref({
   title: {
@@ -82,4 +82,4 @@ export const contributorRules: FormRules = {
   ],
 };
 
-export const studyPublish = ref(new Study(0));
+export const studyPublish = ref(new StudyVersion(0));

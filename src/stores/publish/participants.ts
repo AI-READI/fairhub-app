@@ -10,5 +10,3 @@ import { fetchParticipants } from "@/stores/services/service";
 // );
 
 export const participants = ref(await fetchParticipants());
-
-console.log(participants);

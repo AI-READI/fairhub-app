@@ -12,7 +12,31 @@ export interface Contributor {
   roles: string[];
 }
 
-export class Study {
+export interface Study {
+  id: number;
+  title: string;
+  contributors: Contributor[];
+  description: string;
+  image: string;
+  keywords: string[];
+  lastPublished: PublishedVersion;
+  lastUpdated: string;
+  owner: Owner;
+  size: string;
+}
+
+export interface PublishedVersion {
+  date: string;
+  doi: string;
+  version: string;
+}
+
+export interface Owner {
+  name: string;
+  email: string;
+}
+
+export class StudyVersion {
   public constructor(
     public id: number,
     public contributors: Contributor[] = [
