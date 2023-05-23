@@ -7,7 +7,7 @@ import { useRoute } from "vue-router";
 
 import router from "@/router";
 import { currentRef } from "@/stores/publish/currentStep";
-import type { Contributor } from "@/stores/publish/study-publish";
+import type { Contributor } from "@/stores/publish/study-interfaces";
 import { contributorRules, studyPublish } from "@/stores/publish/study-state";
 
 const route = useRoute();

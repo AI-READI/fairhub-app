@@ -5,7 +5,7 @@ import { onBeforeRouteUpdate, RouterView, useRoute, useRouter } from "vue-router
 
 import { useAuthStore } from "@/stores/auth";
 import { currentRef } from "@/stores/publish/currentStep";
-import { StudyVersion } from "@/stores/publish/study-publish";
+import { StudyVersion } from "@/stores/publish/study-interfaces";
 import { studyPublish } from "@/stores/publish/study-state";
 
 const router = useRouter();
@@ -27,7 +27,7 @@ function checkAuth() {
 
 const route = useRoute();
 function checkStudy() {
-  let id = parseInt(route.params.id.toString());
+  let id = parseInt(route.params.studyId.toString());
   if (id !== studyPublish.value.id) {
     studyPublish.value = new StudyVersion(id);
   }
@@ -39,10 +39,10 @@ onBeforeMount(() => {
 });
 
 onBeforeRouteUpdate((to, from) => {
-  if (from.params.id !== to.params.id) {
+  if (from.params.studyId !== to.params.studyId) {
     checkStudy();
   }
-  if (to.name === "publish-study") {
+  if (to.name === "publish") {
     checkAuth();
   }
 });

@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import type { FormInst } from "naive-ui";
-import { NButton, NForm, NFormItem, NInput, NSelect } from "naive-ui";
-import type { SelectMixedOption } from "naive-ui/lib/select/src/interface";
+import { NButton } from "naive-ui";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 
-import LANGUAGE_JSON from "@/assets/data/languages.json";
 import router from "@/router";
 import { currentRef } from "@/stores/publish/currentStep";
-import { rules } from "@/stores/publish/study-state";
 import { studyPublish } from "@/stores/publish/study-state";
 
 const route = useRoute();
@@ -23,28 +19,28 @@ setTimeout(() => {
   checkingForPreviousVersions.value = false;
 }, 3000);
 
-const formRef = ref<FormInst | null>(null);
-
-const languageOptions: SelectMixedOption[] = LANGUAGE_JSON.map((v) => ({
-  label: v.name,
-  value: v.alpha2,
-}));
-
-const generalOptions = [
-  "Artificial Intelligence",
-  "Dataset",
-  "Diabetes",
-  "Ethics",
-  "Health",
-  "Machine Learning",
-].map((v) => ({
-  label: v,
-  value: v,
-}));
-
-const handleUpdateValue = (value: string[]) => {
-  console.log(value);
-};
+// const formRef = ref<FormInst | null>(null);
+//
+// const languageOptions: SelectMixedOption[] = LANGUAGE_JSON.map((v) => ({
+//   label: v.name,
+//   value: v.alpha2,
+// }));
+//
+// const generalOptions = [
+//   "Artificial Intelligence",
+//   "Dataset",
+//   "Diabetes",
+//   "Ethics",
+//   "Health",
+//   "Machine Learning",
+// ].map((v) => ({
+//   label: v,
+//   value: v,
+// }));
+//
+// const handleUpdateValue = (value: string[]) => {
+//   console.log(value);
+// };
 
 // const handleValidateClick = (e: MouseEvent) => {
 //   formRef.value?.validate((errors) => {
@@ -92,42 +88,42 @@ function handleNextButton() {
     <div>
       <h1 class="pb-4">Edit/Confirm Dataset</h1>
 
-      <n-form ref="formRef" :label-width="80" :model="studyPublish" :rules="rules" size="large">
-        <n-form-item label="Title" path="title">
-          <n-input v-model:value="studyPublish.title" placeholder="Gene Ontology Data Archive V1" />
-        </n-form-item>
+      <!--      <n-form ref="formRef" :label-width="80" :model="studyPublish" :rules="rules" size="large">-->
+      <!--        <n-form-item label="Title" path="title">-->
+      <!--          <n-input v-model:value="studyPublish.title" placeholder="Gene Ontology Data Archive V1" />-->
+      <!--        </n-form-item>-->
 
-        <n-form-item label="Description" path="description">
-          <n-input v-model:value="studyPublish.description" type="textarea" placeholder="..." />
-        </n-form-item>
+      <!--        <n-form-item label="Description" path="description">-->
+      <!--          <n-input v-model:value="studyPublish.description" type="textarea" placeholder="..." />-->
+      <!--        </n-form-item>-->
 
-        <n-form-item :span="12" label="Keywords" path="keywords">
-          <n-select
-            v-model:value="studyPublish.keywords"
-            placeholder="Salutogenesis"
-            multiple
-            tag
-            filterable
-            clearable
-            :options="generalOptions"
-            @update:value="handleUpdateValue"
-          />
-        </n-form-item>
+      <!--        <n-form-item :span="12" label="Keywords" path="keywords">-->
+      <!--          <n-select-->
+      <!--            v-model:value="studyPublish.keywords"-->
+      <!--            placeholder="Salutogenesis"-->
+      <!--            multiple-->
+      <!--            tag-->
+      <!--            filterable-->
+      <!--            clearable-->
+      <!--            :options="generalOptions"-->
+      <!--            @update:value="handleUpdateValue"-->
+      <!--          />-->
+      <!--        </n-form-item>-->
 
-        <n-form-item :span="12" label="Primary Language" path="primaryLanguage">
-          <n-select
-            v-model:value="studyPublishs"
-            placeholder="English"
-            filterable
-            clearable
-            :options="languageOptions"
-          />
-        </n-form-item>
+      <!--        <n-form-item :span="12" label="Primary Language" path="primaryLanguage">-->
+      <!--          <n-select-->
+      <!--            v-model:value="studyPublish"-->
+      <!--            placeholder="English"-->
+      <!--            filterable-->
+      <!--            clearable-->
+      <!--            :options="languageOptions"-->
+      <!--          />-->
+      <!--        </n-form-item>-->
 
-        <!--        <n-form-item>-->
-        <!--          <n-button @click="handleValidateClick"> Validate </n-button>-->
-        <!--        </n-form-item>-->
-      </n-form>
+      <!--        &lt;!&ndash;        <n-form-item>&ndash;&gt;-->
+      <!--        &lt;!&ndash;          <n-button @click="handleValidateClick"> Validate </n-button>&ndash;&gt;-->
+      <!--        &lt;!&ndash;        </n-form-item>&ndash;&gt;-->
+      <!--      </n-form>-->
     </div>
     <div class="back-next-buttons">
       <n-button type="primary" size="large" @click="handleBackButton">Back</n-button>

@@ -27,7 +27,7 @@ onBeforeMount(() => {
 const formRef = ref<FormInst | null>(null);
 
 const generalOptions = [
-  "Artifical Intelligence",
+  "Artificial Intelligence",
   "Dataset",
   "Diabetes",
   "Ethics",

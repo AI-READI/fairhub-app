@@ -8,19 +8,15 @@ import { RouterLink, useRoute } from "vue-router";
 const sidebarCollapsed = ref(false);
 const route = useRoute();
 
-const routeParams = {
-  versionId: route.params.versionId,
-};
-
 function renderIcon(icon: string) {
   return () => h(Icon, { icon });
 }
 
 const studyID = computed(() => {
-  if (route.params.id === undefined) {
+  if (route.params.studyId === undefined) {
     return "null";
   }
-  return route.params.id;
+  return route.params.studyId;
 });
 
 const hideMenuOptions = computed(() => {
@@ -244,7 +240,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            name: "publish-study",
+            name: "publish",
             params: {
               id: studyID.value,
             },

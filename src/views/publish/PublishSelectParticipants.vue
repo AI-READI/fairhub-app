@@ -6,7 +6,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import { currentRef } from "@/stores/publish/currentStep";
 import { participants } from "@/stores/publish/participants";
-import type { Person } from "@/stores/publish/study-publish";
+import type { Participant } from "@/stores/publish/study-interfaces";
 import { studyPublish } from "@/stores/publish/study-state";
 
 const route = useRoute();
@@ -44,7 +44,7 @@ const columns: DataTableColumns<RowData> = [
   },
 ];
 
-checkedRowKeysRef.value = studyPublish.value.selectedParticipants.map((p: Person) => {
+checkedRowKeysRef.value = studyPublish.value.selectedParticipants.map((p: Participant) => {
   return p.address;
 });
 
@@ -89,7 +89,7 @@ function handleNextButton() {
 // });
 
 function onUpdate() {
-  studyPublish.value.selectedParticipants = participants.value.filter((item: Person) =>
+  studyPublish.value.selectedParticipants = participants.value.filter((item: Participant) =>
     checkedRowKeysRef.value.includes(item.address)
   );
 }
@@ -99,13 +99,13 @@ function AllSelected(): void {
     checkedRowKeysRef.value = [];
     return;
   }
-  checkedRowKeysRef.value = participants.value.map((p: Person) => {
+  checkedRowKeysRef.value = participants.value.map((p: Participant) => {
     return p.address;
   });
 }
 
 function selectAllParticipants(): void {
-  checkedRowKeysRef.value = participants.value.map((p: Person) => {
+  checkedRowKeysRef.value = participants.value.map((p: Participant) => {
     return p.address;
   });
   currentRef.value++;

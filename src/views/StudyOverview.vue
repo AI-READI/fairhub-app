@@ -8,7 +8,7 @@ const router = useRouter();
 const route = useRoute();
 
 const routeParams = {
-  id: route.params.id.toString(),
+  id: route.params.studyId.toString(),
 };
 const study = getStudy(parseInt(routeParams.id));
 

@@ -34,7 +34,7 @@ onBeforeMount(() => {
 });
 
 const routeParams = {
-  id: route.params.id.toString(),
+  id: route.params.studyId.toString(),
 };
 
 const formRef = ref<FormInst | null>(null);

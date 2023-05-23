@@ -18,8 +18,8 @@ onBeforeMount(() => {
   }
 });
 
-const navigateToStudy = (id: number) => {
-  router.push({ name: "study", params: { id: id.toString() } });
+const navigateToStudy = (studyId: number) => {
+  router.push({ name: "study", params: { studyId: studyId.toString() } });
 };
 </script>
 

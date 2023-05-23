@@ -7,16 +7,9 @@ const router = useRouter();
 const route = useRoute();
 
 const routeParams = {
-  id: route.params.id.toString(),
+  id: route.params.studyId.toString(),
 };
 const study = getStudy(parseInt(routeParams.id));
-
-// const owner = {
-//   name: study.owner.name,
-//   email: study.owner.email,
-//   role: "owner",
-//   status: "active",
-// };
 
 const navigateToStudy = (id: number) => {
   router.push({ name: "study", params: { id: id.toString() } });
@@ -28,7 +21,6 @@ const navigateToStudy = (id: number) => {
     <n-space vertical>
       <h1>Dataset overview</h1>
     </n-space>
-
     <n-space vertical>
       <div
         class="flex w-full cursor-pointer items-start space-x-8 rounded-md px-4 py-3 transition-all hover:border-slate-200"
@@ -47,7 +39,6 @@ const navigateToStudy = (id: number) => {
             <span class="font-bold">Last Updated: </span>
             <span>{{ study.lastUpdated }}</span>
           </p>
-
           <div class="align-center flex pt-2">
             <p>
               <span class="font-bold">Latest published version: </span>

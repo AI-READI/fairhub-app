@@ -45,7 +45,7 @@ const rules = {
 // eslint-disable-next-line no-undef
 const development = process.env.NODE_ENV === "development";
 
-const showModal = ref(false);
+// const showModal = ref(false);
 const showErrorAlert = ref(false);
 
 const profileOptions = [
