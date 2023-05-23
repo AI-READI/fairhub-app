@@ -5,7 +5,7 @@ import type { Study } from "@/stores/publish/study-interfaces";
 import { fetchStudies } from "@/stores/services/service";
 
 export const studies: Ref<Study[]> = ref([]);
-fetchStudies().then();
+fetchStudies().then((s) => (studies.value = s));
 
 export const getStudy = (studyId: number) => {
   // Check if study exists
