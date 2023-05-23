@@ -10,6 +10,7 @@ import ParticipantsData from "@/views/ParticipantsData.vue";
 import PublishAdditionalInfo from "@/views/publish/PublishAdditionalInfo.vue";
 import PublishChangelog from "@/views/publish/PublishChangelog.vue";
 import PublishContributors from "@/views/publish/PublishContributors.vue";
+import PublishDataset from "@/views/publish/PublishDataset.vue";
 import PublishReadme from "@/views/publish/PublishReadme.vue";
 import PublishRelatedSources from "@/views/publish/PublishRelatedSources.vue";
 import PublishStudyMetadata from "@/views/publish/PublishStudyMetadata.vue";
@@ -51,38 +52,37 @@ const router = createRouter({
     {
       name: "study",
       component: StudyHome,
-      path: "/studies/:id/studyHome",
+      path: "/studies/:studyId/studyHome",
     },
     {
       name: "dashboard",
       component: DashBoard,
-      path: "/studies/:id/dashboard",
+      path: "/studies/:studyId/dashboard",
     },
     {
       name: "add-participant",
       component: AddParticipant,
-      path: "/studies/:id/participants",
+      path: "/studies/:studyId/participants",
     },
     {
       name: "study-home",
       component: StudyHome,
-      path: "/studies/:id/studyHome",
+      path: "/studies/:studyId/studyHome",
     },
     {
       name: "study-info",
       component: StudyInfo,
-      path: "/studies/:id/studyInfo",
+      path: "/studies/:studyId/studyInfo",
     },
-
     {
       name: "study-contributors",
       component: StudyContributors,
-      path: "/studies/:id/contributors",
+      path: "/studies/:studyId/contributors",
     },
     {
       name: "participants-and-data",
       component: ParticipantsData,
-      path: "/studies/:id/participantsdata",
+      path: "/studies/:studyId/participantsdata",
     },
     {
       name: "report-issue",
@@ -115,58 +115,81 @@ const router = createRouter({
       name: "publish-study",
       children: [
         {
-          name: "publish-check-for-previous-version",
-          component: PublishCheckForVersion,
-          path: "precheck/version",
+          name: "publish",
+          component: PublishStudy,
+          path: "publish",
         },
         {
-          name: "publish-select-participants",
-          component: PublishSelectParticipants,
-          path: "version/:versionId/participants",
-        },
-        {
-          name: "publish-study-metadata",
-          component: PublishStudyMetadata,
-          path: "version/:versionId/study/metadata",
-        },
-        {
-          name: "publish-dataset-metadata",
-          component: PublishDatasetMetadata,
-          path: "version/:versionId/dataset/metadata",
-        },
-        {
-          name: "publish-contributors",
-          component: PublishContributors,
-          path: "version/:versionId/contributors",
-        },
-        {
-          name: "publish-related-sources",
-          component: PublishRelatedSources,
-          path: "version/:versionId/related/sources",
-        },
-        {
-          name: "publish-additional-info",
-          component: PublishAdditionalInfo,
-          path: "version/:versionId/contributors",
-        },
-        {
-          name: "publish-readme",
-          component: PublishReadme,
-          path: "version/:versionId/readme",
-        },
-        {
-          name: "publish-changelog",
-          component: PublishChangelog,
-          path: "version/:versionId/changelog",
-        },
-        {
-          name: "publish-summary",
-          component: PublishSummary,
-          path: "version/:versionId/summary",
+          name: "dataset",
+          children: [
+            {
+              name: "publish-dataset",
+              children: [
+                {
+                  name: "publish-check-for-previous-version",
+                  component: PublishCheckForVersion,
+                  path: "check",
+                },
+                {
+                  name: "publish-version-Id",
+                  children: [
+                    {
+                      name: "publish-select-participants",
+                      component: PublishSelectParticipants,
+                      path: "participants",
+                    },
+                    {
+                      name: "publish-study-metadata",
+                      component: PublishStudyMetadata,
+                      path: "study/metadata",
+                    },
+                    {
+                      name: "publish-dataset-metadata",
+                      component: PublishDatasetMetadata,
+                      path: "dataset/metadata",
+                    },
+                    {
+                      name: "publish-contributors",
+                      component: PublishContributors,
+                      path: "contributors",
+                    },
+                    {
+                      name: "publish-related-sources",
+                      component: PublishRelatedSources,
+                      path: "related/sources",
+                    },
+                    {
+                      name: "publish-additional-info",
+                      component: PublishAdditionalInfo,
+                      path: "additional/info",
+                    },
+                    {
+                      name: "publish-readme",
+                      component: PublishReadme,
+                      path: "readme",
+                    },
+                    {
+                      name: "publish-changelog",
+                      component: PublishChangelog,
+                      path: "changelog",
+                    },
+                    {
+                      name: "publish-summary",
+                      component: PublishSummary,
+                      path: "summary",
+                    },
+                  ],
+                  path: ":versionId",
+                },
+              ],
+              path: ":datasetId/version",
+            },
+          ],
+          component: PublishDataset,
+          path: "dataset",
         },
       ],
-      component: PublishStudy,
-      path: "/studies/:id/publish",
+      path: "/studies/:studyId",
     },
     //header
     {
