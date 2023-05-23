@@ -1,4 +1,4 @@
-export interface Person {
+export interface Participant {
   name: string;
   address: string;
   age: string;
@@ -12,10 +12,17 @@ export interface Contributor {
   roles: string[];
 }
 
+export interface ContributorStudy {
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+}
+
 export interface Study {
   id: number;
   title: string;
-  contributors: Contributor[];
+  contributors: ContributorStudy[];
   description: string;
   image: string;
   keywords: string[];
@@ -36,6 +43,16 @@ export interface Owner {
   email: string;
 }
 
+export interface Dataset {
+  id: number;
+  name: string;
+  versions: Version[];
+}
+
+export interface Version {
+  id: number;
+}
+
 export class StudyVersion {
   public constructor(
     public id: number,
@@ -52,6 +69,6 @@ export class StudyVersion {
     public description: string = "",
     public keywords: string[] = [],
     public primaryLanguage: string = "",
-    public selectedParticipants: Person[] = []
+    public selectedParticipants: Participant[] = []
   ) {}
 }

@@ -2,7 +2,7 @@ import type { FormItemRule } from "naive-ui";
 import type { FormRules } from "naive-ui";
 import { ref } from "vue";
 
-import { StudyVersion } from "@/stores/publish/study-publish";
+import { StudyVersion } from "@/stores/publish/study-interfaces";
 
 export const rules = ref({
   title: {

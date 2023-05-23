@@ -1,12 +1,8 @@
+import type { Ref } from "vue";
 import { ref } from "vue";
 
-import { fetchParticipants } from "@/stores/services/service";
-// export const data = ref(
-//   Array.from({ length: 10 }).map(() => ({
-//     name: faker.name.fullName(),
-//     address: faker.address.streetAddress(),
-//     age: faker.random.numeric(2),
-//   }))
-// );
+import type { Participant } from "@/stores/publish/study-interfaces";
+import { fetchStudies } from "@/stores/services/service";
 
-export const participants = ref(await fetchParticipants());
+export const participants: Ref<Participant[]> = ref([]);
+fetchStudies().then();
