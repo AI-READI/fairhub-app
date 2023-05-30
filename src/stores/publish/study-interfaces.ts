@@ -53,22 +53,44 @@ export interface Version {
   id: number;
 }
 
+export interface ViewProfile {
+  username: string;
+  email: string;
+  fullname: string;
+  image: string;
+  institution: string;
+  location: string;
+  password: string;
+  timezone: string;
+}
+
+export class Dataset {
+  public constructor(public id: number = 0, public name: string = "") {}
+  static fromObject(obj: any): Dataset {
+    return new Dataset(obj.id, obj.name);
+  }
+}
+
 export class StudyVersion {
   public constructor(
-    public id: number,
-    public contributors: Contributor[] = [
-      {
-        affiliations: ["Manager"],
-        firstname: "Sanjay",
-        lastname: "Soundarajan",
-        ORCID: "https://orcid.org/0000-0001-7032-2732",
-        roles: ["Developer"],
-      },
-    ],
+    public id: number = 0,
+    public contributors: Contributor[] = [],
     public title: string = "",
     public description: string = "",
     public keywords: string[] = [],
     public primaryLanguage: string = "",
     public selectedParticipants: Participant[] = []
   ) {}
+
+  static fromObject(obj: any): StudyVersion {
+    return new StudyVersion(
+      obj.id,
+      obj.title,
+      obj.description,
+      obj.keywords,
+      obj.primaryLanguage,
+      obj.selectedParticipants,
+      obj.contributors
+    );
+  }
 }
