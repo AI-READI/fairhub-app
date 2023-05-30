@@ -19,7 +19,7 @@ onBeforeMount(() => {
 
 const formRef = ref<FormInst | null>(null);
 
-const study = ref({
+const studyType = ref({
   title: null,
   description: null,
   keywords: null,
@@ -91,18 +91,18 @@ const handleUpdateValue = (value: string[]) => {
 
     <n-form
       ref="formRef"
-      :model="study"
+      :model="studyType"
       :rules="rules"
       size="large"
       label-placement="top"
       class="pr-4"
     >
       <n-form-item :span="12" label="Title" path="title">
-        <n-input v-model:value="study.title" placeholder="Add a study title" />
+        <n-input v-model:value="studyType.title" placeholder="Add a study title" />
       </n-form-item>
       <n-form-item :span="12" label="Description" path="description">
         <n-input
-          v-model:value="study.description"
+          v-model:value="studyType.description"
           placeholder="Add a study description"
           type="textarea"
           :autosize="{
@@ -114,7 +114,7 @@ const handleUpdateValue = (value: string[]) => {
 
       <n-form-item :span="12" label="Keywords" path="keywords">
         <n-select
-          v-model:value="study.keywords"
+          v-model:value="studyType.keywords"
           placeholder="Salutogenesis"
           multiple
           tag

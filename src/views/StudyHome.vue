@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { NImage, NSpace } from "naive-ui";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 
-import { getStudy } from "@/stores/studies";
+import { study } from "@/stores/publish/study-state";
 const router = useRouter();
-const route = useRoute();
 
-const routeParams = {
-  id: route.params.studyId.toString(),
-};
-const study = getStudy(parseInt(routeParams.id));
+// const study = getStudy(parseInt(routeParams.id));
 
 const navigateToStudy = (id: number) => {
   router.push({ name: "study", params: { id: id.toString() } });
@@ -17,7 +13,7 @@ const navigateToStudy = (id: number) => {
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col space-y-8 pr-8">
+  <main class="flex h-full w-full flex-col space-y-8 pr-8" v-if="study">
     <n-space vertical>
       <h1>Dataset overview</h1>
     </n-space>
