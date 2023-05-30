@@ -240,7 +240,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            name: "publish",
+            name: "publish-select-dataset",
             params: {
               id: studyID.value,
             },
