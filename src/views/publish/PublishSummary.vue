@@ -5,7 +5,7 @@ import { useRoute } from "vue-router";
 import router from "@/router";
 import { currentRef } from "@/stores/publish/currentStep";
 
-import { studyPublish } from "../../stores/publish/study-state";
+import { studyPublish } from "../../stores/publish/dataset-state";
 import { study } from "../../stores/publish/studyInfo";
 
 const route = useRoute();
