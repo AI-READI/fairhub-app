@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import type { DataTableColumns, DataTableRowKey } from "naive-ui";
 import { NButton, NCard, NDataTable } from "naive-ui";
-import { ref } from "vue";
+import { Ref, ref } from "vue";
+import { provide } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { currentRef } from "@/stores/publish/currentStep";
-import { participants } from "@/stores/publish/participants";
+import { studyPublish } from "@/stores/publish/dataset-state";
+import { PARTICIPANTS_KEY } from "@/stores/publish/participants";
 import type { Participant } from "@/stores/publish/study-interfaces";
-import { studyPublish } from "@/stores/publish/study-state";
+import { fetchParticipants } from "@/stores/services/service";
 
 const route = useRoute();
 const router = useRouter();
@@ -22,6 +24,9 @@ type RowData = {
   age: string;
   key: number;
 };
+const participants: Ref<Participant[]> = ref([]);
+provide(PARTICIPANTS_KEY, participants);
+fetchParticipants().then((p) => (participants.value = p));
 
 const rowKey = (row: RowData) => row.address;
 const checkedRowKeysRef = ref<DataTableRowKey[]>([]);
@@ -54,13 +59,13 @@ checkedRowKeysRef.value = studyPublish.value.selectedParticipants.map((p: Partic
 //    */
 // };
 
-function handleBackButton() {
-  currentRef.value--;
-  router.push({
-    name: "publish-check-for-previous-version",
-    params: { versionId: routeParams.versionId },
-  });
-}
+// function handleBackButton() {
+//   currentRef.value--;
+//   router.push({
+//     name: "publish-check-for-previous-version",
+//     params: { versionId: routeParams.versionId },
+//   });
+// }
 
 function handleNextButton() {
   // if (checkedRowKeysRef.value.length === 0) {
@@ -72,21 +77,6 @@ function handleNextButton() {
     params: { versionId: routeParams.versionId },
   });
 }
-
-// const value = ref(null);
-// const choices = [
-//   {
-//     label: "Choose all participants",
-//     value: "Choose all participants",
-//   },
-//   {
-//     label: "Select manually",
-//     value: "Select manually",
-//   },
-// ].map((s) => {
-//   s.value = s.value.toLowerCase();
-//   return s;
-// });
 
 function onUpdate() {
   studyPublish.value.selectedParticipants = participants.value.filter((item: Participant) =>
@@ -174,9 +164,6 @@ function selectManual(): void {
       </div>
     </div>
     <div class="back-next-buttons">
-      <n-button type="primary" size="large" class="participants-button" @click="handleBackButton">
-        Back
-      </n-button>
       <n-button type="primary" size="large" class="participants-button" @click="handleNextButton">
         <!--        :disabled="checkedRowKeysRef.length === 0"-->
         Next
@@ -192,7 +179,7 @@ function selectManual(): void {
 
 .back-next-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .participant-choices {
