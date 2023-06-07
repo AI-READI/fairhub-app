@@ -54,7 +54,7 @@ function onsubmit() {
             <h3>Dataset Metadata</h3>
             <div>
               <dl class="font-bold">Title:</dl>
-              <dd>{{ studyPublish }}</dd>
+              <dd>{{ studyPublish.title }}</dd>
 
               <dl class="font-bold">Keywords:</dl>
               <dd v-for="(item, index) in studyPublish.keywords" :key="index">{{ item }}</dd>

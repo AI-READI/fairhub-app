@@ -178,24 +178,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
             },
           },
         },
-        { default: () => "Participants And Data" }
-      ),
-  },
-  {
-    icon: renderIcon("fluent:people-add-24-regular"),
-    key: "add-participant",
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: "add-participant",
-            params: {
-              id: studyID.value,
-            },
-          },
-        },
-        { default: () => "Add Participant" }
+        { default: () => "Study Participants" }
       ),
   },
   {
