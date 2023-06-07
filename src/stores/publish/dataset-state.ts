@@ -1,8 +1,9 @@
 import type { FormItemRule } from "naive-ui";
 import type { FormRules } from "naive-ui";
+import type { InjectionKey, Ref } from "vue";
 import { ref } from "vue";
 
-import { Dataset, StudyVersion } from "@/stores/publish/study-interfaces";
+import type { Dataset } from "@/stores/publish/study-interfaces";
 
 export const rules = ref({
   title: {
@@ -81,6 +82,8 @@ export const contributorRules: FormRules = {
     },
   ],
 };
+// export const studyPublish:Ref<StudyVersion> = ref(new StudyVersion(0));
 
-export const studyPublish = ref(new StudyVersion(0));
-export const dataset = ref(new Dataset());
+export const STUDYPUBLISH_KEY: InjectionKey<null> = Symbol("studyPublish");
+
+export const DATASET_KEY: InjectionKey<Ref<Dataset>> = Symbol("dataset");

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { NImage, NSpace } from "naive-ui";
+import { inject } from "vue";
 import { useRouter } from "vue-router";
 
-import { study } from "@/stores/publish/study-state";
+import { STUDY_KEY } from "@/stores/publish/study-state";
 const router = useRouter();
 
 // const study = getStudy(parseInt(routeParams.id));
@@ -10,6 +11,8 @@ const router = useRouter();
 const navigateToStudy = (id: number) => {
   router.push({ name: "study", params: { id: id.toString() } });
 };
+
+const study = inject(STUDY_KEY);
 </script>
 
 <template>
@@ -21,7 +24,7 @@ const navigateToStudy = (id: number) => {
       <div
         class="flex w-full cursor-pointer items-start space-x-8 rounded-md px-4 py-3 transition-all hover:border-slate-200"
         :key="study.id"
-        @click="navigateToStudy(study.id)"
+        @click="study && navigateToStudy(study.id)"
       >
         <n-image class="studyHome" width="145" :src="study.image" preview-disabled />
         <div class="flex w-full grow flex-col space-y-2 divide-y">

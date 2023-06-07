@@ -4,7 +4,7 @@ import type { Ref } from "vue";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 
-import { Dataset } from "@/stores/publish/study-interfaces";
+import type { Dataset } from "@/stores/publish/study-interfaces";
 import { fetchDatasets } from "@/stores/services/service";
 
 const route = useRoute();

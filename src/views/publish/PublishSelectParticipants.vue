@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import type { DataTableColumns, DataTableRowKey } from "naive-ui";
 import { NButton, NCard, NDataTable } from "naive-ui";
-import { Ref, ref } from "vue";
+import type { Ref } from "vue";
+import { inject, ref } from "vue";
 import { provide } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { currentRef } from "@/stores/publish/currentStep";
-import { studyPublish } from "@/stores/publish/dataset-state";
+import { STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
 import { PARTICIPANTS_KEY } from "@/stores/publish/participants";
 import type { Participant } from "@/stores/publish/study-interfaces";
+import type { StudyVersion } from "@/stores/publish/study-interfaces";
 import { fetchParticipants } from "@/stores/services/service";
 
 const route = useRoute();
@@ -17,6 +19,8 @@ const router = useRouter();
 const routeParams = {
   versionId: route.params.versionId.toString(),
 };
+
+const studyPublish = inject<Ref<StudyVersion | null>>(STUDYPUBLISH_KEY, ref(null));
 
 type RowData = {
   name: string;
@@ -49,9 +53,14 @@ const columns: DataTableColumns<RowData> = [
   },
 ];
 
-checkedRowKeysRef.value = studyPublish.value.selectedParticipants.map((p: Participant) => {
-  return p.address;
-});
+const iff = () => {
+  if (!studyPublish.value) return;
+  else {
+    checkedRowKeysRef.value = studyPublish.value.selectedParticipants.map((p: Participant) => {
+      return p.address;
+    });
+  }
+};
 
 // const handleCheck = () => {
 //   /**
@@ -79,6 +88,7 @@ function handleNextButton() {
 }
 
 function onUpdate() {
+  if (!studyPublish.value) return;
   studyPublish.value.selectedParticipants = participants.value.filter((item: Participant) =>
     checkedRowKeysRef.value.includes(item.address)
   );
@@ -112,7 +122,7 @@ function selectManual(): void {
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col space-y-8 pr-8">
+  <main class="flex h-full w-full flex-col space-y-8 pr-8" v-if="studyPublish">
     <h1 class="pb-4">Add/Edit Participants</h1>
     <div class="part-header">What part of data would you like to use?</div>
     <div class="select-buttons">

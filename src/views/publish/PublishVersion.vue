@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { NDivider, NStep, NSteps } from "naive-ui";
-import { onBeforeMount } from "vue";
+import type { Ref } from "vue";
+import { onBeforeMount, ref } from "vue";
+import { provide } from "vue";
 import { onBeforeRouteUpdate, useRoute } from "vue-router";
 
 import { currentRef } from "@/stores/publish/currentStep";
-import { dataset, studyPublish } from "@/stores/publish/dataset-state";
+import { DATASET_KEY, STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
 import { Dataset, StudyVersion } from "@/stores/publish/study-interfaces";
-import { fetchDatasets, fetchDatasetVersion } from "@/stores/services/service";
+import { fetchDataset, fetchDatasetVersion } from "@/stores/services/service";
 
 const route = useRoute();
 
@@ -15,6 +17,12 @@ const routeParams = {
   studyId: route.params.studyId as string,
   versionId: route.params.versionId as string,
 };
+
+const studyPublish: Ref<StudyVersion | null> = ref(null);
+provide(STUDYPUBLISH_KEY, studyPublish);
+
+const dataset: Ref<Dataset | null> = ref(new Dataset());
+provide(DATASET_KEY, dataset);
 
 function checkStudy() {
   //
@@ -27,7 +35,7 @@ function checkStudy() {
   }
   if (routeParams.versionId === "new" && routeParams.datasetId !== "new") {
     studyPublish.value = new StudyVersion();
-    fetchDatasets(parseInt(routeParams.studyId)).then((p) => (dataset.value = p));
+    fetchDataset(parseInt(routeParams.studyId)).then((p) => (dataset.value = p));
   }
 }
 if (routeParams.versionId !== "new" && routeParams.datasetId !== "new") {

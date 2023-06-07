@@ -2,18 +2,20 @@
 import type { FormInst } from "naive-ui";
 import { NButton, NForm, NFormItem, NInput, NModal, NSelect, NTable } from "naive-ui";
 import type { Ref } from "vue";
-import { ref, toRaw } from "vue";
+import { inject, ref, toRaw } from "vue";
 import { useRoute } from "vue-router";
 
 import router from "@/router";
 import { currentRef } from "@/stores/publish/currentStep";
-import { contributorRules, studyPublish } from "@/stores/publish/dataset-state";
-import type { Contributor } from "@/stores/publish/study-interfaces";
+import { contributorRules, STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
+import type { Contributor, StudyVersion } from "@/stores/publish/study-interfaces";
 
 const route = useRoute();
 const routeParams = {
   versionId: route.params.versionId.toString(),
 };
+
+const studyPublish = inject<Ref<StudyVersion | null>>(STUDYPUBLISH_KEY, ref(null));
 
 const headers = ref({
   delete: "Delete",
@@ -61,7 +63,6 @@ function add() {
     roles: [],
   };
   showDialog.value = true;
-  console.log("ok", showDialog.value, studyPublish.value.contributors);
 }
 
 const handleUpdateValue = (value: string[]) => {
@@ -84,6 +85,9 @@ function onClose() {
 
 function saveContributor() {
   formRef.value?.validate((errors) => {
+    if (!studyPublish.value) {
+      return null;
+    }
     if (!errors) {
       console.log("Valid");
       if (editedContributor) {
@@ -110,12 +114,15 @@ function onEdit(clickedContributor: Contributor) {
 }
 
 function deleteParticipants(clickedContributor: number) {
+  if (!studyPublish.value) {
+    return;
+  }
   studyPublish.value.contributors.splice(clickedContributor, 1);
 }
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col space-y-8 pr-8">
+  <main class="flex h-full w-full flex-col space-y-8 pr-8" v-if="studyPublish">
     <h1>Edit Contributors</h1>
     <div class="add-contributor">
       <n-table :bordered="false" :single-line="false">

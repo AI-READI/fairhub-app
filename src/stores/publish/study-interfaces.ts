@@ -43,11 +43,11 @@ export interface Owner {
   email: string;
 }
 
-export interface Dataset {
-  id: number;
-  name: string;
-  versions: Version[];
-}
+// export interface Dataset {
+//   id: number;
+//   name: string;
+//   versions: Version[];
+// }
 
 export interface Version {
   id: number;
@@ -65,9 +65,17 @@ export interface ViewProfile {
 }
 
 export class Dataset {
-  public constructor(public id: number = 0, public name: string = "") {}
+  public constructor(
+    public id: number = 0,
+    public name: string = "",
+    public versions: Version[] = []
+  ) {}
   static fromObject(obj: any): Dataset {
-    return new Dataset(obj.id, obj.name);
+    return new Dataset(obj.id, obj.name, obj.versions);
+  }
+  public initial = null;
+  findLatestVersion(): number | null {
+    return this.versions.length ? Math.max(...this.versions.map((version) => version.id)) : null;
   }
 }
 
@@ -85,12 +93,12 @@ export class StudyVersion {
   static fromObject(obj: any): StudyVersion {
     return new StudyVersion(
       obj.id,
+      obj.contributors,
       obj.title,
       obj.description,
       obj.keywords,
       obj.primaryLanguage,
-      obj.selectedParticipants,
-      obj.contributors
+      obj.selectedParticipants
     );
   }
 }

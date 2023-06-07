@@ -2,19 +2,23 @@
 import type { FormInst } from "naive-ui";
 import { NButton, NForm, NFormItem, NInput, NSelect } from "naive-ui";
 import type { SelectMixedOption } from "naive-ui/lib/select/src/interface";
-import { ref } from "vue";
+import type { Ref } from "vue";
+import { inject, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import LANGUAGE_JSON from "@/assets/data/languages.json";
 import router from "@/router";
 import { currentRef } from "@/stores/publish/currentStep";
-import { rules, studyPublish } from "@/stores/publish/dataset-state";
+import { rules, STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
+import type { StudyVersion } from "@/stores/publish/study-interfaces";
 
 const route = useRoute();
 
 const routeParams = {
   versionId: route.params.versionId.toString(),
 };
+
+const studyPublish = inject<Ref<StudyVersion | null>>(STUDYPUBLISH_KEY, ref(null));
 
 // const checkingForPreviousVersions = ref(true);
 //
