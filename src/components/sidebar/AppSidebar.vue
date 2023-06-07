@@ -37,81 +37,6 @@ const hideMenuOptions = computed(() => {
   }
 });
 
-// const menuOptions = [
-//   {
-//     label: "All Studies",
-//     key: "hear-the-wind-sing",
-//     icon: renderIcon(BookIcon),
-//   },
-//   {
-//     label: "Pinball 1973",
-//     key: "pinball-1973",
-//     icon: renderIcon(BookIcon),
-//     disabled: true,
-//     children: [
-//       {
-//         label: "Rat",
-//         key: "rat",
-//       },
-//     ],
-//   },
-//   {
-//     label: "A Wild Sheep Chase",
-//     key: "a-wild-sheep-chase",
-//     disabled: true,
-//     icon: renderIcon(BookIcon),
-//   },
-//   {
-//     label: "Dance Dance Dance",
-//     key: "Dance Dance Dance",
-//     icon: renderIcon(BookIcon),
-//     children: [
-//       {
-//         type: "group",
-//         label: "People",
-//         key: "people",
-//         children: [
-//           {
-//             label: "Narrator",
-//             key: "narrator",
-//             icon: renderIcon(PersonIcon),
-//           },
-//           {
-//             label: "Sheep Man",
-//             key: "sheep-man",
-//             icon: renderIcon(PersonIcon),
-//           },
-//         ],
-//       },
-//       {
-//         label: "Beverage",
-//         key: "beverage",
-//         icon: renderIcon(WineIcon),
-//         children: [
-//           {
-//             label: "Whisky",
-//             key: "whisky",
-//           },
-//         ],
-//       },
-//       {
-//         label: "Food",
-//         key: "food",
-//         children: [
-//           {
-//             label: "Sandwich",
-//             key: "sandwich",
-//           },
-//         ],
-//       },
-//       {
-//         label: "The past increases. The future recedes.",
-//         key: "the-past-increases-the-future-recedes",
-//       },
-//     ],
-//   },
-// ];
-
 const staticUpperMenuOptions: MenuOption[] = [
   {
     icon: renderIcon("tabler:home-2"),
@@ -147,32 +72,32 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         { default: () => "Study Home" }
       ),
   },
-  {
-    icon: renderIcon("tabler:list-details"),
-    key: "study-info",
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: "study-info",
-            params: {
-              id: studyID.value,
-            },
-          },
-        },
-        { default: () => "Study Info" }
-      ),
-  },
+  // {
+  //   icon: renderIcon("tabler:list-details"),
+  //   key: "study-info",
+  //   label: () =>
+  //     h(
+  //       RouterLink,
+  //       {
+  //         to: {
+  //           name: "study-info",
+  //           params: {
+  //             id: studyID.value,
+  //           },
+  //         },
+  //       },
+  //       { default: () => "Study Info" }
+  //     ),
+  // },
   {
     icon: renderIcon("fluent:people-team-toolbox-24-regular"),
-    key: "participants-and-data",
+    key: "study-participants",
     label: () =>
       h(
         RouterLink,
         {
           to: {
-            name: "participants-and-data",
+            name: "study-participants",
             params: {
               id: studyID.value,
             },

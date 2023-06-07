@@ -87,7 +87,9 @@ export class StudyVersion {
     public description: string = "",
     public keywords: string[] = [],
     public primaryLanguage: string = "",
-    public selectedParticipants: Participant[] = []
+    public selectedParticipants: Participant[] = [],
+    public dataset: Dataset[] = [],
+    public study: Study[] = []
   ) {}
 
   static fromObject(obj: any): StudyVersion {

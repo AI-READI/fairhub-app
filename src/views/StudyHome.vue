@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NImage, NSpace } from "naive-ui";
+import { NButton, NImage, NSpace } from "naive-ui";
 import { inject } from "vue";
 import { useRouter } from "vue-router";
 
@@ -13,6 +13,12 @@ const navigateToStudy = (id: number) => {
 };
 
 const study = inject(STUDY_KEY);
+
+function updateStudy() {
+  router.push({ name: "study-info" });
+
+  console.log("added");
+}
 </script>
 
 <template>
@@ -20,7 +26,9 @@ const study = inject(STUDY_KEY);
     <n-space vertical>
       <h1>Dataset overview</h1>
     </n-space>
+
     <n-space vertical>
+      <div class="row-auto flex items-end justify-end"></div>
       <div
         class="flex w-full cursor-pointer items-start space-x-8 rounded-md px-4 py-3 transition-all hover:border-slate-200"
         :key="study.id"
@@ -29,7 +37,6 @@ const study = inject(STUDY_KEY);
         <n-image class="studyHome" width="145" :src="study.image" preview-disabled />
         <div class="flex w-full grow flex-col space-y-2 divide-y">
           <div class="flex flex-col space-y-2">
-            <n-space justify="space-between"> </n-space>
             <h2>{{ study.title }}</h2>
             <p class="owner text-sm underline underline-offset-1">{{ study.owner.name }}</p>
             <p class="study-description">{{ study.description }}</p>
@@ -64,6 +71,9 @@ const study = inject(STUDY_KEY);
         </div>
       </div>
     </n-space>
+    <div class="row-auto flex">
+      <n-button @click="updateStudy"> Update study</n-button>
+    </div>
   </main>
 </template>
 

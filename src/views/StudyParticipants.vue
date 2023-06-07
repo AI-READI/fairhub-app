@@ -2,12 +2,13 @@
 import type { DataTableColumns, DataTableRowKey } from "naive-ui";
 import { NButton, NDataTable, useMessage } from "naive-ui";
 import type { RowData } from "naive-ui/lib/data-table/src/interface";
-import { onBeforeMount, provide, Ref, ref } from "vue";
+import type { Ref } from "vue";
+import { onBeforeMount, provide, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import { PARTICIPANTS_KEY } from "@/stores/publish/participants";
-import { Participant } from "@/stores/publish/study-interfaces";
+import type { Participant } from "@/stores/publish/study-interfaces";
 import { fetchParticipants } from "@/stores/services/service";
 
 const router = useRouter();

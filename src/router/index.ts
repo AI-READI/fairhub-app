@@ -6,7 +6,6 @@ import Documentation from "@/views/DocumentationPage.vue";
 import HelpPage from "@/views/HelpPage.vue";
 import Integrations from "@/views/IntegrationPage.vue";
 import NotFound from "@/views/NotFound.vue";
-import ParticipantsData from "@/views/ParticipantsData.vue";
 import PublishAdditionalInfo from "@/views/publish/PublishAdditionalInfo.vue";
 import PublishChangelog from "@/views/publish/PublishChangelog.vue";
 import PublishContributors from "@/views/publish/PublishContributors.vue";
@@ -20,6 +19,7 @@ import ReportIssue from "@/views/ReportIssue.vue";
 import Settings from "@/views/SettingPage.vue";
 import StudyHome from "@/views/StudyHome.vue";
 import StudyInfo from "@/views/StudyInfo.vue";
+import ParticipantsData from "@/views/StudyParticipants.vue";
 import StudyView from "@/views/StudyView.vue";
 import ViewProfile from "@/views/ViewProfile.vue";
 
@@ -85,9 +85,9 @@ const router = createRouter({
               path: "contributors",
             },
             {
-              name: "participants-and-data",
+              name: "study-participants",
               component: ParticipantsData,
-              path: "participants/data",
+              path: "studyParticipants",
             },
           ],
           component: StudyView,
