@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
-import { NButton, NForm, NFormItem, NInput, NModal, NSelect, NTable } from "naive-ui";
+import { NAlert, NButton, NForm, NFormItem, NInput, NModal, NSelect, NTable } from "naive-ui";
 import type { Ref } from "vue";
 import { inject, ref, toRaw } from "vue";
 import { useRoute } from "vue-router";
@@ -45,10 +45,12 @@ const formRef = ref<FormInst | null>(null);
 const showDialog = ref(false);
 const workingContributor: Ref<Contributor> = ref({
   affiliations: [],
+  email: "",
   firstname: "",
   lastname: "",
   ORCID: "",
   roles: [],
+  status: "",
 });
 
 let editedContributor: Contributor | null = null;
@@ -57,10 +59,12 @@ function add() {
   editedContributor = null;
   workingContributor.value = {
     affiliations: [],
+    email: "",
     firstname: "",
     lastname: "",
     ORCID: "",
     roles: [],
+    status: "",
   };
   showDialog.value = true;
 }
@@ -119,6 +123,8 @@ function deleteParticipants(clickedContributor: number) {
   }
   studyPublish.value.contributors.splice(clickedContributor, 1);
 }
+
+console.log(studyPublish.value?.contributors, "sxcxc");
 </script>
 
 <template>
@@ -131,7 +137,8 @@ function deleteParticipants(clickedContributor: number) {
             <th v-for="(item, index) in headers" :key="index">{{ item }}</th>
           </tr>
         </thead>
-        <tbody>
+
+        <tbody v-if="studyPublish.contributors.length !== 0">
           <tr v-for="(item, index) in studyPublish.contributors" :key="index">
             <td>{{ item.firstname }}</td>
             <td>{{ item.lastname }}</td>
@@ -148,6 +155,13 @@ function deleteParticipants(clickedContributor: number) {
           </tr>
         </tbody>
       </n-table>
+    </div>
+
+    <div v-if="studyPublish.contributors.length === 0" class="flex items-center justify-center">
+      <n-alert title="Warning Text" type="warning">
+        No contributors have been found. To add a contributor click to "Add contributor" button
+        below
+      </n-alert>
     </div>
     <div style="display: flex; justify-content: center">
       <n-button type="primary" @click="add">Add a Contributor</n-button>

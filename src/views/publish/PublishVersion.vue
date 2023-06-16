@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { NDivider, NStep, NSteps } from "naive-ui";
 import type { Ref } from "vue";
-import { onBeforeMount, ref } from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import { provide } from "vue";
 import { onBeforeRouteUpdate, useRoute } from "vue-router";
 
 import { currentRef } from "@/stores/publish/currentStep";
-import { DATASET_KEY, STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
+import { DATASET_KEY, DATASETS_KEY, STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
 import { Dataset, StudyVersion } from "@/stores/publish/study-interfaces";
-import { fetchDataset, fetchDatasetVersion } from "@/stores/services/service";
+import { STUDY_KEY } from "@/stores/publish/study-state";
+import { fetchDatasetVersion } from "@/stores/services/service";
 
 const route = useRoute();
 
@@ -24,26 +25,41 @@ provide(STUDYPUBLISH_KEY, studyPublish);
 const dataset: Ref<Dataset | null> = ref(new Dataset());
 provide(DATASET_KEY, dataset);
 
+const datasets = inject(DATASETS_KEY);
+
+const study = inject(STUDY_KEY);
+
 function checkStudy() {
-  //
-  // if (routeParams.studyId!== studyPublish.value.id) {
-  //   studyPublish.value = new StudyVersion(routeParams.studyId);
-  // }
   if (routeParams.versionId === "new" && routeParams.datasetId === "new") {
     studyPublish.value = new StudyVersion();
-    dataset.value = new Dataset();
+    dataset.value = null;
+    if (study?.value) {
+      studyPublish.value.contributors = structuredClone(study.value.contributors);
+    }
   }
   if (routeParams.versionId === "new" && routeParams.datasetId !== "new") {
     studyPublish.value = new StudyVersion();
-    fetchDataset(parseInt(routeParams.studyId)).then((p) => (dataset.value = p));
+    datasets?.value.find((d) => d.id === parseInt(routeParams.datasetId));
+    if (dataset.value) {
+      fetchDatasetVersion(
+        parseInt(routeParams.studyId),
+        parseInt(routeParams.datasetId),
+        dataset?.value.latestVersion
+      ).then((a) => {
+        studyPublish.value = a;
+        if (dataset.value?.latestVersion === dataset.value?.publishedVersion) {
+          studyPublish.value.id = 0;
+        }
+      });
+    }
   }
-}
-if (routeParams.versionId !== "new" && routeParams.datasetId !== "new") {
-  fetchDatasetVersion(
-    parseInt(routeParams.studyId),
-    parseInt(routeParams.datasetId),
-    parseInt(routeParams.versionId)
-  ).then((a) => (studyPublish.value = a));
+  if (routeParams.versionId !== "new" && routeParams.datasetId !== "new") {
+    fetchDatasetVersion(
+      parseInt(routeParams.studyId),
+      parseInt(routeParams.datasetId),
+      parseInt(routeParams.versionId)
+    ).then((a) => (studyPublish.value = a));
+  }
 }
 
 onBeforeMount(() => {

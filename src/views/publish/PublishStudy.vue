@@ -20,7 +20,7 @@ onBeforeMount(() => {
   checkAuth();
 });
 
-onBeforeRouteUpdate((to, from) => {
+onBeforeRouteUpdate((to) => {
   // if (from.params.studyId !== to.params.studyId) {
   //
   // }

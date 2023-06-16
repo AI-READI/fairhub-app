@@ -49,19 +49,19 @@ const handleUpdateValue = (value: string[]) => {
   console.log(value);
 };
 
-const handleValidateClick = (e: MouseEvent) => {
-  formRef.value?.validate((errors) => {
-    if (!errors) {
-      router.push({
-        name: "publish-study-metadata",
-        params: { versionId: routeParams.versionId },
-      });
-    } else {
-      console.log(errors);
-      console.log("Invalid");
-    }
-  });
-};
+// const handleValidateClick = (e: MouseEvent) => {
+//   formRef.value?.validate((errors) => {
+//     if (!errors) {
+//       router.push({
+//         name: "publish-study-metadata",z
+//         params: { versionId: routeParams.versionId },
+//       });
+//     } else {
+//       console.log(errors);
+//       console.log("Invalid");
+//     }
+//   });
+// };
 
 function handleBackButton() {
   currentRef.value--;

@@ -3,7 +3,6 @@ import type { DataTableColumns, DataTableRowKey } from "naive-ui";
 import { NButton, NCard, NDataTable } from "naive-ui";
 import type { Ref } from "vue";
 import { inject, ref } from "vue";
-import { provide } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { currentRef } from "@/stores/publish/currentStep";
@@ -11,7 +10,6 @@ import { STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
 import { PARTICIPANTS_KEY } from "@/stores/publish/participants";
 import type { Participant } from "@/stores/publish/study-interfaces";
 import type { StudyVersion } from "@/stores/publish/study-interfaces";
-import { fetchParticipants } from "@/stores/services/service";
 
 const route = useRoute();
 const router = useRouter();
@@ -28,9 +26,7 @@ type RowData = {
   age: string;
   key: number;
 };
-const participants: Ref<Participant[]> = ref([]);
-provide(PARTICIPANTS_KEY, participants);
-fetchParticipants().then((p) => (participants.value = p));
+const participants: Ref<Participant[]> = inject(PARTICIPANTS_KEY, ref([]));
 
 const rowKey = (row: RowData) => row.address;
 const checkedRowKeysRef = ref<DataTableRowKey[]>([]);
@@ -53,14 +49,14 @@ const columns: DataTableColumns<RowData> = [
   },
 ];
 
-const iff = () => {
-  if (!studyPublish.value) return;
-  else {
-    checkedRowKeysRef.value = studyPublish.value.selectedParticipants.map((p: Participant) => {
-      return p.address;
-    });
-  }
-};
+// const iff = () => {
+//   if (!studyPublish.value) return;
+//   else {
+//     checkedRowKeysRef.value = studyPublish.value.selectedParticipants.map((p: Participant) => {
+//       return p.address;
+//     });
+//   }
+// };
 
 // const handleCheck = () => {
 //   /**
@@ -84,6 +80,13 @@ function handleNextButton() {
   router.push({
     name: "publish-dataset-metadata",
     params: { versionId: routeParams.versionId },
+  });
+}
+
+function handleBackButton() {
+  currentRef.value--;
+  router.push({
+    name: "dataset",
   });
 }
 
@@ -174,11 +177,10 @@ function selectManual(): void {
       </div>
     </div>
     <div class="back-next-buttons">
-      <n-button type="primary" size="large" class="participants-button" @click="handleNextButton">
-        <!--        :disabled="checkedRowKeysRef.length === 0"-->
-        Next
-      </n-button>
+      <n-button type="primary" size="large" @click="handleBackButton">Back</n-button>
+      <n-button type="primary" size="large" @click="handleNextButton">Next</n-button>
     </div>
+    <!--        :disabled="checkedRowKeysRef.length === 0"-->
   </main>
 </template>
 
@@ -233,5 +235,10 @@ function selectManual(): void {
   flex-direction: column;
   margin-top: 1rem;
   align-items: center;
+}
+
+.back-next-buttons {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

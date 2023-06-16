@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { NButton, NCard } from "naive-ui";
 import type { Ref } from "vue";
-import { ref } from "vue";
+import { provide, ref } from "vue";
 import { useRoute } from "vue-router";
 
+import { DATASETS_KEY } from "@/stores/publish/dataset-state";
 import type { Dataset } from "@/stores/publish/study-interfaces";
 import { fetchDatasets } from "@/stores/services/service";
 
@@ -16,7 +17,9 @@ const routeParams = {
 };
 
 let loading = ref(true);
+
 const datasets: Ref<Dataset[]> = ref([]);
+provide(DATASETS_KEY, datasets);
 
 setTimeout(() => {
   fetchDatasets(parseInt(routeParams.studyId)).then((d) => {
@@ -62,46 +65,53 @@ setTimeout(() => {
     </div>
 
     <div>
-      <n-card>
-        <ul class="list-none gap-6">
-          <li v-for="(dataset, index) in datasets" :key="index">
-            <n-card>
-              <div>{{ dataset.name }}</div>
-              <n-button>
-                <RouterLink
-                  :to="{
-                    name: 'publish-select-participants',
-                    params: {
-                      versionId: 'new',
-                      datasetId: dataset.id,
-                    },
-                  }"
-                >
-                  Create new version
-                </RouterLink>
-              </n-button>
-
-              <n-button>
-                <RouterLink
-                  :to="{
-                    name: 'publish-select-participants',
-                    params: {
-                      versionId: dataset.findLatestVersion(),
-                      datasetId: dataset.id,
-                    },
-                  }"
-                >
-                  Update a current version
-                </RouterLink>
-              </n-button>
-            </n-card>
-          </li>
-        </ul>
-      </n-card>
+      <ul class="list-none gap-6">
+        <li v-for="(dataset, index) in datasets" :key="index">
+          <n-card>
+            <div>{{ dataset.name }}</div>
+            <div class="col-auto flex gap-2">
+              <div>
+                <!--                      <div>6/15/2023 [Resume] [Discard]</div>-->
+                <n-button v-if="dataset.latestVersion === dataset.publishedVersion">
+                  <RouterLink
+                    :to="{
+                      name: 'publish-select-participants',
+                      params: {
+                        versionId: 'new',
+                        datasetId: dataset.id,
+                      },
+                    }"
+                  >
+                    Create new version
+                  </RouterLink>
+                </n-button>
+              </div>
+              <div>
+                <!--                      <div>6/15/2023 [Resume] [Discard]</div>-->
+                <n-button v-if="dataset.latestVersion !== dataset.publishedVersion">
+                  <RouterLink
+                    :to="{
+                      name: 'publish-select-participants',
+                      params: {
+                        versionId: dataset.latestVersion,
+                        datasetId: dataset.id,
+                      },
+                    }"
+                  >
+                    Update a current version
+                  </RouterLink>
+                </n-button>
+              </div>
+            </div>
+          </n-card>
+        </li>
+      </ul>
     </div>
     <div>
       Project currently on progress
-      <n-card hoverable> Continue where you left </n-card>
+      <div>
+        <n-card hoverable> Continue where you left </n-card>
+      </div>
     </div>
   </main>
 </template>
