@@ -25,17 +25,17 @@ const studyType = ref({
   keywords: null,
 });
 
-const generalOptions = [
-  "Artifical Intelligence",
-  "Dataset",
-  "Diabetes",
-  "Ethics",
-  "Health",
-  "Machine Learning",
-].map((v) => ({
-  label: v,
-  value: v,
-}));
+// const generalOptions = [
+//   "Artifical Intelligence",
+//   "Dataset",
+//   "Diabetes",
+//   "Ethics",
+//   "Health",
+//   "Machine Learning",
+// ].map((v) => ({
+//   label: v,
+//   value: v,
+// }));
 
 const rules: FormRules = {
   description: [
@@ -78,9 +78,9 @@ const handleValidateButtonClick = (e: MouseEvent) => {
   });
 };
 
-const handleUpdateValue = (value: string[]) => {
-  console.log(value);
-};
+// const handleUpdateValue = (value: string[]) => {
+//   console.log(value);
+// };
 </script>
 
 <template>

@@ -4,9 +4,11 @@ import { onBeforeMount, ref } from "vue";
 import { provide } from "vue";
 import { onBeforeRouteUpdate, RouterView, useRoute } from "vue-router";
 
+import { PARTICIPANTS_KEY } from "@/stores/publish/participants";
 import type { Study } from "@/stores/publish/study-interfaces";
+import type { Participant } from "@/stores/publish/study-interfaces";
 import { STUDY_KEY } from "@/stores/publish/study-state";
-import { fetchStudy } from "@/stores/services/service";
+import { fetchParticipants, fetchStudy } from "@/stores/services/service";
 
 const route = useRoute();
 
@@ -15,9 +17,13 @@ const routeParams = {
 };
 
 const study: Ref<Study | null> = ref(null);
+const participants: Ref<Participant[]> = ref([]);
+
+provide(PARTICIPANTS_KEY, participants);
 provide(STUDY_KEY, study);
 function verifyStudy() {
   fetchStudy(parseInt(routeParams.studyId)).then((p) => (study.value = p));
+  fetchParticipants(parseInt(routeParams.studyId)).then((p) => (participants.value = p));
 }
 
 onBeforeMount(() => {

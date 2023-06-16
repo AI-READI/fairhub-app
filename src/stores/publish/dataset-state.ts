@@ -86,4 +86,6 @@ export const contributorRules: FormRules = {
 
 export const STUDYPUBLISH_KEY: InjectionKey<null> = Symbol("studyPublish");
 
+export const DATASETS_KEY: InjectionKey<Ref<Dataset[]>> = Symbol("datasets");
+
 export const DATASET_KEY: InjectionKey<Ref<Dataset>> = Symbol("dataset");

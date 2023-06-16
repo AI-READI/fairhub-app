@@ -120,7 +120,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
             },
           },
         },
-        { default: () => "Contributors" }
+        { default: () => "Study Contributors" }
       ),
   },
   {
@@ -154,7 +154,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
             },
           },
         },
-        { default: () => "Publish study" }
+        { default: () => "Publish Datasets" }
       ),
   },
 ];

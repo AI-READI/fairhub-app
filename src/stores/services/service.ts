@@ -5,8 +5,8 @@ export async function fetchViewProfile(): Promise<ViewProfile[]> {
   return response.json();
 }
 
-export async function fetchParticipants(): Promise<Participant[]> {
-  const response = await fetch("http://localhost:5000/participants");
+export async function fetchParticipants(studyId: number): Promise<Participant[]> {
+  const response = await fetch(`http://localhost:5000/study/${studyId}/participants`);
   return response.json();
 }
 
@@ -41,3 +41,8 @@ export async function fetchDatasetVersion(
   );
   return StudyVersion.fromObject(await response.json());
 }
+
+// export async function postParticipants(studyId:number): any {
+//   const response = await fetch(`http://localhost:5000/study`);
+//   return 'nothing'
+// }

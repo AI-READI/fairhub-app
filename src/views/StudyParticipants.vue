@@ -1,19 +1,25 @@
 <script setup lang="ts">
-import type { DataTableColumns, DataTableRowKey } from "naive-ui";
+import type { DataTableColumns } from "naive-ui";
 import { NButton, NDataTable, useMessage } from "naive-ui";
 import type { RowData } from "naive-ui/lib/data-table/src/interface";
 import type { Ref } from "vue";
-import { onBeforeMount, provide, ref } from "vue";
-import { useRouter } from "vue-router";
+import { inject, onBeforeMount, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import { PARTICIPANTS_KEY } from "@/stores/publish/participants";
 import type { Participant } from "@/stores/publish/study-interfaces";
-import { fetchParticipants } from "@/stores/services/service";
 
+const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 const { error } = useMessage();
+
+const participants: Ref<Participant[]> = inject(PARTICIPANTS_KEY, ref([]));
+
+const routeParams = {
+  studyId: route.params.studyId as string,
+};
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
@@ -22,21 +28,12 @@ onBeforeMount(() => {
   }
 });
 
-const participants: Ref<Participant[]> = ref([]);
-
-provide(PARTICIPANTS_KEY, participants);
-fetchParticipants().then((p) => (participants.value = p));
-const rowKey = (row: RowData) => row.address;
-const checkedRowKeysRef = ref<DataTableRowKey[]>([]);
-
 const columns: DataTableColumns<RowData> = [
-  {
-    type: "selection",
-  },
   {
     title: "Name",
     key: "name",
   },
+
   {
     title: "Age",
     key: "age",
@@ -48,8 +45,10 @@ const columns: DataTableColumns<RowData> = [
 ];
 
 function addParticipant() {
-  router.push({ name: "add-participant" });
-
+  router.push({
+    name: "add-participant",
+    params: { studyId: routeParams.studyId },
+  });
   console.log("added");
 }
 </script>
@@ -58,7 +57,7 @@ function addParticipant() {
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
     <h1>All Study Participants</h1>
     <div class="row-auto flex items-end justify-end">
-      <n-button @click="addParticipant"> Add new participant </n-button>
+      <n-button @click="addParticipant"> Add participant </n-button>
     </div>
 
     <div class="select-buttons"></div>
@@ -66,13 +65,7 @@ function addParticipant() {
       <div class="participant-choices">
         <div class="participant-elements">
           <div>
-            <n-data-table
-              class="participant-rows"
-              :columns="columns"
-              :data="participants"
-              :row-key="rowKey"
-              v-model:checked-row-keys="checkedRowKeysRef"
-            />
+            <n-data-table :columns="columns" :data="participants" :bordered="true" />
           </div>
         </div>
       </div>

@@ -6,23 +6,18 @@ export interface Participant {
 
 export interface Contributor {
   affiliations: string[];
+  email: string;
   firstname: string;
   lastname: string;
   ORCID: string;
   roles: string[];
-}
-
-export interface ContributorStudy {
-  name: string;
-  email: string;
-  role: string;
   status: string;
 }
 
 export interface Study {
   id: number;
   title: string;
-  contributors: ContributorStudy[];
+  contributors: Contributor[];
   description: string;
   image: string;
   keywords: string[];
@@ -68,10 +63,12 @@ export class Dataset {
   public constructor(
     public id: number = 0,
     public name: string = "",
-    public versions: Version[] = []
+    public versions: Version[] = [],
+    public latestVersion: number = 0,
+    public publishedVersion: number = 0
   ) {}
   static fromObject(obj: any): Dataset {
-    return new Dataset(obj.id, obj.name, obj.versions);
+    return new Dataset(obj.id, obj.name, obj.versions, obj.latestVersion, obj.publishedVersion);
   }
   public initial = null;
   findLatestVersion(): number | null {
@@ -88,8 +85,8 @@ export class StudyVersion {
     public keywords: string[] = [],
     public primaryLanguage: string = "",
     public selectedParticipants: Participant[] = [],
-    public dataset: Dataset[] = [],
-    public study: Study[] = []
+    public latestVersion: number = 0,
+    public publishedVersion: number = 0
   ) {}
 
   static fromObject(obj: any): StudyVersion {
@@ -100,7 +97,9 @@ export class StudyVersion {
       obj.description,
       obj.keywords,
       obj.primaryLanguage,
-      obj.selectedParticipants
+      obj.selectedParticipants,
+      obj.latestVersion,
+      obj.publishedVersion
     );
   }
 }

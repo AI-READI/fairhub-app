@@ -19,7 +19,7 @@ import ReportIssue from "@/views/ReportIssue.vue";
 import Settings from "@/views/SettingPage.vue";
 import StudyHome from "@/views/StudyHome.vue";
 import StudyInfo from "@/views/StudyInfo.vue";
-import ParticipantsData from "@/views/StudyParticipants.vue";
+import StudyParticipants from "@/views/StudyParticipants.vue";
 import StudyView from "@/views/StudyView.vue";
 import ViewProfile from "@/views/ViewProfile.vue";
 
@@ -65,11 +65,6 @@ const router = createRouter({
               path: "dashboard",
             },
             {
-              name: "add-participant",
-              component: AddParticipant,
-              path: "participants",
-            },
-            {
               name: "study-home",
               component: StudyHome,
               path: "studyHome",
@@ -85,9 +80,20 @@ const router = createRouter({
               path: "contributors",
             },
             {
-              name: "study-participants",
-              component: ParticipantsData,
-              path: "studyParticipants",
+              name: "participants",
+              children: [
+                {
+                  name: "study-participants",
+                  component: StudyParticipants,
+                  path: "",
+                },
+                {
+                  name: "add-participant",
+                  component: AddParticipant,
+                  path: "add",
+                },
+              ],
+              path: "participants",
             },
           ],
           component: StudyView,

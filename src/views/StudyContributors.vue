@@ -15,14 +15,13 @@ import {
   useMessage,
 } from "naive-ui";
 import validator from "validator";
-import { onBeforeMount, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { computed, inject, onBeforeMount, ref } from "vue";
+import { useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-import { getStudy } from "@/stores/studies";
+import { STUDY_KEY } from "@/stores/publish/study-state";
 
 const router = useRouter();
-const route = useRoute();
 const authStore = useAuthStore();
 const { error, success } = useMessage();
 
@@ -33,9 +32,9 @@ onBeforeMount(() => {
   }
 });
 
-const routeParams = {
-  id: route.params.studyId.toString(),
-};
+// const routeParams = {
+//   id: route.params.studyId.toString(),
+// };
 
 const formRef = ref<FormInst | null>(null);
 
@@ -70,32 +69,37 @@ const handleValidateClick = (e: MouseEvent) => {
   });
 };
 
-const study = getStudy(parseInt(routeParams.id));
+// const study = getStudy(parseInt(routeParams.id));
+const study = inject(STUDY_KEY, ref(null));
 
-const contributors = study.contributors;
+const contributors = study?.value?.contributors;
 
-const owner = {
-  name: study.owner.name,
-  email: study.owner.email,
-  role: "owner",
-  status: "active",
-};
+const owner = computed(() => {
+  return {
+    name: study.value?.owner.name,
+    email: study.value?.owner.email,
+    role: "owner",
+    status: "active",
+  };
+});
 
-const contributorRoles = [
-  {
-    disabled: authStore.user !== study.owner?.email,
-    label: "Owner",
-    value: "owner",
-  },
-  {
-    label: "can edit",
-    value: "editor",
-  },
-  {
-    label: "can view",
-    value: "viewer",
-  },
-];
+const contributorRoles = computed(() => {
+  return [
+    {
+      disabled: authStore.user !== study.value?.owner.email,
+      label: "Owner",
+      value: "owner",
+    },
+    {
+      label: "can edit",
+      value: "editor",
+    },
+    {
+      label: "can view",
+      value: "viewer",
+    },
+  ];
+});
 
 const invitationRoles = [
   {
@@ -112,14 +116,14 @@ const removeContributor = (email: string) => {
   console.log("remove contributor", email);
 };
 
-const getFirstLetters = (name: string) => {
-  const names = name.split(" ");
-  return names[0].charAt(0) + names[1].charAt(0);
-};
+// const getFirstLetters = (name: string) => {
+//   const names = name.split(" ");
+//   return names[0].charAt(0) + names[1].charAt(0);
+// };
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col space-y-8 pr-8">
+  <main class="flex h-full w-full flex-col space-y-8 pr-8" v-if="study">
     <n-space justify="start" align="end">
       <Icon icon="carbon:user-follow" width="30" height="30" />
       <h1>Invite people to contribute to the {{ study.title }}</h1>
@@ -139,7 +143,7 @@ const getFirstLetters = (name: string) => {
             'text-slate-50': owner.status === 'active',
           }"
         >
-          {{ getFirstLetters(owner.name) }}
+          {{ owner.name }}
         </n-avatar>
         <div class="flex flex-col">
           <span class="text-lg font-semibold">{{ owner.name }}</span>
@@ -167,25 +171,29 @@ const getFirstLetters = (name: string) => {
               'text-slate-50': contributor.status === 'active',
             }"
           >
-            {{ getFirstLetters(contributor.name) }}
           </n-avatar>
-          <span>{{ contributor.name }}</span>
+          <span>{{ (contributor.firstname, contributor.lastname) }}</span>
           <span v-if="contributor.status === 'invited'" class="text-normal text-slate-400">
             [invited]
           </span>
         </n-space>
 
-        <n-space justify="end" align="center">
+        <n-space
+          justify="end"
+          align="center"
+          v-for="(role, index) in contributor.roles"
+          :key="index"
+        >
           <n-select
-            v-model:value="contributor.role"
-            :disabled="contributor.role === 'owner'"
+            v-model:value="contributor.roles"
+            :disabled="role === 'owner'"
             :options="contributorRoles"
             :consistent-menu-width="false"
             class="w-32"
           />
           <n-popconfirm
             @positive-click="removeContributor(contributor.email)"
-            v-if="contributor.role !== 'owner'"
+            v-if="role !== 'owner'"
           >
             <template #trigger>
               <Icon
@@ -200,12 +208,11 @@ const getFirstLetters = (name: string) => {
         </n-space>
       </n-space>
     </n-space>
-
     <n-divider />
 
     <n-form ref="formRef" inline :model="formValue" :rules="rules" size="large">
       <n-form-item label="Email Address" path="email" :label-width="200">
-        <n-input v-model:value="formValue.email" placeholder="someone@email.org" class="w-80" />
+        <n-input v-model:value="formValue.email" placehol5der="someone@email.org" class="w-80" />
       </n-form-item>
       <n-form-item label="Permission" path="role" class="w-60">
         <n-select
@@ -214,7 +221,7 @@ const getFirstLetters = (name: string) => {
           :options="invitationRoles"
           :consistent-menu-width="false"
           class="!w-40"
-        />
+        />l
       </n-form-item>
 
       <n-form-item>
