@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { NDivider, NStep, NSteps } from "naive-ui";
 import type { Ref } from "vue";
-import { inject, onBeforeMount, ref } from "vue";
+import { inject, onBeforeMount, ref, toRaw } from "vue";
 import { provide } from "vue";
 import { onBeforeRouteUpdate, useRoute } from "vue-router";
 
 import { currentRef } from "@/stores/publish/currentStep";
-import { DATASET_KEY, DATASETS_KEY, STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
+import { DATASETS_KEY, STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
 import { Dataset, StudyVersion } from "@/stores/publish/study-interfaces";
 import { STUDY_KEY } from "@/stores/publish/study-state";
 import { fetchDatasetVersion } from "@/stores/services/service";
@@ -22,43 +22,43 @@ const routeParams = {
 const studyPublish: Ref<StudyVersion | null> = ref(null);
 provide(STUDYPUBLISH_KEY, studyPublish);
 
-const dataset: Ref<Dataset | null> = ref(new Dataset());
-provide(DATASET_KEY, dataset);
+// const dataset: Ref<Dataset | null> = ref(null);
 
-const datasets = inject(DATASETS_KEY);
+const datasets = inject(DATASETS_KEY, ref([]));
 
-const study = inject(STUDY_KEY);
+const study = inject(STUDY_KEY, ref(null));
 
 function checkStudy() {
   if (routeParams.versionId === "new" && routeParams.datasetId === "new") {
     studyPublish.value = new StudyVersion();
-    dataset.value = null;
-    if (study?.value) {
-      studyPublish.value.contributors = structuredClone(study.value.contributors);
+    // dataset.value = null;
+    if (study.value) {
+      studyPublish.value.contributors = structuredClone(toRaw(study.value).contributors);
     }
   }
   if (routeParams.versionId === "new" && routeParams.datasetId !== "new") {
-    studyPublish.value = new StudyVersion();
-    datasets?.value.find((d) => d.id === parseInt(routeParams.datasetId));
-    if (dataset.value) {
-      fetchDatasetVersion(
-        parseInt(routeParams.studyId),
-        parseInt(routeParams.datasetId),
-        dataset?.value.latestVersion
-      ).then((a) => {
-        studyPublish.value = a;
-        if (dataset.value?.latestVersion === dataset.value?.publishedVersion) {
-          studyPublish.value.id = 0;
-        }
-      });
-    }
+    const dataset: Dataset | undefined = datasets.value.find(
+      (d) => d.id === parseInt(routeParams.datasetId)
+    );
+    if (!dataset) throw new Error("dataset not found");
+    fetchDatasetVersion(
+      parseInt(routeParams.studyId),
+      parseInt(routeParams.datasetId),
+      dataset.latestVersion
+    ).then((version) => {
+      studyPublish.value = version;
+      if (dataset.latestVersion !== dataset.publishedVersion) {
+        throw new Error("Unpublished version already exist.");
+      }
+      studyPublish.value.id = 0;
+    });
   }
   if (routeParams.versionId !== "new" && routeParams.datasetId !== "new") {
     fetchDatasetVersion(
       parseInt(routeParams.studyId),
       parseInt(routeParams.datasetId),
       parseInt(routeParams.versionId)
-    ).then((a) => (studyPublish.value = a));
+    ).then((version) => (studyPublish.value = version));
   }
 }
 

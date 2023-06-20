@@ -63,16 +63,20 @@ export class Dataset {
   public constructor(
     public id: number = 0,
     public name: string = "",
-    public versions: Version[] = [],
     public latestVersion: number = 0,
-    public publishedVersion: number = 0
+    public publishedVersion: number = 0,
+    public lastPublished: Date,
+    public lastModified: Date
   ) {}
   static fromObject(obj: any): Dataset {
-    return new Dataset(obj.id, obj.name, obj.versions, obj.latestVersion, obj.publishedVersion);
-  }
-  public initial = null;
-  findLatestVersion(): number | null {
-    return this.versions.length ? Math.max(...this.versions.map((version) => version.id)) : null;
+    return new Dataset(
+      obj.id,
+      obj.name,
+      obj.latestVersion,
+      obj.publishedVersion,
+      new Date(obj.lastPublished),
+      new Date(obj.lastModified)
+    );
   }
 }
 
@@ -84,9 +88,7 @@ export class StudyVersion {
     public description: string = "",
     public keywords: string[] = [],
     public primaryLanguage: string = "",
-    public selectedParticipants: Participant[] = [],
-    public latestVersion: number = 0,
-    public publishedVersion: number = 0
+    public selectedParticipants: Participant[] = []
   ) {}
 
   static fromObject(obj: any): StudyVersion {
@@ -97,9 +99,7 @@ export class StudyVersion {
       obj.description,
       obj.keywords,
       obj.primaryLanguage,
-      obj.selectedParticipants,
-      obj.latestVersion,
-      obj.publishedVersion
+      obj.selectedParticipants
     );
   }
 }

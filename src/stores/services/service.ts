@@ -26,10 +26,10 @@ export async function fetchDatasets(studyId: number): Promise<Dataset[]> {
   return (await response.json()).map((d: Dataset) => Dataset.fromObject(d));
 }
 
-export async function fetchDataset(studyId: number): Promise<Dataset> {
-  const response = await fetch(`http://localhost:5000/study/${studyId}/dataset`);
-  return (await response.json()).map((d: Dataset) => Dataset.fromObject(d));
-}
+// export async function fetchDataset(studyId: number): Promise<Dataset> {
+//   const response = await fetch(`http://localhost:5000/study/${studyId}/dataset`);
+//   return (await response.json()).map((d: Dataset) => Dataset.fromObject(d));
+// }
 
 export async function fetchDatasetVersion(
   studyId: number,
