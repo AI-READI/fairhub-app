@@ -15,6 +15,7 @@ const route = useRoute();
 const router = useRouter();
 
 const routeParams = {
+  studyId: route.params.studyId.toString(),
   versionId: route.params.versionId.toString(),
 };
 
@@ -86,7 +87,7 @@ function handleNextButton() {
 function handleBackButton() {
   currentRef.value--;
   router.push({
-    name: "dataset",
+    name: "publish-select-dataset",
   });
 }
 

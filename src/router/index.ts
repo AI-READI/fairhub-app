@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import AddParticipant from "@/views/AddParticipant.vue";
 import Changelog from "@/views/ChangeLog.vue";
+import DatasetView from "@/views/DatasetView.vue";
 import Documentation from "@/views/DocumentationPage.vue";
 import HelpPage from "@/views/HelpPage.vue";
 import Integrations from "@/views/IntegrationPage.vue";
@@ -95,6 +96,83 @@ const router = createRouter({
               ],
               path: "participants",
             },
+            {
+              name: "publish",
+              children: [
+                {
+                  name: "dataset",
+                  children: [
+                    {
+                      name: "publish-select-dataset",
+                      component: PublishDataset,
+                      path: "",
+                    },
+                    {
+                      name: "publish-dataset",
+                      children: [
+                        {
+                          name: "publish-version-Id",
+                          children: [
+                            {
+                              name: "publish-select-participants",
+                              component: PublishSelectParticipants,
+                              path: "participants",
+                            },
+                            {
+                              name: "publish-study-metadata",
+                              component: PublishStudyMetadata,
+                              path: "study/metadata",
+                            },
+                            {
+                              name: "publish-dataset-metadata",
+                              component: PublishDatasetMetadata,
+                              path: "dataset/metadata",
+                            },
+                            {
+                              name: "publish-contributors",
+                              component: PublishContributors,
+                              path: "contributors",
+                            },
+                            {
+                              name: "publish-related-sources",
+                              component: PublishRelatedSources,
+                              path: "related/sources",
+                            },
+                            {
+                              name: "publish-additional-info",
+                              component: PublishAdditionalInfo,
+                              path: "additional/info",
+                            },
+                            {
+                              name: "publish-readme",
+                              component: PublishReadme,
+                              path: "readme",
+                            },
+                            {
+                              name: "publish-changelog",
+                              component: PublishChangelog,
+                              path: "changelog",
+                            },
+                            {
+                              name: "publish-summary",
+                              component: PublishSummary,
+                              path: "summary",
+                            },
+                          ],
+                          component: PublishVersion,
+                          path: "version/:versionId",
+                        },
+                      ],
+                      path: ":datasetId",
+                    },
+                  ],
+                  component: DatasetView,
+                  path: "dataset",
+                },
+              ],
+              component: PublishStudy,
+              path: "publish",
+            },
           ],
           component: StudyView,
           path: ":studyId",
@@ -128,88 +206,6 @@ const router = createRouter({
       ],
       component: HelpPage,
       path: "/help",
-    },
-    {
-      name: "publish-study",
-      children: [
-        {
-          name: "publish",
-          children: [
-            {
-              name: "dataset",
-              children: [
-                {
-                  name: "publish-select-dataset",
-                  component: PublishDataset,
-                  path: "",
-                },
-                {
-                  name: "publish-dataset",
-                  children: [
-                    {
-                      name: "publish-version-Id",
-                      children: [
-                        {
-                          name: "publish-select-participants",
-                          component: PublishSelectParticipants,
-                          path: "participants",
-                        },
-                        {
-                          name: "publish-study-metadata",
-                          component: PublishStudyMetadata,
-                          path: "study/metadata",
-                        },
-                        {
-                          name: "publish-dataset-metadata",
-                          component: PublishDatasetMetadata,
-                          path: "dataset/metadata",
-                        },
-                        {
-                          name: "publish-contributors",
-                          component: PublishContributors,
-                          path: "contributors",
-                        },
-                        {
-                          name: "publish-related-sources",
-                          component: PublishRelatedSources,
-                          path: "related/sources",
-                        },
-                        {
-                          name: "publish-additional-info",
-                          component: PublishAdditionalInfo,
-                          path: "additional/info",
-                        },
-                        {
-                          name: "publish-readme",
-                          component: PublishReadme,
-                          path: "readme",
-                        },
-                        {
-                          name: "publish-changelog",
-                          component: PublishChangelog,
-                          path: "changelog",
-                        },
-                        {
-                          name: "publish-summary",
-                          component: PublishSummary,
-                          path: "summary",
-                        },
-                      ],
-                      component: PublishVersion,
-                      path: "version/:versionId",
-                    },
-                  ],
-                  path: ":datasetId",
-                },
-              ],
-              path: "dataset",
-            },
-          ],
-          component: PublishStudy,
-          path: "publish",
-        },
-      ],
-      path: "/studies/:studyId",
     },
     //header
     {
