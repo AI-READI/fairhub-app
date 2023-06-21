@@ -9,7 +9,7 @@ import { currentRef } from "@/stores/publish/currentStep";
 import { STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
 import { PARTICIPANTS_KEY } from "@/stores/publish/participants";
 import type { Participant } from "@/stores/publish/study-interfaces";
-import type { StudyVersion } from "@/stores/publish/study-interfaces";
+import type { DatasetVersion } from "@/stores/publish/study-interfaces";
 
 const route = useRoute();
 const router = useRouter();
@@ -19,7 +19,7 @@ const routeParams = {
   versionId: route.params.versionId.toString(),
 };
 
-const studyPublish = inject<Ref<StudyVersion | null>>(STUDYPUBLISH_KEY, ref(null));
+const studyPublish = inject<Ref<DatasetVersion | null>>(STUDYPUBLISH_KEY, ref(null));
 
 type RowData = {
   name: string;

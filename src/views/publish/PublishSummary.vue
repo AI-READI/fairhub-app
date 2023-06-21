@@ -7,7 +7,7 @@ import { useRoute } from "vue-router";
 import router from "@/router";
 import { currentRef } from "@/stores/publish/currentStep";
 import { STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
-import type { StudyVersion } from "@/stores/publish/study-interfaces";
+import type { DatasetVersion } from "@/stores/publish/study-interfaces";
 
 import { study } from "../../stores/publish/studyInfo";
 
@@ -16,7 +16,7 @@ const routeParams = {
   versionId: route.params.versionId.toString(),
 };
 
-const studyPublish = inject<Ref<StudyVersion | null>>(STUDYPUBLISH_KEY, ref(null));
+const studyPublish = inject<Ref<DatasetVersion | null>>(STUDYPUBLISH_KEY, ref(null));
 function handleBackButton() {
   currentRef.value--;
   router.push({

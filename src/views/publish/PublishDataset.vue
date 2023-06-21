@@ -34,7 +34,7 @@ const datasets = inject(DATASETS_KEY, ref([]));
     <div>
       <ul class="flex:2xl col-auto:2xl list-none gap-6">
         <li v-for="(dataset, index) in datasets" :key="index">
-          <n-card class="mb-5">
+          <n-card class="mb-5" hoverable>
             <div>{{ dataset.name }}</div>
             <div class="col-auto flex gap-2">
               <div v-if="dataset.latestVersion === dataset.publishedVersion">
@@ -47,19 +47,17 @@ const datasets = inject(DATASETS_KEY, ref([]));
                     day: "numeric",
                   })
                 }}
-                <n-button>
-                  <RouterLink
-                    :to="{
-                      name: 'publish-select-participants',
-                      params: {
-                        versionId: 'new',
-                        datasetId: dataset.id,
-                      },
-                    }"
-                  >
-                    New version
-                  </RouterLink>
-                </n-button>
+
+                <RouterLink
+                  :to="{
+                    name: 'publish-select-participants',
+                    params: {
+                      versionId: 'new',
+                      datasetId: dataset.id,
+                    },
+                  }"
+                  ><n-button> New version</n-button>
+                </RouterLink>
               </div>
               <div v-if="dataset.latestVersion !== dataset.publishedVersion">
                 Unpublished version last updated on

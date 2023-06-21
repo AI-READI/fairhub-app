@@ -10,7 +10,7 @@ import LANGUAGE_JSON from "@/assets/data/languages.json";
 import router from "@/router";
 import { currentRef } from "@/stores/publish/currentStep";
 import { rules, STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
-import type { StudyVersion } from "@/stores/publish/study-interfaces";
+import type { DatasetVersion } from "@/stores/publish/study-interfaces";
 
 const route = useRoute();
 
@@ -18,7 +18,7 @@ const routeParams = {
   versionId: route.params.versionId.toString(),
 };
 
-const studyPublish = inject<Ref<StudyVersion | null>>(STUDYPUBLISH_KEY, ref(null));
+const studyPublish = inject<Ref<DatasetVersion | null>>(STUDYPUBLISH_KEY, ref(null));
 
 // const checkingForPreviousVersions = ref(true);
 //

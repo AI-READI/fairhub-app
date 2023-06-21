@@ -7,7 +7,7 @@ import { onBeforeRouteUpdate, useRoute } from "vue-router";
 
 import { currentRef } from "@/stores/publish/currentStep";
 import { DATASETS_KEY, STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
-import { Dataset, StudyVersion } from "@/stores/publish/study-interfaces";
+import { Dataset, DatasetVersion } from "@/stores/publish/study-interfaces";
 import { STUDY_KEY } from "@/stores/publish/study-state";
 import { fetchDatasetVersion } from "@/stores/services/service";
 
@@ -19,7 +19,7 @@ const routeParams = {
   versionId: route.params.versionId as string,
 };
 
-const studyPublish: Ref<StudyVersion | null> = ref(null);
+const studyPublish: Ref<DatasetVersion | null> = ref(null);
 provide(STUDYPUBLISH_KEY, studyPublish);
 
 // const dataset: Ref<Dataset | null> = ref(null);
@@ -30,7 +30,7 @@ const study = inject(STUDY_KEY, ref(null));
 
 function checkStudy() {
   if (routeParams.versionId === "new" && routeParams.datasetId === "new") {
-    studyPublish.value = new StudyVersion();
+    studyPublish.value = new DatasetVersion();
     // dataset.value = null;
     if (study.value) {
       studyPublish.value.contributors = structuredClone(toRaw(study.value).contributors);
