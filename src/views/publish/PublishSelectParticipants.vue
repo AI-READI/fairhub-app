@@ -127,13 +127,8 @@ function selectManual(): void {
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8" v-if="studyPublish">
-    <h1 class="pb-4">Add/Edit Participants</h1>
-    <div class="part-header">What part of data would you like to use?</div>
-    <div class="select-buttons">
-      <n-button type="primary" @click="selectAllParticipants">Use all</n-button>
-      <n-button type="primary" @click="selectManual">Select manually</n-button>
-    </div>
-    <div v-if="showParticipants">
+    <h1 class="pb-4">Select Participants</h1>
+    <div>
       <div style="margin-bottom: 1rem">
         <n-button type="primary" @click="AllSelected">
           {{ checkedRowKeysRef.length === participants.length ? "Deselect" : "Select" }} all
