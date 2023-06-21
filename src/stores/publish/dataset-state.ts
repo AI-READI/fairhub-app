@@ -82,7 +82,7 @@ export const contributorRules: FormRules = {
     },
   ],
 };
-// export const studyPublish:Ref<StudyVersion> = ref(new StudyVersion(0));
+// export const studyPublish:Ref<DatasetVersion> = ref(new DatasetVersion(0));
 
 export const STUDYPUBLISH_KEY: InjectionKey<null> = Symbol("studyPublish");
 

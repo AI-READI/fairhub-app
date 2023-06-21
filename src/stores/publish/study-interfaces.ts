@@ -10,6 +10,7 @@ export interface Contributor {
   firstname: string;
   lastname: string;
   ORCID: string;
+  permission: string;
   roles: string[];
   status: string;
 }
@@ -36,6 +37,7 @@ export interface PublishedVersion {
 export interface Owner {
   name: string;
   email: string;
+  ORCID: string;
 }
 
 // export interface Dataset {
@@ -80,7 +82,7 @@ export class Dataset {
   }
 }
 
-export class StudyVersion {
+export class DatasetVersion {
   public constructor(
     public id: number = 0,
     public contributors: Contributor[] = [],
@@ -91,8 +93,8 @@ export class StudyVersion {
     public selectedParticipants: Participant[] = []
   ) {}
 
-  static fromObject(obj: any): StudyVersion {
-    return new StudyVersion(
+  static fromObject(obj: any): DatasetVersion {
+    return new DatasetVersion(
       obj.id,
       obj.contributors,
       obj.title,

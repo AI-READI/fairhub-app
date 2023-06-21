@@ -1,5 +1,5 @@
 import type { Participant, Study, ViewProfile } from "@/stores/publish/study-interfaces";
-import { Dataset, StudyVersion } from "@/stores/publish/study-interfaces";
+import { Dataset, DatasetVersion } from "@/stores/publish/study-interfaces";
 export async function fetchViewProfile(): Promise<ViewProfile[]> {
   const response = await fetch(`http://localhost:5000/viewProfile}`);
   return response.json();
@@ -35,11 +35,11 @@ export async function fetchDatasetVersion(
   studyId: number,
   datasetId: number,
   versionId: number
-): Promise<StudyVersion> {
+): Promise<DatasetVersion> {
   const response = await fetch(
     `http://localhost:5000/study/${studyId}/dataset/${datasetId}/version/${versionId}`
   );
-  return StudyVersion.fromObject(await response.json());
+  return DatasetVersion.fromObject(await response.json());
 }
 
 // export async function postParticipants(studyId:number): any {

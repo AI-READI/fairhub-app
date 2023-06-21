@@ -16,7 +16,7 @@ import {
 } from "naive-ui";
 import validator from "validator";
 import { computed, inject, onBeforeMount, ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import { STUDY_KEY } from "@/stores/publish/study-state";
@@ -31,10 +31,11 @@ onBeforeMount(() => {
     router.push({ name: "home" });
   }
 });
+const route = useRoute();
 
-// const routeParams = {
-//   id: route.params.studyId.toString(),
-// };
+const routeParams = {
+  id: route.params.studyId.toString(),
+};
 
 const formRef = ref<FormInst | null>(null);
 
@@ -72,12 +73,11 @@ const handleValidateClick = (e: MouseEvent) => {
 // const study = getStudy(parseInt(routeParams.id));
 const study = inject(STUDY_KEY, ref(null));
 
-const contributors = study?.value?.contributors;
-
 const owner = computed(() => {
   return {
     name: study.value?.owner.name,
     email: study.value?.owner.email,
+    ORCID: study.value?.owner.ORCID,
     role: "owner",
     status: "active",
   };
@@ -145,9 +145,11 @@ const removeContributor = (email: string) => {
         >
           {{ owner.name }}
         </n-avatar>
+
         <div class="flex flex-col">
           <span class="text-lg font-semibold">{{ owner.name }}</span>
           <span>{{ owner.email }}</span>
+          <a :href="owner.ORCID" target="_blank">ORCID</a>
         </div>
       </n-space>
     </n-card>
@@ -158,7 +160,7 @@ const removeContributor = (email: string) => {
       <n-space
         justify="space-between"
         align="center"
-        v-for="contributor in contributors"
+        v-for="contributor in study.contributors"
         :key="contributor.email"
         class="text-medium rounded-md px-3 py-2 transition-colors hover:bg-slate-50"
       >
@@ -171,30 +173,26 @@ const removeContributor = (email: string) => {
               'text-slate-50': contributor.status === 'active',
             }"
           >
+            {{ contributor.firstname }}
           </n-avatar>
           <span>{{ (contributor.firstname, contributor.lastname) }}</span>
           <span v-if="contributor.status === 'invited'" class="text-normal text-slate-400">
-            [invited]
+            [{{ contributor.status }}]
           </span>
         </n-space>
 
-        <n-space
-          justify="end"
-          align="center"
-          v-for="(role, index) in contributor.roles"
-          :key="index"
-        >
+        <n-space justify="end" align="center">
           <n-select
             v-model:value="contributor.roles"
-            :disabled="role === 'owner'"
             :options="contributorRoles"
             :consistent-menu-width="false"
             class="w-32"
           />
-          <n-popconfirm
-            @positive-click="removeContributor(contributor.email)"
-            v-if="role !== 'owner'"
-          >
+          <!--                        :disabled="contributor.roles === 'owner'"-->
+
+          <n-popconfirm @positive-click="removeContributor(contributor.email)">
+            <!--                          v-if="role !== 'owner'"-->
+
             <template #trigger>
               <Icon
                 icon="fluent:person-delete-16-regular"
@@ -221,7 +219,7 @@ const removeContributor = (email: string) => {
           :options="invitationRoles"
           :consistent-menu-width="false"
           class="!w-40"
-        />l
+        />
       </n-form-item>
 
       <n-form-item>
