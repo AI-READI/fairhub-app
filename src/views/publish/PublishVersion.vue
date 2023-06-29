@@ -3,9 +3,9 @@ import { NDivider, NStep, NSteps } from "naive-ui";
 import type { Ref } from "vue";
 import { inject, onBeforeMount, ref, toRaw } from "vue";
 import { provide } from "vue";
+import type { RouteRecordName } from "vue-router";
 import { onBeforeRouteUpdate, useRoute } from "vue-router";
 
-import { currentRef } from "@/stores/publish/currentStep";
 import { DATASETS_KEY, STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
 import { Dataset, DatasetVersion } from "@/stores/publish/study-interfaces";
 import { STUDY_KEY } from "@/stores/publish/study-state";
@@ -18,14 +18,12 @@ const routeParams = {
   studyId: route.params.studyId as string,
   versionId: route.params.versionId as string,
 };
+const currentRef: Ref<number> = ref<number>(1);
 
 const studyPublish: Ref<DatasetVersion | null> = ref(null);
 provide(STUDYPUBLISH_KEY, studyPublish);
 
-// const dataset: Ref<Dataset | null> = ref(null);
-
 const datasets = inject(DATASETS_KEY, ref([]));
-
 const study = inject(STUDY_KEY, ref(null));
 
 function checkStudy() {
@@ -64,9 +62,30 @@ function checkStudy() {
 
 onBeforeMount(() => {
   checkStudy();
+  const steps = new Map<RouteRecordName, number>(
+    Object.entries({
+      "publish-additional-info": 6,
+      "publish-changelog": 8,
+      "publish-contributors": 4,
+      "publish-dataset-metadata": 2,
+      "publish-readme": 7,
+      "publish-related-sources": 5,
+      "publish-select-participants": 1,
+      "publish-study-metadata": 3,
+      "publish-summary": 9,
+    })
+  );
+  if (!route.name || !steps.has(route.name)) {
+    return;
+  }
+  if (!steps.has(route.name)) {
+    throw new Error(`A step for route was not found`);
+  }
+  currentRef.value = steps.get(route.name)!;
 });
 
 onBeforeRouteUpdate((to, from) => {
+  console.log(from.name, to.name);
   if (
     from.params.studyId !== to.params.studyId &&
     from.params.datasetId !== to.params.datasetId &&
@@ -74,6 +93,26 @@ onBeforeRouteUpdate((to, from) => {
   ) {
     checkStudy();
   }
+  const steps = new Map<RouteRecordName, number>(
+    Object.entries({
+      "publish-additional-info": 6,
+      "publish-changelog": 8,
+      "publish-contributors": 4,
+      "publish-dataset-metadata": 2,
+      "publish-readme": 7,
+      "publish-related-sources": 5,
+      "publish-select-participants": 1,
+      "publish-study-metadata": 3,
+      "publish-summary": 9,
+    })
+  );
+  if (!to.name || !steps.has(to.name)) {
+    return;
+  }
+  if (!steps.has(to.name)) {
+    throw new Error(`A step for route was not found`);
+  }
+  currentRef.value = steps.get(to.name)!;
 });
 </script>
 <template>
@@ -81,7 +120,6 @@ onBeforeRouteUpdate((to, from) => {
     :current="(currentRef as number)"
     class="steps flex flex-row flex-wrap pt-2 pl-2 text-sm 2xl:justify-between"
   >
-    <!--      <n-step title="Versioning" description="" />-->
     <n-step title="Participants" description="" />
     <n-step title="Dataset Metadata" description="" />
     <n-step title="Study Metadata" description="" />

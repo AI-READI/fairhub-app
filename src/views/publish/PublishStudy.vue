@@ -15,15 +15,11 @@ function checkAuth() {
     router.push({ name: "home" });
   }
 }
-
 onBeforeMount(() => {
   checkAuth();
 });
 
 onBeforeRouteUpdate((to) => {
-  // if (from.params.studyId !== to.params.studyId) {
-  //
-  // }
   if (to.name === "publish") {
     checkAuth();
   }

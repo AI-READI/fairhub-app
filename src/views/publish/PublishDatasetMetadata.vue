@@ -8,7 +8,6 @@ import { useRoute } from "vue-router";
 
 import LANGUAGE_JSON from "@/assets/data/languages.json";
 import router from "@/router";
-import { currentRef } from "@/stores/publish/currentStep";
 import { rules, STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
 import type { DatasetVersion } from "@/stores/publish/study-interfaces";
 
@@ -64,7 +63,6 @@ const handleUpdateValue = (value: string[]) => {
 // };
 
 function handleBackButton() {
-  currentRef.value--;
   router.push({
     name: "publish-select-participants",
     params: { versionId: routeParams.versionId },
@@ -74,7 +72,6 @@ function handleBackButton() {
 function handleNextButton() {
   // formRef.value?.validate((errors) => {
   //   if (!errors) {
-  currentRef.value++;
   console.log("Valid", studyPublish);
 
   router.push({

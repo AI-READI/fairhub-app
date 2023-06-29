@@ -5,7 +5,6 @@ import type { Ref } from "vue";
 import { inject, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { currentRef } from "@/stores/publish/currentStep";
 import { STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
 import { PARTICIPANTS_KEY } from "@/stores/publish/participants";
 import type { Participant } from "@/stores/publish/study-interfaces";
@@ -49,35 +48,15 @@ const columns: DataTableColumns<RowData> = [
     key: "address",
   },
 ];
-
-// const iff = () => {
-//   if (!studyPublish.value) return;
-//   else {
-//     checkedRowKeysRef.value = studyPublish.value.selectedParticipants.map((p: Participant) => {
-//       return p.address;
-//     });
-//   }
-// };
-
-// const handleCheck = () => {
-//   /**
-//    * TODO: This array needs to be updated when we preselect already selected participants
-//    */
-// };
-
-// function handleBackButton() {
-//   currentRef.value--;
-//   router.push({
-//     name: "publish-check-for-previous-version",
-//     params: { versionId: routeParams.versionId },
-//   });
-// }
+//
+// checkedRowKeysRef.value = studyPublish.value?.selectedParticipants?.map((p: Participant) => {
+//   return p.address;
+// })?? [];
 
 function handleNextButton() {
   // if (checkedRowKeysRef.value.length === 0) {
   //   return;
   // }
-  currentRef.value++;
   router.push({
     name: "publish-dataset-metadata",
     params: { versionId: routeParams.versionId },
@@ -85,7 +64,6 @@ function handleNextButton() {
 }
 
 function handleBackButton() {
-  currentRef.value--;
   router.push({
     name: "publish-select-dataset",
   });
@@ -108,21 +86,21 @@ function AllSelected(): void {
   });
 }
 
-function selectAllParticipants(): void {
-  checkedRowKeysRef.value = participants.value.map((p: Participant) => {
-    return p.address;
-  });
-  currentRef.value++;
-  router.push({
-    name: "publish-dataset-metadata",
-    params: { versionId: routeParams.versionId },
-  });
-}
+// function selectAllParticipants(): void {
+//   checkedRowKeysRef.value = participants.value.map((p: Participant) => {
+//     return p.address;
+//   });
+//   router.push({
+//     name: "publish-dataset-metadata",
+//     params: { versionId: routeParams.versionId },
+//   });
+// }
 
-const showParticipants = ref(false);
-function selectManual(): void {
-  showParticipants.value = true;
-}
+// const showParticipants = ref(false);
+
+// function selectManual(): void {
+//   showParticipants.value = true;
+// }
 </script>
 
 <template>

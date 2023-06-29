@@ -5,7 +5,6 @@ import { inject, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import router from "@/router";
-import { currentRef } from "@/stores/publish/currentStep";
 import { STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
 import type { DatasetVersion } from "@/stores/publish/study-interfaces";
 
@@ -18,7 +17,6 @@ const routeParams = {
 
 const studyPublish = inject<Ref<DatasetVersion | null>>(STUDYPUBLISH_KEY, ref(null));
 function handleBackButton() {
-  currentRef.value--;
   router.push({
     name: "publish-changelog",
     params: { versionId: routeParams.versionId },

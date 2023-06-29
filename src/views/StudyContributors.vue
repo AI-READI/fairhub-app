@@ -16,7 +16,7 @@ import {
 } from "naive-ui";
 import validator from "validator";
 import { computed, inject, onBeforeMount, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import { STUDY_KEY } from "@/stores/publish/study-state";
@@ -31,11 +31,6 @@ onBeforeMount(() => {
     router.push({ name: "home" });
   }
 });
-const route = useRoute();
-
-const routeParams = {
-  id: route.params.studyId.toString(),
-};
 
 const formRef = ref<FormInst | null>(null);
 

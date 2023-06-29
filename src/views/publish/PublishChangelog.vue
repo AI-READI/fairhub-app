@@ -3,7 +3,6 @@ import { NButton, NCard, NInput } from "naive-ui";
 import { useRoute } from "vue-router";
 
 import router from "@/router";
-import { currentRef } from "@/stores/publish/currentStep";
 
 const route = useRoute();
 const routeParams = {
@@ -11,7 +10,6 @@ const routeParams = {
 };
 
 function handleBackButton() {
-  currentRef.value--;
   router.push({
     name: "publish-readme",
     params: { versionId: routeParams.versionId },
@@ -19,7 +17,6 @@ function handleBackButton() {
 }
 
 function handleNextButton() {
-  currentRef.value++;
   router.push({
     name: "publish-summary",
     params: { versionId: routeParams.versionId },

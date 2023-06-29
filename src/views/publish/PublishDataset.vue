@@ -1,15 +1,8 @@
 <script setup lang="ts">
 import { NButton, NCard } from "naive-ui";
 import { inject, ref } from "vue";
-import { useRoute } from "vue-router";
 
 import { DATASETS_KEY } from "@/stores/publish/dataset-state";
-
-const route = useRoute();
-
-const routeParams = {
-  studyId: route.params.studyId as string,
-};
 
 const datasets = inject(DATASETS_KEY, ref([]));
 </script>

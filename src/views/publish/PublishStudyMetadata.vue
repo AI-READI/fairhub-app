@@ -5,7 +5,6 @@ import { onBeforeMount, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-import { currentRef } from "@/stores/publish/currentStep";
 import { study } from "@/stores/publish/studyInfo";
 
 const router = useRouter();
@@ -83,7 +82,6 @@ const handleUpdateValue = (value: string[]) => {
   console.log(value);
 };
 function handleBackButton() {
-  currentRef.value--;
   router.push({
     name: "publish-dataset-metadata",
     params: { versionId: routeParams.versionId },
@@ -91,7 +89,6 @@ function handleBackButton() {
 }
 
 function handleNextButton() {
-  currentRef.value++;
   router.push({
     name: "publish-contributors",
     params: { versionId: routeParams.versionId },

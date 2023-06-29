@@ -6,7 +6,6 @@ import { inject, ref, toRaw } from "vue";
 import { useRoute } from "vue-router";
 
 import router from "@/router";
-import { currentRef } from "@/stores/publish/currentStep";
 import { contributorRules, STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
 import type { Contributor, DatasetVersion } from "@/stores/publish/study-interfaces";
 
@@ -27,14 +26,12 @@ const headers = ref({
 });
 
 function handleBackButton() {
-  currentRef.value--;
   router.push({
     name: "publish-study-metadata",
     params: { versionId: routeParams.versionId },
   });
 }
 function handleNextButton() {
-  currentRef.value++;
   router.push({
     name: "publish-related-sources",
     params: { versionId: routeParams.versionId },
