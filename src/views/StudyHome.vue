@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NButton, NImage, NSpace } from "naive-ui";
 import { inject, ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import { STUDY_KEY } from "@/stores/publish/study-state";
 const router = useRouter();
@@ -14,8 +14,17 @@ const navigateToStudy = (id: number) => {
 
 const study = inject(STUDY_KEY, ref(null));
 
+const route = useRoute();
+
+const routeParams = {
+  studyId: route.params.studyId as string,
+};
+
 function updateStudy() {
-  router.push({ name: "study-info" });
+  router.push({
+    name: "update-study",
+    params: { studyId: routeParams.studyId },
+  });
 
   console.log("added");
 }

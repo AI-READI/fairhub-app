@@ -72,23 +72,6 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         { default: () => "Study Home" }
       ),
   },
-  // {
-  //   icon: renderIcon("tabler:list-details"),
-  //   key: "study-info",
-  //   label: () =>
-  //     h(
-  //       RouterLink,
-  //       {
-  //         to: {
-  //           name: "study-info",
-  //           params: {
-  //             id: studyID.value,
-  //           },
-  //         },
-  //       },
-  //       { default: () => "Study Info" }
-  //     ),
-  // },
   {
     icon: renderIcon("fluent:people-team-toolbox-24-regular"),
     key: "study-participants",

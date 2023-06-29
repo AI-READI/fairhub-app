@@ -19,9 +19,9 @@ import PublishVersion from "@/views/publish/PublishVersion.vue";
 import ReportIssue from "@/views/ReportIssue.vue";
 import Settings from "@/views/SettingPage.vue";
 import StudyHome from "@/views/StudyHome.vue";
-import StudyInfo from "@/views/StudyInfo.vue";
 import StudyParticipants from "@/views/StudyParticipants.vue";
 import StudyView from "@/views/StudyView.vue";
+import UpdateStudy from "@/views/UpdateStudy.vue";
 import ViewProfile from "@/views/ViewProfile.vue";
 
 import AllStudies from "../views/AllStudies.vue";
@@ -57,28 +57,19 @@ const router = createRouter({
           children: [
             {
               name: "study",
-              component: StudyHome,
-              path: "studyHome",
-            },
-            {
-              name: "dashboard",
-              component: DashBoard,
-              path: "dashboard",
-            },
-            {
-              name: "study-home",
-              component: StudyHome,
-              path: "studyHome",
-            },
-            {
-              name: "study-info",
-              component: StudyInfo,
-              path: "studyInfo",
-            },
-            {
-              name: "study-contributors",
-              component: StudyContributors,
-              path: "contributors",
+              children: [
+                {
+                  name: "study-home",
+                  component: StudyHome,
+                  path: "",
+                },
+                {
+                  name: "update-study",
+                  component: UpdateStudy,
+                  path: "updateStudy",
+                },
+              ],
+              path: "study",
             },
             {
               name: "participants",
@@ -95,6 +86,16 @@ const router = createRouter({
                 },
               ],
               path: "participants",
+            },
+            {
+              name: "dashboard",
+              component: DashBoard,
+              path: "dashboard",
+            },
+            {
+              name: "study-contributors",
+              component: StudyContributors,
+              path: "contributors",
             },
             {
               name: "publish",
