@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { FormInst, FormItemRule, FormRules } from "naive-ui";
 import { NButton, NForm, NFormItem, NInput, NSelect, NSpace, useMessage } from "naive-ui";
-import { onBeforeMount, ref } from "vue";
+import { inject, onBeforeMount, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-import { study } from "@/stores/publish/studyInfo";
+import { STUDY_KEY } from "@/stores/publish/study-state";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -22,6 +22,8 @@ onBeforeMount(() => {
     router.push({ name: "home" });
   }
 });
+
+const study = inject(STUDY_KEY, ref(null));
 
 const formRef = ref<FormInst | null>(null);
 
@@ -97,7 +99,7 @@ function handleNextButton() {
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col space-y-8 pr-8">
+  <main class="flex h-full w-full flex-col space-y-8 pr-8" v-if="study">
     <n-space justify="space-between">
       <h1>Review study information</h1>
     </n-space>

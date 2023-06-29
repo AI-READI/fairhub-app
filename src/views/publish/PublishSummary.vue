@@ -7,13 +7,14 @@ import { useRoute } from "vue-router";
 import router from "@/router";
 import { STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
 import type { DatasetVersion } from "@/stores/publish/study-interfaces";
-
-import { study } from "../../stores/publish/studyInfo";
+import { STUDY_KEY } from "@/stores/publish/study-state";
 
 const route = useRoute();
 const routeParams = {
   versionId: route.params.versionId.toString(),
 };
+
+const study = inject(STUDY_KEY, ref(null));
 
 const studyPublish = inject<Ref<DatasetVersion | null>>(STUDYPUBLISH_KEY, ref(null));
 function handleBackButton() {
@@ -66,7 +67,7 @@ function onsubmit() {
           </div>
         </n-space>
         <n-space>
-          <div class="study">
+          <div class="study" v-if="study">
             <h3>Study Metadata</h3>
             <dl class="font-bold">Title:</dl>
             <dd>{{ study.title }}</dd>
