@@ -40,13 +40,14 @@ function updateStudy() {
       <div class="row-auto flex items-end justify-end"></div>
       <div
         class="flex w-full cursor-pointer items-start space-x-8 rounded-md px-4 py-3 transition-all hover:border-slate-200"
-        :key="study.id"
-        @click="study && navigateToStudy(study.id)"
       >
         <n-image class="studyHome" width="145" :src="study.image" preview-disabled />
         <div class="flex w-full grow flex-col space-y-2 divide-y">
           <div class="flex flex-col space-y-2">
             <h2>{{ study.title }}</h2>
+            <div>
+              <n-button @click="updateStudy"> Update study</n-button>
+            </div>
             <p class="owner text-sm underline underline-offset-1">{{ study.owner.name }}</p>
             <p class="study-description">{{ study.description }}</p>
           </div>
@@ -54,7 +55,11 @@ function updateStudy() {
             <span class="font-bold">Last Updated: </span>
             <span>{{ study.lastUpdated }}</span>
           </p>
-          <div class="align-center flex pt-2">
+          <div
+            :key="study.id"
+            @click="study && navigateToStudy(study.id)"
+            class="align-center flex pt-2"
+          >
             <p>
               <span class="font-bold">Latest published version: </span>
               <span v-if="study.lastPublished">
@@ -80,9 +85,6 @@ function updateStudy() {
         </div>
       </div>
     </n-space>
-    <div class="row-auto flex">
-      <n-button @click="updateStudy"> Update study</n-button>
-    </div>
   </main>
 </template>
 

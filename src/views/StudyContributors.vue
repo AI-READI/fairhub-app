@@ -168,9 +168,9 @@ const removeContributor = (email: string) => {
               'text-slate-50': contributor.status === 'active',
             }"
           >
-            {{ contributor.firstname }}
+            {{ contributor.firstname }}{{ contributor.lastname }}
           </n-avatar>
-          <span>{{ (contributor.firstname, contributor.lastname) }}</span>
+          <span>{{ contributor.firstname }} {{ contributor.lastname }}</span>
           <span v-if="contributor.status === 'invited'" class="text-normal text-slate-400">
             [{{ contributor.status }}]
           </span>
