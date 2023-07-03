@@ -27,7 +27,7 @@ onBeforeMount(() => {
   }
 });
 
-const columns: string[] = ["Name", "Age", "Address", "Update", "Delete"];
+const columns: string[] = ["Name", "Address", "Age", "Update", "Delete"];
 
 const showDialog = ref(false);
 const workingParticipant: Ref<Participant> = ref({
