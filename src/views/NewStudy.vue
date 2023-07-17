@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import type { FormInst, FormItemRule, FormRules } from "naive-ui";
 import { NButton, NForm, NFormItem, NInput, NSelect, NSpace, useMessage } from "naive-ui";
+import type { Ref } from "vue";
 import { onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
+import type { Study } from "@/stores/publish/study-interfaces";
+import { addStudy } from "@/stores/services/service";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -19,10 +22,21 @@ onBeforeMount(() => {
 
 const formRef = ref<FormInst | null>(null);
 
-const study = ref({
-  title: null,
-  description: null,
-  keywords: null,
+const study: Ref<Study> = ref({
+  id: 0,
+  title: "",
+  contributors: [],
+  description: "",
+  image: "",
+  keywords: [],
+  lastPublished: {
+    date: "",
+    doi: "",
+    version: "",
+  },
+  lastUpdated: "",
+  owner: { name: "", email: "", ORCID: "" },
+  size: "",
 });
 
 const generalOptions = [
@@ -81,6 +95,12 @@ const handleValidateButtonClick = (e: MouseEvent) => {
 const handleUpdateValue = (value: string[]) => {
   console.log(value);
 };
+
+function addStudyButton() {
+  addStudy(study.value).then((s) => {
+    study.value = s;
+  });
+}
 </script>
 
 <template>
@@ -126,10 +146,12 @@ const handleUpdateValue = (value: string[]) => {
         />
       </n-form-item>
 
+      <n-form-item :span="12" label="Image" path="Image">
+        <n-input v-model:value="study.image" placeholder="Add an image" />
+      </n-form-item>
+
       <div class="flex justify-start">
-        <n-button type="primary" size="large" @click="handleValidateButtonClick">
-          Create Study
-        </n-button>
+        <n-button type="primary" size="large" @click="addStudyButton"> Create Study </n-button>
       </div>
     </n-form>
   </main>
