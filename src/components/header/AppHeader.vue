@@ -57,7 +57,7 @@ const profileOptions = [
         RouterLink,
         {
           to: {
-            name: "view-profile",
+            name: "user-profile",
           },
         },
         { default: () => "View Profile" }

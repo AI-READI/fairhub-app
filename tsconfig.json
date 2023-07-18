@@ -12,7 +12,7 @@
   },
   "composite": true,
   "files": [],
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "src/**/*.json"],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "src/**/*.json", "types"],
   "references": [
     {
       "path": "./tsconfig.config.json"

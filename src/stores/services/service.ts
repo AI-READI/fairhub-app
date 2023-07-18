@@ -1,7 +1,11 @@
 import type { Participant, Study, ViewProfile } from "@/stores/publish/study-interfaces";
 import { Dataset, DatasetVersion } from "@/stores/publish/study-interfaces";
 
-const baseURL = "http://api-fairhub-io-staging.azurewebsites.net";
+const baseURL =
+  process.env.NODE_ENV === "production"
+    ? "https://api-fairhub-io.azurewebsites.net"
+    : "http://localhost:5000";
+
 // const deploymentURL=''
 export async function fetchViewProfile(): Promise<ViewProfile[]> {
   const response = await fetch(`${baseURL}viewProfile}`);

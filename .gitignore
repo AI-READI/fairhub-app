@@ -29,3 +29,7 @@ coverage
 
 # API Platform specific files
 *.pyc
+
+# Auto generate typescript files
+auto-imports.d.ts
+components.d.ts

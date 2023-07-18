@@ -27,7 +27,7 @@ const hideMenuOptions = computed(() => {
     "/reportIssue",
     "/help/documentation",
     "/help/changelog",
-    "/viewProfile",
+    "/profile",
     "/integrations",
   ];
   if (hiddenRoutes.includes(route.path)) {

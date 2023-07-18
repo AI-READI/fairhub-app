@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+import UserProfile from "@/views/account/UserProfile.vue";
 import AddParticipant from "@/views/AddParticipant.vue";
 import Changelog from "@/views/ChangeLog.vue";
 import DatasetView from "@/views/DatasetView.vue";
@@ -22,7 +23,6 @@ import StudyHome from "@/views/StudyHome.vue";
 import StudyParticipants from "@/views/StudyParticipants.vue";
 import StudyView from "@/views/StudyView.vue";
 import UpdateStudy from "@/views/UpdateStudy.vue";
-import ViewProfile from "@/views/ViewProfile.vue";
 
 import AllStudies from "../views/AllStudies.vue";
 import DashBoard from "../views/DashBoard.vue";
@@ -210,9 +210,9 @@ const router = createRouter({
     },
     //header
     {
-      name: "view-profile",
-      component: ViewProfile,
-      path: "/viewProfile",
+      name: "user-profile",
+      component: UserProfile,
+      path: "/profile",
     },
     {
       name: "integrations",
