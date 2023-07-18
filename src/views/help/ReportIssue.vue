@@ -6,7 +6,7 @@ import IssueLottieAnimation from "@/assets/animations/report_issue.json";
 </script>
 
 <template>
-  <div class="flex h-full w-full flex-col">
+  <main class="flex h-full w-full flex-col pr-6">
     <h1>Report an issue</h1>
 
     <p class="py-3">
@@ -41,5 +41,5 @@ import IssueLottieAnimation from "@/assets/animations/report_issue.json";
         </n-button>
       </a>
     </div>
-  </div>
+  </main>
 </template>
