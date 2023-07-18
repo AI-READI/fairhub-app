@@ -23,7 +23,7 @@ import AppSidebar from "./components/sidebar/AppSidebar.vue";
         <n-space vertical size="large">
           <n-layout has-sider>
             <AppSidebar />
-            <n-layout-content class="h-[calc(100vh-56px)] pl-6 pt-5 pb-3">
+            <n-layout-content class="h-[calc(100vh-56px)] py-4 pl-6">
               <RouterView />
             </n-layout-content>
           </n-layout>

@@ -2,10 +2,11 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import UserProfile from "@/views/account/UserProfile.vue";
 import AddParticipant from "@/views/AddParticipant.vue";
-import Changelog from "@/views/ChangeLog.vue";
 import DatasetView from "@/views/DatasetView.vue";
-import Documentation from "@/views/DocumentationPage.vue";
-import HelpPage from "@/views/HelpPage.vue";
+import Changelog from "@/views/help/ChangeLog.vue";
+import Documentation from "@/views/help/DocumentationPage.vue";
+import HelpPage from "@/views/help/HelpPage.vue";
+import ReportIssue from "@/views/help/ReportIssue.vue";
 import Integrations from "@/views/IntegrationPage.vue";
 import NotFound from "@/views/NotFound.vue";
 import PublishAdditionalInfo from "@/views/publish/PublishAdditionalInfo.vue";
@@ -17,8 +18,7 @@ import PublishRelatedSources from "@/views/publish/PublishRelatedSources.vue";
 import PublishStudyMetadata from "@/views/publish/PublishStudyMetadata.vue";
 import PublishSummary from "@/views/publish/PublishSummary.vue";
 import PublishVersion from "@/views/publish/PublishVersion.vue";
-import ReportIssue from "@/views/ReportIssue.vue";
-import Settings from "@/views/SettingPage.vue";
+import AllSettings from "@/views/settings/AllSettings.vue";
 import StudyHome from "@/views/StudyHome.vue";
 import StudyParticipants from "@/views/StudyParticipants.vue";
 import StudyView from "@/views/StudyView.vue";
@@ -182,13 +182,8 @@ const router = createRouter({
       path: "/studies",
     },
     {
-      name: "report-issue",
-      component: ReportIssue,
-      path: "/reportIssue",
-    },
-    {
-      name: "settings",
-      component: Settings,
+      name: "all-settings",
+      component: AllSettings,
       path: "/settings",
     },
     {
@@ -204,11 +199,15 @@ const router = createRouter({
           component: Changelog,
           path: "changelog",
         },
+        {
+          name: "report-issue",
+          component: ReportIssue,
+          path: "report-issue",
+        },
       ],
       component: HelpPage,
       path: "/help",
     },
-    //header
     {
       name: "user-profile",
       component: UserProfile,

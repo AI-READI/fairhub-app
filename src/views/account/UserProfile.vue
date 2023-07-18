@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
 import type { FormInst, UploadFileInfo } from "naive-ui";
 import { ref, toRaw } from "vue";
 
@@ -47,7 +46,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
 
 <template>
   <main class="flex h-full w-full flex-col">
-    <h1>Your profile</h1>
+    <h1>Your Profile</h1>
 
     <n-divider />
 
@@ -55,15 +54,11 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
       <div class="w-full max-w-screen-md px-2">
         <n-form ref="userFormRef" size="large" label-placement="top">
           <n-form-item :span="12" label="Username" path="username">
-            <n-input v-model:value="userProfile.username" placeholder="loid.forger" type="text" />
-          </n-form-item>
-
-          <n-form-item :span="12" label="Full Name" path="fullname">
             <n-input
-              v-model:value="userProfile.fullname"
+              v-model:value="userProfile.username"
+              placeholder="loid.forger"
+              disabled
               type="text"
-              placeholder="Loid Forger"
-              clearable
             />
           </n-form-item>
 
@@ -72,7 +67,17 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
               v-model:value="userProfile.email"
               placeholder="loid.forger@ucsd.edu"
               clearable
+              disabled
               typeof="email"
+            />
+          </n-form-item>
+
+          <n-form-item :span="12" label="Full Name" path="fullname">
+            <n-input
+              v-model:value="userProfile.fullname"
+              type="text"
+              placeholder="Loid Forger"
+              clearable
             />
           </n-form-item>
 
@@ -102,7 +107,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
           <div class="flex justify-start">
             <n-button type="primary" size="large" @click="updateProfile">
               <template #icon>
-                <Icon icon="material-symbols:save" />
+                <f-icon icon="material-symbols:save" />
               </template>
 
               Update Profile
@@ -116,7 +121,10 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
 
         <n-upload accept=".jpeg,.png" directory-dnd @change="onChange" class="mx-auto w-max">
           <n-button size="large" strong secondary type="primary">
-            Click to Update Picture
+            <template #default>
+              <f-icon icon="mdi:upload" class="mr-1" />
+              Upload Image
+            </template>
           </n-button>
         </n-upload>
       </div>

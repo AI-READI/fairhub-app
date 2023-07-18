@@ -1,6 +1,6 @@
 import "./assets/main.css";
-import "vue3-lottie/dist/style.css";
 
+import { Icon } from "@iconify/vue";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { createApp } from "vue";
@@ -13,6 +13,8 @@ const app = createApp(App);
 
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
+
+app.component("f-icon", Icon);
 
 app.use(pinia);
 app.use(router);
