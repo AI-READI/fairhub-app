@@ -69,7 +69,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
             },
           },
         },
-        { default: () => "Study Home" }
+        { default: () => "Study Overview" }
       ),
   },
   {

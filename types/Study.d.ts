@@ -1,12 +1,35 @@
+export interface StudyOwner {
+  name: string;
+  email: string;
+  ORCID: string;
+}
+
+export interface StudyPublishedVersion {
+  date: string;
+  doi: string;
+  version: string;
+}
+
+export interface StudyContributor {
+  affiliations: string[];
+  email: string;
+  firstname: string;
+  lastname: string;
+  ORCID: string;
+  // permission: string;
+  roles: string[];
+  status: string;
+}
+
 export interface Study {
-  id: number;
+  id: string;
   title: string;
-  contributors: Contributor[];
+  contributors: StudyContributor[];
   description: string;
   image: string;
   keywords: string[];
-  lastPublished: PublishedVersion;
+  lastPublished: StudyPublishedVersion;
   lastUpdated: string;
-  owner: Owner;
+  owner: StudyOwner;
   size: string;
 }

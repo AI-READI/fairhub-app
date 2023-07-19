@@ -5,6 +5,7 @@
   "compilerOptions": {
     "composite": true,
     "baseUrl": ".",
+    "typeRoots": ["./node_modules/@types", "./types"],
     "allowJs": true,
     "types": ["naive-ui/volar", "node"],
     "paths": {
