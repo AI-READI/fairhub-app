@@ -118,7 +118,7 @@ onBeforeRouteUpdate((to, from) => {
 <template>
   <n-steps
     :current="(currentRef as number)"
-    class="steps flex flex-row flex-wrap pt-2 pl-2 text-sm 2xl:justify-between"
+    class="steps flex flex-row flex-wrap pl-2 pt-2 text-sm 2xl:justify-between"
   >
     <n-step title="Participants" description="" />
     <n-step title="Dataset Metadata" description="" />
