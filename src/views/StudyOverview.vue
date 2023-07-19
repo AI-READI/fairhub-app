@@ -70,3 +70,4 @@ const navigateToStudy = (id: number) => {
     </n-space>
   </main>
 </template>
+@/stores/study @/stores/studt

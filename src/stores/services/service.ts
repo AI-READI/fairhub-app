@@ -17,11 +17,6 @@ export async function fetchParticipants(studyId: number): Promise<Participant[]>
   return response.json();
 }
 
-export async function fetchStudies(): Promise<Study[]> {
-  const response = await fetch(`${baseURL}/study`);
-  return response.json();
-}
-
 // today this has to be set up 1st TODO
 export async function fetchStudy(studyId: number): Promise<Study> {
   const response = await fetch(`${baseURL}/study/${studyId}`);
