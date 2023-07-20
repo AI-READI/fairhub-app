@@ -30,7 +30,7 @@ import NewStudy from "@/views/study/new/NewStudy.vue";
 import StudyOverview from "@/views/study/overview/StudyOverview.vue";
 import AddParticipant from "@/views/study/participants/AddParticipant.vue";
 import StudyParticipants from "@/views/study/participants/StudyParticipants.vue";
-import StudyView from "@/views/StudyView.vue";
+import StudyView from "@/views/study/root/StudyView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

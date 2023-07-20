@@ -116,21 +116,27 @@ onBeforeRouteUpdate((to, from) => {
 });
 </script>
 <template>
-  <n-steps
-    :current="(currentRef as number)"
-    class="steps flex flex-row flex-wrap pl-2 pt-2 text-sm 2xl:justify-between"
-  >
-    <n-step title="Participants" description="" />
-    <n-step title="Dataset Metadata" description="" />
-    <n-step title="Study Metadata" description="" />
-    <n-step title="Contributors" description="" />
-    <n-step title="Related Resources" description="" />
-    <n-step title="Additional Information" description="" />
-    <n-step title="README" description="" />
-    <n-step title="Changelog" description="" />
-    <n-step title="Summary" description="" />
-  </n-steps>
-  <n-divider class="w-full" />
+  <div>
+    <n-steps
+      :current="(currentRef as number)"
+      class="steps flex flex-row flex-wrap pl-2 pt-2 text-sm 2xl:justify-between"
+    >
+      <n-step title="Participants" description="" />
+      <n-step title="Dataset Metadata" description="" />
+      <n-step title="Study Metadata" description="" />
+      <n-step title="Contributors" description="" />
+      <n-step title="Related Resources" description="" />
+      <n-step title="Additional Information" description="" />
+      <n-step title="README" description="" />
+      <n-step title="Changelog" description="" />
+      <n-step title="Summary" description="" />
+    </n-steps>
+    <n-divider class="w-full" />
 
-  <router-view />
+    <router-view v-slot="{ Component }">
+      <transition name="fade" appear mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
+  </div>
 </template>

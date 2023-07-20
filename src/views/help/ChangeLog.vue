@@ -12,8 +12,8 @@ const markdownToHtml = computed(() => {
 </script>
 
 <template>
-  <n-scrollbar>
+  <main>
     <n-back-top />
     <div v-html="markdownToHtml" class="prose max-w-none"></div>
-  </n-scrollbar>
+  </main>
 </template>
