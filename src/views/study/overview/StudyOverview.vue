@@ -33,7 +33,7 @@ onBeforeMount(() => {
 
 function editStudyDetails() {
   router.push({
-    name: "update-study",
+    name: "edit-study",
     params: { studyId: routeParams.studyId },
   });
 }

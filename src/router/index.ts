@@ -25,12 +25,12 @@ import AllSettings from "@/views/settings/AllSettings.vue";
 import AllStudies from "@/views/studies/AllStudies.vue";
 import StudyContributors from "@/views/study/contributors/StudyContributors.vue";
 import DashBoard from "@/views/study/dashboard/DashBoard.vue";
+import EditStudy from "@/views/study/edit/EditStudy.vue";
 import NewStudy from "@/views/study/new/NewStudy.vue";
-import StudyHome from "@/views/study/overview/StudyHome.vue";
+import StudyOverview from "@/views/study/overview/StudyOverview.vue";
 import AddParticipant from "@/views/study/participants/AddParticipant.vue";
 import StudyParticipants from "@/views/study/participants/StudyParticipants.vue";
 import StudyView from "@/views/StudyView.vue";
-import UpdateStudy from "@/views/UpdateStudy.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,24 +53,24 @@ const router = createRouter({
           path: "new",
           component: NewStudy,
         },
+      ],
+    },
+    {
+      path: "/study",
+      children: [
         {
           path: ":studyId",
           children: [
             {
-              name: "study",
-              path: "study",
-              children: [
-                {
-                  name: "study-overview",
-                  path: "",
-                  component: StudyHome,
-                },
-                {
-                  name: "update-study",
-                  path: "updateStudy",
-                  component: UpdateStudy,
-                },
-              ],
+              name: "study-overview",
+              path: "overview",
+
+              component: StudyOverview,
+            },
+            {
+              name: "edit-study",
+              path: "edit",
+              component: EditStudy,
             },
             {
               name: "participants",

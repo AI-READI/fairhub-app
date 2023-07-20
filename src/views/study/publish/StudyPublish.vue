@@ -5,7 +5,7 @@ import { useRoute } from "vue-router";
 
 import { DATASETS_KEY } from "@/stores/publish/dataset-state";
 import type { Dataset } from "@/stores/publish/study-interfaces";
-import { fetchDatasets } from "@/stores/services/service";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 
@@ -17,6 +17,11 @@ const datasets: Ref<Dataset[]> = ref([]);
 provide(DATASETS_KEY, datasets);
 
 let loading = ref(true);
+
+async function fetchDatasets(studyId: number): Promise<Dataset[]> {
+  const response = await fetch(`${baseURL}/study/${studyId}/dataset`);
+  return (await response.json()).map((d: Dataset) => Dataset.fromObject(d));
+}
 
 setTimeout(() => {
   fetchDatasets(parseInt(routeParams.studyId)).then((d) => {
