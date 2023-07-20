@@ -43,14 +43,3 @@ export async function fetchDatasetVersion(
   );
   return DatasetVersion.fromObject(await response.json());
 }
-
-export async function addStudy(study: Study): Promise<Study> {
-  const response = await fetch(`${baseURL}/study/add`, {
-    body: JSON.stringify(study),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-  });
-  return response.json();
-}

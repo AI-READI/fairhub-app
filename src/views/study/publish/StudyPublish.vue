@@ -33,7 +33,7 @@ setTimeout(() => {
       :height="150"
       :width="200"
     />
-    <p class="flex justify-center">Checking for previously published versions datasets</p>
+    <p class="flex justify-center">Checking for previously published datasets...</p>
   </div>
   <div v-if="!loading && datasets.length === 0">
     <Vue3Lottie

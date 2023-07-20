@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NSkeleton, NSpace, useMessage } from "naive-ui";
+import { useMessage } from "naive-ui";
 import { onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
 

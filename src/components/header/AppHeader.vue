@@ -1,23 +1,10 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import type { FormInst } from "naive-ui";
-import {
-  NAlert,
-  NAvatar,
-  NButton,
-  NCard,
-  NDropdown,
-  NForm,
-  NFormItem,
-  NInput,
-  NModal,
-  NSpace,
-} from "naive-ui";
 import { h, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-import { showLogin } from "@/stores/loginAuth";
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -92,20 +79,12 @@ function renderIcon(icon: string) {
   return () => h(Icon, { icon });
 }
 
-//watcher function to
-// watch(showLogin, (showLogin) => {
-//   if (showLogin) {
-//     showModal.value = true;
-//
-//   }
-// });
-
 const showLoginModal = () => {
-  showLogin.value = true;
+  authStore.showLoginModal = true;
 };
 
 const handleCancel = () => {
-  showLogin.value = false;
+  authStore.showLoginModal = false;
 };
 
 const handleSelect = (key: string | number) => {
@@ -125,7 +104,7 @@ const handleLogin = (e: MouseEvent) => {
       if (formValue.value.username === "admin" && formValue.value.password === "admin") {
         showErrorAlert.value = false;
 
-        showLogin.value = false;
+        authStore.showLoginModal = false;
 
         authStore.setLoggedIn();
 
@@ -183,7 +162,7 @@ const handleLogin = (e: MouseEvent) => {
             />
           </n-dropdown>
 
-          <n-modal v-model:show="showLogin">
+          <n-modal v-model:show="authStore.showLoginModal">
             <n-card
               style="width: 600px"
               title="Login to fairhub.io"

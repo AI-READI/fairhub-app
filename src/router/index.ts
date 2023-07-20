@@ -1,14 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+import StudyPublish from "@/views//study/publish/StudyPublish.vue";
 import UserProfile from "@/views/account/UserProfile.vue";
-import DatasetView from "@/views/DatasetView.vue";
 import Changelog from "@/views/help/ChangeLog.vue";
 import Documentation from "@/views/help/DocumentationPage.vue";
 import HelpPage from "@/views/help/HelpPage.vue";
 import ReportIssue from "@/views/help/ReportIssue.vue";
-import Integrations from "@/views/IntegrationPage.vue";
+import Integrations from "@/views/integrations/IntegrationPage.vue";
 import LandingPage from "@/views/LandingPage.vue";
-import NewStudy from "@/views/NewStudy.vue";
 import NotFound from "@/views/NotFound.vue";
 import PublishAdditionalInfo from "@/views/publish/PublishAdditionalInfo.vue";
 import PublishChangelog from "@/views/publish/PublishChangelog.vue";
@@ -26,6 +25,7 @@ import AllSettings from "@/views/settings/AllSettings.vue";
 import AllStudies from "@/views/studies/AllStudies.vue";
 import StudyContributors from "@/views/study/contributors/StudyContributors.vue";
 import DashBoard from "@/views/study/dashboard/DashBoard.vue";
+import NewStudy from "@/views/study/new/NewStudy.vue";
 import StudyHome from "@/views/study/overview/StudyHome.vue";
 import AddParticipant from "@/views/study/participants/AddParticipant.vue";
 import StudyParticipants from "@/views/study/participants/StudyParticipants.vue";
@@ -170,7 +170,7 @@ const router = createRouter({
                       ],
                     },
                   ],
-                  component: DatasetView,
+                  component: StudyPublish,
                 },
               ],
               component: PublishStudy,

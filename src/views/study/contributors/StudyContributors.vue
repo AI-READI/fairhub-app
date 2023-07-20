@@ -1,35 +1,36 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import type { FormInst, FormItemRule } from "naive-ui";
-import {
-  NAvatar,
-  NButton,
-  NCard,
-  NDivider,
-  NForm,
-  NFormItem,
-  NInput,
-  NPopconfirm,
-  NSelect,
-  NSpace,
-  useMessage,
-} from "naive-ui";
+import { useMessage } from "naive-ui";
 import validator from "validator";
-import { computed, inject, onBeforeMount, ref } from "vue";
-import { useRouter } from "vue-router";
+import { computed, onBeforeMount, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-import { STUDY_KEY } from "@/stores/publish/study-state";
+import { useStudyStore } from "@/stores/study";
 
 const router = useRouter();
-const authStore = useAuthStore();
+const route = useRoute();
 const { error, success } = useMessage();
+
+const authStore = useAuthStore();
+const studyStore = useStudyStore();
+
+const study = computed(() => studyStore.study);
+
+const routeParams = {
+  studyId: route.params.studyId as string,
+};
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
     error("You are not logged in.");
     router.push({ name: "home" });
   }
+
+  const studyId = routeParams.studyId;
+
+  studyStore.getStudy(studyId);
 });
 
 const formRef = ref<FormInst | null>(null);
@@ -64,9 +65,6 @@ const handleValidateClick = (e: MouseEvent) => {
     }
   });
 };
-
-// const study = getStudy(parseInt(routeParams.id));
-const study = inject(STUDY_KEY, ref(null));
 
 const owner = computed(() => {
   return {
@@ -111,115 +109,137 @@ const removeContributor = (email: string) => {
   console.log("remove contributor", email);
 };
 
-// const getFirstLetters = (name: string) => {
-//   const names = name.split(" ");
-//   return names[0].charAt(0) + names[1].charAt(0);
-// };
+const getFirstLetters = (name: string) => {
+  const names = name.split(" ");
+  return names[0].charAt(0) + names[1].charAt(0);
+};
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col space-y-8 pr-8" v-if="study">
-    <n-space justify="start" align="end">
-      <Icon icon="carbon:user-follow" width="30" height="30" />
-      <h1>Invite people to contribute to the {{ study.title }}</h1>
-    </n-space>
+  <FadeTransition>
+    <LottieLoader v-if="studyStore.loading" />
 
-    <n-card class="!mt-4">
-      <h3>Current owner of the study</h3>
+    <main class="flex h-full w-full flex-col space-y-8 pr-6" v-else>
+      <h2>Study Contributors</h2>
 
       <n-divider />
 
-      <n-space align="center">
-        <n-avatar
-          round
-          class="flex items-center justify-center"
-          :class="{
-            'bg-sky-900': owner.status === 'active',
-            'text-slate-50': owner.status === 'active',
-          }"
-        >
-          {{ owner.name }}
-        </n-avatar>
+      <n-card class="mt-4">
+        <h3>Current owner of the study</h3>
 
-        <div class="flex flex-col">
-          <span class="text-lg font-semibold">{{ owner.name }}</span>
-          <span>{{ owner.email }}</span>
-          <a :href="owner.ORCID" target="_blank">ORCID</a>
-        </div>
-      </n-space>
-    </n-card>
+        <n-divider />
 
-    <n-divider />
-
-    <n-space vertical>
-      <n-space
-        justify="space-between"
-        align="center"
-        v-for="contributor in study.contributors"
-        :key="contributor.email"
-        class="text-medium rounded-md px-3 py-2 transition-colors hover:bg-slate-50"
-      >
-        <n-space align="center">
+        <n-space align="start">
           <n-avatar
-            round
-            class="flex items-center justify-center"
+            class="my-2 flex items-center justify-center"
+            size="large"
             :class="{
-              'bg-sky-900': contributor.status === 'active',
-              'text-slate-50': contributor.status === 'active',
+              'bg-sky-900': owner.status === 'active',
+              'text-slate-50': owner.status === 'active',
             }"
           >
-            {{ contributor.firstname }}{{ contributor.lastname }}
+            {{ getFirstLetters(owner.name) }}
           </n-avatar>
-          <span>{{ contributor.firstname }} {{ contributor.lastname }}</span>
-          <span v-if="contributor.status === 'invited'" class="text-normal text-slate-400">
-            [{{ contributor.status }}]
-          </span>
+
+          <div class="flex flex-col">
+            <span class="text-lg font-semibold">{{ owner.email }}</span>
+
+            <span>{{ owner.name }}</span>
+
+            <a :href="owner.ORCID" target="_blank" class="text-slate-700" rel="noopener">
+              0000-0003-2829-8032
+            </a>
+          </div>
         </n-space>
+      </n-card>
 
-        <n-space justify="end" align="center">
-          <n-select
-            v-model:value="contributor.roles"
-            :options="contributorRoles"
-            :consistent-menu-width="false"
-            class="w-32"
-          />
-          <!--                        :disabled="contributor.roles === 'owner'"-->
+      <n-divider />
 
-          <n-popconfirm @positive-click="removeContributor(contributor.email)">
-            <!--                          v-if="role !== 'owner'"-->
+      <n-space vertical>
+        <n-space
+          justify="space-between"
+          align="center"
+          v-for="contributor in study.contributors"
+          :key="contributor.email"
+          class="rounded-md px-3 py-2 transition-all hover:bg-slate-50"
+        >
+          <n-space align="center">
+            <n-avatar
+              round
+              size="large"
+              class="flex items-center justify-center"
+              :class="{
+                'bg-sky-900': contributor.status === 'active',
+                'text-slate-50': contributor.status === 'active',
+              }"
+            >
+              {{ contributor.firstname.charAt(0) }}{{ contributor.lastname.charAt(0) }}
+            </n-avatar>
+            <span>{{ contributor.firstname }} {{ contributor.lastname }}</span>
+            <span v-if="contributor.status === 'invited'" class="text-normal text-slate-400">
+              [{{ contributor.status }}]
+            </span>
+          </n-space>
 
-            <template #trigger>
-              <Icon
-                icon="fluent:person-delete-16-regular"
-                width="20"
-                height="20"
-                class="transtition-all flex cursor-pointer items-center justify-center text-slate-400 hover:text-sky-300"
-              />
-            </template>
-            Are you sure you want to remove this user from the study?
-          </n-popconfirm>
+          <n-space justify="end" align="center">
+            <n-select
+              v-model:value="contributor.permission"
+              :options="contributorRoles"
+              :consistent-menu-width="false"
+              class="w-32"
+            />
+            <!--                        :disabled="contributor.roles === 'owner'"-->
+
+            <n-popconfirm @positive-click="removeContributor(contributor.email)">
+              <!--                          v-if="role !== 'owner'"-->
+
+              <template #trigger>
+                <Icon
+                  icon="fluent:person-delete-16-regular"
+                  width="20"
+                  height="20"
+                  class="transtition-all flex cursor-pointer items-center justify-center text-slate-400 hover:text-sky-300"
+                />
+              </template>
+              Are you sure you want to remove this user from the study?
+            </n-popconfirm>
+          </n-space>
         </n-space>
       </n-space>
-    </n-space>
-    <n-divider />
 
-    <n-form ref="formRef" inline :model="formValue" :rules="rules" size="large">
-      <n-form-item label="Email Address" path="email" :label-width="200">
-        <n-input v-model:value="formValue.email" placehol5der="someone@email.org" class="w-80" />
-      </n-form-item>
-      <n-form-item label="Permission" path="role" class="w-60">
-        <n-select
-          v-model:value="formValue.role"
-          placeholder=""
-          :options="invitationRoles"
-          :consistent-menu-width="false"
-          class="!w-40"
-        />
-      </n-form-item>
+      <n-divider />
 
-      <n-form-item>
-        <n-button @click="handleValidateClick"> Send Invitation </n-button>
-      </n-form-item>
-    </n-form>
-  </main>
+      <h4 class="flex items-center">
+        <Icon icon="carbon:user-follow" width="20" height="20" class="mr-2" />
+        Invite a new contributor
+      </h4>
+      <n-form ref="formRef" inline :model="formValue" :rules="rules" size="large">
+        <n-form-item label="Email Address" path="email">
+          <n-input
+            v-model:value="formValue.email"
+            placehol5der="someone@email.org"
+            class="!w-[350px]"
+          />
+        </n-form-item>
+        <n-form-item label="Permission" path="role" class="w-60">
+          <n-select
+            v-model:value="formValue.role"
+            placeholder=""
+            :options="invitationRoles"
+            :consistent-menu-width="false"
+            class="!w-40"
+          />
+        </n-form-item>
+
+        <n-form-item>
+          <n-button size="large" type="primary" @click="handleValidateClick">
+            <template #icon>
+              <f-icon icon="mingcute:invite-fill" />
+            </template>
+            Send Invitation
+          </n-button>
+        </n-form-item>
+      </n-form>
+    </main>
+  </FadeTransition>
 </template>

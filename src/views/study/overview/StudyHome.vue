@@ -1,13 +1,17 @@
 <script setup lang="ts">
+import { useMessage } from "naive-ui";
 import { computed, onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import { useAuthStore } from "@/stores/auth";
 import { useStudyStore } from "@/stores/study";
 import { displayHumanFriendlyDateAndTime } from "@/utils/date";
 
 const router = useRouter();
 const route = useRoute();
+const { error } = useMessage();
 
+const authStore = useAuthStore();
 const studyStore = useStudyStore();
 
 const study = computed(() => studyStore.study);
@@ -17,6 +21,11 @@ const routeParams = {
 };
 
 onBeforeMount(() => {
+  if (!authStore.isAuthenticated) {
+    error("You are not logged in.");
+    router.push({ name: "home" });
+  }
+
   const studyId = routeParams.studyId;
 
   studyStore.getStudy(studyId);
@@ -34,7 +43,7 @@ function editStudyDetails() {
   <FadeTransition>
     <LottieLoader v-if="studyStore.loading" />
 
-    <main class="flex h-full w-full flex-col space-y-8 px-6" px-4 v-else>
+    <main class="flex h-full w-full flex-col space-y-8 pr-6" px-4 v-else>
       <div class="flex items-center justify-between">
         <h2>Study Overview</h2>
 
@@ -50,7 +59,7 @@ function editStudyDetails() {
 
       <div class="flex w-full justify-between">
         <div class="pr-8">
-          <h2>{{ study.title }}</h2>
+          <h3>{{ study.title }}</h3>
 
           <p class="py-4">{{ study.description }}</p>
 

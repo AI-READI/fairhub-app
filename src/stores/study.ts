@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
-import type { Study } from "types/Study";
 import { ref } from "vue";
 
+import type { Study } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 export const useStudyStore = defineStore("study", () => {

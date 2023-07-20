@@ -16,7 +16,7 @@ export interface StudyContributor {
   firstname: string;
   lastname: string;
   ORCID: string;
-  // permission: string;
+  permission: string;
   roles: string[];
   status: string;
 }
