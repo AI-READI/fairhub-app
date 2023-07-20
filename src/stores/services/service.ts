@@ -1,7 +1,11 @@
 import type { Participant, Study, ViewProfile } from "@/stores/publish/study-interfaces";
 import { Dataset, DatasetVersion } from "@/stores/publish/study-interfaces";
 
-const baseURL = "http://api-fairhub-io-staging.azurewebsites.net";
+const baseURL =
+  process.env.NODE_ENV === "production"
+    ? "https://api-fairhub-io.azurewebsites.net"
+    : "http://localhost:5000";
+
 // const deploymentURL=''
 export async function fetchViewProfile(): Promise<ViewProfile[]> {
   const response = await fetch(`${baseURL}viewProfile}`);
@@ -10,11 +14,6 @@ export async function fetchViewProfile(): Promise<ViewProfile[]> {
 
 export async function fetchParticipants(studyId: number): Promise<Participant[]> {
   const response = await fetch(`${baseURL}/study/${studyId}/participants`);
-  return response.json();
-}
-
-export async function fetchStudies(): Promise<Study[]> {
-  const response = await fetch(`${baseURL}/study`);
   return response.json();
 }
 
@@ -43,15 +42,4 @@ export async function fetchDatasetVersion(
     `${baseURL}/study/${studyId}/dataset/${datasetId}/version/${versionId}`
   );
   return DatasetVersion.fromObject(await response.json());
-}
-
-export async function addStudy(study: Study): Promise<Study> {
-  const response = await fetch(`${baseURL}/study/add`, {
-    body: JSON.stringify(study),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-  });
-  return response.json();
 }

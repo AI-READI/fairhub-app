@@ -24,10 +24,10 @@ const hideMenuOptions = computed(() => {
     "/studies",
     "/studies/new",
     "/settings",
-    "/reportIssue",
+    "/help/report-issue",
     "/help/documentation",
     "/help/changelog",
-    "/viewProfile",
+    "/profile",
     "/integrations",
   ];
   if (hiddenRoutes.includes(route.path)) {
@@ -57,19 +57,19 @@ const staticUpperMenuOptions: MenuOption[] = [
 const dynamicUpperMenuOptions: MenuOption[] = [
   {
     icon: renderIcon("uil:align-left"),
-    key: "study-home",
+    key: "study-overview",
     label: () =>
       h(
         RouterLink,
         {
           to: {
-            name: "study-home",
+            name: "study-overview",
             params: {
-              id: studyID.value,
+              studyId: studyID.value,
             },
           },
         },
-        { default: () => "Study Home" }
+        { default: () => "Study Overview" }
       ),
   },
   {
@@ -82,7 +82,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
           to: {
             name: "study-participants",
             params: {
-              id: studyID.value,
+              studyId: studyID.value,
             },
           },
         },
@@ -99,7 +99,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
           to: {
             name: "study-contributors",
             params: {
-              id: studyID.value,
+              studyId: studyID.value,
             },
           },
         },
@@ -116,7 +116,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
           to: {
             name: "dashboard",
             params: {
-              id: studyID.value,
+              studyId: studyID.value,
             },
           },
         },
@@ -133,7 +133,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
           to: {
             name: "publish-select-dataset",
             params: {
-              id: studyID.value,
+              studyId: studyID.value,
             },
           },
         },
@@ -142,31 +142,23 @@ const dynamicUpperMenuOptions: MenuOption[] = [
   },
 ];
 
-// function routerLink(key: string) {
-//   if (key !== "publish-study") return;
-//   router.push({
-//     name: "publish-select-participants",
-//     params: { versionId: "v1" },
-//   });
-// }
-
 const lowerMenuOptions: MenuOption[] = [
   {
-    icon: renderIcon("material-symbols:bug-report-outline"),
-    key: "report-an-issue",
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            path: "/reportIssue",
-          },
-        },
-        { default: () => "Report an Issue" }
-      ),
-  },
-  {
     children: [
+      {
+        icon: renderIcon("material-symbols:bug-report-outline"),
+        key: "report-issue",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                path: "/help/report-issue",
+              },
+            },
+            { default: () => "Report an Issue" }
+          ),
+      },
       {
         icon: renderIcon("fluent:document-flowchart-24-regular"),
         key: "documentation",
@@ -208,7 +200,7 @@ const lowerMenuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            name: "settings",
+            name: "all-settings",
           },
         },
         { default: () => "Settings" }

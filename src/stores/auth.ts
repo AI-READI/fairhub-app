@@ -7,6 +7,8 @@ export const useAuthStore = defineStore(
     const isAuthenticated = ref(false);
     const user = ref("");
 
+    const showLoginModal = ref(false);
+
     function setLoggedIn() {
       isAuthenticated.value = true;
       user.value = "sanjay@email.org";
@@ -17,7 +19,7 @@ export const useAuthStore = defineStore(
       user.value = "";
     }
 
-    return { isAuthenticated, setLoggedIn, setLoggedOut, user };
+    return { isAuthenticated, setLoggedIn, setLoggedOut, showLoginModal, user };
   },
   {
     persist: { storage: sessionStorage },

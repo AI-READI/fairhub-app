@@ -121,23 +121,23 @@
     @apply bg-primary-500;
   }
 
-    .bg-secondary {
+  .bg-secondary {
     @apply bg-secondary-500;
   }
 
-   .border-primary {
+  .border-primary {
     @apply border-primary-500;
   }
 
-    .border-secondary {
+  .border-secondary {
     @apply border-secondary-500;
   }
 
-     .text-primary {
+  .text-primary {
     @apply text-primary-500;
   }
 
-    .text-secondary {
+  .text-secondary {
     @apply text-secondary-500;
   }
 
@@ -146,19 +146,44 @@
   }
 
   .back-next-buttons {
-  display: flex;
-  justify-content: space-between;
-}
-
-   .steps .n-steps .n-step {
-    @apply flex-none 2xl:flex-1
+    display: flex;
+    justify-content: space-between;
   }
 
-   .steps .n-step-indicator, .n-step-content {
+  .steps .n-steps .n-step {
+    @apply flex-none 2xl:flex-1;
+  }
+
+  .steps .n-step-indicator,
+  .n-step-content {
     margin-top: 1rem;
+  }
 }
 
+/* ------------------------------------------
+Transition styles for <transition />
+--------------------------------------------- */
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease-in-out;
 }
 
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  /* transform: translateY(-20px); */
+}
 
+.lightfadeleft-enter-active,
+.lightfadeleft-leave-active {
+  transition: all 0.3s ease-in-out;
+  overflow-x: hidden;
+  opacity: 0.7;
+}
 
+.lightfadeleft-enter-from,
+.lightfadeleft-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}

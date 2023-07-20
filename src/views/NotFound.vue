@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import "vue3-lottie/dist/style.css";
-</script>
-
 <template>
   <div class="column">
     <div class="row">

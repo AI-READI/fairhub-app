@@ -5,10 +5,11 @@ import { h } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-import { showLogin } from "@/stores/loginAuth";
-const authStore = useAuthStore();
+
 const router = useRouter();
 const { error } = useMessage();
+
+const authStore = useAuthStore();
 
 const renderMessage: MessageRenderMessage = (props) => {
   const { type } = props;
@@ -38,7 +39,8 @@ const navigateToStudies = () => {
     error("You must be logged in to view studies", {
       render: renderMessage,
     });
-    showLogin.value = true;
+
+    authStore.showLoginModal = true;
     /**
      *
      * TODO: Attach the login method to this component

@@ -5,14 +5,14 @@
     "types": ["naive-ui/volar", "node"],
     "resolveJsonModule": true,
     "esModuleInterop": true,
-
+    "typeRoots": ["./node_modules/@types", "src/types"],
     "paths": {
       "@/*": ["./src/*"]
     }
   },
   "composite": true,
   "files": [],
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "src/**/*.json"],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "src/**/*.json", "src/types"],
   "references": [
     {
       "path": "./tsconfig.config.json"

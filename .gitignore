@@ -20,6 +20,7 @@ coverage
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea
 *.suo
 *.ntvs*
@@ -29,3 +30,7 @@ coverage
 
 # API Platform specific files
 *.pyc
+
+# Auto generate typescript files
+auto-imports.d.ts
+components.d.ts

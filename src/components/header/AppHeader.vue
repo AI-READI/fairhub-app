@@ -1,23 +1,10 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import type { FormInst } from "naive-ui";
-import {
-  NAlert,
-  NAvatar,
-  NButton,
-  NCard,
-  NDropdown,
-  NForm,
-  NFormItem,
-  NInput,
-  NModal,
-  NSpace,
-} from "naive-ui";
 import { h, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-import { showLogin } from "@/stores/loginAuth";
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -57,7 +44,7 @@ const profileOptions = [
         RouterLink,
         {
           to: {
-            name: "view-profile",
+            name: "user-profile",
           },
         },
         { default: () => "View Profile" }
@@ -92,20 +79,12 @@ function renderIcon(icon: string) {
   return () => h(Icon, { icon });
 }
 
-//watcher function to
-// watch(showLogin, (showLogin) => {
-//   if (showLogin) {
-//     showModal.value = true;
-//
-//   }
-// });
-
 const showLoginModal = () => {
-  showLogin.value = true;
+  authStore.showLoginModal = true;
 };
 
 const handleCancel = () => {
-  showLogin.value = false;
+  authStore.showLoginModal = false;
 };
 
 const handleSelect = (key: string | number) => {
@@ -125,7 +104,7 @@ const handleLogin = (e: MouseEvent) => {
       if (formValue.value.username === "admin" && formValue.value.password === "admin") {
         showErrorAlert.value = false;
 
-        showLogin.value = false;
+        authStore.showLoginModal = false;
 
         authStore.setLoggedIn();
 
@@ -147,7 +126,7 @@ const handleLogin = (e: MouseEvent) => {
   <header :class="{ 'debug-screens': development }">
     <n-space justify="space-between" align="center" class="pl-4 pr-2">
       <RouterLink to="/">
-        <h1 class="relative top-0 left-0 p-2 text-4xl font-black text-[#565656]">
+        <h1 class="relative left-0 top-0 p-2 text-4xl font-black text-[#565656]">
           <span class="text-4xl font-black text-primary-900"> fair</span>hub
         </h1>
       </RouterLink>
@@ -183,7 +162,7 @@ const handleLogin = (e: MouseEvent) => {
             />
           </n-dropdown>
 
-          <n-modal v-model:show="showLogin">
+          <n-modal v-model:show="authStore.showLoginModal">
             <n-card
               style="width: 600px"
               title="Login to fairhub.io"

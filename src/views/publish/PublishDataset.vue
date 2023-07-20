@@ -94,12 +94,5 @@ const datasets = inject(DATASETS_KEY, ref([]));
         </li>
       </ul>
     </div>
-    <!--      <div>-->
-    <!--          Select the dataset that you would like to continue working with and click "Resume"-->
-    <!--        <div>-->
-    <!--          <n-card hoverable> Continue where you left </n-card>-->
-    <!--        </div>-->
-    <!--     </div>-->
-    <div></div>
   </main>
 </template>

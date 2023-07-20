@@ -105,8 +105,8 @@ function deleteParticipants(clickedParticipant: number) {
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col space-y-8 pr-8">
-    <h1>All Study Participants</h1>
+  <main class="flex h-full w-full flex-col space-y-8 pr-6">
+    <h2>Study Participants</h2>
     <div class="row-auto flex items-end justify-end">
       <n-button @click="addParticipant"> Add participant </n-button>
     </div>
@@ -114,11 +114,6 @@ function deleteParticipants(clickedParticipant: number) {
     <div class="select-buttons"></div>
     <div>
       <div class="participant-choices">
-        <!--        <div class="participant-elements">-->
-        <!--          <div>-->
-        <!--            <n-data-table :columns="columns" :data="participants" :bordered="true" />-->
-        <!--          </div>-->
-        <!--        </div>-->
         <n-table :bordered="false" :single-line="false">
           <thead>
             <tr>

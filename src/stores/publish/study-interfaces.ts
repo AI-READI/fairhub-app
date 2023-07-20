@@ -4,42 +4,6 @@ export interface Participant {
   age: string;
 }
 
-export interface Contributor {
-  affiliations: string[];
-  email: string;
-  firstname: string;
-  lastname: string;
-  ORCID: string;
-  // permission: string;
-  roles: string[];
-  status: string;
-}
-
-export interface Study {
-  id: number;
-  title: string;
-  contributors: Contributor[];
-  description: string;
-  image: string;
-  keywords: string[];
-  lastPublished: PublishedVersion;
-  lastUpdated: string;
-  owner: Owner;
-  size: string;
-}
-
-export interface PublishedVersion {
-  date: string;
-  doi: string;
-  version: string;
-}
-
-export interface Owner {
-  name: string;
-  email: string;
-  ORCID: string;
-}
-
 // export interface Dataset {
 //   id: number;
 //   name: string;

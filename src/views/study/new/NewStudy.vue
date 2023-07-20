@@ -1,13 +1,15 @@
 <script setup lang="ts">
+import { faker } from "@faker-js/faker";
 import type { FormInst, FormItemRule, FormRules } from "naive-ui";
-import { NButton, NForm, NFormItem, NInput, NSelect, NSpace, useMessage } from "naive-ui";
+import { useMessage } from "naive-ui";
+import { nanoid } from "nanoid";
 import type { Ref } from "vue";
 import { onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-import type { Study } from "@/stores/publish/study-interfaces";
-import { addStudy } from "@/stores/services/service";
+import type { Study } from "@/types/Study";
+import { baseURL } from "@/utils/constants";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -23,20 +25,20 @@ onBeforeMount(() => {
 const formRef = ref<FormInst | null>(null);
 
 const study: Ref<Study> = ref({
-  id: 0,
-  title: "",
+  id: nanoid(5),
+  title: faker.commerce.productName(),
   contributors: [],
-  description: "",
-  image: "",
-  keywords: [],
+  description: faker.commerce.productDescription(),
+  image: faker.image.url(),
+  keywords: [faker.word.noun(), faker.word.noun(), faker.word.noun(), faker.word.noun()],
   lastPublished: {
     date: "",
     doi: "",
     version: "",
   },
   lastUpdated: "",
-  owner: { name: "", email: "", ORCID: "" },
-  size: "",
+  owner: { name: faker.person.fullName(), email: faker.internet.email(), ORCID: "" },
+  size: "0 MB",
 });
 
 const generalOptions = [
@@ -70,7 +72,7 @@ const rules: FormRules = {
     {
       required: true,
       trigger: ["blur", "change"],
-      validator: (rule: FormItemRule, value) => {
+      validator: (_rule: FormItemRule, value) => {
         if (value !== null && value.length > 0) {
           return Promise.resolve();
         }
@@ -80,11 +82,14 @@ const rules: FormRules = {
   ],
 };
 
-const handleValidateButtonClick = (e: MouseEvent) => {
+const createStudy = (e: MouseEvent) => {
   e.preventDefault();
+
   formRef.value?.validate((errors) => {
     if (!errors) {
-      console.log("success");
+      addStudy(study.value).then((s) => {
+        study.value = s;
+      });
     } else {
       console.log("error");
       console.log(errors);
@@ -96,18 +101,23 @@ const handleUpdateValue = (value: string[]) => {
   console.log(value);
 };
 
-function addStudyButton() {
-  addStudy(study.value).then((s) => {
-    study.value = s;
+async function addStudy(study: Study): Promise<Study> {
+  const response = await fetch(`${baseURL}/study/add`, {
+    body: JSON.stringify(study),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
   });
+  return response.json();
 }
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8">
-    <n-space justify="space-between">
-      <h1>Create a Study</h1>
-    </n-space>
+    <h1>Create a new study</h1>
+
+    <n-divider />
 
     <n-form
       ref="formRef"
@@ -150,8 +160,17 @@ function addStudyButton() {
         <n-input v-model:value="study.image" placeholder="Add an image" />
       </n-form-item>
 
+      <n-image :src="study.image" v-if="study.image !== ''" width="300" class="rounded-xl" />
+
+      <n-divider />
+
       <div class="flex justify-start">
-        <n-button type="primary" size="large" @click="addStudyButton"> Create Study </n-button>
+        <n-button size="large" type="primary" @click="createStudy">
+          <template #icon>
+            <f-icon icon="material-symbols:add" />
+          </template>
+          Create Study
+        </n-button>
       </div>
     </n-form>
   </main>

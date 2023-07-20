@@ -32,3 +32,22 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* ===== Scrollbar CSS ===== */
+/* ------------------------------------------
+Custom styles for all the scrollbars
+--------------------------------------------- */
+
+*::-webkit-scrollbar {
+  width: 11px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #919191;
+  border-radius: 15px;
+  border: 3px solid #ffffff;
+}
