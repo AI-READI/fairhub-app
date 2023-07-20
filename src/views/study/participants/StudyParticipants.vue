@@ -105,76 +105,79 @@ function deleteParticipants(clickedParticipant: number) {
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col space-y-8 pr-8">
-    <h1>All Study Participants</h1>
-    <div class="row-auto flex items-end justify-end">
-      <n-button @click="addParticipant"> Add participant </n-button>
-    </div>
+  <n-scrollbar>
+    <n-back-top />
+    <main class="flex h-full w-full flex-col space-y-8 pr-8">
+      <h1>All Study Participants</h1>
+      <div class="row-auto flex items-end justify-end">
+        <n-button @click="addParticipant"> Add participant </n-button>
+      </div>
 
-    <div class="select-buttons"></div>
-    <div>
-      <div class="participant-choices">
-        <!--        <div class="participant-elements">-->
-        <!--          <div>-->
-        <!--            <n-data-table :columns="columns" :data="participants" :bordered="true" />-->
-        <!--          </div>-->
-        <!--        </div>-->
-        <n-table :bordered="false" :single-line="false">
-          <thead>
-            <tr>
-              <th v-for="(item, index) in columns" :key="index">{{ item }}</th>
-            </tr>
-          </thead>
+      <div class="select-buttons"></div>
+      <div>
+        <div class="participant-choices">
+          <!--        <div class="participant-elements">-->
+          <!--          <div>-->
+          <!--            <n-data-table :columns="columns" :data="participants" :bordered="true" />-->
+          <!--          </div>-->
+          <!--        </div>-->
+          <n-table :bordered="false" :single-line="false">
+            <thead>
+              <tr>
+                <th v-for="(item, index) in columns" :key="index">{{ item }}</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            <tr v-for="(item, index) in participants" :key="index">
-              <td>{{ item.name }}</td>
-              <td>{{ item.address }}</td>
-              <td>{{ item.age }}</td>
-              <td>
-                <n-button type="primary" @click="onEdit(item)"> View/Edit</n-button>
-              </td>
-              <td>
-                <n-button type="error" @click="deleteParticipants(index)">Delete</n-button>
-              </td>
-            </tr>
-          </tbody>
-        </n-table>
+            <tbody>
+              <tr v-for="(item, index) in participants" :key="index">
+                <td>{{ item.name }}</td>
+                <td>{{ item.address }}</td>
+                <td>{{ item.age }}</td>
+                <td>
+                  <n-button type="primary" @click="onEdit(item)"> View/Edit</n-button>
+                </td>
+                <td>
+                  <n-button type="error" @click="deleteParticipants(index)">Delete</n-button>
+                </td>
+              </tr>
+            </tbody>
+          </n-table>
 
-        <div style="display: flex; justify-content: center">
-          <n-button type="primary" @click="add">Add a Participant</n-button>
-          <n-modal
-            v-model:show="showDialog"
-            class="custom-card"
-            preset="card"
-            title="Add or make changes on participant information"
-            :bordered="false"
-            size="huge"
-          >
-            <n-form
-              :model="workingParticipant"
-              ref="formRef"
-              size="large"
-              label-placement="top"
-              class="pr-4"
+          <div style="display: flex; justify-content: center">
+            <n-button type="primary" @click="add">Add a Participant</n-button>
+            <n-modal
+              v-model:show="showDialog"
+              class="custom-card"
+              preset="card"
+              title="Add or make changes on participant information"
+              :bordered="false"
+              size="huge"
             >
-              <n-form-item :span="12" label="Name" path="Name">
-                <n-input v-model:value="workingParticipant.name" placeholder="Name" />
-              </n-form-item>
-              <n-form-item :span="12" label="Address" path="Address">
-                <n-input v-model:value="workingParticipant.address" placeholder="Address" />
-              </n-form-item>
-              <n-form-item :span="12" label="Age" path="Age">
-                <n-input v-model:value="workingParticipant.age" placeholder="Age" />
-              </n-form-item>
-              <div class="add-cancel flex justify-start">
-                <n-button type="primary" size="large" @click="saveParticipant()"> Save </n-button>
-                <n-button type="tertiary" size="large" @click="onClose"> Cancel </n-button>
-              </div>
-            </n-form>
-          </n-modal>
+              <n-form
+                :model="workingParticipant"
+                ref="formRef"
+                size="large"
+                label-placement="top"
+                class="pr-4"
+              >
+                <n-form-item :span="12" label="Name" path="Name">
+                  <n-input v-model:value="workingParticipant.name" placeholder="Name" />
+                </n-form-item>
+                <n-form-item :span="12" label="Address" path="Address">
+                  <n-input v-model:value="workingParticipant.address" placeholder="Address" />
+                </n-form-item>
+                <n-form-item :span="12" label="Age" path="Age">
+                  <n-input v-model:value="workingParticipant.age" placeholder="Age" />
+                </n-form-item>
+                <div class="add-cancel flex justify-start">
+                  <n-button type="primary" size="large" @click="saveParticipant()"> Save </n-button>
+                  <n-button type="tertiary" size="large" @click="onClose"> Cancel </n-button>
+                </div>
+              </n-form>
+            </n-modal>
+          </div>
         </div>
       </div>
-    </div>
-  </main>
+    </main>
+  </n-scrollbar>
 </template>

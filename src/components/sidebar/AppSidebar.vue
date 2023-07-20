@@ -57,15 +57,15 @@ const staticUpperMenuOptions: MenuOption[] = [
 const dynamicUpperMenuOptions: MenuOption[] = [
   {
     icon: renderIcon("uil:align-left"),
-    key: "study-home",
+    key: "study-overview",
     label: () =>
       h(
         RouterLink,
         {
           to: {
-            name: "study-home",
+            name: "study-overview",
             params: {
-              id: studyID.value,
+              studyId: studyID.value,
             },
           },
         },
@@ -82,7 +82,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
           to: {
             name: "study-participants",
             params: {
-              id: studyID.value,
+              studyId: studyID.value,
             },
           },
         },
@@ -99,7 +99,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
           to: {
             name: "study-contributors",
             params: {
-              id: studyID.value,
+              studyId: studyID.value,
             },
           },
         },
@@ -116,7 +116,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
           to: {
             name: "dashboard",
             params: {
-              id: studyID.value,
+              studyId: studyID.value,
             },
           },
         },
@@ -133,7 +133,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
           to: {
             name: "publish-select-dataset",
             params: {
-              id: studyID.value,
+              studyId: studyID.value,
             },
           },
         },

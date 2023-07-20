@@ -22,11 +22,7 @@ onBeforeMount(() => {
   studyStore.getStudy(studyId);
 });
 
-const navigateToStudy = (id: string) => {
-  router.push({ name: "study", params: { id: id.toString() } });
-};
-
-function updateStudy() {
+function editStudyDetails() {
   router.push({
     name: "update-study",
     params: { studyId: routeParams.studyId },
@@ -42,7 +38,7 @@ function updateStudy() {
       <div class="flex items-center justify-between">
         <h2>Study Overview</h2>
 
-        <n-button size="large" type="primary">
+        <n-button size="large" type="primary" @click="editStudyDetails">
           <template #icon>
             <f-icon icon="material-symbols:edit" />
           </template>
@@ -52,7 +48,7 @@ function updateStudy() {
 
       <n-divider />
 
-      <div class="flex w-full justify-start">
+      <div class="flex w-full justify-between">
         <div class="pr-8">
           <h2>{{ study.title }}</h2>
 

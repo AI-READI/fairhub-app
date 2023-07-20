@@ -26,8 +26,8 @@ onBeforeMount(() => {
   studyStore.fetchAllStudies();
 });
 
-const navigateToStudy = (studyId: number) => {
-  router.push({ name: "study-home", params: { studyId: studyId.toString() } });
+const navigateToStudy = (studyId: string) => {
+  router.push({ name: "study-overview", params: { studyId } });
 };
 </script>
 
@@ -58,7 +58,7 @@ const navigateToStudy = (studyId: number) => {
 
         <div class="flex w-full grow flex-col space-y-2 py-3 pl-8">
           <div class="flex flex-col space-y-2">
-            <div class="flex justify-between pr-4">
+            <div class="flex justify-between pr-4 pt-2">
               <h3>{{ study.title }}</h3>
               <span> {{ study.size }} </span>
             </div>
