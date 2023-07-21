@@ -27,11 +27,9 @@ onBeforeRouteUpdate((to) => {
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col space-y-8 pr-8">
-    <router-view v-slot="{ Component }">
-      <transition name="fade" appear mode="out-in">
-        <component :is="Component" />
-      </transition>
-    </router-view>
-  </main>
+  <router-view v-slot="{ Component }">
+    <transition name="fade" appear mode="out-in">
+      <component :is="Component" />
+    </transition>
+  </router-view>
 </template>
