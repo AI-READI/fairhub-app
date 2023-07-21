@@ -126,9 +126,9 @@ const handleLogin = (e: MouseEvent) => {
   <header :class="{ 'debug-screens': development }">
     <n-space justify="space-between" align="center" class="pl-4 pr-2">
       <RouterLink to="/">
-        <h1 class="relative left-0 top-0 p-2 text-4xl font-black text-[#565656]">
+        <div class="relative left-0 top-0 p-2 text-4xl font-black text-[#565656]">
           <span class="text-4xl font-black text-primary-900"> fair</span>hub
-        </h1>
+        </div>
       </RouterLink>
 
       <n-space justify="space-between" align="center">
@@ -147,6 +147,7 @@ const handleLogin = (e: MouseEvent) => {
           >
             Login
           </n-button>
+
           <n-dropdown
             :options="profileOptions"
             placement="bottom-start"

@@ -12,8 +12,9 @@ import type { Study } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const router = useRouter();
-const authStore = useAuthStore();
 const { error } = useMessage();
+
+const authStore = useAuthStore();
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
@@ -115,7 +116,7 @@ async function addStudy(study: Study): Promise<Study> {
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8">
-    <h2>Create a new study</h2>
+    <h1>Create a new study</h1>
 
     <n-divider />
 

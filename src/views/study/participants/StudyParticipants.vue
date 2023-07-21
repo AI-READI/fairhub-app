@@ -7,7 +7,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useParticipantStore } from "@/stores/participant";
 
 /**
- * TODO: update this to use a data table from naive ui instead
+ * TODO: update this to use a data-table from naive ui instead
  */
 
 const route = useRoute();

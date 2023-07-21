@@ -17,7 +17,7 @@ export const useDatasetStore = defineStore("dataset", () => {
 
     allDatasets.value = await response.json();
 
-    console.log(allDatasets.value);
+    console.log("datasets", allDatasets.value);
 
     allDatasets.value.forEach((dataset) => {
       dataset.id = dataset.id.toString();
