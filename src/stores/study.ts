@@ -25,10 +25,6 @@ export const useStudyStore = defineStore("study", () => {
     allStudies.value.sort((a, b) => a.title.localeCompare(b.title));
   };
 
-  const getAllStudies = () => {
-    return allStudies.value;
-  };
-
   const getStudy = async (studyId: string) => {
     loading.value = true;
     /**
@@ -54,5 +50,5 @@ export const useStudyStore = defineStore("study", () => {
     return study.value;
   };
 
-  return { allStudies, fetchAllStudies, getAllStudies, getStudy, loading, study };
+  return { allStudies, fetchAllStudies, getStudy, loading, study };
 });

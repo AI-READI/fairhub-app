@@ -34,7 +34,8 @@ const navigateToStudy = (studyId: string) => {
 <template>
   <main class="flex h-full w-full flex-col space-y-4 pr-6">
     <n-space justify="space-between">
-      <h1>All Studies</h1>
+      <h2>All Studies</h2>
+
       <RouterLink :to="{ name: 'new-study' }">
         <n-button size="large" type="primary">
           <template #icon>

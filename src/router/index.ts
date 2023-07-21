@@ -9,10 +9,10 @@ import ReportIssue from "@/views/help/ReportIssue.vue";
 import Integrations from "@/views/integrations/IntegrationPage.vue";
 import LandingPage from "@/views/LandingPage.vue";
 import NotFound from "@/views/NotFound.vue";
+import PublishDataset from "@/views/publish/datasets/PublishDataset.vue";
 import PublishAdditionalInfo from "@/views/publish/PublishAdditionalInfo.vue";
 import PublishChangelog from "@/views/publish/PublishChangelog.vue";
 import PublishContributors from "@/views/publish/PublishContributors.vue";
-import PublishDataset from "@/views/publish/PublishDataset.vue";
 import PublishDatasetMetadata from "@/views/publish/PublishDatasetMetadata.vue";
 import PublishReadme from "@/views/publish/PublishReadme.vue";
 import PublishRelatedSources from "@/views/publish/PublishRelatedSources.vue";
@@ -103,8 +103,8 @@ const router = createRouter({
               path: "publish",
               children: [
                 {
-                  name: "dataset",
-                  path: "dataset",
+                  name: "datasets",
+                  path: "datasets",
                   children: [
                     {
                       name: "publish-select-dataset",
