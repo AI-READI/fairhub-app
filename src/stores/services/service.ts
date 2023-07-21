@@ -1,4 +1,4 @@
-import type { Participant, Study, ViewProfile } from "@/stores/publish/study-interfaces";
+import type { Study, ViewProfile } from "@/stores/publish/study-interfaces";
 import { DatasetVersion, Wataset } from "@/stores/publish/study-interfaces";
 
 const baseURL =
@@ -9,11 +9,6 @@ const baseURL =
 // const deploymentURL=''
 export async function fetchViewProfile(): Promise<ViewProfile[]> {
   const response = await fetch(`${baseURL}viewProfile}`);
-  return response.json();
-}
-
-export async function fetchParticipants(studyId: number): Promise<Participant[]> {
-  const response = await fetch(`${baseURL}/study/${studyId}/participants`);
   return response.json();
 }
 

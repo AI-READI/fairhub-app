@@ -124,7 +124,7 @@ const deleteDatasetVersion = () => {
 
         <n-divider />
 
-        <div class="flex flex-col space-y-4">
+        <div class="flex flex-col space-y-2">
           <p>{{ dataset.description }}</p>
 
           <n-divider />

@@ -1,9 +1,3 @@
-export interface Participant {
-  name: string;
-  address: string;
-  age: string;
-}
-
 // export interface Dataset {
 //   id: number;
 //   name: string;

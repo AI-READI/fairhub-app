@@ -115,7 +115,7 @@ async function addStudy(study: Study): Promise<Study> {
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8">
-    <h1>Create a new study</h1>
+    <h2>Create a new study</h2>
 
     <n-divider />
 
