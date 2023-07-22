@@ -86,8 +86,10 @@ const navigateToStudy = (studyId: string) => {
                 <span v-if="study.lastPublished">
                   {{ study.lastPublished.version }} ({{ study.lastPublished.date }})
                 </span>
+
                 <span v-else> Not published yet </span>
               </p>
+
               <p class="pl-2" v-if="study.lastPublished">
                 <span class="font-bold"> Latest DOI: </span>
                 <span class="text-blue-500"> {{ study.lastPublished!.doi }} </span>

@@ -1,4 +1,3 @@
-import { nanoid } from "nanoid";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
@@ -17,10 +16,10 @@ export const useParticipantStore = defineStore("participant", () => {
 
     allParticipants.value = await response.json();
 
-    console.log(allParticipants.value);
+    console.log("participants", allParticipants.value);
 
     allParticipants.value.forEach((participant) => {
-      participant.id = nanoid(5);
+      //   participant.id = nanoid(5);  //was changing on load
     });
 
     loading.value = false;

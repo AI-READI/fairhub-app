@@ -19,12 +19,6 @@ const routeParams = {
 
 const studyPublish = inject<Ref<DatasetVersion | null>>(STUDYPUBLISH_KEY, ref(null));
 
-// const checkingForPreviousVersions = ref(true);
-//
-// setTimeout(() => {
-//   checkingForPreviousVersions.value = false;
-// }, 3000);
-
 const formRef = ref<FormInst | null>(null);
 
 const languageOptions: SelectMixedOption[] = LANGUAGE_JSON.map((v) => ({
@@ -47,20 +41,6 @@ const generalOptions = [
 const handleUpdateValue = (value: string[]) => {
   console.log(value);
 };
-
-// const handleValidateClick = (e: MouseEvent) => {
-//   formRef.value?.validate((errors) => {
-//     if (!errors) {
-//       router.push({
-//         name: "publish-study-metadata",z
-//         params: { versionId: routeParams.versionId },
-//       });
-//     } else {
-//       console.log(errors);
-//       console.log("Invalid");
-//     }
-//   });
-// };
 
 function handleBackButton() {
   router.push({
@@ -123,12 +103,9 @@ console.log(studyPublish);
             :options="languageOptions"
           />
         </n-form-item>
-
-        <!--        <n-form-item>-->
-        <!--          <n-button @click="handleValidateClick"> Validate </n-button>-->
-        <!--        </n-form-item>-->
       </n-form>
     </div>
+
     <div class="back-next-buttons">
       <n-button type="primary" size="large" @click="handleBackButton">Back</n-button>
       <n-button type="primary" size="large" @click="handleNextButton">Next</n-button>

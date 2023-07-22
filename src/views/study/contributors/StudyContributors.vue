@@ -110,6 +110,7 @@ const removeContributor = (email: string) => {
 };
 
 const getFirstLetters = (name: string) => {
+  console.log(name);
   const names = name.split(" ");
   return names[0].charAt(0) + names[1].charAt(0);
 };
@@ -138,7 +139,7 @@ const getFirstLetters = (name: string) => {
               'text-slate-50': owner.status === 'active',
             }"
           >
-            {{ getFirstLetters(owner.name) }}
+            {{ getFirstLetters(owner.email) }}
           </n-avatar>
 
           <div class="flex flex-col">
