@@ -1,7 +1,7 @@
 export interface Version {
   id: string;
   title: string;
-  contributors: Contributor[];
+  contributors: VersionContributor[];
   description: string;
   keywords: string[];
   primaryLanguage: string;

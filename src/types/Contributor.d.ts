@@ -2,7 +2,7 @@ interface Contributor {
   affiliations: string[];
   firstname: string;
   lastname: string;
-  ORCID: string;
+  orcid: string;
 }
 
 export interface StudyContributor extends Contributor {
@@ -12,5 +12,6 @@ export interface StudyContributor extends Contributor {
 }
 
 export interface VersionContributor extends Contributor {
+  id: string;
   roles: string[];
 }

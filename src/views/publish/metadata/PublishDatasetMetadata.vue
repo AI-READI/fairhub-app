@@ -165,7 +165,7 @@ function handleNextButton() {
         <n-input v-model:value="datasetMetadata.description" type="textarea" placeholder="..." />
       </n-form-item>
 
-      <n-form-item :span="12" label="Keywords" path="keywords">
+      <n-form-item label="Keywords" path="keywords">
         <n-select
           v-model:value="datasetMetadata.keywords"
           placeholder="Salutogenesis"
@@ -177,7 +177,7 @@ function handleNextButton() {
         />
       </n-form-item>
 
-      <n-form-item :span="12" label="Primary Language" path="primaryLanguage">
+      <n-form-item label="Primary Language" path="primaryLanguage">
         <n-select
           v-model:value="datasetMetadata.primaryLanguage"
           placeholder="Select language"

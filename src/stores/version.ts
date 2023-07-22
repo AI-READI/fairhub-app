@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
+import type { VersionContributor } from "@/types/Contributor";
 import type { Participant } from "@/types/Participant";
 import type { Version } from "@/types/Version";
 
@@ -37,7 +38,12 @@ export const useVersionStore = defineStore("version", () => {
     version.value.primaryLanguage = language;
   };
 
+  const addContributor = (contributor: VersionContributor) => {
+    version.value.contributors.push(contributor);
+  };
+
   return {
+    addContributor,
     loading,
     updateDescription,
     updateKeywords,
