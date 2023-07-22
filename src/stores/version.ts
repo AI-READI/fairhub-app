@@ -21,5 +21,29 @@ export const useVersionStore = defineStore("version", () => {
     version.value.selectedParticipants = participants;
   };
 
-  return { loading, updateSelectedParticipants, version };
+  const updateTitle = (title: string) => {
+    version.value.title = title;
+  };
+
+  const updateDescription = (description: string) => {
+    version.value.description = description;
+  };
+
+  const updateKeywords = (keywords: string[]) => {
+    version.value.keywords = keywords;
+  };
+
+  const updatePrimaryLanguage = (language: string) => {
+    version.value.primaryLanguage = language;
+  };
+
+  return {
+    loading,
+    updateDescription,
+    updateKeywords,
+    updatePrimaryLanguage,
+    updateSelectedParticipants,
+    updateTitle,
+    version,
+  };
 });
