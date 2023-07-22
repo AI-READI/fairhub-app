@@ -9,13 +9,14 @@ import ReportIssue from "@/views/help/ReportIssue.vue";
 import Integrations from "@/views/integrations/IntegrationPage.vue";
 import LandingPage from "@/views/LandingPage.vue";
 import NotFound from "@/views/NotFound.vue";
+import PublishAddContributor from "@/views/publish/contributors/PublishAddContributor.vue";
+import PublishContributors from "@/views/publish/contributors/PublishContributors.vue";
 import PublishDataset from "@/views/publish/datasets/PublishDataset.vue";
 import PublishDatasetMetadata from "@/views/publish/metadata/PublishDatasetMetadata.vue";
 import PublishStudyMetadata from "@/views/publish/metadata/PublishStudyMetadata.vue";
 import PublishSelectParticipants from "@/views/publish/participants/PublishSelectParticipants.vue";
 import PublishAdditionalInfo from "@/views/publish/PublishAdditionalInfo.vue";
 import PublishChangelog from "@/views/publish/PublishChangelog.vue";
-import PublishContributors from "@/views/publish/PublishContributors.vue";
 import PublishReadme from "@/views/publish/PublishReadme.vue";
 import PublishRelatedSources from "@/views/publish/PublishRelatedSources.vue";
 import PublishStudy from "@/views/publish/PublishStudy.vue";
@@ -137,7 +138,18 @@ const router = createRouter({
                             {
                               name: "publish-contributors",
                               path: "contributors",
-                              component: PublishContributors,
+                              children: [
+                                {
+                                  name: "publish-view-contributors",
+                                  path: "",
+                                  component: PublishContributors,
+                                },
+                                {
+                                  name: "publish-add-contributor",
+                                  path: "add",
+                                  component: PublishAddContributor,
+                                },
+                              ],
                             },
                             {
                               name: "publish-related-sources",

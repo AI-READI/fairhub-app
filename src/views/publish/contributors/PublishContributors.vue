@@ -1,29 +1,35 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
-import { NAlert, NButton, NForm, NFormItem, NInput, NModal, NSelect, NTable } from "naive-ui";
+import { useMessage } from "naive-ui";
 import type { Ref } from "vue";
 import { inject, ref, toRaw } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
-import router from "@/router";
+import { useAuthStore } from "@/stores/auth";
+import { useDatasetStore } from "@/stores/dataset";
 import { contributorRules, STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
 import type { Contributor, DatasetVersion } from "@/stores/publish/study-interfaces";
+import { useVersionStore } from "@/stores/version";
 
 const route = useRoute();
+const router = useRouter();
+const { error } = useMessage();
+
+const authStore = useAuthStore();
+const datasetStore = useDatasetStore();
+const versionStore = useVersionStore();
+
 const routeParams = {
-  versionId: route.params.versionId.toString(),
+  datasetId: route.params.datasetId,
+  studyId: route.params.studyId,
+  versionId: route.params.versionId,
 };
+
+const version = ref(versionStore.version);
 
 const studyPublish = inject<Ref<DatasetVersion | null>>(STUDYPUBLISH_KEY, ref(null));
 
-const headers = ref({
-  delete: "Delete",
-  firstname: "First name",
-  lastname: "Last name",
-  ORCID: " ORCID",
-  roles: "Role(s)",
-  update: "Update",
-});
+const tableHeaders = ["First name", "Last name", "ORCID", "Roles", "Actions"];
 
 function handleBackButton() {
   router.push({
@@ -52,7 +58,7 @@ const workingContributor: Ref<Contributor> = ref({
 
 let editedContributor: Contributor | null = null;
 
-function add() {
+function addContributor() {
   editedContributor = null;
   workingContributor.value = {
     affiliations: [],
@@ -120,49 +126,84 @@ function deleteParticipants(clickedContributor: number) {
   }
   studyPublish.value.contributors.splice(clickedContributor, 1);
 }
-
-console.log(studyPublish.value?.contributors, "sxcxc");
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col space-y-8 pr-8" v-if="studyPublish">
-    <h1>Edit Contributors</h1>
-    <div class="add-contributor">
-      <n-table :bordered="false" :single-line="false">
-        <thead>
-          <tr>
-            <th v-for="(item, index) in headers" :key="index">{{ item }}</th>
-          </tr>
-        </thead>
+  <main class="flex h-full w-full flex-col space-y-4 pr-6">
+    <n-space justify="space-between">
+      <h2>Add/Edit Contributors</h2>
 
-        <tbody v-if="studyPublish.contributors.length !== 0">
-          <tr v-for="(item, index) in studyPublish.contributors" :key="index">
-            <td>{{ item.firstname }}</td>
-            <td>{{ item.lastname }}</td>
-            <td>{{ item.ORCID }}</td>
-            <td>
-              <div v-for="(role, index) in item.roles" :key="index">{{ role }}</div>
-            </td>
-            <td>
-              <n-button type="primary" @click="onEdit(item)"> View/Edit</n-button>
-            </td>
-            <td>
-              <n-button type="error" @click="deleteParticipants(index)">Delete</n-button>
-            </td>
-          </tr>
-        </tbody>
-      </n-table>
-    </div>
+      <RouterLink
+        :to="{
+          name: 'publish-add-contributor',
+          params: {
+            datasetId: route.params.datasetId,
+            studyId: route.params.studyId,
+            versionId: route.params.versionId,
+          },
+        }"
+      >
+        <n-button size="large" type="primary">
+          <template #icon>
+            <f-icon icon="ion:add-circle-outline" />
+          </template>
+          Add a new contributor
+        </n-button>
+      </RouterLink>
+    </n-space>
 
-    <div v-if="studyPublish.contributors.length === 0" class="flex items-center justify-center">
-      <n-alert title="Warning Text" type="warning">
-        No contributors have been found. To add a contributor click to "Add contributor" button
-        below
+    <n-table :bordered="true" :single-line="false">
+      <thead>
+        <tr>
+          <th v-for="header in tableHeaders" :key="header">{{ header }}</th>
+        </tr>
+      </thead>
+
+      <tbody v-if="studyPublish.contributors.length !== 0">
+        <tr v-for="(item, index) in studyPublish.contributors" :key="index">
+          <td>{{ item.firstname }}</td>
+          <td>{{ item.lastname }}</td>
+          <td>{{ item.ORCID }}</td>
+          <td>
+            <n-tag v-for="role in item.roles" :key="role" type="info">{{ role }}</n-tag>
+          </td>
+
+          <td>
+            <div class="flex items-center space-x-2">
+              <n-button size="small" type="primary" @click="onEdit">
+                <template #icon>
+                  <f-icon icon="material-symbols:edit" />
+                </template>
+                Edit participant
+              </n-button>
+
+              <n-popconfirm @positive-click="deleteParticipants(index)">
+                <template #trigger>
+                  <n-button strong secondary type="error" size="small">
+                    <template #icon>
+                      <f-icon icon="ph:trash-fill" />
+                    </template>
+                    Delete participant
+                  </n-button>
+                </template>
+                Are you sure you want to remove this participant?
+              </n-popconfirm>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </n-table>
+
+    <div v-if="studyPublish.contributors.length === 0">
+      <n-divider />
+
+      <n-alert title="No Contributors found" type="warning">
+        There are no contributors added to this study. Use the `Add a new contributor` button at the
+        top right of the page to add a new contributor.
       </n-alert>
     </div>
-    <div style="display: flex; justify-content: center">
-      <n-button type="primary" @click="add">Add a Contributor</n-button>
 
+    <div style="display: flex; justify-content: center">
       <n-modal
         v-model:show="showDialog"
         class="custom-card"
@@ -228,21 +269,28 @@ console.log(studyPublish.value?.contributors, "sxcxc");
         </n-form>
       </n-modal>
     </div>
-    <div class="back-next-buttons">
-      <n-button type="primary" size="large" @click="handleBackButton">Back</n-button>
-      <n-button type="primary" size="large" @click="handleNextButton">Next</n-button>
+
+    <n-divider />
+
+    <div class="flex items-center justify-between">
+      <n-button size="large" type="warning" @click="handleBackButton">
+        <template #icon>
+          <f-icon icon="ic:round-arrow-back-ios" />
+        </template>
+        View study participants
+      </n-button>
+
+      <n-button
+        size="large"
+        type="primary"
+        @click="handleNextButton"
+        :disabled="studyPublish.contributors.length === 0"
+      >
+        <template #icon>
+          <f-icon icon="ic:round-arrow-forward-ios" />
+        </template>
+        Confirm study metadata
+      </n-button>
     </div>
   </main>
 </template>
-<style scoped>
-.add-cancel {
-  display: flex;
-  gap: 2rem;
-  justify-content: flex-end;
-}
-
-.input-ORCID {
-  display: flex;
-  flex-direction: column;
-}
-</style>

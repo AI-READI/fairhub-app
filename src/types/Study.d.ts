@@ -10,17 +10,6 @@ export interface StudyPublishedVersion {
   version: string;
 }
 
-export interface StudyContributor {
-  affiliations: string[];
-  email: string;
-  firstname: string;
-  lastname: string;
-  ORCID: string;
-  permission: string;
-  roles: string[];
-  status: string;
-}
-
 export interface Study {
   id: string;
   title: string;
