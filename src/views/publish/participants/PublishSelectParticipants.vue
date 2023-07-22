@@ -25,7 +25,6 @@ const routeParams = {
   versionId: route.params.versionId,
 };
 
-const dataset = computed(() => datasetStore.dataset);
 const participants = computed(() => participantStore.allParticipants);
 const version = ref(versionStore.version);
 

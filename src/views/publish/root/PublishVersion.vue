@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { NDivider, NStep, NSteps } from "naive-ui";
+import { useMessage } from "naive-ui";
 import type { Ref } from "vue";
 import { inject, onBeforeMount, ref, toRaw } from "vue";
 import { provide } from "vue";
 import type { RouteRecordName } from "vue-router";
-import { onBeforeRouteUpdate, useRoute } from "vue-router";
+import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
 
 import { DATASETS_KEY, STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
 import { Dataset, DatasetVersion } from "@/stores/publish/study-interfaces";
@@ -12,6 +12,8 @@ import { STUDY_KEY } from "@/stores/publish/study-state";
 import { fetchDatasetVersion } from "@/stores/services/service";
 
 const route = useRoute();
+const router = useRouter();
+const { error } = useMessage();
 
 const routeParams = {
   datasetId: route.params.datasetId as string,

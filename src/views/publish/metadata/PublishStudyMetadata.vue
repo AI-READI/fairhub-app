@@ -1,22 +1,18 @@
 <script setup lang="ts">
-import { faker } from "@faker-js/faker";
 import type { FormInst, FormItemRule, FormRules } from "naive-ui";
 import { useMessage } from "naive-ui";
-import { onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import LANGUAGE_JSON from "@/assets/data/languages.json";
 import { useAuthStore } from "@/stores/auth";
-import { useDatasetStore } from "@/stores/dataset";
-import { useVersionStore } from "@/stores/version";
+import { useStudyStore } from "@/stores/study";
 
 const route = useRoute();
 const router = useRouter();
 const { error } = useMessage();
 
 const authStore = useAuthStore();
-const datasetStore = useDatasetStore();
-const versionStore = useVersionStore();
+const studyStore = useStudyStore();
 
 const routeParams = {
   datasetId: route.params.datasetId,
@@ -24,7 +20,7 @@ const routeParams = {
   versionId: route.params.versionId,
 };
 
-const version = ref(versionStore.version);
+const study = computed(() => studyStore.study);
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
@@ -32,16 +28,10 @@ onBeforeMount(() => {
     router.push({ name: "home" });
   }
 
-  const datasetId = routeParams.datasetId as string;
   const studyId = routeParams.studyId as string;
 
-  datasetStore.getDataset(datasetId, studyId);
+  studyStore.getStudy(studyId);
 });
-
-const languageOptions = LANGUAGE_JSON.map((v) => ({
-  label: v.name,
-  value: v.alpha2,
-}));
 
 const keywordOptions = [
   {
@@ -72,29 +62,23 @@ const keywordOptions = [
 
 const formRef = ref<FormInst | null>(null);
 
-const datasetMetadata = ref({
-  title: version.value.title || faker.commerce.productName(),
-  description: version.value.description || faker.commerce.productDescription(),
-  keywords: version.value.keywords || [
-    faker.word.noun(),
-    faker.word.noun(),
-    faker.word.noun(),
-    faker.word.noun(),
-  ],
-  primaryLanguage: version.value.primaryLanguage || "en",
+const studyMetadata = ref({
+  title: study.value.title,
+  description: study.value.description,
+  keywords: study.value.keywords,
 });
 
 const rules: FormRules = {
   title: [
     {
-      message: "Please add a title for the dataset",
+      message: "Please add a title for the study",
       required: true,
       trigger: ["blur", "input"],
     },
   ],
   description: [
     {
-      message: "Please add a description for the dataset",
+      message: "Please add a description for the study",
       required: true,
       trigger: ["blur", "input"],
     },
@@ -103,7 +87,7 @@ const rules: FormRules = {
     {
       required: true,
       trigger: ["blur", "change"],
-      validator: (_rule: FormItemRule, value) => {
+      validator: (rule: FormItemRule, value) => {
         if (value !== null && value.length > 0) {
           return Promise.resolve();
         }
@@ -111,18 +95,11 @@ const rules: FormRules = {
       },
     },
   ],
-  primaryLanguage: [
-    {
-      message: "Please select a primary language",
-      required: true,
-      trigger: ["blur", "change"],
-    },
-  ],
 };
 
 function handleBackButton() {
   router.push({
-    name: "publish-select-participants",
+    name: "publish-dataset-metadata",
     params: { versionId: routeParams.versionId },
   });
 }
@@ -130,13 +107,14 @@ function handleBackButton() {
 function handleNextButton() {
   formRef.value?.validate((errors) => {
     if (!errors) {
-      versionStore.updateTitle(datasetMetadata.value.title);
-      versionStore.updateDescription(datasetMetadata.value.description);
-      versionStore.updateKeywords(datasetMetadata.value.keywords);
-      versionStore.updatePrimaryLanguage(datasetMetadata.value.primaryLanguage);
+      /**
+       * TODO: determine if this changes from the original study metadata
+       */
+
+      console.log(studyMetadata.value);
 
       router.push({
-        name: "publish-study-metadata",
+        name: "publish-contributors",
         params: { versionId: routeParams.versionId },
       });
     } else {
@@ -149,41 +127,43 @@ function handleNextButton() {
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
-    <h2>Confirm Dataset Metadata</h2>
+    <h2>Confirm Study Metadata</h2>
 
     <n-divider />
 
-    <n-form ref="formRef" :label-width="80" :model="datasetMetadata" :rules="rules" size="large">
-      <n-form-item label="Title" path="title">
-        <n-input
-          v-model:value="datasetMetadata.title"
-          placeholder="Gene Ontology Data Archive V1"
-        />
+    <n-form
+      ref="formRef"
+      :model="study"
+      :rules="rules"
+      size="large"
+      label-placement="top"
+      class="pr-4"
+    >
+      <n-form-item :span="12" label="Title" path="title">
+        <n-input v-model:value="study.title" placeholder="Add a study title" />
       </n-form-item>
 
-      <n-form-item label="Description" path="description">
-        <n-input v-model:value="datasetMetadata.description" type="textarea" placeholder="..." />
+      <n-form-item :span="12" label="Description" path="description">
+        <n-input
+          v-model:value="study.description"
+          placeholder="Add a study description"
+          type="textarea"
+          :autosize="{
+            minRows: 3,
+            maxRows: 5,
+          }"
+        />
       </n-form-item>
 
       <n-form-item :span="12" label="Keywords" path="keywords">
         <n-select
-          v-model:value="datasetMetadata.keywords"
+          v-model:value="study.keywords"
           placeholder="Salutogenesis"
           multiple
           tag
           filterable
           clearable
           :options="keywordOptions"
-        />
-      </n-form-item>
-
-      <n-form-item :span="12" label="Primary Language" path="primaryLanguage">
-        <n-select
-          v-model:value="datasetMetadata.primaryLanguage"
-          placeholder="Select language"
-          filterable
-          clearable
-          :options="languageOptions"
         />
       </n-form-item>
     </n-form>
@@ -195,14 +175,14 @@ function handleNextButton() {
         <template #icon>
           <f-icon icon="ic:round-arrow-back-ios" />
         </template>
-        View study participants
+        View dataset metadata
       </n-button>
 
       <n-button size="large" type="primary" @click="handleNextButton">
         <template #icon>
           <f-icon icon="ic:round-arrow-forward-ios" />
         </template>
-        Confirm study metadata
+        Add contributors
       </n-button>
     </div>
   </main>
