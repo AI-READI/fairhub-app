@@ -31,6 +31,8 @@ onBeforeMount(() => {
 
     return;
   }
+
+  console.log("onBeforeMount");
 });
 
 const tableHeaders = ["First name", "Last name", "ORCID", "Roles", "Actions"];
@@ -107,12 +109,15 @@ const deleteContributor = (id: string) => {
       <tbody v-if="contributors.length > 0">
         <tr v-for="contributor in contributors" :key="contributor.id">
           <td>{{ contributor.firstname }}</td>
+
           <td>{{ contributor.lastname }}</td>
+
           <td>{{ contributor.orcid }}</td>
+
           <td class="flex flex-wrap items-center">
-            <n-tag v-for="role in contributor.roles" :key="role" type="info" class="m-1">{{
-              role
-            }}</n-tag>
+            <n-tag v-for="role in contributor.roles" :key="role" type="info" class="m-1">
+              {{ role }}
+            </n-tag>
           </td>
 
           <td>
@@ -133,6 +138,7 @@ const deleteContributor = (id: string) => {
                     Delete contributor
                   </n-button>
                 </template>
+
                 Are you sure you want to remove this contributor?
               </n-popconfirm>
             </div>

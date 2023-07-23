@@ -114,7 +114,7 @@ function handleNextButton() {
       console.log(studyMetadata.value);
 
       router.push({
-        name: "publish-contributors",
+        name: "publish-view-contributors",
         params: { versionId: routeParams.versionId },
       });
     } else {
