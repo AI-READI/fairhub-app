@@ -30,16 +30,14 @@ export const useDatasetStore = defineStore("dataset", () => {
   };
 
   const getDataset = async (datasetId: string, studyId: string) => {
-    loading.value = true;
-
     // fetch all datasets if not already fetched
     if (allDatasets.value.length === 0) {
+      loading.value = true;
       await fetchAllDatasets(studyId);
+      loading.value = false;
     }
 
     const d = allDatasets.value.find((dataset) => dataset.id === datasetId);
-
-    loading.value = false;
 
     dataset.value = d;
 

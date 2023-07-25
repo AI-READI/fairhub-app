@@ -36,7 +36,7 @@ onBeforeMount(() => {
   participantStore.fetchAllParticipants(studyId);
 });
 
-const columns: string[] = ["id", "First Name", "Last Name", "Address", "Age", "Actions"];
+const columns: string[] = ["id", "Given Name", "Family Name", "Address", "Age", "Actions"];
 
 function onEdit() {
   /**
@@ -84,9 +84,9 @@ function deleteParticipants(clickedParticipant: number) {
           <tr v-for="(item, index) in participants" :key="index">
             <td>{{ item.id }}</td>
 
-            <td>{{ item.firstname }}</td>
+            <td>{{ item.first_name }}</td>
 
-            <td>{{ item.lastname }}</td>
+            <td>{{ item.last_name }}</td>
 
             <td>{{ item.address }}</td>
 

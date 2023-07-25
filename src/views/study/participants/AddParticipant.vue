@@ -3,10 +3,12 @@ import { faker } from "@faker-js/faker";
 import type { FormInst, FormRules } from "naive-ui";
 import { useMessage } from "naive-ui";
 import { nanoid } from "nanoid";
+import type { Ref } from "vue";
 import { onBeforeMount, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
+import type { Participant } from "@/types/Participant";
 import { baseURL } from "@/utils/constants";
 
 const router = useRouter();
@@ -28,12 +30,12 @@ onBeforeMount(() => {
 
 const formRef = ref<FormInst | null>(null);
 
-const participant = ref({
+const participant: Ref<Participant> = ref({
   id: nanoid(5),
   address: faker.location.streetAddress(),
   age: faker.number.int(100),
-  firstName: faker.person.firstName(),
-  lastName: faker.person.lastName(),
+  first_name: faker.person.firstName(),
+  last_name: faker.person.lastName(),
 });
 
 const rules: FormRules = {
@@ -51,14 +53,14 @@ const rules: FormRules = {
       trigger: ["blur", "input"],
     },
   ],
-  firstName: [
+  first_name: [
     {
       message: "Please input a first name",
       required: true,
       trigger: ["blur", "input"],
     },
   ],
-  lastName: [
+  last_name: [
     {
       message: "Please input a last name",
       required: true,
@@ -77,8 +79,8 @@ const addParticipant = (e: MouseEvent) => {
       const data = {
         address: participant.value.address,
         age: participant.value.age,
-        firstName: participant.value.firstName,
-        lastName: participant.value.lastName,
+        first_name: participant.value.first_name,
+        last_name: participant.value.last_name,
       };
 
       const studyId = routeParams.studyId;
@@ -127,12 +129,12 @@ const addParticipant = (e: MouseEvent) => {
       label-placement="top"
       class="pr-4"
     >
-      <n-form-item :span="12" label="First Name" path="firstName">
-        <n-input v-model:value="participant.firstName" placeholder="Mabel" clearable />
+      <n-form-item :span="12" label="First Name" path="first_name">
+        <n-input v-model:value="participant.first_name" placeholder="Mabel" clearable />
       </n-form-item>
 
-      <n-form-item :span="12" label="Last Name" path="lastName">
-        <n-input v-model:value="participant.lastName" placeholder="Mora" clearable />
+      <n-form-item :span="12" label="Last Name" path="last_name">
+        <n-input v-model:value="participant.last_name" placeholder="Mora" clearable />
       </n-form-item>
 
       <n-form-item :span="12" label="Address" path="Address">

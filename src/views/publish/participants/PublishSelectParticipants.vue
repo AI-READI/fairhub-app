@@ -65,12 +65,12 @@ const columns: DataTableColumns<RowData> = [
     key: "id",
   },
   {
-    title: "First Name",
-    key: "firstname",
+    title: "Given Name",
+    key: "first_name",
   },
   {
-    title: "Last Name",
-    key: "lastname",
+    title: "Family Name",
+    key: "last_name",
   },
   {
     title: "Age",

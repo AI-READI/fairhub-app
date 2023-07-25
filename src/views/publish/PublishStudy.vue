@@ -15,6 +15,7 @@ function checkAuth() {
     router.push({ name: "home" });
   }
 }
+
 onBeforeMount(() => {
   checkAuth();
 });

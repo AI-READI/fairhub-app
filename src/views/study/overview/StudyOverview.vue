@@ -96,7 +96,7 @@ function editStudyDetails() {
 
       <n-divider />
 
-      <h3>Files</h3>
+      <h2>Files</h2>
 
       <n-space vertical>
         <n-skeleton height="40px" width="33%" />
