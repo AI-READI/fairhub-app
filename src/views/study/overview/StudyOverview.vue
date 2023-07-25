@@ -45,7 +45,7 @@ function editStudyDetails() {
 
     <main class="flex h-full w-full flex-col space-y-8 pr-6" px-4 v-else>
       <div class="flex items-center justify-between">
-        <h2>Study Overview</h2>
+        <h1>Study Overview</h1>
 
         <n-button size="large" type="primary" @click="editStudyDetails">
           <template #icon>
@@ -59,12 +59,12 @@ function editStudyDetails() {
 
       <div class="flex w-full justify-between">
         <div class="pr-8">
-          <h3>{{ study.title }}</h3>
+          <h2>{{ study.title }}</h2>
 
           <p class="py-4">{{ study.description }}</p>
 
           <n-space>
-            <n-tag>{{ study.owner_id }}</n-tag>
+            <n-tag>{{ study.owner.first_name }} {{ study.owner.last_name }}</n-tag>
             <n-tag type="warning">{{ study.size }}</n-tag>
           </n-space>
 
@@ -73,7 +73,7 @@ function editStudyDetails() {
             <span>{{ displayHumanFriendlyDateAndTime(study.last_updated) }}</span>
           </p>
 
-          <p>
+          <!-- <p>
             <span class="font-bold">Latest published version: </span>
             <span v-if="study.last_published">
               {{ study.last_published.version }}
@@ -88,11 +88,25 @@ function editStudyDetails() {
               {{ study.last_published.doi }}
             </span>
             <span v-else>Not published yet</span>
-          </p>
+          </p> -->
         </div>
 
         <n-image :src="study.image" width="200" height="200" />
       </div>
+
+      <n-divider />
+
+      <h3>Files</h3>
+
+      <n-space vertical>
+        <n-skeleton height="40px" width="33%" />
+        <n-skeleton height="40px" width="66%" :sharp="false" />
+        <n-skeleton height="40px" width="66%" :sharp="false" />
+        <n-skeleton height="40px" width="33%" />
+        <n-skeleton height="40px" width="66%" :sharp="false" />
+        <n-skeleton height="40px" width="33%" />
+        <n-skeleton height="40px" width="66%" :sharp="false" />
+      </n-space>
     </main>
   </FadeTransition>
 </template>

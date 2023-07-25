@@ -30,15 +30,18 @@ const study: Ref<Study> = ref({
   title: faker.commerce.productName(),
   contributors: [],
   description: faker.commerce.productDescription(),
-  image: faker.image.url(),
+  image: faker.image.url({
+    height: 600,
+    width: 600,
+  }),
   keywords: [faker.word.noun(), faker.word.noun(), faker.word.noun(), faker.word.noun()],
-  lastPublished: {
-    date: "",
-    doi: "",
-    version: "",
+  last_updated: "",
+  owner: {
+    email: faker.internet.email(),
+    first_name: faker.person.firstName(),
+    last_name: faker.person.lastName(),
+    orcid: "",
   },
-  lastUpdated: "",
-  owner: { name: faker.person.fullName(), email: faker.internet.email(), ORCID: "" },
   size: "0 MB",
 });
 

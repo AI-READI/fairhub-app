@@ -26,6 +26,10 @@ onBeforeMount(() => {
   studyStore.fetchAllStudies();
 });
 
+/**
+ * TODO: add dataset filters like pennsieve
+ */
+
 const navigateToStudy = (studyId: string) => {
   router.push({ name: "study-overview", params: { studyId } });
 };
@@ -75,26 +79,28 @@ const navigateToStudy = (studyId: string) => {
 
             <p class="pt-2">
               <span class="font-bold"> Last updated: </span>
-              <span> {{ displayHumanFriendlyDateAndTime(study.lastUpdated) }} </span>
+              <span> {{ displayHumanFriendlyDateAndTime(study.last_updated) }} </span>
             </p>
 
-            <n-divider />
+            <!-- needs last_published and last_published.doi -->
 
-            <div class="align-center flex space-x-3 divide-x pt-2">
+            <!-- <n-divider />
+              
+             <div class="align-center flex space-x-3 divide-x pt-2">
               <p>
                 <span class="font-bold"> Latest published version: </span>
-                <span v-if="study.lastPublished">
-                  {{ study.lastPublished.version }} ({{ study.lastPublished.date }})
+                <span v-if="study.last_published">
+                  {{ study.last_published.version }} ({{ study.last_published.date }})
                 </span>
 
                 <span v-else> Not published yet </span>
               </p>
 
-              <p class="pl-2" v-if="study.lastPublished">
+              <p class="pl-2" v-if="study.last_published">
                 <span class="font-bold"> Latest DOI: </span>
-                <span class="text-blue-500"> {{ study.lastPublished!.doi }} </span>
+                <span class="text-blue-500"> {{ study.last_published!.doi }} </span>
               </p>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
