@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { faker } from "@faker-js/faker";
 import { Icon } from "@iconify/vue";
 import type { FormInst, FormItemRule } from "naive-ui";
 import { useMessage } from "naive-ui";
@@ -44,7 +45,7 @@ const rules = {
   email: {
     required: true,
     trigger: ["input"],
-    validator: (rule: FormItemRule, value: string) => {
+    validator: (_rule: FormItemRule, value: string) => {
       if (value !== null && validator.isEmail(value)) {
         return Promise.resolve();
       }
@@ -68,9 +69,9 @@ const handleValidateClick = (e: MouseEvent) => {
 
 const owner = computed(() => {
   return {
-    name: study.value?.owner.name,
-    email: study.value?.owner.email,
-    ORCID: study.value?.owner.ORCID,
+    name: study.value?.owner_id,
+    email: study.value?.owner_id,
+    ORCID: study.value?.owner_id,
     role: "owner",
     status: "active",
   };
@@ -79,7 +80,7 @@ const owner = computed(() => {
 const contributorRoles = computed(() => {
   return [
     {
-      disabled: authStore.user !== study.value?.owner.email,
+      disabled: authStore.user !== study.value?.owner_id,
       label: "Owner",
       value: "owner",
     },
@@ -110,7 +111,9 @@ const removeContributor = (email: string) => {
 };
 
 const getFirstLetters = (name: string) => {
-  console.log(name);
+  if (!name) {
+    name = faker.person.fullName();
+  }
   const names = name.split(" ");
   return names[0].charAt(0) + names[1].charAt(0);
 };

@@ -1,3 +1,5 @@
+import type { StudyContributor } from "./Contributor";
+
 export interface StudyOwner {
   name: string;
   email: string;
@@ -17,8 +19,8 @@ export interface Study {
   description: string;
   image: string;
   keywords: string[];
-  lastPublished: StudyPublishedVersion;
-  lastUpdated: string;
-  owner: StudyOwner;
+  last_published: StudyPublishedVersion;
+  last_updated: string;
+  owner_id: string;
   size: string;
 }

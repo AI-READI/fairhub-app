@@ -14,11 +14,10 @@ export const useStudyStore = defineStore("study", () => {
     const response = await fetch(`${baseURL}/study`);
     allStudies.value = await response.json();
 
-    console.log(allStudies.value);
+    console.log("studies", allStudies.value);
 
     allStudies.value.forEach((study) => {
       study.size = `${Math.round(Math.random() * 100)} MB`;
-      study.id = study.id.toString();
     });
 
     /** Sort by name for now */

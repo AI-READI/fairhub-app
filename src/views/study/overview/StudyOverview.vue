@@ -64,28 +64,28 @@ function editStudyDetails() {
           <p class="py-4">{{ study.description }}</p>
 
           <n-space>
-            <n-tag>{{ study.owner.email }}</n-tag>
+            <n-tag>{{ study.owner_id }}</n-tag>
             <n-tag type="warning">{{ study.size }}</n-tag>
           </n-space>
 
           <p class="py-4">
             <span class="font-bold">Last updated: </span>
-            <span>{{ displayHumanFriendlyDateAndTime(study.lastUpdated) }}</span>
+            <span>{{ displayHumanFriendlyDateAndTime(study.last_updated) }}</span>
           </p>
 
           <p>
             <span class="font-bold">Latest published version: </span>
-            <span v-if="study.lastPublished">
-              {{ study.lastPublished.version }}
-              ({{ study.lastPublished.date }})
+            <span v-if="study.last_published">
+              {{ study.last_published.version }}
+              ({{ study.last_published.date }})
             </span>
             <span v-else>Study not published yet</span>
           </p>
 
-          <p v-if="study.lastPublished">
+          <p v-if="study.last_published">
             <span class="font-bold">Study DOI: </span>
-            <span v-if="study.lastPublished">
-              {{ study.lastPublished.doi }}
+            <span v-if="study.last_published">
+              {{ study.last_published.doi }}
             </span>
             <span v-else>Not published yet</span>
           </p>
