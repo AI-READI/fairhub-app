@@ -6,8 +6,8 @@ import Changelog from "@/views/help/ChangeLog.vue";
 import Documentation from "@/views/help/DocumentationPage.vue";
 import HelpPage from "@/views/help/HelpPage.vue";
 import ReportIssue from "@/views/help/ReportIssue.vue";
+import HomePage from "@/views/home/HomePage.vue";
 import Integrations from "@/views/integrations/IntegrationPage.vue";
-import LandingPage from "@/views/LandingPage.vue";
 import NotFound from "@/views/NotFound.vue";
 import PublishAddContributor from "@/views/publish/contributors/PublishAddContributor.vue";
 import PublishContributors from "@/views/publish/contributors/PublishContributors.vue";
@@ -39,7 +39,7 @@ const router = createRouter({
     {
       name: "home",
       path: "/",
-      component: LandingPage,
+      component: HomePage,
     },
     {
       path: "/studies",

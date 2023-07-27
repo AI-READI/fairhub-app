@@ -139,12 +139,10 @@ const handleLogin = (e: MouseEvent) => {
         </n-input>
 
         <div class="flex items-center justify-center space-x-3">
-          <n-button
-            type="primary"
-            secondary
-            v-if="!authStore.isAuthenticated"
-            @click="showLoginModal"
-          >
+          <n-button type="primary" v-if="!authStore.isAuthenticated" @click="showLoginModal">
+            <template #icon>
+              <f-icon icon="majesticons:login" />
+            </template>
             Login
           </n-button>
 
@@ -163,7 +161,7 @@ const handleLogin = (e: MouseEvent) => {
             />
           </n-dropdown>
 
-          <n-modal v-model:show="authStore.showLoginModal">
+          <n-modal v-model:show="authStore.showLoginModal" transform-origin="center">
             <n-card
               style="width: 600px"
               title="Login to fairhub.io"
@@ -183,6 +181,7 @@ const handleLogin = (e: MouseEvent) => {
                 <n-form-item label="Username" path="username">
                   <n-input v-model:value="formValue.username" placeholder="" />
                 </n-form-item>
+
                 <n-form-item label="Password" path="password">
                   <n-input v-model:value="formValue.password" placeholder="" type="password" />
                 </n-form-item>
@@ -194,8 +193,19 @@ const handleLogin = (e: MouseEvent) => {
 
               <template #footer>
                 <div class="flex justify-center space-x-4">
-                  <n-button secondary @click="handleCancel"> Cancel </n-button>
-                  <n-button @click="handleLogin" secondary type="primary"> Login </n-button>
+                  <n-button secondary type="warning" @click="handleCancel">
+                    <template #icon>
+                      <f-icon icon="material-symbols:cancel" />
+                    </template>
+                    Cancel
+                  </n-button>
+
+                  <n-button type="primary" @click="handleLogin" secondary>
+                    <template #icon>
+                      <f-icon icon="material-symbols:login" />
+                    </template>
+                    Login
+                  </n-button>
                 </div>
               </template>
             </n-card>
