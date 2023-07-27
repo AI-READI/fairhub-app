@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useMessage } from "naive-ui";
-import { computed, onBeforeMount } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
@@ -26,9 +26,11 @@ onBeforeMount(() => {
   studyStore.fetchAllStudies();
 });
 
-/**
- * TODO: add dataset filters like pennsieve
- */
+const permissionFilters = ref({
+  editor: true,
+  owner: true,
+  viewer: true,
+});
 
 const navigateToStudy = (studyId: string) => {
   router.push({ name: "study-overview", params: { studyId } });
@@ -53,6 +55,37 @@ const navigateToStudy = (studyId: string) => {
     <FadeTransition>
       <LottieLoader v-if="studyStore.loading" />
       <div v-else>
+        <div v-if="studies.length > 0">
+          <n-popover trigger="click" placement="bottom-start">
+            <template #trigger>
+              <div
+                class="flex w-max cursor-pointer items-center space-x-2 rounded-lg border px-2 py-1 shadow-sm transition-all hover:bg-slate-100"
+              >
+                <f-icon icon="icon-park-outline:permissions" height="20" />
+
+                <span class="text-sm"> Permission </span>
+              </div>
+            </template>
+
+            <n-space vertical>
+              <n-space>
+                <n-switch size="small" v-model:value="permissionFilters.owner" />
+                <span class="text-sm font-medium"> Owner </span>
+              </n-space>
+              <n-space>
+                <n-switch size="small" v-model:value="permissionFilters.editor" />
+                <span class="text-sm font-medium"> Editor </span>
+              </n-space>
+              <n-space>
+                <n-switch size="small" v-model:value="permissionFilters.viewer" />
+                <span class="text-sm font-medium"> Viewer </span>
+              </n-space>
+            </n-space>
+          </n-popover>
+
+          <n-divider />
+        </div>
+
         <div
           class="my-3 flex w-full cursor-pointer items-center rounded-md border border-slate-100 shadow-sm transition-all hover:border-slate-200 hover:bg-slate-50"
           v-for="study in studies"
