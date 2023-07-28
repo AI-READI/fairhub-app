@@ -95,16 +95,14 @@ const statistics = ref([
     </section>
 
     <section class="bg-slate-50 py-10">
-      <div class="mx-auto flex max-w-screen-xl flex-col">
-        <h2 class="pb-4 pt-3 text-4xl font-bold">About</h2>
+      <div class="mx-auto mb-5 flex max-w-screen-xl flex-col">
+        <h2 class="pb-3 pt-3 text-4xl font-bold">About</h2>
 
-        <p class="max-w-screen-md text-xl font-medium">
+        <p class="max-w-screen-md text-xl font-medium text-slate-500">
           fairhub has been built from the ground up to include convenient and efficient tools for
           data management, tracking, curation, and sharing.
         </p>
       </div>
-
-      <n-divider />
 
       <div class="mx-auto grid max-w-screen-xl grid-cols-3 gap-10 py-10">
         <div
@@ -120,11 +118,11 @@ const statistics = ref([
             <n-divider />
           </div>
 
-          <h3 class="pr-5 text-4xl font-semibold">
+          <h3 class="pr-3 text-4xl font-semibold">
             {{ statistic.heading }}
           </h3>
 
-          <p class="py-10 pr-5 text-base text-slate-500">
+          <p class="py-10 pr-4 text-base text-slate-500">
             {{ statistic.description }}
           </p>
         </div>
@@ -134,7 +132,7 @@ const statistics = ref([
     <section class="mx-auto flex w-full max-w-screen-xl flex-col py-10">
       <h2 class="pb-4 pt-3 text-4xl font-bold">FAQ</h2>
 
-      <p class="max-w-screen-md pb-10 text-xl font-medium">
+      <p class="max-w-screen-md pb-10 text-xl font-medium text-slate-500">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget
         vestibulum aliquam, nunc sapien ultricies nunc, euis
       </p>

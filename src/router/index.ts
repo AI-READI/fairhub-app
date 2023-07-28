@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import StudyPublish from "@/views//study/publish/StudyPublish.vue";
+import NotFound from "@/views/404/NotFound.vue";
 import UserProfile from "@/views/account/UserProfile.vue";
 import Changelog from "@/views/help/ChangeLog.vue";
 import Documentation from "@/views/help/DocumentationPage.vue";
@@ -8,7 +9,6 @@ import HelpPage from "@/views/help/HelpPage.vue";
 import ReportIssue from "@/views/help/ReportIssue.vue";
 import HomePage from "@/views/home/HomePage.vue";
 import Integrations from "@/views/integrations/IntegrationPage.vue";
-import NotFound from "@/views/NotFound.vue";
 import PublishAddContributor from "@/views/publish/contributors/PublishAddContributor.vue";
 import PublishContributors from "@/views/publish/contributors/PublishContributors.vue";
 import PublishDataset from "@/views/publish/datasets/PublishDataset.vue";

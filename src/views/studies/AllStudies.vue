@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useMessage } from "naive-ui";
-import { computed, onBeforeMount } from "vue";
+import { computed, onBeforeMount, onMounted } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import FadeTransition from "@/components/transitions/FadeTransition.vue";
@@ -10,7 +10,7 @@ import { useStudyStore } from "@/stores/study";
 import { displayHumanFriendlyDateAndTime } from "@/utils/date";
 
 const router = useRouter();
-const { error } = useMessage();
+const { error, info } = useMessage();
 
 const authStore = useAuthStore();
 const filterStore = useFilterStore();
@@ -80,6 +80,10 @@ onBeforeMount(() => {
   }
 
   studyStore.fetchAllStudies();
+});
+
+onMounted(() => {
+  info("Your workspace is being loaded. Please wait...");
 });
 
 const navigateToStudy = (studyId: string) => {

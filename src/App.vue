@@ -7,9 +7,11 @@ import { theme } from "@/stores/settings";
     <n-dialog-provider>
       <n-message-provider>
         <AppHeader />
+
         <n-space vertical size="large">
           <n-layout has-sider>
             <AppSidebar />
+
             <n-layout-content class="h-[calc(100vh-56px)] py-4 pl-6">
               <router-view v-slot="{ Component }">
                 <transition name="fade" appear mode="out-in">
