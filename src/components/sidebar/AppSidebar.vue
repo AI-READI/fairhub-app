@@ -56,7 +56,7 @@ const staticUpperMenuOptions: MenuOption[] = [
 
 const dynamicUpperMenuOptions: MenuOption[] = [
   {
-    icon: renderIcon("uil:align-left"),
+    icon: renderIcon("material-symbols:overview-key-rounded"),
     key: "study-overview",
     label: () =>
       h(
