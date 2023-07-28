@@ -73,6 +73,234 @@ const dynamicUpperMenuOptions: MenuOption[] = [
       ),
   },
   {
+    children: [
+      {
+        icon: renderIcon("tabler:id"),
+        key: "study-overview",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "study-overview",
+                params: {
+                  studyId: studyID.value,
+                },
+              },
+            },
+            { default: () => "Identification" }
+          ),
+      },
+      {
+        icon: renderIcon("pajamas:status"),
+        key: "study-overview",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "study-overview",
+                params: {
+                  studyId: studyID.value,
+                },
+              },
+            },
+            { default: () => "Status" }
+          ),
+      },
+      {
+        icon: renderIcon("carbon:user-sponsor"),
+        key: "study-overview",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "study-overview",
+                params: {
+                  studyId: studyID.value,
+                },
+              },
+            },
+            { default: () => "Sponsors" }
+          ),
+      },
+      {
+        icon: renderIcon("carbon:collaborate"),
+        key: "study-overview",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "study-overview",
+                params: {
+                  studyId: studyID.value,
+                },
+              },
+            },
+            { default: () => "Collaborators" }
+          ),
+      },
+      {
+        icon: renderIcon("ic:baseline-local-police"),
+        key: "study-overview",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "study-overview",
+                params: {
+                  studyId: studyID.value,
+                },
+              },
+            },
+            { default: () => "Oversight" }
+          ),
+      },
+      {
+        icon: renderIcon("material-symbols:description"),
+        key: "study-overview",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "study-overview",
+                params: {
+                  studyId: studyID.value,
+                },
+              },
+            },
+            { default: () => "Description" }
+          ),
+      },
+      {
+        icon: renderIcon("material-symbols:conditions-rounded"),
+        key: "study-overview",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "study-overview",
+                params: {
+                  studyId: studyID.value,
+                },
+              },
+            },
+            { default: () => "Conditions" }
+          ),
+      },
+      {
+        icon: renderIcon("iconoir:design-pencil"),
+        key: "study-overview",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "study-overview",
+                params: {
+                  studyId: studyID.value,
+                },
+              },
+            },
+            { default: () => "Design" }
+          ),
+      },
+      {
+        icon: renderIcon("mdi:drugs"),
+        key: "study-overview",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "study-overview",
+                params: {
+                  studyId: studyID.value,
+                },
+              },
+            },
+            { default: () => "Interventions" }
+          ),
+      },
+      {
+        icon: renderIcon("icon-park-outline:permissions"),
+        key: "study-overview",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "study-overview",
+                params: {
+                  studyId: studyID.value,
+                },
+              },
+            },
+            { default: () => "Eligibility" }
+          ),
+      },
+      {
+        icon: renderIcon("teenyicons:contact-outline"),
+        key: "study-overview",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "study-overview",
+                params: {
+                  studyId: studyID.value,
+                },
+              },
+            },
+            { default: () => "Contacts" }
+          ),
+      },
+      {
+        icon: renderIcon("icons8:share"),
+        key: "study-overview",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "study-overview",
+                params: {
+                  studyId: studyID.value,
+                },
+              },
+            },
+            { default: () => "IPD Sharing" }
+          ),
+      },
+      {
+        icon: renderIcon("zondicons:book-reference"),
+        key: "study-overview",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: "study-overview",
+                params: {
+                  studyId: studyID.value,
+                },
+              },
+            },
+            { default: () => "References" }
+          ),
+      },
+    ],
+    icon: renderIcon("ooui:view-details-ltr"),
+    key: "study-metadata",
+    label: "Study Metadata",
+  },
+  {
     icon: renderIcon("fluent:people-team-toolbox-24-regular"),
     key: "study-participants",
     label: () =>
@@ -239,7 +467,6 @@ const hideSidebar = computed(() => {
     :collapsed="sidebarCollapsed"
     collapse-mode="width"
     :collapsed-width="64"
-    :width="240"
     :native-scrollbar="true"
     @update:collapsed="toggleSidebar"
     class="h-[calc(100vh-56px)]"
