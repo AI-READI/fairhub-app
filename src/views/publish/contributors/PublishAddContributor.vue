@@ -211,8 +211,8 @@ const formRef = ref<FormInst | null>(null);
 const contributor: Ref<VersionContributor> = ref({
   id: nanoid(5),
   affiliations: [faker.company.name(), faker.company.name()],
-  firstname: faker.person.firstName(),
-  lastname: faker.person.lastName(),
+  first_name: faker.person.firstName(),
+  last_name: faker.person.lastName(),
   orcid: faker.string.uuid(),
   roles: ["ContactPerson"],
 });
@@ -273,8 +273,8 @@ const addContributor = (e: MouseEvent) => {
       const data = {
         id: contributor.value.id,
         affiliations: contributor.value.affiliations,
-        firstname: contributor.value.firstname,
-        lastname: contributor.value.lastname,
+        first_name: contributor.value.first_name,
+        last_name: contributor.value.last_name,
         orcid: contributor.value.orcid,
         roles: contributor.value.roles,
       };
@@ -311,11 +311,11 @@ const addContributor = (e: MouseEvent) => {
       class="pr-4"
     >
       <n-form-item label="First Name" path="firstname">
-        <n-input v-model:value="contributor.firstname" placeholder="Mabel" clearable />
+        <n-input v-model:value="contributor.first_name" placeholder="Mabel" clearable />
       </n-form-item>
 
       <n-form-item label="Last Name" path="lastname">
-        <n-input v-model:value="contributor.lastname" placeholder="Mora" clearable />
+        <n-input v-model:value="contributor.last_name" placeholder="Mora" clearable />
       </n-form-item>
 
       <n-form-item label="Affiliations" path="affiliations">

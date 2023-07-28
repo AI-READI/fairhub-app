@@ -108,9 +108,9 @@ const deleteContributor = (id: string) => {
 
       <tbody v-if="contributors.length > 0">
         <tr v-for="contributor in contributors" :key="contributor.id">
-          <td>{{ contributor.firstname }}</td>
+          <td>{{ contributor.first_name }}</td>
 
-          <td>{{ contributor.lastname }}</td>
+          <td>{{ contributor.last_name }}</td>
 
           <td>{{ contributor.orcid }}</td>
 
