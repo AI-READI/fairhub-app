@@ -1,0 +1,28 @@
+{
+  "keywordOptions": [
+    {
+      "label": "Artifical Intelligence",
+      "value": "Artifical Intelligence"
+    },
+    {
+      "label": "Dataset",
+      "value": "Dataset"
+    },
+    {
+      "label": "Diabetes",
+      "value": "Diabetes"
+    },
+    {
+      "label": "Ethics",
+      "value": "Ethics"
+    },
+    {
+      "label": "Health",
+      "value": "Health"
+    },
+    {
+      "label": "Machine Learning",
+      "value": "Machine Learning"
+    }
+  ]
+}

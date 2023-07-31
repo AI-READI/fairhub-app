@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import type { FormInst } from "naive-ui";
+import { useMessage } from "naive-ui";
 import { h, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 
-const authStore = useAuthStore();
 const router = useRouter();
+const { success } = useMessage();
+
+const authStore = useAuthStore();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -107,6 +110,8 @@ const handleLogin = (e: MouseEvent) => {
         authStore.showLoginModal = false;
 
         authStore.setLoggedIn();
+
+        success("Logged in successfully");
 
         router.push({
           path: "/studies",

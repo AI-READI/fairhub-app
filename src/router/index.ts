@@ -27,6 +27,20 @@ import AllStudies from "@/views/studies/AllStudies.vue";
 import StudyContributors from "@/views/study/contributors/StudyContributors.vue";
 import DashBoard from "@/views/study/dashboard/DashBoard.vue";
 import EditStudy from "@/views/study/edit/EditStudy.vue";
+import StudyFiles from "@/views/study/files/StudyFiles.vue";
+import StudyCollaborators from "@/views/study/metadata/collaborators/StudyCollaborators.vue";
+import StudyConditions from "@/views/study/metadata/conditions/StudyConditions.vue";
+import StudyContacts from "@/views/study/metadata/contacts/StudyContacts.vue";
+import StudyDescription from "@/views/study/metadata/description/StudyDescription.vue";
+import StudyDesign from "@/views/study/metadata/design/StudyDesign.vue";
+import StudyEligibility from "@/views/study/metadata/eligibility/StudyEligibility.vue";
+import StudyIdentification from "@/views/study/metadata/identification/StudyIdentification.vue";
+import StudyInterventions from "@/views/study/metadata/interventions/StudyInterventions.vue";
+import StudyIPDSharing from "@/views/study/metadata/ipdsharing/StudyIPDSharing.vue";
+import StudyOversight from "@/views/study/metadata/oversight/StudyOversight.vue";
+import StudyReferences from "@/views/study/metadata/references/StudyReferences.vue";
+import StudySponsors from "@/views/study/metadata/sponsors/StudySponsors.vue";
+import StudyStatus from "@/views/study/metadata/status/StudyStatus.vue";
 import NewStudy from "@/views/study/new/NewStudy.vue";
 import StudyOverview from "@/views/study/overview/StudyOverview.vue";
 import AddParticipant from "@/views/study/participants/AddParticipant.vue";
@@ -85,6 +99,11 @@ const router = createRouter({
               component: AddParticipant,
             },
           ],
+        },
+        {
+          name: "study-files",
+          path: "files",
+          component: StudyFiles,
         },
         {
           name: "dashboard",
@@ -183,6 +202,77 @@ const router = createRouter({
             },
           ],
           component: StudyPublish,
+        },
+        {
+          name: "study-metadata",
+          path: "metadata",
+          children: [
+            {
+              name: "study-metadata-identification",
+              path: "identification",
+              component: StudyIdentification,
+            },
+            {
+              name: "study-metadata-status",
+              path: "status",
+              component: StudyStatus,
+            },
+            {
+              name: "study-metadata-sponsors",
+              path: "sponsor",
+              component: StudySponsors,
+            },
+            {
+              name: "study-metadata-collaborators",
+              path: "collaborators",
+              component: StudyCollaborators,
+            },
+            {
+              name: "study-metadata-oversight",
+              path: "oversight",
+              component: StudyOversight,
+            },
+            {
+              name: "study-metadata-description",
+              path: "description",
+              component: StudyDescription,
+            },
+            {
+              name: "study-metadata-conditions",
+              path: "conditions",
+              component: StudyConditions,
+            },
+            {
+              name: "study-metadata-design",
+              path: "design",
+              component: StudyDesign,
+            },
+            {
+              name: "study-metadata-interventions",
+              path: "interventions",
+              component: StudyInterventions,
+            },
+            {
+              name: "study-metadata-eligibility",
+              path: "eligibility",
+              component: StudyEligibility,
+            },
+            {
+              name: "study-metadata-contacts",
+              path: "contacts",
+              component: StudyContacts,
+            },
+            {
+              name: "study-metadata-ipd-sharing",
+              path: "ipd-sharing",
+              component: StudyIPDSharing,
+            },
+            {
+              name: "study-metadata-references",
+              path: "references",
+              component: StudyReferences,
+            },
+          ],
         },
       ],
       component: StudyView,

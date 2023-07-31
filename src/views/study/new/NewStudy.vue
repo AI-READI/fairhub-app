@@ -7,6 +7,7 @@ import type { Ref } from "vue";
 import { onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 
+import FormJSON from "@/assets/data/form.json";
 import { useAuthStore } from "@/stores/auth";
 import type { Study } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
@@ -45,29 +46,19 @@ const study: Ref<Study> = ref({
   size: "0 MB",
 });
 
-const generalOptions = [
-  "Artifical Intelligence",
-  "Dataset",
-  "Diabetes",
-  "Ethics",
-  "Health",
-  "Machine Learning",
-].map((v) => ({
-  label: v,
-  value: v,
-}));
+const keywordOptions = FormJSON.keywordOptions;
 
 const rules: FormRules = {
-  description: [
+  title: [
     {
-      message: "Please input a study description",
+      message: "Please add a study title",
       required: true,
       trigger: ["blur", "input"],
     },
   ],
-  inputValue: [
+  description: [
     {
-      message: "Please add a study title",
+      message: "Please input a study description",
       required: true,
       trigger: ["blur", "input"],
     },
@@ -155,7 +146,7 @@ async function addStudy(study: Study): Promise<Study> {
           tag
           filterable
           clearable
-          :options="generalOptions"
+          :options="keywordOptions"
           @update:value="handleUpdateValue"
         />
       </n-form-item>

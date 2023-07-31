@@ -45,7 +45,7 @@ function editStudyDetails() {
 
     <main class="flex h-full w-full flex-col space-y-8 pr-6" px-4 v-else>
       <div class="flex items-center justify-between">
-        <h1>Study Overview</h1>
+        <h1>Overview</h1>
 
         <n-button size="large" type="primary" @click="editStudyDetails">
           <template #icon>
