@@ -8,7 +8,21 @@ export const useStudyStore = defineStore("study", () => {
   const allStudies = ref<Study[]>([]);
   const loading = ref(false);
 
-  const study = ref<Study>();
+  const study = ref<Study>({
+    id: "",
+    title: "",
+    description: "",
+    image: "",
+    keywords: [],
+    last_updated: "",
+    owner: {
+      email: "",
+      first_name: "",
+      last_name: "",
+      orcid: "",
+    },
+    size: "",
+  });
 
   const fetchAllStudies = async () => {
     const response = await fetch(`${baseURL}/study`);

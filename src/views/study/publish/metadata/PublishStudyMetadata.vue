@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import type { FormInst, FormItemRule, FormRules } from "naive-ui";
 import { useMessage } from "naive-ui";
+import type { Ref } from "vue";
 import { computed, onBeforeMount, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import FormJSON from "@/assets/data/form.json";
 import { useAuthStore } from "@/stores/auth";
 import { useStudyStore } from "@/stores/study";
+import type { Study } from "@/types/Study";
 
 const route = useRoute();
 const router = useRouter();
@@ -20,7 +23,7 @@ const routeParams = {
   versionId: route.params.versionId,
 };
 
-const study = computed(() => studyStore.study);
+const study: Ref<Study> = computed(() => studyStore.study);
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
@@ -33,39 +36,14 @@ onBeforeMount(() => {
   studyStore.getStudy(studyId);
 });
 
-const keywordOptions = [
-  {
-    label: "Artificial Intelligence",
-    value: "Artificial Intelligence",
-  },
-  {
-    label: "Dataset",
-    value: "Dataset",
-  },
-  {
-    label: "Diabetes",
-    value: "Diabetes",
-  },
-  {
-    label: "Ethics",
-    value: "Ethics",
-  },
-  {
-    label: "Health",
-    value: "Health",
-  },
-  {
-    label: "Machine Learning",
-    value: "Machine Learning",
-  },
-];
+const keywordOptions = FormJSON.keywordOptions;
 
 const formRef = ref<FormInst | null>(null);
 
 const studyMetadata = ref({
-  title: study.value.title,
-  description: study.value.description,
-  keywords: study.value.keywords,
+  title: study.value.title || "",
+  description: study.value.description || "",
+  keywords: study.value.keywords || [],
 });
 
 const rules: FormRules = {

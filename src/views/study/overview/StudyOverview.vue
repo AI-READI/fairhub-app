@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { useMessage } from "naive-ui";
+import type { Ref } from "vue";
 import { computed, onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import { useStudyStore } from "@/stores/study";
+import type { Study } from "@/types/Study";
 import { displayHumanFriendlyDateAndTime } from "@/utils/date";
 
 const router = useRouter();
@@ -14,7 +16,7 @@ const { error } = useMessage();
 const authStore = useAuthStore();
 const studyStore = useStudyStore();
 
-const study = computed(() => studyStore.study);
+const study: Ref<Study> = computed(() => studyStore.study);
 
 const routeParams = {
   studyId: route.params.studyId as string,
@@ -31,12 +33,12 @@ onBeforeMount(() => {
   studyStore.getStudy(studyId);
 });
 
-function editStudyDetails() {
+const editStudyDetails = () => {
   router.push({
     name: "edit-study",
     params: { studyId: routeParams.studyId },
   });
-}
+};
 </script>
 
 <template>

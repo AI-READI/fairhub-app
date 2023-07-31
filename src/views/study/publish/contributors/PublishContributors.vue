@@ -6,7 +6,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import { useVersionStore } from "@/stores/version";
-import { VersionContributor } from "@/types/Contributor";
+import type { VersionContributor } from "@/types/Contributor";
 
 const route = useRoute();
 const router = useRouter();

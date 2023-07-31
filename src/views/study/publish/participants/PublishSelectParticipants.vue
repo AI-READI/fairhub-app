@@ -28,6 +28,9 @@ const routeParams = {
 const participants = computed(() => participantStore.allParticipants);
 const version = ref(versionStore.version);
 
+const rowKey = (row: RowData) => row.id;
+const selectedParticipantRows = ref<DataTableRowKey[]>([]);
+
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
     error("You are not logged in.");
@@ -40,9 +43,15 @@ onBeforeMount(() => {
   datasetStore.getDataset(datasetId, studyId);
   participantStore.fetchAllParticipants(studyId);
 
-  selectedParticipantRows.value = version.value?.selectedParticipants.map(
-    (item: Participant) => item.id
-  );
+  for (const participant of version.value?.selectedParticipants || []) {
+    if (!participant.id) {
+      continue;
+    }
+
+    const id = participant.id as DataTableRowKey;
+
+    selectedParticipantRows.value.push(id);
+  }
 });
 
 type RowData = {
@@ -52,9 +61,6 @@ type RowData = {
   age: string;
   key: number;
 };
-
-const rowKey = (row: RowData) => row.id;
-const selectedParticipantRows = ref<DataTableRowKey[]>([]);
 
 const columns: DataTableColumns<RowData> = [
   {
@@ -120,8 +126,11 @@ function onUpdate() {
 
     <n-divider />
 
+    <pre>{{ selectedParticipantRows }}</pre>
+
     <n-data-table
       :columns="columns"
+      striped
       :data="participants"
       :row-key="rowKey"
       v-model:checked-row-keys="selectedParticipantRows"
@@ -149,7 +158,7 @@ function onUpdate() {
 
             <p>
               <span class="font-bold">Name: </span>
-              <span>{{ item.firstname }} {{ item.lastname }}</span>
+              <span>{{ item.first_name }} {{ item.last_name }}</span>
             </p>
 
             <p>

@@ -1,3 +1,6 @@
+import { VersionContributor } from "./Contributor";
+import { Participant } from "./Participant";
+
 export interface Version {
   id: string;
   title: string;

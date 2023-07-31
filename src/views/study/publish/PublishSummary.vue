@@ -1,22 +1,14 @@
 <script setup lang="ts">
 import { NButton, NCard, NSpace } from "naive-ui";
-import type { Ref } from "vue";
-import { inject, ref } from "vue";
-import { useRoute } from "vue-router";
-
-import router from "@/router";
-import { STUDYPUBLISH_KEY } from "@/stores/publish/dataset-state";
-import type { DatasetVersion } from "@/stores/publish/study-interfaces";
-import { STUDY_KEY } from "@/stores/publish/study-state";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
+
 const routeParams = {
   versionId: route.params.versionId.toString(),
 };
 
-const study = inject(STUDY_KEY, ref(null));
-
-const studyPublish = inject<Ref<DatasetVersion | null>>(STUDYPUBLISH_KEY, ref(null));
 function handleBackButton() {
   router.push({
     name: "publish-changelog",
@@ -30,7 +22,7 @@ function onsubmit() {
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col" v-if="studyPublish">
+  <main class="flex h-full w-full flex-col">
     <h1>Review Summary</h1>
     <div class="summary">
       <n-card>
@@ -53,28 +45,29 @@ function onsubmit() {
             <h3>Dataset Metadata</h3>
             <div>
               <dl class="font-bold">Title:</dl>
-              <dd>{{ studyPublish.title }}</dd>
+              <dd>test</dd>
 
               <dl class="font-bold">Keywords:</dl>
-              <dd v-for="(item, index) in studyPublish.keywords" :key="index">{{ item }}</dd>
+              <dd>test</dd>
 
               <dl class="font-bold">Description:</dl>
-              <dd>{{ studyPublish.description }}</dd>
+              <dd>test</dd>
 
               <dl class="font-bold">Primary language:</dl>
-              <dd>{{ studyPublish.primaryLanguage }}</dd>
+
+              <dd>test</dd>
             </div>
           </div>
         </n-space>
         <n-space>
-          <div class="study" v-if="study">
+          <div class="study">
             <h3>Study Metadata</h3>
             <dl class="font-bold">Title:</dl>
-            <dd>{{ study.title }}</dd>
+            <dd>test</dd>
             <dl class="font-bold">Keyword(s):</dl>
-            <dd v-for="(keyword, index) in study.keywords" :key="index">{{ keyword }}</dd>
+            <dd>test</dd>
             <dl class="font-bold">Description:</dl>
-            <dd>{{ study.description }}</dd>
+            <dd>test</dd>
             <div></div>
           </div>
         </n-space>
@@ -82,17 +75,15 @@ function onsubmit() {
           <div class="contributors">
             <h3>Contributor information</h3>
             <div class="participants">
-              <div v-for="(contributor, index) in studyPublish.contributors" :key="index">
+              <div>
                 <dl class="font-bold">Fullname:</dl>
-                <dd>{{ contributor.firstname }} {{ contributor.lastname }}</dd>
+                <dd>test</dd>
                 <dl class="font-bold">ORCID:</dl>
-                <dd>{{ contributor.ORCID }}</dd>
+                <dd>test</dd>
                 <dl class="font-bold">Role(s):</dl>
-                <dd v-for="(role, index) in contributor.roles" :key="index">{{ role }}</dd>
+                <dd>test</dd>
                 <dl>Affiliation(s):</dl>
-                <dd v-for="(affiliation, index) in contributor.affiliations" :key="index">
-                  {{ affiliation }}
-                </dd>
+                <dd>test</dd>
               </div>
             </div>
           </div>
@@ -113,9 +104,3 @@ function onsubmit() {
     </div>
   </main>
 </template>
-
-<style scoped>
-.summary {
-  margin: 1rem 0 1rem 0;
-}
-</style>

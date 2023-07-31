@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import StudyPublish from "@/views//study/publish/StudyPublish.vue";
+import StudyPublish from "@/views//study/publish/root/StudyPublish.vue";
 import NotFound from "@/views/404/NotFound.vue";
 import UserProfile from "@/views/account/UserProfile.vue";
 import Changelog from "@/views/help/ChangeLog.vue";
@@ -9,19 +9,6 @@ import HelpPage from "@/views/help/HelpPage.vue";
 import ReportIssue from "@/views/help/ReportIssue.vue";
 import HomePage from "@/views/home/HomePage.vue";
 import Integrations from "@/views/integrations/IntegrationPage.vue";
-import PublishAddContributor from "@/views/publish/contributors/PublishAddContributor.vue";
-import PublishContributors from "@/views/publish/contributors/PublishContributors.vue";
-import PublishDataset from "@/views/publish/datasets/PublishDataset.vue";
-import PublishDatasetMetadata from "@/views/publish/metadata/PublishDatasetMetadata.vue";
-import PublishStudyMetadata from "@/views/publish/metadata/PublishStudyMetadata.vue";
-import PublishSelectParticipants from "@/views/publish/participants/PublishSelectParticipants.vue";
-import PublishAdditionalInfo from "@/views/publish/PublishAdditionalInfo.vue";
-import PublishChangelog from "@/views/publish/PublishChangelog.vue";
-import PublishReadme from "@/views/publish/PublishReadme.vue";
-import PublishRelatedSources from "@/views/publish/PublishRelatedSources.vue";
-import PublishStudy from "@/views/publish/PublishStudy.vue";
-import PublishSummary from "@/views/publish/PublishSummary.vue";
-import PublishVersion from "@/views/publish/root/PublishVersion.vue";
 import AllSettings from "@/views/settings/AllSettings.vue";
 import AllStudies from "@/views/studies/AllStudies.vue";
 import StudyContributors from "@/views/study/contributors/StudyContributors.vue";
@@ -45,6 +32,19 @@ import NewStudy from "@/views/study/new/NewStudy.vue";
 import StudyOverview from "@/views/study/overview/StudyOverview.vue";
 import AddParticipant from "@/views/study/participants/AddParticipant.vue";
 import StudyParticipants from "@/views/study/participants/StudyParticipants.vue";
+import PublishAddContributor from "@/views/study/publish/contributors/PublishAddContributor.vue";
+import PublishContributors from "@/views/study/publish/contributors/PublishContributors.vue";
+import PublishDataset from "@/views/study/publish/datasets/PublishDataset.vue";
+import PublishDatasetMetadata from "@/views/study/publish/metadata/PublishDatasetMetadata.vue";
+import PublishStudyMetadata from "@/views/study/publish/metadata/PublishStudyMetadata.vue";
+import PublishSelectParticipants from "@/views/study/publish/participants/PublishSelectParticipants.vue";
+import PublishAdditionalInfo from "@/views/study/publish/PublishAdditionalInfo.vue";
+import PublishChangelog from "@/views/study/publish/PublishChangelog.vue";
+import PublishReadme from "@/views/study/publish/PublishReadme.vue";
+import PublishRelatedSources from "@/views/study/publish/PublishRelatedSources.vue";
+import PublishStudy from "@/views/study/publish/PublishStudy.vue";
+import PublishSummary from "@/views/study/publish/PublishSummary.vue";
+import PublishVersion from "@/views/study/publish/root/PublishVersion.vue";
 import StudyView from "@/views/study/root/StudyView.vue";
 
 const router = createRouter({

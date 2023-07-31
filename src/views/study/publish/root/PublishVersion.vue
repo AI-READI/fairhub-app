@@ -5,8 +5,6 @@ import { onBeforeMount, ref } from "vue";
 import type { RouteRecordName } from "vue-router";
 import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
 
-import { DatasetVersion } from "@/stores/publish/study-interfaces";
-
 const route = useRoute();
 const router = useRouter();
 const { error } = useMessage();
@@ -17,8 +15,6 @@ const routeParams = {
   versionId: route.params.versionId as string,
 };
 const currentRef: Ref<number> = ref<number>(1);
-
-const studyPublish: Ref<DatasetVersion | null> = ref(null);
 
 function checkStudy() {
   if (routeParams.versionId === "new" && routeParams.datasetId === "new") {
