@@ -60,7 +60,7 @@ function deleteParticipants(clickedParticipant: number) {
     <n-space justify="space-between">
       <h2>Study Participants</h2>
 
-      <RouterLink :to="{ name: 'add-participant', params: { studyId: routeParams.studyId } }">
+      <RouterLink :to="{ name: 'study:add-participant', params: { studyId: routeParams.studyId } }">
         <n-button size="large" type="primary">
           <template #icon>
             <f-icon icon="ion:add-circle-outline" />

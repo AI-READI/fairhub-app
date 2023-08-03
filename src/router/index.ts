@@ -45,7 +45,7 @@ import PublishRelatedSources from "@/views/study/publish/PublishRelatedSources.v
 import PublishStudy from "@/views/study/publish/PublishStudy.vue";
 import PublishSummary from "@/views/study/publish/PublishSummary.vue";
 import PublishVersion from "@/views/study/publish/root/PublishVersion.vue";
-import StudyView from "@/views/study/root/StudyView.vue";
+import StudyRouterView from "@/views/study/root/StudyRouterView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,61 +59,65 @@ const router = createRouter({
       path: "/studies",
       children: [
         {
-          name: "all-studies",
+          name: "studies:all-studies",
           path: "",
           component: AllStudies,
         },
         {
-          name: "new-study",
+          name: "studies:new-study",
           path: "new",
           component: NewStudy,
         },
       ],
     },
     {
+      name: "study:root",
       path: "/study/:studyId",
       children: [
         {
-          name: "study-overview",
+          name: "study:overview",
           path: "overview",
-
           component: StudyOverview,
         },
         {
-          name: "edit-study",
+          name: "study:edit",
           path: "edit",
           component: EditStudy,
         },
         {
-          name: "participants",
           path: "participants",
           children: [
             {
-              name: "study-participants",
+              name: "study:participants",
               path: "",
               component: StudyParticipants,
             },
             {
-              name: "add-participant",
+              name: "study:add-participant",
               path: "add",
               component: AddParticipant,
             },
           ],
         },
         {
-          name: "study-files",
+          name: "study:files",
           path: "files",
           component: StudyFiles,
         },
         {
-          name: "dashboard",
+          name: "study:dashboard",
           path: "dashboard",
           component: DashBoard,
         },
         {
-          name: "study-contributors",
+          name: "study:contributors",
           path: "contributors",
           component: StudyContributors,
+        },
+        {
+          name: "datasets:all-datasets",
+          path: "datasets",
+          component: StudyPublish,
         },
         {
           name: "publish",
@@ -123,6 +127,11 @@ const router = createRouter({
               name: "datasets",
               path: "datasets",
               children: [
+                {
+                  name: "view-datasets",
+                  path: "",
+                  component: PublishDataset,
+                },
                 {
                   name: "publish-select-dataset",
                   path: "",
@@ -275,7 +284,7 @@ const router = createRouter({
           ],
         },
       ],
-      component: StudyView,
+      component: StudyRouterView,
     },
     {
       name: "all-settings",

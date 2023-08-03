@@ -31,10 +31,7 @@ const study: Ref<Study> = ref({
   title: faker.commerce.productName(),
   contributors: [],
   description: faker.commerce.productDescription(),
-  image: faker.image.url({
-    height: 600,
-    width: 600,
-  }),
+  image: `https://api.dicebear.com/6.x/shapes/svg?seed=${nanoid()}`,
   keywords: [faker.word.noun(), faker.word.noun(), faker.word.noun(), faker.word.noun()],
   last_updated: "",
   owner: {

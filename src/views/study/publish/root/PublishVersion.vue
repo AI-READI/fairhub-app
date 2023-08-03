@@ -123,7 +123,7 @@ onBeforeRouteUpdate((to, from) => {
     </n-steps>
     <n-divider class="w-full" />
 
-    <router-view v-slot="{ Component }">
+    <router-view v-slot="{ Component }" :key="$route.fullPath">
       <transition name="fade" appear mode="out-in">
         <component :is="Component" />
       </transition>

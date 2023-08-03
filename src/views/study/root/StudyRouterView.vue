@@ -26,11 +26,17 @@ onBeforeMount(() => {
   const studyId = routeParams.studyId;
 
   studyStore.getStudy(studyId);
+
+  if (route.name && route.name === "study:root") {
+    console.log("redirecting to study overview");
+
+    router.push({ name: "study:overview", params: { studyId } });
+  }
 });
 </script>
 
 <template>
-  <router-view v-slot="{ Component }">
+  <router-view v-slot="{ Component }" :key="$route.fullPath">
     <transition name="fade" appear mode="out-in">
       <component :is="Component" />
     </transition>

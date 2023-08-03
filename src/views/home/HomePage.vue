@@ -13,7 +13,7 @@ const authStore = useAuthStore();
 
 const navigateToStudies = () => {
   if (authStore.isAuthenticated) {
-    router.push("/studies");
+    router.push({ name: "studies:all-studies" });
   } else {
     error("You must be logged in to view studies");
 

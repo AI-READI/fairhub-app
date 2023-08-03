@@ -11,6 +11,7 @@ import { theme } from "@/stores/settings";
         <n-space vertical size="large">
           <n-layout has-sider>
             <AppSidebar />
+            <DatasetSidebar />
 
             <n-layout-content class="h-[calc(100vh-56px)] py-4 pl-6">
               <router-view v-slot="{ Component }">

@@ -3,19 +3,21 @@ import { Icon } from "@iconify/vue";
 import type { MenuOption } from "naive-ui";
 import { NLayoutSider, NMenu, NSpace } from "naive-ui";
 import { computed, h, ref } from "vue";
-import { RouterLink, useRoute } from "vue-router";
+import { RouterLink, useRoute, useRouter } from "vue-router";
 
 const sidebarCollapsed = ref(false);
 const route = useRoute();
+const router = useRouter();
 
 function renderIcon(icon: string) {
   return () => h(Icon, { icon });
 }
 
 const studyID = computed(() => {
-  if (route.params.studyId === undefined) {
+  if (!route.params.studyId) {
     return "null";
   }
+
   return route.params.studyId;
 });
 
@@ -37,40 +39,17 @@ const hideMenuOptions = computed(() => {
   }
 });
 
-const staticUpperMenuOptions: MenuOption[] = [
+const UpperMenuOptions = computed(() => [
   {
     icon: renderIcon("tabler:home-2"),
-    key: "all-studies",
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: "all-studies",
-          },
-        },
-        { default: () => "All Studies" }
-      ),
+    key: "studies:all-studies",
+    label: "All Studies",
   },
-];
-
-const dynamicUpperMenuOptions: MenuOption[] = [
   {
     icon: renderIcon("material-symbols:overview-key-rounded"),
-    key: "study-overview",
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: "study-overview",
-            params: {
-              studyId: studyID.value,
-            },
-          },
-        },
-        { default: () => "Overview" }
-      ),
+    key: "study:overview",
+    label: "Overview",
+    show: hideMenuOptions.value,
   },
   {
     children: [
@@ -297,76 +276,39 @@ const dynamicUpperMenuOptions: MenuOption[] = [
       },
     ],
     icon: renderIcon("ooui:view-details-ltr"),
-    key: "study-metadata",
+    key: "study:metadata",
     label: "Metadata",
+    show: hideMenuOptions.value,
   },
   {
     icon: renderIcon("fluent:people-team-toolbox-24-regular"),
-    key: "study-participants",
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: "study-participants",
-            params: {
-              studyId: studyID.value,
-            },
-          },
-        },
-        { default: () => "Participants" }
-      ),
+    key: "study:participants",
+    label: "Participants",
+    show: hideMenuOptions.value,
   },
   {
     icon: renderIcon("fluent:people-checkmark-24-regular"),
-    key: "contributors",
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: "study-contributors",
-            params: {
-              studyId: studyID.value,
-            },
-          },
-        },
-        { default: () => "Contributors" }
-      ),
+    key: "study:contributors",
+    label: "Contributors",
+    show: hideMenuOptions.value,
   },
   {
     icon: renderIcon("ph:files-fill"),
-    key: "files",
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: "study-files",
-            params: {
-              studyId: studyID.value,
-            },
-          },
-        },
-        { default: () => "Files" }
-      ),
+    key: "study:files",
+    label: "Files",
+    show: hideMenuOptions.value,
   },
   {
     icon: renderIcon("material-symbols:dashboard-rounded"),
-    key: "dashboard",
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: "dashboard",
-            params: {
-              studyId: studyID.value,
-            },
-          },
-        },
-        { default: () => "Dashboard" }
-      ),
+    key: "study:dashboard",
+    label: "Dashboard",
+    show: hideMenuOptions.value,
+  },
+  {
+    icon: renderIcon("material-symbols:dataset"),
+    key: "datasets:all-datasets",
+    label: "Datasets",
+    show: hideMenuOptions.value,
   },
   {
     icon: renderIcon("material-symbols:published-with-changes-rounded"),
@@ -384,8 +326,9 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         },
         { default: () => "Publish" }
       ),
+    show: hideMenuOptions.value,
   },
-];
+]);
 
 const lowerMenuOptions: MenuOption[] = [
   {
@@ -463,6 +406,51 @@ const toggleSidebar = (collapsed: boolean) => {
   return;
 };
 
+const navigateTo = (value: string) => {
+  const routeName = value.split(":")[0];
+
+  if (routeName === "studies") {
+    sidebarCollapsed.value = false;
+
+    router.push({
+      name: value,
+    });
+
+    return;
+  }
+
+  if (routeName === "study") {
+    sidebarCollapsed.value = false;
+
+    router.push({
+      name: value,
+      params: {
+        studyId: studyID.value,
+      },
+    });
+
+    return;
+  }
+
+  if (routeName === "datasets") {
+    sidebarCollapsed.value = true;
+
+    router.push({
+      name: value,
+      params: {
+        studyId: studyID.value,
+      },
+    });
+
+    return;
+  }
+
+  if (value === "publish-dataset") {
+    sidebarCollapsed.value = true;
+    return;
+  }
+};
+
 /**
  * A computed property that returns true if the sidebar should be completely hidden
  * @returns {boolean}
@@ -486,7 +474,7 @@ const hideSidebar = computed(() => {
     :collapsed-width="64"
     :native-scrollbar="true"
     @update:collapsed="toggleSidebar"
-    class="h-[calc(100vh-56px)]"
+    class="z-10 h-[calc(100vh-56px)]"
   >
     <n-space vertical justify="space-between" class="h-full">
       <div class="flex flex-col justify-start divide-y">
@@ -494,17 +482,9 @@ const hideSidebar = computed(() => {
           :collapsed-width="64"
           :collapsed-icon-size="22"
           :collapsed="sidebarCollapsed"
-          :options="staticUpperMenuOptions"
-          class="mb-1 pb-1"
+          :options="UpperMenuOptions"
+          @update:value="navigateTo"
         />
-        <n-menu
-          v-if="hideMenuOptions"
-          :collapsed-width="64"
-          :collapsed-icon-size="22"
-          :collapsed="sidebarCollapsed"
-          :options="dynamicUpperMenuOptions"
-        />
-        <!--             @update:value="routerLink"-->
       </div>
 
       <n-menu
