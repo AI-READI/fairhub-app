@@ -88,7 +88,7 @@ const deleteDatasetVersion = () => {
             class="my-5 flex w-full flex-col rounded-md border border-slate-200 bg-slate-50 p-4 shadow-sm transition-all"
           >
             <div class="flex justify-between pt-2">
-              <h3>{{ dataset.name }}</h3>
+              <h3>{{ dataset.title }}</h3>
 
               <div class="flex items-center space-x-3">
                 <RouterLink
@@ -99,7 +99,6 @@ const deleteDatasetVersion = () => {
                       datasetId: dataset.id,
                     },
                   }"
-                  v-if="dataset.latestVersion === dataset.publishedVersion"
                 >
                   <n-button strong secondary type="primary">
                     <template #icon>
@@ -109,15 +108,12 @@ const deleteDatasetVersion = () => {
                   </n-button>
                 </RouterLink>
 
-                <div
-                  v-if="dataset.latestVersion !== dataset.publishedVersion"
-                  class="flex items-center space-x-3"
-                >
+                <div class="flex items-center space-x-3">
                   <RouterLink
                     :to="{
                       name: 'publish-select-participants',
                       params: {
-                        versionId: dataset.latestVersion,
+                        versionId: dataset.latest_version,
                         datasetId: dataset.id,
                       },
                     }"
@@ -155,14 +151,14 @@ const deleteDatasetVersion = () => {
               <p>
                 <span class="font-bold"> Latest version: </span>
                 <span>
-                  {{ dataset.latestVersion }}
+                  {{ dataset.latest_version }}
                 </span>
               </p>
 
               <p>
                 <span class="font-bold"> Created on: </span>
                 <span>
-                  {{ displayHumanFriendlyDateAndTime(dataset.lastPublished) }}
+                  {{ displayHumanFriendlyDateAndTime(dataset.latest_version) }}
                 </span>
               </p>
             </div>
