@@ -2,12 +2,17 @@
 import { Icon } from "@iconify/vue";
 import type { MenuOption } from "naive-ui";
 import { NLayoutSider, NMenu, NSpace } from "naive-ui";
-import { computed, h, ref } from "vue";
+import { computed, h } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 
-const sidebarCollapsed = ref(false);
+import { useSidebarStore } from "@/stores/sidebar";
+
 const route = useRoute();
 const router = useRouter();
+
+const sidebarStore = useSidebarStore();
+
+const sidebarCollapsed = computed(() => sidebarStore.collapseAppSidebar);
 
 function renderIcon(icon: string) {
   return () => h(Icon, { icon });
@@ -306,7 +311,7 @@ const UpperMenuOptions = computed(() => [
   },
   {
     icon: renderIcon("material-symbols:dataset"),
-    key: "datasets:all-datasets",
+    key: "study:all-datasets",
     label: "Datasets",
     show: hideMenuOptions.value,
   },
@@ -402,7 +407,7 @@ const lowerMenuOptions: MenuOption[] = [
  * @returns {void}
  */
 const toggleSidebar = (collapsed: boolean) => {
-  sidebarCollapsed.value = collapsed;
+  sidebarStore.setAppSidebarCollapse(collapsed);
   return;
 };
 
@@ -410,7 +415,7 @@ const navigateTo = (value: string) => {
   const routeName = value.split(":")[0];
 
   if (routeName === "studies") {
-    sidebarCollapsed.value = false;
+    sidebarStore.setAppSidebarCollapse(false);
 
     router.push({
       name: value,
@@ -420,7 +425,7 @@ const navigateTo = (value: string) => {
   }
 
   if (routeName === "study") {
-    sidebarCollapsed.value = false;
+    sidebarStore.setAppSidebarCollapse(false);
 
     router.push({
       name: value,
@@ -433,7 +438,7 @@ const navigateTo = (value: string) => {
   }
 
   if (routeName === "datasets") {
-    sidebarCollapsed.value = true;
+    sidebarStore.setAppSidebarCollapse(false);
 
     router.push({
       name: value,
@@ -445,8 +450,9 @@ const navigateTo = (value: string) => {
     return;
   }
 
-  if (value === "publish-dataset") {
-    sidebarCollapsed.value = true;
+  if (routeName === "dataset") {
+    sidebarStore.setAppSidebarCollapse(true);
+
     return;
   }
 };
@@ -457,6 +463,7 @@ const navigateTo = (value: string) => {
  */
 const hideSidebar = computed(() => {
   const currentRoute = useRoute();
+
   if (currentRoute.path === "/") {
     return false;
   }

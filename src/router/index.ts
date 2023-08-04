@@ -13,6 +13,9 @@ import AllSettings from "@/views/settings/AllSettings.vue";
 import AllStudies from "@/views/studies/AllStudies.vue";
 import StudyContributors from "@/views/study/contributors/StudyContributors.vue";
 import DashBoard from "@/views/study/dashboard/DashBoard.vue";
+import NewDataset from "@/views/study/dataset/new/NewDataset.vue";
+import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue";
+import AllDatasets from "@/views/study/datasets/AllDatasets.vue";
 import EditStudy from "@/views/study/edit/EditStudy.vue";
 import StudyFiles from "@/views/study/files/StudyFiles.vue";
 import StudyCollaborators from "@/views/study/metadata/collaborators/StudyCollaborators.vue";
@@ -115,9 +118,29 @@ const router = createRouter({
           component: StudyContributors,
         },
         {
-          name: "datasets:all-datasets",
+          name: "study:all-datasets",
           path: "datasets",
-          component: StudyPublish,
+          component: AllDatasets,
+        },
+        {
+          path: "dataset",
+          children: [
+            {
+              name: "dataset:new",
+              path: "new",
+              component: NewDataset,
+            },
+            {
+              path: ":datasetId",
+              children: [
+                {
+                  name: "dataset:overview",
+                  path: "overview",
+                  component: DatasetOverview,
+                },
+              ],
+            },
+          ],
         },
         {
           name: "publish",

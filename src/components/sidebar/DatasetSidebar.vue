@@ -3,12 +3,12 @@ import { Icon } from "@iconify/vue";
 import type { MenuOption } from "naive-ui";
 import { NLayoutSider, NMenu, NSpace } from "naive-ui";
 import { computed, h, ref } from "vue";
-import { RouterLink, useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+
+const route = useRoute();
+const router = useRouter();
 
 const sidebarCollapsed = ref(false);
-const route = useRoute();
-
-console.log("route", route);
 
 function renderIcon(icon: string) {
   return () => h(Icon, { icon });
@@ -21,23 +21,23 @@ const studyID = computed(() => {
   return route.params.studyId;
 });
 
+const datasetId = computed(() => {
+  if (route.params.datasetId === undefined) {
+    return "null";
+  }
+  return route.params.datasetId;
+});
+
 const dynamicUpperMenuOptions: MenuOption[] = [
   {
-    icon: renderIcon("material-symbols:dataset"),
-    key: "publish-dataset",
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: "view-datasets",
-            params: {
-              studyId: studyID.value,
-            },
-          },
-        },
-        { default: () => "Datasets" }
-      ),
+    icon: renderIcon("ph:list-fill"),
+    key: "study:all-datasets",
+    label: "All Datasets",
+  },
+  {
+    icon: renderIcon("material-symbols:overview-key-outline"),
+    key: "dataset:overview",
+    label: "Overview",
   },
 ];
 
@@ -51,9 +51,31 @@ const toggleSidebar = (collapsed: boolean) => {
   return;
 };
 
-const checkForDataset = (value: string) => {
-  if (value === "publish-dataset") {
-    sidebarCollapsed.value = true;
+const navigateTo = (value: string) => {
+  console.log("navigateTo", value);
+  const routeName = value.split(":")[0];
+
+  if (routeName === "study") {
+    router.push({
+      name: value,
+      params: {
+        studyId: studyID.value,
+      },
+    });
+
+    return;
+  }
+
+  if (routeName === "dataset") {
+    router.push({
+      name: value,
+      params: {
+        datasetId: datasetId.value,
+        studyId: studyID.value,
+      },
+    });
+
+    return;
   }
 };
 
@@ -72,8 +94,14 @@ const showSidebar = computed(() => {
 
   console.log("routeName", routeName);
 
-  //Check if the phrase `datasets:` is the start of the route name
-  if (routeName.startsWith("datasets:")) {
+  // These routes should not show the sidebar
+  const hiddenRoutes = ["dataset:new", "dataset:edit"];
+
+  if (hiddenRoutes.includes(routeName)) {
+    return false;
+  }
+
+  if (routeName.startsWith("dataset:")) {
     return true;
   }
 
@@ -99,7 +127,7 @@ const showSidebar = computed(() => {
         :collapsed-icon-size="22"
         :collapsed="sidebarCollapsed"
         :options="dynamicUpperMenuOptions"
-        @update:value="checkForDataset"
+        @update:value="navigateTo"
       />
     </n-space>
   </n-layout-sider>

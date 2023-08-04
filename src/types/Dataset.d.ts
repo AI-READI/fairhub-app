@@ -1,10 +1,7 @@
 export interface Dataset {
   id: string;
-  name: string;
   title: string;
   description: string;
-  lastModified: string;
-  lastPublished: string;
-  latestVersion: number;
-  publishedVersion: number;
+  latest_version: string | null;
+  primary_language: string;
 }
