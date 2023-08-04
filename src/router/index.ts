@@ -15,6 +15,7 @@ import StudyContributors from "@/views/study/contributors/StudyContributors.vue"
 import DashBoard from "@/views/study/dashboard/DashBoard.vue";
 import NewDataset from "@/views/study/dataset/new/NewDataset.vue";
 import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue";
+import DatasetRouterView from "@/views/study/dataset/root/DatasetRouterView.vue";
 import AllDatasets from "@/views/study/datasets/AllDatasets.vue";
 import EditStudy from "@/views/study/edit/EditStudy.vue";
 import StudyFiles from "@/views/study/files/StudyFiles.vue";
@@ -123,6 +124,7 @@ const router = createRouter({
           component: AllDatasets,
         },
         {
+          name: "dataset:root",
           path: "dataset",
           children: [
             {
@@ -139,6 +141,7 @@ const router = createRouter({
                   component: DatasetOverview,
                 },
               ],
+              component: DatasetRouterView,
             },
           ],
         },

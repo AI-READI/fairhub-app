@@ -29,15 +29,20 @@ const datasetId = computed(() => {
 });
 
 const dynamicUpperMenuOptions: MenuOption[] = [
-  {
-    icon: renderIcon("ph:list-fill"),
-    key: "study:all-datasets",
-    label: "All Datasets",
-  },
+  // {
+  //   icon: renderIcon("ph:list-fill"),
+  //   key: "study:all-datasets",
+  //   label: "All Datasets",
+  // },
   {
     icon: renderIcon("material-symbols:overview-key-outline"),
     key: "dataset:overview",
     label: "Overview",
+  },
+  {
+    icon: renderIcon("fluent:text-case-title-16-filled"),
+    key: "dataset:overview",
+    label: "Title",
   },
 ];
 
@@ -55,16 +60,16 @@ const navigateTo = (value: string) => {
   console.log("navigateTo", value);
   const routeName = value.split(":")[0];
 
-  if (routeName === "study") {
-    router.push({
-      name: value,
-      params: {
-        studyId: studyID.value,
-      },
-    });
+  // if (routeName === "study") {
+  //   router.push({
+  //     name: value,
+  //     params: {
+  //       studyId: studyID.value,
+  //     },
+  //   });
 
-    return;
-  }
+  //   return;
+  // }
 
   if (routeName === "dataset") {
     router.push({

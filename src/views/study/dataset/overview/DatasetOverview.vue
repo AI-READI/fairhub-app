@@ -9,7 +9,6 @@ import { useDatasetStore } from "@/stores/dataset";
 import { useSidebarStore } from "@/stores/sidebar";
 import { useStudyStore } from "@/stores/study";
 import type { Dataset } from "@/types/Dataset";
-import type { Study } from "@/types/Study";
 
 const router = useRouter();
 const route = useRoute();
@@ -20,8 +19,6 @@ const authStore = useAuthStore();
 const sidebarStore = useSidebarStore();
 const datasetStore = useDatasetStore();
 const studyStore = useStudyStore();
-
-const study: Ref<Study> = computed(() => studyStore.study);
 
 const dataset: Ref<Dataset> = computed(() => datasetStore.dataset);
 
@@ -60,15 +57,6 @@ const handleBack = () => {
       <n-page-header subtitle="View an overview of your dataset" @back="handleBack">
         <template #title>
           <p>Overview</p>
-        </template>
-
-        <template #header>
-          <n-breadcrumb>
-            <n-breadcrumb-item>Study</n-breadcrumb-item>
-            <n-breadcrumb-item>{{ study.title }}</n-breadcrumb-item>
-            <n-breadcrumb-item>{{ dataset.title }}</n-breadcrumb-item>
-            <n-breadcrumb-item>Overview</n-breadcrumb-item>
-          </n-breadcrumb>
         </template>
       </n-page-header>
 

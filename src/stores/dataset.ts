@@ -55,7 +55,10 @@ export const useDatasetStore = defineStore("dataset", () => {
       loading.value = false;
     }
 
-    const d = allDatasets.value.find((dataset) => dataset.id === datasetId);
+    /**
+     * TODO: Fix the ts case for undefined if dataset is not found
+     */
+    const d = allDatasets.value.find((dataset) => dataset.id === datasetId) as Dataset;
 
     dataset.value = d;
 
