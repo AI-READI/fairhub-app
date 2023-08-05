@@ -5,14 +5,15 @@ import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import { useDatasetStore } from "@/stores/dataset";
+import { useSidebarStore } from "@/stores/sidebar";
 
 const route = useRoute();
 const router = useRouter();
 const { error } = useMessage();
 
 const authStore = useAuthStore();
-
 const datasetStore = useDatasetStore();
+const sidebarStore = useSidebarStore();
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
@@ -24,6 +25,8 @@ onBeforeMount(() => {
     error("You are not logged in.");
     router.push({ name: "home" });
   }
+
+  sidebarStore.setAppSidebarCollapse(true);
 
   const studyId = routeParams.studyId;
   const datasetId = routeParams.datasetId;

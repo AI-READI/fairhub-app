@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-import type { Dataset } from "@/types/Dataset";
+import type { Dataset, DatasetTitles } from "@/types/Dataset";
 
 export const useDatasetStore = defineStore("dataset", () => {
   const allDatasets = ref<Dataset[]>([]);
@@ -14,6 +14,8 @@ export const useDatasetStore = defineStore("dataset", () => {
     latest_version: "",
     primary_language: "",
   });
+
+  const datasetTitles = ref<DatasetTitles>([]);
 
   const fetchAllDatasets = async (studyId: string) => {
     loading.value = true;
@@ -81,5 +83,5 @@ export const useDatasetStore = defineStore("dataset", () => {
     return dataset.id;
   };
 
-  return { addDataset, allDatasets, dataset, fetchAllDatasets, getDataset, loading };
+  return { addDataset, allDatasets, dataset, datasetTitles, fetchAllDatasets, getDataset, loading };
 });

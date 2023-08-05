@@ -13,6 +13,7 @@ import AllSettings from "@/views/settings/AllSettings.vue";
 import AllStudies from "@/views/studies/AllStudies.vue";
 import StudyContributors from "@/views/study/contributors/StudyContributors.vue";
 import DashBoard from "@/views/study/dashboard/DashBoard.vue";
+import DatasetMetadataTitle from "@/views/study/dataset/metadata/title/DatasetMetadataTitle.vue";
 import NewDataset from "@/views/study/dataset/new/NewDataset.vue";
 import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue";
 import DatasetRouterView from "@/views/study/dataset/root/DatasetRouterView.vue";
@@ -140,6 +141,11 @@ const router = createRouter({
                   path: "overview",
                   component: DatasetOverview,
                 },
+                {
+                  name: "dataset:metadata:title",
+                  path: "metadata/title",
+                  component: DatasetMetadataTitle,
+                },
               ],
               component: DatasetRouterView,
             },
@@ -239,71 +245,71 @@ const router = createRouter({
           component: StudyPublish,
         },
         {
-          name: "study-metadata",
+          name: "study:metadata",
           path: "metadata",
           children: [
             {
-              name: "study-metadata-identification",
+              name: "study:metadata:identification",
               path: "identification",
               component: StudyIdentification,
             },
             {
-              name: "study-metadata-status",
+              name: "study:metadata:status",
               path: "status",
               component: StudyStatus,
             },
             {
-              name: "study-metadata-sponsors",
+              name: "study:metadata:sponsors",
               path: "sponsor",
               component: StudySponsors,
             },
             {
-              name: "study-metadata-collaborators",
+              name: "study:metadata:collaborators",
               path: "collaborators",
               component: StudyCollaborators,
             },
             {
-              name: "study-metadata-oversight",
+              name: "study:metadata:oversight",
               path: "oversight",
               component: StudyOversight,
             },
             {
-              name: "study-metadata-description",
+              name: "study:metadata:description",
               path: "description",
               component: StudyDescription,
             },
             {
-              name: "study-metadata-conditions",
+              name: "study:metadata:conditions",
               path: "conditions",
               component: StudyConditions,
             },
             {
-              name: "study-metadata-design",
+              name: "study:metadata:design",
               path: "design",
               component: StudyDesign,
             },
             {
-              name: "study-metadata-interventions",
+              name: "study:metadata:interventions",
               path: "interventions",
               component: StudyInterventions,
             },
             {
-              name: "study-metadata-eligibility",
+              name: "study:metadata:eligibility",
               path: "eligibility",
               component: StudyEligibility,
             },
             {
-              name: "study-metadata-contacts",
+              name: "study:metadata:contacts",
               path: "contacts",
               component: StudyContacts,
             },
             {
-              name: "study-metadata-ipd-sharing",
+              name: "study:metadata:ipd-sharing",
               path: "ipd-sharing",
               component: StudyIPDSharing,
             },
             {
-              name: "study-metadata-references",
+              name: "study:metadata:references",
               path: "references",
               component: StudyReferences,
             },

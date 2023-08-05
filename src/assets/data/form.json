@@ -24,5 +24,32 @@
       "label": "Machine Learning",
       "value": "Machine Learning"
     }
+  ],
+  "datasetTitleTypeOptions": [
+    {
+      "label": "Main Title",
+      "value": "mainTitle",
+      "disabled": true
+    },
+    {
+      "label": "Alternative Title",
+      "value": "AlternativeTitle",
+      "disabled": false
+    },
+    {
+      "label": "Subtitle",
+      "value": "Subtitle",
+      "disabled": false
+    },
+    {
+      "label": "Translated Title",
+      "value": "TranslatedTitle",
+      "disabled": false
+    },
+    {
+      "label": "Other",
+      "value": "Other",
+      "disabled": false
+    }
   ]
 }

@@ -60,224 +60,68 @@ const UpperMenuOptions = computed(() => [
     children: [
       {
         icon: renderIcon("tabler:id"),
-        key: "study-metadata-identification",
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "study-metadata-identification",
-                params: {
-                  studyId: studyID.value,
-                },
-              },
-            },
-            { default: () => "Identification" }
-          ),
+        key: "study:metadata:identification",
+        label: "Identification",
       },
       {
         icon: renderIcon("pajamas:status"),
-        key: "study-metadata-status",
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "study-metadata-status",
-                params: {
-                  studyId: studyID.value,
-                },
-              },
-            },
-            { default: () => "Status" }
-          ),
+        key: "study:metadata:status",
+        label: "Status",
       },
       {
         icon: renderIcon("carbon:user-sponsor"),
-        key: "study-metadata-sponsors",
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "study-metadata-sponsors",
-                params: {
-                  studyId: studyID.value,
-                },
-              },
-            },
-            { default: () => "Sponsors" }
-          ),
+        key: "study:metadata:sponsors",
+        label: "Sponsors",
       },
       {
         icon: renderIcon("carbon:collaborate"),
-        key: "study-metadata-collaborators",
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "study-metadata-collaborators",
-                params: {
-                  studyId: studyID.value,
-                },
-              },
-            },
-            { default: () => "Collaborators" }
-          ),
+        key: "study:metadata:collaborators",
+        label: "Collaborators",
       },
       {
         icon: renderIcon("ic:baseline-local-police"),
-        key: "study-metadata-oversight",
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "study-metadata-oversight",
-                params: {
-                  studyId: studyID.value,
-                },
-              },
-            },
-            { default: () => "Oversight" }
-          ),
+        key: "study:metadata:oversight",
+        label: "Oversight",
       },
       {
         icon: renderIcon("material-symbols:description"),
-        key: "study-metadata-description",
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "study-metadata-description",
-                params: {
-                  studyId: studyID.value,
-                },
-              },
-            },
-            { default: () => "Description" }
-          ),
+        key: "study:metadata:description",
+        label: "Description",
       },
       {
         icon: renderIcon("material-symbols:conditions-rounded"),
-        key: "study-metadata-conditions",
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "study-metadata-conditions",
-                params: {
-                  studyId: studyID.value,
-                },
-              },
-            },
-            { default: () => "Conditions" }
-          ),
+        key: "study:metadata:conditions",
+        label: "Conditions",
       },
       {
         icon: renderIcon("iconoir:design-pencil"),
-        key: "study-metadata-design",
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "study-metadata-design",
-                params: {
-                  studyId: studyID.value,
-                },
-              },
-            },
-            { default: () => "Design" }
-          ),
+        key: "study:metadata:design",
+        label: "Design",
       },
       {
         icon: renderIcon("mdi:drugs"),
-        key: "study-metadata-interventions",
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "study-metadata-interventions",
-                params: {
-                  studyId: studyID.value,
-                },
-              },
-            },
-            { default: () => "Interventions" }
-          ),
+        key: "study:metadata:interventions",
+        label: "Interventions",
       },
       {
         icon: renderIcon("icon-park-outline:permissions"),
-        key: "study-metadata-eligibility",
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "study-metadata-eligibility",
-                params: {
-                  studyId: studyID.value,
-                },
-              },
-            },
-            { default: () => "Eligibility" }
-          ),
+        key: "study:metadata:eligibility",
+        label: "Eligibility",
       },
       {
         icon: renderIcon("teenyicons:contact-outline"),
-        key: "study-metadata-contacts",
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "study-metadata-contacts",
-                params: {
-                  studyId: studyID.value,
-                },
-              },
-            },
-            { default: () => "Contacts" }
-          ),
+        key: "study:metadata:contacts",
+        label: "Contacts",
       },
       {
         icon: renderIcon("icons8:share"),
-        key: "study-metadata-ipd-sharing",
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "study-metadata-ipd-sharing",
-                params: {
-                  studyId: studyID.value,
-                },
-              },
-            },
-            { default: () => "IPD Sharing" }
-          ),
+        key: "study:metadata:ipd-sharing",
+        label: "IPD Sharing",
       },
       {
         icon: renderIcon("zondicons:book-reference"),
-        key: "study-metadata-references",
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                name: "study-metadata-references",
-                params: {
-                  studyId: studyID.value,
-                },
-              },
-            },
-            { default: () => "References" }
-          ),
+        key: "study:metadata:references",
+        label: "References",
       },
     ],
     icon: renderIcon("ooui:view-details-ltr"),
@@ -469,6 +313,19 @@ const hideSidebar = computed(() => {
   }
   return true;
 });
+
+const defaultExpandedKeys = computed(() => {
+  const currentRoute = useRoute();
+
+  if (currentRoute.name) {
+    const name = currentRoute.name as string;
+
+    if (name.startsWith("study:metadata")) {
+      return ["study:metadata"];
+    }
+  }
+  return [];
+});
 </script>
 
 <template>
@@ -488,6 +345,7 @@ const hideSidebar = computed(() => {
         <n-menu
           :collapsed-width="64"
           :collapsed-icon-size="22"
+          :default-expanded-keys="defaultExpandedKeys"
           :collapsed="sidebarCollapsed"
           :options="UpperMenuOptions"
           @update:value="navigateTo"

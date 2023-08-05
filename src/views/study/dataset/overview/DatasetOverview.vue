@@ -9,6 +9,7 @@ import { useDatasetStore } from "@/stores/dataset";
 import { useSidebarStore } from "@/stores/sidebar";
 import { useStudyStore } from "@/stores/study";
 import type { Dataset } from "@/types/Dataset";
+import type { Study } from "@/types/Study";
 
 const router = useRouter();
 const route = useRoute();
@@ -19,6 +20,8 @@ const authStore = useAuthStore();
 const sidebarStore = useSidebarStore();
 const datasetStore = useDatasetStore();
 const studyStore = useStudyStore();
+
+const study: Ref<Study> = computed(() => studyStore.study);
 
 const dataset: Ref<Dataset> = computed(() => datasetStore.dataset);
 

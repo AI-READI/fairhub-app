@@ -40,9 +40,16 @@ const dynamicUpperMenuOptions: MenuOption[] = [
     label: "Overview",
   },
   {
-    icon: renderIcon("fluent:text-case-title-16-filled"),
-    key: "dataset:overview",
-    label: "Title",
+    children: [
+      {
+        icon: renderIcon("fluent:text-case-title-16-filled"),
+        key: "dataset:metadata:title",
+        label: "Title",
+      },
+    ],
+    icon: renderIcon("ooui:view-details-ltr"),
+    key: "dataset:metadata",
+    label: "Metadata",
   },
 ];
 
@@ -130,6 +137,7 @@ const showSidebar = computed(() => {
       <n-menu
         :collapsed-width="64"
         :collapsed-icon-size="22"
+        :default-expanded-keys="['dataset:metadata']"
         :collapsed="sidebarCollapsed"
         :options="dynamicUpperMenuOptions"
         @update:value="navigateTo"
