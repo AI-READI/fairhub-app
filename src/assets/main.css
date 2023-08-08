@@ -79,6 +79,10 @@
     @apply !font-primary text-base font-bold md:text-lg;
   }
 
+  p {
+    @apply !font-primary text-sm text-slate-600 md:text-base;
+  }
+
   body {
     @apply !font-primary text-sm md:text-base;
   }

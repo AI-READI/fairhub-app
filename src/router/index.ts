@@ -13,6 +13,7 @@ import AllSettings from "@/views/settings/AllSettings.vue";
 import AllStudies from "@/views/studies/AllStudies.vue";
 import StudyContributors from "@/views/study/contributors/StudyContributors.vue";
 import DashBoard from "@/views/study/dashboard/DashBoard.vue";
+import DatasetMetadataIdentifiers from "@/views/study/dataset/metadata/identifiers/DatasetMetadataIdentifiers.vue";
 import DatasetMetadataTitle from "@/views/study/dataset/metadata/title/DatasetMetadataTitle.vue";
 import NewDataset from "@/views/study/dataset/new/NewDataset.vue";
 import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue";
@@ -140,6 +141,11 @@ const router = createRouter({
                   name: "dataset:overview",
                   path: "overview",
                   component: DatasetOverview,
+                },
+                {
+                  name: "dataset:metadata:identifiers",
+                  path: "metadata/identifiers",
+                  component: DatasetMetadataIdentifiers,
                 },
                 {
                   name: "dataset:metadata:title",

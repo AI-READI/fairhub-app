@@ -42,6 +42,11 @@ const dynamicUpperMenuOptions: MenuOption[] = [
   {
     children: [
       {
+        icon: renderIcon("mdi:identifier"),
+        key: "dataset:metadata:identifiers",
+        label: "Identifiers",
+      },
+      {
         icon: renderIcon("fluent:text-case-title-16-filled"),
         key: "dataset:metadata:title",
         label: "Title",

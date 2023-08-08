@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 import FORM_JSON from "@/assets/data/form.json";
 import { useAuthStore } from "@/stores/auth";
 import { useDatasetStore } from "@/stores/dataset";
-import type { Dataset, DatasetTitle } from "@/types/Dataset";
+import type { DatasetIdentifiers } from "@/types/Dataset";
 
 const route = useRoute();
 const router = useRouter();
@@ -18,14 +18,7 @@ const routeParams = {
   studyId: route.params.studyId as string,
 };
 
-const dataset = ref<Dataset>({
-  id: nanoid(),
-  title: "",
-  description: "",
-  latest_version: "",
-  primary_language: "",
-});
-const datasetTitles = ref<DatasetTitle[]>([]);
+const datasetIdentifiers = ref<DatasetIdentifiers>([]);
 
 computed(() => {
   console.log("datasetStore.datasetTitles", datasetStore.datasetTitles);
@@ -38,51 +31,46 @@ onBeforeMount(async () => {
     router.push({ name: "home" });
   }
 
-  dataset.value = await datasetStore.getDataset(routeParams.datasetId, routeParams.studyId);
-
   /**
    * TODO: replace this with a call to the API
    */
-  if (datasetTitles.value.length === 0) {
-    datasetTitles.value.push({
+  if (datasetIdentifiers.value.length === 0) {
+    datasetIdentifiers.value.push({
       id: nanoid(),
-      title: dataset.value.title,
-      type: "mainTitle",
+      identifier: "10.5072/1234",
+      type: "doi",
     });
   }
 
-  console.log(
-    "datasetTitless",
-    datasetTitles.value,
-    datasetTitles.value.length,
-    dataset.value.title
-  );
-  if (datasetTitles.value.length > 0) {
-    datasetTitles.value[0].title = dataset.value.title;
-  }
+  /**
+   * TODO: get latest version for dataset
+   */
+  // if (datasetTitles.value.length > 0) {
+  //   datasetTitles.value[0].title = dataset.value.title;
+  // }
 });
 
-const titleTypeOptions = FORM_JSON.datasetTitleTypeOptions;
+const identifierTypeOptions = FORM_JSON.datasetIdentifierTypeOptions;
 
-const createDataset = (e: MouseEvent) => {
+const updateDatasetIdentifier = (e: MouseEvent) => {
   e.preventDefault();
 
-  const dts: DatasetTitle[] = datasetTitles.value;
+  const dts: DatasetIdentifiers = datasetIdentifiers.value;
 
   for (const item of dts) {
     // remove any items that have an empty title
-    if (item.title === "") {
+    if (item.identifier === "") {
       dts.splice(dts.indexOf(item), 1);
     }
 
     // remove any items that have a duplicate title and type
-    if (dts.filter((i) => i.title === item.title && i.type === item.type).length > 1) {
+    if (dts.filter((i) => i.identifier === item.identifier && i.type === item.type).length > 1) {
       dts.splice(dts.indexOf(item), 1);
     }
   }
 
   // call the API to update the dataset
-  datasetStore.datasetTitles = dts;
+  datasetStore.datasetIdentifiers = dts;
 
   success("Dataset titles updated successfully.");
 
@@ -106,26 +94,38 @@ const onCreate = () => {
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
-    <h1>Titles</h1>
+    <h1>Identifiers</h1>
 
     <n-divider />
 
-    <n-dynamic-input v-model:value="datasetTitles" :on-create="onCreate">
+    <h3>Primary Identifier</h3>
+
+    <p class="py-2">
+      The primary identifier for your dataset is generated automatically when you publish a version
+      of your dataset. You can find the identifier for the latest version of your dataset on the
+      dataset overview page.
+    </p>
+
+    <n-divider />
+
+    <h3>Alternative Identifiers</h3>
+
+    <p class="py-2">
+      If you would like to add alternative identifiers for your dataset, you can do so here. These
+      will be attached to your dataset at the time of publication.
+    </p>
+
+    <n-dynamic-input v-model:value="datasetIdentifiers" :on-create="onCreate" class="my-5">
       <template #default="{ value }">
         <div class="mb-2 mr-5 flex w-full items-center space-x-5">
           <div class="flex w-full flex-col space-y-2">
-            <span> Title </span>
-            <n-input v-model:value="value.title" type="text" size="large" />
+            <span> Identifier </span>
+            <n-input v-model:value="value.identifier" type="text" size="large" />
           </div>
 
           <div class="flex w-full flex-col space-y-2">
             <span> Type </span>
-            <n-select
-              v-model:value="value.type"
-              :options="titleTypeOptions"
-              size="large"
-              :disabled="value.type === 'mainTitle'"
-            />
+            <n-select v-model:value="value.type" :options="identifierTypeOptions" size="large" />
           </div>
         </div>
       </template>
@@ -142,10 +142,7 @@ const onCreate = () => {
             <span>Add a new title</span>
           </n-popover>
 
-          <n-button
-            :disabled="datasetTitles[index].type === 'mainTitle'"
-            @click="() => remove(index)"
-          >
+          <n-button @click="() => remove(index)">
             <f-icon icon="gridicons:trash" />
           </n-button>
         </div>
@@ -155,7 +152,7 @@ const onCreate = () => {
     <n-divider />
 
     <div class="flex justify-start">
-      <n-button size="large" type="primary" @click="createDataset">
+      <n-button size="large" type="primary" @click="updateDatasetIdentifier">
         <template #icon>
           <f-icon icon="material-symbols:save" />
         </template>

@@ -51,5 +51,87 @@
       "value": "Other",
       "disabled": false
     }
+  ],
+  "datasetIdentifierTypeOptions": [
+    {
+      "label": "ARK",
+      "value": "ark"
+    },
+    {
+      "label": "arXiv",
+      "value": "arXiv"
+    },
+    {
+      "label": "bibcode",
+      "value": "bibcode"
+    },
+    {
+      "label": "DOI",
+      "value": "doi"
+    },
+    {
+      "label": "EAN13",
+      "value": "ean13"
+    },
+    {
+      "label": "EISSN",
+      "value": "eissn"
+    },
+    {
+      "label": "Handle",
+      "value": "handle"
+    },
+    {
+      "label": "IGSN",
+      "value": "igsn"
+    },
+    {
+      "label": "ISBN",
+      "value": "isbn"
+    },
+    {
+      "label": "ISSN",
+      "value": "issn"
+    },
+    {
+      "label": "ISTC",
+      "value": "istc"
+    },
+    {
+      "label": "LISSN",
+      "value": "lissn"
+    },
+    {
+      "label": "LSID",
+      "value": "lsid"
+    },
+    {
+      "label": "PMID",
+      "value": "pmid"
+    },
+    {
+      "label": "PURL",
+      "value": "purl"
+    },
+    {
+      "label": "UPC",
+      "value": "upc"
+    },
+    {
+      "label": "URL",
+      "value": "url"
+    },
+    {
+      "label": "URN",
+      "value": "urn"
+    },
+    {
+      "label": "w3id",
+      "value": "w3id"
+    },
+    {
+      "label": "other",
+      "value": "other"
+    }
   ]
 }
