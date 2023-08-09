@@ -53,7 +53,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
       },
       {
         icon: renderIcon("material-symbols:description-outline"),
-        key: "dataset:metadata:title",
+        key: "dataset:metadata:descriptions",
         label: "Descriptions",
       },
       {

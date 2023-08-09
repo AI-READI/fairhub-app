@@ -47,7 +47,7 @@ onBeforeMount(async () => {
     datasetTitles.value.push({
       id: nanoid(),
       title: dataset.value.title,
-      type: "mainTitle",
+      type: "MainTitle",
     });
   }
 
@@ -124,7 +124,7 @@ const onCreate = () => {
               v-model:value="value.type"
               :options="titleTypeOptions"
               size="large"
-              :disabled="value.type === 'mainTitle'"
+              :disabled="value.type === 'MainTitle'"
             />
           </div>
         </div>
@@ -143,7 +143,7 @@ const onCreate = () => {
           </n-popover>
 
           <n-button
-            :disabled="datasetTitles[index].type === 'mainTitle'"
+            :disabled="datasetTitles[index].type === 'MainTitle'"
             @click="() => remove(index)"
           >
             <f-icon icon="gridicons:trash" />

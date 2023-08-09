@@ -9,7 +9,7 @@ export interface Dataset {
 export interface DatasetTitle {
   id: string;
   title: string;
-  type: "mainTitle" | "AlternativeTitle" | "Subtitle" | "TranslatedTitle" | "Other";
+  type: "MainTitle" | "AlternativeTitle" | "Subtitle" | "TranslatedTitle" | "Other";
 }
 
 export interface DatasetTitles extends Array<DatasetTitle> {}
@@ -41,3 +41,17 @@ export interface DatasetIdentifier {
 }
 
 export interface DatasetIdentifiers extends Array<DatasetIdentifier> {}
+
+export interface DatasetDescription {
+  id: string;
+  description: string;
+  type:
+    | "Abstract"
+    | "Methods"
+    | "SeriesInformation"
+    | "TableOfContents"
+    | "TechnicalInfo"
+    | "Other";
+}
+
+export interface DatasetDescriptions extends Array<DatasetDescription> {}

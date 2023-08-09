@@ -43,13 +43,6 @@ onBeforeMount(() => {
 
   sidebarStore.setAppSidebarCollapse(true);
 });
-
-const handleBack = () => {
-  router.push({
-    name: "study:all-datasets",
-    params: { studyId: routeParams.studyId },
-  });
-};
 </script>
 
 <template>
@@ -57,11 +50,12 @@ const handleBack = () => {
     <LottieLoader v-if="datasetStore.loading" />
 
     <main class="flex h-full w-full flex-col pr-6" px-4 v-else>
-      <n-page-header subtitle="View an overview of your dataset" @back="handleBack">
-        <template #title>
-          <p>Overview</p>
-        </template>
-      </n-page-header>
+      <PageBackNavigationHeader
+        title="Dataset metadata"
+        description="View an overview of your dataset"
+        linkName="study:all-datasets"
+        :linkParams="{ studyId: routeParams.studyId }"
+      />
 
       <n-divider />
 

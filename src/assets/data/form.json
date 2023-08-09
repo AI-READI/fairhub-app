@@ -28,7 +28,7 @@
   "datasetTitleTypeOptions": [
     {
       "label": "Main Title",
-      "value": "mainTitle",
+      "value": "MainTitle",
       "disabled": true
     },
     {
@@ -132,6 +132,32 @@
     {
       "label": "other",
       "value": "other"
+    }
+  ],
+  "datasetDescriptionTypeOptions": [
+    {
+      "label": "Abstract",
+      "value": "Abstract"
+    },
+    {
+      "label": "Methods",
+      "value": "Methods"
+    },
+    {
+      "label": "Series Information",
+      "value": "SeriesInformation"
+    },
+    {
+      "label": "Table of Contents",
+      "value": "TableOfContents"
+    },
+    {
+      "label": "Technical Info",
+      "value": "TechnicalInfo"
+    },
+    {
+      "label": "Other",
+      "value": "Other"
     }
   ]
 }
