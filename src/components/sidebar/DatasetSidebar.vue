@@ -49,12 +49,90 @@ const dynamicUpperMenuOptions: MenuOption[] = [
       {
         icon: renderIcon("fluent:text-case-title-16-filled"),
         key: "dataset:metadata:title",
-        label: "Title",
+        label: "Titles",
+      },
+      {
+        icon: renderIcon("material-symbols:description-outline"),
+        key: "dataset:metadata:title",
+        label: "Descriptions",
+      },
+      {
+        // contains both creators and contributors
+        icon: renderIcon("ic:baseline-people"),
+        key: "dataset:metadata:title",
+        label: "Contributors",
+      },
+      {
+        icon: renderIcon("solar:calendar-date-outline"),
+        key: "dataset:metadata:title",
+        label: "Dates",
+      },
+      {
+        // also contains publication year
+        icon: renderIcon("octicon:organization-16"),
+        key: "dataset:metadata:title",
+        label: "Publisher",
+      },
+      {
+        icon: renderIcon("solar:key-bold-duotone"),
+        key: "dataset:metadata:title",
+        label: "Record Keys",
+      },
+      {
+        icon: renderIcon("tabler:id-badge-off"),
+        key: "dataset:metadata:title",
+        label: "De-identification",
+      },
+      {
+        icon: renderIcon("icon-park-twotone:permissions"),
+        key: "dataset:metadata:title",
+        label: "Consent",
+      },
+      {
+        icon: renderIcon("fluent-mdl2:relationship"),
+        key: "dataset:metadata:title",
+        label: "Related Identifiers",
+      },
+      {
+        icon: renderIcon("ep:list"),
+        key: "dataset:metadata:title",
+        label: "Subjects",
+      },
+      {
+        icon: renderIcon("mdi:cloud-access"),
+        key: "dataset:metadata:title",
+        label: "Access",
+      },
+      {
+        icon: renderIcon("icon-park-twotone:right-user"),
+        key: "dataset:metadata:title",
+        label: "Rights",
+      },
+      {
+        icon: renderIcon("solar:hand-money-linear"),
+        key: "dataset:metadata:title",
+        label: "Funders",
+      },
+      {
+        icon: renderIcon("icon-park:relational-graph"),
+        key: "dataset:metadata:title",
+        label: "Related Items",
+      },
+      {
+        // language, managing organization, size goes in here
+        icon: renderIcon("pajamas:overview"),
+        key: "dataset:metadata:title",
+        label: "About",
       },
     ],
     icon: renderIcon("ooui:view-details-ltr"),
     key: "dataset:metadata",
     label: "Metadata",
+  },
+  {
+    icon: renderIcon("entypo:publish"),
+    key: "dataset:overview",
+    label: "Publish",
   },
 ];
 
@@ -109,7 +187,7 @@ const showSidebar = computed(() => {
     return false;
   }
 
-  console.log("routeName", routeName);
+  console.log("routeName", routeName, route.path);
 
   // These routes should not show the sidebar
   const hiddenRoutes = ["dataset:new", "dataset:edit"];

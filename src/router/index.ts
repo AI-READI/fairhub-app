@@ -143,6 +143,11 @@ const router = createRouter({
                   component: DatasetOverview,
                 },
                 {
+                  name: "dataset:overview",
+                  path: "metadata",
+                  component: DatasetOverview,
+                },
+                {
                   name: "dataset:metadata:identifiers",
                   path: "metadata/identifiers",
                   component: DatasetMetadataIdentifiers,
