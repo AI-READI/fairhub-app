@@ -131,7 +131,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
   },
   {
     icon: renderIcon("entypo:publish"),
-    key: "dataset:overview",
+    key: "dataset:publish",
     label: "Publish",
   },
 ];

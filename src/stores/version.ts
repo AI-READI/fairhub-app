@@ -18,6 +18,18 @@ export const useVersionStore = defineStore("version", () => {
     selectedParticipants: [],
   });
 
+  const getVersion = async (id: string) => {
+    loading.value = true;
+
+    const response = await fetch(`/api/versions/${id}`);
+
+    const data = await response.json();
+
+    version.value = data;
+
+    loading.value = false;
+  };
+
   const updateSelectedParticipants = (participants: Participant[]) => {
     version.value.selectedParticipants = participants;
   };
@@ -44,6 +56,7 @@ export const useVersionStore = defineStore("version", () => {
 
   return {
     addContributor,
+    getVersion,
     loading,
     updateDescription,
     updateKeywords,
