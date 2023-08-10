@@ -20,10 +20,6 @@ const routeParams = {
 
 const datasetDescriptions = ref<DatasetDescriptions>([]);
 
-const defaultExpandedNames = computed(() => {
-  return datasetDescriptions.value.map((i) => i.id);
-});
-
 onBeforeMount(async () => {
   if (!authStore.isAuthenticated) {
     error("You are not logged in.");
