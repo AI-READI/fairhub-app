@@ -1,4 +1,4 @@
-import "./assets/main.css";
+import "./assets/css/main.css";
 
 import { Icon } from "@iconify/vue";
 import { createPinia } from "pinia";

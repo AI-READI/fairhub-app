@@ -1,67 +1,84 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-import type { VersionContributor } from "@/types/Contributor";
-import type { Participant } from "@/types/Participant";
 import type { Version } from "@/types/Version";
 
 export const useVersionStore = defineStore("version", () => {
   const loading = ref(false);
 
+  const allVersions = ref<Version[]>([]);
+
   const version = ref<Version>({
     id: "",
     title: "",
-    contributors: [],
-    description: "",
-    keywords: [],
-    primaryLanguage: "",
-    selectedParticipants: [],
+    changelog: "",
+    published: false,
   });
 
-  const getVersion = async (id: string) => {
+  const getAllVersions = async (datasetId: string) => {
     loading.value = true;
 
-    const response = await fetch(`/api/versions/${id}`);
+    // const response = await fetch(`${baseURL}/api/versions/${datasetId}`);
 
-    const data = await response.json();
+    // const data = await response.json();
+
+    const data = [
+      {
+        id: "1",
+        title: "Version 1",
+        changelog: "Version 1",
+        published: false,
+      },
+      {
+        id: "2",
+        title: "Version 2",
+        changelog: "Version 2",
+        published: true,
+      },
+    ];
+
+    allVersions.value = data;
+
+    loading.value = false;
+  };
+
+  const getVersion = async (versionId: string) => {
+    if (versionId === "new") {
+      return;
+    }
+
+    loading.value = true;
+
+    // const response = await fetch(`${baseURL}/api/versions/${versionId}`);
+
+    // const data = await response.json();
+
+    const data = {
+      id: "1",
+      title: "Version 1",
+      changelog: "Version 1",
+      published: false,
+    };
 
     version.value = data;
 
     loading.value = false;
   };
 
-  const updateSelectedParticipants = (participants: Participant[]) => {
-    version.value.selectedParticipants = participants;
-  };
-
   const updateTitle = (title: string) => {
     version.value.title = title;
   };
 
-  const updateDescription = (description: string) => {
-    version.value.description = description;
-  };
-
-  const updateKeywords = (keywords: string[]) => {
-    version.value.keywords = keywords;
-  };
-
-  const updatePrimaryLanguage = (language: string) => {
-    version.value.primaryLanguage = language;
-  };
-
-  const addContributor = (contributor: VersionContributor) => {
-    version.value.contributors.push(contributor);
+  const updateChangelog = (changelog: string) => {
+    version.value.changelog = changelog;
   };
 
   return {
-    addContributor,
+    allVersions,
+    getAllVersions,
     getVersion,
     loading,
-    updateDescription,
-    updateKeywords,
-    updatePrimaryLanguage,
-    updateSelectedParticipants,
+    updateChangelog,
     updateTitle,
     version,
   };

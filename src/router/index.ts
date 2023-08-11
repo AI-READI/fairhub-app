@@ -18,7 +18,9 @@ import DatasetMetadataIdentifiers from "@/views/study/dataset/metadata/identifie
 import DatasetMetadataTitle from "@/views/study/dataset/metadata/title/DatasetMetadataTitle.vue";
 import NewDataset from "@/views/study/dataset/new/NewDataset.vue";
 import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue";
+import PublishSelectParticipants from "@/views/study/dataset/publish/participants/PublishSelectParticipants.vue";
 import PublishRouterView from "@/views/study/dataset/publish/root/PublishRouterView.vue";
+import PublishAllVersions from "@/views/study/dataset/publish/versions/PublishAllVersions.vue";
 import DatasetRouterView from "@/views/study/dataset/root/DatasetRouterView.vue";
 import AllDatasets from "@/views/study/datasets/AllDatasets.vue";
 import EditStudy from "@/views/study/edit/EditStudy.vue";
@@ -45,7 +47,6 @@ import PublishContributors from "@/views/study/publish/contributors/PublishContr
 import PublishDataset from "@/views/study/publish/datasets/PublishDataset.vue";
 import PublishDatasetMetadata from "@/views/study/publish/metadata/PublishDatasetMetadata.vue";
 import PublishStudyMetadata from "@/views/study/publish/metadata/PublishStudyMetadata.vue";
-import PublishSelectParticipants from "@/views/study/publish/participants/PublishSelectParticipants.vue";
 import PublishAdditionalInfo from "@/views/study/publish/PublishAdditionalInfo.vue";
 import PublishChangelog from "@/views/study/publish/PublishChangelog.vue";
 import PublishReadme from "@/views/study/publish/PublishReadme.vue";
@@ -167,9 +168,42 @@ const router = createRouter({
                 {
                   name: "dataset:publish",
                   path: "publish",
-                  children: [],
+                  children: [
+                    {
+                      name: "dataset:publish:versions",
+                      path: "versions",
+                      component: PublishAllVersions,
+                    },
+                    {
+                      path: ":versionId",
+                      children: [
+                        {
+                          name: "dataset:publish:version:participants",
+                          path: "participants",
+                          component: PublishSelectParticipants,
+                        },
+                      ],
+                    },
+                  ],
                   component: PublishRouterView,
                 },
+                // {
+                //   name: "dataset:publish",
+                //   path: "publish",
+                //   children: [
+                //     {
+                //       name: "dataset:publish:versions",
+                //       path: "versions",
+                //       component: PublishAllVersions,
+                //     },
+                //     {
+                //       name: "dataset:publish:participants",
+                //       path: "participants",
+                //       component: PublishSelectParticipants,
+                //     },
+                //   ],
+                //   component: PublishRouterView,
+                // },
               ],
               component: DatasetRouterView,
             },

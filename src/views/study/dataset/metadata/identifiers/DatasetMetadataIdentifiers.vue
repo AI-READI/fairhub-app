@@ -103,7 +103,10 @@ const onCreate = () => {
     <p class="py-2">
       The primary identifier for your dataset is generated automatically when you publish a version
       of your dataset. You can find the identifier for the latest version of your dataset on the
-      dataset overview page.
+      <RouterLink :to="{ name: 'dataset:overview', params: routeParams }" class="hover:underline">
+        dataset overview</RouterLink
+      >
+      page.
     </p>
 
     <n-divider />
