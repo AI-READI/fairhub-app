@@ -43,7 +43,7 @@ onBeforeMount(() => {
   datasetStore.getDataset(datasetId, studyId);
   participantStore.fetchAllParticipants(studyId);
 
-  for (const participant of version.value?.selectedParticipants || []) {
+  for (const participant of version.value?.participants || []) {
     if (!participant.id) {
       continue;
     }
@@ -85,15 +85,23 @@ const columns: DataTableColumns<RowData> = [
 ];
 
 function handleNextButton() {
+  /**
+   * TODO: Push the participant IDs to the database.
+   */
+
   router.push({
-    name: "publish-dataset-metadata",
-    params: { versionId: routeParams.versionId },
+    name: "dataset:publish:version:study-metadata",
+    params: {
+      datasetId: routeParams.datasetId,
+      studyId: routeParams.studyId,
+      versionId: routeParams.versionId,
+    },
   });
 }
 
 function handleBackButton() {
   router.push({
-    name: "publish-select-dataset",
+    name: "dataset:publish:versions",
   });
 }
 
@@ -102,7 +110,7 @@ function onUpdate() {
     return;
   }
 
-  version.value.selectedParticipants = [];
+  version.value.participants = [];
 
   for (const selectedParticipant of selectedParticipantRows.value) {
     const participant = participants.value.find(
@@ -113,10 +121,10 @@ function onUpdate() {
       continue;
     }
 
-    version.value.selectedParticipants.push(participant);
+    version.value.participants.push(participant);
   }
 
-  versionStore.updateSelectedParticipants(version.value.selectedParticipants);
+  versionStore.updateParticipants(version.value.participants);
 }
 </script>
 
@@ -144,11 +152,7 @@ function onUpdate() {
         </template>
 
         <transition-group name="fade" tag="div" class="flex flex-wrap">
-          <n-card
-            v-for="item in version.selectedParticipants"
-            :key="item.id"
-            class="m-2 w-max shadow-md"
-          >
+          <n-card v-for="item in version.participants" :key="item.id" class="m-2 w-max shadow-md">
             <p>
               <span class="font-bold">Participant ID: </span>
               <span>{{ item.id }}</span>
@@ -175,14 +179,19 @@ function onUpdate() {
         <template #icon>
           <f-icon icon="ic:round-arrow-back-ios" />
         </template>
-        View all datasets
+        View all versions
       </n-button>
 
-      <n-button size="large" type="primary" @click="handleNextButton">
+      <n-button
+        size="large"
+        type="primary"
+        @click="handleNextButton"
+        :disabled="selectedParticipantRows.length <= 0"
+      >
         <template #icon>
           <f-icon icon="ic:round-arrow-forward-ios" />
         </template>
-        Add dataset metadata
+        Review study metadata
       </n-button>
     </div>
   </main>

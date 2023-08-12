@@ -110,85 +110,86 @@ const navigateToStudy = (studyId: string) => {
       </RouterLink>
     </n-space>
 
-    <FadeTransition>
-      <LottieLoader v-if="studyStore.loading" />
-      <div v-else>
-        <div class="flex items-center space-x-3 border-t pt-4">
-          <n-popover trigger="click" placement="bottom-start">
-            <template #trigger>
-              <n-button strong tertiary type="info">
-                <template #icon>
-                  <n-icon>
-                    <f-icon icon="icon-park-outline:permissions" height="20" />
-                  </n-icon>
-                </template>
-                Permission
-              </n-button>
-            </template>
+    <div>
+      <div class="flex items-center space-x-3 border-t pt-4">
+        <n-popover trigger="click" placement="bottom-start">
+          <template #trigger>
+            <n-button strong tertiary type="info">
+              <template #icon>
+                <n-icon>
+                  <f-icon icon="icon-park-outline:permissions" height="20" />
+                </n-icon>
+              </template>
+              Permission
+            </n-button>
+          </template>
 
-            <n-space vertical>
-              <n-space>
-                <n-switch size="small" v-model:value="filterStore.permissions.owner" />
-                <span class="text-sm font-medium"> Owner </span>
-              </n-space>
-
-              <n-space>
-                <n-switch size="small" v-model:value="filterStore.permissions.editor" />
-                <span class="text-sm font-medium"> Editor </span>
-              </n-space>
-
-              <n-space>
-                <n-switch size="small" v-model:value="filterStore.permissions.viewer" />
-                <span class="text-sm font-medium"> Viewer </span>
-              </n-space>
+          <n-space vertical>
+            <n-space>
+              <n-switch size="small" v-model:value="filterStore.permissions.owner" />
+              <span class="text-sm font-medium"> Owner </span>
             </n-space>
-          </n-popover>
 
-          <n-divider vertical />
-
-          <n-popover trigger="click" placement="bottom-start" class="w-[180px]">
-            <template #trigger>
-              <n-button strong tertiary type="info">
-                <template #icon>
-                  <n-icon>
-                    <f-icon icon="iconoir:sort" height="20" />
-                  </n-icon>
-                </template>
-                Sort
-              </n-button>
-            </template>
-
-            <n-space vertical>
-              <div
-                v-for="option in sortOptions"
-                :key="option.key"
-                @click="updateSort(option.key)"
-                class="flex cursor-pointer items-center justify-between space-x-4 rounded-md p-2 transition-all hover:bg-slate-100"
-              >
-                <span class="text-sm font-medium"> {{ option.label }} </span>
-
-                <FadeTransition>
-                  <f-icon
-                    icon="mdi:tick"
-                    height="20"
-                    class="text-sky-400"
-                    v-if="sortOption === option.key"
-                  />
-                </FadeTransition>
-              </div>
+            <n-space>
+              <n-switch size="small" v-model:value="filterStore.permissions.editor" />
+              <span class="text-sm font-medium"> Editor </span>
             </n-space>
-          </n-popover>
 
-          <n-button @click="toggleSortOrder" text type="info">
-            <n-icon>
-              <f-icon :icon="sortOrder === 'asc' ? 'bi:sort-up' : 'bi:sort-down'" height="20" />
-            </n-icon>
-          </n-button>
-        </div>
+            <n-space>
+              <n-switch size="small" v-model:value="filterStore.permissions.viewer" />
+              <span class="text-sm font-medium"> Viewer </span>
+            </n-space>
+          </n-space>
+        </n-popover>
 
-        <n-divider />
+        <n-divider vertical />
 
-        <TransitionGroup name="fade" tag="ul" class="list-none p-0">
+        <n-popover trigger="click" placement="bottom-start" class="w-[180px]">
+          <template #trigger>
+            <n-button strong tertiary type="info">
+              <template #icon>
+                <n-icon>
+                  <f-icon icon="iconoir:sort" height="20" />
+                </n-icon>
+              </template>
+              Sort
+            </n-button>
+          </template>
+
+          <n-space vertical>
+            <div
+              v-for="option in sortOptions"
+              :key="option.key"
+              @click="updateSort(option.key)"
+              class="flex cursor-pointer items-center justify-between space-x-4 rounded-md p-2 transition-all hover:bg-slate-100"
+            >
+              <span class="text-sm font-medium"> {{ option.label }} </span>
+
+              <FadeTransition>
+                <f-icon
+                  icon="mdi:tick"
+                  height="20"
+                  class="text-sky-400"
+                  v-if="sortOption === option.key"
+                />
+              </FadeTransition>
+            </div>
+          </n-space>
+        </n-popover>
+
+        <n-button @click="toggleSortOrder" text type="info">
+          <n-icon>
+            <f-icon :icon="sortOrder === 'asc' ? 'bi:sort-up' : 'bi:sort-down'" height="20" />
+          </n-icon>
+        </n-button>
+      </div>
+
+      <n-divider />
+
+      <FadeTransition>
+        <LottieLoader v-if="studyStore.loading" />
+
+        <TransitionGroup name="fade" tag="ul" class="list-none p-0" v-else>
           <li
             class="my-5 flex w-full cursor-pointer items-center rounded-md border border-slate-100 shadow-sm transition-all hover:border-slate-200 hover:bg-slate-50 hover:shadow-md"
             v-for="study in studies"
@@ -240,7 +241,7 @@ const navigateToStudy = (studyId: string) => {
             </div>
           </li>
         </TransitionGroup>
-      </div>
-    </FadeTransition>
+      </FadeTransition>
+    </div>
   </main>
 </template>

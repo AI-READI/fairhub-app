@@ -45,16 +45,16 @@ onBeforeMount(() => {
 });
 
 const steps = [
-  { title: "Participants", description: "", route: "dataset:publish:participants" },
+  { title: "Participants", description: "", route: "dataset:publish:version:participants" },
   {
     title: "Study Metadata",
     description: "",
-    route: "dataset:publish:study-metadata",
+    route: "dataset:publish:version:study-metadata",
   },
   {
     title: "Dataset Metadata",
     description: "",
-    route: "dataset:publish:dataset-metadata",
+    route: "dataset:publish:version:dataset-metadata",
   },
   {
     title: "Publish Dataset",

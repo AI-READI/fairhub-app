@@ -1,20 +1,11 @@
 <script setup lang="ts">
 import type { FormInst, FormRules } from "naive-ui";
-import { useMessage } from "naive-ui";
 import { onBeforeMount, ref } from "vue";
-import { useRouter } from "vue-router";
 
-import { useAuthStore } from "@/stores/auth";
-
-const router = useRouter();
-const authStore = useAuthStore();
-const { error } = useMessage();
+import { useSidebarStore } from "@/stores/sidebar";
 
 onBeforeMount(() => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
-  }
+  useSidebarStore().setAppSidebarCollapse(true);
 });
 
 const formRef = ref<FormInst | null>(null);

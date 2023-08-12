@@ -1,8 +1,8 @@
+import { faker } from "@faker-js/faker";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
 import type { Participant } from "@/types/Participant";
-import { baseURL } from "@/utils/constants";
 
 export const useParticipantStore = defineStore("participant", () => {
   const allParticipants = ref<Participant[]>([]);
@@ -12,9 +12,23 @@ export const useParticipantStore = defineStore("participant", () => {
 
   const fetchAllParticipants = async (studyId: string) => {
     loading.value = true;
-    const response = await fetch(`${baseURL}/study/${studyId}/participants`);
+    // const response = await fetch(`${baseURL}/study/${studyId}/participants`);
 
-    allParticipants.value = await response.json();
+    // allParticipants.value = await response.json();
+
+    if (allParticipants.value.length === 0) {
+      for (let i = 0; i < 10; i++) {
+        const p: Participant = {
+          id: faker.string.uuid(),
+          address: faker.location.streetAddress(),
+          age: faker.number.int({ max: 99, min: 18 }),
+          first_name: faker.person.firstName(),
+          last_name: faker.person.lastName(),
+        };
+
+        allParticipants.value.push(p);
+      }
+    }
 
     console.log("participants", allParticipants.value);
 

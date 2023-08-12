@@ -89,11 +89,6 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         label: "Consent",
       },
       {
-        icon: renderIcon("fluent-mdl2:relationship"),
-        key: "dataset:metadata:title",
-        label: "Related Identifiers",
-      },
-      {
         icon: renderIcon("ep:list"),
         key: "dataset:metadata:title",
         label: "Subjects",
@@ -114,7 +109,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         label: "Funders",
       },
       {
-        icon: renderIcon("icon-park:relational-graph"),
+        icon: renderIcon("fluent-mdl2:relationship"),
         key: "dataset:metadata:title",
         label: "Related Items",
       },

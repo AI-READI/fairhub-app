@@ -320,6 +320,8 @@ const defaultExpandedKeys = computed(() => {
   if (currentRoute.name) {
     const name = currentRoute.name as string;
 
+    console.log("appsidebar-name", name, name.startsWith("study:metadata"));
+
     if (name.startsWith("study:metadata")) {
       return ["study:metadata"];
     }

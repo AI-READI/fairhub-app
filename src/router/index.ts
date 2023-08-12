@@ -18,6 +18,8 @@ import DatasetMetadataIdentifiers from "@/views/study/dataset/metadata/identifie
 import DatasetMetadataTitle from "@/views/study/dataset/metadata/title/DatasetMetadataTitle.vue";
 import NewDataset from "@/views/study/dataset/new/NewDataset.vue";
 import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue";
+import PublishDatasetMetadata from "@/views/study/dataset/publish/metadata/PublishDatasetMetadata.vue";
+import PublishStudyMetadata from "@/views/study/dataset/publish/metadata/PublishStudyMetadata.vue";
 import PublishSelectParticipants from "@/views/study/dataset/publish/participants/PublishSelectParticipants.vue";
 import PublishRouterView from "@/views/study/dataset/publish/root/PublishRouterView.vue";
 import PublishAllVersions from "@/views/study/dataset/publish/versions/PublishAllVersions.vue";
@@ -45,8 +47,6 @@ import StudyParticipants from "@/views/study/participants/StudyParticipants.vue"
 import PublishAddContributor from "@/views/study/publish/contributors/PublishAddContributor.vue";
 import PublishContributors from "@/views/study/publish/contributors/PublishContributors.vue";
 import PublishDataset from "@/views/study/publish/datasets/PublishDataset.vue";
-import PublishDatasetMetadata from "@/views/study/publish/metadata/PublishDatasetMetadata.vue";
-import PublishStudyMetadata from "@/views/study/publish/metadata/PublishStudyMetadata.vue";
 import PublishAdditionalInfo from "@/views/study/publish/PublishAdditionalInfo.vue";
 import PublishChangelog from "@/views/study/publish/PublishChangelog.vue";
 import PublishReadme from "@/views/study/publish/PublishReadme.vue";
@@ -181,6 +181,16 @@ const router = createRouter({
                           name: "dataset:publish:version:participants",
                           path: "participants",
                           component: PublishSelectParticipants,
+                        },
+                        {
+                          name: "dataset:publish:version:study-metadata",
+                          path: "study-metadata",
+                          component: PublishStudyMetadata,
+                        },
+                        {
+                          name: "dataset:publish:version:dataset-metadata",
+                          path: "dataset-metadata",
+                          component: PublishDatasetMetadata,
                         },
                       ],
                     },

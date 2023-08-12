@@ -19,7 +19,7 @@ onBeforeMount(() => {
   versionStore.getAllVersions(datasetId);
 });
 
-const deleteVersion = async (versionId: string) => {
+const deleteVersion = async (_versionId: string) => {
   // await versionStore.deleteVersion(versionId);
 
   await versionStore.getAllVersions(routeParams.datasetId);
@@ -89,6 +89,29 @@ const deleteVersion = async (versionId: string) => {
               Are you sure you want to discard this version?
             </n-popconfirm>
           </div>
+        </template>
+      </n-card>
+    </div>
+
+    <n-divider />
+
+    <h3>Published versions</h3>
+
+    <p class="py-2">Published versions of this dataset are listed here.</p>
+
+    <div class="py-4">
+      <n-card
+        v-for="version in allVersions"
+        :key="version.id"
+        :title="version.title"
+        v-show="version.published"
+      >
+        <template #header-extra> published date here </template>
+
+        Some details about the version
+
+        <template #action>
+          We can add a button here to view the version on the discover platform
         </template>
       </n-card>
     </div>
