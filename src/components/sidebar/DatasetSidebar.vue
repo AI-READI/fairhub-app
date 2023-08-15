@@ -59,64 +59,64 @@ const dynamicUpperMenuOptions: MenuOption[] = [
       {
         // contains both creators and contributors
         icon: renderIcon("ic:baseline-people"),
-        key: "dataset:metadata:title",
+        key: "dataset:metadata:contributors",
         label: "Contributors",
       },
       {
         icon: renderIcon("solar:calendar-date-outline"),
-        key: "dataset:metadata:title",
+        key: "dataset:metadata:dates",
         label: "Dates",
       },
       {
         // also contains publication year
         icon: renderIcon("octicon:organization-16"),
-        key: "dataset:metadata:title",
+        key: "dataset:metadata:publisher",
         label: "Publisher",
       },
       {
         icon: renderIcon("solar:key-bold-duotone"),
-        key: "dataset:metadata:title",
+        key: "dataset:metadata:record-keys",
         label: "Record Keys",
       },
       {
         icon: renderIcon("tabler:id-badge-off"),
-        key: "dataset:metadata:title",
+        key: "dataset:metadata:de-identification",
         label: "De-identification",
       },
       {
         icon: renderIcon("icon-park-twotone:permissions"),
-        key: "dataset:metadata:title",
+        key: "dataset:metadata:consent",
         label: "Consent",
       },
       {
         icon: renderIcon("ep:list"),
-        key: "dataset:metadata:title",
+        key: "dataset:metadata:subjects",
         label: "Subjects",
       },
       {
         icon: renderIcon("mdi:cloud-access"),
-        key: "dataset:metadata:title",
+        key: "dataset:metadata:access",
         label: "Access",
       },
       {
         icon: renderIcon("icon-park-twotone:right-user"),
-        key: "dataset:metadata:title",
+        key: "dataset:metadata:rights",
         label: "Rights",
       },
       {
         icon: renderIcon("solar:hand-money-linear"),
-        key: "dataset:metadata:title",
+        key: "dataset:metadata:funders",
         label: "Funders",
       },
       {
         icon: renderIcon("fluent-mdl2:relationship"),
-        key: "dataset:metadata:title",
+        key: "dataset:metadata:related-items",
         label: "Related Items",
       },
       {
         // language, managing organization, size goes in here
         icon: renderIcon("pajamas:overview"),
-        key: "dataset:metadata:title",
+        key: "dataset:metadata:about",
         label: "About",
       },
     ],

@@ -13,8 +13,20 @@ import AllSettings from "@/views/settings/AllSettings.vue";
 import AllStudies from "@/views/studies/AllStudies.vue";
 import StudyContributors from "@/views/study/contributors/StudyContributors.vue";
 import DashBoard from "@/views/study/dashboard/DashBoard.vue";
+import DatasetMetadataOther from "@/views/study/dataset/metadata/about/DatasetMetadataOther.vue";
+import DatasetMetadataAccess from "@/views/study/dataset/metadata/access/DatasetMetadataAccess.vue";
+import DatasetMetadataConsent from "@/views/study/dataset/metadata/consent/DatasetMetadataConsent.vue";
+import DatasetMetadataContributors from "@/views/study/dataset/metadata/contributors/DatasetMetadataContributors.vue";
+import DatasetMetadataDates from "@/views/study/dataset/metadata/dates/DatasetMetadataDates.vue";
+import DatasetMetadataDeIdentification from "@/views/study/dataset/metadata/deidentification/DatasetMetadataDeIdentification.vue";
 import DatasetMetadataDescriptions from "@/views/study/dataset/metadata/descriptions/DatasetMetadataDescriptions.vue";
+import DatasetMetadataFunders from "@/views/study/dataset/metadata/funders/DatasetMetadataFunders.vue";
 import DatasetMetadataIdentifiers from "@/views/study/dataset/metadata/identifiers/DatasetMetadataIdentifiers.vue";
+import DatasetMetadataRecordKeys from "@/views/study/dataset/metadata/keys/DatasetMetadataRecordKeys.vue";
+import DatasetMetadataPublisher from "@/views/study/dataset/metadata/publisher/DatasetMetadataPublisher.vue";
+import DatasetMetadataRelatedItems from "@/views/study/dataset/metadata/related/DatasetMetadataRelatedItems.vue";
+import DatasetMetadataRights from "@/views/study/dataset/metadata/rights/DatasetMetadataRights.vue";
+import DatasetMetadataSubjects from "@/views/study/dataset/metadata/subjects/DatasetMetadataSubjects.vue";
 import DatasetMetadataTitle from "@/views/study/dataset/metadata/title/DatasetMetadataTitle.vue";
 import NewDataset from "@/views/study/dataset/new/NewDataset.vue";
 import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue";
@@ -146,11 +158,6 @@ const router = createRouter({
                   component: DatasetOverview,
                 },
                 {
-                  name: "dataset:overview",
-                  path: "metadata",
-                  component: DatasetOverview,
-                },
-                {
                   name: "dataset:metadata:identifiers",
                   path: "metadata/identifiers",
                   component: DatasetMetadataIdentifiers,
@@ -164,6 +171,66 @@ const router = createRouter({
                   name: "dataset:metadata:descriptions",
                   path: "metadata/descriptions",
                   component: DatasetMetadataDescriptions,
+                },
+                {
+                  name: "dataset:metadata:contributors",
+                  path: "metadata/contributors",
+                  component: DatasetMetadataContributors,
+                },
+                {
+                  name: "dataset:metadata:dates",
+                  path: "metadata/dates",
+                  component: DatasetMetadataDates,
+                },
+                {
+                  name: "dataset:metadata:publisher",
+                  path: "metadata/publisher",
+                  component: DatasetMetadataPublisher,
+                },
+                {
+                  name: "dataset:metadata:record-keys",
+                  path: "metadata/record-keys",
+                  component: DatasetMetadataRecordKeys,
+                },
+                {
+                  name: "dataset:metadata:de-identification",
+                  path: "metadata/de-identification",
+                  component: DatasetMetadataDeIdentification,
+                },
+                {
+                  name: "dataset:metadata:consent",
+                  path: "metadata/consent",
+                  component: DatasetMetadataConsent,
+                },
+                {
+                  name: "dataset:metadata:subjects",
+                  path: "metadata/subjects",
+                  component: DatasetMetadataSubjects,
+                },
+                {
+                  name: "dataset:metadata:access",
+                  path: "metadata/access",
+                  component: DatasetMetadataAccess,
+                },
+                {
+                  name: "dataset:metadata:rights",
+                  path: "metadata/rights",
+                  component: DatasetMetadataRights,
+                },
+                {
+                  name: "dataset:metadata:funders",
+                  path: "metadata/funders",
+                  component: DatasetMetadataFunders,
+                },
+                {
+                  name: "dataset:metadata:related-items",
+                  path: "metadata/related-items",
+                  component: DatasetMetadataRelatedItems,
+                },
+                {
+                  name: "dataset:metadata:about",
+                  path: "metadata/about",
+                  component: DatasetMetadataOther,
                 },
                 {
                   name: "dataset:publish",

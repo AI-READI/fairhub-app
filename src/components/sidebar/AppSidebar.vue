@@ -175,7 +175,7 @@ const UpperMenuOptions = computed(() => [
         },
         { default: () => "Publish" }
       ),
-    show: hideMenuOptions.value,
+    show: false,
   },
 ]);
 

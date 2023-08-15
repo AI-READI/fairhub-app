@@ -132,7 +132,7 @@ const remove = (id: string) => {
             />
           </div>
 
-          <div class="flex flex-col space-y-2">
+          <div class="flex flex-col space-y-3">
             <span> &nbsp; </span>
 
             <n-button @click="remove(description.id)">

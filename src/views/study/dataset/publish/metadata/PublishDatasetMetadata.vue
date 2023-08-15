@@ -1,22 +1,17 @@
 <script setup lang="ts">
-import { faker } from "@faker-js/faker";
-import type { FormInst, FormItemRule, FormRules } from "naive-ui";
-import { useMessage } from "naive-ui";
-import { onBeforeMount, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import type { Ref } from "vue";
 
-import LANGUAGE_JSON from "@/assets/data/languages.json";
+import CollapsibleCard from "@/components/cards/CollapsibleCard.vue";
 import { useAuthStore } from "@/stores/auth";
-import { useDatasetStore } from "@/stores/dataset";
-import { useVersionStore } from "@/stores/version";
+import { useStudyStore } from "@/stores/study";
+import type { Study } from "@/types/Study";
 
 const route = useRoute();
 const router = useRouter();
 const { error } = useMessage();
 
 const authStore = useAuthStore();
-const datasetStore = useDatasetStore();
-const versionStore = useVersionStore();
+const studyStore = useStudyStore();
 
 const routeParams = {
   datasetId: route.params.datasetId,
@@ -24,7 +19,7 @@ const routeParams = {
   versionId: route.params.versionId,
 };
 
-const version = ref(versionStore.version);
+const study: Ref<Study> = computed(() => studyStore.study);
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
@@ -32,161 +27,397 @@ onBeforeMount(() => {
     router.push({ name: "home" });
   }
 
-  const datasetId = routeParams.datasetId as string;
   const studyId = routeParams.studyId as string;
 
-  datasetStore.getDataset(datasetId, studyId);
+  studyStore.getStudy(studyId);
 });
-
-const languageOptions = LANGUAGE_JSON.map((v) => ({
-  label: v.name,
-  value: v.alpha2,
-}));
-
-const keywordOptions = [
-  {
-    label: "Artificial Intelligence",
-    value: "Artificial Intelligence",
-  },
-  {
-    label: "Dataset",
-    value: "Dataset",
-  },
-  {
-    label: "Diabetes",
-    value: "Diabetes",
-  },
-  {
-    label: "Ethics",
-    value: "Ethics",
-  },
-  {
-    label: "Health",
-    value: "Health",
-  },
-  {
-    label: "Machine Learning",
-    value: "Machine Learning",
-  },
-];
-
-const formRef = ref<FormInst | null>(null);
-
-const datasetMetadata = ref({
-  title: version.value.title || faker.commerce.productName(),
-  description: version.value.description || faker.commerce.productDescription(),
-  keywords: version.value.keywords || [
-    faker.word.noun(),
-    faker.word.noun(),
-    faker.word.noun(),
-    faker.word.noun(),
-  ],
-  primaryLanguage: version.value.primaryLanguage || "en",
-});
-
-const rules: FormRules = {
-  title: [
-    {
-      message: "Please add a title for the dataset",
-      required: true,
-      trigger: ["blur", "input"],
-    },
-  ],
-  description: [
-    {
-      message: "Please add a description for the dataset",
-      required: true,
-      trigger: ["blur", "input"],
-    },
-  ],
-  keywords: [
-    {
-      required: true,
-      trigger: ["blur", "change"],
-      validator: (_rule: FormItemRule, value) => {
-        if (value !== null && value.length > 0) {
-          return Promise.resolve();
-        }
-        return Promise.reject("Please select at least one keyword");
-      },
-    },
-  ],
-  primaryLanguage: [
-    {
-      message: "Please select a primary language",
-      required: true,
-      trigger: ["blur", "change"],
-    },
-  ],
-};
 
 function handleBackButton() {
   router.push({
-    name: "publish-select-participants",
-    params: { versionId: routeParams.versionId },
+    name: "dataset:publish:version:study-metadata",
+    params: {
+      datasetId: routeParams.datasetId,
+      studyId: routeParams.studyId,
+      versionId: routeParams.versionId,
+    },
   });
 }
 
 function handleNextButton() {
-  formRef.value?.validate((errors) => {
-    if (!errors) {
-      versionStore.updateTitle(datasetMetadata.value.title);
-      versionStore.updateDescription(datasetMetadata.value.description);
-      versionStore.updateKeywords(datasetMetadata.value.keywords);
-      versionStore.updatePrimaryLanguage(datasetMetadata.value.primaryLanguage);
-
-      router.push({
-        name: "publish-study-metadata",
-        params: { versionId: routeParams.versionId },
-      });
-    } else {
-      console.log("error");
-      console.log(errors);
-    }
+  router.push({
+    name: "dataset:publish:version:dataset-metadata",
+    params: {
+      datasetId: routeParams.datasetId,
+      studyId: routeParams.studyId,
+      versionId: routeParams.versionId,
+    },
   });
 }
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
-    <h2>Confirm Dataset Metadata</h2>
+    <PageBackNavigationHeader
+      title="Dataset Metadata"
+      description="Details about your dataset are displayed here"
+      linkName="dataset:publish:versions"
+      :linkParams="{ datasetId: routeParams.datasetId, studyId: routeParams.studyId }"
+    />
 
     <n-divider />
 
-    <n-form ref="formRef" :label-width="80" :model="datasetMetadata" :rules="rules" size="large">
-      <n-form-item label="Title" path="title">
-        <n-input
-          v-model:value="datasetMetadata.title"
-          placeholder="Gene Ontology Data Archive V1"
-        />
-      </n-form-item>
+    <h3>Dataset Metadata</h3>
 
-      <n-form-item label="Description" path="description">
-        <n-input v-model:value="datasetMetadata.description" type="textarea" placeholder="..." />
-      </n-form-item>
+    <p class="py-1">
+      Details about your dataset are displayed here. Go to the appropriate page to edit the details.
+    </p>
 
-      <n-form-item label="Keywords" path="keywords">
-        <n-select
-          v-model:value="datasetMetadata.keywords"
-          placeholder="Salutogenesis"
-          multiple
-          tag
-          filterable
-          clearable
-          :options="keywordOptions"
-        />
-      </n-form-item>
+    <n-divider />
 
-      <n-form-item label="Primary Language" path="primaryLanguage">
-        <n-select
-          v-model:value="datasetMetadata.primaryLanguage"
-          placeholder="Select language"
-          filterable
-          clearable
-          :options="languageOptions"
-        />
-      </n-form-item>
-    </n-form>
+    <CollapsibleCard title="Identifiers">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'dataset:metadata:identifiers',
+            params: {
+              studyId: routeParams.studyId,
+              datasetId: routeParams.datasetId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Identifiers
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Titles">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'dataset:metadata:identifiers',
+            params: {
+              studyId: routeParams.studyId,
+              datasetId: routeParams.datasetId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Titles
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Descriptions">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'dataset:metadata:identifiers',
+            params: {
+              studyId: routeParams.studyId,
+              datasetId: routeParams.datasetId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Descriptions
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Contributors">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'dataset:metadata:identifiers',
+            params: {
+              studyId: routeParams.studyId,
+              datasetId: routeParams.datasetId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Contributors
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Dates">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'dataset:metadata:identifiers',
+            params: {
+              studyId: routeParams.studyId,
+              datasetId: routeParams.datasetId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Dates
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Publisher">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'dataset:metadata:identifiers',
+            params: {
+              studyId: routeParams.studyId,
+              datasetId: routeParams.datasetId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Publisher Details
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Record Keys">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'dataset:metadata:identifiers',
+            params: {
+              studyId: routeParams.studyId,
+              datasetId: routeParams.datasetId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Record Keys
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="De-identification">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'dataset:metadata:identifiers',
+            params: {
+              studyId: routeParams.studyId,
+              datasetId: routeParams.datasetId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit De-identification Details
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Consent">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'dataset:metadata:identifiers',
+            params: {
+              studyId: routeParams.studyId,
+              datasetId: routeParams.datasetId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Consent Details
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Subjects">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'dataset:metadata:identifiers',
+            params: {
+              studyId: routeParams.studyId,
+              datasetId: routeParams.datasetId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Subjects
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Access">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'dataset:metadata:identifiers',
+            params: {
+              studyId: routeParams.studyId,
+              datasetId: routeParams.datasetId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Access Details
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Rights">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'dataset:metadata:identifiers',
+            params: {
+              studyId: routeParams.studyId,
+              datasetId: routeParams.datasetId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Rights Details
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Funders">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'dataset:metadata:identifiers',
+            params: {
+              studyId: routeParams.studyId,
+              datasetId: routeParams.datasetId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Funders
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Related Items">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'dataset:metadata:identifiers',
+            params: {
+              studyId: routeParams.studyId,
+              datasetId: routeParams.datasetId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Related Items
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Additional Details">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'dataset:metadata:identifiers',
+            params: {
+              studyId: routeParams.studyId,
+              datasetId: routeParams.datasetId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Additional Details
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
 
     <n-divider />
 
@@ -195,14 +426,16 @@ function handleNextButton() {
         <template #icon>
           <f-icon icon="ic:round-arrow-back-ios" />
         </template>
-        View study participants
+
+        Review study metadata
       </n-button>
 
       <n-button size="large" type="primary" @click="handleNextButton">
         <template #icon>
           <f-icon icon="ic:round-arrow-forward-ios" />
         </template>
-        Confirm study metadata
+
+        Review dataset metadata
       </n-button>
     </div>
   </main>

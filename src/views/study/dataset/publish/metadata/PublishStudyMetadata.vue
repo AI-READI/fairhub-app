@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Ref } from "vue";
 
+import CollapsibleCard from "@/components/cards/CollapsibleCard.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useStudyStore } from "@/stores/study";
 import type { Study } from "@/types/Study";
@@ -73,8 +74,8 @@ function handleNextButton() {
 
     <n-divider />
 
-    <n-card title="Identification">
-      identifiers here
+    <CollapsibleCard title="Identification">
+      some content
 
       <template #action>
         <RouterLink
@@ -93,7 +94,271 @@ function handleNextButton() {
           </n-button>
         </RouterLink>
       </template>
-    </n-card>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Status">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'study:metadata:status',
+            params: {
+              studyId: routeParams.studyId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Status
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Sponsors">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'study:metadata:sponsors',
+            params: {
+              studyId: routeParams.studyId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Sponsors
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Collaborators">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'study:metadata:collaborators',
+            params: {
+              studyId: routeParams.studyId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Collaborators
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Oversight">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'study:metadata:oversight',
+            params: {
+              studyId: routeParams.studyId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Oversight Details
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Description">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'study:metadata:description',
+            params: {
+              studyId: routeParams.studyId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Description
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Conditions">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'study:metadata:conditions',
+            params: {
+              studyId: routeParams.studyId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Conditions
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Design">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'study:metadata:design',
+            params: {
+              studyId: routeParams.studyId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Design
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Interventions">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'study:metadata:interventions',
+            params: {
+              studyId: routeParams.studyId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Interventions
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Eligibility">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'study:metadata:eligibility',
+            params: {
+              studyId: routeParams.studyId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Eligibility
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="Contacts">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'study:metadata:contacts',
+            params: {
+              studyId: routeParams.studyId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Contacts
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="IPD Sharing">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'study:metadata:ipd-sharing',
+            params: {
+              studyId: routeParams.studyId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit IPD Sharing
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
+    <CollapsibleCard title="References">
+      some content
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'study:metadata:references',
+            params: {
+              studyId: routeParams.studyId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit References
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
 
     <n-divider />
 
@@ -102,6 +367,7 @@ function handleNextButton() {
         <template #icon>
           <f-icon icon="ic:round-arrow-back-ios" />
         </template>
+
         Select participants
       </n-button>
 
@@ -109,7 +375,8 @@ function handleNextButton() {
         <template #icon>
           <f-icon icon="ic:round-arrow-forward-ios" />
         </template>
-        Add contributors
+
+        Review dataset metadata
       </n-button>
     </div>
   </main>
