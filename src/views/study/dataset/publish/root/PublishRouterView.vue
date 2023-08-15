@@ -57,6 +57,11 @@ const steps = [
     route: "dataset:publish:version:dataset-metadata",
   },
   {
+    title: "Changelog",
+    description: "",
+    route: "dataset:publish:version:changelog",
+  },
+  {
     title: "Publish Dataset",
     description: "",
     route: "dataset:publish:final",

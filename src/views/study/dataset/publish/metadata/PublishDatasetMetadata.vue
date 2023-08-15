@@ -45,7 +45,7 @@ function handleBackButton() {
 
 function handleNextButton() {
   router.push({
-    name: "dataset:publish:version:dataset-metadata",
+    name: "dataset:publish:version:changelog",
     params: {
       datasetId: routeParams.datasetId,
       studyId: routeParams.studyId,
@@ -435,7 +435,7 @@ function handleNextButton() {
           <f-icon icon="ic:round-arrow-forward-ios" />
         </template>
 
-        Review dataset metadata
+        Add a changelog
       </n-button>
     </div>
   </main>

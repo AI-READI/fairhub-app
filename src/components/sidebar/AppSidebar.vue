@@ -59,14 +59,14 @@ const UpperMenuOptions = computed(() => [
   {
     children: [
       {
-        icon: renderIcon("tabler:id"),
-        key: "study:metadata:identification",
-        label: "Identification",
-      },
-      {
         icon: renderIcon("pajamas:status"),
         key: "study:metadata:status",
         label: "Status",
+      },
+      {
+        icon: renderIcon("tabler:id"),
+        key: "study:metadata:identificationModule",
+        label: "Identification",
       },
       {
         icon: renderIcon("carbon:user-sponsor"),

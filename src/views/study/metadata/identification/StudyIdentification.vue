@@ -1,12 +1,5 @@
 <script setup lang="ts">
 import type { FormInst, FormRules } from "naive-ui";
-import { onBeforeMount, ref } from "vue";
-
-import { useSidebarStore } from "@/stores/sidebar";
-
-onBeforeMount(() => {
-  useSidebarStore().setAppSidebarCollapse(true);
-});
 
 const formRef = ref<FormInst | null>(null);
 

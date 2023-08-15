@@ -30,6 +30,7 @@ import DatasetMetadataSubjects from "@/views/study/dataset/metadata/subjects/Dat
 import DatasetMetadataTitle from "@/views/study/dataset/metadata/title/DatasetMetadataTitle.vue";
 import NewDataset from "@/views/study/dataset/new/NewDataset.vue";
 import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue";
+import PublishChangelog from "@/views/study/dataset/publish/changelog/PublishChangelog.vue";
 import PublishDatasetMetadata from "@/views/study/dataset/publish/metadata/PublishDatasetMetadata.vue";
 import PublishStudyMetadata from "@/views/study/dataset/publish/metadata/PublishStudyMetadata.vue";
 import PublishSelectParticipants from "@/views/study/dataset/publish/participants/PublishSelectParticipants.vue";
@@ -158,79 +159,84 @@ const router = createRouter({
                   component: DatasetOverview,
                 },
                 {
-                  name: "dataset:metadata:identifiers",
-                  path: "metadata/identifiers",
-                  component: DatasetMetadataIdentifiers,
-                },
-                {
-                  name: "dataset:metadata:title",
-                  path: "metadata/title",
-                  component: DatasetMetadataTitle,
-                },
-                {
-                  name: "dataset:metadata:descriptions",
-                  path: "metadata/descriptions",
-                  component: DatasetMetadataDescriptions,
-                },
-                {
-                  name: "dataset:metadata:contributors",
-                  path: "metadata/contributors",
-                  component: DatasetMetadataContributors,
-                },
-                {
-                  name: "dataset:metadata:dates",
-                  path: "metadata/dates",
-                  component: DatasetMetadataDates,
-                },
-                {
-                  name: "dataset:metadata:publisher",
-                  path: "metadata/publisher",
-                  component: DatasetMetadataPublisher,
-                },
-                {
-                  name: "dataset:metadata:record-keys",
-                  path: "metadata/record-keys",
-                  component: DatasetMetadataRecordKeys,
-                },
-                {
-                  name: "dataset:metadata:de-identification",
-                  path: "metadata/de-identification",
-                  component: DatasetMetadataDeIdentification,
-                },
-                {
-                  name: "dataset:metadata:consent",
-                  path: "metadata/consent",
-                  component: DatasetMetadataConsent,
-                },
-                {
-                  name: "dataset:metadata:subjects",
-                  path: "metadata/subjects",
-                  component: DatasetMetadataSubjects,
-                },
-                {
-                  name: "dataset:metadata:access",
-                  path: "metadata/access",
-                  component: DatasetMetadataAccess,
-                },
-                {
-                  name: "dataset:metadata:rights",
-                  path: "metadata/rights",
-                  component: DatasetMetadataRights,
-                },
-                {
-                  name: "dataset:metadata:funders",
-                  path: "metadata/funders",
-                  component: DatasetMetadataFunders,
-                },
-                {
-                  name: "dataset:metadata:related-items",
-                  path: "metadata/related-items",
-                  component: DatasetMetadataRelatedItems,
-                },
-                {
-                  name: "dataset:metadata:about",
-                  path: "metadata/about",
-                  component: DatasetMetadataOther,
+                  path: "metadata",
+                  children: [
+                    {
+                      name: "dataset:metadata:identifiers",
+                      path: "identifiers",
+                      component: DatasetMetadataIdentifiers,
+                    },
+                    {
+                      name: "dataset:metadata:title",
+                      path: "title",
+                      component: DatasetMetadataTitle,
+                    },
+                    {
+                      name: "dataset:metadata:descriptions",
+                      path: "descriptions",
+                      component: DatasetMetadataDescriptions,
+                    },
+                    {
+                      name: "dataset:metadata:contributors",
+                      path: "contributors",
+                      component: DatasetMetadataContributors,
+                    },
+                    {
+                      name: "dataset:metadata:dates",
+                      path: "dates",
+                      component: DatasetMetadataDates,
+                    },
+                    {
+                      name: "dataset:metadata:publisher",
+                      path: "publisher",
+                      component: DatasetMetadataPublisher,
+                    },
+                    {
+                      name: "dataset:metadata:record-keys",
+                      path: "record-keys",
+                      component: DatasetMetadataRecordKeys,
+                    },
+                    {
+                      name: "dataset:metadata:de-identification",
+                      path: "de-identification",
+                      component: DatasetMetadataDeIdentification,
+                    },
+                    {
+                      name: "dataset:metadata:consent",
+                      path: "consent",
+                      component: DatasetMetadataConsent,
+                    },
+                    {
+                      name: "dataset:metadata:subjects",
+                      path: "subjects",
+                      component: DatasetMetadataSubjects,
+                    },
+                    {
+                      name: "dataset:metadata:access",
+                      path: "access",
+                      component: DatasetMetadataAccess,
+                    },
+                    {
+                      name: "dataset:metadata:rights",
+                      path: "rights",
+                      component: DatasetMetadataRights,
+                    },
+                    {
+                      name: "dataset:metadata:funders",
+                      path: "funders",
+                      component: DatasetMetadataFunders,
+                    },
+                    {
+                      name: "dataset:metadata:related-items",
+                      path: "related-items",
+                      component: DatasetMetadataRelatedItems,
+                    },
+                    {
+                      name: "dataset:metadata:about",
+                      path: "about",
+                      component: DatasetMetadataOther,
+                    },
+                  ],
                 },
                 {
                   name: "dataset:publish",
@@ -259,28 +265,16 @@ const router = createRouter({
                           path: "dataset-metadata",
                           component: PublishDatasetMetadata,
                         },
+                        {
+                          name: "dataset:publish:version:changelog",
+                          path: "changelog",
+                          component: PublishChangelog,
+                        },
                       ],
                     },
                   ],
                   component: PublishRouterView,
                 },
-                // {
-                //   name: "dataset:publish",
-                //   path: "publish",
-                //   children: [
-                //     {
-                //       name: "dataset:publish:versions",
-                //       path: "versions",
-                //       component: PublishAllVersions,
-                //     },
-                //     {
-                //       name: "dataset:publish:participants",
-                //       path: "participants",
-                //       component: PublishSelectParticipants,
-                //     },
-                //   ],
-                //   component: PublishRouterView,
-                // },
               ],
               component: DatasetRouterView,
             },
