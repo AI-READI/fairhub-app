@@ -23,7 +23,6 @@ const dataset = ref<Dataset>({
   title: "",
   description: "",
   latest_version: "",
-  primary_language: "",
 });
 const datasetTitles = ref<DatasetTitle[]>([]);
 

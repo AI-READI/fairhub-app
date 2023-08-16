@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-import { Participant } from "@/types/Participant";
+import type { Participant } from "@/types/Participant";
 import type { LocalVersion } from "@/types/Version";
 
 export const useVersionStore = defineStore("version", () => {
@@ -64,7 +64,7 @@ export const useVersionStore = defineStore("version", () => {
 
     const data = allVersions.value.find((version) => version.id === versionId);
 
-    version.value = data;
+    version.value = data as LocalVersion;
 
     loading.value = false;
   };

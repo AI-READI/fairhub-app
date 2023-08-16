@@ -71,6 +71,7 @@
     "@types/jsdom": "^20.0.0",
     "@types/marked": "^4.0.8",
     "@types/node": "^18.11.5",
+    "@types/sanitize-html": "^2.9.0",
     "@types/validator": "^13.7.12",
     "@vitejs/plugin-vue": "^3.0.3",
     "@vitejs/plugin-vue-jsx": "^2.0.1",

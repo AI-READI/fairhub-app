@@ -17,7 +17,6 @@ export const useDatasetStore = defineStore("dataset", () => {
     title: "",
     description: "",
     latest_version: "",
-    primary_language: "",
   });
 
   const datasetTitles = ref<DatasetTitles>([]);
@@ -37,7 +36,6 @@ export const useDatasetStore = defineStore("dataset", () => {
           title: "Dataset 1",
           description: "Dataset 1 description",
           latest_version: "",
-          primary_language: "en",
         },
       ];
     }
