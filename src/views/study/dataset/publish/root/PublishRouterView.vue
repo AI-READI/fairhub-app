@@ -62,14 +62,14 @@ const steps = [
     route: "dataset:publish:version:changelog",
   },
   {
-    title: "Additional Details",
+    title: "Readme",
     description: "",
-    route: "dataset:publish:version:additional-details",
+    route: "dataset:publish:version:readme",
   },
   {
-    title: "Publish Dataset",
+    title: "Summary",
     description: "",
-    route: "dataset:publish:final",
+    route: "dataset:publish:version:summary",
   },
 ];
 

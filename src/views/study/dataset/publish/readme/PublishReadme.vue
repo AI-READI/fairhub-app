@@ -38,24 +38,18 @@ const routeParams = {
 
 const version = ref(versionStore.version);
 
-const changelog = ref("");
+const readme = ref("");
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
     error("You are not logged in.");
     router.push({ name: "home" });
   }
-
-  changelog.value = version.value.changelog;
 });
 
 function handleNextButton() {
-  /**
-   * TODO: Push the participant IDs to the database.
-   */
-
   router.push({
-    name: "dataset:publish:version:readme",
+    name: "dataset:publish:version:summary",
     params: {
       datasetId: routeParams.datasetId,
       studyId: routeParams.studyId,
@@ -64,19 +58,21 @@ function handleNextButton() {
   });
 }
 
-function handleBackButton() {
-  router.push({
-    name: "dataset:publish:versions",
-  });
-}
+const autoGenerateReadme = async () => {
+  console.log("autoGenerateReadme");
+
+  const response = await fetch("https://jaspervdj.be/lorem-markdownum/markdown.txt");
+
+  readme.value = await response.text();
+};
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
-      title="Changelog"
-      description="What is new in this version?"
-      linkName="dataset:publish:version:dataset-metadata"
+      title="Readme"
+      description="Details that will be shown to users when they request access to this dataset."
+      linkName="dataset:publish:version:changelog"
       :linkParams="{
         datasetId: routeParams.datasetId,
         studyId: routeParams.studyId,
@@ -87,29 +83,28 @@ function handleBackButton() {
     <n-divider />
 
     <p class="mb-10">
-      Changelogs are a great way to keep track of what has changed in your dataset or study over
-      time. Be sure to describe the changes in detail so that other researchers can understand what
-      has changed. The editor below supports Markdown syntax. You can use it to add links, images,
-      and other formatting to your changelog.
+      A `README.md` file is a text file that introduces and explains a dataset. It contains
+      information that is commonly required to understand what the dataset is about and how to use
+      it. It is automatically displayed to users when they request access to this dataset.
     </p>
 
     <MdEditor
-      v-model="changelog"
+      v-model="readme"
       language="en-US"
-      preview-theme="vuepress"
+      preview-theme="github"
       :show-code-row-number="true"
       :sanitize="sanitize"
     />
 
     <n-divider />
 
-    <div class="flex items-center justify-end">
-      <n-button size="large" type="warning" @click="handleBackButton" class="hidden">
+    <div class="flex items-center justify-between">
+      <n-button size="large" secondary type="info" @click="autoGenerateReadme">
         <template #icon>
-          <f-icon icon="ic:round-arrow-back-ios" />
+          <f-icon icon="mdi:auto-mode" />
         </template>
 
-        Review dataset metadata
+        Auto-generate README
       </n-button>
 
       <n-button size="large" type="primary" @click="handleNextButton">
@@ -117,7 +112,7 @@ function handleBackButton() {
           <f-icon icon="ic:round-arrow-forward-ios" />
         </template>
 
-        Review readme
+        View summary
       </n-button>
     </div>
   </main>

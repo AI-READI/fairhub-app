@@ -45,7 +45,7 @@ export const useStudyStore = defineStore(
               email: "sanjay@email.org",
               first_name: faker.person.firstName(),
               last_name: faker.person.lastName(),
-              orcid: faker.datatype.uuid(),
+              orcid: faker.string.uuid(),
             },
             size: "4 GB",
           };

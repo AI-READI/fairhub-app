@@ -29,12 +29,13 @@ import DatasetMetadataSubjects from "@/views/study/dataset/metadata/subjects/Dat
 import DatasetMetadataTitle from "@/views/study/dataset/metadata/title/DatasetMetadataTitle.vue";
 import NewDataset from "@/views/study/dataset/new/NewDataset.vue";
 import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue";
-import PublishAdditionalDetails from "@/views/study/dataset/publish/additional-details/PublishAdditionalDetails.vue";
 import PublishChangelog from "@/views/study/dataset/publish/changelog/PublishChangelog.vue";
 import PublishDatasetMetadata from "@/views/study/dataset/publish/metadata/PublishDatasetMetadata.vue";
 import PublishStudyMetadata from "@/views/study/dataset/publish/metadata/PublishStudyMetadata.vue";
 import PublishSelectParticipants from "@/views/study/dataset/publish/participants/PublishSelectParticipants.vue";
+import PublishReadme from "@/views/study/dataset/publish/readme/PublishReadme.vue";
 import PublishRouterView from "@/views/study/dataset/publish/root/PublishRouterView.vue";
+import PublishSummary from "@/views/study/dataset/publish/summary/PublishSummary.vue";
 import PublishAllVersions from "@/views/study/dataset/publish/versions/PublishAllVersions.vue";
 import DatasetRouterView from "@/views/study/dataset/root/DatasetRouterView.vue";
 import AllDatasets from "@/views/study/datasets/AllDatasets.vue";
@@ -261,9 +262,14 @@ const router = createRouter({
                           component: PublishChangelog,
                         },
                         {
-                          name: "dataset:publish:version:additional-details",
-                          path: "additional-details",
-                          component: PublishAdditionalDetails,
+                          name: "dataset:publish:version:readme",
+                          path: "additional-readme",
+                          component: PublishReadme,
+                        },
+                        {
+                          name: "dataset:publish:version:summary",
+                          path: "summary",
+                          component: PublishSummary,
                         },
                       ],
                     },

@@ -1,6 +1,25 @@
 <script setup lang="ts">
+import { config } from "md-editor-v3";
+
 import { useAuthStore } from "@/stores/auth";
 import { useVersionStore } from "@/stores/version";
+import TargetBlankExtension from "@/utils/TargetBlankExtension";
+
+config({
+  editorConfig: {
+    languageUserDefined: {
+      "en-US": {
+        footer: {
+          markdownTotal: "Character Count",
+          scrollAuto: "Scroll Auto",
+        },
+      },
+    },
+  },
+  markdownItConfig(md) {
+    md.use(TargetBlankExtension);
+  },
+});
 
 const route = useRoute();
 const router = useRouter();
@@ -18,24 +37,18 @@ const routeParams = {
 
 const version = ref(versionStore.version);
 
-const changelog = ref("");
+const readme = ref("");
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
     error("You are not logged in.");
     router.push({ name: "home" });
   }
-
-  changelog.value = version.value.changelog;
 });
 
 function handleNextButton() {
-  /**
-   * TODO: Push the participant IDs to the database.
-   */
-
   router.push({
-    name: "dataset:publish:version:study-metadata",
+    name: "dataset:publish:version:summary",
     params: {
       datasetId: routeParams.datasetId,
       studyId: routeParams.studyId,
@@ -44,19 +57,21 @@ function handleNextButton() {
   });
 }
 
-function handleBackButton() {
-  router.push({
-    name: "dataset:publish:versions",
-  });
-}
+const autoGenerateReadme = async () => {
+  console.log("autoGenerateReadme");
+
+  const response = await fetch("https://jaspervdj.be/lorem-markdownum/markdown.txt");
+
+  readme.value = await response.text();
+};
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
-      title="Additional Information"
-      description="Some final details about your dataset."
-      linkName="dataset:publish:version:changelog"
+      title="Summary"
+      description="Review your dataset before publishing it."
+      linkName="dataset:publish:version:readme"
       :linkParams="{
         datasetId: routeParams.datasetId,
         studyId: routeParams.studyId,
@@ -66,23 +81,17 @@ function handleBackButton() {
 
     <n-divider />
 
+    Content here
+
     <n-divider />
 
-    <div class="flex items-center justify-end">
-      <n-button size="large" type="warning" @click="handleBackButton" class="hidden">
-        <template #icon>
-          <f-icon icon="ic:round-arrow-back-ios" />
-        </template>
-
-        Review dataset metadata
-      </n-button>
-
+    <div class="flex items-center justify-between">
       <n-button size="large" type="primary" @click="handleNextButton">
         <template #icon>
           <f-icon icon="ic:round-arrow-forward-ios" />
         </template>
 
-        View Summary
+        Publish Dataset
       </n-button>
     </div>
   </main>
