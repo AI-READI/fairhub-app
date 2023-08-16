@@ -30,6 +30,7 @@ import DatasetMetadataSubjects from "@/views/study/dataset/metadata/subjects/Dat
 import DatasetMetadataTitle from "@/views/study/dataset/metadata/title/DatasetMetadataTitle.vue";
 import NewDataset from "@/views/study/dataset/new/NewDataset.vue";
 import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue";
+import PublishAdditionalDetails from "@/views/study/dataset/publish/additional-details/PublishAdditionalDetails.vue";
 import PublishChangelog from "@/views/study/dataset/publish/changelog/PublishChangelog.vue";
 import PublishDatasetMetadata from "@/views/study/dataset/publish/metadata/PublishDatasetMetadata.vue";
 import PublishStudyMetadata from "@/views/study/dataset/publish/metadata/PublishStudyMetadata.vue";
@@ -61,7 +62,6 @@ import PublishAddContributor from "@/views/study/publish/contributors/PublishAdd
 import PublishContributors from "@/views/study/publish/contributors/PublishContributors.vue";
 import PublishDataset from "@/views/study/publish/datasets/PublishDataset.vue";
 import PublishAdditionalInfo from "@/views/study/publish/PublishAdditionalInfo.vue";
-import PublishChangelog from "@/views/study/publish/PublishChangelog.vue";
 import PublishReadme from "@/views/study/publish/PublishReadme.vue";
 import PublishRelatedSources from "@/views/study/publish/PublishRelatedSources.vue";
 import PublishStudy from "@/views/study/publish/PublishStudy.vue";
@@ -269,6 +269,11 @@ const router = createRouter({
                           name: "dataset:publish:version:changelog",
                           path: "changelog",
                           component: PublishChangelog,
+                        },
+                        {
+                          name: "dataset:publish:version:additional-details",
+                          path: "additional-details",
+                          component: PublishAdditionalDetails,
                         },
                       ],
                     },

@@ -3,7 +3,6 @@ export interface Dataset {
   title: string;
   description: string;
   latest_version: string;
-  primary_language: string;
 }
 
 export interface DatasetTitle {

@@ -22,6 +22,8 @@ const datasets = computed(() => datasetStore.allDatasets);
 onBeforeMount(() => {
   const studyId = routeParams.studyId as string;
 
+  sidebarStore.setAppSidebarCollapsed(false);
+
   datasetStore.fetchAllDatasets(studyId);
 });
 
@@ -30,7 +32,7 @@ onBeforeMount(() => {
 // };
 
 const navigateToDataset = (datasetId: string) => {
-  sidebarStore.setAppSidebarCollapse(true);
+  sidebarStore.setAppSidebarCollapsed(true);
 
   router.push({ name: "dataset:overview", params: { datasetId } });
 };

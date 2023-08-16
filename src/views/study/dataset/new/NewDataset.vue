@@ -6,9 +6,9 @@ import { nanoid } from "nanoid";
 import { onBeforeMount, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import LANGUAGE_JSON from "@/assets/data/languages.json";
 import { useAuthStore } from "@/stores/auth";
 import { useDatasetStore } from "@/stores/dataset";
+import { useSidebarStore } from "@/stores/sidebar";
 import type { Dataset } from "@/types/Dataset";
 
 const route = useRoute();
@@ -17,6 +17,7 @@ const { error } = useMessage();
 
 const authStore = useAuthStore();
 const datasetStore = useDatasetStore();
+const sidebarStore = useSidebarStore();
 
 const routeParams = {
   studyId: route.params.studyId,
@@ -29,6 +30,8 @@ onBeforeMount(() => {
     error("You are not logged in.");
     router.push({ name: "home" });
   }
+
+  sidebarStore.setAppSidebarCollapsed(false);
 });
 
 const formRef = ref<FormInst | null>(null);
@@ -36,13 +39,7 @@ const formRef = ref<FormInst | null>(null);
 const dataset = ref({
   title: faker.commerce.productName(),
   description: faker.commerce.productDescription(),
-  primary_language: "en",
 });
-
-const languageOptions = LANGUAGE_JSON.map((v) => ({
-  label: v.name,
-  value: v.alpha2,
-}));
 
 const rules: FormRules = {
   title: [
@@ -59,13 +56,6 @@ const rules: FormRules = {
       trigger: ["blur", "input"],
     },
   ],
-  primary_language: [
-    {
-      message: "Please select a primary language",
-      required: true,
-      trigger: ["blur", "change"],
-    },
-  ],
 };
 
 const createDataset = (e: MouseEvent) => {
@@ -78,7 +68,6 @@ const createDataset = (e: MouseEvent) => {
         title: dataset.value.title,
         description: dataset.value.description,
         latest_version: "",
-        primary_language: dataset.value.primary_language,
       };
 
       datasetStore.addDataset(data).then(() => {
@@ -88,7 +77,6 @@ const createDataset = (e: MouseEvent) => {
       // addDataset(dataset.value).then((_datasetId) => {
       //   console.log(datasetStore.allDatasets);
 
-      //   // router.push({ name: "study:all-datasets", params: { studyId } });
       //   // router.push({ name: "dataset:overview", params: { studyId, datasetId } });
       // });
     } else {
@@ -142,15 +130,6 @@ const createDataset = (e: MouseEvent) => {
             maxRows: 5,
           }"
         />
-      </n-form-item>
-
-      <n-form-item label="Primary Language" path="primary_language">
-        <n-select
-          v-model:value="dataset.primary_language"
-          placeholder="Select a primary language for this dataset"
-          :options="languageOptions"
-        >
-        </n-select>
       </n-form-item>
 
       <n-divider />

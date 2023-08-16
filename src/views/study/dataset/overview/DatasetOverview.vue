@@ -41,7 +41,7 @@ onBeforeMount(() => {
 
   datasetStore.getDataset(datasetId, studyId);
 
-  sidebarStore.setAppSidebarCollapse(true);
+  sidebarStore.setAppSidebarCollapsed(true);
 });
 </script>
 

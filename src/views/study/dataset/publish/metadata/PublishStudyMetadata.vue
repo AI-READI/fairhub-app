@@ -60,8 +60,12 @@ function handleNextButton() {
     <PageBackNavigationHeader
       title="Study Metadata"
       description="Details about your study are displayed here"
-      linkName="dataset:publish:versions"
-      :linkParams="{ datasetId: routeParams.datasetId, studyId: routeParams.studyId }"
+      linkName="dataset:publish:version:participants"
+      :linkParams="{
+        datasetId: routeParams.datasetId,
+        studyId: routeParams.studyId,
+        versionId: routeParams.versionId,
+      }"
     />
 
     <n-divider />
@@ -362,8 +366,8 @@ function handleNextButton() {
 
     <n-divider />
 
-    <div class="flex items-center justify-between">
-      <n-button size="large" type="warning" @click="handleBackButton">
+    <div class="flex items-center justify-end">
+      <n-button size="large" type="warning" @click="handleBackButton" class="hidden">
         <template #icon>
           <f-icon icon="ic:round-arrow-back-ios" />
         </template>

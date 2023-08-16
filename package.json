@@ -32,14 +32,17 @@
     }
   },
   "dependencies": {
+    "@vavt/md-editor-extension": "^3.0.0",
     "axios": "^1.1.3",
     "code-tag": "^1.1.0",
     "dayjs": "^1.11.9",
     "eslint-plugin-prettier": "^4.2.1",
     "marked": "^4.2.12",
+    "md-editor-v3": "^4.3.0",
     "nanoid": "^4.0.2",
     "pinia": "^2.0.21",
     "pinia-plugin-persistedstate": "^3.0.2",
+    "sanitize-html": "^2.11.0",
     "storybook-tailwind-foundations": "^1.1.2",
     "validator": "^13.9.0",
     "vue": "^3.2.38",

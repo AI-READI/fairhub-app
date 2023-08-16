@@ -1,4 +1,5 @@
 import "./assets/css/main.css";
+import "md-editor-v3/lib/style.css";
 
 import { Icon } from "@iconify/vue";
 import { createPinia } from "pinia";

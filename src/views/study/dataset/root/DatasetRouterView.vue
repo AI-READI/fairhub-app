@@ -26,7 +26,7 @@ onBeforeMount(() => {
     router.push({ name: "home" });
   }
 
-  sidebarStore.setAppSidebarCollapse(true);
+  sidebarStore.setAppSidebarCollapsed(true);
 
   const studyId = routeParams.studyId;
   const datasetId = routeParams.datasetId;

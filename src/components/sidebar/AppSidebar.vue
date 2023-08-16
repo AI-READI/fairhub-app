@@ -59,14 +59,14 @@ const UpperMenuOptions = computed(() => [
   {
     children: [
       {
+        icon: renderIcon("tabler:id"),
+        key: "study:metadata:identification",
+        label: "Identification",
+      },
+      {
         icon: renderIcon("pajamas:status"),
         key: "study:metadata:status",
         label: "Status",
-      },
-      {
-        icon: renderIcon("tabler:id"),
-        key: "study:metadata:identificationModule",
-        label: "Identification",
       },
       {
         icon: renderIcon("carbon:user-sponsor"),
@@ -251,7 +251,7 @@ const lowerMenuOptions: MenuOption[] = [
  * @returns {void}
  */
 const toggleSidebar = (collapsed: boolean) => {
-  sidebarStore.setAppSidebarCollapse(collapsed);
+  sidebarStore.setAppSidebarCollapsed(collapsed);
   return;
 };
 
@@ -259,7 +259,7 @@ const navigateTo = (value: string) => {
   const routeName = value.split(":")[0];
 
   if (routeName === "studies") {
-    sidebarStore.setAppSidebarCollapse(false);
+    sidebarStore.setAppSidebarCollapsed(false);
 
     router.push({
       name: value,
@@ -269,7 +269,7 @@ const navigateTo = (value: string) => {
   }
 
   if (routeName === "study") {
-    sidebarStore.setAppSidebarCollapse(false);
+    sidebarStore.setAppSidebarCollapsed(false);
 
     router.push({
       name: value,
@@ -282,7 +282,7 @@ const navigateTo = (value: string) => {
   }
 
   if (routeName === "datasets") {
-    sidebarStore.setAppSidebarCollapse(false);
+    sidebarStore.setAppSidebarCollapsed(false);
 
     router.push({
       name: value,
@@ -295,7 +295,7 @@ const navigateTo = (value: string) => {
   }
 
   if (routeName === "dataset") {
-    sidebarStore.setAppSidebarCollapse(true);
+    sidebarStore.setAppSidebarCollapsed(true);
 
     return;
   }

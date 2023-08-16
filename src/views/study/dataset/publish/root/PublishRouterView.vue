@@ -26,7 +26,7 @@ onBeforeMount(() => {
     router.push({ name: "home" });
   }
 
-  sidebarStore.setAppSidebarCollapse(true);
+  sidebarStore.setAppSidebarCollapsed(true);
 
   const studyId = routeParams.studyId;
   const datasetId = routeParams.datasetId;
@@ -60,6 +60,11 @@ const steps = [
     title: "Changelog",
     description: "",
     route: "dataset:publish:version:changelog",
+  },
+  {
+    title: "Additional Details",
+    description: "",
+    route: "dataset:publish:version:additional-details",
   },
   {
     title: "Publish Dataset",

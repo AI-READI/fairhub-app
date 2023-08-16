@@ -29,11 +29,6 @@ const datasetId = computed(() => {
 });
 
 const dynamicUpperMenuOptions: MenuOption[] = [
-  // {
-  //   icon: renderIcon("ph:list-fill"),
-  //   key: "study:all-datasets",
-  //   label: "All Datasets",
-  // },
   {
     icon: renderIcon("material-symbols:overview-key-outline"),
     key: "dataset:overview",
