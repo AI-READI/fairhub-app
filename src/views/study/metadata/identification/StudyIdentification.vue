@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type { FormInst, FormRules } from "naive-ui";
 
+const route = useRoute();
+
+const warningConfirmRef = ref(null);
+
 const formRef = ref<FormInst | null>(null);
 
 const moduleData = ref({
@@ -28,13 +32,35 @@ const saveMetadata = (e: MouseEvent) => {
     }
   });
 };
-</script>
 
+const showModal = () => {
+  warningConfirmRef.value.show();
+};
+</script>
+s
 <template>
   <main class="flex h-full w-full flex-col pr-6">
-    <HeadingText title="Study Identification" description="Some description text here" />
+    <PageBackNavigationHeader
+      title="Identification"
+      description="Identifiers for the study"
+      linkName="study:overview"
+      :linkParams="{
+        studyId: route.params.studyId,
+      }"
+    />
 
     <n-divider />
+
+    <h3>Primary Identifier</h3>
+
+    <p class="py-2">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+      voluptatem, quibusdam, quos voluptas quae quas voluptatum
+    </p>
+
+    <n-divider />
+
+    <h3>Alternative Identifiers</h3>
 
     <n-form
       ref="formRef"
@@ -49,6 +75,10 @@ const saveMetadata = (e: MouseEvent) => {
       </n-form-item>
 
       <n-divider />
+
+      <ErrorConfirm ref="warningConfirmRef" />
+
+      <n-button @click="showModal"> show Modal </n-button>
 
       <div class="flex justify-start">
         <n-button size="large" type="primary" @click="saveMetadata">
