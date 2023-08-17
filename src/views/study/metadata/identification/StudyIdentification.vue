@@ -76,7 +76,7 @@ s
 
       <n-divider />
 
-      <ErrorConfirm ref="warningConfirmRef" />
+      <ConfirmDialog ref="warningConfirmRef" />
 
       <n-button @click="showModal"> show Modal </n-button>
 
