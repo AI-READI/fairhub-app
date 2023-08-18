@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormInst, FormRules } from "naive-ui";
-
+import { nanoid } from "nanoid";
 const route = useRoute();
 
 const warningConfirmRef = ref(null);
@@ -8,17 +8,39 @@ const warningConfirmRef = ref(null);
 const formRef = ref<FormInst | null>(null);
 
 const moduleData = ref({
-  title: "",
+  primary: {
+    id: nanoid(),
+    domain: "",
+    identifier: "",
+    link: "",
+    type: "",
+  },
+  secondary: [
+    {
+      id: nanoid(),
+      domain: "",
+      identifier: "",
+      link: "",
+      type: "",
+    },
+    {
+      id: nanoid(),
+      domain: "",
+      identifier: "",
+      link: "",
+      type: "",
+    },
+  ],
 });
 
 const rules: FormRules = {
-  title: [
-    {
+  primary: {
+    identifier: {
       message: "Please input a study title",
       required: true,
       trigger: ["blur", "input"],
     },
-  ],
+  },
 };
 
 const saveMetadata = (e: MouseEvent) => {
@@ -51,17 +73,6 @@ s
 
     <n-divider />
 
-    <h3>Primary Identifier</h3>
-
-    <p class="py-2">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
-      voluptatem, quibusdam, quos voluptas quae quas voluptatum
-    </p>
-
-    <n-divider />
-
-    <h3>Alternative Identifiers</h3>
-
     <n-form
       ref="formRef"
       :model="moduleData"
@@ -70,11 +81,43 @@ s
       label-placement="top"
       class="pr-4"
     >
-      <n-form-item :span="12" label="Title" path="title">
-        <n-input v-model:value="moduleData.title" placeholder="Add a title" />
+      <h3>Primary Identifier</h3>
+
+      <p class="pb-8 pt-2">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+        voluptatem, quibusdam, quos voluptas quae quas voluptatum
+      </p>
+
+      <n-form-item :span="12" label="Identifier" path="primary.identifier">
+        <n-input
+          v-model:value="moduleData.primary.identifier"
+          placeholder="Add an identifier"
+          clearable
+        />
+      </n-form-item>
+
+      <n-form-item :span="12" label="Domain" path="primary.domain">
+        <n-input v-model:value="moduleData.primary.domain" placeholder="Add a domain" clearable />
       </n-form-item>
 
       <n-divider />
+
+      <h3>Alternative Identifiers</h3>
+
+      <div v-for="item in moduleData.secondary" :key="item.id">
+        <n-form-item :span="12" label="Identifier" path="secondary.identifier">
+          <n-input v-model:value="item.identifier" placeholder="Add an identifier" clearable />
+        </n-form-item>
+
+        <n-form-item :span="12" label="Domain" path="secondary.domain">
+          <n-input v-model:value="item.domain" placeholder="Add a domain" clearable />
+        </n-form-item>
+      </div>
+
+      <n-divider />
+      <pre>
+        {{ moduleData }}
+      </pre>
 
       <ConfirmDialog ref="warningConfirmRef" />
 
