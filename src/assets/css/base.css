@@ -7,8 +7,6 @@
 
   margin: 0;
 
-  font-weight: normal;
-
   border-width: 0;
   border-style: solid;
   border-color: theme("borderColor.DEFAULT", currentColor);

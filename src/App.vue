@@ -1,9 +1,19 @@
 <script setup lang="ts">
+import type { GlobalThemeOverrides } from "naive-ui";
+
 import { theme } from "@/stores/settings";
+
+const themeOverrides: GlobalThemeOverrides = {
+  Button: {},
+  Form: {
+    feedbackPadding: "4px 0 8px 2px",
+    labelFontWeight: "600",
+  },
+};
 </script>
 
 <template>
-  <n-config-provider :theme="theme">
+  <n-config-provider :theme="theme" :theme-overrides="themeOverrides">
     <n-dialog-provider>
       <n-message-provider>
         <AppHeader />
