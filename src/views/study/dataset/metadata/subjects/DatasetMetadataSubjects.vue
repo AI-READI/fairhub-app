@@ -61,7 +61,10 @@ onBeforeMount(async () => {
     </n-list>
 
     <n-button class="my-10" dashed type="info">
-      <f-icon icon="gridicons:create" />
+      <template #icon>
+        <f-icon icon="gridicons:create" />
+      </template>
+
       Add a item
     </n-button>
 

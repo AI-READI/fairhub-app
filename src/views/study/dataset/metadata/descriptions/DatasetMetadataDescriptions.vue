@@ -144,7 +144,10 @@ const remove = (id: string) => {
     </n-list>
 
     <n-button @click="onCreate" class="my-10" dashed type="info">
-      <f-icon icon="gridicons:create" />
+      <template #icon>
+        <f-icon icon="gridicons:create" />
+      </template>
+
       Add a new description
     </n-button>
 

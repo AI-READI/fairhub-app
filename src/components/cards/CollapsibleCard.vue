@@ -28,7 +28,9 @@ const toggleCollapse = () => {
     </n-collapse-transition>
 
     <template #header-extra>
-      <n-button text class="text-3xl" type="info" @click="toggleCollapse">
+      <slot name="header-extra"></slot>
+
+      <n-button text class="ml-4 text-3xl" type="info" @click="toggleCollapse">
         <f-icon icon="fluent:arrow-minimize-vertical-24-filled" />
       </n-button>
     </template>
