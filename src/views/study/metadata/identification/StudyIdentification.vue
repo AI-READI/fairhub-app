@@ -220,6 +220,8 @@ const saveMetadata = (e: MouseEvent) => {
 
             Are you sure you want to remove this identifier?
           </n-popconfirm>
+
+          <n-divider vertical />
         </template>
 
         <n-form-item

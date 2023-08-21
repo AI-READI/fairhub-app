@@ -16,6 +16,9 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "commit": "cz",
+    "postinstall": "run-script-os",
+    "postinstall:win32": "husky install",
+    "postinstall:darwin:linux": "husky install && chmod ug+x .husky/*  && chmod ug+x .git/hooks/*",
     "prepare": "run-script-os",
     "prepare:win32": "husky install",
     "prepare:darwin:linux": "husky install && chmod ug+x .husky/*  && chmod ug+x .git/hooks/*"
