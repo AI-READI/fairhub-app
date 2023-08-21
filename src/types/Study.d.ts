@@ -25,3 +25,20 @@ export interface Study {
   };
   size: string;
 }
+
+export interface StudyIdentifier {
+  id: string;
+  domain: string;
+  identifier: string;
+  link: string;
+  type: string;
+}
+
+export interface SecondaryStudyIdentifier extends StudyIdentifier {
+  origin: string;
+}
+
+export interface StudyIdentificationModule {
+  primary: StudyIdentifier;
+  secondary: SecondaryStudyIdentifier[];
+}

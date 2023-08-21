@@ -3,13 +3,13 @@ import type { FormInst, FormRules } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import CollapsibleCard from "@/components/cards/CollapsibleCard.vue";
-const route = useRoute();
+import type { StudyIdentificationModule } from "@/types/Study";
 
-const warningConfirmRef = ref(null);
+const route = useRoute();
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData = ref({
+const moduleData = ref<StudyIdentificationModule>({
   primary: {
     id: nanoid(),
     domain: "",
@@ -64,7 +64,7 @@ const removeSecondaryIdentifier = (id: string) => {
   if (item.origin === "local") {
     moduleData.value.secondary = moduleData.value.secondary.filter((item) => item.id !== id);
   } else {
-    warningConfirmRef.value?.open();
+    // post to api to remove
   }
 };
 
@@ -220,8 +220,6 @@ const saveMetadata = (e: MouseEvent) => {
 
             Are you sure you want to remove this identifier?
           </n-popconfirm>
-
-          <n-divider vertical />
         </template>
 
         <n-form-item
