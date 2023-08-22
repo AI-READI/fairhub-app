@@ -144,7 +144,7 @@ const saveMetadata = (e: MouseEvent) => {
         voluptatem, quibusdam, quos voluptas quae quas voluptatum
       </p>
 
-      <n-form-item :span="12" label="Identifier" path="primary.identifier">
+      <n-form-item label="Identifier" path="primary.identifier">
         <n-input
           v-model:value="moduleData.primary.identifier"
           placeholder="1-R01-MH99999-01A1"
@@ -152,7 +152,7 @@ const saveMetadata = (e: MouseEvent) => {
         />
       </n-form-item>
 
-      <n-form-item :span="12" label="Type" path="primary.type">
+      <n-form-item label="Type" path="primary.type">
         <n-select
           v-model:value="moduleData.primary.type"
           placeholder="NIH Grant Number"
@@ -162,7 +162,6 @@ const saveMetadata = (e: MouseEvent) => {
       </n-form-item>
 
       <n-form-item
-        :span="12"
         label="Domain"
         path="primary.domain"
         placeholder="ClinicalTrials.gov"
@@ -179,7 +178,7 @@ const saveMetadata = (e: MouseEvent) => {
         <n-input v-model:value="moduleData.primary.domain" placeholder="Add a domain" clearable />
       </n-form-item>
 
-      <n-form-item :span="12" label="Link" path="primary.link">
+      <n-form-item label="Link" path="primary.link">
         <n-input-group>
           <n-input-group-label size="large">https://</n-input-group-label>
 
@@ -224,7 +223,6 @@ const saveMetadata = (e: MouseEvent) => {
         </template>
 
         <n-form-item
-          :span="12"
           label="Identifier"
           :path="`secondary[${index}].identifier`"
           :rule="{
@@ -237,7 +235,6 @@ const saveMetadata = (e: MouseEvent) => {
         </n-form-item>
 
         <n-form-item
-          :span="12"
           label="Type"
           :path="`secondary[${index}].type`"
           :rule="{
@@ -255,7 +252,6 @@ const saveMetadata = (e: MouseEvent) => {
         </n-form-item>
 
         <n-form-item
-          :span="12"
           label="Domain"
           :path="`secondary[${index}].domain`"
           :rule="{
@@ -271,7 +267,7 @@ const saveMetadata = (e: MouseEvent) => {
           <n-input v-model:value="item.domain" placeholder="ClinicalTrials.gov" clearable />
         </n-form-item>
 
-        <n-form-item :span="12" label="Link" :path="`secondary[${index}].link`">
+        <n-form-item label="Link" :path="`secondary[${index}].link`">
           <n-input-group>
             <n-input-group-label size="large">https://</n-input-group-label>
 

@@ -60,7 +60,7 @@ const saveMetadata = (e: MouseEvent) => {
       label-placement="top"
       class="pr-4"
     >
-      <n-form-item :span="12" label="Title" path="title">
+      <n-form-item label="Title" path="title">
         <n-input v-model:value="moduleData.title" placeholder="Add a title" />
       </n-form-item>
 

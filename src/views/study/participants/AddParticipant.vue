@@ -129,19 +129,19 @@ const addParticipant = (e: MouseEvent) => {
       label-placement="top"
       class="pr-4"
     >
-      <n-form-item :span="12" label="First Name" path="first_name">
+      <n-form-item label="First Name" path="first_name">
         <n-input v-model:value="participant.first_name" placeholder="Mabel" clearable />
       </n-form-item>
 
-      <n-form-item :span="12" label="Last Name" path="last_name">
+      <n-form-item label="Last Name" path="last_name">
         <n-input v-model:value="participant.last_name" placeholder="Mora" clearable />
       </n-form-item>
 
-      <n-form-item :span="12" label="Address" path="Address">
+      <n-form-item label="Address" path="Address">
         <n-input v-model:value="participant.address" placeholder="Address" clearable />
       </n-form-item>
 
-      <n-form-item :span="12" label="Age" path="Age">
+      <n-form-item label="Age" path="Age">
         <n-input-number v-model:value="participant.age" clearable placeholder="Age" />
       </n-form-item>
 

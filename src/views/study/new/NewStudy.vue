@@ -119,11 +119,11 @@ async function addStudy(study: Study): Promise<Study> {
       label-placement="top"
       class="pr-4"
     >
-      <n-form-item :span="12" label="Title" path="title">
+      <n-form-item label="Title" path="title">
         <n-input v-model:value="study.title" placeholder="Add a study title" />
       </n-form-item>
 
-      <n-form-item :span="12" label="Description" path="description">
+      <n-form-item label="Description" path="description">
         <n-input
           v-model:value="study.description"
           placeholder="Add a study description"
@@ -135,7 +135,7 @@ async function addStudy(study: Study): Promise<Study> {
         />
       </n-form-item>
 
-      <n-form-item :span="12" label="Keywords" path="keywords">
+      <n-form-item label="Keywords" path="keywords">
         <n-select
           v-model:value="study.keywords"
           placeholder="Salutogenesis"
@@ -148,7 +148,7 @@ async function addStudy(study: Study): Promise<Study> {
         />
       </n-form-item>
 
-      <n-form-item :span="12" label="Image" path="Image">
+      <n-form-item label="Image" path="Image">
         <n-input v-model:value="study.image" placeholder="Add an image" />
       </n-form-item>
 

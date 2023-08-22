@@ -94,7 +94,7 @@ const saveMetadata = (e: MouseEvent) => {
         voluptatem, quibusdam, quos voluptas quae quas voluptatum
       </p>
 
-      <n-form-item :span="12" label="Type" path="responsible_party.type">
+      <n-form-item label="Type" path="responsible_party.type">
         <n-select
           v-model:value="moduleData.responsible_party.type"
           placeholder="Principal Investigator"
@@ -104,7 +104,6 @@ const saveMetadata = (e: MouseEvent) => {
       </n-form-item>
 
       <n-form-item
-        :span="12"
         label="Investigator Name"
         path="responsible_party.name"
         :rule="{
@@ -125,7 +124,6 @@ const saveMetadata = (e: MouseEvent) => {
       </n-form-item>
 
       <n-form-item
-        :span="12"
         label="Investigator Title"
         path="responsible_party.title"
         :rule="{
@@ -146,7 +144,6 @@ const saveMetadata = (e: MouseEvent) => {
       </n-form-item>
 
       <n-form-item
-        :span="12"
         label="Investigator Affiliation"
         path="responsible_party.affiliation"
         :rule="{
@@ -175,7 +172,7 @@ const saveMetadata = (e: MouseEvent) => {
         voluptatem, quibusdam, quos voluptas quae quas voluptatum
       </p>
 
-      <n-form-item :span="12" label="Name" path="lead_sponsor_name">
+      <n-form-item label="Name" path="lead_sponsor_name">
         <n-input v-model:value="moduleData.lead_sponsor_name" placeholder="Willy Tybur" clearable />
       </n-form-item>
 

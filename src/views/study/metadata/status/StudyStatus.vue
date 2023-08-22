@@ -130,7 +130,7 @@ const saveMetadata = (e: MouseEvent) => {
       label-placement="top"
       class="pr-4"
     >
-      <n-form-item :span="12" label="Overall Status" path="overall_status">
+      <n-form-item label="Overall Status" path="overall_status">
         <n-select
           v-model:value="moduleData.overall_status"
           placeholder="Recruiting"
@@ -139,7 +139,7 @@ const saveMetadata = (e: MouseEvent) => {
         />
       </n-form-item>
 
-      <n-form-item :span="12" label="Start Date" path="start_date">
+      <n-form-item label="Start Date" path="start_date">
         <n-date-picker
           v-model:formatted-value="moduleData.start_date"
           type="date"
@@ -148,7 +148,7 @@ const saveMetadata = (e: MouseEvent) => {
         />
       </n-form-item>
 
-      <n-form-item :span="12" label="Start Date Type" path="start_date_type">
+      <n-form-item label="Start Date Type" path="start_date_type">
         <n-select
           v-model:value="moduleData.start_date_type"
           placeholder="Actual"
@@ -158,7 +158,6 @@ const saveMetadata = (e: MouseEvent) => {
       </n-form-item>
 
       <n-form-item
-        :span="12"
         label="Why Stopped"
         path="why_stopped"
         :rule="{
@@ -181,7 +180,6 @@ const saveMetadata = (e: MouseEvent) => {
       </n-form-item>
 
       <n-form-item
-        :span="12"
         label="Completion Date"
         path="completionDate"
         :rule="{
@@ -199,7 +197,6 @@ const saveMetadata = (e: MouseEvent) => {
       </n-form-item>
 
       <n-form-item
-        :span="12"
         label="Completion Date Type"
         path="completion_date_type"
         :rule="{

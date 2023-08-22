@@ -82,7 +82,6 @@ const saveMetadata = (e: MouseEvent) => {
       <n-form-item
         v-for="collaborator in moduleData"
         :key="collaborator.id"
-        :span="12"
         label="Full Name"
         path="collaborator.name"
       >

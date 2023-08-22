@@ -53,7 +53,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
     <div class="flex w-full space-x-10">
       <div class="w-full max-w-screen-md px-2">
         <n-form ref="userFormRef" size="large" label-placement="top">
-          <n-form-item :span="12" label="Username" path="username">
+          <n-form-item label="Username" path="username">
             <n-input
               v-model:value="userProfile.username"
               placeholder="loid.forger"
@@ -62,7 +62,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
             />
           </n-form-item>
 
-          <n-form-item :span="12" label="Email Address" path="email">
+          <n-form-item label="Email Address" path="email">
             <n-input
               v-model:value="userProfile.email"
               placeholder="loid.forger@ucsd.edu"
@@ -72,7 +72,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
             />
           </n-form-item>
 
-          <n-form-item :span="12" label="Full Name" path="fullname">
+          <n-form-item label="Full Name" path="fullname">
             <n-input
               v-model:value="userProfile.fullname"
               type="text"
@@ -81,7 +81,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
             />
           </n-form-item>
 
-          <n-form-item :span="12" label="Institution" path="institution">
+          <n-form-item label="Institution" path="institution">
             <n-input
               v-model:value="userProfile.institution"
               placeholder="University of California, Santa Diego"
@@ -89,11 +89,11 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
             />
           </n-form-item>
 
-          <n-form-item :span="12" label="Location" path="Location">
+          <n-form-item label="Location" path="Location">
             <n-input v-model:value="userProfile.location" placeholder="San Diego, CA" type="text" />
           </n-form-item>
 
-          <n-form-item :span="12" label="Timezone" path="timezone">
+          <n-form-item label="Timezone" path="timezone">
             <n-select
               filterable
               clearable

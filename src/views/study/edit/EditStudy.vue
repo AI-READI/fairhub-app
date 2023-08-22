@@ -97,10 +97,10 @@ const handleUpdateValue = (value: string[]) => {
       label-placement="top"
       class="pr-4"
     >
-      <n-form-item :span="12" label="Title" path="title">
+      <n-form-item label="Title" path="title">
         <n-input v-model:value="studyType.title" placeholder="Add a study title" />
       </n-form-item>
-      <n-form-item :span="12" label="Description" path="description">
+      <n-form-item label="Description" path="description">
         <n-input
           v-model:value="studyType.description"
           placeholder="Add a study description"
@@ -112,7 +112,7 @@ const handleUpdateValue = (value: string[]) => {
         />
       </n-form-item>
 
-      <n-form-item :span="12" label="Keywords" path="keywords">
+      <n-form-item label="Keywords" path="keywords">
         <n-select
           v-model:value="studyType.keywords"
           placeholder="Salutogenesis"
