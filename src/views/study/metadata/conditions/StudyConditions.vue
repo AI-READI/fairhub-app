@@ -1,42 +1,51 @@
 <script setup lang="ts">
-import type { FormInst, FormRules } from "naive-ui";
-import { useMessage } from "naive-ui";
-import { onBeforeMount, ref } from "vue";
-import { useRouter } from "vue-router";
-
-import { useAuthStore } from "@/stores/auth";
-
-const router = useRouter();
-const authStore = useAuthStore();
-const { error } = useMessage();
-
-onBeforeMount(() => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
-  }
-});
+import type { FormInst } from "naive-ui";
+import { nanoid } from "nanoid";
+const route = useRoute();
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData = ref({
-  title: "",
-});
+type Condition = {
+  id: string;
+  name: string;
+};
 
-const rules: FormRules = {
-  title: [
-    {
-      message: "Please input a study title",
-      required: true,
-      trigger: ["blur", "input"],
-    },
-  ],
+const moduleData = ref<Condition[]>([
+  {
+    id: nanoid(),
+    name: "Diabetes",
+  },
+]);
+
+const addCondition = () => {
+  moduleData.value.push({
+    id: nanoid(),
+    name: "",
+  });
+};
+
+const removeCondition = (id: string) => {
+  const conditions = moduleData.value;
+
+  const index = conditions.findIndex((Condition) => Condition.id === id);
+
+  conditions.splice(index, 1);
 };
 
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate((errors) => {
     if (!errors) {
+      // remove empty Conditions
+      const conditions = moduleData.value.filter((Condition) => Condition.name !== "");
+
+      // remove Conditions with duplicate names
+      const uniqueConditions = conditions.filter(
+        (Condition, index, self) => index === self.findIndex((c) => c.name === Condition.name)
+      );
+
+      console.log("conditions", uniqueConditions);
+
       console.log("success");
     } else {
       console.log("error");
@@ -48,21 +57,49 @@ const saveMetadata = (e: MouseEvent) => {
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
-    <HeadingText title="Study Conditions" description="Some description text here" />
+    <PageBackNavigationHeader
+      title="Conditions"
+      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+      linkName="study:overview"
+      :linkParams="{
+        studyId: route.params.studyId,
+      }"
+    />
 
     <n-divider />
 
-    <n-form
-      ref="formRef"
-      :model="moduleData"
-      :rules="rules"
-      size="large"
-      label-placement="top"
-      class="pr-4"
-    >
-      <n-form-item :span="12" label="Title" path="title">
-        <n-input v-model:value="moduleData.title" placeholder="Add a title" />
+    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
+      <SubHeadingText
+        title=""
+        description="The name(s) of the disease(s) or condition(s) studied in the clinical study, or the focus of the clinical study. Use, if available, appropriate descriptors from NLM's Medical Subject Headings (MeSH)-controlled vocabulary thesaurus or terms from another vocabulary, such as the Systematized Nomenclature of Medicine—Clinical Terms (SNOMED CT), that has been mapped to MeSH within the Unified Medical Language System (UMLS) Metathesaurus."
+      />
+
+      <n-form-item
+        v-for="condition in moduleData"
+        :key="condition.id"
+        label="Name"
+        path="condition.name"
+      >
+        <n-input v-model:value="condition.name" placeholder="Diabetes" />
+
+        <n-popconfirm @positive-click="removeCondition(condition.id)">
+          <template #trigger>
+            <n-button class="ml-5">
+              <f-icon icon="gridicons:trash" />
+            </n-button>
+          </template>
+
+          Are you sure you want to remove this condition?
+        </n-popconfirm>
       </n-form-item>
+
+      <n-button class="mb-10 w-full" dashed type="success" @click="addCondition">
+        <template #icon>
+          <f-icon icon="gridicons:create" />
+        </template>
+
+        Add a Condition
+      </n-button>
 
       <n-divider />
 

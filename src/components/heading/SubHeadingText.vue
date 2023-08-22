@@ -8,6 +8,11 @@ defineProps({
     required: false,
     type: String,
   },
+  spacing: {
+    default: "mb-4",
+    required: false,
+    type: String,
+  },
 });
 </script>
 
@@ -17,6 +22,6 @@ defineProps({
   </slot>
 
   <slot name="description">
-    <p class="pb-2 text-sm" v-if="description">{{ description }}</p>
+    <p :class="`pb-2 text-sm ${spacing}`" v-if="description">{{ description }}</p>
   </slot>
 </template>
