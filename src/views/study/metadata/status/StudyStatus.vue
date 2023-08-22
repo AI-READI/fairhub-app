@@ -9,44 +9,29 @@ const route = useRoute();
 const formRef = ref<FormInst | null>(null);
 
 const moduleData = ref<StudyStatusModule>({
-  completionDate: null,
-  completionDateType: "",
-  overallStatus: "",
-  startDate: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-  startDateType: "",
-  whyStopped: "",
+  completion_date: null,
+  completion_date_type: null,
+  overall_status: null,
+  start_date: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+  start_date_type: null,
+  why_stopped: "",
 });
 
 const rules: FormRules = {
-  completionDate: {
-    message: "Please enter a completion date",
-    required: false,
-    trigger: ["blur", "input"],
-  },
-  completionDateType: {
-    message: "Please select a completion date type",
-    required: false,
-    trigger: ["blur", "change"],
-  },
-  overallStatus: {
+  overall_status: {
     message: "Please enter an overall status",
     required: true,
     trigger: ["blur", "input"],
   },
-  startDate: {
+  start_date: {
     message: "Please enter a start date",
     required: true,
     trigger: ["blur", "input"],
   },
-  startDateType: {
+  start_date_type: {
     message: "Please select a start date type",
     required: true,
     trigger: ["blur", "change"],
-  },
-  whyStopped: {
-    message: "Please enter a reason for stopping",
-    required: false,
-    trigger: ["blur", "input"],
   },
 };
 
@@ -145,28 +130,28 @@ const saveMetadata = (e: MouseEvent) => {
       label-placement="top"
       class="pr-4"
     >
-      <n-form-item :span="12" label="Overall Status" path="overallStatus">
+      <n-form-item :span="12" label="Overall Status" path="overall_status">
         <n-select
-          v-model:value="moduleData.overallStatus"
-          placeholder="Select a status"
+          v-model:value="moduleData.overall_status"
+          placeholder="Recruiting"
           clearable
           :options="statusOptions"
         />
       </n-form-item>
 
-      <n-form-item :span="12" label="Start Date" path="startDate">
+      <n-form-item :span="12" label="Start Date" path="start_date">
         <n-date-picker
-          v-model:formatted-value="moduleData.startDate"
+          v-model:formatted-value="moduleData.start_date"
           type="date"
           value-format="yyyy-MM-dd HH:mm:ss"
           clearable
         />
       </n-form-item>
 
-      <n-form-item :span="12" label="Start Date Type" path="startDateType">
+      <n-form-item :span="12" label="Start Date Type" path="start_date_type">
         <n-select
-          v-model:value="moduleData.startDateType"
-          placeholder="Select a type"
+          v-model:value="moduleData.start_date_type"
+          placeholder="Actual"
           clearable
           :options="dateTypeOptions"
         />
@@ -175,20 +160,20 @@ const saveMetadata = (e: MouseEvent) => {
       <n-form-item
         :span="12"
         label="Why Stopped"
-        path="whyStopped"
+        path="why_stopped"
         :rule="{
           message: 'Please enter a reason for stopping',
           required:
-            moduleData.overallStatus === 'Suspended' ||
-            moduleData.overallStatus === 'Terminated' ||
-            moduleData.overallStatus === 'Withdrawn'
+            moduleData.overall_status === 'Suspended' ||
+            moduleData.overall_status === 'Terminated' ||
+            moduleData.overall_status === 'Withdrawn'
               ? true
               : false,
           trigger: ['blur', 'input'],
         }"
       >
         <n-input
-          v-model:value="moduleData.whyStopped"
+          v-model:value="moduleData.why_stopped"
           type="textarea"
           placeholder="A brief explanation of the reason(s) why such clinical study was stopped (for a clinical study that is 'Suspended', 'Terminated', or 'Withdrawn' prior to its planned completion as anticipated by the protocol)."
           clearable
@@ -201,12 +186,12 @@ const saveMetadata = (e: MouseEvent) => {
         path="completionDate"
         :rule="{
           message: 'Please enter a completion date',
-          required: moduleData.completionDateType ? true : false,
+          required: moduleData.completion_date_type ? true : false,
           trigger: ['blur', 'input'],
         }"
       >
         <n-date-picker
-          v-model:formatted-value="moduleData.completionDate"
+          v-model:formatted-value="moduleData.completion_date"
           type="date"
           value-format="yyyy-MM-dd HH:mm:ss"
           clearable
@@ -216,16 +201,16 @@ const saveMetadata = (e: MouseEvent) => {
       <n-form-item
         :span="12"
         label="Completion Date Type"
-        path="completionDateType"
+        path="completion_date_type"
         :rule="{
           message: 'Please select a completion date type',
-          required: moduleData.completionDate ? true : false,
+          required: moduleData.completion_date ? true : false,
           trigger: ['blur', 'input'],
         }"
       >
         <n-select
-          v-model:value="moduleData.completionDateType"
-          placeholder="Select a type"
+          v-model:value="moduleData.completion_date_type"
+          placeholder="Anticipated"
           clearable
           :options="dateTypeOptions"
         />

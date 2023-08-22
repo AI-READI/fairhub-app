@@ -44,10 +44,22 @@ export interface StudyIdentificationModule {
 }
 
 export interface StudyStatusModule {
-  completionDate: string | null;
-  completionDateType: string;
-  overallStatus: string;
-  startDate: string;
-  startDateType: string;
-  whyStopped: string;
+  completion_date: string | null;
+  completion_date_type: string;
+  overall_status: string;
+  start_date: string;
+  start_date_type: string;
+  why_stopped: string;
+}
+
+export interface StudyResponsibleParty {
+  name: string;
+  title: string;
+  affiliation: string;
+  type: string;
+}
+
+export interface StudySponsorCollaboratorsModule {
+  lead_sponsor_name: string;
+  responsible_party: StudyResponsibleParty;
 }

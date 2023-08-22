@@ -15,7 +15,7 @@ const moduleData = ref<StudyIdentificationModule>({
     domain: "",
     identifier: "",
     link: "",
-    type: "",
+    type: null,
   },
   secondary: [],
 });
@@ -147,7 +147,7 @@ const saveMetadata = (e: MouseEvent) => {
       <n-form-item :span="12" label="Identifier" path="primary.identifier">
         <n-input
           v-model:value="moduleData.primary.identifier"
-          placeholder="Add an identifier"
+          placeholder="1-R01-MH99999-01A1"
           clearable
         />
       </n-form-item>
@@ -155,7 +155,7 @@ const saveMetadata = (e: MouseEvent) => {
       <n-form-item :span="12" label="Type" path="primary.type">
         <n-select
           v-model:value="moduleData.primary.type"
-          placeholder="Select a type"
+          placeholder="NIH Grant Number"
           clearable
           :options="typeOptions"
         />
@@ -165,6 +165,7 @@ const saveMetadata = (e: MouseEvent) => {
         :span="12"
         label="Domain"
         path="primary.domain"
+        placeholder="ClinicalTrials.gov"
         :rule="{
           message: 'Please enter a domain',
           required:
@@ -184,7 +185,7 @@ const saveMetadata = (e: MouseEvent) => {
 
           <n-input
             v-model:value="moduleData.primary.link"
-            placeholder="nih.org/someidentifier"
+            placeholder="clinicaltrials.gov"
             clearable
           />
         </n-input-group>
@@ -232,7 +233,7 @@ const saveMetadata = (e: MouseEvent) => {
             trigger: ['blur', 'input'],
           }"
         >
-          <n-input v-model:value="item.identifier" placeholder="Add an identifier" clearable />
+          <n-input v-model:value="item.identifier" placeholder="1-R01-MH99999-01A1" clearable />
         </n-form-item>
 
         <n-form-item
@@ -247,7 +248,7 @@ const saveMetadata = (e: MouseEvent) => {
         >
           <n-select
             v-model:value="item.type"
-            placeholder="Select a type"
+            placeholder="Other Grant/Funding Number"
             clearable
             :options="typeOptions"
           />
@@ -267,7 +268,7 @@ const saveMetadata = (e: MouseEvent) => {
             trigger: ['blur', 'input'],
           }"
         >
-          <n-input v-model:value="item.domain" placeholder="Add a domain" clearable />
+          <n-input v-model:value="item.domain" placeholder="ClinicalTrials.gov" clearable />
         </n-form-item>
 
         <n-form-item :span="12" label="Link" :path="`secondary[${index}].link`">
@@ -276,7 +277,7 @@ const saveMetadata = (e: MouseEvent) => {
 
             <n-input
               v-model:value="moduleData.primary.link"
-              placeholder="nih.org/someidentifier"
+              placeholder="clinicaltrials.gov"
               clearable
             />
           </n-input-group>
