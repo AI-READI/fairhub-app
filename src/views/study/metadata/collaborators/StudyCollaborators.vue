@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FormInst, FormRules } from "naive-ui";
+import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 const route = useRoute();
 
@@ -20,16 +20,6 @@ const moduleData = ref<Collaborator[]>([
     name: "Grisha Yeager",
   },
 ]);
-
-const rules: FormRules = {
-  name: [
-    {
-      message: "Please input a study title",
-      required: true,
-      trigger: ["blur", "input"],
-    },
-  ],
-};
 
 const addCollaborator = () => {
   moduleData.value.push({
@@ -88,14 +78,7 @@ const saveMetadata = (e: MouseEvent) => {
       confirming all collaborators before listing them.
     </p>
 
-    <n-form
-      ref="formRef"
-      :model="moduleData"
-      :rules="rules"
-      size="large"
-      label-placement="top"
-      class="pr-4"
-    >
+    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
       <n-form-item
         v-for="collaborator in moduleData"
         :key="collaborator.id"

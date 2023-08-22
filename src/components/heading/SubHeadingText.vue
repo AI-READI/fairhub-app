@@ -13,10 +13,10 @@ defineProps({
 
 <template>
   <slot>
-    <h1>{{ title }}</h1>
+    <h3>{{ title }}</h3>
   </slot>
 
   <slot name="description">
-    <p class="py-2 text-sm" v-if="description">{{ description }}</p>
+    <p class="pb-2 text-sm" v-if="description">{{ description }}</p>
   </slot>
 </template>
