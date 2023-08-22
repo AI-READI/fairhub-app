@@ -61,7 +61,7 @@ const typeOptions = [
 const removeSecondaryIdentifier = (id: string) => {
   const item = moduleData.value.secondary.find((item) => item.id === id);
 
-  if (item.origin === "local") {
+  if (item && item.origin === "local") {
     moduleData.value.secondary = moduleData.value.secondary.filter((item) => item.id !== id);
   } else {
     // post to api to remove

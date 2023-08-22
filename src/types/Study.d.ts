@@ -42,3 +42,12 @@ export interface StudyIdentificationModule {
   primary: StudyIdentifier;
   secondary: SecondaryStudyIdentifier[];
 }
+
+export interface StudyStatusModule {
+  completionDate: string;
+  completionDateType: string;
+  overallStatus: string;
+  startDate: string;
+  startDateType: string;
+  whyStopped: string;
+}
