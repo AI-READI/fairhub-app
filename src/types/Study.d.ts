@@ -44,7 +44,7 @@ export interface StudyIdentificationModule {
 }
 
 export interface StudyStatusModule {
-  completionDate: string;
+  completionDate: string | null;
   completionDateType: string;
   overallStatus: string;
   startDate: string;
