@@ -107,7 +107,11 @@ async function addStudy(study: Study): Promise<Study> {
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8">
-    <h1>Create a new study</h1>
+    <PageBackNavigationHeader
+      title="Create a new study"
+      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+      linkName="studies:all-studies"
+    />
 
     <n-divider />
 
