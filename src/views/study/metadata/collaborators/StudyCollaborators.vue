@@ -1,30 +1,28 @@
 <script setup lang="ts">
 import type { FormInst, FormRules } from "naive-ui";
-import { useMessage } from "naive-ui";
-import { onBeforeMount, ref } from "vue";
-import { useRouter } from "vue-router";
-
-import { useAuthStore } from "@/stores/auth";
-
-const router = useRouter();
-const authStore = useAuthStore();
-const { error } = useMessage();
-
-onBeforeMount(() => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
-  }
-});
+import { nanoid } from "nanoid";
+const route = useRoute();
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData = ref({
-  title: "",
-});
+type Collaborator = {
+  id: string;
+  name: string;
+};
+
+const moduleData = ref<Collaborator[]>([
+  {
+    id: nanoid(),
+    name: "Frieda Reiss",
+  },
+  {
+    id: nanoid(),
+    name: "Grisha Yeager",
+  },
+]);
 
 const rules: FormRules = {
-  title: [
+  name: [
     {
       message: "Please input a study title",
       required: true,
@@ -33,10 +31,35 @@ const rules: FormRules = {
   ],
 };
 
+const addCollaborator = () => {
+  moduleData.value.push({
+    id: nanoid(),
+    name: "",
+  });
+};
+
+const removeCollaborator = (id: string) => {
+  const collaborators = moduleData.value;
+
+  const index = collaborators.findIndex((collaborator) => collaborator.id === id);
+
+  collaborators.splice(index, 1);
+};
+
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate((errors) => {
     if (!errors) {
+      // remove empty collaborators
+      const collaborators = moduleData.value.filter((collaborator) => collaborator.name !== "");
+
+      // remove collaborators with duplicate names
+      const uniqueCollaborators = collaborators.filter(
+        (collaborator, index, self) => index === self.findIndex((c) => c.name === collaborator.name)
+      );
+
+      console.log("collaborators", uniqueCollaborators);
+
       console.log("success");
     } else {
       console.log("error");
@@ -48,9 +71,22 @@ const saveMetadata = (e: MouseEvent) => {
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
-    <HeadingText title="Study Collaborators" description="Some description text here" />
+    <PageBackNavigationHeader
+      title="Collaborators"
+      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+      linkName="study:overview"
+      :linkParams="{
+        studyId: route.params.studyId,
+      }"
+    />
 
     <n-divider />
+
+    <p class="pb-8 pt-2">
+      Other organizations (if any) providing support. Support may include funding, design,
+      implementation, data analysis or reporting. The responsible party is responsible for
+      confirming all collaborators before listing them.
+    </p>
 
     <n-form
       ref="formRef"
@@ -60,9 +96,33 @@ const saveMetadata = (e: MouseEvent) => {
       label-placement="top"
       class="pr-4"
     >
-      <n-form-item :span="12" label="Title" path="title">
-        <n-input v-model:value="moduleData.title" placeholder="Add a title" />
+      <n-form-item
+        v-for="collaborator in moduleData"
+        :key="collaborator.id"
+        :span="12"
+        label="Full Name"
+        path="collaborator.name"
+      >
+        <n-input v-model:value="collaborator.name" placeholder="Historia Reiss" />
+
+        <n-popconfirm @positive-click="removeCollaborator(collaborator.id)">
+          <template #trigger>
+            <n-button class="ml-5">
+              <f-icon icon="gridicons:trash" />
+            </n-button>
+          </template>
+
+          Are you sure you want to remove this collaborator?
+        </n-popconfirm>
       </n-form-item>
+
+      <n-button class="mb-10 w-full" dashed type="success" @click="addCollaborator">
+        <template #icon>
+          <f-icon icon="gridicons:create" />
+        </template>
+
+        Add a Collaborator
+      </n-button>
 
       <n-divider />
 
