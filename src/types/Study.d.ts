@@ -31,7 +31,7 @@ export interface StudyIdentifier {
   domain: string;
   identifier: string;
   link: string;
-  type: string;
+  type: string | null;
 }
 
 export interface SecondaryStudyIdentifier extends StudyIdentifier {
@@ -45,10 +45,10 @@ export interface StudyIdentificationModule {
 
 export interface StudyStatusModule {
   completion_date: string | null;
-  completion_date_type: string;
-  overall_status: string;
+  completion_date_type: string | null;
+  overall_status: string | null;
   start_date: string;
-  start_date_type: string;
+  start_date_type: string | null;
   why_stopped: string;
 }
 
@@ -56,7 +56,7 @@ export interface StudyResponsibleParty {
   name: string;
   title: string;
   affiliation: string;
-  type: string;
+  type: string | null;
 }
 
 export interface StudySponsorCollaboratorsModule {
@@ -70,12 +70,12 @@ export interface StudyDesignModuleEnrollmentInfo {
 }
 
 export interface InterventionalStudyDesignInfo {
-  allocation: string;
-  intervention_model: string;
+  allocation: string | null;
+  intervention_model: string | null;
   intervention_model_description: string;
-  masking: string;
+  masking: string | null;
   masking_description: string;
-  primary_purpose: string;
+  primary_purpose: string | null;
   who_masked_list: string[];
 }
 export interface ObservationalStudyDesignInfo {
@@ -88,14 +88,14 @@ export interface StudyDesignInfo
     ObservationalStudyDesignInfo {}
 
 export interface InterventionalStudyDesignModule {
-  number_arms: number;
+  number_arms: number | null;
   phase_list: string[];
 }
 
 export interface ObservationalStudyDesignModule {
   bio_spec_description: string;
-  bio_spec_retention: string;
-  number_groups_cohorts: number;
+  bio_spec_retention: string | null;
+  number_groups_cohorts: number | null;
   target_duration: string;
 }
 
@@ -104,5 +104,5 @@ export interface StudyDesignModule
     ObservationalStudyDesignModule {
   design_info: StudyDesignInfo;
   enrollment_info: StudyDesignModuleEnrollmentInfo;
-  study_type: string;
+  study_type: string | null;
 }

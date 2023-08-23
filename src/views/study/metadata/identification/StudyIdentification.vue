@@ -9,7 +9,7 @@ const route = useRoute();
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData = ref<StudyIdentificationModule>({
+const moduleData: StudyIdentificationModule = reactive({
   primary: {
     id: nanoid(),
     domain: "",
@@ -59,17 +59,17 @@ const typeOptions = [
 ];
 
 const removeSecondaryIdentifier = (id: string) => {
-  const item = moduleData.value.secondary.find((item) => item.id === id);
+  const item = moduleData.secondary.find((item) => item.id === id);
 
   if (item && item.origin === "local") {
-    moduleData.value.secondary = moduleData.value.secondary.filter((item) => item.id !== id);
+    moduleData.secondary = moduleData.secondary.filter((item) => item.id !== id);
   } else {
     // post to api to remove
   }
 };
 
 const addSecondaryIdentifier = () => {
-  moduleData.value.secondary.push({
+  moduleData.secondary.push({
     id: nanoid(),
     domain: "",
     identifier: "",
@@ -84,8 +84,8 @@ const saveMetadata = (e: MouseEvent) => {
   formRef.value?.validate((errors) => {
     if (!errors) {
       const data = {
-        primary: moduleData.value.primary,
-        secondary: moduleData.value.secondary.map((item) => {
+        primary: moduleData.primary,
+        secondary: moduleData.secondary.map((item) => {
           const entry = {
             domain: item.domain,
             identifier: item.identifier,

@@ -113,6 +113,8 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data: any = {};
 
+      console.log("moduleData", moduleData.value);
+
       if (isInterventionalStudy) {
         data.design_allocation = moduleData.value.design_info.allocation;
         data.design_intervention_model = moduleData.value.design_info.intervention_model;
