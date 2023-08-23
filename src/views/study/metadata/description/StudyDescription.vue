@@ -64,12 +64,11 @@ const saveMetadata = (e: MouseEvent) => {
       class="pr-4"
     >
       <SubHeadingText
-        spacing="mb-0"
         title="Brief Summary"
         description="Short description of the clinical study, written in language intended for the lay public."
       />
 
-      <n-form-item label="" path="brief_summary">
+      <n-form-item label="Brief_summary" path="brief_summary" :show-label="false">
         <n-input
           v-model:value="moduleData.brief_summary"
           type="textarea"
@@ -83,12 +82,11 @@ const saveMetadata = (e: MouseEvent) => {
       <n-divider />
 
       <SubHeadingText
-        spacing="mb-0"
         title="Detailed Description"
         description="Extended description of the study. Do not include the entire protocol; do not duplicate information recorded in other data elements, such as Eligibility Criteria or outcome measures.For Patient Registries: Also describe the applicable registry procedures and other quality factors (for example, third party certification, on-site audit). In particular, summarize any procedures implemented as part of the patient registry, including, but not limited to the following: Quality assurance plan that addresses data validation and registry procedures, including any plans for site monitoring and auditing. Data checks to compare data entered into the registry against predefined rules for range or consistency with other data fields in the registry. Source data verification to assess the accuracy, completeness, or representativeness of registry data by comparing the data to external data sources (for example, medical records, paper or electronic case report forms, or interactive voice response systems). Data dictionary that contains detailed descriptions of each variable used by the registry, including the source of the variable, coding information if used (for example, World Health Organization Drug Dictionary, MedDRA), and normal ranges if relevant. Standard Operating Procedures to address registry operations and analysis activities, such as patient recruitment, data collection, data management, data analysis, reporting for adverse events, and change management. Sample size assessment to specify the number of participants or participant years necessary to demonstrate an effect. Plan for missing data to address situations where variables are reported as missing, unavailable, non-reported, uninterpretable, or considered missing because of data inconsistency or out-of-range results. Statistical analysis plan describing the analytical principles and statistical techniques to be employed in order to address the primary and secondary objectives, as specified in the study protocol or plan. -- Needs to be shortened"
       />
 
-      <n-form-item label="" path="detailed_description">
+      <n-form-item label="Detailed Description" path="detailed_description" :show-label="false">
         <n-input
           v-model:value="moduleData.detailed_description"
           type="textarea"

@@ -63,3 +63,46 @@ export interface StudySponsorCollaboratorsModule {
   lead_sponsor_name: string;
   responsible_party: StudyResponsibleParty;
 }
+
+export interface StudyDesignModuleEnrollmentInfo {
+  enrollment_count: number;
+  enrollment_type: string;
+}
+
+export interface InterventionalStudyDesignInfo {
+  allocation: string;
+  intervention_model: string;
+  intervention_model_description: string;
+  masking: string;
+  masking_description: string;
+  primary_purpose: string;
+  who_masked_list: string[];
+}
+export interface ObservationalStudyDesignInfo {
+  observational_model_list: string[];
+  time_perspective_list: string[];
+}
+
+export interface StudyDesignInfo
+  extends InterventionalStudyDesignInfo,
+    ObservationalStudyDesignInfo {}
+
+export interface InterventionalStudyDesignModule {
+  number_arms: number;
+  phase_list: string[];
+}
+
+export interface ObservationalStudyDesignModule {
+  bio_spec_description: string;
+  bio_spec_retention: string;
+  number_groups_cohorts: number;
+  target_duration: string;
+}
+
+export interface StudyDesignModule
+  extends InterventionalStudyDesignModule,
+    ObservationalStudyDesignModule {
+  design_info: StudyDesignInfo;
+  enrollment_info: StudyDesignModuleEnrollmentInfo;
+  study_type: string;
+}

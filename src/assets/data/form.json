@@ -159,5 +159,221 @@
       "label": "Other",
       "value": "Other"
     }
+  ],
+  "studyMetadataStudyTypeOptions": [
+    {
+      "description": "A clinical trial. Participants are assigned prospectively to an intervention or interventions according to a protocol to evaluate the effect of the intervention(s) on biomedical or other health related outcomes.",
+      "label": "Interventional",
+      "value": "Interventional"
+    },
+    {
+      "description": "Studies in human beings in which biomedical and/or health outcomes are assessed in pre-defined groups of individuals. Participants in the study may receive diagnostic, therapeutic, or other interventions, but the investigator does not assign specific interventions to the study participants. This includes when participants receive interventions as part of routine medical care, and a researcher studies the effect of the intervention.",
+      "label": "Observational",
+      "value": "Observational"
+    },
+    {
+      "description": "An observational study that is also considered to be a Patient Registry. Note: The Agency for Healthcare Research and Quality (AHRQ) defines a Patient Registry as including an organized system that uses observational methods to collect uniform data (clinical and other) prospectively for a population defined by a particular disorder/disease, condition (including susceptibility to a disorder), or exposure (including products, healthcare services, and/or procedures) and that serves a predetermined scientific, clinical, or policy purpose. Patient registries may be single purpose or on-going data collection programs that address one or more questions.",
+      "disabled": true,
+      "label": "Observational Patient Registry",
+      "value": "Observational Patient Registry"
+    },
+    {
+      "description": "An investigational drug product (including biological product) available through expanded access for patients who do not qualify for enrollment in a clinical trial. Expanded Access includes all expanded access types under section 561 of the Federal Food, Drug, and Cosmetic Act: (1) for individual patients, including emergency use; (2) for intermediate-size patient populations; and (3) under a treatment IND or treatment protocol. (For more information on data requirements for this Study Type, see Expanded Access Data Element $defs).",
+      "disabled": true,
+      "label": "Expanded Access",
+      "value": "Expanded Access"
+    }
+  ],
+  "studyMetadataAllocationOptions": [
+    {
+      "description": "For a single-arm trial.",
+      "label": "N/A",
+      "value": "N/A"
+    },
+    {
+      "description": "Participants are assigned to intervention groups by chance.",
+      "label": "Randomized",
+      "value": "Randomized"
+    },
+    {
+      "description": "Participants are expressly assigned to intervention groups through a non-random method, such as physician choice.",
+      "label": "Non-randomized",
+      "value": "Non-randomized"
+    }
+  ],
+  "studyMetadataInterventionModelOptions": [
+    {
+      "description": "One or more interventions are being evaluated for treating a disease, syndrome, or condition.",
+      "label": "Treatment",
+      "value": "Treatment"
+    },
+    {
+      "description": "One or more interventions are being assessed for preventing the development of a specific disease or health condition.",
+      "label": "Prevention",
+      "value": "Prevention"
+    },
+    {
+      "description": "One or more interventions are being evaluated for identifying a disease or health condition.",
+      "label": "Diagnostic",
+      "value": "Diagnostic"
+    },
+    {
+      "description": "One or more interventions are evaluated for maximizing comfort, minimizing side effects, or mitigating against a decline in the participant's health or function.",
+      "label": "Supportive Care",
+      "value": "Supportive Care"
+    },
+    {
+      "description": "One or more interventions are assessed or examined for identifying a condition, or risk factors for a condition, in people who are not yet known to have the condition or risk factor.",
+      "label": "Screening",
+      "value": "Screening"
+    },
+    {
+      "description": "One or more interventions for evaluating the delivery, processes, management, organization, or financing of healthcare.",
+      "label": "Health Services Research",
+      "value": "Health Services Research"
+    },
+    {
+      "description": "One or more interventions for examining the basic mechanism of action (for example, physiology or biomechanics of an intervention).",
+      "label": "Basic Science",
+      "value": "Basic Science"
+    },
+    {
+      "description": "An intervention of a device product is being evaluated in a small clinical trial (generally fewer than 10 participants) to determine the feasibility of the product, or a clinical trial to test a prototype device for feasibility and not health outcomes.",
+      "label": "Device Feasibility",
+      "value": "Device Feasibility"
+    }
+  ],
+  "studyMetadataPrimaryPurposeOptions": [
+    {
+      "description": "Clinical trials with a single arm.",
+      "label": "Single Group Assignment",
+      "value": "Single Group Assignment"
+    },
+    {
+      "description": "Participants are assigned to one of two or more groups in parallel for the duration of the study.",
+      "label": "Parallel Assignment",
+      "value": "Parallel Assignment"
+    },
+    {
+      "description": "Participants receive one of two (or more) alternative interventions during the initial phase of the study and receive the other intervention during the second phase of the study.",
+      "label": "Crossover Assignment",
+      "value": "Crossover Assignment"
+    },
+    {
+      "description": "Two or more interventions, each alone and in combination, are evaluated in parallel against a control group.",
+      "label": "Factorial Assignment",
+      "value": "Factorial Assignment"
+    },
+    {
+      "description": "Groups of participants are assigned to receive interventions based on prior milestones being reached in the study, such as in some dose escalation and adaptive design studies.",
+      "label": "Sequential Assignment",
+      "value": "Sequential Assignment"
+    }
+  ],
+  "studyMetadataObservationalModelsOptions": [
+    {
+      "label": "Cohort",
+      "value": "Cohort"
+    },
+    {
+      "label": "Case-Control",
+      "value": "Case-Control"
+    },
+    {
+      "label": "Case-Only",
+      "value": "Case-Only"
+    },
+    {
+      "label": "Case-Crossover",
+      "value": "Case-Crossover"
+    },
+    {
+      "label": "Ecologic or Community",
+      "value": "Ecologic or Community"
+    },
+    {
+      "label": "Family-Based",
+      "value": "Family-Based"
+    },
+    {
+      "label": "Other",
+      "value": "Other"
+    }
+  ],
+  "studyMetadataTimePerspectiveOptions": [
+    {
+      "label": "Retrospective",
+      "value": "Retrospective"
+    },
+    {
+      "label": "Prospective",
+      "value": "Prospective"
+    },
+    {
+      "label": "Cross-sectional",
+      "value": "Cross-sectional"
+    },
+    {
+      "label": "Other",
+      "value": "Other"
+    }
+  ],
+  "studyMetadataPhaseOptions": [
+    {
+      "label": "Early Phase 1",
+      "value": "Early Phase 1"
+    },
+    {
+      "label": "Phase 1",
+      "value": "Phase 1"
+    },
+    {
+      "label": "Phase 1/2",
+      "value": "Phase 1/2"
+    },
+    {
+      "label": "Phase 2",
+      "value": "Phase 2"
+    },
+    {
+      "label": "Phase 2/3",
+      "value": "Phase 2/3"
+    },
+    {
+      "label": "Phase 3",
+      "value": "Phase 3"
+    },
+    {
+      "label": "Phase 4",
+      "value": "Phase 4"
+    },
+    {
+      "label": "N/A",
+      "value": "N/A"
+    }
+  ],
+  "studyMetadataBioSpecRetentionOptions": [
+    {
+      "label": "None Retained",
+      "value": "None Retained"
+    },
+    {
+      "label": "Samples With DNA",
+      "value": "Samples With DNA"
+    },
+    {
+      "label": "Samples Without DNA",
+      "value": "Samples Without DNA"
+    }
+  ],
+  "studyMetadataEnrollmentTypeOptions": [
+    {
+      "label": "Actual",
+      "value": "Actual"
+    },
+    {
+      "label": "Anticipated",
+      "value": "Anticipated"
+    }
   ]
 }
