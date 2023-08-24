@@ -375,5 +375,47 @@
       "label": "Anticipated",
       "value": "Anticipated"
     }
+  ],
+  "studyMetadataInterventionsTypeOptions": [
+    {
+      "label": "Drug",
+      "value": "Drug"
+    },
+    {
+      "label": "Device",
+      "value": "Device"
+    },
+    {
+      "label": "Biological/Vaccine",
+      "value": "Biological/Vaccine"
+    },
+    {
+      "label": "Procedure/Surgery",
+      "value": "Procedure/Surgery"
+    },
+    {
+      "label": "Radiation",
+      "value": "Radiation"
+    },
+    {
+      "label": "Genetic",
+      "value": "Genetic"
+    },
+    {
+      "label": "Dietary Supplement",
+      "value": "Dietary Supplement"
+    },
+    {
+      "label": "Combination Product",
+      "value": "Combination Product"
+    },
+    {
+      "label": "Diagnostic Test",
+      "value": "Diagnostic Test"
+    },
+    {
+      "label": "Other",
+      "value": "Other"
+    }
   ]
 }

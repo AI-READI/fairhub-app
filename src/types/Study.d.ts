@@ -106,3 +106,25 @@ export interface StudyDesignModule
   enrollment_info: StudyDesignModuleEnrollmentInfo;
   study_type: string | null;
 }
+
+export interface StudyIntervention {
+  id: string;
+  name: string;
+  arm_group_label_list: string[];
+  description: string;
+  origin: string;
+  other_name_list: string[];
+  type: string | null;
+}
+
+export interface StudyArm {
+  description: string;
+  intervention_list: string[];
+  label: string;
+  type: string;
+}
+
+export interface StudyArmsInterventionsModule {
+  arms: StudyArm[];
+  interventions: StudyIntervention[];
+}

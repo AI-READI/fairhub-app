@@ -1,42 +1,93 @@
 <script setup lang="ts">
 import type { FormInst, FormRules } from "naive-ui";
-import { useMessage } from "naive-ui";
-import { onBeforeMount, ref } from "vue";
-import { useRouter } from "vue-router";
+import { nanoid } from "nanoid";
 
-import { useAuthStore } from "@/stores/auth";
+import FORM_JSON from "@/assets/data/form.json";
+import CollapsibleCard from "@/components/cards/CollapsibleCard.vue";
+import type { StudyArmsInterventionsModule } from "@/types/Study";
 
-const router = useRouter();
-const authStore = useAuthStore();
-const { error } = useMessage();
-
-onBeforeMount(() => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
-  }
-});
+const route = useRoute();
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData = ref({
-  title: "",
+const moduleData: StudyArmsInterventionsModule = reactive({
+  arms: [],
+  interventions: [
+    {
+      id: nanoid(),
+      name: "",
+      arm_group_label_list: [],
+      description: "",
+      origin: "remote",
+      other_name_list: [],
+      type: null,
+    },
+  ],
 });
 
 const rules: FormRules = {
-  title: [
-    {
-      message: "Please input a study title",
+  primary: {
+    identifier: {
+      message: "Please enter a study identifier",
       required: true,
       trigger: ["blur", "input"],
     },
-  ],
+    type: {
+      message: "Please select a study type",
+      required: true,
+      trigger: ["blur", "change"],
+    },
+  },
+};
+
+const dynamicInputRule = {
+  trigger: ["blur", "input"],
+  validator: (rule: unknown, value: string) => {
+    console.log(value);
+    if (!value || value === "") {
+      return new Error("Please enter a value for this field");
+    }
+    return true;
+  },
+};
+
+const addEntryToArmGroupLabelList = () => {
+  return "";
+};
+
+const addEntryToOtherNameList = () => {
+  return "";
+};
+
+const removeIntervention = (id: string) => {
+  const item = moduleData.interventions.find((item) => item.id === id);
+
+  if (item && item.origin === "local") {
+    moduleData.interventions = moduleData.interventions.filter((item) => item.id !== id);
+  } else {
+    // post to api to remove
+  }
+};
+
+const addIntervention = () => {
+  moduleData.interventions.push({
+    id: nanoid(),
+    name: "",
+    arm_group_label_list: [],
+    description: "",
+    origin: "local",
+    other_name_list: [],
+    type: null,
+  });
 };
 
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate((errors) => {
     if (!errors) {
+      // console.log(data);
+
+      // post to api
       console.log("success");
     } else {
       console.log("error");
@@ -48,7 +99,14 @@ const saveMetadata = (e: MouseEvent) => {
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
-    <HeadingText title="Study Interventions" description="Some description text here" />
+    <PageBackNavigationHeader
+      title="Interventions & Arms"
+      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+      linkName="study:overview"
+      :linkParams="{
+        studyId: route.params.studyId,
+      }"
+    />
 
     <n-divider />
 
@@ -60,9 +118,140 @@ const saveMetadata = (e: MouseEvent) => {
       label-placement="top"
       class="pr-4"
     >
-      <n-form-item label="Title" path="title">
-        <n-input v-model:value="moduleData.title" placeholder="Add a title" />
-      </n-form-item>
+      <h3>Interventions</h3>
+
+      <p class="pb-8 pt-2">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+        voluptatem, quibusdam, quos voluptas quae quas voluptatum
+      </p>
+
+      <CollapsibleCard
+        v-for="(item, index) in moduleData.interventions"
+        :key="item.id"
+        class="mb-5 shadow-md"
+        :title="`Intervention ${index + 1}`"
+        bordered
+      >
+        <template #header-extra>
+          <n-popconfirm @positive-click="removeIntervention(item.id)">
+            <template #trigger>
+              <n-button type="error" secondary>
+                <template #icon>
+                  <f-icon icon="ep:delete" />
+                </template>
+
+                Remove Intervention
+              </n-button>
+            </template>
+
+            Are you sure you want to remove this intervention?
+          </n-popconfirm>
+        </template>
+
+        <n-form-item
+          label="Type"
+          :path="`interventions[${index}].type`"
+          :rule="{
+            message: 'Please select an intervention type',
+            required: true,
+            trigger: ['blur', 'change'],
+          }"
+        >
+          <n-select
+            v-model:value="item.type"
+            placeholder="Drug"
+            clearable
+            :options="FORM_JSON.studyMetadataInterventionsTypeOptions"
+          />
+        </n-form-item>
+
+        <n-form-item
+          label="Name"
+          :path="`interventions[${index}].name`"
+          :rule="{
+            message: 'Please enter an intervention name',
+            required: true,
+            trigger: ['blur', 'input'],
+          }"
+        >
+          <n-input v-model:value="item.name" placeholder="Lorem Ipsum" clearable />
+        </n-form-item>
+
+        <n-form-item label="Description" :path="`interventions[${index}].description`">
+          <n-input
+            v-model:value="item.description"
+            placeholder="Lorem Ipsum"
+            clearable
+            type="textarea"
+            :rows="3"
+          />
+        </n-form-item>
+
+        <n-form-item
+          label="Arm Group Labels"
+          :path="`interventions[${index}].arm_group_label_list`"
+          ignore-path-change
+          :rule="{
+            message: 'Please add at least one arm group label',
+            required: true,
+            type: 'array',
+            trigger: ['blur', 'input'],
+          }"
+        >
+          <!-- outer form item is only used to diplay the label and the required mark -->
+
+          <n-dynamic-input
+            v-model:value="item.arm_group_label_list"
+            #="{ index: idx, value }"
+            :on-create="addEntryToArmGroupLabelList"
+          >
+            <n-form-item
+              ignore-path-change
+              :show-label="false"
+              :path="`interventions[${index}].arm_group_label_list[${idx}]`"
+              :rule="dynamicInputRule"
+              class="w-full"
+            >
+              <n-input
+                v-model:value="item.arm_group_label_list[idx]"
+                placeholder="Name"
+                @keydown.enter.prevent
+              />
+            </n-form-item>
+          </n-dynamic-input>
+        </n-form-item>
+
+        <n-form-item label="Other Names">
+          <!-- outer form item is only used to diplay the label -->
+
+          <n-dynamic-input
+            v-model:value="item.other_name_list"
+            #="{ index: idx, value }"
+            :on-create="addEntryToOtherNameList"
+          >
+            <n-form-item
+              ignore-path-change
+              :show-label="false"
+              :path="`interventions[${index}].other_name_list[${idx}]`"
+              class="w-full"
+            >
+              <n-input
+                v-model:value="item.other_name_list[idx]"
+                placeholder="Name"
+                @keydown.enter.prevent
+              />
+            </n-form-item>
+          </n-dynamic-input>
+        </n-form-item>
+      </CollapsibleCard>
+
+      <n-button class="my-10 w-full" dashed type="success" @click="addIntervention">
+        <template #icon>
+          <f-icon icon="gridicons:create" />
+        </template>
+
+        Add an Intervention
+      </n-button>
 
       <n-divider />
 
@@ -71,6 +260,7 @@ const saveMetadata = (e: MouseEvent) => {
           <template #icon>
             <f-icon icon="material-symbols:save" />
           </template>
+
           Save Metadata
         </n-button>
       </div>
