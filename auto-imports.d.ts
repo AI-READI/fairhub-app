@@ -81,6 +81,7 @@ declare global {
     PropType,
     Ref,
     VNode,
+    WritableComputedRef,
   } from "vue";
   // @ts-ignore
   export type { RouteLocationRaw } from "vue-router";

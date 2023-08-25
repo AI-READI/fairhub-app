@@ -11,7 +11,16 @@ const route = useRoute();
 const formRef = ref<FormInst | null>(null);
 
 const moduleData: StudyArmsInterventionsModule = reactive({
-  arms: [],
+  arms: [
+    {
+      id: nanoid(),
+      description: "",
+      intervention_list: [],
+      label: "",
+      origin: "remote",
+      type: null,
+    },
+  ],
   interventions: [
     {
       id: nanoid(),
@@ -23,6 +32,7 @@ const moduleData: StudyArmsInterventionsModule = reactive({
       type: null,
     },
   ],
+  study_type: "interventional",
 });
 
 const rules: FormRules = {
@@ -59,11 +69,25 @@ const addEntryToOtherNameList = () => {
   return "";
 };
 
+const addEntryToArmGroupInterventionList = () => {
+  return "";
+};
+
 const removeIntervention = (id: string) => {
   const item = moduleData.interventions.find((item) => item.id === id);
 
   if (item && item.origin === "local") {
     moduleData.interventions = moduleData.interventions.filter((item) => item.id !== id);
+  } else {
+    // post to api to remove
+  }
+};
+
+const removeArmGroup = (id: string) => {
+  const item = moduleData.arms.find((item) => item.id === id);
+
+  if (item && item.origin === "local") {
+    moduleData.arms = moduleData.arms.filter((item) => item.id !== id);
   } else {
     // post to api to remove
   }
@@ -81,11 +105,32 @@ const addIntervention = () => {
   });
 };
 
+const addArmGroup = () => {
+  moduleData.arms.push({
+    id: nanoid(),
+    description: "",
+    intervention_list: [],
+    label: "",
+    origin: "local",
+    type: null,
+  });
+};
+
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate((errors) => {
     if (!errors) {
-      // console.log(data);
+      const data = {};
+
+      data["interventions"] = moduleData.interventions;
+      data["arms"] = moduleData.arms;
+
+      if (moduleData.study_type !== "interventional") {
+        delete data["arms"].type;
+        delete data["arms"].intervention_list;
+      }
+
+      console.log(data);
 
       // post to api
       console.log("success");
@@ -251,6 +296,115 @@ const saveMetadata = (e: MouseEvent) => {
         </template>
 
         Add an Intervention
+      </n-button>
+
+      <n-divider />
+
+      <h3>Arms</h3>
+
+      <p class="pb-8 pt-2">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+        voluptatem, quibusdam, quos voluptas quae quas voluptatum
+      </p>
+
+      <CollapsibleCard
+        v-for="(item, index) in moduleData.arms"
+        :key="item.id"
+        class="mb-5 shadow-md"
+        :title="`Arm ${index + 1}`"
+        bordered
+      >
+        <template #header-extra>
+          <n-popconfirm @positive-click="removeArmGroup(item.id)">
+            <template #trigger>
+              <n-button type="error" secondary>
+                <template #icon>
+                  <f-icon icon="ep:delete" />
+                </template>
+
+                Remove Arm
+              </n-button>
+            </template>
+
+            Are you sure you want to remove this intervention?
+          </n-popconfirm>
+        </template>
+
+        <n-form-item
+          label="Label"
+          :path="`arms[${index}].label`"
+          :rule="{
+            message: 'Please enter an arm group label',
+            required: true,
+            trigger: ['blur', 'input'],
+          }"
+        >
+          <n-input v-model:value="item.label" placeholder="Lorem Ipsum" clearable />
+        </n-form-item>
+
+        <n-form-item label="Description" :path="`arms[${index}].description`">
+          <n-input
+            v-model:value="item.description"
+            placeholder="Lorem Ipsum"
+            clearable
+            type="textarea"
+            :rows="3"
+          />
+        </n-form-item>
+
+        <n-form-item
+          label="Type"
+          :path="`arms[${index}].type`"
+          v-if="moduleData.study_type == 'interventional'"
+          :rule="{
+            message: 'Please select an intervention type',
+            required: moduleData.study_type === 'interventional',
+            trigger: ['blur', 'change'],
+          }"
+        >
+          <n-select
+            v-model:value="item.type"
+            placeholder="Experimental"
+            clearable
+            :options="FORM_JSON.studyMetadataArmsTypeOptions"
+          />
+        </n-form-item>
+
+        <n-form-item
+          v-if="moduleData.study_type == 'interventional'"
+          label="Interventions"
+          :path="`arms[${index}].intervention_list`"
+          ignore-path-change
+        >
+          <!-- outer form item is only used to diplay the label and the required mark -->
+
+          <n-dynamic-input
+            v-model:value="item.intervention_list"
+            #="{ index: idx, value }"
+            :on-create="addEntryToArmGroupInterventionList"
+          >
+            <n-form-item
+              ignore-path-change
+              :show-label="false"
+              :path="`arms[${index}].intervention_list[${idx}]`"
+              class="w-full"
+            >
+              <n-input
+                v-model:value="item.intervention_list[idx]"
+                placeholder="Intervention"
+                @keydown.enter.prevent
+              />
+            </n-form-item>
+          </n-dynamic-input>
+        </n-form-item>
+      </CollapsibleCard>
+
+      <n-button class="my-10 w-full" dashed type="success" @click="addArmGroup">
+        <template #icon>
+          <f-icon icon="gridicons:create" />
+        </template>
+
+        Add an Arm Group
       </n-button>
 
       <n-divider />

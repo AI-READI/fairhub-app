@@ -417,5 +417,31 @@
       "label": "Other",
       "value": "Other"
     }
+  ],
+  "studyMetadataArmsTypeOptions": [
+    {
+      "label": "Experimental",
+      "value": "Experimental"
+    },
+    {
+      "label": "Active Comparator",
+      "value": "Active Comparator"
+    },
+    {
+      "label": "Placebo Comparator",
+      "value": "Placebo Comparator"
+    },
+    {
+      "label": "Sham Comparator",
+      "value": "Sham Comparator"
+    },
+    {
+      "label": "No Intervention",
+      "value": "No Intervention"
+    },
+    {
+      "label": "Other",
+      "value": "Other"
+    }
   ]
 }

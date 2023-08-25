@@ -118,13 +118,16 @@ export interface StudyIntervention {
 }
 
 export interface StudyArm {
+  id: string;
   description: string;
   intervention_list: string[];
   label: string;
+  origin: string;
   type: string;
 }
 
 export interface StudyArmsInterventionsModule {
   arms: StudyArm[];
   interventions: StudyIntervention[];
+  study_type: string;
 }
