@@ -76,21 +76,22 @@ const addEntryToArmGroupInterventionList = () => {
 const removeIntervention = (id: string) => {
   const item = moduleData.interventions.find((item) => item.id === id);
 
-  if (item && item.origin === "local") {
-    moduleData.interventions = moduleData.interventions.filter((item) => item.id !== id);
-  } else {
+  if (item && item.origin === "remote") {
+    console.log("post to api to remove");
     // post to api to remove
   }
+
+  moduleData.interventions = moduleData.interventions.filter((item) => item.id !== id);
 };
 
 const removeArmGroup = (id: string) => {
   const item = moduleData.arms.find((item) => item.id === id);
 
-  if (item && item.origin === "local") {
-    moduleData.arms = moduleData.arms.filter((item) => item.id !== id);
-  } else {
-    // post to api to remove
+  if (item && item.origin === "remote") {
+    console.log("post to api to remove");
   }
+
+  moduleData.arms = moduleData.arms.filter((item) => item.id !== id);
 };
 
 const addIntervention = () => {
@@ -326,7 +327,7 @@ const saveMetadata = (e: MouseEvent) => {
               </n-button>
             </template>
 
-            Are you sure you want to remove this intervention?
+            Are you sure you want to remove this Arm?
           </n-popconfirm>
         </template>
 

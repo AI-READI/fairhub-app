@@ -131,3 +131,25 @@ export interface StudyArmsInterventionsModule {
   interventions: StudyIntervention[];
   study_type: string;
 }
+
+export interface StudyEligiblityModule {
+  criteria: {
+    exclusion_criteria: string[];
+    inclusion_criteria: string[];
+  };
+  gender: string | null;
+  gender_based: string | null;
+  gender_description: string;
+  healthy_volunteers: string | null;
+  maximum_age: {
+    age: string | null;
+    unit: number | null;
+  };
+  minimum_age: {
+    age: string | null;
+    unit: number | null;
+  };
+  sampling_method: string | null;
+  study_population: string;
+  study_type: string;
+}

@@ -443,5 +443,79 @@
       "label": "Other",
       "value": "Other"
     }
+  ],
+  "studyMetadataEligibilityGenderOptions": [
+    {
+      "label": "All",
+      "value": "All"
+    },
+    {
+      "label": "Female",
+      "value": "Female"
+    },
+    {
+      "label": "Male",
+      "value": "Male"
+    }
+  ],
+  "studyMetadataEligibilityGenderBasedOptions": [
+    {
+      "label": "Yes",
+      "value": "Yes"
+    },
+    {
+      "label": "No",
+      "value": "No"
+    }
+  ],
+  "studyMetadataEligibilityAgeUnitOptions": [
+    {
+      "label": "Years",
+      "value": "Years"
+    },
+    {
+      "label": "Months",
+      "value": "Months"
+    },
+    {
+      "label": "Weeks",
+      "value": "Weeks"
+    },
+    {
+      "label": "Days",
+      "value": "Days"
+    },
+    {
+      "label": "Hours",
+      "value": "Hours"
+    },
+    {
+      "label": "Minutes",
+      "value": "Minutes"
+    },
+    {
+      "label": "N/A",
+      "value": "N/A"
+    }
+  ],
+  "studyMetadataEligibilityHealthyVolunteersOptions": [
+    {
+      "label": "Yes",
+      "value": "Yes"
+    },
+    {
+      "label": "No",
+      "value": "No"
+    }
+  ],
+  "studyMetadataEligibilitySamplingMethodOptions": [
+    {
+      "label": "Probability Sample",
+      "value": "Probability Sample"
+    },
+    {
+      "label": "Non-Probability Sample",
+      "value": "Non-Probability Sample"
+    }
   ]
 }
