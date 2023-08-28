@@ -195,7 +195,7 @@ const saveMetadata = (e: MouseEvent) => {
           />
         </n-form-item>
 
-        <n-form-item label="Age Unit" path="minimum_age.unit" class="min-w-[200px]">
+        <n-form-item label="Age Unit" path="minimum_age.unit" class="min-w-[290px]">
           <n-select
             v-model:value="moduleData.minimum_age.unit"
             placeholder="Weeks"
@@ -215,7 +215,7 @@ const saveMetadata = (e: MouseEvent) => {
           />
         </n-form-item>
 
-        <n-form-item label="Age Unit" path="maximum_age.unit" class="min-w-[200px]">
+        <n-form-item label="Age Unit" path="maximum_age.unit" class="min-w-[290px]">
           <n-select
             v-model:value="moduleData.maximum_age.unit"
             placeholder="Months"

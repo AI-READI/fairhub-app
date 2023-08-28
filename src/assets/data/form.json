@@ -517,5 +517,19 @@
       "label": "Non-Probability Sample",
       "value": "Non-Probability Sample"
     }
+  ],
+  "studyMetadataContactsOverallOfficialRole": [
+    {
+      "label": "Study Chair",
+      "value": "Study Chair"
+    },
+    {
+      "label": "Study Director",
+      "value": "Study Director"
+    },
+    {
+      "label": "Study Principal Investigator",
+      "value": "Study Principal Investigator"
+    }
   ]
 }

@@ -153,3 +153,26 @@ export interface StudyEligiblityModule {
   study_population: string;
   study_type: string;
 }
+
+export interface StudyContact {
+  id: string;
+  name: string;
+  affiliation: string;
+  email: string;
+  origin: string;
+  phone: string;
+  phone_ext: string;
+}
+
+export interface StudyOverallOfficial {
+  id: string;
+  name: string;
+  affiliation: string;
+  origin: string;
+  role: string | null;
+}
+
+export interface StudyContacts {
+  central_contact_list: StudyContact[];
+  overall_official_list: StudyOverallOfficial[];
+}
