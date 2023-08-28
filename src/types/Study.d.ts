@@ -142,12 +142,12 @@ export interface StudyEligiblityModule {
   gender_description: string;
   healthy_volunteers: string | null;
   maximum_age: {
-    age: string | null;
-    unit: number | null;
+    age: number | null;
+    unit: string | null;
   };
   minimum_age: {
-    age: string | null;
-    unit: number | null;
+    age: number | null;
+    unit: string | null;
   };
   sampling_method: string | null;
   study_population: string;
