@@ -191,3 +191,42 @@ export interface StudyContactsLocationsModule {
   location_list: StudyLocation[];
   overall_official_list: StudyOverallOfficial[];
 }
+
+export interface StudyIPDSharing {
+  access_criteria: string;
+  description: string;
+  info_type_list: string[];
+  ipd_sharing: string | null;
+  time_frame: string;
+  url: string;
+}
+
+export interface StudyReference {
+  id: string;
+  citation: string;
+  identifier: string;
+  origin: string;
+  type: string | null;
+}
+
+export interface StudyLink {
+  id: string;
+  label: string;
+  origin: string;
+  url: string;
+}
+
+export interface StudyIPD {
+  id: string;
+  comment: string;
+  identifier: string;
+  origin: string;
+  type: string | null;
+  url: string;
+}
+
+export interface StudyReferencesModule {
+  ipd_list: StudyIPD[];
+  link_list: StudyLink[];
+  reference_list: StudyReference[];
+}

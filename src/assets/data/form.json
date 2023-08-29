@@ -573,5 +573,71 @@
       "label": "Terminated",
       "value": "Terminated"
     }
+  ],
+  "studyMetadataIPDSharingOptions": [
+    {
+      "label": "Yes",
+      "value": "Yes"
+    },
+    {
+      "label": "No",
+      "value": "No"
+    },
+    {
+      "label": "Undecided",
+      "value": "Undecided"
+    }
+  ],
+  "studyMetadataIPDSharingInfoTypeOptions": [
+    {
+      "label": "Study Protocol",
+      "value": "Study Protocol"
+    },
+    {
+      "label": "Statistical Analysis Plan (SAP)",
+      "value": "Statistical Analysis Plan (SAP)"
+    },
+    {
+      "label": "Informed Consent Form (ICF)",
+      "value": "Informed Consent Form (ICF)"
+    },
+    {
+      "label": "Clinical Study Report (CSR)",
+      "value": "Clinical Study Report (CSR)"
+    },
+    {
+      "label": "Analytic Code",
+      "value": "Analytic Code"
+    }
+  ],
+  "studyMetadataReferencesIPDTypeOptions": [
+    {
+      "label": "Individual Participant Data Set",
+      "value": "Individual Participant Data Set"
+    },
+    {
+      "label": "Study Protocol",
+      "value": "Study Protocol"
+    },
+    {
+      "label": "Statistical Analysis Plan",
+      "value": "Statistical Analysis Plan"
+    },
+    {
+      "label": "Informed Consent Form",
+      "value": "Informed Consent Form"
+    },
+    {
+      "label": "Clinical Study Report",
+      "value": "Clinical Study Report"
+    },
+    {
+      "label": "Analytic Code",
+      "value": "Analytic Code"
+    },
+    {
+      "label": "Other",
+      "value": "Other"
+    }
   ]
 }
