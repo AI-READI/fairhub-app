@@ -172,7 +172,22 @@ export interface StudyOverallOfficial {
   role: string | null;
 }
 
-export interface StudyContacts {
+export interface StudyLocationContact extends Omit<StudyContact, "affiliation"> {}
+
+export interface StudyLocation {
+  id: string;
+  city: string;
+  contact_list: StudyLocationContact[];
+  country: string;
+  facility: string;
+  origin: string;
+  state: string;
+  status: string | null;
+  zip: string;
+}
+
+export interface StudyContactsLocationsModule {
   central_contact_list: StudyContact[];
+  location_list: StudyLocation[];
   overall_official_list: StudyOverallOfficial[];
 }

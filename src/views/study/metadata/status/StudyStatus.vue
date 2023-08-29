@@ -2,6 +2,7 @@
 import dayjs from "dayjs";
 import type { FormInst, FormRules } from "naive-ui";
 
+import FORM_JSON from "@/assets/data/form.json";
 import type { StudyStatusModule } from "@/types/Study";
 
 const route = useRoute();
@@ -34,53 +35,6 @@ const rules: FormRules = {
     trigger: ["blur", "change"],
   },
 };
-
-const statusOptions = [
-  {
-    description: "Study halted prematurely, prior to enrollment of the first participant.",
-    label: "Withdrawn",
-    value: "Withdrawn",
-  },
-  {
-    description:
-      "Participants are currently being recruited, whether or not any participants have yet been enrolled.",
-    label: "Recruiting",
-    value: "Recruiting",
-  },
-  {
-    description:
-      "Study is continuing, meaning participants are receiving an intervention or being examined, but new participants are not currently being recruited or enrolled.",
-    label: "Active, not recruiting",
-    value: "Active, not recruiting",
-  },
-  {
-    description: "Participants are not yet being recruited.",
-    label: "Not yet recruiting",
-    value: "Not yet recruiting",
-  },
-  {
-    description: "Study halted prematurely but potentially will resume.",
-    label: "Suspended",
-    value: "Suspended",
-  },
-  {
-    description: "Participants are being (or will be) selected from a predetermined population.",
-    label: "Enrolling by invitation",
-    value: "Enrolling by invitation",
-  },
-  {
-    description:
-      "The study has concluded normally; participants are no longer receiving an intervention or being examined (that is, last participant's last visit has occurred).",
-    label: "Completed",
-    value: "Completed",
-  },
-  {
-    description:
-      "Study halted prematurely and will not resume; participants are no longer being examined or receiving intervention.",
-    label: "Terminated",
-    value: "Terminated",
-  },
-];
 
 const dateTypeOptions = [
   {
@@ -135,7 +89,7 @@ const saveMetadata = (e: MouseEvent) => {
           v-model:value="moduleData.overall_status"
           placeholder="Recruiting"
           clearable
-          :options="statusOptions"
+          :options="FORM_JSON.studyMetadataStatusOptions"
         />
       </n-form-item>
 

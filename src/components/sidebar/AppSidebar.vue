@@ -113,11 +113,7 @@ const UpperMenuOptions = computed(() => [
         key: "study:metadata:contacts",
         label: "Contacts",
       },
-      {
-        icon: renderIcon("material-symbols:share-location"),
-        key: "study:metadata:locations",
-        label: "Locations",
-      },
+
       {
         icon: renderIcon("icons8:share"),
         key: "study:metadata:ipd-sharing",

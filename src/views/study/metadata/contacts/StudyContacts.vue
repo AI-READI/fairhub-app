@@ -4,14 +4,15 @@ import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
 import CollapsibleCard from "@/components/cards/CollapsibleCard.vue";
-import type { StudyContacts } from "@/types/Study";
+import type { StudyContactsLocationsModule } from "@/types/Study";
 
 const route = useRoute();
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData: StudyContacts = reactive({
+const moduleData: StudyContactsLocationsModule = reactive({
   central_contact_list: [],
+  location_list: [],
   overall_official_list: [],
 });
 
@@ -55,6 +56,17 @@ const removeOverallOfficial = (id: string) => {
   );
 };
 
+const removeLocation = (id: string) => {
+  const item = moduleData.location_list.find((item) => item.id === id);
+
+  if (item && item.origin === "remote") {
+    console.log("post to api to remove");
+    // post to api to remove
+  }
+
+  moduleData.location_list = moduleData.location_list.filter((item) => item.id !== id);
+};
+
 const addCentralContact = () => {
   moduleData.central_contact_list.push({
     id: nanoid(),
@@ -74,6 +86,20 @@ const addOverallOfficial = () => {
     affiliation: "",
     origin: "local",
     role: null,
+  });
+};
+
+const addLocation = () => {
+  moduleData.location_list.push({
+    id: nanoid(),
+    city: "",
+    contact_list: [],
+    country: "",
+    facility: "",
+    origin: "local",
+    state: "",
+    status: null,
+    zip: "",
   });
 };
 
@@ -98,6 +124,17 @@ const saveMetadata = (e: MouseEvent) => {
           name: item.name,
           affiliation: item.affiliation,
           role: item.role,
+        };
+      });
+
+      data["location_list"] = moduleData.location_list.map((item) => {
+        return {
+          city: item.city,
+          contact_list: item.contact_list,
+          country: item.country,
+          facility: item.facility,
+          state: item.state,
+          zip: item.zip,
         };
       });
 
@@ -305,6 +342,108 @@ const saveMetadata = (e: MouseEvent) => {
         </template>
 
         Add an Overall Official Contact
+      </n-button>
+
+      <n-divider />
+
+      <h3>Locations</h3>
+
+      <p class="pb-8 pt-2">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+        voluptatem, quibusdam, quos voluptas quae quas voluptatum
+      </p>
+
+      <CollapsibleCard
+        v-for="(item, index) in moduleData.location_list"
+        :key="item.id"
+        class="mb-5 shadow-md"
+        :title="item.facility || `City ${index + 1}`"
+        bordered
+      >
+        <template #header-extra>
+          <n-popconfirm @positive-click="removeLocation(item.id)">
+            <template #trigger>
+              <n-button type="error" secondary>
+                <template #icon>
+                  <f-icon icon="ep:delete" />
+                </template>
+
+                Remove Location
+              </n-button>
+            </template>
+
+            Are you sure you want to remove this Location?
+          </n-popconfirm>
+        </template>
+
+        <n-form-item
+          label="Name of Facility"
+          :path="`location_list[${index}].facility`"
+          :rule="{
+            message: 'Please enter a name for the facility',
+            required: true,
+            trigger: ['blur', 'change'],
+          }"
+        >
+          <n-input v-model:value="item.facility" placeholder="Wall Rose" clearable />
+        </n-form-item>
+
+        <n-form-item
+          label="Status of Facility"
+          :path="`location_list[${index}].status`"
+          :rule="{
+            message: 'Please select a status for the facility',
+            required: true,
+            trigger: ['blur', 'change'],
+          }"
+        >
+          <n-select
+            v-model:value="item.status"
+            placeholder="Recruiting"
+            clearable
+            :options="FORM_JSON.studyMetadataStatusOptions"
+          />
+        </n-form-item>
+
+        <n-form-item
+          label="City"
+          :path="`location_list[${index}].city`"
+          :rule="{
+            message: 'Please enter a city',
+            required: true,
+            trigger: ['blur', 'change'],
+          }"
+        >
+          <n-input v-model:value="item.city" placeholder="Paradis" clearable />
+        </n-form-item>
+
+        <n-form-item label="State" :path="`location_list[${index}].state`">
+          <n-input v-model:value="item.state" placeholder="Ohio" clearable />
+        </n-form-item>
+
+        <n-form-item label="Zip Code" :path="`location_list[${index}].zip`">
+          <n-input v-model:value="item.zip" placeholder="12345" clearable />
+        </n-form-item>
+
+        <n-form-item
+          label="Country"
+          :path="`location_list[${index}].country`"
+          :rule="{
+            message: 'Please enter a country',
+            required: true,
+            trigger: ['blur', 'change'],
+          }"
+        >
+          <n-input v-model:value="item.country" placeholder="United States" clearable />
+        </n-form-item>
+      </CollapsibleCard>
+
+      <n-button class="my-10 w-full" dashed type="success" @click="addLocation">
+        <template #icon>
+          <f-icon icon="gridicons:create" />
+        </template>
+
+        Add a Location
       </n-button>
 
       <n-divider />
