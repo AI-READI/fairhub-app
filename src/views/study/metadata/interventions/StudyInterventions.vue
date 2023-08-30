@@ -121,7 +121,7 @@ const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate((errors) => {
     if (!errors) {
-      const data = {};
+      const data: any = {};
 
       data["interventions"] = moduleData.interventions;
       data["arms"] = moduleData.arms;

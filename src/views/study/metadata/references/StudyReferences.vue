@@ -97,7 +97,7 @@ const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate((errors) => {
     if (!errors) {
-      const data = {};
+      const data: any = {};
 
       data["reference_list"] = moduleData.reference_list.map((item) => {
         return {

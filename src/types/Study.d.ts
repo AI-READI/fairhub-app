@@ -65,8 +65,8 @@ export interface StudySponsorCollaboratorsModule {
 }
 
 export interface StudyDesignModuleEnrollmentInfo {
-  enrollment_count: number;
-  enrollment_type: string;
+  enrollment_count: number | null;
+  enrollment_type: string | null;
 }
 
 export interface InterventionalStudyDesignInfo {
@@ -123,7 +123,7 @@ export interface StudyArm {
   intervention_list: string[];
   label: string;
   origin: string;
-  type: string;
+  type: string | null;
 }
 
 export interface StudyArmsInterventionsModule {

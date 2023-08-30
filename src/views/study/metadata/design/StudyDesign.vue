@@ -8,7 +8,7 @@ const route = useRoute();
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData = ref<StudyDesignModule>({
+const moduleData: StudyDesignModule = reactive({
   bio_spec_description: "",
   bio_spec_retention: null,
   design_info: {
@@ -54,8 +54,8 @@ const rules: FormRules = {
   },
 };
 
-const isInterventionalStudy = computed(() => moduleData.value.study_type === "Interventional");
-const isObservationalStudy = computed(() => moduleData.value.study_type === "Observational");
+const isInterventionalStudy = computed(() => moduleData.study_type === "Interventional");
+const isObservationalStudy = computed(() => moduleData.study_type === "Observational");
 
 const maskingOptions = [
   {
@@ -113,38 +113,37 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data: any = {};
 
-      console.log("moduleData", moduleData.value);
+      console.log("moduleData", moduleData);
 
       if (isInterventionalStudy) {
-        data.design_allocation = moduleData.value.design_info.allocation;
-        data.design_intervention_model = moduleData.value.design_info.intervention_model;
+        data.design_allocation = moduleData.design_info.allocation;
+        data.design_intervention_model = moduleData.design_info.intervention_model;
         data.design_intervention_model_description =
-          moduleData.value.design_info.intervention_model_description;
-        data.design_primary_purpose = moduleData.value.design_info.primary_purpose;
+          moduleData.design_info.intervention_model_description;
+        data.design_primary_purpose = moduleData.design_info.primary_purpose;
 
-        data.design_masking = moduleData.value.design_info.masking;
-        data.design_masking_description = moduleData.value.design_info.masking_description;
-        data.design_who_masked_list = moduleData.value.design_info.who_masked_list;
+        data.design_masking = moduleData.design_info.masking;
+        data.design_masking_description = moduleData.design_info.masking_description;
+        data.design_who_masked_list = moduleData.design_info.who_masked_list;
 
-        data.phase_list = moduleData.value.phase_list;
+        data.phase_list = moduleData.phase_list;
 
-        data.number_arms = moduleData.value.number_arms;
+        data.number_arms = moduleData.number_arms;
       }
 
       if (isObservationalStudy) {
-        data.design_observational_model_list =
-          moduleData.value.design_info.observational_model_list;
-        data.design_time_perspective_list = moduleData.value.design_info.time_perspective_list;
+        data.design_observational_model_list = moduleData.design_info.observational_model_list;
+        data.design_time_perspective_list = moduleData.design_info.time_perspective_list;
 
-        data.bio_spec_retention = moduleData.value.bio_spec_retention;
-        data.bio_spec_description = moduleData.value.bio_spec_description;
+        data.bio_spec_retention = moduleData.bio_spec_retention;
+        data.bio_spec_description = moduleData.bio_spec_description;
 
-        data.target_duration = moduleData.value.target_duration;
-        data.number_groups_cohorts = moduleData.value.number_groups_cohorts;
+        data.target_duration = moduleData.target_duration;
+        data.number_groups_cohorts = moduleData.number_groups_cohorts;
       }
 
-      data.enrollment_count = moduleData.value.enrollment_info.enrollment_count;
-      data.enrollment_type = moduleData.value.enrollment_info.enrollment_type;
+      data.enrollment_count = moduleData.enrollment_info.enrollment_count;
+      data.enrollment_type = moduleData.enrollment_info.enrollment_type;
 
       console.log("data", data);
 
