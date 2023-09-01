@@ -1,19 +1,48 @@
 <script setup lang="ts">
-import LottieLoader from "@/components/loader/LottieLoader.vue";
-import FadeTransition from "@/components/transitions/FadeTransition.vue";
+import { baseURL } from "@/utils/constants";
+
 const route = useRoute();
+const router = useRouter();
+const message = useMessage();
 
 const oversight_has_dmc = ref(false);
 const showLoader = ref(false);
 
-const saveMetadata = (value: boolean) => {
+onBeforeMount(async () => {
+  const studyId = route.params.studyId;
+
+  const response = await fetch(`${baseURL}/study/${studyId}/metadata/oversight`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  });
+
+  console.log(response);
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+
+  oversight_has_dmc.value = data.oversight_has_dmc;
+});
+
+const saveMetadata = async (value: boolean) => {
   showLoader.value = true;
 
-  // TODO: save to API
+  const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/oversight`, {
+    body: JSON.stringify({
+      oversight_has_dmc: value,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "PUT",
+  });
 
-  setTimeout(() => {
-    showLoader.value = false;
-  }, 1000);
+  showLoader.value = false;
 
   console.log("saveMetadata", value);
 };

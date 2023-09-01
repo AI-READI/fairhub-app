@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import type { FormInst, FormRules } from "naive-ui";
 
+import FORM_JSON from "@/assets/data/form.json";
 import type { StudySponsorCollaboratorsModule } from "@/types/Study";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
+const router = useRouter();
+const message = useMessage();
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData = ref<StudySponsorCollaboratorsModule>({
+const moduleData = reactive<StudySponsorCollaboratorsModule>({
   lead_sponsor_name: "",
   responsible_party: {
     name: "",
@@ -32,31 +36,66 @@ const rules: FormRules = {
   },
 };
 
-const typeOptions = [
-  {
-    description: "An entity or organization that initiates the study.",
-    label: "Sponsor",
-    value: "Sponsor",
-  },
-  {
-    description: "The individual designated as a responsible party by the sponsor.",
-    label: "Principal Investigator",
-    value: "Principal Investigator",
-  },
-  {
-    description: "The individual who both initiates and conducts the study.",
-    label: "Sponsor-Investigator",
-    value: "Sponsor-Investigator",
-  },
-];
+onBeforeMount(async () => {
+  const studyId = route.params.studyId;
+
+  const response = await fetch(`${baseURL}/study/${studyId}/metadata/sponsors_collaborators`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  });
+
+  console.log(response);
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+
+  moduleData.lead_sponsor_name = data.lead_sponsor_name;
+  moduleData.responsible_party = {
+    name: data.responsible_party_investigator_name,
+    title: data.responsible_party_investigator_title,
+    affiliation: data.responsible_party_investigator_affiliation,
+    type: data.responsible_party_type,
+  };
+});
 
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (!errors) {
-      // console.log(data);
+      const data = {
+        lead_sponsor_name: moduleData.lead_sponsor_name,
+        responsible_party_investigator_affiliation: moduleData.responsible_party.affiliation,
+        responsible_party_investigator_name: moduleData.responsible_party.name,
+        responsible_party_investigator_title: moduleData.responsible_party.title,
+        responsible_party_type: moduleData.responsible_party.type,
+      };
 
-      // post to api
+      const response = await fetch(
+        `${baseURL}/study/${route.params.studyId}/metadata/sponsors_collaborators`,
+        {
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "PUT",
+        }
+      );
+
+      if (!response.ok) {
+        message.error("Something went wrong.");
+        return;
+      } else {
+        message.success("Study updated successfully.");
+
+        // refresh page
+        router.go(0);
+      }
+
       console.log("success");
     } else {
       console.log("error");
@@ -99,7 +138,7 @@ const saveMetadata = (e: MouseEvent) => {
           v-model:value="moduleData.responsible_party.type"
           placeholder="Principal Investigator"
           clearable
-          :options="typeOptions"
+          :options="FORM_JSON.studyMetadataSponsorsResponsiblePartyTypeOptions"
         />
       </n-form-item>
 

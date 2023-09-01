@@ -87,7 +87,7 @@ const saveMetadata = (e: MouseEvent) => {
         headers: {
           "Content-Type": "application/json",
         },
-        method: "POST",
+        method: "PUT",
       });
 
       if (!response.ok) {

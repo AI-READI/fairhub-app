@@ -1,54 +1,77 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
-import { nanoid } from "nanoid";
+
+import { baseURL } from "@/utils/constants";
+
 const route = useRoute();
+const router = useRouter();
+const message = useMessage();
 
 const formRef = ref<FormInst | null>(null);
 
-type Collaborator = {
-  id: string;
-  name: string;
-};
+const moduleData = ref<string[]>([]);
 
-const moduleData = ref<Collaborator[]>([
-  {
-    id: nanoid(),
-    name: "Frieda Reiss",
-  },
-  {
-    id: nanoid(),
-    name: "Grisha Yeager",
-  },
-]);
+onBeforeMount(async () => {
+  const studyId = route.params.studyId;
+
+  const response = await fetch(`${baseURL}/study/${studyId}/metadata/collaborators`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  });
+
+  console.log(response);
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+
+  moduleData.value = data;
+});
 
 const addCollaborator = () => {
-  moduleData.value.push({
-    id: nanoid(),
-    name: "",
-  });
+  moduleData.value.push("");
 };
 
-const removeCollaborator = (id: string) => {
-  const collaborators = moduleData.value;
-
-  const index = collaborators.findIndex((collaborator) => collaborator.id === id);
-
-  collaborators.splice(index, 1);
+const removeCollaborator = (index: number) => {
+  moduleData.value.splice(index, 1);
 };
 
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (!errors) {
       // remove empty collaborators
-      const collaborators = moduleData.value.filter((collaborator) => collaborator.name !== "");
+      const collaborators = moduleData.value.filter((collaborator) => collaborator !== "");
 
       // remove collaborators with duplicate names
-      const uniqueCollaborators = collaborators.filter(
-        (collaborator, index, self) => index === self.findIndex((c) => c.name === collaborator.name)
-      );
+      const uniqueCollaborators = [...new Set(collaborators)];
 
       console.log("collaborators", uniqueCollaborators);
+
+      const response = await fetch(
+        `${baseURL}/study/${route.params.studyId}/metadata/collaborators`,
+        {
+          body: JSON.stringify(uniqueCollaborators),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "PUT",
+        }
+      );
+
+      if (!response.ok) {
+        message.error("Something went wrong.");
+        return;
+      } else {
+        message.success("Study updated successfully.");
+
+        // refresh page
+        router.go(0);
+      }
 
       console.log("success");
     } else {
@@ -80,14 +103,14 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
       <n-form-item
-        v-for="collaborator in moduleData"
-        :key="collaborator.id"
+        v-for="(collaborator, index) in moduleData"
+        :key="index"
         label="Full Name"
-        path="collaborator.name"
+        path="collaborator"
       >
-        <n-input v-model:value="collaborator.name" placeholder="Historia Reiss" />
+        <n-input v-model:value="moduleData[index]" placeholder="Historia Reiss" />
 
-        <n-popconfirm @positive-click="removeCollaborator(collaborator.id)">
+        <n-popconfirm @positive-click="removeCollaborator(index)">
           <template #trigger>
             <n-button class="ml-5">
               <f-icon icon="gridicons:trash" />

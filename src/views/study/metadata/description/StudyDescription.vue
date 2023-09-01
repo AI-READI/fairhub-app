@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import type { FormInst, FormRules } from "naive-ui";
 
+import { baseURL } from "@/utils/constants";
+
 const route = useRoute();
+const router = useRouter();
+const message = useMessage();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -25,13 +29,59 @@ const rules: FormRules = {
   ],
 };
 
+onBeforeMount(async () => {
+  const studyId = route.params.studyId;
+
+  const response = await fetch(`${baseURL}/study/${studyId}/metadata/description`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  });
+
+  console.log(response);
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+
+  moduleData.value = {
+    brief_summary: data.brief_summary,
+    detailed_description: data.detailed_description,
+  };
+});
+
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (!errors) {
-      const data = moduleData.value;
+      const data = {
+        brief_summary: moduleData.value.brief_summary,
+        detailed_description: moduleData.value.detailed_description,
+      };
 
-      console.log("data", data);
+      const response = await fetch(
+        `${baseURL}/study/${route.params.studyId}/metadata/description`,
+        {
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "PUT",
+        }
+      );
+
+      if (!response.ok) {
+        message.error("Something went wrong.");
+        return;
+      } else {
+        message.success("Study updated successfully.");
+
+        // refresh page
+        router.go(0);
+      }
 
       console.log("success");
     } else {

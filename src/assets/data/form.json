@@ -182,6 +182,23 @@
       "value": "Other Identifier"
     }
   ],
+  "studyMetadataSponsorsResponsiblePartyTypeOptions": [
+    {
+      "description": "An entity or organization that initiates the study.",
+      "label": "Sponsor",
+      "value": "Sponsor"
+    },
+    {
+      "description": "The individual designated as a responsible party by the sponsor.",
+      "label": "Principal Investigator",
+      "value": "Principal Investigator"
+    },
+    {
+      "description": "The individual who both initiates and conducts the study.",
+      "label": "Sponsor-Investigator",
+      "value": "Sponsor-Investigator"
+    }
+  ],
   "studyMetadataStudyTypeOptions": [
     {
       "description": "A clinical trial. Participants are assigned prospectively to an intervention or interventions according to a protocol to evaluate the effect of the intervention(s) on biomedical or other health related outcomes.",

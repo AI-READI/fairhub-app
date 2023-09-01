@@ -3,7 +3,6 @@ import type { FormInst, FormRules } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
-import CollapsibleCard from "@/components/cards/CollapsibleCard.vue";
 import type { StudyIdentificationModule } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
