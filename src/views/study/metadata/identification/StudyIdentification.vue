@@ -42,12 +42,14 @@ const rules: FormRules = {
 onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
-  const response = await fetch(`${baseURL}/study/${studyId}`, {
+  const response = await fetch(`${baseURL}/study/${studyId}/metadata/identification`, {
     headers: {
       "Content-Type": "application/json",
     },
     method: "GET",
   });
+
+  console.log(response);
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
