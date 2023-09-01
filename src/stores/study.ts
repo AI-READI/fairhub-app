@@ -40,7 +40,6 @@ export const useStudyStore = defineStore(
       allStudies.value = await response.json();
 
       for (const study of allStudies.value) {
-        study.size = `${Math.round(Math.random() * 100)} MB`;
         study.owner = {
           email: "sanjay@email.org",
           first_name: faker.person.firstName(),
@@ -96,7 +95,6 @@ export const useStudyStore = defineStore(
 
       study.value = s;
 
-      study.value.size = `${Math.round(Math.random() * 100)} MB`;
       study.value.owner = {
         email: "sanjay@email.org",
         first_name: faker.person.firstName(),

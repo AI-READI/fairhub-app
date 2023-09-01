@@ -1,75 +1,83 @@
 <script setup lang="ts">
-import type { FormInst, FormItemRule, FormRules } from "naive-ui";
-import { NButton, NForm, NFormItem, NInput, NSelect, NSpace, useMessage } from "naive-ui";
-import { onBeforeMount, ref } from "vue";
-import { useRouter } from "vue-router";
+import type { FormInst, FormRules } from "naive-ui";
+import { nanoid } from "nanoid";
 
 import { useAuthStore } from "@/stores/auth";
+import { useStudyStore } from "@/stores/study";
+import { baseURL } from "@/utils/constants";
 
 const router = useRouter();
+const route = useRoute();
+const message = useMessage();
+
 const authStore = useAuthStore();
-const { error } = useMessage();
+const studyStore = useStudyStore();
+
+const routeParams = {
+  studyId: route.params.studyId as string,
+};
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
+    message.error("You are not logged in.");
     router.push({ name: "home" });
   }
+
+  const studyId = routeParams.studyId;
+
+  studyStore.getStudy(studyId);
+
+  study.title = studyStore.study.title;
+  study.image = studyStore.study.image;
 });
 
 const formRef = ref<FormInst | null>(null);
 
-const studyType = ref({
-  title: null,
-  description: null,
-  keywords: null,
+const study = reactive({
+  title: "",
+  image: "",
 });
 
-const generalOptions = [
-  "Artifical Intelligence",
-  "Dataset",
-  "Diabetes",
-  "Ethics",
-  "Health",
-  "Machine Learning",
-].map((v) => ({
-  label: v,
-  value: v,
-}));
+const generateImageURL = () => {
+  study.image = `https://api.dicebear.com/6.x/shapes/svg?seed=${nanoid()}`;
+};
 
 const rules: FormRules = {
-  description: [
-    {
-      message: "Please input a study description",
-      required: true,
-      trigger: ["blur", "input"],
-    },
-  ],
-  inputValue: [
+  title: [
     {
       message: "Please add a study title",
       required: true,
       trigger: ["blur", "input"],
     },
   ],
-  keywords: [
-    {
-      required: true,
-      trigger: ["blur", "change"],
-      validator: (rule: FormItemRule, value) => {
-        if (value !== null && value.length > 0) {
-          return Promise.resolve();
-        }
-        return Promise.reject("Please select at least one keyword");
-      },
-    },
-  ],
 };
 
-const handleValidateButtonClick = (e: MouseEvent) => {
+const saveChanges = (e: MouseEvent) => {
   e.preventDefault();
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (!errors) {
+      const data = {
+        title: study.title,
+        image: study.image,
+      };
+
+      const response = await fetch(`${baseURL}/study/${routeParams.studyId}`, {
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PUT",
+      });
+
+      if (!response.ok) {
+        message.error("Something went wrong.");
+        return;
+      } else {
+        message.success("Study updated successfully.");
+
+        router.push({ name: "studies:all-studies" }); // TODO: Redirect to study page
+      }
+
       console.log("success");
     } else {
       console.log("error");
@@ -77,56 +85,54 @@ const handleValidateButtonClick = (e: MouseEvent) => {
     }
   });
 };
-
-const handleUpdateValue = (value: string[]) => {
-  console.log(value);
-};
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col space-y-8">
-    <n-space justify="space-between">
-      <h1 class="header">Enter information</h1>
-    </n-space>
+  <main class="flex h-full w-full flex-col space-y-8 pr-8">
+    <PageBackNavigationHeader
+      title="Update Study"
+      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+      linkName="studies:all-studies"
+    />
 
     <n-form
       ref="formRef"
-      :model="studyType"
+      :model="study"
       :rules="rules"
       size="large"
       label-placement="top"
       class="pr-4"
     >
       <n-form-item label="Title" path="title">
-        <n-input v-model:value="studyType.title" placeholder="Add a study title" />
-      </n-form-item>
-      <n-form-item label="Description" path="description">
-        <n-input
-          v-model:value="studyType.description"
-          placeholder="Add a study description"
-          type="textarea"
-          :autosize="{
-            minRows: 3,
-            maxRows: 5,
-          }"
-        />
+        <n-input v-model:value="study.title" placeholder="Add a study title" />
       </n-form-item>
 
-      <n-form-item label="Keywords" path="keywords">
-        <n-select
-          v-model:value="studyType.keywords"
-          placeholder="Salutogenesis"
-          multiple
-          tag
-          filterable
-          clearable
-          :options="generalOptions"
-          @update:value="handleUpdateValue"
-        />
+      <n-form-item label="Image" path="Image">
+        <n-input v-model:value="study.image" placeholder="Add an image" />
+
+        <n-button @click="generateImageURL" class="ml-4">
+          <template #icon>
+            <f-icon icon="mdi:auto-fix" />
+          </template>
+        </n-button>
       </n-form-item>
+
+      <n-image
+        :src="study.image || 'https://www.svgrepo.com/show/213127/image-warning.svg'"
+        width="300"
+        class="rounded-xl bg-slate-50 p-3 shadow-md"
+      />
+
+      <n-divider />
 
       <div class="flex justify-start">
-        <n-button type="primary" size="large" @click="handleValidateButtonClick"> Update </n-button>
+        <n-button type="primary" size="large" @click="saveChanges">
+          <template #icon>
+            <f-icon icon="material-symbols:save-outline" />
+          </template>
+
+          Update Study
+        </n-button>
       </div>
     </n-form>
   </main>

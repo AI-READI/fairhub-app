@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import { faker } from "@faker-js/faker";
-import type { FormInst, FormItemRule, FormRules } from "naive-ui";
+import type { FormInst, FormRules } from "naive-ui";
 import { useMessage } from "naive-ui";
 import { nanoid } from "nanoid";
-import type { Ref } from "vue";
 import { onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 
-import FormJSON from "@/assets/data/form.json";
 import { useAuthStore } from "@/stores/auth";
-import type { Study } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const router = useRouter();
 const { error } = useMessage();
+const message = useMessage();
 
 const authStore = useAuthStore();
 
@@ -26,24 +24,12 @@ onBeforeMount(() => {
 
 const formRef = ref<FormInst | null>(null);
 
-const study: Ref<Study> = ref({
-  id: nanoid(5),
+const study = reactive({
   title: faker.commerce.productName(),
-  contributors: [],
-  description: faker.commerce.productDescription(),
-  image: `https://api.dicebear.com/6.x/shapes/svg?seed=${nanoid()}`,
-  keywords: [faker.word.noun(), faker.word.noun(), faker.word.noun(), faker.word.noun()],
-  last_updated: "",
-  owner: {
-    email: faker.internet.email(),
-    first_name: faker.person.firstName(),
-    last_name: faker.person.lastName(),
-    orcid: "",
-  },
-  size: "0 MB",
+  image: "",
 });
 
-const keywordOptions = FormJSON.keywordOptions;
+// const keywordOptions = FormJSON.keywordOptions;
 
 const rules: FormRules = {
   title: [
@@ -53,35 +39,37 @@ const rules: FormRules = {
       trigger: ["blur", "input"],
     },
   ],
-  description: [
-    {
-      message: "Please input a study description",
-      required: true,
-      trigger: ["blur", "input"],
-    },
-  ],
-  keywords: [
-    {
-      required: true,
-      trigger: ["blur", "change"],
-      validator: (_rule: FormItemRule, value) => {
-        if (value !== null && value.length > 0) {
-          return Promise.resolve();
-        }
-        return Promise.reject("Please select at least one keyword");
-      },
-    },
-  ],
+  // keywords: [
+  //   {
+  //     required: true,
+  //     trigger: ["blur", "change"],
+  //     validator: (_rule: FormItemRule, value) => {
+  //       if (value !== null && value.length > 0) {
+  //         return Promise.resolve();
+  //       }
+  //       return Promise.reject("Please select at least one keyword");
+  //     },
+  //   },
+  // ],
+};
+
+const generateImageURL = () => {
+  study.image = `https://api.dicebear.com/6.x/shapes/svg?seed=${nanoid()}`;
 };
 
 const createStudy = (e: MouseEvent) => {
   e.preventDefault();
 
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (!errors) {
-      addStudy(study.value).then((s) => {
-        study.value = s;
-      });
+      const response = await addStudy();
+
+      if (response) {
+        console.log(response);
+        message.success("Study created successfully.");
+
+        router.push({ name: "studies:all-studies" }); // TODO: Redirect to study page
+      }
     } else {
       console.log("error");
       console.log(errors);
@@ -89,24 +77,32 @@ const createStudy = (e: MouseEvent) => {
   });
 };
 
-const handleUpdateValue = (value: string[]) => {
-  console.log(value);
-};
+async function addStudy(): Promise<any> {
+  const data = {
+    title: study.title,
+    image: study.image || `https://api.dicebear.com/6.x/shapes/svg?seed=${nanoid()}`,
+  };
 
-async function addStudy(study: Study): Promise<Study> {
-  const response = await fetch(`${baseURL}/study/add`, {
-    body: JSON.stringify(study),
+  const response = await fetch(`${baseURL}/study`, {
+    body: JSON.stringify(data),
     headers: {
       "Content-Type": "application/json",
     },
     method: "POST",
   });
+
+  if (!response.ok) {
+    message.error("Something went wrong. Please try again later.");
+
+    throw new Error(response.statusText);
+  }
+
   return response.json();
 }
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col space-y-8">
+  <main class="flex h-full w-full flex-col space-y-8 pr-6">
     <PageBackNavigationHeader
       title="Create a new study"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
@@ -127,19 +123,7 @@ async function addStudy(study: Study): Promise<Study> {
         <n-input v-model:value="study.title" placeholder="Add a study title" />
       </n-form-item>
 
-      <n-form-item label="Description" path="description">
-        <n-input
-          v-model:value="study.description"
-          placeholder="Add a study description"
-          type="textarea"
-          :autosize="{
-            minRows: 3,
-            maxRows: 5,
-          }"
-        />
-      </n-form-item>
-
-      <n-form-item label="Keywords" path="keywords">
+      <!-- <n-form-item label="Keywords" path="keywords">
         <n-select
           v-model:value="study.keywords"
           placeholder="Salutogenesis"
@@ -148,15 +132,24 @@ async function addStudy(study: Study): Promise<Study> {
           filterable
           clearable
           :options="keywordOptions"
-          @update:value="handleUpdateValue"
         />
-      </n-form-item>
+      </n-form-item> -->
 
       <n-form-item label="Image" path="Image">
         <n-input v-model:value="study.image" placeholder="Add an image" />
+
+        <n-button @click="generateImageURL" class="ml-4">
+          <template #icon>
+            <f-icon icon="mdi:auto-fix" />
+          </template>
+        </n-button>
       </n-form-item>
 
-      <n-image :src="study.image" v-if="study.image !== ''" width="300" class="rounded-xl" />
+      <n-image
+        :src="study.image || 'https://www.svgrepo.com/show/213127/image-warning.svg'"
+        width="300"
+        class="rounded-xl bg-slate-50 p-3 shadow-md"
+      />
 
       <n-divider />
 

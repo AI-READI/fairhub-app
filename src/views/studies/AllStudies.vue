@@ -197,7 +197,7 @@ const navigateToStudy = (studyId: string) => {
             @click="navigateToStudy(study.id)"
           >
             <div class="flex h-full w-[200px] items-center">
-              <img :src="study.image" class="h-full w-full object-cover" />
+              <img :src="study.image" class="h-full w-full rounded-l-md object-cover" />
             </div>
 
             <div class="flex w-full grow flex-col space-y-2 px-6 py-3">

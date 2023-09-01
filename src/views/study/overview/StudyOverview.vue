@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import { useMessage } from "naive-ui";
-import type { Ref } from "vue";
-import { computed, onBeforeMount } from "vue";
-import { useRoute, useRouter } from "vue-router";
-
 import { useAuthStore } from "@/stores/auth";
 import { useStudyStore } from "@/stores/study";
 import type { Study } from "@/types/Study";
