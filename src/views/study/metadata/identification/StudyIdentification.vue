@@ -2,16 +2,20 @@
 import type { FormInst, FormRules } from "naive-ui";
 import { nanoid } from "nanoid";
 
+import FORM_JSON from "@/assets/data/form.json";
 import CollapsibleCard from "@/components/cards/CollapsibleCard.vue";
 import type { StudyIdentificationModule } from "@/types/Study";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
+const router = useRouter();
+const message = useMessage();
 
 const formRef = ref<FormInst | null>(null);
 
 const moduleData: StudyIdentificationModule = reactive({
   primary: {
-    id: nanoid(),
+    id: "",
     domain: "",
     identifier: "",
     link: "",
@@ -35,36 +39,57 @@ const rules: FormRules = {
   },
 };
 
-const typeOptions = [
-  {
-    label: "NIH Grant Number",
-    value: "NIH Grant Number",
-  },
-  {
-    label: "Other Grant/Funding Number",
-    value: "Other Grant/Funding Number",
-  },
-  {
-    label: "EudraCT Number",
-    value: "EudraCT Number",
-  },
-  {
-    label: "Registry Identifier",
-    value: "Registry Identifier",
-  },
-  {
-    label: "Other Identifier",
-    value: "Other Identifier",
-  },
-];
+onBeforeMount(async () => {
+  const studyId = route.params.studyId;
 
-const removeSecondaryIdentifier = (id: string) => {
+  const response = await fetch(`${baseURL}/study/${studyId}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+
+  moduleData.primary = data.primary;
+  moduleData.secondary = data.secondary.map((item: any) => ({
+    ...item,
+    origin: "remote",
+  }));
+
+  console.log(moduleData);
+});
+
+const removeSecondaryIdentifier = async (id: string) => {
   const item = moduleData.secondary.find((item) => item.id === id);
 
   if (item && item.origin === "local") {
     moduleData.secondary = moduleData.secondary.filter((item) => item.id !== id);
   } else {
-    // post to api to remove
+    // delete from api
+
+    const response = await fetch(
+      `${baseURL}/study/${route.params.studyId}/metadata/identification/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok) {
+      message.error("Something went wrong. Please try again.");
+      throw new Error("Network response was not ok");
+    }
+
+    moduleData.secondary = moduleData.secondary.filter((item) => item.id !== id);
+
+    message.success("Identifier removed successfully.");
   }
 };
 
@@ -81,7 +106,7 @@ const addSecondaryIdentifier = () => {
 
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (!errors) {
       const data = {
         primary: moduleData.primary,
@@ -107,6 +132,27 @@ const saveMetadata = (e: MouseEvent) => {
       console.log(data);
 
       // post to api
+      const response = await fetch(
+        `${baseURL}/study/${route.params.studyId}/metadata/identification`,
+        {
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+        }
+      );
+
+      if (!response.ok) {
+        message.error("Something went wrong.");
+        return;
+      } else {
+        message.success("Study updated successfully.");
+
+        // refresh page
+        router.go(0);
+      }
+
       console.log("success");
     } else {
       console.log("error");
@@ -157,7 +203,7 @@ const saveMetadata = (e: MouseEvent) => {
           v-model:value="moduleData.primary.type"
           placeholder="NIH Grant Number"
           clearable
-          :options="typeOptions"
+          :options="FORM_JSON.studyMetadataIdentificationPrimaryIdentifierTypeOptions"
         />
       </n-form-item>
 
@@ -247,7 +293,7 @@ const saveMetadata = (e: MouseEvent) => {
             v-model:value="item.type"
             placeholder="Other Grant/Funding Number"
             clearable
-            :options="typeOptions"
+            :options="FORM_JSON.studyMetadataIdentificationPrimaryIdentifierTypeOptions"
           />
         </n-form-item>
 

@@ -160,6 +160,28 @@
       "value": "Other"
     }
   ],
+  "studyMetadataIdentificationPrimaryIdentifierTypeOptions": [
+    {
+      "label": "NIH Grant Number",
+      "value": "NIH Grant Number"
+    },
+    {
+      "label": "Other Grant/Funding Number",
+      "value": "Other Grant/Funding Number"
+    },
+    {
+      "label": "EudraCT Number",
+      "value": "EudraCT Number"
+    },
+    {
+      "label": "Registry Identifier",
+      "value": "Registry Identifier"
+    },
+    {
+      "label": "Other Identifier",
+      "value": "Other Identifier"
+    }
+  ],
   "studyMetadataStudyTypeOptions": [
     {
       "description": "A clinical trial. Participants are assigned prospectively to an intervention or interventions according to a protocol to evaluate the effect of the intervention(s) on biomedical or other health related outcomes.",
