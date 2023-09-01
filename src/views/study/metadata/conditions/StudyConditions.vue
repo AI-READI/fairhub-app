@@ -1,50 +1,74 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
-import { nanoid } from "nanoid";
+
+import { baseURL } from "@/utils/constants";
+
 const route = useRoute();
+const router = useRouter();
+const message = useMessage();
 
 const formRef = ref<FormInst | null>(null);
 
-type Condition = {
-  id: string;
-  name: string;
-};
+const moduleData = ref<string[]>(["Diabetes"]);
 
-const moduleData = ref<Condition[]>([
-  {
-    id: nanoid(),
-    name: "Diabetes",
-  },
-]);
+onBeforeMount(async () => {
+  const studyId = route.params.studyId;
+
+  const response = await fetch(`${baseURL}/study/${studyId}/metadata/conditions`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  });
+
+  console.log(response);
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+
+  moduleData.value = data;
+});
 
 const addCondition = () => {
-  moduleData.value.push({
-    id: nanoid(),
-    name: "",
-  });
+  moduleData.value.push("");
 };
 
-const removeCondition = (id: string) => {
-  const conditions = moduleData.value;
-
-  const index = conditions.findIndex((Condition) => Condition.id === id);
-
-  conditions.splice(index, 1);
+const removeCondition = (index: number) => {
+  moduleData.value.splice(index, 1);
 };
 
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (!errors) {
       // remove empty Conditions
-      const conditions = moduleData.value.filter((Condition) => Condition.name !== "");
+      const conditions = moduleData.value.filter((Condition) => Condition !== "");
 
       // remove Conditions with duplicate names
-      const uniqueConditions = conditions.filter(
-        (Condition, index, self) => index === self.findIndex((c) => c.name === Condition.name)
-      );
+      const uniqueConditions = [...new Set(conditions)];
 
       console.log("conditions", uniqueConditions);
+
+      const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/conditions`, {
+        body: JSON.stringify(uniqueConditions),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PUT",
+      });
+
+      if (!response.ok) {
+        message.error("Something went wrong.");
+        return;
+      } else {
+        message.success("Study updated successfully.");
+
+        // refresh page
+        router.go(0);
+      }
 
       console.log("success");
     } else {
@@ -75,14 +99,14 @@ const saveMetadata = (e: MouseEvent) => {
       />
 
       <n-form-item
-        v-for="condition in moduleData"
-        :key="condition.id"
+        v-for="(condition, index) in moduleData"
+        :key="index"
         label="Name"
-        path="condition.name"
+        path="condition"
       >
-        <n-input v-model:value="condition.name" placeholder="Diabetes" />
+        <n-input v-model:value="moduleData[index]" placeholder="Diabetes" />
 
-        <n-popconfirm @positive-click="removeCondition(condition.id)">
+        <n-popconfirm @positive-click="removeCondition(index)">
           <template #trigger>
             <n-button class="ml-5">
               <f-icon icon="gridicons:trash" />

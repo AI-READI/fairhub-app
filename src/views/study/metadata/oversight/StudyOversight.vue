@@ -42,6 +42,16 @@ const saveMetadata = async (value: boolean) => {
     method: "PUT",
   });
 
+  if (!response.ok) {
+    message.error("Something went wrong.");
+    return;
+  } else {
+    message.success("Study updated successfully.");
+
+    // refresh page
+    router.go(0);
+  }
+
   showLoader.value = false;
 
   console.log("saveMetadata", value);

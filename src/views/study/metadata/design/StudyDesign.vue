@@ -3,8 +3,11 @@ import type { FormInst, FormRules } from "naive-ui";
 
 import FORM_JSON from "@/assets/data/form.json";
 import type { StudyDesignModule } from "@/types/Study";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
+const router = useRouter();
+const message = useMessage();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -107,9 +110,62 @@ const whoMaskedOptions = [
   },
 ];
 
+onBeforeMount(async () => {
+  const studyId = route.params.studyId;
+
+  const response = await fetch(`${baseURL}/study/${studyId}/metadata/design`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  });
+
+  console.log(response);
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+
+  moduleData.study_type = data.study_type;
+
+  moduleData.design_info.allocation = data.design_allocation;
+  moduleData.design_info.intervention_model = data.design_intervention_model;
+  moduleData.design_info.intervention_model_description =
+    data.design_intervention_model_description;
+  moduleData.design_info.primary_purpose = data.design_primary_purpose;
+
+  moduleData.design_info.masking = data.design_masking;
+  moduleData.design_info.masking_description = data.design_masking_description;
+  moduleData.design_info.who_masked_list = data.design_who_masked_list;
+
+  moduleData.phase_list = data.phase_list;
+
+  moduleData.number_arms = data.number_arms;
+
+  moduleData.design_info.observational_model_list = data.design_observational_model_list;
+
+  moduleData.design_info.time_perspective_list = data.design_time_perspective_list;
+
+  moduleData.bio_spec_retention = data.bio_spec_retention;
+
+  moduleData.bio_spec_description = data.bio_spec_description;
+
+  moduleData.target_duration = data.target_duration;
+
+  moduleData.number_groups_cohorts = data.number_groups_cohorts;
+
+  moduleData.enrollment_info.enrollment_count = data.enrollment_count;
+
+  moduleData.enrollment_info.enrollment_type = data.enrollment_type;
+
+  console.log("moduleData", moduleData);
+});
+
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (!errors) {
       const data: any = {};
 
@@ -146,6 +202,24 @@ const saveMetadata = (e: MouseEvent) => {
       data.enrollment_type = moduleData.enrollment_info.enrollment_type;
 
       console.log("data", data);
+
+      const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/design`, {
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PUT",
+      });
+
+      if (!response.ok) {
+        message.error("Something went wrong.");
+        return;
+      } else {
+        message.success("Study updated successfully.");
+
+        // refresh page
+        router.go(0);
+      }
 
       console.log("success");
     } else {
