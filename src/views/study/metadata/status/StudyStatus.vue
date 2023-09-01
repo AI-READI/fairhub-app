@@ -4,8 +4,10 @@ import type { FormInst, FormRules } from "naive-ui";
 
 import FORM_JSON from "@/assets/data/form.json";
 import type { StudyStatusModule } from "@/types/Study";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
+const message = useMessage();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -47,13 +49,55 @@ const dateTypeOptions = [
   },
 ];
 
+onBeforeMount(async () => {
+  const studyId = route.params.studyId;
+
+  const response = await fetch(`${baseURL}/study/${studyId}/metadata/status`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+
+  moduleData.value = data;
+
+  console.log(moduleData);
+});
+
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (!errors) {
-      // console.log(data);
+      const data = {
+        ...moduleData.value,
+        completion_date: moduleData.value.completion_date
+          ? dayjs(moduleData.value.completion_date).format("YYYY-MM-DD HH:mm:ss")
+          : null,
+        start_date: dayjs(moduleData.value.start_date).format("YYYY-MM-DD HH:mm:ss"),
+      };
 
-      // post to api
+      const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/status`, {
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        message.error("Something went wrong. Please try again.");
+
+        throw new Error("Network response was not ok");
+      }
+
+      message.success("Status saved successfully.");
+
       console.log("success");
     } else {
       console.log("error");
@@ -135,7 +179,7 @@ const saveMetadata = (e: MouseEvent) => {
 
       <n-form-item
         label="Completion Date"
-        path="completionDate"
+        path="completion_date"
         :rule="{
           message: 'Please enter a completion date',
           required: moduleData.completion_date_type ? true : false,
