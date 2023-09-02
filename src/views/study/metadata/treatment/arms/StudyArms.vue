@@ -3,7 +3,6 @@ import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
-import CollapsibleCard from "@/components/cards/CollapsibleCard.vue";
 import type { StudyArms } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
@@ -87,9 +86,7 @@ const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
     if (!errors) {
-      const data: any = {};
-
-      data["arms"] = moduleData.arms.map((item) => {
+      const data = moduleData.arms.map((item) => {
         const entry = {
           description: item.description,
           intervention_list: item.intervention_list,

@@ -102,9 +102,7 @@ const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
     if (!errors) {
-      const data: any = {};
-
-      data["interventions"] = moduleData.interventions.map((item) => {
+      const data: any = moduleData.interventions.map((item) => {
         const entry = {
           name: item.name,
           arm_group_label_list: item.arm_group_label_list,

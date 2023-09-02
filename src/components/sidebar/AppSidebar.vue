@@ -122,9 +122,26 @@ const UpperMenuOptions = computed(() => [
         label: "Eligibility",
       },
       {
-        icon: renderIcon("teenyicons:contact-outline"),
-        key: "study:metadata:contacts",
-        label: "Contacts",
+        children: [
+          {
+            icon: renderIcon("teenyicons:contact-outline"),
+            key: "study:metadata:contacts",
+            label: "Central Contacts",
+          },
+          {
+            icon: renderIcon("material-symbols:social-leaderboard-outline-rounded"),
+            key: "study:metadata:officials",
+            label: "Overall Officials",
+          },
+          {
+            icon: renderIcon("fluent:location-16-filled"),
+            key: "study:metadata:locations",
+            label: "Locations",
+          },
+        ],
+        icon: renderIcon("ep:list"),
+        key: "study:enrollment",
+        label: "Enrollment",
       },
 
       {

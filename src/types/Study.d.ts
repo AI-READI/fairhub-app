@@ -167,12 +167,20 @@ export interface StudyContact {
   phone_ext: string;
 }
 
+export interface StudyContacts {
+  central_contact_list: StudyContact[];
+}
+
 export interface StudyOverallOfficial {
   id: string;
   name: string;
   affiliation: string;
   origin: string;
   role: string | null;
+}
+
+export interface StudyOverallOfficials {
+  overall_official_list: StudyOverallOfficial[];
 }
 
 export interface StudyLocationContact extends Omit<StudyContact, "affiliation"> {}
@@ -187,6 +195,10 @@ export interface StudyLocation {
   state: string;
   status: string | null;
   zip: string;
+}
+
+export interface StudyLocations {
+  location_list: StudyLocation[];
 }
 
 export interface StudyContactsLocationsModule {

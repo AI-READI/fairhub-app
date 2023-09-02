@@ -44,10 +44,12 @@ import EditStudy from "@/views/study/edit/EditStudy.vue";
 import StudyFiles from "@/views/study/files/StudyFiles.vue";
 import StudyCollaborators from "@/views/study/metadata/collaborators/StudyCollaborators.vue";
 import StudyConditions from "@/views/study/metadata/conditions/StudyConditions.vue";
-import StudyContacts from "@/views/study/metadata/contacts/StudyContacts.vue";
 import StudyDescription from "@/views/study/metadata/description/StudyDescription.vue";
 import StudyDesign from "@/views/study/metadata/design/StudyDesign.vue";
 import StudyEligibility from "@/views/study/metadata/eligibility/StudyEligibility.vue";
+import StudyContacts from "@/views/study/metadata/enrollment/contacts/StudyContacts.vue";
+import StudyLocations from "@/views/study/metadata/enrollment/locations/StudyLocations.vue";
+import StudyOfficials from "@/views/study/metadata/enrollment/officials/StudyOfficials.vue";
 import StudyIdentification from "@/views/study/metadata/identification/StudyIdentification.vue";
 import StudyIPDSharing from "@/views/study/metadata/ipdsharing/StudyIPDSharing.vue";
 import StudyOversight from "@/views/study/metadata/oversight/StudyOversight.vue";
@@ -346,6 +348,16 @@ const router = createRouter({
               name: "study:metadata:contacts",
               path: "contacts",
               component: StudyContacts,
+            },
+            {
+              name: "study:metadata:officials",
+              path: "officials",
+              component: StudyOfficials,
+            },
+            {
+              name: "study:metadata:locations",
+              path: "locations",
+              component: StudyLocations,
             },
             {
               name: "study:metadata:ipd-sharing",
