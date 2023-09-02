@@ -3,12 +3,15 @@ import type { FormInst, FormRules } from "naive-ui";
 
 import FORM_JSON from "@/assets/data/form.json";
 import type { StudyEligiblityModule } from "@/types/Study";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
+const router = useRouter();
+const message = useMessage();
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData = ref<StudyEligiblityModule>({
+const moduleData = reactive<StudyEligiblityModule>({
   criteria: {
     exclusion_criteria: [],
     inclusion_criteria: [],
@@ -69,17 +72,89 @@ const rules: FormRules = {
   },
 };
 
+onBeforeMount(async () => {
+  const studyId = route.params.studyId;
+
+  const response = await fetch(`${baseURL}/study/${studyId}/metadata/eligibility`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+
+  moduleData.criteria = {
+    exclusion_criteria: data.exclusion_criteria,
+    inclusion_criteria: data.inclusion_criteria,
+  };
+
+  moduleData.gender = data.gender;
+  moduleData.gender_based = data.gender_based;
+  moduleData.gender_description = data.gender_description;
+  moduleData.healthy_volunteers = data.healthy_volunteers;
+
+  moduleData.maximum_age = {
+    age: data.maximum_age_value,
+    unit: data.maximum_age_unit,
+  };
+
+  moduleData.minimum_age = {
+    age: data.minimum_age_value,
+    unit: data.minimum_age_unit,
+  };
+
+  moduleData.sampling_method = data.sampling_method;
+  moduleData.study_population = data.study_population;
+  moduleData.study_type = data.study_type;
+});
+
 const addEntryToCriteria = () => {
   return "";
 };
 
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (!errors) {
-      // console.log(data);
+      const data = {
+        ...moduleData,
+      };
 
-      // post to api
+      delete data.study_type;
+
+      if (moduleData.study_type !== "interventional") {
+        delete data.healthy_volunteers;
+      }
+
+      const response = await fetch(
+        `${baseURL}/study/${route.params.studyId}/metadata/eligibility`,
+        {
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "PUT",
+        }
+      );
+
+      if (!response.ok) {
+        message.error("Something went wrong. Please try again later.");
+
+        throw new Error("Network response was not ok");
+      } else {
+        message.success("Study updated successfully.");
+
+        // refresh page
+        router.go(0);
+      }
+
+      message.success("Status saved successfully.");
+
       console.log("success");
     } else {
       console.log("error");
