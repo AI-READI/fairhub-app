@@ -49,12 +49,13 @@ import StudyDescription from "@/views/study/metadata/description/StudyDescriptio
 import StudyDesign from "@/views/study/metadata/design/StudyDesign.vue";
 import StudyEligibility from "@/views/study/metadata/eligibility/StudyEligibility.vue";
 import StudyIdentification from "@/views/study/metadata/identification/StudyIdentification.vue";
-import StudyInterventions from "@/views/study/metadata/interventions/StudyInterventions.vue";
 import StudyIPDSharing from "@/views/study/metadata/ipdsharing/StudyIPDSharing.vue";
 import StudyOversight from "@/views/study/metadata/oversight/StudyOversight.vue";
 import StudyReferences from "@/views/study/metadata/references/StudyReferences.vue";
 import StudySponsors from "@/views/study/metadata/sponsors/StudySponsors.vue";
 import StudyStatus from "@/views/study/metadata/status/StudyStatus.vue";
+import StudyArms from "@/views/study/metadata/treatment/arms/StudyArms.vue";
+import StudyInterventions from "@/views/study/metadata/treatment/interventions/StudyInterventions.vue";
 import NewStudy from "@/views/study/new/NewStudy.vue";
 import StudyOverview from "@/views/study/overview/StudyOverview.vue";
 import AddParticipant from "@/views/study/participants/AddParticipant.vue";
@@ -330,6 +331,11 @@ const router = createRouter({
               name: "study:metadata:interventions",
               path: "interventions",
               component: StudyInterventions,
+            },
+            {
+              name: "study:metadata:arms",
+              path: "arms",
+              component: StudyArms,
             },
             {
               name: "study:metadata:eligibility",

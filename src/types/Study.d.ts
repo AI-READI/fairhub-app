@@ -117,6 +117,10 @@ export interface StudyIntervention {
   type: string | null;
 }
 
+export interface StudyInterventions {
+  interventions: StudyIntervention[];
+}
+
 export interface StudyArm {
   id: string;
   description: string;
@@ -126,9 +130,8 @@ export interface StudyArm {
   type: string | null;
 }
 
-export interface StudyArmsInterventionsModule {
+export interface StudyArms {
   arms: StudyArm[];
-  interventions: StudyIntervention[];
   study_type: string;
 }
 

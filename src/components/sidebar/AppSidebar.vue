@@ -99,9 +99,22 @@ const UpperMenuOptions = computed(() => [
         label: "Design",
       },
       {
-        icon: renderIcon("mdi:drugs"),
-        key: "study:metadata:interventions",
-        label: "Interventions",
+        children: [
+          {
+            icon: renderIcon("akar-icons:people-group"),
+            key: "study:metadata:arms",
+            label: "Arms",
+          },
+          {
+            icon: renderIcon("mdi:drugs"),
+            key: "study:metadata:interventions",
+            label: "Interventions",
+          },
+        ],
+        icon: renderIcon("solar:medical-kit-bold"),
+        key: "study:treatment",
+        label: "Treatment",
+        show: hideMenuOptions.value,
       },
       {
         icon: renderIcon("icon-park-outline:permissions"),

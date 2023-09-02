@@ -1,59 +1,51 @@
 <script setup lang="ts">
-import type { FormInst, FormRules } from "naive-ui";
+import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
 import CollapsibleCard from "@/components/cards/CollapsibleCard.vue";
-import type { StudyArmsInterventionsModule } from "@/types/Study";
+import type { StudyInterventions } from "@/types/Study";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
+const router = useRouter();
+const message = useMessage();
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData: StudyArmsInterventionsModule = reactive({
-  arms: [
-    {
-      id: nanoid(),
-      description: "",
-      intervention_list: [],
-      label: "",
-      origin: "remote",
-      type: null,
-    },
-  ],
-  interventions: [
-    {
-      id: nanoid(),
-      name: "",
-      arm_group_label_list: [],
-      description: "",
-      origin: "remote",
-      other_name_list: [],
-      type: null,
-    },
-  ],
-  study_type: "interventional",
+const moduleData = reactive<StudyInterventions>({
+  interventions: [],
 });
 
-const rules: FormRules = {
-  primary: {
-    identifier: {
-      message: "Please enter a study identifier",
-      required: true,
-      trigger: ["blur", "input"],
+onBeforeMount(async () => {
+  const studyId = route.params.studyId;
+
+  const response = await fetch(`${baseURL}/study/${studyId}/metadata/intervention`, {
+    headers: {
+      "Content-Type": "application/json",
     },
-    type: {
-      message: "Please select a study type",
-      required: true,
-      trigger: ["blur", "change"],
-    },
-  },
-};
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+
+  console.log(data);
+
+  moduleData.interventions = data.map((item) => {
+    return {
+      ...item,
+      origin: "remote",
+    };
+  });
+});
 
 const dynamicInputRule = {
   trigger: ["blur", "input"],
   validator: (rule: unknown, value: string) => {
-    console.log(value);
     if (!value || value === "") {
       return new Error("Please enter a value for this field");
     }
@@ -69,29 +61,29 @@ const addEntryToOtherNameList = () => {
   return "";
 };
 
-const addEntryToArmGroupInterventionList = () => {
-  return "";
-};
-
-const removeIntervention = (id: string) => {
+const removeIntervention = async (id: string) => {
   const item = moduleData.interventions.find((item) => item.id === id);
 
   if (item && item.origin === "remote") {
-    console.log("post to api to remove");
-    // post to api to remove
+    const response = await fetch(
+      `${baseURL}/study/${route.params.studyId}/metadata/intervention/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok) {
+      message.error("Failed to delete intervention");
+      throw new Error("Network response was not ok");
+    }
+
+    message.success("Intervention deleted successfully");
   }
 
   moduleData.interventions = moduleData.interventions.filter((item) => item.id !== id);
-};
-
-const removeArmGroup = (id: string) => {
-  const item = moduleData.arms.find((item) => item.id === id);
-
-  if (item && item.origin === "remote") {
-    console.log("post to api to remove");
-  }
-
-  moduleData.arms = moduleData.arms.filter((item) => item.id !== id);
 };
 
 const addIntervention = () => {
@@ -106,34 +98,53 @@ const addIntervention = () => {
   });
 };
 
-const addArmGroup = () => {
-  moduleData.arms.push({
-    id: nanoid(),
-    description: "",
-    intervention_list: [],
-    label: "",
-    origin: "local",
-    type: null,
-  });
-};
-
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (!errors) {
       const data: any = {};
 
-      data["interventions"] = moduleData.interventions;
-      data["arms"] = moduleData.arms;
+      data["interventions"] = moduleData.interventions.map((item) => {
+        const entry = {
+          name: item.name,
+          arm_group_label_list: item.arm_group_label_list,
+          description: item.description,
+          other_name_list: item.other_name_list,
+          type: item.type,
+        };
 
-      if (moduleData.study_type !== "interventional") {
-        delete data["arms"].type;
-        delete data["arms"].intervention_list;
+        if (item.origin === "local") {
+          return entry;
+        } else {
+          return {
+            ...entry,
+            id: item.id,
+          };
+        }
+      });
+
+      const response = await fetch(
+        `${baseURL}/study/${route.params.studyId}/metadata/intervention`,
+        {
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+        }
+      );
+
+      if (!response.ok) {
+        message.error("Something went wrong. Please try again later.");
+
+        throw new Error("Network response was not ok");
+      } else {
+        message.success("Study updated successfully.");
+
+        // refresh page
+        router.go(0);
       }
 
-      console.log(data);
-
-      // post to api
       console.log("success");
     } else {
       console.log("error");
@@ -146,7 +157,7 @@ const saveMetadata = (e: MouseEvent) => {
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
-      title="Interventions & Arms"
+      title="Interventions"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
       linkName="study:overview"
       :linkParams="{
@@ -156,21 +167,7 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <n-form
-      ref="formRef"
-      :model="moduleData"
-      :rules="rules"
-      size="large"
-      label-placement="top"
-      class="pr-4"
-    >
-      <h3>Interventions</h3>
-
-      <p class="pb-8 pt-2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
-        voluptatem, quibusdam, quos voluptas quae quas voluptatum
-      </p>
-
+    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
       <CollapsibleCard
         v-for="(item, index) in moduleData.interventions"
         :key="item.id"
@@ -223,7 +220,7 @@ const saveMetadata = (e: MouseEvent) => {
           <n-input v-model:value="item.name" placeholder="Lorem Ipsum" clearable />
         </n-form-item>
 
-        <n-form-item label="Description" :path="`interventions[${index}].description`">
+        <n-form-item label="Description" :path="`intervention_list[${index}].description`">
           <n-input
             v-model:value="item.description"
             placeholder="Lorem Ipsum"
@@ -297,115 +294,6 @@ const saveMetadata = (e: MouseEvent) => {
         </template>
 
         Add an Intervention
-      </n-button>
-
-      <n-divider />
-
-      <h3>Arms</h3>
-
-      <p class="pb-8 pt-2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
-        voluptatem, quibusdam, quos voluptas quae quas voluptatum
-      </p>
-
-      <CollapsibleCard
-        v-for="(item, index) in moduleData.arms"
-        :key="item.id"
-        class="mb-5 shadow-md"
-        :title="`Arm ${index + 1}`"
-        bordered
-      >
-        <template #header-extra>
-          <n-popconfirm @positive-click="removeArmGroup(item.id)">
-            <template #trigger>
-              <n-button type="error" secondary>
-                <template #icon>
-                  <f-icon icon="ep:delete" />
-                </template>
-
-                Remove Arm
-              </n-button>
-            </template>
-
-            Are you sure you want to remove this Arm?
-          </n-popconfirm>
-        </template>
-
-        <n-form-item
-          label="Label"
-          :path="`arms[${index}].label`"
-          :rule="{
-            message: 'Please enter an arm group label',
-            required: true,
-            trigger: ['blur', 'input'],
-          }"
-        >
-          <n-input v-model:value="item.label" placeholder="Lorem Ipsum" clearable />
-        </n-form-item>
-
-        <n-form-item label="Description" :path="`arms[${index}].description`">
-          <n-input
-            v-model:value="item.description"
-            placeholder="Lorem Ipsum"
-            clearable
-            type="textarea"
-            :rows="3"
-          />
-        </n-form-item>
-
-        <n-form-item
-          label="Type"
-          :path="`arms[${index}].type`"
-          v-if="moduleData.study_type == 'interventional'"
-          :rule="{
-            message: 'Please select an intervention type',
-            required: moduleData.study_type === 'interventional',
-            trigger: ['blur', 'change'],
-          }"
-        >
-          <n-select
-            v-model:value="item.type"
-            placeholder="Experimental"
-            clearable
-            :options="FORM_JSON.studyMetadataArmsTypeOptions"
-          />
-        </n-form-item>
-
-        <n-form-item
-          v-if="moduleData.study_type == 'interventional'"
-          label="Interventions"
-          :path="`arms[${index}].intervention_list`"
-          ignore-path-change
-        >
-          <!-- outer form item is only used to diplay the label and the required mark -->
-
-          <n-dynamic-input
-            v-model:value="item.intervention_list"
-            #="{ index: idx, value }"
-            :on-create="addEntryToArmGroupInterventionList"
-          >
-            <n-form-item
-              ignore-path-change
-              :show-label="false"
-              :path="`arms[${index}].intervention_list[${idx}]`"
-              class="w-full"
-            >
-              <n-input
-                v-model:value="item.intervention_list[idx]"
-                placeholder="Intervention"
-                @keydown.enter.prevent
-              />
-            </n-form-item>
-          </n-dynamic-input>
-        </n-form-item>
-      </CollapsibleCard>
-
-      <n-button class="my-10 w-full" dashed type="success" @click="addArmGroup">
-        <template #icon>
-          <f-icon icon="gridicons:create" />
-        </template>
-
-        Add an Arm Group
       </n-button>
 
       <n-divider />

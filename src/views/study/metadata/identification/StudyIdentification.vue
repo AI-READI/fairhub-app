@@ -68,11 +68,7 @@ onBeforeMount(async () => {
 const removeSecondaryIdentifier = async (id: string) => {
   const item = moduleData.secondary.find((item) => item.id === id);
 
-  if (item && item.origin === "local") {
-    moduleData.secondary = moduleData.secondary.filter((item) => item.id !== id);
-  } else {
-    // delete from api
-
+  if (item && item.origin === "remote") {
     const response = await fetch(
       `${baseURL}/study/${route.params.studyId}/metadata/identification/${id}`,
       {
@@ -88,10 +84,10 @@ const removeSecondaryIdentifier = async (id: string) => {
       throw new Error("Network response was not ok");
     }
 
-    moduleData.secondary = moduleData.secondary.filter((item) => item.id !== id);
-
     message.success("Identifier removed successfully.");
   }
+
+  moduleData.secondary = moduleData.secondary.filter((item) => item.id !== id);
 };
 
 const addSecondaryIdentifier = () => {

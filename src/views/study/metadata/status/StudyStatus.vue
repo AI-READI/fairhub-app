@@ -7,6 +7,7 @@ import type { StudyStatusModule } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
+const router = useRouter();
 const message = useMessage();
 
 const formRef = ref<FormInst | null>(null);
@@ -91,9 +92,14 @@ const saveMetadata = (e: MouseEvent) => {
       });
 
       if (!response.ok) {
-        message.error("Something went wrong. Please try again.");
+        message.error("Something went wrong. Please try again later.");
 
         throw new Error("Network response was not ok");
+      } else {
+        message.success("Study updated successfully.");
+
+        // refresh page
+        router.go(0);
       }
 
       message.success("Status saved successfully.");
