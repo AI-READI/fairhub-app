@@ -224,11 +224,19 @@ export interface StudyReference {
   type: string | null;
 }
 
+export interface StudyReferences {
+  reference_list: StudyReference[];
+}
+
 export interface StudyLink {
   id: string;
   label: string;
   origin: string;
   url: string;
+}
+
+export interface StudyLinks {
+  link_list: StudyLink[];
 }
 
 export interface StudyIPD {
@@ -238,6 +246,10 @@ export interface StudyIPD {
   origin: string;
   type: string | null;
   url: string;
+}
+
+export interface StudyIPDs {
+  ipd_list: StudyIPD[];
 }
 
 export interface StudyReferencesModule {

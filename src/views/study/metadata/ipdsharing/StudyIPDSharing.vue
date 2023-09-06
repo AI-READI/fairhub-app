@@ -3,12 +3,15 @@ import type { FormInst, FormRules } from "naive-ui";
 
 import FORM_JSON from "@/assets/data/form.json";
 import type { StudyIPDSharing } from "@/types/Study";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
+const router = useRouter();
+const message = useMessage();
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData = ref<StudyIPDSharing>({
+const moduleData = reactive<StudyIPDSharing>({
   access_criteria: "",
   description: "",
   info_type_list: [],
@@ -25,13 +28,63 @@ const rules: FormRules = {
   },
 };
 
+onBeforeMount(async () => {
+  const studyId = route.params.studyId;
+
+  const response = await fetch(`${baseURL}/study/${studyId}/metadata/ipdsharing`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  });
+
+  console.log(response);
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+
+  moduleData.access_criteria = data.ipd_sharing_access_criteria;
+  moduleData.description = data.ipd_sharing_description;
+  moduleData.info_type_list = data.ipd_sharing_info_type_list;
+  moduleData.ipd_sharing = data.ipd_sharing;
+  moduleData.time_frame = data.ipd_sharing_time_frame;
+  moduleData.url = data.ipd_sharing_url;
+});
+
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (!errors) {
-      // console.log(data);
+      const data = {
+        ipd_sharing: moduleData.ipd_sharing,
+        ipd_sharing_access_criteria: moduleData.access_criteria,
+        ipd_sharing_description: moduleData.description,
+        ipd_sharing_info_type_list: moduleData.info_type_list,
+        ipd_sharing_time_frame: moduleData.time_frame,
+        ipd_sharing_url: moduleData.url,
+      };
 
-      // post to api
+      const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/ipdsharing`, {
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PUT",
+      });
+
+      if (!response.ok) {
+        message.error("Something went wrong.");
+        return;
+      } else {
+        message.success("Study updated successfully.");
+
+        // refresh page
+        router.go(0);
+      }
+
       console.log("success");
     } else {
       console.log("error");

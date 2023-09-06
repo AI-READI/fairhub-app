@@ -37,14 +37,15 @@ const rules: FormRules = {
 };
 
 onBeforeMount(async () => {
-  const studyId = route.params.studyId;
-
-  const response = await fetch(`${baseURL}/study/${studyId}/metadata/sponsors_collaborators`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "GET",
-  });
+  const response = await fetch(
+    `${baseURL}/study/${route.params.studyId}/metadata/sponsors_collaborators`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "GET",
+    }
+  );
 
   console.log(response);
 

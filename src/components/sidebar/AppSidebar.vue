@@ -143,15 +143,31 @@ const UpperMenuOptions = computed(() => [
         key: "study:enrollment",
         label: "Enrollment",
       },
-
       {
         icon: renderIcon("icons8:share"),
         key: "study:metadata:ipd-sharing",
         label: "IPD Sharing",
       },
       {
-        icon: renderIcon("zondicons:book-reference"),
-        key: "study:metadata:references",
+        children: [
+          {
+            icon: renderIcon("bi:journal-medical"),
+            key: "study:metadata:references",
+            label: "Publications",
+          },
+          {
+            icon: renderIcon("fluent:link-12-filled"),
+            key: "study:metadata:links",
+            label: "Links",
+          },
+          {
+            icon: renderIcon("material-symbols:smb-share"),
+            key: "study:metadata:available-ipd",
+            label: "Available IPD",
+          },
+        ],
+        icon: renderIcon("ooui:reference"),
+        key: "study:references",
         label: "References",
       },
     ],
