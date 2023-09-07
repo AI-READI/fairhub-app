@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import log from "@/middleware/log";
 import NotFound from "@/views/404/NotFound.vue";
 import UserProfile from "@/views/account/UserProfile.vue";
+import LoginPage from "@/views/auth/LoginPage.vue";
 import Changelog from "@/views/help/ChangeLog.vue";
 import Documentation from "@/views/help/DocumentationPage.vue";
 import HelpPage from "@/views/help/HelpPage.vue";
@@ -73,6 +74,16 @@ const router = createRouter({
       name: "home",
       path: "/",
       component: HomePage,
+    },
+    {
+      path: "/auth",
+      children: [
+        {
+          name: "login",
+          path: "login",
+          component: LoginPage,
+        },
+      ],
     },
     {
       path: "/studies",

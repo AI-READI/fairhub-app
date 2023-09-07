@@ -144,12 +144,21 @@ const handleLogin = (e: MouseEvent) => {
         </n-input>
 
         <div class="flex items-center justify-center space-x-3">
-          <n-button type="primary" v-if="!authStore.isAuthenticated" @click="showLoginModal">
+          <RouterLink to="/auth/login" v-if="!authStore.isAuthenticated">
+            <n-button type="primary">
+              <template #icon>
+                <f-icon icon="majesticons:login" />
+              </template>
+              Login
+            </n-button>
+          </RouterLink>
+
+          <!-- <n-button type="primary" v-if="!authStore.isAuthenticated" @click="showLoginModal">
             <template #icon>
               <f-icon icon="majesticons:login" />
             </template>
             Login
-          </n-button>
+          </n-button> -->
 
           <n-dropdown
             :options="profileOptions"

@@ -9,6 +9,8 @@ export const useAuthStore = defineStore(
 
     const showLoginModal = ref(false);
 
+    const signIn = (email_address: string, password: string) => {};
+
     function setLoggedIn() {
       isAuthenticated.value = true;
       user.value = "sanjay@email.org";

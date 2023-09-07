@@ -358,6 +358,11 @@ const hideSidebar = computed(() => {
   if (currentRoute.path === "/") {
     return false;
   }
+
+  if (currentRoute.path.startsWith("/auth/")) {
+    return false;
+  }
+
   return true;
 });
 
