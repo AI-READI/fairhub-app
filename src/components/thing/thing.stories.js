@@ -1,25 +1,25 @@
-import { CashOutline as CashIcon } from "@vicons/ionicons5";
+import { Icon } from "@iconify/vue";
 import { html } from "code-tag";
 import { NAvatar, NButton, NCheckbox, NCol, NIcon, NRow, NSpace, NThing } from "naive-ui";
 import { ref } from "vue";
 
 export default {
   title: "Components/Thing",
-  component: NThing,
   argTypes: {},
+  component: NThing,
 };
 
 const HorizontalTemplate = () => ({
-  components: { NThing, CashIcon, NButton, NIcon, NSpace, NCheckbox, NCol, NRow, NAvatar },
+  components: { Icon, NAvatar, NButton, NCheckbox, NCol, NIcon, NRow, NSpace, NThing },
   data() {},
   setup() {
     return {
+      action: ref(true),
       avatar: ref(true),
-      header: ref(true),
-      headerExtra: ref(true),
       description: ref(true),
       footer: ref(true),
-      action: ref(true),
+      header: ref(true),
+      headerExtra: ref(true),
     };
   },
   template: html` <n-row>
@@ -50,16 +50,14 @@ const HorizontalTemplate = () => ({
     <n-thing v-bind="args">
       <template v-if="avatar" #avatar>
         <n-avatar>
-          <n-icon>
-            <cash-icon />
-          </n-icon>
+          <Icon icon="ion:cash" />
         </n-avatar>
       </template>
       <template v-if="header" #header> Money </template>
       <template v-if="headerExtra" #header-extra>
         <n-button circle size="small">
           <template #icon>
-            <cash-icon />
+            <Icon icon="ion:cash" />
           </template>
         </n-button>
       </template>
@@ -72,25 +70,19 @@ const HorizontalTemplate = () => ({
         <n-space>
           <n-button size="small">
             <template #icon>
-              <n-icon>
-                <cash-icon />
-              </n-icon>
+              <Icon icon="ion:cash" />
             </template>
             1$
           </n-button>
           <n-button size="small">
             <template #icon>
-              <n-icon>
-                <cash-icon />
-              </n-icon>
+              <Icon icon="ion:cash" />
             </template>
             10$
           </n-button>
           <n-button size="small">
             <template #icon>
-              <n-icon>
-                <cash-icon />
-              </n-icon>
+              <Icon icon="ion:cash" />
             </template>
             100$
           </n-button>

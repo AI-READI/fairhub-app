@@ -8,13 +8,13 @@ export default defineComponent({
     NPagination,
   },
   props: {
+    disabled: { type: Boolean },
     mode: {
       type: String,
       validator: function (value: string) {
         return ["basic", "slot", "picker"].indexOf(value) !== -1;
       },
     },
-    disabled: { type: Boolean },
     simple: { type: Boolean },
     size: { type: String as PropType<"small" | "medium" | "large"> },
   },

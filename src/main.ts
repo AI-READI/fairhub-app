@@ -1,7 +1,9 @@
-import "./assets/main.css";
-import "vue3-lottie/dist/style.css";
+import "./assets/css/main.css";
+import "md-editor-v3/lib/style.css";
 
+import { Icon } from "@iconify/vue";
 import { createPinia } from "pinia";
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { createApp } from "vue";
 import Vue3Lottie from "vue3-lottie";
 
@@ -10,7 +12,12 @@ import router from "./router";
 
 const app = createApp(App);
 
-app.use(createPinia());
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
+
+app.component("f-icon", Icon);
+
+app.use(pinia);
 app.use(router);
 app.use(Vue3Lottie, { name: "Vue3Lottie" });
 

@@ -1,16 +1,16 @@
 <script setup>
 const props = defineProps({
-  colors: {
-    type: Object,
-    required: true,
-  },
   title: {
-    type: String,
     default: "Root",
+    type: String,
+  },
+  colors: {
+    required: true,
+    type: Object,
   },
   useDefaultBackgroundColor: {
-    type: Boolean,
     default: false,
+    type: Boolean,
   },
 });
 </script>

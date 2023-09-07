@@ -3,29 +3,29 @@ import { NButton, NCard, NForm, NFormItemRow, NInput, NTabPane, NTabs } from "na
 
 export default {
   title: "Components/Tabs",
-  component: NTabs,
   argTypes: {
+    closable: {
+      control: { type: "boolean" },
+    },
     size: {
       control: { type: "select" },
       options: ["small", "medium", "large"],
-    },
-    type: {
-      control: { type: "select" },
-      options: ["bar", "line", "card", "segment"],
-    },
-    closable: {
-      control: { type: "boolean" },
     },
 
     trigger: {
       control: { type: "select" },
       options: ["click", "hover"],
     },
+    type: {
+      control: { type: "select" },
+      options: ["bar", "line", "card", "segment"],
+    },
   },
+  component: NTabs,
 };
 
 const BasicTemplate = (args) => ({
-  components: { NTabs, NTabPane, NButton, NCard, NForm, NFormItemRow, NInput },
+  components: { NButton, NCard, NForm, NFormItemRow, NInput, NTabPane, NTabs },
   setup() {
     return { args };
   },
@@ -78,7 +78,7 @@ export const Basic = BasicTemplate.bind({});
 Basic.args = {};
 
 const SegmentTemplate = (args) => ({
-  components: { NTabs, NTabPane },
+  components: { NTabPane, NTabs },
   setup() {
     return { args };
   },

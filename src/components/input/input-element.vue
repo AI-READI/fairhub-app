@@ -4,28 +4,28 @@ import type { PropType } from "vue";
 import { defineComponent, ref } from "vue";
 
 export default defineComponent({
-  setup() {
-    return {
-      value: ref(null),
-    };
-  },
   components: {
+    NIcon,
     NInput,
     NSpace,
-    NIcon,
   },
   props: {
+    keyboard: { type: Boolean },
+    maxlength: { type: Number },
     mode: {
       type: String,
       validator: function (value: string) {
         return ["basic", "round", "prefix", "Limit"].indexOf(value) !== -1;
       },
     },
-    size: { type: String as PropType<"small" | "medium" | "large"> },
-    maxlength: { type: Number },
-    keyboard: { type: Boolean },
-    status: { type: String as PropType<"success" | "warning" | "error"> },
     showCount: { type: Boolean },
+    size: { type: String as PropType<"small" | "medium" | "large"> },
+    status: { type: String as PropType<"success" | "warning" | "error"> },
+  },
+  setup() {
+    return {
+      value: ref(null),
+    };
   },
 });
 </script>
