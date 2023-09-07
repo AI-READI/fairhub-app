@@ -48,21 +48,28 @@ onBeforeMount(async () => {
     method: "GET",
   });
 
-  console.log(response);
-
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
 
   const data = await response.json();
 
-  moduleData.primary = data.primary;
-  moduleData.secondary = data.secondary.map((item: any) => ({
-    ...item,
-    origin: "remote",
-  }));
+  moduleData.primary = {
+    id: data.primary.id,
+    domain: data.primary.identifier_domain,
+    identifier: data.primary.identifier,
+    link: data.primary.identifier_link,
+    type: data.primary.identifier_type,
+  };
 
-  console.log(moduleData);
+  moduleData.secondary = data.secondary.map((item: any) => ({
+    id: item.id,
+    domain: item.identifier_domain,
+    identifier: item.identifier,
+    link: item.identifier_link,
+    origin: "remote",
+    type: item.identifier_type,
+  }));
 });
 
 const removeSecondaryIdentifier = async (id: string) => {
@@ -106,23 +113,27 @@ const saveMetadata = (e: MouseEvent) => {
   formRef.value?.validate(async (errors) => {
     if (!errors) {
       const data = {
-        primary: moduleData.primary,
+        primary: {
+          id: moduleData.primary.id,
+          identifier: moduleData.primary.identifier,
+          identifier_domain: moduleData.primary.domain,
+          identifier_link: moduleData.primary.link,
+          identifier_type: moduleData.primary.type,
+        },
         secondary: moduleData.secondary.map((item) => {
           const entry = {
-            domain: item.domain,
+            id: item.id,
             identifier: item.identifier,
-            link: item.link,
-            type: item.type,
+            identifier_domain: item.domain,
+            identifier_link: item.link,
+            identifier_type: item.type,
           };
 
           if (item.origin === "local") {
-            return entry;
-          } else {
-            return {
-              ...entry,
-              id: item.id,
-            };
+            delete entry.id;
           }
+
+          return entry;
         }),
       };
 

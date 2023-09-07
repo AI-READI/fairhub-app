@@ -47,14 +47,9 @@ const saveMetadata = async (value: boolean) => {
     return;
   } else {
     message.success("Study updated successfully.");
-
-    // refresh page
-    router.go(0);
   }
 
   showLoader.value = false;
-
-  console.log("saveMetadata", value);
 };
 </script>
 

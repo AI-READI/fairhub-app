@@ -37,15 +37,12 @@ const rules: FormRules = {
 };
 
 onBeforeMount(async () => {
-  const response = await fetch(
-    `${baseURL}/study/${route.params.studyId}/metadata/sponsors_collaborators`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "GET",
-    }
-  );
+  const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/sponsors`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  });
 
   console.log(response);
 
@@ -76,16 +73,13 @@ const saveMetadata = (e: MouseEvent) => {
         responsible_party_type: moduleData.responsible_party.type,
       };
 
-      const response = await fetch(
-        `${baseURL}/study/${route.params.studyId}/metadata/sponsors_collaborators`,
-        {
-          body: JSON.stringify(data),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "PUT",
-        }
-      );
+      const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/sponsors`, {
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PUT",
+      });
 
       if (!response.ok) {
         message.error("Something went wrong.");

@@ -21,15 +21,13 @@ onBeforeMount(async () => {
     method: "GET",
   });
 
-  console.log(response);
-
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
 
   const data = await response.json();
 
-  moduleData.value = data;
+  moduleData.value = data.collaborator_name;
 });
 
 const addCollaborator = () => {
@@ -48,9 +46,9 @@ const saveMetadata = (e: MouseEvent) => {
       const collaborators = moduleData.value.filter((collaborator) => collaborator !== "");
 
       // remove collaborators with duplicate names
-      const uniqueCollaborators = [...new Set(collaborators)];
-
-      console.log("collaborators", uniqueCollaborators);
+      const uniqueCollaborators = {
+        collaborator_name: [...new Set(collaborators)],
+      };
 
       const response = await fetch(
         `${baseURL}/study/${route.params.studyId}/metadata/collaborators`,

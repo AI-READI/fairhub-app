@@ -33,8 +33,6 @@ onBeforeMount(async () => {
 
   const data: StudyArms = await response.json();
 
-  console.log(data);
-
   moduleData.arms = data.arms.map((item) => {
     return {
       ...item,
@@ -94,7 +92,7 @@ const saveMetadata = (e: MouseEvent) => {
           type: item.type,
         };
 
-        if (moduleData.study_type !== "interventional") {
+        if (moduleData.study_type !== "Interventional") {
           delete entry.type;
           delete entry.intervention_list;
         }
@@ -198,10 +196,10 @@ const saveMetadata = (e: MouseEvent) => {
         <n-form-item
           label="Type"
           :path="`arms[${index}].type`"
-          v-if="moduleData.study_type == 'interventional'"
+          v-if="moduleData.study_type == 'Interventional'"
           :rule="{
             message: 'Please select an intervention type',
-            required: moduleData.study_type === 'interventional',
+            required: moduleData.study_type === 'Interventional',
             trigger: ['blur', 'change'],
           }"
         >
@@ -214,7 +212,7 @@ const saveMetadata = (e: MouseEvent) => {
         </n-form-item>
 
         <n-form-item
-          v-if="moduleData.study_type == 'interventional'"
+          v-if="moduleData.study_type == 'Interventional'"
           label="Interventions"
           :path="`arms[${index}].intervention_list`"
           ignore-path-change

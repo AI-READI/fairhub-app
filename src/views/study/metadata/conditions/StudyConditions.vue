@@ -29,7 +29,7 @@ onBeforeMount(async () => {
 
   const data = await response.json();
 
-  moduleData.value = data;
+  moduleData.value = data.conditions;
 });
 
 const addCondition = () => {
@@ -48,9 +48,9 @@ const saveMetadata = (e: MouseEvent) => {
       const conditions = moduleData.value.filter((Condition) => Condition !== "");
 
       // remove Conditions with duplicate names
-      const uniqueConditions = [...new Set(conditions)];
-
-      console.log("conditions", uniqueConditions);
+      const uniqueConditions = {
+        conditions: [...new Set(conditions)],
+      };
 
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/conditions`, {
         body: JSON.stringify(uniqueConditions),
