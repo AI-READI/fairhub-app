@@ -75,7 +75,7 @@ const saveChanges = (e: MouseEvent) => {
       } else {
         message.success("Study updated successfully.");
 
-        router.push({ name: "studies:all-studies" }); // TODO: Redirect to study page
+        router.push({ name: "study:overview", params: { studyId: route.params.studyId } });
       }
 
       console.log("success");
