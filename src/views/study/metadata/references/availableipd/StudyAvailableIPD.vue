@@ -85,7 +85,6 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data = moduleData.ipd_list.map((item) => {
         const entry = {
-          id: item.id,
           comment: item.comment,
           identifier: item.identifier,
           type: item.type,
@@ -93,10 +92,13 @@ const saveMetadata = (e: MouseEvent) => {
         };
 
         if (item.origin === "local") {
-          delete entry.id;
+          return entry;
+        } else {
+          return {
+            ...entry,
+            id: item.id,
+          };
         }
-
-        return entry;
       });
 
       const response = await fetch(

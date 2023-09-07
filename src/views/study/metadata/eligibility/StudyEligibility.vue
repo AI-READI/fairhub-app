@@ -122,14 +122,22 @@ const saveMetadata = (e: MouseEvent) => {
   formRef.value?.validate(async (errors) => {
     if (!errors) {
       const data = {
-        ...moduleData,
+        exclusion_criteria: moduleData.criteria.exclusion_criteria,
+        gender: moduleData.gender,
+        gender_based: moduleData.gender_based,
+        gender_description: moduleData.gender_description,
+        healthy_volunteers:
+          moduleData.study_type === "Interventional" ? moduleData.healthy_volunteers : null,
+        inclusion_criteria: moduleData.criteria.inclusion_criteria,
+        maximum_age_unit: moduleData.maximum_age.unit,
+        maximum_age_value: moduleData.maximum_age.age,
+        minimum_age_unit: moduleData.minimum_age.unit,
+        minimum_age_value: moduleData.minimum_age.age,
+        sampling_method: moduleData.sampling_method,
+        study_population: moduleData.study_population,
       };
 
-      delete data.study_type;
-
-      if (moduleData.study_type !== "interventional") {
-        delete data.healthy_volunteers;
-      }
+      console.log("data", data);
 
       const response = await fetch(
         `${baseURL}/study/${route.params.studyId}/metadata/eligibility`,
@@ -302,7 +310,7 @@ const saveMetadata = (e: MouseEvent) => {
 
       <n-divider />
 
-      <div v-if="moduleData.study_type === 'interventional'">
+      <div v-if="moduleData.study_type === 'Interventional'">
         <h3>Interventional Studies</h3>
 
         <p class="pb-8 pt-2">
@@ -315,7 +323,7 @@ const saveMetadata = (e: MouseEvent) => {
           path="healthy_volunteers"
           :rule="{
             message: 'Please select if the volunteers are healthy',
-            required: moduleData.study_type === 'interventional' ? true : false,
+            required: moduleData.study_type === 'Interventional' ? true : false,
             trigger: ['blur', 'input'],
           }"
         >

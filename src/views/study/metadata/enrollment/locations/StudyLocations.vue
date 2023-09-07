@@ -32,7 +32,7 @@ onBeforeMount(async () => {
 
   const data = await response.json();
 
-  moduleData.location_list = data.map((item) => {
+  moduleData.location_list = data.map((item: any) => {
     return {
       ...item,
       contact_list: [],
@@ -94,11 +94,14 @@ const saveMetadata = (e: MouseEvent) => {
           zip: item.zip,
         };
 
-        if (item.origin === "remote") {
-          entry["id"] = item.id;
+        if (item.origin === "local") {
+          return entry;
+        } else {
+          return {
+            ...entry,
+            id: item.id,
+          };
         }
-
-        return entry;
       });
 
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/location`, {

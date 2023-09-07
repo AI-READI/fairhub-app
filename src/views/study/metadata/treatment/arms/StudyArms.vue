@@ -87,15 +87,11 @@ const saveMetadata = (e: MouseEvent) => {
       const data = moduleData.arms.map((item) => {
         const entry = {
           description: item.description,
-          intervention_list: item.intervention_list,
+          intervention_list:
+            moduleData.study_type === "Interventional" ? item.intervention_list : null,
           label: item.label,
-          type: item.type,
+          type: moduleData.study_type === "Interventional" ? item.type : null,
         };
-
-        if (moduleData.study_type !== "Interventional") {
-          delete entry.type;
-          delete entry.intervention_list;
-        }
 
         if (item.origin === "local") {
           return entry;

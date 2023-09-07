@@ -46,7 +46,7 @@ onBeforeMount(async () => {
           <div class="flex w-full flex-col space-y-2">
             <span class="font-semibold"> Item </span>
 
-            <n-input v-model:value="resource.value" size="large" type="textarea" rows="1" />
+            <n-input v-model:value="resource['value']" size="large" type="textarea" rows="1" />
           </div>
 
           <div class="flex flex-col space-y-3">

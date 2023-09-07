@@ -31,14 +31,12 @@ onBeforeMount(async () => {
 
   const data = await response.json();
 
-  moduleData.central_contact_list = data.map((item) => {
+  moduleData.central_contact_list = data.map((item: any) => {
     return {
       ...item,
       origin: "remote",
     };
   });
-
-  moduleData.central_contact_list = data.central_contact_list;
 });
 
 const removeCentralContact = async (id: string) => {
@@ -73,7 +71,7 @@ const addCentralContact = () => {
     id: nanoid(),
     name: "",
     affiliation: "",
-    email: "",
+    email_address: "",
     origin: "local",
     phone: "",
     phone_ext: "",
@@ -88,17 +86,22 @@ const saveMetadata = (e: MouseEvent) => {
         const entry = {
           name: item.name,
           affiliation: item.affiliation,
-          email: item.email,
+          email_address: item.email_address,
           phone: item.phone,
           phone_ext: item.phone_ext,
         };
 
-        if (item.origin === "remote") {
-          entry["id"] = item.id;
+        if (item.origin === "local") {
+          return entry;
+        } else {
+          return {
+            ...entry,
+            id: item.id,
+          };
         }
-
-        return entry;
       });
+
+      console.log(data);
 
       const response = await fetch(
         `${baseURL}/study/${route.params.studyId}/metadata/central-contact`,
@@ -193,14 +196,14 @@ const saveMetadata = (e: MouseEvent) => {
 
         <n-form-item
           label="Email Address"
-          :path="`central_contact_list[${index}].email`"
+          :path="`central_contact_list[${index}].email_address`"
           :rule="{
             message: 'Please enter an email',
             required: true,
             trigger: ['blur', 'change'],
           }"
         >
-          <n-input v-model:value="item.email" placeholder="sasha.b@aot.org" clearable />
+          <n-input v-model:value="item.email_address" placeholder="sasha.b@aot.org" clearable />
         </n-form-item>
 
         <n-form-item

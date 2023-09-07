@@ -27,7 +27,7 @@ onBeforeMount(async () => {
 
   const data = await response.json();
 
-  moduleData.value = data.collaborator_name;
+  moduleData.value = data;
 });
 
 const addCollaborator = () => {
@@ -46,9 +46,7 @@ const saveMetadata = (e: MouseEvent) => {
       const collaborators = moduleData.value.filter((collaborator) => collaborator !== "");
 
       // remove collaborators with duplicate names
-      const uniqueCollaborators = {
-        collaborator_name: [...new Set(collaborators)],
-      };
+      const uniqueCollaborators = [...new Set(collaborators)];
 
       const response = await fetch(
         `${baseURL}/study/${route.params.studyId}/metadata/collaborators`,

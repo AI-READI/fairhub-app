@@ -122,7 +122,6 @@ const saveMetadata = (e: MouseEvent) => {
         },
         secondary: moduleData.secondary.map((item) => {
           const entry = {
-            id: item.id,
             identifier: item.identifier,
             identifier_domain: item.domain,
             identifier_link: item.link,
@@ -130,10 +129,13 @@ const saveMetadata = (e: MouseEvent) => {
           };
 
           if (item.origin === "local") {
-            delete entry.id;
+            return entry;
+          } else {
+            return {
+              ...entry,
+              id: item.id,
+            };
           }
-
-          return entry;
         }),
       };
 

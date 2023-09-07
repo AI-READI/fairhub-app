@@ -80,16 +80,18 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data = moduleData.link_list.map((item) => {
         const entry = {
-          id: item.id,
           title: item.label,
           url: item.url,
         };
 
         if (item.origin === "local") {
-          delete entry.id;
+          return entry;
+        } else {
+          return {
+            ...entry,
+            id: item.id,
+          };
         }
-
-        return entry;
       });
 
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/link`, {

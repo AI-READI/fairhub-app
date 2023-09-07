@@ -35,7 +35,7 @@ onBeforeMount(async () => {
 
   console.log(data);
 
-  moduleData.interventions = data.map((item) => {
+  moduleData.interventions = data.map((item: any) => {
     return {
       ...item,
       origin: "remote",

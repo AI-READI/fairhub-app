@@ -161,7 +161,7 @@ export interface StudyContact {
   id: string;
   name: string;
   affiliation: string;
-  email: string;
+  email_address: string;
   origin: string;
   phone: string;
   phone_ext: string;

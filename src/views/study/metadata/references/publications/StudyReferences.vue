@@ -83,17 +83,19 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data = moduleData.reference_list.map((item) => {
         const entry = {
-          id: item.id,
           citation: item.citation,
           identifier: item.identifier,
           type: item.type,
         };
 
         if (item.origin === "local") {
-          delete entry.id;
+          return entry;
+        } else {
+          return {
+            ...entry,
+            id: item.id,
+          };
         }
-
-        return entry;
       });
 
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/reference`, {

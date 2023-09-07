@@ -32,14 +32,12 @@ onBeforeMount(async () => {
 
   const data = await response.json();
 
-  moduleData.overall_official_list = data.map((item) => {
+  moduleData.overall_official_list = data.map((item: any) => {
     return {
       ...item,
       origin: "remote",
     };
   });
-
-  moduleData.overall_official_list = data.overall_official_list;
 });
 
 const removeOverallOfficial = async (id: string) => {
@@ -90,11 +88,14 @@ const saveMetadata = (e: MouseEvent) => {
           role: item.role,
         };
 
-        if (item.origin === "remote") {
-          entry["id"] = item.id;
+        if (item.origin === "local") {
+          return entry;
+        } else {
+          return {
+            ...entry,
+            id: item.id,
+          };
         }
-
-        return entry;
       });
 
       const response = await fetch(
