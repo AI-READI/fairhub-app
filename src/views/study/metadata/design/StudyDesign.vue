@@ -167,41 +167,52 @@ const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
     if (!errors) {
-      const data: any = {};
+      const data = {
+        bio_spec_description: isObservationalStudy ? moduleData.bio_spec_description : "",
+        bio_spec_retention: isObservationalStudy ? moduleData.bio_spec_retention : null,
 
-      console.log("moduleData", moduleData);
+        design_allocation: isInterventionalStudy ? moduleData.design_info.allocation : null,
 
-      if (isInterventionalStudy) {
-        data.design_allocation = moduleData.design_info.allocation;
-        data.design_intervention_model = moduleData.design_info.intervention_model;
-        data.design_intervention_model_description =
-          moduleData.design_info.intervention_model_description;
-        data.design_primary_purpose = moduleData.design_info.primary_purpose;
+        design_intervention_model: isInterventionalStudy
+          ? moduleData.design_info.intervention_model
+          : null,
+        design_intervention_model_description: isInterventionalStudy
+          ? moduleData.design_info.intervention_model_description
+          : null,
 
-        data.design_masking = moduleData.design_info.masking;
-        data.design_masking_description = moduleData.design_info.masking_description;
-        data.design_who_masked_list = moduleData.design_info.who_masked_list;
+        design_masking: isInterventionalStudy ? moduleData.design_info.masking : null,
+        design_masking_description: isInterventionalStudy
+          ? moduleData.design_info.masking_description
+          : "",
 
-        data.phase_list = moduleData.phase_list;
+        design_observational_model_list: isObservationalStudy
+          ? moduleData.design_info.observational_model_list
+          : [],
 
-        data.number_arms = moduleData.number_arms;
-      }
+        design_primary_purpose: isInterventionalStudy
+          ? moduleData.design_info.primary_purpose
+          : null,
 
-      if (isObservationalStudy) {
-        data.design_observational_model_list = moduleData.design_info.observational_model_list;
-        data.design_time_perspective_list = moduleData.design_info.time_perspective_list;
+        design_time_perspective_list: isObservationalStudy
+          ? moduleData.design_info.time_perspective_list
+          : [],
 
-        data.bio_spec_retention = moduleData.bio_spec_retention;
-        data.bio_spec_description = moduleData.bio_spec_description;
+        design_who_masked_list: isInterventionalStudy
+          ? moduleData.design_info.who_masked_list
+          : null,
 
-        data.target_duration = moduleData.target_duration;
-        data.number_groups_cohorts = moduleData.number_groups_cohorts;
-      }
+        enrollment_count: moduleData.enrollment_info.enrollment_count,
+        enrollment_type: moduleData.enrollment_info.enrollment_type,
 
-      data.enrollment_count = moduleData.enrollment_info.enrollment_count;
-      data.enrollment_type = moduleData.enrollment_info.enrollment_type;
+        number_arms: moduleData.study_type === "Interventional" ? moduleData.number_arms : null,
+        number_groups_cohorts: isObservationalStudy ? moduleData.number_groups_cohorts : null,
 
-      console.log("data", data);
+        phase_list: moduleData.study_type === "Interventional" ? moduleData.phase_list : [],
+
+        study_type: moduleData.study_type,
+
+        target_duration: isObservationalStudy ? moduleData.target_duration : "",
+      };
 
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/design`, {
         body: JSON.stringify(data),
