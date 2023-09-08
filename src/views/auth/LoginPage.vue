@@ -7,13 +7,15 @@ const emailAddress = ref("");
 const password = ref("");
 
 const loading = ref(false);
-const invalidEmailAddress = computed(() => !emailAddress.value.includes("@"));
+const invalidEmailAddress = computed(() => !emailAddress.value.includes("@")); //add email validation
 
 const signIn = async () => {
   loading.value = true;
 
   try {
     // accept anything for now
+
+    authStore.signIn(emailAddress.value, password.value);
   } catch (error) {
     console.error(error);
   } finally {
