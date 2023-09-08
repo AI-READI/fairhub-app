@@ -26,7 +26,7 @@ const signIn = async () => {
 
 <template>
   <main class="flex h-full w-full items-start py-4 pr-6">
-    <div class="mr-5 flex flex-col px-20 pb-10 pt-[10%]">
+    <div class="mr-5 flex w-[30%] flex-col px-20 pb-10 pt-[10%]">
       <h1 class="mb-1 font-extrabold">Login to fairhub.io</h1>
 
       <p class="text-2xl font-medium">Welcome back!</p>
