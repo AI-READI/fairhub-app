@@ -94,7 +94,7 @@ const handleSelect = (key: string | number) => {
   console.info(String(key));
 
   if (key === "logout") {
-    authStore.setLoggedOut();
+    authStore.logout();
     router.push("/");
   }
 };
@@ -109,7 +109,7 @@ const handleLogin = (e: MouseEvent) => {
 
         authStore.showLoginModal = false;
 
-        authStore.setLoggedIn();
+        authStore.signIn("admin", "admin");
 
         success("Logged in successfully");
 
