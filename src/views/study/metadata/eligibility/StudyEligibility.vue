@@ -411,9 +411,9 @@ const saveMetadata = (e: MouseEvent) => {
         </n-dynamic-input>
       </n-form-item>
 
-      <n-divider />
-
       <div v-if="moduleData.study_type === 'observational'">
+        <n-divider />
+
         <h3>Observational Studies</h3>
 
         <p class="pb-8 pt-2">

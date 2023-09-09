@@ -4,7 +4,6 @@ import type { FormInst } from "naive-ui";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
-const router = useRouter();
 const message = useMessage();
 
 const formRef = ref<FormInst | null>(null);
@@ -64,9 +63,6 @@ const saveMetadata = (e: MouseEvent) => {
         return;
       } else {
         message.success("Study updated successfully.");
-
-        // refresh page
-        router.go(0);
       }
 
       console.log("success");
