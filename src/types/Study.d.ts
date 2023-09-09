@@ -47,7 +47,7 @@ export interface StudyStatusModule {
   completion_date: string | null;
   completion_date_type: string | null;
   overall_status: string | null;
-  start_date: string;
+  start_date: string | null;
   start_date_type: string | null;
   why_stopped: string;
 }
