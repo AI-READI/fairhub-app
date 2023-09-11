@@ -191,7 +191,7 @@ const navigateToStudy = (studyId: string) => {
 
         <TransitionGroup name="fade" tag="ul" class="list-none p-0" v-else>
           <li
-            class="my-5 flex w-full cursor-pointer items-center rounded-md border border-slate-100 shadow-sm transition-all hover:border-slate-200 hover:bg-slate-50 hover:shadow-md"
+            class="my-5 flex w-full cursor-pointer items-start rounded-md border border-slate-100 shadow-sm transition-all hover:border-slate-200 hover:bg-slate-50 hover:shadow-md"
             v-for="study in studies"
             :key="study.id"
             @click="navigateToStudy(study.id)"
@@ -200,16 +200,16 @@ const navigateToStudy = (studyId: string) => {
               <img :src="study.image" class="h-full w-full rounded-l-md object-cover" />
             </div>
 
-            <div class="flex w-full grow flex-col space-y-2 px-6 py-3">
+            <div class="flex h-full w-full grow flex-col space-y-2 px-6 py-3">
               <div class="flex flex-col space-y-2">
                 <div class="flex justify-between pt-2">
                   <h3>{{ study.title }}</h3>
                   <span> {{ study.size }} </span>
                 </div>
 
-                <n-divider />
+                <n-divider v-if="study.description" />
 
-                <p>{{ study.description }}</p>
+                <p v-if="study.description">{{ study.description }}</p>
               </div>
 
               <n-divider />
