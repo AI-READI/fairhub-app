@@ -16,7 +16,6 @@ export interface Study {
   description: string;
   image: string;
   keywords: string[];
-  last_updated: string;
   owner: {
     email: string;
     first_name: string;
@@ -24,6 +23,7 @@ export interface Study {
     orcid: string;
   };
   size: string;
+  updated_on: number;
 }
 
 export interface StudyIdentifier {

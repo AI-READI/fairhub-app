@@ -88,7 +88,7 @@ const saveMetadata = (e: MouseEvent) => {
         const entry = {
           description: item.description,
           intervention_list:
-            moduleData.study_type === "Interventional" ? item.intervention_list : null,
+            moduleData.study_type === "Interventional" ? item.intervention_list : [],
           label: item.label,
           type: moduleData.study_type === "Interventional" ? item.type : null,
         };

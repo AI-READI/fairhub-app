@@ -39,15 +39,15 @@ const studies = computed(() => {
    * TODO: Implement sorting (type error with a and b)
    */
 
-  // filteredStudies.sort((a, b) => {
-  //   if (sortOption.value === "title") {
-  //     return a.title.localeCompare(b.title);
-  //   } else if (sortOption.value === "last_updated") {
-  //     return new Date(b.last_updated).getTime() - new Date(a.last_updated).getTime();
-  //   } else if (sortOption.value === "size") {
-  //     return b.size - a.size;
-  //   }
-  // });
+  filteredStudies.sort((a, b) => {
+    if (sortOption.value === "title") {
+      return a.title.localeCompare(b.title);
+    } else if (sortOption.value === "last_updated") {
+      return new Date(b.last_updated).getTime() - new Date(a.last_updated).getTime();
+    } else if (sortOption.value === "size") {
+      return b.size - a.size;
+    }
+  });
 
   if (sortOrder.value === "desc") {
     filteredStudies.reverse();
@@ -216,7 +216,7 @@ const navigateToStudy = (studyId: string) => {
 
               <p class="pt-2">
                 <span class="font-bold"> Last updated: </span>
-                <span> {{ displayHumanFriendlyDateAndTime(study.last_updated) }} </span>
+                <span> {{ displayHumanFriendlyDateAndTime(study.updated_on) }} </span>
               </p>
 
               <!-- needs last_published and last_published.doi -->

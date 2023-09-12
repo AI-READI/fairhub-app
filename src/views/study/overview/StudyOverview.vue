@@ -67,7 +67,7 @@ const editStudyDetails = () => {
 
           <p class="py-4">
             <span class="font-bold">Last updated: </span>
-            <span>{{ displayHumanFriendlyDateAndTime(study.last_updated) }}</span>
+            <span>{{ displayHumanFriendlyDateAndTime(study.updated_on) }}</span>
           </p>
 
           <!-- <p>

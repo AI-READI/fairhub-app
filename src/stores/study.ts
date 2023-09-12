@@ -17,7 +17,6 @@ export const useStudyStore = defineStore(
       description: "",
       image: "",
       keywords: [],
-      last_updated: "",
       owner: {
         email: "",
         first_name: "",
@@ -25,6 +24,7 @@ export const useStudyStore = defineStore(
         orcid: "",
       },
       size: "",
+      updated_on: 0,
     });
 
     const fetchAllStudies = async () => {
