@@ -35,15 +35,11 @@ const studies = computed(() => {
 
   // sort the studies based on the sort option
 
-  /**
-   * TODO: Implement sorting (type error with a and b)
-   */
-
-  filteredStudies.sort((a, b) => {
+  filteredStudies.sort((a: any, b: any) => {
     if (sortOption.value === "title") {
       return a.title.localeCompare(b.title);
     } else if (sortOption.value === "last_updated") {
-      return new Date(b.last_updated).getTime() - new Date(a.last_updated).getTime();
+      return new Date(b.updated_on).getTime() - new Date(a.updated_on).getTime();
     } else if (sortOption.value === "size") {
       return b.size - a.size;
     }
