@@ -143,7 +143,36 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
+    <div v-if="!moduleData.study_type">
+      <n-alert
+        title="A study type should be added before you can add study arms."
+        type="error"
+        class=""
+      >
+        <div>
+          <p></p>
+
+          <n-button size="small" type="info" ghost class="mt-2" @click="saveMetadata">
+            <template #icon>
+              <f-icon icon="solar:route-linear" />
+            </template>
+
+            Add Study Type
+          </n-button>
+        </div>
+      </n-alert>
+
+      <n-divider />
+    </div>
+
+    <n-form
+      ref="formRef"
+      :model="moduleData"
+      size="large"
+      label-placement="top"
+      class="pr-4"
+      :disabled="!moduleData.study_type"
+    >
       <CollapsibleCard
         v-for="(item, index) in moduleData.arms"
         :key="item.id"
@@ -236,7 +265,13 @@ const saveMetadata = (e: MouseEvent) => {
         </n-form-item>
       </CollapsibleCard>
 
-      <n-button class="my-10 w-full" dashed type="success" @click="addArmGroup">
+      <n-button
+        class="my-10 w-full"
+        dashed
+        type="success"
+        @click="addArmGroup"
+        :disabled="!moduleData.study_type"
+      >
         <template #icon>
           <f-icon icon="gridicons:create" />
         </template>
