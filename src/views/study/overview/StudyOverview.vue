@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { filesize } from "filesize";
+
 import { useAuthStore } from "@/stores/auth";
 import { useStudyStore } from "@/stores/study";
 import type { Study } from "@/types/Study";
@@ -62,7 +64,7 @@ const editStudyDetails = () => {
 
           <n-space>
             <n-tag>{{ study.owner.first_name }} {{ study.owner.last_name }}</n-tag>
-            <n-tag type="warning">{{ study.size }}</n-tag>
+            <n-tag type="warning">{{ filesize(study.size || 0) }}</n-tag>
           </n-space>
 
           <p class="py-4">

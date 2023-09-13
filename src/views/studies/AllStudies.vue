@@ -200,7 +200,7 @@ const navigateToStudy = (studyId: string) => {
               <div class="flex flex-col space-y-2">
                 <div class="flex justify-between pt-2">
                   <h3>{{ study.title }}</h3>
-                  <span> {{ filesize(study.size) }} </span>
+                  <span> {{ filesize(study.size || 0) }} </span>
                 </div>
 
                 <n-divider v-if="study.description" />
