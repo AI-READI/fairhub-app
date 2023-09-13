@@ -23,7 +23,7 @@ export const useStudyStore = defineStore(
         last_name: "",
         orcid: "",
       },
-      size: "",
+      size: 0,
       updated_on: 0,
     });
 

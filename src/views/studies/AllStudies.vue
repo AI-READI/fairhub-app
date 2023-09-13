@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { useMessage } from "naive-ui";
-import { computed, onBeforeMount, onMounted } from "vue";
-import { RouterLink, useRouter } from "vue-router";
+import { filesize } from "filesize";
 
-import FadeTransition from "@/components/transitions/FadeTransition.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useFilterStore } from "@/stores/filter";
 import { useStudyStore } from "@/stores/study";
+import type { Study } from "@/types/Study";
 import { displayHumanFriendlyDateAndTime } from "@/utils/date";
 
 const router = useRouter();
@@ -35,13 +33,15 @@ const studies = computed(() => {
 
   // sort the studies based on the sort option
 
-  filteredStudies.sort((a: any, b: any) => {
+  filteredStudies.sort((a: Study, b: Study) => {
     if (sortOption.value === "title") {
       return a.title.localeCompare(b.title);
     } else if (sortOption.value === "last_updated") {
       return new Date(b.updated_on).getTime() - new Date(a.updated_on).getTime();
     } else if (sortOption.value === "size") {
       return b.size - a.size;
+    } else {
+      return 0;
     }
   });
 
@@ -200,7 +200,7 @@ const navigateToStudy = (studyId: string) => {
               <div class="flex flex-col space-y-2">
                 <div class="flex justify-between pt-2">
                   <h3>{{ study.title }}</h3>
-                  <span> {{ study.size }} </span>
+                  <span> {{ filesize(study.size) }} </span>
                 </div>
 
                 <n-divider v-if="study.description" />
@@ -236,6 +236,13 @@ const navigateToStudy = (studyId: string) => {
             </div> -->
             </div>
           </li>
+          <n-empty
+            v-if="studies.length === 0"
+            description="No studies found"
+            size="huge"
+            class="my-10"
+          >
+          </n-empty>
         </TransitionGroup>
       </FadeTransition>
     </div>

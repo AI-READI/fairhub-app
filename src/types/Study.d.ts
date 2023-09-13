@@ -22,7 +22,7 @@ export interface Study {
     last_name: string;
     orcid: string;
   };
-  size: string;
+  size: number;
   updated_on: number;
 }
 
