@@ -189,7 +189,7 @@ export interface StudyLocation {
   id: string;
   city: string;
   contact_list: StudyLocationContact[];
-  country: string;
+  country: string | null;
   facility: string;
   origin: string;
   state: string;

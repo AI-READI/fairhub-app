@@ -172,7 +172,7 @@ const saveMetadata = (e: MouseEvent) => {
          * * Custom check since the inbuilt validation doesn't seem to catch/show min value errors
          * TODO: create a custom rule for this
          */
-        if (moduleData.number_arms <= 0) {
+        if (moduleData.number_arms && moduleData.number_arms <= 0) {
           message.error("Number of arms must be greater than 0.");
           return;
         }
