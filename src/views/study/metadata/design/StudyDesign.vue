@@ -167,6 +167,17 @@ const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
     if (!errors) {
+      if (moduleData.study_type === "Interventional") {
+        /**
+         * * Custom check since the inbuilt validation doesn't seem to catch/show min value errors
+         * TODO: create a custom rule for this
+         */
+        if (moduleData.number_arms <= 0) {
+          message.error("Number of arms must be greater than 0.");
+          return;
+        }
+      }
+
       const data = {
         bio_spec_description: isObservationalStudy ? moduleData.bio_spec_description : "",
         bio_spec_retention: isObservationalStudy ? moduleData.bio_spec_retention : null,
