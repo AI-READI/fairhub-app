@@ -2,6 +2,7 @@
 import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
+import COUNTRIES_JSON from "@/assets/data/countries.json";
 import FORM_JSON from "@/assets/data/form.json";
 import type { StudyLocations } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
@@ -14,6 +15,15 @@ const formRef = ref<FormInst | null>(null);
 
 const moduleData = reactive<StudyLocations>({
   location_list: [],
+});
+
+const countryOptions = computed(() => {
+  return COUNTRIES_JSON.map((item) => {
+    return {
+      label: item.name,
+      value: item.name,
+    };
+  });
 });
 
 onBeforeMount(async () => {
@@ -71,7 +81,7 @@ const addLocation = () => {
     id: nanoid(),
     city: "",
     contact_list: [],
-    country: "",
+    country: null,
     facility: "",
     origin: "local",
     state: "",
@@ -226,7 +236,13 @@ const saveMetadata = (e: MouseEvent) => {
             trigger: ['blur', 'change'],
           }"
         >
-          <n-input v-model:value="item.country" placeholder="United States" clearable />
+          <n-select
+            v-model:value="item.country"
+            placeholder="United States of America"
+            clearable
+            filterable
+            :options="countryOptions"
+          />
         </n-form-item>
       </CollapsibleCard>
 

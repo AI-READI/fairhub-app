@@ -1,4 +1,7 @@
 import dayjs from "dayjs";
 
-export const displayHumanFriendlyDateAndTime = (date: string) =>
-  `${dayjs(date).format("dddd, MMMM D, YYYY")} at ${dayjs(date).format("h:mm A")}`;
+export const displayHumanFriendlyDateAndTime = (date: number) => {
+  const parsedDate = dayjs.unix(date);
+
+  return `${parsedDate.format("dddd, MMMM D, YYYY")} at ${parsedDate.format("h:mm A")}`;
+};

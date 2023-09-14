@@ -206,10 +206,7 @@ const saveMetadata = (e: MouseEvent) => {
             trigger: ['blur', 'input'],
           }"
         >
-          <n-input-group>
-            <n-input-group-label size="large">https://</n-input-group-label>
-            <n-input v-model:value="item.url" placeholder="nih.org" clearable />
-          </n-input-group>
+          <n-input v-model:value="item.url" placeholder="https://nih.org" clearable />
         </n-form-item>
 
         <n-form-item label="Comment" :path="`ipd_list[${index}].comment`">

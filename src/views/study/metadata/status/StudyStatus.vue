@@ -12,6 +12,8 @@ const message = useMessage();
 
 const formRef = ref<FormInst | null>(null);
 
+// date type: dayjs().format("YYYY-MM-DD HH:mm:ss")
+
 const moduleData = ref<StudyStatusModule>({
   completion_date: null,
   completion_date_type: null,

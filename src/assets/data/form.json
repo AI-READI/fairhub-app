@@ -678,5 +678,15 @@
       "label": "Other",
       "value": "Other"
     }
+  ],
+  "studyMetadataReferencesGenericOptions": [
+    {
+      "label": "Yes",
+      "value": "Yes"
+    },
+    {
+      "label": "No",
+      "value": "No"
+    }
   ]
 }
