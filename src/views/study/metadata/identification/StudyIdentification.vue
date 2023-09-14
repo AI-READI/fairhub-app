@@ -235,15 +235,11 @@ const saveMetadata = (e: MouseEvent) => {
       </n-form-item>
 
       <n-form-item label="Link" path="primary.link">
-        <n-input-group>
-          <n-input-group-label size="large">https://</n-input-group-label>
-
-          <n-input
-            v-model:value="moduleData.primary.link"
-            placeholder="clinicaltrials.gov"
-            clearable
-          />
-        </n-input-group>
+        <n-input
+          v-model:value="moduleData.primary.link"
+          placeholder="https://clinicaltrials.gov"
+          clearable
+        />
       </n-form-item>
 
       <n-divider />
@@ -324,15 +320,11 @@ const saveMetadata = (e: MouseEvent) => {
         </n-form-item>
 
         <n-form-item label="Link" :path="`secondary[${index}].link`">
-          <n-input-group>
-            <n-input-group-label size="large">https://</n-input-group-label>
-
-            <n-input
-              v-model:value="moduleData.primary.link"
-              placeholder="clinicaltrials.gov"
-              clearable
-            />
-          </n-input-group>
+          <n-input
+            v-model:value="moduleData.primary.link"
+            placeholder="https://clinicaltrials.gov"
+            clearable
+          />
         </n-form-item>
       </CollapsibleCard>
 

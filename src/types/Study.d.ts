@@ -16,14 +16,14 @@ export interface Study {
   description: string;
   image: string;
   keywords: string[];
-  last_updated: string;
   owner: {
     email: string;
     first_name: string;
     last_name: string;
     orcid: string;
   };
-  size: string;
+  size: number;
+  updated_on: number;
 }
 
 export interface StudyIdentifier {
@@ -47,7 +47,7 @@ export interface StudyStatusModule {
   completion_date: string | null;
   completion_date_type: string | null;
   overall_status: string | null;
-  start_date: string;
+  start_date: string | null;
   start_date_type: string | null;
   why_stopped: string;
 }
@@ -189,7 +189,7 @@ export interface StudyLocation {
   id: string;
   city: string;
   contact_list: StudyLocationContact[];
-  country: string;
+  country: string | null;
   facility: string;
   origin: string;
   state: string;

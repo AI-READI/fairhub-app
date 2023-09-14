@@ -9,6 +9,8 @@ const route = useRoute();
 const router = useRouter();
 const message = useMessage();
 
+const apiLoading = ref(false);
+
 const formRef = ref<FormInst | null>(null);
 
 const moduleData = reactive<StudyEligiblityModule>({
@@ -75,12 +77,16 @@ const rules: FormRules = {
 onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
+  apiLoading.value = true;
+
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/eligibility`, {
     headers: {
       "Content-Type": "application/json",
     },
     method: "GET",
   });
+
+  apiLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -185,236 +191,168 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <div v-if="!moduleData.study_type">
-      <n-alert
-        title="A study type should be added before you can add eligibility details."
-        type="error"
-        class=""
-      >
-        <div>
-          <p></p>
+    <FadeTransition>
+      <LottieLoader v-if="apiLoading" />
 
-          <n-button size="small" type="info" ghost class="mt-2" @click="saveMetadata">
-            <template #icon>
-              <f-icon icon="solar:route-linear" />
-            </template>
-
-            Add Study Type
-          </n-button>
-        </div>
-      </n-alert>
-
-      <n-divider />
-    </div>
-
-    <n-form
-      ref="formRef"
-      :model="moduleData"
-      :rules="rules"
-      size="large"
-      :disabled="!moduleData.study_type"
-      label-placement="top"
-      class="pr-4"
-    >
-      <h3>Gender</h3>
-
-      <p class="pb-8 pt-2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
-        voluptatem, quibusdam, quos voluptas quae quas voluptatum
-      </p>
-
-      <n-form-item label="Gender" path="gender">
-        <n-select
-          v-model:value="moduleData.gender"
-          placeholder="Female"
-          clearable
-          :options="FORM_JSON.studyMetadataEligibilityGenderOptions"
-        />
-      </n-form-item>
-
-      <n-form-item label="Based on Gender?" path="gender_based">
-        <n-select
-          v-model:value="moduleData.gender_based"
-          placeholder="Yes"
-          clearable
-          :options="FORM_JSON.studyMetadataEligibilityGenderBasedOptions"
-        />
-      </n-form-item>
-
-      <n-form-item
-        label="Description"
-        path="gender_description"
-        :rule="{
-          message: 'Please add a description',
-          required: moduleData.gender_based === 'No' ? true : false,
-          trigger: ['blur', 'input'],
-        }"
-      >
-        <n-input
-          v-model:value="moduleData.gender_description"
-          placeholder=""
-          type="textarea"
-          :rows="2"
-          clearable
-        />
-      </n-form-item>
-
-      <n-divider />
-
-      <h3>Age</h3>
-
-      <p class="pb-8 pt-2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
-        voluptatem, quibusdam, quos voluptas quae quas voluptatum
-      </p>
-
-      <div class="flex w-full items-start space-x-5">
-        <n-form-item label="Minimum Age" path="minimum_age.age">
-          <n-input-number
-            v-model:value="moduleData.minimum_age.age"
-            :min="1"
-            clearable
-            class="w-full"
-          />
-        </n-form-item>
-
-        <n-form-item label="Age Unit" path="minimum_age.unit" class="min-w-[290px]">
-          <n-select
-            v-model:value="moduleData.minimum_age.unit"
-            placeholder="Weeks"
-            clearable
-            :options="FORM_JSON.studyMetadataEligibilityAgeUnitOptions"
-          />
-        </n-form-item>
-      </div>
-
-      <div class="flex w-full items-start space-x-5">
-        <n-form-item label="Maximum Age" path="maximum_age.age">
-          <n-input-number
-            v-model:value="moduleData.maximum_age.age"
-            :min="1"
-            clearable
-            class="w-full"
-          />
-        </n-form-item>
-
-        <n-form-item label="Age Unit" path="maximum_age.unit" class="min-w-[290px]">
-          <n-select
-            v-model:value="moduleData.maximum_age.unit"
-            placeholder="Months"
-            clearable
-            :options="FORM_JSON.studyMetadataEligibilityAgeUnitOptions"
-          />
-        </n-form-item>
-      </div>
-
-      <n-divider />
-
-      <div v-if="moduleData.study_type === 'Interventional'">
-        <h3>Interventional Studies</h3>
-
-        <p class="pb-8 pt-2">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
-          voluptatem, quibusdam, quos voluptas quae quas voluptatum
-        </p>
-
-        <n-form-item
-          label="Are the volunteers healthy?"
-          path="healthy_volunteers"
-          :rule="{
-            message: 'Please select if the volunteers are healthy',
-            required: moduleData.study_type === 'Interventional' ? true : false,
-            trigger: ['blur', 'input'],
-          }"
+      <div v-if="!moduleData.study_type">
+        <n-alert
+          title="A study type should be added before you can add eligibility details."
+          type="error"
+          class=""
         >
-          <n-select
-            v-model:value="moduleData.healthy_volunteers"
-            placeholder="Yes"
-            clearable
-            :options="FORM_JSON.studyMetadataEligibilityHealthyVolunteersOptions"
-          />
-        </n-form-item>
+          <RouterLink
+            :to="{
+              name: 'study:metadata:design',
+              params: {
+                studyId: route.params.studyId,
+              },
+            }"
+          >
+            <n-button size="small" type="info" ghost class="mt-2">
+              <template #icon>
+                <f-icon icon="solar:route-linear" />
+              </template>
+
+              Add Study Type
+            </n-button>
+          </RouterLink>
+        </n-alert>
 
         <n-divider />
       </div>
 
-      <h3>Eligibility Criteria</h3>
-
-      <p class="pb-8 pt-2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
-        voluptatem, quibusdam, quos voluptas quae quas voluptatum
-      </p>
-
-      <n-form-item
-        label="Inclusion Criteria"
-        path="criteria.inclusion_criteria"
-        ignore-path-change
-        :rule="{
-          message: 'Please add at least one inclusion criteria',
-          required: true,
-          type: 'array',
-          trigger: ['blur', 'input'],
-        }"
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        :rules="rules"
+        size="large"
+        :disabled="!moduleData.study_type"
+        label-placement="top"
+        class="pr-4"
       >
-        <!-- outer form item is only used to diplay the label and the required mark -->
+        <h3>Gender</h3>
 
-        <n-dynamic-input
-          v-model:value="moduleData.criteria.inclusion_criteria"
-          #="{ index: idx, value }"
-          :on-create="addEntryToCriteria"
+        <p class="pb-8 pt-2">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+          voluptatem, quibusdam, quos voluptas quae quas voluptatum
+        </p>
+
+        <n-form-item label="Gender" path="gender">
+          <n-select
+            v-model:value="moduleData.gender"
+            placeholder="Female"
+            clearable
+            :options="FORM_JSON.studyMetadataEligibilityGenderOptions"
+          />
+        </n-form-item>
+
+        <n-form-item label="Based on Gender?" path="gender_based">
+          <n-select
+            v-model:value="moduleData.gender_based"
+            placeholder="Yes"
+            clearable
+            :options="FORM_JSON.studyMetadataEligibilityGenderBasedOptions"
+          />
+        </n-form-item>
+
+        <n-form-item
+          label="Description"
+          path="gender_description"
+          :rule="{
+            message: 'Please add a description',
+            required: moduleData.gender_based === 'No' ? true : false,
+            trigger: ['blur', 'input'],
+          }"
         >
-          <n-form-item
-            ignore-path-change
-            :show-label="false"
-            :path="`criteria.inclusion_criteria[${idx}]`"
-            class="w-full"
-          >
-            <n-input
-              v-model:value="moduleData.criteria.inclusion_criteria[idx]"
-              placeholder="Intervention"
-              @keydown.enter.prevent
+          <n-input
+            v-model:value="moduleData.gender_description"
+            placeholder=""
+            type="textarea"
+            :rows="2"
+            clearable
+          />
+        </n-form-item>
+
+        <n-divider />
+
+        <h3>Age</h3>
+
+        <p class="pb-8 pt-2">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+          voluptatem, quibusdam, quos voluptas quae quas voluptatum
+        </p>
+
+        <div class="flex w-full items-start space-x-5">
+          <n-form-item label="Minimum Age" path="minimum_age.age">
+            <n-input-number
+              v-model:value="moduleData.minimum_age.age"
+              :min="1"
+              clearable
+              class="w-full"
             />
           </n-form-item>
-        </n-dynamic-input>
-      </n-form-item>
 
-      <n-form-item
-        label="Exclusion Criteria"
-        path="criteria.exclusion_criteria"
-        ignore-path-change
-        :rule="{
-          message: 'Please add at least one exclusion criteria',
-          required: true,
-          type: 'array',
-          trigger: ['blur', 'input'],
-        }"
-      >
-        <!-- outer form item is only used to diplay the label and the required mark -->
-
-        <n-dynamic-input
-          v-model:value="moduleData.criteria.exclusion_criteria"
-          #="{ index: idx, value }"
-          :on-create="addEntryToCriteria"
-        >
-          <n-form-item
-            ignore-path-change
-            :show-label="false"
-            :path="`criteria.exclusion_criteria[${idx}]`"
-            class="w-full"
-          >
-            <n-input
-              v-model:value="moduleData.criteria.exclusion_criteria[idx]"
-              placeholder="Intervention"
-              @keydown.enter.prevent
+          <n-form-item label="Age Unit" path="minimum_age.unit" class="min-w-[290px]">
+            <n-select
+              v-model:value="moduleData.minimum_age.unit"
+              placeholder="Weeks"
+              clearable
+              :options="FORM_JSON.studyMetadataEligibilityAgeUnitOptions"
             />
           </n-form-item>
-        </n-dynamic-input>
-      </n-form-item>
+        </div>
 
-      <n-divider />
+        <div class="flex w-full items-start space-x-5">
+          <n-form-item label="Maximum Age" path="maximum_age.age">
+            <n-input-number
+              v-model:value="moduleData.maximum_age.age"
+              :min="1"
+              clearable
+              class="w-full"
+            />
+          </n-form-item>
 
-      <div v-if="moduleData.study_type === 'observational'">
-        <h3>Observational Studies</h3>
+          <n-form-item label="Age Unit" path="maximum_age.unit" class="min-w-[290px]">
+            <n-select
+              v-model:value="moduleData.maximum_age.unit"
+              placeholder="Months"
+              clearable
+              :options="FORM_JSON.studyMetadataEligibilityAgeUnitOptions"
+            />
+          </n-form-item>
+        </div>
+
+        <n-divider />
+
+        <div v-if="moduleData.study_type === 'Interventional'">
+          <h3>Interventional Studies</h3>
+
+          <p class="pb-8 pt-2">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
+            voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum
+          </p>
+
+          <n-form-item
+            label="Are the volunteers healthy?"
+            path="healthy_volunteers"
+            :rule="{
+              message: 'Please select if the volunteers are healthy',
+              required: moduleData.study_type === 'Interventional' ? true : false,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-select
+              v-model:value="moduleData.healthy_volunteers"
+              placeholder="Yes"
+              clearable
+              :options="FORM_JSON.studyMetadataEligibilityHealthyVolunteersOptions"
+            />
+          </n-form-item>
+
+          <n-divider />
+        </div>
+
+        <h3>Eligibility Criteria</h3>
 
         <p class="pb-8 pt-2">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
@@ -422,50 +360,127 @@ const saveMetadata = (e: MouseEvent) => {
         </p>
 
         <n-form-item
-          label="Study Population"
-          path="study_population"
+          label="Inclusion Criteria"
+          path="criteria.inclusion_criteria"
+          ignore-path-change
           :rule="{
-            message: 'Please add the study population',
-            required: moduleData.study_type === 'observational' ? true : false,
+            message: 'Please add at least one inclusion criteria',
+            required: true,
+            type: 'array',
             trigger: ['blur', 'input'],
           }"
         >
-          <n-input
-            v-model:value="moduleData.study_population"
-            placeholder="Lorem Ipsum"
-            clearable
-          />
+          <!-- outer form item is only used to diplay the label and the required mark -->
+
+          <n-dynamic-input
+            v-model:value="moduleData.criteria.inclusion_criteria"
+            #="{ index: idx, value }"
+            :on-create="addEntryToCriteria"
+          >
+            <n-form-item
+              ignore-path-change
+              :show-label="false"
+              :path="`criteria.inclusion_criteria[${idx}]`"
+              class="w-full"
+            >
+              <n-input
+                v-model:value="moduleData.criteria.inclusion_criteria[idx]"
+                placeholder="Intervention"
+                @keydown.enter.prevent
+              />
+            </n-form-item>
+          </n-dynamic-input>
         </n-form-item>
 
         <n-form-item
-          label="Sampling Method"
-          path="sampling_method"
+          label="Exclusion Criteria"
+          path="criteria.exclusion_criteria"
+          ignore-path-change
           :rule="{
-            message: 'Please add the sampling method',
-            required: moduleData.study_type === 'observational' ? true : false,
+            message: 'Please add at least one exclusion criteria',
+            required: true,
+            type: 'array',
             trigger: ['blur', 'input'],
           }"
         >
-          <n-select
-            v-model:value="moduleData.sampling_method"
-            placeholder="Probability Sample"
-            clearable
-            :options="FORM_JSON.studyMetadataEligibilitySamplingMethodOptions"
-          />
+          <!-- outer form item is only used to diplay the label and the required mark -->
+
+          <n-dynamic-input
+            v-model:value="moduleData.criteria.exclusion_criteria"
+            #="{ index: idx, value }"
+            :on-create="addEntryToCriteria"
+          >
+            <n-form-item
+              ignore-path-change
+              :show-label="false"
+              :path="`criteria.exclusion_criteria[${idx}]`"
+              class="w-full"
+            >
+              <n-input
+                v-model:value="moduleData.criteria.exclusion_criteria[idx]"
+                placeholder="Intervention"
+                @keydown.enter.prevent
+              />
+            </n-form-item>
+          </n-dynamic-input>
         </n-form-item>
-      </div>
 
-      <n-divider />
+        <div v-if="moduleData.study_type === 'observational'">
+          <n-divider />
 
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata">
-          <template #icon>
-            <f-icon icon="material-symbols:save" />
-          </template>
+          <h3>Observational Studies</h3>
 
-          Save Metadata
-        </n-button>
-      </div>
-    </n-form>
+          <p class="pb-8 pt-2">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
+            voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum
+          </p>
+
+          <n-form-item
+            label="Study Population"
+            path="study_population"
+            :rule="{
+              message: 'Please add the study population',
+              required: moduleData.study_type === 'observational' ? true : false,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-input
+              v-model:value="moduleData.study_population"
+              placeholder="Lorem Ipsum"
+              clearable
+            />
+          </n-form-item>
+
+          <n-form-item
+            label="Sampling Method"
+            path="sampling_method"
+            :rule="{
+              message: 'Please add the sampling method',
+              required: moduleData.study_type === 'observational' ? true : false,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-select
+              v-model:value="moduleData.sampling_method"
+              placeholder="Probability Sample"
+              clearable
+              :options="FORM_JSON.studyMetadataEligibilitySamplingMethodOptions"
+            />
+          </n-form-item>
+        </div>
+
+        <n-divider />
+
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>

@@ -115,7 +115,10 @@ const saveMetadata = (e: MouseEvent) => {
       label-placement="top"
       class="pr-4"
     >
-      <n-form-item label="Type" path="ipd_sharing">
+      <n-form-item
+        label="Is there a plan to share Individual Participant Data(IPD)?"
+        path="ipd_sharing"
+      >
         <n-select
           v-model:value="moduleData.ipd_sharing"
           placeholder="Yes"
@@ -137,8 +140,7 @@ const saveMetadata = (e: MouseEvent) => {
           v-model:value="moduleData.description"
           type="textarea"
           :rows="3"
-          placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
-          voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+          placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
           clearable
         />
       </n-form-item>
@@ -203,10 +205,7 @@ const saveMetadata = (e: MouseEvent) => {
           trigger: ['blur', 'input'],
         }"
       >
-        <n-input-group>
-          <n-input-group-label size="large">https://</n-input-group-label>
-          <n-input v-model:value="moduleData.url" placeholder="nih.org" clearable />
-        </n-input-group>
+        <n-input v-model:value="moduleData.url" placeholder="https://nih.org" clearable />
       </n-form-item>
 
       <n-divider />

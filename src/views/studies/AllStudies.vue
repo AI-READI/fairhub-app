@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { useMessage } from "naive-ui";
-import { computed, onBeforeMount, onMounted } from "vue";
-import { RouterLink, useRouter } from "vue-router";
+import { filesize } from "filesize";
 
-import FadeTransition from "@/components/transitions/FadeTransition.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useFilterStore } from "@/stores/filter";
 import { useStudyStore } from "@/stores/study";
+import type { Study } from "@/types/Study";
 import { displayHumanFriendlyDateAndTime } from "@/utils/date";
 
 const router = useRouter();
@@ -35,19 +33,17 @@ const studies = computed(() => {
 
   // sort the studies based on the sort option
 
-  /**
-   * TODO: Implement sorting (type error with a and b)
-   */
-
-  // filteredStudies.sort((a, b) => {
-  //   if (sortOption.value === "title") {
-  //     return a.title.localeCompare(b.title);
-  //   } else if (sortOption.value === "last_updated") {
-  //     return new Date(b.last_updated).getTime() - new Date(a.last_updated).getTime();
-  //   } else if (sortOption.value === "size") {
-  //     return b.size - a.size;
-  //   }
-  // });
+  filteredStudies.sort((a: Study, b: Study) => {
+    if (sortOption.value === "title") {
+      return a.title.localeCompare(b.title);
+    } else if (sortOption.value === "last_updated") {
+      return new Date(b.updated_on).getTime() - new Date(a.updated_on).getTime();
+    } else if (sortOption.value === "size") {
+      return b.size - a.size;
+    } else {
+      return 0;
+    }
+  });
 
   if (sortOrder.value === "desc") {
     filteredStudies.reverse();
@@ -191,7 +187,7 @@ const navigateToStudy = (studyId: string) => {
 
         <TransitionGroup name="fade" tag="ul" class="list-none p-0" v-else>
           <li
-            class="my-5 flex w-full cursor-pointer items-center rounded-md border border-slate-100 shadow-sm transition-all hover:border-slate-200 hover:bg-slate-50 hover:shadow-md"
+            class="my-5 flex w-full cursor-pointer items-start rounded-md border border-slate-100 shadow-sm transition-all hover:border-slate-200 hover:bg-slate-50 hover:shadow-md"
             v-for="study in studies"
             :key="study.id"
             @click="navigateToStudy(study.id)"
@@ -200,23 +196,23 @@ const navigateToStudy = (studyId: string) => {
               <img :src="study.image" class="h-full w-full rounded-l-md object-cover" />
             </div>
 
-            <div class="flex w-full grow flex-col space-y-2 px-6 py-3">
+            <div class="flex h-full w-full grow flex-col space-y-2 px-6 py-3">
               <div class="flex flex-col space-y-2">
                 <div class="flex justify-between pt-2">
                   <h3>{{ study.title }}</h3>
-                  <span> {{ study.size }} </span>
+                  <span> {{ filesize(study.size || 0) }} </span>
                 </div>
 
-                <n-divider />
+                <n-divider v-if="study.description" />
 
-                <p>{{ study.description }}</p>
+                <p v-if="study.description">{{ study.description }}</p>
               </div>
 
               <n-divider />
 
               <p class="pt-2">
                 <span class="font-bold"> Last updated: </span>
-                <span> {{ displayHumanFriendlyDateAndTime(study.last_updated) }} </span>
+                <span> {{ displayHumanFriendlyDateAndTime(study.updated_on) }} </span>
               </p>
 
               <!-- needs last_published and last_published.doi -->
@@ -240,6 +236,13 @@ const navigateToStudy = (studyId: string) => {
             </div> -->
             </div>
           </li>
+          <n-empty
+            v-if="studies.length === 0"
+            description="No studies found"
+            size="huge"
+            class="my-10"
+          >
+          </n-empty>
         </TransitionGroup>
       </FadeTransition>
     </div>

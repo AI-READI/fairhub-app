@@ -17,14 +17,14 @@ export const useStudyStore = defineStore(
       description: "",
       image: "",
       keywords: [],
-      last_updated: "",
       owner: {
         email: "",
         first_name: "",
         last_name: "",
         orcid: "",
       },
-      size: "",
+      size: 0,
+      updated_on: 0,
     });
 
     const fetchAllStudies = async () => {

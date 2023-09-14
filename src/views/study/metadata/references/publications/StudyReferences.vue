@@ -190,7 +190,7 @@ const saveMetadata = (e: MouseEvent) => {
             v-model:value="item.type"
             placeholder="Yes"
             clearable
-            :options="FORM_JSON.studyMetadataContactsOverallOfficialRole"
+            :options="FORM_JSON.studyMetadataReferencesGenericOptions"
           />
         </n-form-item>
       </CollapsibleCard>
