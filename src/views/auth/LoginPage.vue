@@ -3,13 +3,7 @@ import type { FormInst, FormRules } from "naive-ui";
 
 import { useAuthStore } from "@/stores/auth";
 
-const router = useRouter();
-const message = useMessage();
-
 const authStore = useAuthStore();
-
-const emailAddress = ref("");
-const password = ref("");
 
 const loading = ref(false);
 
@@ -106,9 +100,11 @@ const signIn = (e: MouseEvent) => {
         </n-button>
       </n-form>
 
-      <RouterLink class="ml-1 mt-6 text-center text-sm" to="#">
-        <n-button text type="warning"> Forgot your password? </n-button>
-      </RouterLink>
+      <n-space justify="center">
+        <RouterLink class="ml-1 mt-6 text-center text-sm" to="#">
+          <n-button text type="warning"> Forgot your password? </n-button>
+        </RouterLink>
+      </n-space>
 
       <n-divider class="text-slate-400"> </n-divider>
 
@@ -124,11 +120,10 @@ const signIn = (e: MouseEvent) => {
     </div>
 
     <div class="ml-5 h-full w-full flex-1">
-      <img
+      <lazy-image
+        class="h-full w-full"
         src="https://images.unsplash.com/photo-1581093577421-f561a654a353?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80"
-        alt=""
-        srcset=""
-        class="h-full w-full rounded-2xl object-cover"
+        blurhash="LGLq^Y~q8^Xnk?R:ITob00Dix^xb"
       />
     </div>
   </main>

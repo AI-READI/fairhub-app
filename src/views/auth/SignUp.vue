@@ -241,11 +241,10 @@ const signUp = (e: MouseEvent) => {
     </div>
 
     <div class="ml-5 h-full w-full flex-1">
-      <img
+      <lazy-image
+        class="h-full w-full"
         src="https://images.unsplash.com/photo-1602052577122-f73b9710adba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80"
-        alt=""
-        srcset=""
-        class="h-full w-full rounded-2xl object-cover"
+        blurhash="LMLgtvoe%3WU~qa#s:of~Wt6NGRj"
       />
     </div>
   </main>
