@@ -79,11 +79,9 @@ onBeforeMount(() => {
     return;
   }
 
-  studyStore.fetchAllStudies();
-});
-
-onMounted(() => {
   info("Your workspace is being loaded. Please wait...");
+
+  studyStore.fetchAllStudies();
 });
 
 const navigateToStudy = (studyId: string) => {
