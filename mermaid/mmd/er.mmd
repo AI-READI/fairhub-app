@@ -74,6 +74,13 @@ erDiagram
         string participant_id PK,FK
     }
 
+    TOKEN_BLACKLIST {
+        string jti PK "UUIDv4"
+        timestamp iat "Issued at"
+        timestamp exp "Expiration time"
+        string user_id FK "USER.id"
+    }
+
 
     STUDY_CONTRIBUTOR }o--|| STUDY : contributes
     STUDY_INVITED_CONTRIBUTOR }o--|| STUDY : "invited to"
@@ -86,6 +93,7 @@ erDiagram
     DATASET ||--o{ VERSION : creates
 
     USER ||--|| USER_DETAILS : "has"
+    USER ||--o{ TOKEN_BLACKLIST : "has"
 
     USER ||--o{ STUDY_CONTRIBUTOR : "part of"
     PARTICIPANT }o--|| STUDY : participates
