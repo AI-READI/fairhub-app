@@ -17,7 +17,7 @@ const navigateToStudies = () => {
   } else {
     error("You must be logged in to view studies");
 
-    authStore.showLoginModal = true;
+    authStore.navigateToLogin();
   }
 };
 

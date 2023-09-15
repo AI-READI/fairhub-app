@@ -11,6 +11,8 @@ export const useAuthStore = defineStore(
     const refreshToken = ref("");
     const user = ref("");
 
+    const router = useRouter();
+
     const showLoginModal = ref(false);
 
     const signIn = async (email_address: string, password: string) => {
@@ -52,10 +54,15 @@ export const useAuthStore = defineStore(
       refreshToken.value = token;
     };
 
+    const navigateToLogin = () => {
+      router.push("/auth/login");
+    };
+
     return {
       accessToken,
       isAuthenticated,
       logout,
+      navigateToLogin,
       refreshToken,
       setAccessToken,
       setRefreshToken,
