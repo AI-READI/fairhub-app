@@ -4,6 +4,7 @@ import log from "@/middleware/log";
 import NotFound from "@/views/404/NotFound.vue";
 import UserProfile from "@/views/account/UserProfile.vue";
 import LoginPage from "@/views/auth/LoginPage.vue";
+import SignUp from "@/views/auth/SignUp.vue";
 import Changelog from "@/views/help/ChangeLog.vue";
 import Documentation from "@/views/help/DocumentationPage.vue";
 import HelpPage from "@/views/help/HelpPage.vue";
@@ -82,6 +83,11 @@ const router = createRouter({
           name: "login",
           path: "login",
           component: LoginPage,
+        },
+        {
+          name: "signup",
+          path: "signup",
+          component: SignUp,
         },
       ],
     },

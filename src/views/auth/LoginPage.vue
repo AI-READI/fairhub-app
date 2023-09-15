@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import type { FormInst, FormRules } from "naive-ui";
+
 import { useAuthStore } from "@/stores/auth";
+
+const router = useRouter();
+const message = useMessage();
 
 const authStore = useAuthStore();
 
@@ -7,49 +12,80 @@ const emailAddress = ref("");
 const password = ref("");
 
 const loading = ref(false);
-const invalidEmailAddress = computed(() => !emailAddress.value.includes("@")); //add email validation
 
-const signIn = async () => {
-  loading.value = true;
+const formRef = ref<FormInst | null>(null);
 
-  try {
-    // accept anything for now
+const rules: FormRules = {
+  emailAddress: {
+    message: "Please enter your email address",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+  password: {
+    message: "Please enter a password",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+};
 
-    authStore.signIn(emailAddress.value, password.value);
-  } catch (error) {
-    console.error(error);
-  } finally {
-    loading.value = false;
-  }
+const formValue = ref({
+  acceptTerms: false,
+  emailAddress: "test@fairhub.io",
+  password: "asdkj45@ksdSA",
+});
+
+const invalidEmailAddress = computed(() => !formValue.value.emailAddress.includes("@")); //add email validation
+
+const signIn = (e: MouseEvent) => {
+  e.preventDefault();
+  formRef.value?.validate(async (errors) => {
+    if (!errors) {
+      loading.value = true;
+
+      const emailAddress = formValue.value.emailAddress;
+      const password = formValue.value.password;
+
+      authStore.signIn(emailAddress, password);
+
+      loading.value = false;
+    } else {
+      console.log("error");
+      console.log(errors);
+    }
+  });
 };
 </script>
 
 <template>
   <main class="flex h-full w-full items-start py-4 pr-6">
     <div class="mr-5 flex w-[30%] flex-col px-20 pb-10 pt-[10%]">
-      <h1 class="mb-1 font-extrabold">Login to fairhub.io</h1>
-
-      <p class="text-2xl font-medium">Welcome back!</p>
+      <h1
+        class="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text font-extrabold text-transparent"
+      >
+        Login to fairhub.io
+      </h1>
 
       <n-divider />
 
-      <div class="flex flex-col space-y-6">
-        <div class="flex w-full flex-col">
-          <span class="mb-1 text-left text-sm text-slate-600"> Email Address </span>
-
-          <n-input v-model:value="emailAddress" type="text" size="large" placeholder="ea@sjy.so" />
-        </div>
-
-        <div class="flex flex-col">
-          <span class="mb-1 text-left text-sm text-slate-600"> Password </span>
-
+      <n-form ref="formRef" :label-width="80" :model="formValue" :rules="rules" size="large">
+        <n-form-item label="Email Address" path="emailAddress">
           <n-input
-            v-model:value="password"
-            type="password"
-            show-password-on="mousedown"
-            size="large"
-            placeholder=""
+            v-model:value="formValue.emailAddress"
+            placeholder="me@fairhub.io"
+            @keydown.enter.prevent
+            clearable
           />
+        </n-form-item>
+
+        <div>
+          <n-form-item label="Password" path="password">
+            <n-input
+              v-model:value="formValue.password"
+              type="password"
+              show-password-on="mousedown"
+              placeholder=""
+            />
+          </n-form-item>
         </div>
 
         <n-button
@@ -60,13 +96,30 @@ const signIn = async () => {
           :loading="loading"
           :disabled="invalidEmailAddress"
           @click="signIn"
-          class="w-full"
+          class="my-5 w-full"
         >
           <template #icon>
-            <f-icon icon="ph:sign-in-bold" />
+            <f-icon icon="ic:sharp-login" />
           </template>
+
           Sign In
         </n-button>
+      </n-form>
+
+      <RouterLink class="ml-1 mt-6 text-center text-sm" to="#">
+        <n-button text type="warning"> Forgot your password? </n-button>
+      </RouterLink>
+
+      <n-divider class="text-slate-400"> </n-divider>
+
+      <div class="flex justify-center">
+        Don't have an account?
+        <RouterLink
+          class="ml-1 w-fit text-blue-600 transition-all hover:text-blue-400"
+          to="/auth/signup"
+        >
+          Sign Up
+        </RouterLink>
       </div>
     </div>
 

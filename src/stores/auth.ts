@@ -44,11 +44,21 @@ export const useAuthStore = defineStore(
       isAuthenticated.value = false;
     };
 
+    const setAccessToken = (token: string) => {
+      accessToken.value = token;
+    };
+
+    const setRefreshToken = (token: string) => {
+      refreshToken.value = token;
+    };
+
     return {
       accessToken,
       isAuthenticated,
       logout,
       refreshToken,
+      setAccessToken,
+      setRefreshToken,
       showLoginModal,
       signIn,
       user,
