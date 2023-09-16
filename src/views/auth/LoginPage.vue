@@ -39,6 +39,8 @@ const signIn = (e: MouseEvent) => {
       const emailAddress = formValue.value.emailAddress;
       const password = formValue.value.password;
 
+      console.log(emailAddress, password);
+
       authStore.signIn(emailAddress, password);
 
       loading.value = false;

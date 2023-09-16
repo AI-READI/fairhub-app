@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-import { baseURL } from "@/utils/constants";
+// import { baseURL } from "@/utils/constants";
+const baseURL = "http://localhost:3001";
 
 export const useAuthStore = defineStore(
   "auth",
@@ -10,14 +11,22 @@ export const useAuthStore = defineStore(
     const accessToken = ref("");
     const refreshToken = ref("");
     const user = ref("");
+    const userDetails = ref({
+      id: "",
+      username: "",
+      email_address: "",
+      first_name: "",
+      last_name: "",
+    });
 
     const router = useRouter();
 
-    const showLoginModal = ref(false);
+    const signIn = async (emailAddress: string, password: string) => {
+      console.log("signing in");
+      console.log(emailAddress, password);
 
-    const signIn = async (email_address: string, password: string) => {
       const response = await fetch(`${baseURL}/auth/login`, {
-        body: JSON.stringify({ email_address, password }),
+        body: JSON.stringify({ emailAddress, password }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -27,10 +36,14 @@ export const useAuthStore = defineStore(
       if (response.ok) {
         const data = await response.json();
 
-        accessToken.value = data.access_token;
-        refreshToken.value = data.refresh_token;
+        accessToken.value = data.accessToken;
+        refreshToken.value = data.refreshToken;
 
         user.value = data.user_id;
+
+        userDetails.value = data.context;
+
+        console.log(data);
 
         isAuthenticated.value = true;
       } else {
@@ -66,9 +79,9 @@ export const useAuthStore = defineStore(
       refreshToken,
       setAccessToken,
       setRefreshToken,
-      showLoginModal,
       signIn,
       user,
+      userDetails,
     };
   },
   {

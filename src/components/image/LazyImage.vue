@@ -36,14 +36,9 @@ const onEnter = () => {
   // so start loading by setting the src attribute
   image.value.src = props.src;
 
-  console.log("onEnter");
-  console.log(image.value.src);
-
   image.value.onload = () => {
     // Image is loaded, so start fading in
 
-    // Just for this demo: Wait a second, so the BlurHash
-    // is visible a little longer
     setTimeout(() => {
       isLoaded.value = true;
       console.log(image.value.src);

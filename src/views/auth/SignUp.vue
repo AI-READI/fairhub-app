@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { FormInst, FormRules } from "naive-ui";
 
-import { baseURL } from "@/utils/constants";
+// import { baseURL } from "@/utils/constants";
+
+const baseURL = "http://localhost:3001";
 
 const router = useRouter();
 const message = useMessage();

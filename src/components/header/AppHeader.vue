@@ -1,42 +1,15 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import type { FormInst } from "naive-ui";
-import { useMessage } from "naive-ui";
-import { h, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();
-const { success } = useMessage();
 
 const authStore = useAuthStore();
 
-const formRef = ref<FormInst | null>(null);
-
-const formValue = ref({
-  username: "admin",
-  password: "admin",
-});
-
-const rules = {
-  username: {
-    message: "Please input your username",
-    required: true,
-    trigger: ["input"],
-  },
-  password: {
-    message: "Please input your password",
-    required: true,
-    trigger: ["input"],
-  },
-};
-
 // eslint-disable-next-line no-undef
 const development = process.env.NODE_ENV === "development";
-
-// const showModal = ref(false);
-const showErrorAlert = ref(false);
 
 const profileOptions = [
   {
@@ -82,14 +55,6 @@ function renderIcon(icon: string) {
   return () => h(Icon, { icon });
 }
 
-const showLoginModal = () => {
-  authStore.showLoginModal = true;
-};
-
-const handleCancel = () => {
-  authStore.showLoginModal = false;
-};
-
 const handleSelect = (key: string | number) => {
   console.info(String(key));
 
@@ -97,33 +62,6 @@ const handleSelect = (key: string | number) => {
     authStore.logout();
     router.push("/");
   }
-};
-
-const handleLogin = (e: MouseEvent) => {
-  e.preventDefault();
-
-  formRef.value?.validate((errors) => {
-    if (!errors) {
-      if (formValue.value.username === "admin" && formValue.value.password === "admin") {
-        showErrorAlert.value = false;
-
-        authStore.showLoginModal = false;
-
-        authStore.signIn("admin", "admin");
-
-        success("Logged in successfully");
-
-        router.push({
-          path: "/studies",
-        });
-      } else {
-        showErrorAlert.value = true;
-        console.log("Invalid credentials");
-      }
-    } else {
-      console.log(errors);
-    }
-  });
 };
 </script>
 
@@ -153,13 +91,6 @@ const handleLogin = (e: MouseEvent) => {
             </n-button>
           </RouterLink>
 
-          <!-- <n-button type="primary" v-if="!authStore.isAuthenticated" @click="showLoginModal">
-            <template #icon>
-              <f-icon icon="majesticons:login" />
-            </template>
-            Login
-          </n-button> -->
-
           <n-dropdown
             :options="profileOptions"
             placement="bottom-start"
@@ -174,56 +105,6 @@ const handleLogin = (e: MouseEvent) => {
               class="hover:cursor-pointer hover:opacity-80"
             />
           </n-dropdown>
-
-          <n-modal v-model:show="authStore.showLoginModal" transform-origin="center">
-            <n-card
-              style="width: 600px"
-              title="Login to fairhub.io"
-              :bordered="false"
-              size="huge"
-              role="dialog"
-              aria-modal="true"
-            >
-              <n-form
-                ref="formRef"
-                label-placement="left"
-                :label-width="100"
-                :model="formValue"
-                :rules="rules"
-                size="medium"
-              >
-                <n-form-item label="Username" path="username">
-                  <n-input v-model:value="formValue.username" placeholder="" />
-                </n-form-item>
-
-                <n-form-item label="Password" path="password">
-                  <n-input v-model:value="formValue.password" placeholder="" type="password" />
-                </n-form-item>
-              </n-form>
-
-              <n-alert title="Invalid credentials" type="error" v-if="showErrorAlert">
-                Please check your username and password
-              </n-alert>
-
-              <template #footer>
-                <div class="flex justify-center space-x-4">
-                  <n-button secondary type="warning" @click="handleCancel">
-                    <template #icon>
-                      <f-icon icon="material-symbols:cancel" />
-                    </template>
-                    Cancel
-                  </n-button>
-
-                  <n-button type="primary" @click="handleLogin" secondary>
-                    <template #icon>
-                      <f-icon icon="material-symbols:login" />
-                    </template>
-                    Login
-                  </n-button>
-                </div>
-              </template>
-            </n-card>
-          </n-modal>
         </div>
       </n-space>
     </n-space>
