@@ -12,6 +12,7 @@ erDiagram
         string username
         string password "hashed"
         string email_address
+        boolean email_verified 
         timestamp created_at
     }
 
@@ -81,6 +82,13 @@ erDiagram
         string user_id FK "USER.id"
     }
 
+    EMAIL_VERIFICATION {
+        string id PK "UUIDv4"
+        string user_id FK "USER.id"
+        string token "UUIDv4"
+        timestamp created_at
+    }
+
 
     STUDY_CONTRIBUTOR }o--|| STUDY : contributes
     STUDY_INVITED_CONTRIBUTOR }o--|| STUDY : "invited to"
@@ -94,6 +102,8 @@ erDiagram
 
     USER ||--|| USER_DETAILS : "has"
     USER ||--o{ TOKEN_BLACKLIST : "has"
+
+    USER ||--o{ EMAIL_VERIFICATION : "has"
 
     USER ||--o{ STUDY_CONTRIBUTOR : "part of"
     PARTICIPANT }o--|| STUDY : participates
