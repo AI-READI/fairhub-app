@@ -6,6 +6,12 @@ import type { User } from "@/types/User";
 // import { baseURL } from "@/utils/constants";
 const baseURL = "http://localhost:3001";
 
+type JWT_TYPE = {
+  exp: number;
+  iat: number;
+  sub: string;
+};
+
 export const useAuthStore = defineStore(
   "auth",
   () => {
@@ -65,6 +71,11 @@ export const useAuthStore = defineStore(
     };
 
     const logout = async () => {
+      // check if refresh token exists
+      if (!refreshToken.value) {
+        return;
+      }
+
       const response = await fetch(`${baseURL}/auth/logout`, {
         headers: {
           Authorization: `Bearer ${refreshToken.value}`,
@@ -92,13 +103,25 @@ export const useAuthStore = defineStore(
       };
     };
 
-    const setRefreshToken = (token: string) => {
-      refreshToken.value = token;
+    const validateRefreshToken = async () => {
+      const response = await fetch(`${baseURL}/auth/validate`, {
+        headers: {
+          Authorization: `Bearer ${refreshToken.value}`,
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        console.log("error validating refresh token");
+        return false;
+      }
+
+      return true;
     };
 
-    const getRefreshToken = () => {
-      // TODO: update type
-      const decodedRefreshToken = jwt_decode(refreshToken.value) as any;
+    const getRefreshToken = async () => {
+      const decodedRefreshToken = jwt_decode(refreshToken.value) as JWT_TYPE;
 
       if (decodedRefreshToken.exp * 1000 < Date.now()) {
         // logout user
@@ -107,22 +130,24 @@ export const useAuthStore = defineStore(
         return null;
       }
 
+      const response = await validateRefreshToken();
+
+      if (!response) {
+        logout();
+        return null;
+      }
+
       return refreshToken.value;
     };
 
-    const setAccessToken = (token: string) => {
-      accessToken.value = token;
-    };
-
     const getAccessToken = async () => {
-      // TODO: update type
-      const decodedAccessToken = jwt_decode(accessToken.value) as any;
+      const decodedAccessToken = jwt_decode(accessToken.value) as JWT_TYPE;
 
       if (decodedAccessToken.exp * 1000 < Date.now()) {
-        const refreshToken = getRefreshToken();
+        console.log("access token expired");
+        console.log("refreshing access token");
 
-        // todo: check if refresh token is valid
-        // await fetch(`${baseURL}/auth/validate`, {});
+        const refreshToken = getRefreshToken();
 
         if (!refreshToken) {
           logout();
@@ -130,7 +155,6 @@ export const useAuthStore = defineStore(
         }
 
         const response = await fetch(`${baseURL}/auth/refresh`, {
-          body: JSON.stringify({}),
           headers: {
             Authorization: `Bearer ${refreshToken}`,
             "Content-Type": "application/json",
@@ -165,8 +189,6 @@ export const useAuthStore = defineStore(
       logout,
       navigateToLogin,
       refreshToken,
-      setAccessToken,
-      setRefreshToken,
       signIn,
       user,
     };

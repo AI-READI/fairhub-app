@@ -1,16 +1,18 @@
 import { faker } from "@faker-js/faker";
 import { defineStore } from "pinia";
-import { ref } from "vue";
 
+import { useAuthStore } from "@/stores/auth";
 import type { Study } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 export const useStudyStore = defineStore(
   "study",
   () => {
-    const allStudies = ref<Study[]>([]);
     const loading = ref(false);
 
+    const authStore = useAuthStore();
+
+    const allStudies = ref<Study[]>([]);
     const study = ref<Study>({
       id: "",
       title: "",
@@ -30,7 +32,13 @@ export const useStudyStore = defineStore(
     const fetchAllStudies = async () => {
       loading.value = true;
 
-      const response = await fetch(`${baseURL}/study`);
+      // add authorization header
+      const response = await fetch(`${baseURL}/study`, {
+        headers: {
+          Authorization: `Bearer ${authStore.getAccessToken()}`,
+        },
+        method: "GET",
+      });
 
       // check for errors
       if (!response.ok) {
@@ -84,7 +92,12 @@ export const useStudyStore = defineStore(
     const getStudy = async (studyId: string) => {
       loading.value = true;
 
-      const response = await fetch(`${baseURL}/study/${studyId}`);
+      const response = await fetch(`${baseURL}/study/${studyId}`, {
+        headers: {
+          Authorization: `Bearer ${authStore.getAccessToken()}`,
+        },
+        method: "GET",
+      });
 
       // check for errors
       if (!response.ok) {
