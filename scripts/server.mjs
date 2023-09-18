@@ -5,9 +5,18 @@ import jwt from "jsonwebtoken";
 import { nanoid } from "nanoid";
 
 const token_blacklist = {};
-const users = {};
+const users = {
+  "test@fairhub.io": {
+    id: "1",
+    username: "test",
+    emailAddress: "test@fairhub.io",
+    first_name: "Test",
+    last_name: "User",
+    password: "asdkj45@ksdSA",
+  },
+};
 
-const secret = "secret";
+const SECRET = "DONT_TELL_ANYONE";
 
 const init = async () => {
   const server = Hapi.server({
@@ -86,6 +95,7 @@ const init = async () => {
           .code(400);
       }
 
+      // TODO: hash password
       if (users[emailAddress].password !== password) {
         return h
           .response({
@@ -96,39 +106,20 @@ const init = async () => {
 
       const jti = nanoid();
 
-      const accessToken = jwt.sign(
-        {
-          context: {
-            id: users[emailAddress].id,
-            username: users[emailAddress].username,
-            email_address: emailAddress,
-            first_name: users[emailAddress].first_name,
-            last_name: users[emailAddress].last_name,
-          },
-        },
-        secret,
-        {
-          audience: "https://example.com",
-          expiresIn: "1h",
-          issuer: "https://example.com",
-          jwtid: jti,
-          subject: emailAddress,
-        }
-      );
+      const accessToken = jwt.sign({}, SECRET, {
+        audience: "https://example.com",
+        expiresIn: "1h",
+        issuer: "https://example.com",
+        subject: users[emailAddress].id,
+      });
 
-      const refreshToken = jwt.sign(
-        {
-          id: users[emailAddress].id,
-        },
-        secret,
-        {
-          audience: "https://example.com",
-          expiresIn: "3d",
-          issuer: "https://example.com",
-          jwtid: jti,
-          subject: emailAddress,
-        }
-      );
+      const refreshToken = jwt.sign({}, SECRET, {
+        audience: "https://example.com",
+        expiresIn: "3d",
+        issuer: "https://example.com",
+        jwtid: jti,
+        subject: users[emailAddress].id,
+      });
 
       console.log("accessToken", accessToken);
       console.log("refreshToken", refreshToken);
@@ -137,14 +128,83 @@ const init = async () => {
         .response({
           accessToken,
           refreshToken,
-          user_id: users[emailAddress].id,
+          user: {
+            id: users[emailAddress].id,
+            username: users[emailAddress].username,
+            email_address: emailAddress,
+            first_name: users[emailAddress].first_name,
+            last_name: users[emailAddress].last_name,
+          },
         })
         .code(200);
     },
     method: "POST",
   });
 
+  server.route({
+    path: "/auth/logout",
+    handler: async (request, h) => {
+      // get authorization header
+      const authorization = request.headers.authorization;
+
+      if (!authorization) {
+        return h
+          .response({
+            error: "no authorization header",
+          })
+          .code(400);
+      }
+
+      const token = authorization.split(" ")[1];
+
+      // verify token
+      try {
+        // get the jti and expired claims from the token
+        const decoded = await jwt.verify(token, SECRET);
+
+        console.log(decoded);
+
+        token_blacklist[decoded.jti] = {
+          expires: decoded.exp,
+          user_id: decoded.sub,
+        };
+
+        console.log(token_blacklist);
+
+        return h
+          .response({
+            message: "logout successful",
+          })
+          .code(200);
+      } catch (err) {
+        if (err.name === "TokenExpiredError") {
+          return h
+            .response({
+              error: "token expired",
+            })
+            .code(200);
+        }
+
+        if (err.name === "JsonWebTokenError") {
+          return h
+            .response({
+              error: "invalid token",
+            })
+            .code(400);
+        }
+
+        return h
+          .response({
+            error: "invalid token",
+          })
+          .code(400);
+      }
+    },
+    method: "POST",
+  });
+
   await server.start();
+
   console.log("Server running on %s", server.info.uri);
 };
 

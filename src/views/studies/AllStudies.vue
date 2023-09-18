@@ -25,7 +25,7 @@ const studies = computed(() => {
 
     if (permissions.owner) {
       console.log("owner", study.owner.email, authStore.user);
-      if (study.owner.email === authStore.user) {
+      if (study.owner.email === authStore.user.email_address) {
         filteredStudies.push(study);
       }
     }
@@ -74,7 +74,7 @@ const sortOptions = [
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
     error("You are not logged in.");
-    router.push({ name: "home" });
+    router.push({ name: "login" });
 
     return;
   }

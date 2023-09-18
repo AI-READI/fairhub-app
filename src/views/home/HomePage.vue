@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useMessage } from "naive-ui";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
 
 import HomePageAnimationJSON from "@/assets/animations/home_page.json";
 import { useAuthStore } from "@/stores/auth";
@@ -10,6 +9,12 @@ const router = useRouter();
 const { error } = useMessage();
 
 const authStore = useAuthStore();
+
+onBeforeMount(() => {
+  if (authStore.isAuthenticated) {
+    router.push({ name: "studies:all-studies" });
+  }
+});
 
 const navigateToStudies = () => {
   if (authStore.isAuthenticated) {

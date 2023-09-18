@@ -4,6 +4,7 @@ import type { FormInst, FormRules } from "naive-ui";
 import { useAuthStore } from "@/stores/auth";
 
 const authStore = useAuthStore();
+const router = useRouter();
 
 const loading = ref(false);
 
@@ -30,6 +31,12 @@ const formValue = ref({
 
 const invalidEmailAddress = computed(() => !formValue.value.emailAddress.includes("@")); //add email validation
 
+onBeforeMount(() => {
+  if (authStore.isAuthenticated) {
+    router.push({ name: "studies:all-studies" });
+  }
+});
+
 const signIn = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
@@ -44,6 +51,8 @@ const signIn = (e: MouseEvent) => {
       authStore.signIn(emailAddress, password);
 
       loading.value = false;
+
+      router.push({ name: "studies:all-studies" });
     } else {
       console.log("error");
       console.log(errors);

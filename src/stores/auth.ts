@@ -1,6 +1,7 @@
 import jwt_decode from "jwt-decode";
 import { defineStore } from "pinia";
-import { ref } from "vue";
+
+import type { User } from "@/types/User";
 
 // import { baseURL } from "@/utils/constants";
 const baseURL = "http://localhost:3001";
@@ -9,10 +10,11 @@ export const useAuthStore = defineStore(
   "auth",
   () => {
     const isAuthenticated = ref(false);
+
     const accessToken = ref("");
     const refreshToken = ref("");
-    const user = ref("");
-    const userDetails = ref({
+
+    const user = ref<User>({
       id: "",
       username: "",
       email_address: "",
@@ -26,9 +28,7 @@ export const useAuthStore = defineStore(
       accessToken.value = data.accessToken;
       refreshToken.value = data.refreshToken;
 
-      user.value = data.user_id;
-
-      userDetails.value = data.context;
+      user.value = data.user;
     };
 
     const signIn = async (emailAddress: string, password: string) => {
@@ -53,17 +53,43 @@ export const useAuthStore = defineStore(
         isAuthenticated.value = true;
       } else {
         isAuthenticated.value = false;
-        user.value = "";
+
+        user.value = {
+          id: "",
+          username: "",
+          email_address: "",
+          first_name: "",
+          last_name: "",
+        };
       }
     };
 
     const logout = async () => {
-      // TODO: call logout endpoint on server to blacklist refresh token
+      const response = await fetch(`${baseURL}/auth/logout`, {
+        headers: {
+          Authorization: `Bearer ${refreshToken.value}`,
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        console.log("error logging out");
+        return;
+      }
 
       accessToken.value = "";
       refreshToken.value = "";
-      user.value = "";
+
       isAuthenticated.value = false;
+
+      user.value = {
+        id: "",
+        username: "",
+        email_address: "",
+        first_name: "",
+        last_name: "",
+      };
     };
 
     const setRefreshToken = (token: string) => {
@@ -143,7 +169,6 @@ export const useAuthStore = defineStore(
       setRefreshToken,
       signIn,
       user,
-      userDetails,
     };
   },
   {

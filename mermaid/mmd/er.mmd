@@ -77,7 +77,6 @@ erDiagram
 
     TOKEN_BLACKLIST {
         string jti PK "UUIDv4"
-        timestamp iat "Issued at"
         timestamp exp "Expiration time"
         string user_id FK "USER.id"
     }
@@ -85,7 +84,7 @@ erDiagram
     EMAIL_VERIFICATION {
         string id PK "UUIDv4"
         string user_id FK "USER.id"
-        string token "UUIDv4"
+        string token "passphrase"
         timestamp created_at
     }
 
