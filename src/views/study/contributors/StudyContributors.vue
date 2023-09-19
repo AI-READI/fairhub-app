@@ -2,10 +2,7 @@
 import { faker } from "@faker-js/faker";
 import { Icon } from "@iconify/vue";
 import type { FormInst, FormItemRule } from "naive-ui";
-import { useMessage } from "naive-ui";
 import validator from "validator";
-import { computed, onBeforeMount, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import { useStudyStore } from "@/stores/study";
@@ -80,7 +77,7 @@ const owner = computed(() => {
 const contributorRoles = computed(() => {
   return [
     {
-      disabled: authStore.user !== study.value?.owner.email,
+      disabled: authStore.user?.email_address !== study.value?.owner.email,
       label: "Owner",
       value: "owner",
     },

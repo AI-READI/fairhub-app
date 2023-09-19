@@ -2,12 +2,15 @@
 import type { FormInst, FormRules } from "naive-ui";
 
 import FORM_JSON from "@/assets/data/form.json";
+import { useAuthStore } from "@/stores/auth";
 import type { StudyDesignModule } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const message = useMessage();
+
+const authStore = useAuthStore();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -115,6 +118,7 @@ onBeforeMount(async () => {
 
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/design`, {
     headers: {
+      Authorization: `Bearer ${authStore.getAccessToken()}`,
       "Content-Type": "application/json",
     },
     method: "GET",
@@ -228,6 +232,7 @@ const saveMetadata = (e: MouseEvent) => {
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/design`, {
         body: JSON.stringify(data),
         headers: {
+          Authorization: `Bearer ${authStore.getAccessToken()}`,
           "Content-Type": "application/json",
         },
         method: "PUT",

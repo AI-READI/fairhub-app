@@ -142,7 +142,7 @@ const init = async () => {
   });
 
   server.route({
-    path: "auth/validate",
+    path: "/auth/validate",
     handler: async (request, h) => {
       const authorization = request.headers.authorization;
 
@@ -204,7 +204,7 @@ const init = async () => {
   });
 
   server.route({
-    path: "auth/refresh",
+    path: "/auth/refresh",
     handler: async (request, h) => {
       const authorization = request.headers.authorization;
 

@@ -60,7 +60,6 @@ const handleSelect = (key: string | number) => {
 
   if (key === "logout") {
     authStore.logout();
-    router.push("/");
   }
 };
 </script>

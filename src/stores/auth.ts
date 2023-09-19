@@ -114,6 +114,7 @@ export const useAuthStore = defineStore(
 
       if (!response.ok) {
         console.log("error validating refresh token");
+        logout();
         return false;
       }
 

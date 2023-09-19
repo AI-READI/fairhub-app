@@ -62,43 +62,35 @@ const createStudy = (e: MouseEvent) => {
 
   formRef.value?.validate(async (errors) => {
     if (!errors) {
-      const response = await addStudy();
+      const data = {
+        title: study.title,
+        image: study.image || `https://api.dicebear.com/6.x/shapes/svg?seed=${nanoid()}`,
+      };
 
-      if (response) {
-        console.log(response);
-        message.success("Study created successfully.");
+      const response = await fetch(`${baseURL}/study`, {
+        body: JSON.stringify(data),
+        headers: {
+          Authorization: `Bearer ${authStore.getAccessToken()}`,
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
 
-        router.push({ name: "studies:all-studies" }); // TODO: Redirect to study page
+      if (!response.ok) {
+        message.error("Something went wrong. Please try again later.");
+
+        throw new Error(response.statusText);
       }
+
+      message.success("Study created successfully.");
+
+      router.push({ name: "studies:all-studies" }); // TODO: Redirect to study page
     } else {
       console.log("error");
       console.log(errors);
     }
   });
 };
-
-async function addStudy(): Promise<any> {
-  const data = {
-    title: study.title,
-    image: study.image || `https://api.dicebear.com/6.x/shapes/svg?seed=${nanoid()}`,
-  };
-
-  const response = await fetch(`${baseURL}/study`, {
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-  });
-
-  if (!response.ok) {
-    message.error("Something went wrong. Please try again later.");
-
-    throw new Error(response.statusText);
-  }
-
-  return response.json();
-}
 </script>
 
 <template>

@@ -4,12 +4,15 @@ import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
 import CollapsibleCard from "@/components/cards/CollapsibleCard.vue";
+import { useAuthStore } from "@/stores/auth";
 import type { StudyInterventions } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const message = useMessage();
+
+const authStore = useAuthStore();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -22,6 +25,7 @@ onBeforeMount(async () => {
 
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/intervention`, {
     headers: {
+      Authorization: `Bearer ${authStore.getAccessToken()}`,
       "Content-Type": "application/json",
     },
     method: "GET",
@@ -69,6 +73,7 @@ const removeIntervention = async (id: string) => {
       `${baseURL}/study/${route.params.studyId}/metadata/intervention/${id}`,
       {
         headers: {
+          Authorization: `Bearer ${authStore.getAccessToken()}`,
           "Content-Type": "application/json",
         },
         method: "DELETE",
@@ -126,6 +131,7 @@ const saveMetadata = (e: MouseEvent) => {
         {
           body: JSON.stringify(data),
           headers: {
+            Authorization: `Bearer ${authStore.getAccessToken()}`,
             "Content-Type": "application/json",
           },
           method: "POST",

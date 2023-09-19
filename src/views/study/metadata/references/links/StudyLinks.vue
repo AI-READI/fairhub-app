@@ -2,12 +2,15 @@
 import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
+import { useAuthStore } from "@/stores/auth";
 import type { StudyLinks } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const message = useMessage();
+
+const authStore = useAuthStore();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -20,6 +23,7 @@ onBeforeMount(async () => {
 
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/link`, {
     headers: {
+      Authorization: `Bearer ${authStore.getAccessToken()}`,
       "Content-Type": "application/json",
     },
     method: "GET",
@@ -49,6 +53,7 @@ const removeLink = async (id: string) => {
   if (item && item.origin === "remote") {
     const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/link/${id}`, {
       headers: {
+        Authorization: `Bearer ${authStore.getAccessToken()}`,
         "Content-Type": "application/json",
       },
       method: "DELETE",
@@ -97,6 +102,7 @@ const saveMetadata = (e: MouseEvent) => {
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/link`, {
         body: JSON.stringify(data),
         headers: {
+          Authorization: `Bearer ${authStore.getAccessToken()}`,
           "Content-Type": "application/json",
         },
         method: "POST",

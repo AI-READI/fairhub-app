@@ -64,6 +64,7 @@ const saveChanges = (e: MouseEvent) => {
       const response = await fetch(`${baseURL}/study/${routeParams.studyId}`, {
         body: JSON.stringify(data),
         headers: {
+          Authorization: `Bearer ${authStore.getAccessToken()}`,
           "Content-Type": "application/json",
         },
         method: "PUT",
