@@ -18,6 +18,9 @@ export const useAuthStore = defineStore(
     const isAuthenticated = ref(false);
 
     const accessToken = ref("");
+    /**
+     * TODO: store refresh token in a cookie/local storage
+     */
     const refreshToken = ref("");
 
     const user = ref<User>({
@@ -141,42 +144,56 @@ export const useAuthStore = defineStore(
       return refreshToken.value;
     };
 
-    const getAccessToken = async () => {
-      const decodedAccessToken = jwt_decode(accessToken.value) as JWT_TYPE;
+    const refreshTokens = async () => {
+      const refreshToken = getRefreshToken();
 
-      if (decodedAccessToken.exp * 1000 < Date.now()) {
-        console.log("access token expired");
-        console.log("refreshing access token");
-
-        const refreshToken = getRefreshToken();
-
-        if (!refreshToken) {
-          logout();
-          return null;
-        }
-
-        const response = await fetch(`${baseURL}/auth/refresh`, {
-          headers: {
-            Authorization: `Bearer ${refreshToken}`,
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-        });
-
-        if (!response.ok) {
-          logout();
-        }
-
-        const data = await response.json();
-
-        console.log(data);
-
-        saveUserInformation(data);
-
-        return accessToken.value;
+      if (!refreshToken) {
+        logout();
+        return null;
       }
 
+      const response = await fetch(`${baseURL}/auth/refresh`, {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        logout();
+        return null;
+      }
+
+      const data = await response.json();
+
+      saveUserInformation(data);
+
       return accessToken.value;
+    };
+
+    const getAccessToken = async () => {
+      if (accessToken.value) {
+        const decodedAccessToken = jwt_decode(accessToken.value) as JWT_TYPE;
+
+        if (decodedAccessToken.exp * 1000 < Date.now()) {
+          console.log("access token expired");
+          console.log("refreshing access token");
+
+          const token = await refreshTokens();
+
+          return token;
+        }
+
+        return accessToken.value;
+      } else {
+        console.log("no access token");
+        console.log("using refresh token");
+
+        const token = await refreshTokens();
+
+        return token;
+      }
     };
 
     const navigateToLogin = () => {
