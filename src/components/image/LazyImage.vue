@@ -25,14 +25,19 @@ const props = defineProps({
   },
 });
 
-const wrapper = ref<HTMLDivElement>(null);
-const image = ref<HTMLImageElement>(null);
+const wrapper = ref<HTMLDivElement | null>(null);
+const image = ref<HTMLImageElement | null>(null);
 const observer = ref<IntersectionObserver | null>(null);
 
 const isLoaded = ref(false);
 
 const onEnter = () => {
+  if (!image.value) {
+    return;
+  }
+
   // Image is visible (means: has entered the viewport),
+
   // so start loading by setting the src attribute
   image.value.src = props.src;
 
@@ -41,12 +46,15 @@ const onEnter = () => {
 
     setTimeout(() => {
       isLoaded.value = true;
-      console.log(image.value.src);
     }, 100);
   };
 };
 
 onMounted(() => {
+  if (!wrapper.value) {
+    return;
+  }
+
   observer.value = new IntersectionObserver((entries) => {
     if (entries[0].isIntersecting) {
       onEnter();

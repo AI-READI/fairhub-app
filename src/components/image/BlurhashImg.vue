@@ -12,16 +12,20 @@ const props = defineProps({
   },
 });
 
-const canvas = ref<HTMLCanvasElement>(null);
+const canvas = ref<HTMLCanvasElement | null>(null);
 
 onMounted(() => {
+  if (!canvas.value) {
+    return;
+  }
+
   const pixels = decode(props.hash, 32, 32);
 
   const imageData = new ImageData(pixels, 32, 32);
 
   const context = canvas.value.getContext("2d");
 
-  context.putImageData(imageData, 0, 0);
+  context?.putImageData(imageData, 0, 0);
 });
 </script>
 
