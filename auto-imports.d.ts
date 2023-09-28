@@ -62,6 +62,7 @@ declare global {
   const useMouse: typeof import("@vueuse/core")["useMouse"];
   const useMyFetch: typeof import("@vueuse/core")["useFetch"];
   const useNotification: typeof import("naive-ui")["useNotification"];
+  const usePush: typeof import("notivue")["usePush"];
   const useRoute: typeof import("vue-router")["useRoute"];
   const useRouter: typeof import("vue-router")["useRouter"];
   const useSlots: typeof import("vue")["useSlots"];
@@ -84,5 +85,5 @@ declare global {
     WritableComputedRef,
   } from "vue";
   // @ts-ignore
-  export type { RouteLocationRaw } from "vue-router";
+  export type { FormInst, FormRules } from "naive-ui";
 }

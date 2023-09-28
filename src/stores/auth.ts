@@ -2,9 +2,7 @@ import jwt_decode from "jwt-decode";
 import { defineStore } from "pinia";
 
 import type { User } from "@/types/User";
-
-// import { baseURL } from "@/utils/constants";
-const baseURL = "http://localhost:3001";
+import { baseURL } from "@/utils/constants";
 
 type JWT_TYPE = {
   exp: number;
@@ -34,18 +32,22 @@ export const useAuthStore = defineStore(
     const router = useRouter();
 
     const saveUserInformation = (data: any) => {
-      accessToken.value = data.accessToken;
-      refreshToken.value = data.refreshToken;
-
       user.value = data.user;
     };
 
-    const signIn = async (emailAddress: string, password: string) => {
+    const setIsAuthenticated = (value: boolean) => {
+      isAuthenticated.value = value;
+    };
+
+    const login = async (emailAddress: string, password: string) => {
       console.log("signing in");
       console.log(emailAddress, password);
 
       const response = await fetch(`${baseURL}/auth/login`, {
-        body: JSON.stringify({ emailAddress, password }),
+        body: JSON.stringify({
+          email_address: emailAddress,
+          password,
+        }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -55,11 +57,11 @@ export const useAuthStore = defineStore(
       if (response.ok) {
         const data = await response.json();
 
-        console.log(data);
-
         saveUserInformation(data);
 
         isAuthenticated.value = true;
+
+        return data;
       } else {
         isAuthenticated.value = false;
 
@@ -70,30 +72,15 @@ export const useAuthStore = defineStore(
           first_name: "",
           last_name: "",
         };
+
+        return null;
       }
     };
 
     const logout = async () => {
-      // check if refresh token exists
-      if (!refreshToken.value) {
-        return;
-      }
-
-      const response = await fetch(`${baseURL}/auth/logout`, {
-        headers: {
-          Authorization: `Bearer ${refreshToken.value}`,
-          "Content-Type": "application/json",
-        },
+      await fetch(`${baseURL}/auth/logout`, {
         method: "POST",
       });
-
-      if (!response.ok) {
-        console.log("error logging out");
-        return;
-      }
-
-      accessToken.value = "";
-      refreshToken.value = "";
 
       isAuthenticated.value = false;
 
@@ -104,6 +91,8 @@ export const useAuthStore = defineStore(
         first_name: "",
         last_name: "",
       };
+
+      router.push("/auth/login");
     };
 
     const validateRefreshToken = async () => {
@@ -201,13 +190,12 @@ export const useAuthStore = defineStore(
     };
 
     return {
-      accessToken,
-      getAccessToken,
       isAuthenticated,
+      login,
       logout,
       navigateToLogin,
-      refreshToken,
-      signIn,
+      saveUserInformation,
+      setIsAuthenticated,
       user,
     };
   },

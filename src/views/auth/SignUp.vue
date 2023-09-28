@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import type { FormInst, FormRules } from "naive-ui";
+import { baseURL } from "@/utils/constants";
 
-// import { baseURL } from "@/utils/constants";
-
-const baseURL = "http://localhost:3001";
-
+const push = usePush();
 const router = useRouter();
-const message = useMessage();
 
 const loading = ref(false);
 
@@ -85,14 +81,14 @@ const signUp = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
     if (!errors) {
-      loading.value = true;
-
       const emailAddress = formValue.value.emailAddress;
       const password = formValue.value.password;
 
-      const response = await fetch(`${baseURL}/auth/sign-up`, {
+      loading.value = true;
+
+      const response = await fetch(`${baseURL}/auth/signup`, {
         body: JSON.stringify({
-          emailAddress,
+          email_address: emailAddress,
           password,
         }),
         headers: {
@@ -104,13 +100,21 @@ const signUp = (e: MouseEvent) => {
       loading.value = false;
 
       if (!response.ok) {
-        message.error("Something went wrong. Please try again.");
+        if (response.status === 409) {
+          push.error("An account with this email address already exists.");
+        } else if (response.status === 400) {
+          push.error("Please enter a valid email address.");
+        } else {
+          push.error("Something went wrong. Please try again.");
+        }
+
         throw new Error("Network response was not ok");
       }
 
-      message.success(
-        "Account created successfully. Please check your email to verify your account."
-      );
+      push.success({
+        title: "Account created successfully.",
+        message: "Please check your email for a verification link.",
+      });
 
       router.push("/auth/login");
     } else {

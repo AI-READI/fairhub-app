@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { FormInst, FormRules } from "naive-ui";
-
 import { useAuthStore } from "@/stores/auth";
+import { baseURL } from "@/utils/constants";
 
-const authStore = useAuthStore();
+const push = usePush();
 const router = useRouter();
+const authStore = useAuthStore();
 
 const loading = ref(false);
 
@@ -46,11 +46,50 @@ const signIn = (e: MouseEvent) => {
       const emailAddress = formValue.value.emailAddress;
       const password = formValue.value.password;
 
-      console.log(emailAddress, password);
-
-      authStore.signIn(emailAddress, password);
+      const response = await fetch(`${baseURL}/auth/login`, {
+        body: JSON.stringify({
+          email_address: emailAddress,
+          password,
+        }),
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
 
       loading.value = false;
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          console.log("invalid credentials");
+
+          push.error({
+            title: "Invalid Credentials",
+            message: "Please check your email address and password",
+          });
+
+          return;
+        } else {
+          console.log("error");
+          console.log(response);
+
+          push.error({
+            title: "Error",
+            message: "Something went wrong. Please try again later",
+          });
+        }
+      }
+
+      const data = await response.json();
+
+      authStore.saveUserInformation(data);
+      authStore.setIsAuthenticated(true);
+
+      push.success({
+        title: "Logged in successfully",
+        message: "Welcome back!",
+      });
 
       router.push({ name: "studies:all-studies" });
     } else {

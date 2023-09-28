@@ -1,7 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { defineStore } from "pinia";
 
-import { useAuthStore } from "@/stores/auth";
 import type { Study } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
@@ -9,8 +8,6 @@ export const useStudyStore = defineStore(
   "study",
   () => {
     const loading = ref(false);
-
-    const authStore = useAuthStore();
 
     const allStudies = ref<Study[]>([]);
     const study = ref<Study>({
@@ -32,20 +29,30 @@ export const useStudyStore = defineStore(
     const fetchAllStudies = async () => {
       loading.value = true;
 
-      // add authorization header
+      // const response = await axios.get(`${baseURL}/study`, {
+      //   withCredentials: true,
+      // });
+
+      // if (!response) {
+      //   throw new Error("Studies not found");
+      // }
+
+      // const studies = response.data;
+
       const response = await fetch(`${baseURL}/study`, {
-        headers: {
-          Authorization: `Bearer ${authStore.getAccessToken()}`,
-        },
+        credentials: "include",
         method: "GET",
       });
 
-      // check for errors
       if (!response.ok) {
-        throw new Error("Studies not found  ");
+        throw new Error("Studies not found");
       }
 
-      allStudies.value = await response.json();
+      const studies = await response.json();
+
+      console.log("studies", studies);
+
+      allStudies.value = studies as Study[];
 
       for (const study of allStudies.value) {
         study.owner = {
@@ -93,18 +100,16 @@ export const useStudyStore = defineStore(
       loading.value = true;
 
       const response = await fetch(`${baseURL}/study/${studyId}`, {
-        headers: {
-          Authorization: `Bearer ${authStore.getAccessToken()}`,
-        },
         method: "GET",
       });
 
-      // check for errors
       if (!response.ok) {
         throw new Error("Study not found");
       }
 
-      const s = await response.json();
+      const data = await response.json();
+
+      const s = data as Study;
 
       study.value = s;
 

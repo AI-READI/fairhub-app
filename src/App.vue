@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { GlobalThemeOverrides } from "naive-ui";
+import { materialTheme, Notifications, Notivue } from "notivue";
 
 import { theme } from "@/stores/settings";
 
@@ -17,6 +18,10 @@ const themeOverrides: GlobalThemeOverrides = {
     <n-dialog-provider>
       <n-message-provider>
         <AppHeader />
+
+        <Notivue v-slot="item">
+          <Notifications :item="item" :theme="materialTheme" />
+        </Notivue>
 
         <n-space vertical size="large">
           <n-layout has-sider>

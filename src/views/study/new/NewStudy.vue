@@ -69,10 +69,6 @@ const createStudy = (e: MouseEvent) => {
 
       const response = await fetch(`${baseURL}/study`, {
         body: JSON.stringify(data),
-        headers: {
-          Authorization: `Bearer ${authStore.getAccessToken()}`,
-          "Content-Type": "application/json",
-        },
         method: "POST",
       });
 
