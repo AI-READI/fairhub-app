@@ -3,26 +3,29 @@ erDiagram
         string id PK "UUIDv4"
         string dataset_id FK "DATASET.id"
         string identifier
-        string identifier_type
+        string identifier_type "NULLABLE"
+        timestamp created_at
     }
 
     DATASET_TITLE {
         string id PK "UUIDv4"
         string dataset_id FK "DATASET.id"
         string title
-        string type "needed to distinguish between main title and alternative titles"
+        string type "NULLABLE"
+        timestamp created_at
     }
 
     DATASET_CONTRIBUTOR {
         string id PK "UUIDv4"
         string dataset_id FK "DATASET.id"
         string name
-        string name_type
+        string name_type "NULLABLE"
         string name_identifier
         string name_identifier_scheme
         string name_identifier_scheme_uri
         boolean creator "true if creator, false if contributor"
-        string contributor_type "required if contributor"
+        string contributor_type "NULLABLE | required if contributor"
+        timestamp created_at
     }
 
     DATASET_CONTRIBUTOR_AFFILIATION {
@@ -31,27 +34,27 @@ erDiagram
         string identifier 
         string identifier_scheme
         string identifier_scheme_uri
+        timestamp created_at
     }
 
     DATASET_DATE {
         string id PK "UUIDv4"
         string dataset_id FK "DATASET.id"
         string date
-        string date_type
+        string date_type "NULLABLE"
         string date_information
+        timestamp created_at
     }
 
     DATASET_RECORD_KEYS {
-        string id PK "UUIDv4"
-        string dataset_id FK "DATASET.id"
-        string key_type
-        string key_details
+        string dataset_id PK,FK "DATASET.id"
+        string keys_type "NULLABLE"
+        string keys_details
     }
 
     DATASET_DE_IDENT_LEVEL {
-        string id PK "UUIDv4"
-        string dataset_id FK "DATASET.id"
-        string type
+        string dataset_id PK,FK "DATASET.id"
+        string type "NULLABLE"
         boolean direct
         boolean hipaa
         boolean dates
@@ -61,9 +64,8 @@ erDiagram
     }
 
     DATASET_CONSENT {
-        string id PK "UUIDv4"
-        string dataset_id FK "DATASET.id"
-        string type
+        string dataset_id PK,FK "DATASET.id"
+        string type "NULLABLE"
         boolean noncommercial
         boolean geog_restrict
         boolean research_type
@@ -73,8 +75,7 @@ erDiagram
     }
 
     DATASET_README {
-        string id PK "UUIDv4"
-        string dataset_id FK "DATASET.id"
+        string dataset_id PK,FK "DATASET.id"
         string content
     }
 
@@ -82,7 +83,8 @@ erDiagram
         string id PK "UUIDv4"
         string dataset_id FK "DATASET.id"
         string description
-        string description_type
+        string description_type "NULLABLE"
+        timestamp created_at
     }
 
     DATASET_SUBJECT {
@@ -93,22 +95,15 @@ erDiagram
         string scheme_uri
         string value_uri
         string classification_code
-    }
-
-    DATASET_MANAGING_ORGANIZATION {
-        string id PK "UUIDv4"
-        string dataset_id FK "DATASET.id"
-        string name
-        string ror_id
+        timestamp created_at
     }
 
     DATASET_ACCESS {
-        string id PK "UUIDv4"
-        string dataset_id FK "DATASET.id"
-        string type
+        string dataset_id PK,FK "DATASET.id"
+        string type "NULLABLE"
         string description
         string url
-        string url_last_checked
+        timestamp url_last_checked "milliseconds format"
     }
 
     DATASET_RIGHTS {
@@ -118,6 +113,7 @@ erDiagram
         string uri
         string identifier
         string identifier_scheme
+        timestamp created_at
     }
 
     DATASET_FUNDER {
@@ -125,65 +121,70 @@ erDiagram
         string dataset_id FK "DATASET.id"
         string name
         string identifier
-        string identifier_type
+        string identifier_type "NULLABLE"
         string identifier_scheme_uri
         string award_number
         string award_uri
         string award_title
+        timestamp created_at
     }
 
      DATASET_OTHER {
-        string id PK "UUIDv4"
-        string dataset_id FK "DATASET.id"
-        string language
+        string dataset_id PK,FK "DATASET.id"
+        string resource_type
+        string language "NULLABLE"
         string managing_organization_name
         string managing_organization_ror_id
-        string standards_followed
-        string acknowledgement
+        string publisher
+        string standards_followed "Used for the README file"
+        string acknowledgement "Used for the README file"
         string[] size
     }
 
     DATASET_RELATED_ITEM {
         string id PK "UUIDv4"
         string dataset_id FK "DATASET.id"
-        string type
-        string relation_type
+        string type "NULLABLE"
+        string relation_type "NULLABLE"
+        timestamp created_at
     }
 
     DATASET_RELATED_ITEM_IDENTIFIER {
         string id PK "UUIDv4"
         string related_item_id FK "DATASET_RELATED_ITEM.id"
         string identifier
-        string type
-        string metadata_scheme
-        string scheme_uri
-        string scheme_type
+        string type "NULLABLE"
+        string metadata_scheme "NULLABLE"
+        string scheme_uri "NULLABLE"
+        string scheme_type "NULLABLE"
+        timestamp created_at
     }
 
     DATASET_RELATED_ITEM_CONTRIBUTOR {
         string id PK "UUIDv4"
         string related_item_id FK "DATASET_RELATED_ITEM.id"
         string name
-        string name_type
+        string name_type "NULLABLE"
         boolean creator "true if creator, false if contributor"
-        string contributor_type "required if contributor"
+        string contributor_type "NULLABLE | required if contributor"
+        timestamp created_at
     }
 
     DATASET_RELATED_ITEM_TITLE {
         string id PK "UUIDv4"
         string related_item_id FK "DATASET_RELATED_ITEM.id"
         string title
-        string type "needed to distinguish between main title and alternative titles"
+        string type "NULLABLE"
+        timestamp created_at
     }
 
     DATASET_RELATED_ITEM_OTHER {
-        string id PK "UUIDv4"
-        string related_item_id FK "DATASET_RELATED_ITEM.id"
-        string publication_year
+        string related_item_id PK,FK "DATASET_RELATED_ITEM.id"
+        timestamp publication_year
         string volume
         string issue
         string number_value
-        string number_type
+        string number_type "NULLABLE"
         string first_page
         string last_page
         string publisher
@@ -202,7 +203,6 @@ erDiagram
     DATASET_README ||--|| DATASET : "has readme"
 
     DATASET ||--o{ DATASET_SUBJECT : "has subject"
-    DATASET ||--|| DATASET_MANAGING_ORGANIZATION : "has managing organization"
     DATASET ||--|| DATASET_ACCESS : "has access"
     DATASET ||--o{ DATASET_RIGHTS : "has rights"
     DATASET ||--o{ DATASET_FUNDER : "has funder"

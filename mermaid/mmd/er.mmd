@@ -17,8 +17,7 @@ erDiagram
     }
 
     USER_DETAILS {
-        string id PK "UUIDv4"
-        string user_id FK "USER.id"
+        string user_id PK,FK "USER.id"
         string first_name "`Given name` in UI"
         string last_name "`Family name` in UI"
         string institution

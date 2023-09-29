@@ -11,15 +11,13 @@ erDiagram
     }
 
     STUDY_DESCRIPTION {
-        string id PK "UUIDv4"
-        string study_id FK "STUDY.id"
+        string study_id PK,FK "STUDY.id"
         string brief_summary "should act as a default description"
         string detailed_description
     }
 
     STUDY_STATUS {
-        string id PK "UUIDv4"
-        string study_id FK "STUDY.id"
+        string study_id PK,FK "STUDY.id"
         string overall_status "NULLABLE"
         string why_stopped
         string start_date "NULLABLE"
@@ -29,8 +27,7 @@ erDiagram
     }
 
     STUDY_SPONSORS_COLLOBORATORS {
-        string id PK "UUIDv4"
-        string study_id FK "STUDY.id"
+        string study_id PK,FK "STUDY.id"
         string responsible_party_type "NULLABLE"
         string responsible_party_investigator_name
         string responsible_party_investigator_title
@@ -40,8 +37,7 @@ erDiagram
     }
 
     STUDY_DESIGN {
-        string id PK "UUIDv4"
-        string study_id FK "STUDY.id"
+        string study_id PK,FK "STUDY.id"
         string study_type
         string design_allocation "NULLABLE"
         string design_intervention_model "NULLABLE"
@@ -84,8 +80,7 @@ erDiagram
     }
 
     STUDY_ELIGIBILTY {
-        string id PK "UUIDv4"
-        string study_id FK "STUDY.id"
+        string study_id PK,FK "STUDY.id"
         string gender "NULLABLE"
         string gender_based "NULLABLE"
         string gender_description
@@ -137,8 +132,7 @@ erDiagram
     }
 
     STUDY_IPDSHARING {
-        string id PK "UUIDv4"
-        string study_id FK "STUDY.id"
+        string study_id PK,FK "STUDY.id"
         string ipd_sharing "NULLABLE"
         string ipd_sharing_description
         string[] ipd_sharing_info_type_list
@@ -176,8 +170,7 @@ erDiagram
     }
 
     STUDY_OTHER {
-        string id PK "UUIDv4"
-        string study_id FK "STUDY.id"
+        string study_id PK,FK "STUDY.id"
         boolean oversight_has_dmc 
         string[] conditions
         string[] keywords
