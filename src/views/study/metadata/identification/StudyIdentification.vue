@@ -3,15 +3,12 @@ import type { FormInst, FormRules } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
-import { useAuthStore } from "@/stores/auth";
 import type { StudyIdentificationModule } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const message = useMessage();
-
-const authStore = useAuthStore();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -45,10 +42,6 @@ onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/identification`, {
-    headers: {
-      Authorization: `Bearer ${authStore.getAccessToken()}`,
-      "Content-Type": "application/json",
-    },
     method: "GET",
   });
 
@@ -83,10 +76,6 @@ const removeSecondaryIdentifier = async (id: string) => {
     const response = await fetch(
       `${baseURL}/study/${route.params.studyId}/metadata/identification/${id}`,
       {
-        headers: {
-          Authorization: `Bearer ${authStore.getAccessToken()}`,
-          "Content-Type": "application/json",
-        },
         method: "DELETE",
       }
     );
@@ -151,10 +140,6 @@ const saveMetadata = (e: MouseEvent) => {
         `${baseURL}/study/${route.params.studyId}/metadata/identification`,
         {
           body: JSON.stringify(data),
-          headers: {
-            Authorization: `Bearer ${authStore.getAccessToken()}`,
-            "Content-Type": "application/json",
-          },
           method: "POST",
         }
       );

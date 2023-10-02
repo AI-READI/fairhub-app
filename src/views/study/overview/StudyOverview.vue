@@ -63,7 +63,7 @@ const editStudyDetails = () => {
           <p class="py-4">{{ study.description }}</p>
 
           <n-space>
-            <n-tag>{{ study.owner.first_name }} {{ study.owner.last_name }}</n-tag>
+            <n-tag>{{ study.owner }}</n-tag>
             <n-tag type="warning">{{ filesize(study.size || 0) }}</n-tag>
           </n-space>
 

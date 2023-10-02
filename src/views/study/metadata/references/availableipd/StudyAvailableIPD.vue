@@ -4,15 +4,12 @@ import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
 import CollapsibleCard from "@/components/cards/CollapsibleCard.vue";
-import { useAuthStore } from "@/stores/auth";
 import type { StudyIPDs } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const message = useMessage();
-
-const authStore = useAuthStore();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -24,10 +21,6 @@ onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/available-ipd`, {
-    headers: {
-      Authorization: `Bearer ${authStore.getAccessToken()}`,
-      "Content-Type": "application/json",
-    },
     method: "GET",
   });
 
@@ -54,10 +47,6 @@ const removeIPD = async (id: string) => {
     const response = await fetch(
       `${baseURL}/study/${route.params.studyId}/metadata/available-ipd/${id}`,
       {
-        headers: {
-          Authorization: `Bearer ${authStore.getAccessToken()}`,
-          "Content-Type": "application/json",
-        },
         method: "DELETE",
       }
     );
@@ -110,10 +99,6 @@ const saveMetadata = (e: MouseEvent) => {
         `${baseURL}/study/${route.params.studyId}/metadata/available-ipd`,
         {
           body: JSON.stringify(data),
-          headers: {
-            Authorization: `Bearer ${authStore.getAccessToken()}`,
-            "Content-Type": "application/json",
-          },
           method: "POST",
         }
       );

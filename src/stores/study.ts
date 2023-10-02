@@ -1,133 +1,124 @@
-import { faker } from "@faker-js/faker";
 import { defineStore } from "pinia";
 
 import type { Study } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
-export const useStudyStore = defineStore(
-  "study",
-  () => {
-    const loading = ref(false);
+import { useAuthStore } from "./auth";
 
-    const allStudies = ref<Study[]>([]);
-    const study = ref<Study>({
-      id: "",
-      title: "",
-      description: "",
-      image: "",
-      keywords: [],
-      owner: {
-        email: "",
-        first_name: "",
-        last_name: "",
-        orcid: "",
-      },
-      size: 0,
-      updated_on: 0,
+export const useStudyStore = defineStore("study", () => {
+  const authStore = useAuthStore();
+
+  const loading = ref(false);
+
+  const allStudies = ref<Study[]>([]);
+  const study = ref<Study>({
+    id: "",
+    title: "",
+    description: "",
+    image: "",
+    keywords: [],
+    owner: "",
+    role: "viewer",
+    size: 0,
+    updated_on: 0,
+  });
+
+  const fetchAllStudies = async () => {
+    loading.value = true;
+
+    // const response = await axios.get(`${baseURL}/study`, {
+    //   withCredentials: true,
+    // });
+
+    // if (!response) {
+    //   throw new Error("Studies not found");
+    // }
+
+    // const studies = response.data;
+
+    const response = await fetch(`${baseURL}/study`, {
+      method: "GET",
     });
 
-    const fetchAllStudies = async () => {
-      loading.value = true;
+    if (!response.ok) {
+      throw new Error("Studies not found");
+    }
 
-      // const response = await axios.get(`${baseURL}/study`, {
-      //   withCredentials: true,
-      // });
+    const studies = await response.json();
 
-      // if (!response) {
-      //   throw new Error("Studies not found");
-      // }
+    console.log("response studies", studies);
 
-      // const studies = response.data;
+    allStudies.value = studies as Study[];
 
-      const response = await fetch(`${baseURL}/study`, {
-        credentials: "include",
-        method: "GET",
-      });
+    for (const study of allStudies.value) {
+      /**
+       * TODO: Remove this once we have the user object
+       */
 
-      if (!response.ok) {
-        throw new Error("Studies not found");
-      }
+      console.log("authStore.user", authStore.user);
+      study.owner = authStore.user.id;
+      study.role = "owner";
+    }
 
-      const studies = await response.json();
+    // if (allStudies.value.length === 0) {
+    //   for (let i = 0; i < 5; i++) {
+    //     const s: Study = {
+    //       id: faker.string.uuid(),
+    //       title: faker.lorem.sentence(),
+    //       description: faker.lorem.paragraph(),
+    //       image: faker.image.urlPicsumPhotos(),
+    //       keywords: Array.from({ length: 3 }, () => faker.lorem.word()),
+    //       last_updated: faker.date.past().toISOString(),
+    //       owner: {
+    //         email: "sanjay@email.org",
+    //         first_name: faker.person.firstName(),
+    //         last_name: faker.person.lastName(),
+    //         orcid: faker.string.uuid(),
+    //       },
+    //       size: "4 GB",
+    //     };
+    //     allStudies.value.push(s);
+    //   }
+    // }
 
-      console.log("studies", studies);
+    console.log("studies", allStudies.value);
 
-      allStudies.value = studies as Study[];
+    // allStudies.value.forEach((study) => {
+    //   study.size = `${Math.round(Math.random() * 100)} MB`;
+    // });
 
-      for (const study of allStudies.value) {
-        study.owner = {
-          email: "sanjay@email.org",
-          first_name: faker.person.firstName(),
-          last_name: faker.person.lastName(),
-          orcid: faker.string.uuid(),
-        };
-      }
+    /** Sort by name for now */
+    allStudies.value.sort((a, b) => a.title.localeCompare(b.title));
 
-      // if (allStudies.value.length === 0) {
-      //   for (let i = 0; i < 5; i++) {
-      //     const s: Study = {
-      //       id: faker.string.uuid(),
-      //       title: faker.lorem.sentence(),
-      //       description: faker.lorem.paragraph(),
-      //       image: faker.image.urlPicsumPhotos(),
-      //       keywords: Array.from({ length: 3 }, () => faker.lorem.word()),
-      //       last_updated: faker.date.past().toISOString(),
-      //       owner: {
-      //         email: "sanjay@email.org",
-      //         first_name: faker.person.firstName(),
-      //         last_name: faker.person.lastName(),
-      //         orcid: faker.string.uuid(),
-      //       },
-      //       size: "4 GB",
-      //     };
-      //     allStudies.value.push(s);
-      //   }
-      // }
+    loading.value = false;
+  };
 
-      console.log("studies", allStudies.value);
+  const getStudy = async (studyId: string) => {
+    loading.value = true;
 
-      // allStudies.value.forEach((study) => {
-      //   study.size = `${Math.round(Math.random() * 100)} MB`;
-      // });
+    const response = await fetch(`${baseURL}/study/${studyId}`, {
+      method: "GET",
+    });
 
-      /** Sort by name for now */
-      allStudies.value.sort((a, b) => a.title.localeCompare(b.title));
+    if (!response.ok) {
+      throw new Error("Study not found");
+    }
 
-      loading.value = false;
-    };
+    const data = await response.json();
 
-    const getStudy = async (studyId: string) => {
-      loading.value = true;
+    const s = data as Study;
 
-      const response = await fetch(`${baseURL}/study/${studyId}`, {
-        method: "GET",
-      });
+    study.value = s;
 
-      if (!response.ok) {
-        throw new Error("Study not found");
-      }
+    study.value.owner = authStore.user.id;
+    study.value.role = "owner";
 
-      const data = await response.json();
+    console.log("study", study.value);
 
-      const s = data as Study;
+    loading.value = false;
 
-      study.value = s;
+    return study.value;
+  };
 
-      study.value.owner = {
-        email: "sanjay@email.org",
-        first_name: faker.person.firstName(),
-        last_name: faker.person.lastName(),
-        orcid: faker.string.uuid(),
-      };
-
-      loading.value = false;
-
-      return study.value;
-    };
-
-    return { allStudies, fetchAllStudies, getStudy, loading, study };
-  },
-  {
-    persist: { storage: sessionStorage },
-  }
-);
+  return { allStudies, fetchAllStudies, getStudy, loading, study };
+});

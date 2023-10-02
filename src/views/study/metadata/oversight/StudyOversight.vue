@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { useAuthStore } from "@/stores/auth";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const message = useMessage();
-
-const authStore = useAuthStore();
 
 const oversight_has_dmc = ref(false);
 const showLoader = ref(false);
@@ -14,10 +11,6 @@ onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/oversight`, {
-    headers: {
-      Authorization: `Bearer ${authStore.getAccessToken()}`,
-      "Content-Type": "application/json",
-    },
     method: "GET",
   });
 
@@ -39,10 +32,6 @@ const saveMetadata = async (value: boolean) => {
     body: JSON.stringify({
       oversight_has_dmc: value,
     }),
-    headers: {
-      Authorization: `Bearer ${authStore.getAccessToken()}`,
-      "Content-Type": "application/json",
-    },
     method: "PUT",
   });
 

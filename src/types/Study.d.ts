@@ -16,12 +16,8 @@ export interface Study {
   description: string;
   image: string;
   keywords: string[];
-  owner: {
-    email: string;
-    first_name: string;
-    last_name: string;
-    orcid: string;
-  };
+  owner: string; // study owner's id
+  role: "owner" | "admin" | "editor" | "viewer";
   size: number;
   updated_on: number;
 }

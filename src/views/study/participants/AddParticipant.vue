@@ -88,10 +88,7 @@ const addParticipant = (e: MouseEvent) => {
       try {
         const response = await fetch(`${baseURL}/study/${studyId}/participants/add`, {
           body: JSON.stringify(data),
-          headers: {
-            Authorization: `Bearer ${authStore.getAccessToken()}`,
-            "Content-Type": "application/json",
-          },
+
           method: "POST",
         });
 

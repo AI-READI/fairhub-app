@@ -5,6 +5,7 @@ export const useFilterStore = defineStore(
   "filter",
   () => {
     const permissions = ref({
+      admin: true,
       editor: true,
       owner: true,
       viewer: true,

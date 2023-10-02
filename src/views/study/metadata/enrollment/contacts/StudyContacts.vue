@@ -2,15 +2,12 @@
 import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
-import { useAuthStore } from "@/stores/auth";
 import type { StudyContacts } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const message = useMessage();
-
-const authStore = useAuthStore();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -22,10 +19,6 @@ onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/central-contact`, {
-    headers: {
-      Authorization: `Bearer ${authStore.getAccessToken()}`,
-      "Content-Type": "application/json",
-    },
     method: "GET",
   });
 
@@ -50,10 +43,6 @@ const removeCentralContact = async (id: string) => {
     const response = await fetch(
       `${baseURL}/study/${route.params.studyId}/metadata/central-contact/${id}`,
       {
-        headers: {
-          Authorization: `Bearer ${authStore.getAccessToken()}`,
-          "Content-Type": "application/json",
-        },
         method: "DELETE",
       }
     );
@@ -112,10 +101,6 @@ const saveMetadata = (e: MouseEvent) => {
         `${baseURL}/study/${route.params.studyId}/metadata/central-contact`,
         {
           body: JSON.stringify(data),
-          headers: {
-            Authorization: `Bearer ${authStore.getAccessToken()}`,
-            "Content-Type": "application/json",
-          },
           method: "POST",
         }
       );

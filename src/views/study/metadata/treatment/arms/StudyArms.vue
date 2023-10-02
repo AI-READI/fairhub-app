@@ -4,15 +4,12 @@ import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
 import FadeTransition from "@/components/transitions/FadeTransition.vue";
-import { useAuthStore } from "@/stores/auth";
 import type { StudyArms } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const message = useMessage();
-
-const authStore = useAuthStore();
 
 const apiLoading = ref(false);
 
@@ -29,10 +26,6 @@ onBeforeMount(async () => {
   apiLoading.value = true;
 
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/arm`, {
-    headers: {
-      Authorization: `Bearer ${authStore.getAccessToken()}`,
-      "Content-Type": "application/json",
-    },
     method: "GET",
   });
 
@@ -63,10 +56,6 @@ const removeArmGroup = async (id: string) => {
 
   if (item && item.origin === "remote") {
     const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/arm/${id}`, {
-      headers: {
-        Authorization: `Bearer ${authStore.getAccessToken()}`,
-        "Content-Type": "application/json",
-      },
       method: "DELETE",
     });
 
@@ -117,10 +106,6 @@ const saveMetadata = (e: MouseEvent) => {
 
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/arm`, {
         body: JSON.stringify(data),
-        headers: {
-          Authorization: `Bearer ${authStore.getAccessToken()}`,
-          "Content-Type": "application/json",
-        },
         method: "POST",
       });
 

@@ -2,15 +2,12 @@
 import type { FormInst, FormRules } from "naive-ui";
 
 import FORM_JSON from "@/assets/data/form.json";
-import { useAuthStore } from "@/stores/auth";
 import type { StudyEligiblityModule } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const message = useMessage();
-
-const authStore = useAuthStore();
 
 const apiLoading = ref(false);
 
@@ -83,10 +80,6 @@ onBeforeMount(async () => {
   apiLoading.value = true;
 
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/eligibility`, {
-    headers: {
-      Authorization: `Bearer ${authStore.getAccessToken()}`,
-      "Content-Type": "application/json",
-    },
     method: "GET",
   });
 
@@ -153,10 +146,6 @@ const saveMetadata = (e: MouseEvent) => {
         `${baseURL}/study/${route.params.studyId}/metadata/eligibility`,
         {
           body: JSON.stringify(data),
-          headers: {
-            Authorization: `Bearer ${authStore.getAccessToken()}`,
-            "Content-Type": "application/json",
-          },
           method: "PUT",
         }
       );

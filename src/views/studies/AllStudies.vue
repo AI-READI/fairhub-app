@@ -24,8 +24,9 @@ const studies = computed(() => {
     const permissions = filterStore.permissions;
 
     if (permissions.owner) {
-      console.log("owner", study.owner.email, authStore.user);
-      if (study.owner.email === authStore.user.email_address) {
+      console.log("owner", study.owner, authStore.user);
+
+      if (study.role === "owner") {
         filteredStudies.push(study);
       }
     }

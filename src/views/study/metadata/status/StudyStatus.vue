@@ -3,15 +3,12 @@ import dayjs from "dayjs";
 import type { FormInst, FormRules } from "naive-ui";
 
 import FORM_JSON from "@/assets/data/form.json";
-import { useAuthStore } from "@/stores/auth";
 import type { StudyStatusModule } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const message = useMessage();
-
-const authStore = useAuthStore();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -59,10 +56,6 @@ onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/status`, {
-    headers: {
-      Authorization: `Bearer ${authStore.getAccessToken()}`,
-      "Content-Type": "application/json",
-    },
     method: "GET",
   });
 
@@ -91,10 +84,6 @@ const saveMetadata = (e: MouseEvent) => {
 
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/status`, {
         body: JSON.stringify(data),
-        headers: {
-          Authorization: `Bearer ${authStore.getAccessToken()}`,
-          "Content-Type": "application/json",
-        },
         method: "PUT",
       });
 

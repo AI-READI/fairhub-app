@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
 
-import { useAuthStore } from "@/stores/auth";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const message = useMessage();
-
-const authStore = useAuthStore();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -17,10 +14,6 @@ onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/collaborators`, {
-    headers: {
-      Authorization: `Bearer ${authStore.getAccessToken()}`,
-      "Content-Type": "application/json",
-    },
     method: "GET",
   });
 
@@ -55,10 +48,6 @@ const saveMetadata = (e: MouseEvent) => {
         `${baseURL}/study/${route.params.studyId}/metadata/collaborators`,
         {
           body: JSON.stringify(uniqueCollaborators),
-          headers: {
-            Authorization: `Bearer ${authStore.getAccessToken()}`,
-            "Content-Type": "application/json",
-          },
           method: "PUT",
         }
       );
