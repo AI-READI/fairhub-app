@@ -22,6 +22,17 @@ export interface Study {
   updated_on: number;
 }
 
+export interface StudyContributor {
+  id?: string;
+  name?: string;
+  email_address: string;
+  ORCID?: string;
+  role?: string;
+  status: "invited" | "accepted" | "declined";
+}
+
+export interface StudyContributors extends Array<StudyContributor> {}
+
 export interface StudyIdentifier {
   id: string;
   domain: string;

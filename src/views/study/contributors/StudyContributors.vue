@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { faker } from "@faker-js/faker";
 import { Icon } from "@iconify/vue";
 import type { FormInst, FormItemRule } from "naive-ui";
 import validator from "validator";
 
 import { useAuthStore } from "@/stores/auth";
 import { useStudyStore } from "@/stores/study";
+import type { StudyContributors } from "@/types/Study";
+import { baseURL } from "@/utils/constants";
 
-const router = useRouter();
 const route = useRoute();
 const { error, success } = useMessage();
 
@@ -16,19 +16,24 @@ const studyStore = useStudyStore();
 
 const study = computed(() => studyStore.study);
 
-const routeParams = {
-  studyId: route.params.studyId as string,
-};
+const contributors = ref<StudyContributors>([]);
 
-onBeforeMount(() => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
+onBeforeMount(async () => {
+  const studyId = route.params.studyId;
+
+  const response = await fetch(`${baseURL}/study/${studyId}/contributor`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
   }
 
-  const studyId = routeParams.studyId;
+  const data = await response.json();
 
-  studyStore.getStudy(studyId);
+  console.log(data);
+
+  contributors.value = data;
 });
 
 const formRef = ref<FormInst | null>(null);
@@ -65,28 +70,38 @@ const handleValidateClick = (e: MouseEvent) => {
 };
 
 const owner = computed(() => {
-  return {
-    name: study.value?.owner.first_name + " " + study.value?.owner.last_name,
-    email_address: study.value?.owner.email,
-    ORCID: study.value?.owner.orcid,
-    role: "owner",
-    status: "active",
-  };
+  const owner = contributors.value.find((contributor) => contributor.role === "owner");
+
+  if (!owner) {
+    return {
+      name: "",
+      email_address: "",
+      ORCID: "",
+      role: "",
+      status: "",
+    };
+  }
+
+  return owner;
 });
 
 const contributorRoles = computed(() => {
   return [
     {
-      disabled: authStore.user?.email_address !== study.value?.owner.email,
+      disabled: authStore.user?.id !== study.value?.owner,
       label: "Owner",
       value: "owner",
     },
     {
-      label: "can edit",
+      label: "Administrator",
+      value: "admin",
+    },
+    {
+      label: "Editor",
       value: "editor",
     },
     {
-      label: "can view",
+      label: "Viewer",
       value: "viewer",
     },
   ];
@@ -107,176 +122,163 @@ const removeContributor = (email: string) => {
   console.log("remove contributor", email);
 };
 
-const contributors = Array(7)
-  .fill(0)
-  .map(() => {
-    return {
-      email: faker.internet.email(),
-      first_name: faker.person.firstName(),
-      institution: faker.company.name(),
-      last_name: faker.person.lastName(),
-      ORCID: "https://orcid.org/0000-0003-2829-8032",
-      permission: faker.helpers.arrayElement(["editor", "viewer"]),
-      status: faker.helpers.arrayElement(["active", "invited"]),
-    };
-  });
-
-contributors.sort((a, b) => {
-  if (a.status === "active") {
+contributors.value.sort((a, b) => {
+  if (a.status === "accepted") {
     return -1;
   }
-  if (b.status === "active") {
+  if (b.status === "accepted") {
     return 1;
   }
   return 0;
 });
 
 const getFirstLetters = (name: string) => {
+  if (!name) {
+    return ":)";
+  }
+
   const names = name.toUpperCase().split(" ");
-  return names[0].charAt(0) + names[1].charAt(0);
+  return names
+    .map((name) => name.charAt(0))
+    .slice(0, 2)
+    .join("");
 };
 </script>
 
 <template>
-  <FadeTransition>
-    <LottieLoader v-if="studyStore.loading" />
+  <main class="flex h-full w-full flex-col space-y-8 pr-6">
+    <PageBackNavigationHeader
+      title="Contributors"
+      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+      linkName="study:overview"
+      :linkParams="{
+        studyId: route.params.studyId,
+      }"
+    />
 
-    <main class="flex h-full w-full flex-col space-y-8 pr-6" v-else>
-      <h1>Study Contributors</h1>
+    <n-divider />
 
-      <n-divider />
+    <n-card class="mt-4 shadow-md" bordered>
+      <h2 class="text-lg">Owner of the Study</h2>
 
-      <n-card class="mt-4 shadow-md">
-        <h2>Current owner of the study</h2>
+      <div class="flex items-start justify-start space-x-4 pt-4">
+        <n-avatar class="mt-1 flex items-center justify-center bg-sky-900" size="large">
+          {{ getFirstLetters(owner.name) }}
+        </n-avatar>
 
-        <n-divider />
+        <div class="flex flex-col">
+          <span class="text-base">{{ owner.name || "Anonymous" }}</span>
 
-        <div class="flex items-start space-x-4">
+          <span>{{ owner.email_address || "xxx@fairhub.io" }}</span>
+
+          <span v-if="owner.ORCID">
+            {{ "0000-0003-2829-8032" || "xxxx-xxxx-xxxx-xxxx" }}
+          </span>
+        </div>
+      </div>
+    </n-card>
+
+    <n-space vertical>
+      <n-space
+        justify="space-between"
+        align="center"
+        v-for="contributor in contributors"
+        :key="contributor.email_address"
+        class="rounded-md px-3 py-2 transition-all hover:bg-slate-50"
+      >
+        <div class="flex items-center space-x-4">
           <n-avatar
-            class="my-2 flex items-center justify-center"
+            round
             size="large"
+            class="flex items-center justify-center"
             :class="{
-              'bg-sky-900': owner.status === 'active',
-              'text-slate-50': owner.status === 'active',
+              'border border-dashed': contributor.status === 'invited',
+              'opacity-60': contributor.status === 'invited',
             }"
+            :src="`https://api.dicebear.com/6.x/thumbs/svg?seed=${contributor.id}`"
           >
-            {{ getFirstLetters(owner.name) }}
           </n-avatar>
 
-          <div class="flex flex-col">
-            <span class="text-lg font-semibold">{{ owner.name }}</span>
+          <span
+            :class="{
+              'text-slate-400': contributor.status === 'invited',
+            }"
+          >
+            {{
+              contributor.status === "invited"
+                ? contributor.email_address
+                : contributor.name || "Anonymous"
+            }}
+          </span>
 
-            <span>{{ owner.email_address }}</span>
-
-            <a :href="owner.ORCID" target="_blank" class="text-slate-700" rel="noopener">
-              0000-0003-2829-8032
-            </a>
-          </div>
+          <span v-if="contributor.status === 'invited'" class="text-sm text-slate-400">
+            [{{ contributor.status }}]
+          </span>
         </div>
-      </n-card>
 
-      <n-divider />
+        <n-space justify="end" align="center">
+          <n-select
+            v-model:value="contributor.role"
+            :options="contributorRoles"
+            :consistent-menu-width="false"
+            class="w-32"
+          />
 
-      <n-space vertical>
-        <n-space
-          justify="space-between"
-          align="center"
-          v-for="contributor in contributors"
-          :key="contributor.email"
-          class="rounded-md px-3 py-2 transition-all hover:bg-slate-50"
-        >
-          <div class="flex items-center space-x-4">
-            <n-avatar
-              round
-              size="large"
-              class="flex items-center justify-center"
-              :class="{
-                'border border-dashed': contributor.status === 'invited',
-                'opacity-60': contributor.status === 'invited',
-              }"
-              :src="`https://api.dicebear.com/6.x/thumbs/svg?seed=${contributor.email}`"
-            >
-            </n-avatar>
+          <n-divider vertical />
 
-            <span
-              :class="{
-                'text-slate-400': contributor.status === 'invited',
-              }"
-            >
-              {{
-                contributor.status === "invited"
-                  ? contributor.email
-                  : contributor.first_name + " " + contributor.last_name
-              }}
-            </span>
+          <n-popconfirm @positive-click="removeContributor(contributor.email_address)">
+            <template #trigger>
+              <n-button type="error">
+                <template #icon>
+                  <Icon icon="fluent:delete-24-filled" width="20" height="20" />
+                </template>
+              </n-button>
+            </template>
 
-            <span v-if="contributor.status === 'invited'" class="text-sm text-slate-400">
-              [{{ contributor.status }}]
-            </span>
-          </div>
-
-          <n-space justify="end" align="center">
-            <n-select
-              v-model:value="contributor.permission"
-              :options="contributorRoles"
-              :consistent-menu-width="false"
-              class="w-32"
-            />
-
-            <n-popconfirm @positive-click="removeContributor(contributor.email)">
-              <template #trigger>
-                <Icon
-                  icon="fluent:person-delete-16-regular"
-                  width="20"
-                  height="20"
-                  class="transtition-all flex cursor-pointer items-center justify-center text-slate-400 hover:text-sky-300"
-                />
-              </template>
-              {{
-                contributor.status === "invited"
-                  ? "Are you sure you want to cancel this invitation?"
-                  : "Are you sure you want to remove this user from the study?"
-              }}
-            </n-popconfirm>
-          </n-space>
+            {{
+              contributor.status === "invited"
+                ? "Are you sure you want to cancel this invitation?"
+                : "Are you sure you want to remove this user from the study?"
+            }}
+          </n-popconfirm>
         </n-space>
       </n-space>
+    </n-space>
 
-      <n-divider />
+    <n-divider />
 
-      <h3 class="flex items-center">
-        <Icon icon="carbon:user-follow" width="23" height="20" class="mr-2" />
-        Invite a new contributor
-      </h3>
+    <h3 class="flex items-center">
+      <Icon icon="carbon:user-follow" width="23" height="20" class="mr-2" />
+      Invite a new contributor
+    </h3>
 
-      <n-form ref="formRef" inline :model="formValue" :rules="rules" size="large">
-        <n-form-item label="Email Address" path="email">
-          <n-input
-            v-model:value="formValue.email"
-            placehol5der="someone@email.org"
-            class="!w-[350px]"
-          />
-        </n-form-item>
+    <n-form ref="formRef" inline :model="formValue" :rules="rules" size="large">
+      <n-form-item label="Email Address" path="email">
+        <n-input
+          v-model:value="formValue.email"
+          placehol5der="someone@email.org"
+          class="!w-[350px]"
+        />
+      </n-form-item>
 
-        <n-form-item label="Permission" path="role" class="w-60">
-          <n-select
-            v-model:value="formValue.role"
-            placeholder=""
-            :options="invitationRoles"
-            :consistent-menu-width="false"
-            class="!w-40"
-          />
-        </n-form-item>
+      <n-form-item label="Permission" path="role" class="w-60">
+        <n-select
+          v-model:value="formValue.role"
+          placeholder=""
+          :options="invitationRoles"
+          :consistent-menu-width="false"
+          class="!w-40"
+        />
+      </n-form-item>
 
-        <n-form-item>
-          <n-button size="large" type="primary" @click="handleValidateClick">
-            <template #icon>
-              <f-icon icon="mingcute:invite-fill" />
-            </template>
-            Send Invitation
-          </n-button>
-        </n-form-item>
-      </n-form>
-    </main>
-  </FadeTransition>
+      <n-form-item>
+        <n-button size="large" type="primary" @click="handleValidateClick">
+          <template #icon>
+            <f-icon icon="mingcute:invite-fill" />
+          </template>
+          Send Invitation
+        </n-button>
+      </n-form-item>
+    </n-form>
+  </main>
 </template>

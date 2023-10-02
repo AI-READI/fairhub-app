@@ -29,7 +29,8 @@ erDiagram
     STUDY_CONTRIBUTOR {
         string study_id PK "UUIDv4"
         string user_id PK,FK "USER.id"
-        string permission "owner|editor|viewer"
+        string permission "owner|admin|editor|viewer"
+        timestamp joined_on
     }
 
     STUDY_INVITED_CONTRIBUTOR {
