@@ -7,8 +7,7 @@ import type { StudyStatusModule } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
-const router = useRouter();
-const message = useMessage();
+const push = usePush();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -52,6 +51,8 @@ const dateTypeOptions = [
   },
 ];
 
+const loading = ref(false);
+
 onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
@@ -66,14 +67,14 @@ onBeforeMount(async () => {
   const data = await response.json();
 
   moduleData.value = data;
-
-  console.log(moduleData);
 });
 
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
     if (!errors) {
+      loading.value = true;
+
       const data = {
         ...moduleData.value,
         completion_date: moduleData.value.completion_date
@@ -87,18 +88,20 @@ const saveMetadata = (e: MouseEvent) => {
         method: "PUT",
       });
 
+      loading.value = false;
+
       if (!response.ok) {
-        message.error("Something went wrong. Please try again later.");
+        push.error({
+          title: "Failed to save status",
+          message: "Something went wrong. Please try again later.",
+        });
 
         throw new Error("Network response was not ok");
-      } else {
-        message.success("Study updated successfully.");
-
-        // refresh page
-        router.go(0);
       }
 
-      message.success("Status saved successfully.");
+      push.success({
+        title: "Status saved successfully",
+      });
 
       console.log("success");
     } else {
@@ -216,7 +219,7 @@ const saveMetadata = (e: MouseEvent) => {
       <n-divider />
 
       <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata">
+        <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
           <template #icon>
             <f-icon icon="material-symbols:save" />
           </template>
