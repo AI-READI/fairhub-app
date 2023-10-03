@@ -37,6 +37,7 @@ erDiagram
         string email_address PK
         string study_id PK,FK "STUDY.id"
         string permission "owner|editor|viewer"
+        string token "passphrase"
         timestamp invited_on
     }
 
