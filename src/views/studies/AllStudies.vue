@@ -81,9 +81,13 @@ onBeforeMount(() => {
     return;
   }
 
-  push.info("Your workspace is being loaded. Please wait...");
+  const x = push.info("Your workspace is being loaded. Please wait...");
 
-  studyStore.fetchAllStudies();
+  studyStore.fetchAllStudies().then(() => {
+    setTimeout(() => {
+      x.clear();
+    }, 1000);
+  });
 });
 
 const navigateToStudy = (studyId: string) => {
