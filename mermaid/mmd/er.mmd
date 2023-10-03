@@ -30,7 +30,7 @@ erDiagram
         string study_id PK "UUIDv4"
         string user_id PK,FK "USER.id"
         string permission "owner|admin|editor|viewer"
-        timestamp joined_on
+        timestamp created_at
     }
 
     STUDY_INVITED_CONTRIBUTOR {
@@ -38,7 +38,7 @@ erDiagram
         string study_id PK,FK "STUDY.id"
         string permission "owner|editor|viewer"
         string token "passphrase"
-        timestamp invited_on
+        timestamp created_at
     }
 
     PARTICIPANT {
