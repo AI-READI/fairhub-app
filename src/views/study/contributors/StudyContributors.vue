@@ -71,7 +71,7 @@ const sendInvitation = (e: MouseEvent) => {
 
       invitationLoading.value = true;
 
-      const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributor`, {
+      const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributors`, {
         body: JSON.stringify(body),
         headers: {
           "Content-Type": "application/json",
@@ -145,13 +145,9 @@ const invitationRoles = [
 ];
 
 const updateStudyOwner = async (id: string) => {
-  /**
-   * TODO: Should this be a new endpoint?
-   */
-
   studyOwnerLoading.value = true;
 
-  const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributor/owner`, {
+  const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributors/owner`, {
     body: JSON.stringify({ user_id: id }),
     method: "PUT",
   });
@@ -171,7 +167,7 @@ const updateContributorRole = async (id: string, role: string) => {
   if (role) {
     roleChangeLoading.value = true;
 
-    const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributor/${id}`, {
+    const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributors/${id}`, {
       body: JSON.stringify({ role }),
       method: "PUT",
     });
@@ -188,8 +184,19 @@ const updateContributorRole = async (id: string, role: string) => {
   }
 };
 
-const removeContributor = (email: string) => {
-  console.log("remove contributor", email);
+const removeContributor = async (id: string) => {
+  const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributors/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    push.error("Something went wrong.");
+    throw new Error("Network response was not ok");
+  }
+
+  push.success("Contributor removed!");
+
+  window.location.reload();
 };
 
 contributors.value.sort((a, b) => {
@@ -248,92 +255,90 @@ const getFirstLetters = (name: string) => {
       </div>
     </n-card>
 
-    <n-space vertical>
-      <n-space
-        justify="space-between"
-        align="center"
-        v-for="contributor in contributors"
-        :key="contributor.email_address"
-        class="rounded-md px-3 py-2 transition-all hover:bg-slate-50"
-      >
-        <div class="flex items-center space-x-4">
-          <n-avatar
-            round
-            size="large"
-            class="flex items-center justify-center"
-            :class="{
-              'border border-dashed': contributor.status === 'invited',
-              'opacity-60': contributor.status === 'invited',
-            }"
-            :src="`https://api.dicebear.com/6.x/thumbs/svg?seed=${contributor.email_address}`"
-          >
-          </n-avatar>
+    <n-space
+      justify="space-between"
+      align="center"
+      v-for="contributor in contributors"
+      :key="contributor.email_address"
+      class="rounded-md px-3 py-2 transition-all hover:bg-slate-50"
+    >
+      <div class="flex items-center space-x-4">
+        <n-avatar
+          round
+          size="large"
+          class="flex items-center justify-center"
+          :class="{
+            'border border-dashed': contributor.status === 'invited',
+            'opacity-60': contributor.status === 'invited',
+          }"
+          :src="`https://api.dicebear.com/6.x/thumbs/svg?seed=${contributor.email_address}`"
+        >
+        </n-avatar>
 
-          <span
-            :class="{
-              'text-slate-400': contributor.status === 'invited',
-            }"
-          >
-            {{
-              contributor.status === "invited"
-                ? contributor.email_address
-                : contributor.name || "Anonymous"
-            }}
-          </span>
+        <span
+          :class="{
+            'text-slate-400': contributor.status === 'invited',
+          }"
+        >
+          {{
+            contributor.status === "invited"
+              ? contributor.email_address
+              : contributor.name || "Anonymous"
+          }}
+        </span>
 
-          <span v-if="contributor.status === 'invited'" class="text-sm text-slate-400">
-            [{{ contributor.status }}]
-          </span>
-        </div>
+        <span v-if="contributor.status === 'invited'" class="text-sm text-slate-400">
+          [{{ contributor.status }}]
+        </span>
+      </div>
 
-        <n-space justify="end" align="center">
-          <n-button
-            :disabled="contributor.role !== 'admin'"
-            type="info"
-            @click="updateStudyOwner(contributor.id)"
-            :loading="studyOwnerLoading"
-          >
-            Make Study Owner
-          </n-button>
+      <n-space justify="end" align="center">
+        <n-button
+          :disabled="contributor.role !== 'admin'"
+          type="info"
+          @click="updateStudyOwner(contributor.id)"
+          :loading="studyOwnerLoading"
+        >
+          Make Study Owner
+        </n-button>
 
-          <n-divider vertical />
+        <n-divider vertical />
 
-          <n-select
-            v-model:value="contributor.role"
-            :options="contributorRoles"
-            :consistent-menu-width="false"
-            class="w-40"
-          />
+        <n-select
+          v-model:value="contributor.role"
+          :options="contributorRoles"
+          :consistent-menu-width="false"
+          class="w-40"
+        />
 
-          <n-button
-            type="primary"
-            @click="updateContributorRole(contributor.id, contributor.role)"
-            :loading="roleChangeLoading"
-            :disabled="!contributor.role"
-          >
-            <template #icon>
-              <f-icon icon="material-symbols:save" />
-            </template>
-          </n-button>
+        <n-button
+          type="primary"
+          @click="updateContributorRole(contributor.id, contributor.role)"
+          :loading="roleChangeLoading"
+          :disabled="!contributor.role"
+        >
+          <template #icon>
+            <f-icon icon="material-symbols:save" />
+          </template>
+        </n-button>
 
-          <n-divider vertical />
+        <n-divider vertical />
 
-          <n-popconfirm @positive-click="removeContributor(contributor.email_address)">
-            <template #trigger>
-              <n-button type="error">
-                <template #icon>
-                  <Icon icon="fluent:delete-24-filled" width="20" height="20" />
-                </template>
-              </n-button>
-            </template>
+        <n-popconfirm @positive-click="removeContributor(contributor.id)">
+          <template #trigger>
+            <n-button type="error">
+              <template #icon>
+                <Icon icon="fluent:delete-24-filled" width="20" height="20" />
+              </template>
+            </n-button>
+          </template>
 
-            {{
-              contributor.status === "invited"
-                ? "Are you sure you want to cancel this invitation?"
-                : "Are you sure you want to remove this user from the study?"
-            }}
-          </n-popconfirm>
-        </n-space>
+          {{
+            contributor.status === "invited"
+              ? "Are you sure you want to cancel this invitation?"
+              : "Are you sure you want to remove this user from the study?"
+          }}
+        </n-popconfirm>
       </n-space>
     </n-space>
 
