@@ -27,7 +27,7 @@ export interface StudyContributor {
   name?: string;
   email_address: string;
   ORCID?: string;
-  role?: string;
+  role: string;
   status: "invited" | "accepted" | "declined";
 }
 

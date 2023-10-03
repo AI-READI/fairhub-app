@@ -85,5 +85,5 @@ declare global {
     WritableComputedRef,
   } from "vue";
   // @ts-ignore
-  export type { FormInst, FormRules } from "naive-ui";
+  export type { FormInst, FormRules, SelectOption, FormItemRule } from "naive-ui";
 }

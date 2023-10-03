@@ -45,7 +45,7 @@ export default defineConfig({
         //type imports
         {
           from: "naive-ui",
-          imports: ["FormInst", "FormRules"],
+          imports: ["FormInst", "FormRules", "SelectOption", "FormItemRule"],
           type: true,
         },
       ],

@@ -1,20 +1,14 @@
 <script setup lang="ts">
+import { faker } from "@faker-js/faker";
 import { Icon } from "@iconify/vue";
-import type { FormInst, FormItemRule } from "naive-ui";
 import validator from "validator";
 
-import { useAuthStore } from "@/stores/auth";
-import { useStudyStore } from "@/stores/study";
 import type { StudyContributors } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
-const { error, success } = useMessage();
-
-const authStore = useAuthStore();
-const studyStore = useStudyStore();
-
-const study = computed(() => studyStore.study);
+const router = useRouter();
+const push = usePush();
 
 const contributors = ref<StudyContributors>([]);
 
@@ -33,13 +27,18 @@ onBeforeMount(async () => {
 
   console.log(data);
 
-  contributors.value = data;
+  contributors.value = data.map((contributor: any) => {
+    return {
+      ...contributor,
+      id: contributor.user_id,
+    };
+  });
 });
 
 const formRef = ref<FormInst | null>(null);
 
 const formValue = ref({
-  email: "",
+  email: faker.internet.email(),
   role: "viewer",
 });
 
@@ -57,14 +56,41 @@ const rules = {
   role: { message: "Please select a role", required: true, trigger: ["blur", "change"] },
 };
 
-const handleValidateClick = (e: MouseEvent) => {
+const invitationLoading = ref(false);
+const roleChangeLoading = ref(false);
+
+const sendInvitation = (e: MouseEvent) => {
   e.preventDefault();
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (!errors) {
-      success("Invitation sent!");
+      const body = {
+        email_address: formValue.value.email,
+        role: formValue.value.role,
+      };
+
+      invitationLoading.value = true;
+
+      const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributor`, {
+        body: JSON.stringify(body),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
+
+      invitationLoading.value = false;
+
+      if (!response.ok) {
+        push.error("Something went wrong.");
+        throw new Error("Network response was not ok");
+      }
+
+      push.success("Invitation sent!");
+
+      router.go(0);
     } else {
       console.log(errors);
-      error("Something went wrong.");
+      push.error("Something went wrong.");
     }
   });
 };
@@ -88,11 +114,6 @@ const owner = computed(() => {
 const contributorRoles = computed(() => {
   return [
     {
-      disabled: authStore.user?.id !== study.value?.owner,
-      label: "Owner",
-      value: "owner",
-    },
-    {
       label: "Administrator",
       value: "admin",
     },
@@ -109,14 +130,39 @@ const contributorRoles = computed(() => {
 
 const invitationRoles = [
   {
-    label: "can edit",
+    label: "Administrator",
+    value: "admin",
+  },
+  {
+    label: "Editor",
     value: "editor",
   },
   {
-    label: "can view",
+    label: "Viewer",
     value: "viewer",
   },
 ];
+
+const updateContributorRole = async (id: string, role: string) => {
+  if (role) {
+    roleChangeLoading.value = true;
+
+    const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributor/${id}`, {
+      body: JSON.stringify({ role }),
+      method: "PUT",
+    });
+
+    roleChangeLoading.value = false;
+
+    if (!response.ok) {
+      push.error("Something went wrong.");
+      throw new Error("Network response was not ok");
+    }
+
+    push.success("Contributor role updated!");
+    window.location.reload();
+  }
+};
 
 const removeContributor = (email: string) => {
   console.log("remove contributor", email);
@@ -217,12 +263,32 @@ const getFirstLetters = (name: string) => {
         </div>
 
         <n-space justify="end" align="center">
+          <n-button
+            :disabled="contributor.role === 'admin' && contributor.status === 'accepted'"
+            type="info"
+          >
+            Make Study Owner
+          </n-button>
+
+          <n-divider vertical />
+
           <n-select
             v-model:value="contributor.role"
             :options="contributorRoles"
             :consistent-menu-width="false"
-            class="w-32"
+            class="w-40"
           />
+
+          <n-button
+            type="primary"
+            @click="updateContributorRole(contributor.id, contributor.role)"
+            :loading="roleChangeLoading"
+            :disabled="!contributor.role"
+          >
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+          </n-button>
 
           <n-divider vertical />
 
@@ -256,7 +322,7 @@ const getFirstLetters = (name: string) => {
       <n-form-item label="Email Address" path="email">
         <n-input
           v-model:value="formValue.email"
-          placehol5der="someone@email.org"
+          placeholder="someone@email.org"
           class="!w-[350px]"
         />
       </n-form-item>
@@ -272,7 +338,7 @@ const getFirstLetters = (name: string) => {
       </n-form-item>
 
       <n-form-item>
-        <n-button size="large" type="primary" @click="handleValidateClick">
+        <n-button size="large" type="primary" @click="sendInvitation" :loading="invitationLoading">
           <template #icon>
             <f-icon icon="mingcute:invite-fill" />
           </template>

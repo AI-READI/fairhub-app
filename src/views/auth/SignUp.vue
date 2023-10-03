@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { faker } from "@faker-js/faker";
+
 import { baseURL } from "@/utils/constants";
 
 const push = usePush();
@@ -123,6 +125,10 @@ const signUp = (e: MouseEvent) => {
     }
   });
 };
+
+const generateNewEmail = () => {
+  formValue.value.emailAddress = faker.internet.email();
+};
 </script>
 
 <template>
@@ -144,6 +150,12 @@ const signUp = (e: MouseEvent) => {
             @keydown.enter.prevent
             clearable
           />
+
+          <n-button class="ml-2" @click="generateNewEmail">
+            <template #icon>
+              <f-icon icon="mdi:auto-fix" />
+            </template>
+          </n-button>
         </n-form-item>
 
         <div>
@@ -161,7 +173,7 @@ const signUp = (e: MouseEvent) => {
             <div
               class="text-gre flex items-center space-x-1"
               :class="{
-                'text-slate-500': validPasswordRequirements.lowercase,
+                'text-slate-500': !validPasswordRequirements.lowercase,
                 'text-green-500': validPasswordRequirements.lowercase,
               }"
             >
@@ -172,7 +184,7 @@ const signUp = (e: MouseEvent) => {
             <div
               class="flex items-center space-x-1"
               :class="{
-                'text-slate-500': validPasswordRequirements.uppercase,
+                'text-slate-500': !validPasswordRequirements.uppercase,
                 'text-green-500': validPasswordRequirements.uppercase,
               }"
             >
@@ -183,7 +195,7 @@ const signUp = (e: MouseEvent) => {
             <div
               class="flex items-center space-x-1"
               :class="{
-                'text-slate-500': validPasswordRequirements.special,
+                'text-slate-500': !validPasswordRequirements.special,
                 'text-green-500': validPasswordRequirements.special,
               }"
             >
@@ -194,7 +206,7 @@ const signUp = (e: MouseEvent) => {
             <div
               class="flex items-center space-x-1"
               :class="{
-                'text-slate-500': validPasswordRequirements.numeric,
+                'text-slate-500': !validPasswordRequirements.numeric,
                 'text-green-500': validPasswordRequirements.numeric,
               }"
             >
@@ -205,7 +217,7 @@ const signUp = (e: MouseEvent) => {
             <div
               class="flex items-center space-x-1"
               :class="{
-                'text-slate-500': validPasswordRequirements.length,
+                'text-slate-500': !validPasswordRequirements.length,
                 'text-green-500': validPasswordRequirements.length,
               }"
             >

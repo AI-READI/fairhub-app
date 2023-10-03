@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { filesize } from "filesize";
 
+import { push } from "@/main";
 import { useAuthStore } from "@/stores/auth";
 import { useFilterStore } from "@/stores/filter";
 import { useStudyStore } from "@/stores/study";
@@ -8,7 +9,6 @@ import type { Study } from "@/types/Study";
 import { displayHumanFriendlyDateAndTime } from "@/utils/date";
 
 const router = useRouter();
-const { error, info } = useMessage();
 
 const authStore = useAuthStore();
 const filterStore = useFilterStore();
@@ -74,13 +74,14 @@ const sortOptions = [
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
+    push.error("You are not logged in. Please log in to continue");
+
     router.push({ name: "login" });
 
     return;
   }
 
-  info("Your workspace is being loaded. Please wait...");
+  push.info("Your workspace is being loaded. Please wait...");
 
   studyStore.fetchAllStudies();
 });
