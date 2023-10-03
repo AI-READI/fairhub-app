@@ -58,6 +58,7 @@ const rules = {
 
 const invitationLoading = ref(false);
 const roleChangeLoading = ref(false);
+const studyOwnerLoading = ref(false);
 
 const sendInvitation = (e: MouseEvent) => {
   e.preventDefault();
@@ -142,6 +143,29 @@ const invitationRoles = [
     value: "viewer",
   },
 ];
+
+const updateStudyOwner = async (id: string) => {
+  /**
+   * TODO: Should this be a new endpoint?
+   */
+
+  studyOwnerLoading.value = true;
+
+  const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributor/owner`, {
+    body: JSON.stringify({ user_id: id }),
+    method: "PUT",
+  });
+
+  studyOwnerLoading.value = false;
+
+  if (!response.ok) {
+    push.error("Something went wrong.");
+    throw new Error("Network response was not ok");
+  }
+
+  push.success("Study owner updated!");
+  window.location.reload();
+};
 
 const updateContributorRole = async (id: string, role: string) => {
   if (role) {
@@ -241,7 +265,7 @@ const getFirstLetters = (name: string) => {
               'border border-dashed': contributor.status === 'invited',
               'opacity-60': contributor.status === 'invited',
             }"
-            :src="`https://api.dicebear.com/6.x/thumbs/svg?seed=${contributor.id}`"
+            :src="`https://api.dicebear.com/6.x/thumbs/svg?seed=${contributor.email_address}`"
           >
           </n-avatar>
 
@@ -264,8 +288,10 @@ const getFirstLetters = (name: string) => {
 
         <n-space justify="end" align="center">
           <n-button
-            :disabled="contributor.role === 'admin' && contributor.status === 'accepted'"
+            :disabled="contributor.role !== 'admin'"
             type="info"
+            @click="updateStudyOwner(contributor.id)"
+            :loading="studyOwnerLoading"
           >
             Make Study Owner
           </n-button>
