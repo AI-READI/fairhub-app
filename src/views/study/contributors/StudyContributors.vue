@@ -71,7 +71,7 @@ const sendInvitation = (e: MouseEvent) => {
 
       invitationLoading.value = true;
 
-      const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributors`, {
+      const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributor`, {
         body: JSON.stringify(body),
         headers: {
           "Content-Type": "application/json",
@@ -147,7 +147,7 @@ const invitationRoles = [
 const updateStudyOwner = async (id: string) => {
   studyOwnerLoading.value = true;
 
-  const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributors/owner`, {
+  const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributor/owner`, {
     body: JSON.stringify({ user_id: id }),
     method: "PUT",
   });
@@ -167,7 +167,7 @@ const updateContributorRole = async (id: string, role: string) => {
   if (role) {
     roleChangeLoading.value = true;
 
-    const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributors/${id}`, {
+    const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributor/${id}`, {
       body: JSON.stringify({ role }),
       method: "PUT",
     });
@@ -185,7 +185,7 @@ const updateContributorRole = async (id: string, role: string) => {
 };
 
 const removeContributor = async (id: string) => {
-  const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributors/${id}`, {
+  const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributor/${id}`, {
     method: "DELETE",
   });
 
