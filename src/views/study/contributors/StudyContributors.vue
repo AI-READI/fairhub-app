@@ -3,6 +3,8 @@ import { faker } from "@faker-js/faker";
 import { Icon } from "@iconify/vue";
 import validator from "validator";
 
+import LottieLoader from "@/components/loader/LottieLoader.vue";
+import FadeTransition from "@/components/transitions/FadeTransition.vue";
 import { useStudyStore } from "@/stores/study";
 import type { StudyContributors } from "@/types/Study";
 import type { Study } from "@/types/Study";
@@ -16,6 +18,7 @@ const studyStore = useStudyStore();
 const contributors = ref<StudyContributors>([]);
 const study: Ref<Study> = computed(() => studyStore.study);
 
+const requestLoading = ref(false);
 const invitationLoading = ref(false);
 const roleChangeLoading = ref(false);
 const studyOwnerLoading = ref(false);
@@ -38,11 +41,15 @@ const contributorRoles = [
 onBeforeMount(async () => {
   const studyId = route.params.studyId as string;
 
+  requestLoading.value = true;
+
   studyStore.getStudy(studyId);
 
   const response = await fetch(`${baseURL}/study/${studyId}/contributor`, {
     method: "GET",
   });
+
+  requestLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -55,7 +62,6 @@ onBeforeMount(async () => {
   contributors.value = data.map((contributor: any) => {
     return {
       ...contributor,
-      id: contributor.user_id,
     };
   });
 
@@ -243,108 +249,126 @@ const getFirstLetters = (name: string) => {
       </div>
     </n-card>
 
-    <n-space
-      justify="space-between"
-      align="center"
-      v-for="contributor in contributors"
-      :key="contributor.email_address"
-      class="rounded-md px-3 py-2 transition-all hover:bg-slate-50"
-    >
-      <div class="flex items-center space-x-4">
-        <n-avatar
-          round
-          size="large"
-          class="flex items-center justify-center"
-          :class="{
-            'border border-dashed': contributor.status === 'invited',
-            'opacity-60': contributor.status === 'invited',
-          }"
-          :src="`https://api.dicebear.com/6.x/thumbs/svg?seed=${contributor.email_address}`"
+    <pre>{{ study.owner }}</pre>
+    <pre>{{ contributors }}</pre>
+
+    <FadeTransition>
+      <LottieLoader v-if="requestLoading" />
+
+      <div v-else>
+        <n-space
+          justify="space-between"
+          align="center"
+          v-for="contributor in contributors"
+          :key="contributor.email_address"
+          class="rounded-md px-3 py-2 transition-all hover:bg-slate-50"
         >
-        </n-avatar>
+          <div class="flex items-center space-x-4">
+            <n-avatar
+              round
+              size="large"
+              class="flex items-center justify-center"
+              :class="{
+                'border border-dashed': contributor.status === 'invited',
+                'opacity-60': contributor.status === 'invited',
+              }"
+              :src="`https://api.dicebear.com/6.x/thumbs/svg?seed=${contributor.email_address}`"
+            >
+            </n-avatar>
 
-        <span
-          :class="{
-            'text-slate-400': contributor.status === 'invited',
-          }"
-        >
-          {{
-            contributor.status === "invited"
-              ? contributor.email_address
-              : contributor.name || "Anonymous"
-          }}
-        </span>
+            <span
+              :class="{
+                'text-slate-400': contributor.status === 'invited',
+              }"
+            >
+              {{
+                contributor.status === "invited"
+                  ? contributor.email_address
+                  : contributor.name || "Anonymous"
+              }}
+            </span>
 
-        <span v-if="contributor.status === 'invited'" class="text-sm text-slate-400">
-          [{{ contributor.status }}]
-        </span>
-      </div>
+            <span v-if="contributor.status === 'accepted'">
+              [{{ contributor.email_address }}]
+            </span>
 
-      <n-space justify="end" align="center">
-        <n-button
-          v-if="
-            study.owner !== contributor.id &&
-            contributor.status === 'accepted' &&
-            contributor.role === 'admin'
-          "
-          type="info"
-          @click="updateStudyOwner(contributor.id)"
-          :loading="studyOwnerLoading"
-        >
-          Make Study Owner
-        </n-button>
+            <span v-if="contributor.status === 'invited'" class="text-sm text-slate-400">
+              [{{ contributor.status }}]
+            </span>
+          </div>
 
-        <n-divider
-          vertical
-          v-if="
-            study.owner !== contributor.id &&
-            contributor.status === 'accepted' &&
-            contributor.role === 'admin'
-          "
-        />
+          <n-space justify="end" align="center">
+            <n-tag type="info" size="large" v-if="contributor.role === 'owner'"> Owner </n-tag>
 
-        <n-select
-          v-model:value="contributor.role"
-          :options="contributorRoles"
-          :consistent-menu-width="false"
-          class="w-40"
-          :disabled="
-            study.role === 'editor' || study.role === 'viewer' || study.owner === contributor.id
-          "
-        />
+            <n-button
+              v-if="
+                study.owner !== contributor.id &&
+                contributor.status === 'accepted' &&
+                contributor.role === 'admin'
+              "
+              type="info"
+              @click="updateStudyOwner(contributor.id)"
+              :loading="studyOwnerLoading"
+            >
+              Make Study Owner
+            </n-button>
 
-        <n-button
-          type="primary"
-          @click="updateContributorRole(contributor.id, contributor.role)"
-          :loading="roleChangeLoading"
-          :disabled="
-            study.role === 'editor' || study.role === 'viewer' || study.owner === contributor.id
-          "
-        >
-          <template #icon>
-            <f-icon icon="material-symbols:save" />
-          </template>
-        </n-button>
+            <n-divider
+              vertical
+              v-if="
+                study.owner !== contributor.id &&
+                contributor.status === 'accepted' &&
+                contributor.role === 'admin'
+              "
+            />
 
-        <n-divider vertical />
+            <n-select
+              v-model:value="contributor.role"
+              :options="contributorRoles"
+              :consistent-menu-width="false"
+              class="w-40"
+              v-if="study.owner !== contributor.id"
+              :disabled="study.role === 'editor' || study.role === 'viewer'"
+            />
 
-        <n-popconfirm @positive-click="removeContributor(contributor.id)">
-          <template #trigger>
-            <n-button type="error" :disabled="study.owner === contributor.id">
+            <n-button
+              type="primary"
+              @click="updateContributorRole(contributor.id, contributor.role)"
+              :loading="roleChangeLoading"
+              v-if="study.owner !== contributor.id"
+              :disabled="
+                study.role === 'editor' || study.role === 'viewer' || study.owner === contributor.id
+              "
+            >
               <template #icon>
-                <Icon icon="fluent:delete-24-filled" width="20" height="20" />
+                <f-icon icon="material-symbols:save" />
               </template>
             </n-button>
-          </template>
 
-          {{
-            contributor.status === "invited"
-              ? "Are you sure you want to cancel this invitation?"
-              : "Are you sure you want to remove this user from the study?"
-          }}
-        </n-popconfirm>
-      </n-space>
-    </n-space>
+            <n-divider vertical v-if="study.owner !== contributor.id" />
+
+            <n-popconfirm
+              @positive-click="removeContributor(contributor.id)"
+              v-if="study.owner !== contributor.id"
+            >
+              <template #trigger>
+                <n-button type="error" :disabled="study.owner === contributor.id">
+                  <template #icon>
+                    <Icon icon="fluent:delete-24-filled" width="20" height="20" />
+                  </template>
+                </n-button>
+              </template>
+
+              {{
+                contributor.status === "invited"
+                  ? "Are you sure you want to cancel this invitation?"
+                  : "Are you sure you want to remove this user from the study?"
+              }}
+            </n-popconfirm>
+          </n-space>
+        </n-space>
+      </div>
+    </FadeTransition>
 
     <n-divider />
 
