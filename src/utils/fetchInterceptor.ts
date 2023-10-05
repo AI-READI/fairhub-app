@@ -32,7 +32,7 @@ window.fetch = async (url: string, options) => {
   // Modify the response if needed
   // For example, you can check the status code and handle errors here.
 
-  if (response.status === 401) {
+  if (response.status === 401 && !url.endsWith("/auth/login")) {
     // Redirect to logout if unauthorized
     window.location.href = "/auth/logout";
   }

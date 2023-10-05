@@ -3,17 +3,42 @@ import { faker } from "@faker-js/faker";
 import { Icon } from "@iconify/vue";
 import validator from "validator";
 
+import { useStudyStore } from "@/stores/study";
 import type { StudyContributors } from "@/types/Study";
+import type { Study } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const push = usePush();
+const studyStore = useStudyStore();
 
 const contributors = ref<StudyContributors>([]);
+const study: Ref<Study> = computed(() => studyStore.study);
+
+const invitationLoading = ref(false);
+const roleChangeLoading = ref(false);
+const studyOwnerLoading = ref(false);
+
+const contributorRoles = [
+  {
+    label: "Administrator",
+    value: "admin",
+  },
+  {
+    label: "Editor",
+    value: "editor",
+  },
+  {
+    label: "Viewer",
+    value: "viewer",
+  },
+];
 
 onBeforeMount(async () => {
-  const studyId = route.params.studyId;
+  const studyId = route.params.studyId as string;
+
+  studyStore.getStudy(studyId);
 
   const response = await fetch(`${baseURL}/study/${studyId}/contributor`, {
     method: "GET",
@@ -33,10 +58,19 @@ onBeforeMount(async () => {
       id: contributor.user_id,
     };
   });
+
+  contributors.value.sort((a, b) => {
+    if (a.status === "accepted") {
+      return -1;
+    }
+    if (b.status === "accepted") {
+      return 1;
+    }
+    return 0;
+  });
 });
 
 const formRef = ref<FormInst | null>(null);
-
 const formValue = ref({
   email: faker.internet.email(),
   role: "viewer",
@@ -55,10 +89,6 @@ const rules = {
   },
   role: { message: "Please select a role", required: true, trigger: ["blur", "change"] },
 };
-
-const invitationLoading = ref(false);
-const roleChangeLoading = ref(false);
-const studyOwnerLoading = ref(false);
 
 const sendInvitation = (e: MouseEvent) => {
   e.preventDefault();
@@ -111,38 +141,6 @@ const owner = computed(() => {
 
   return owner;
 });
-
-const contributorRoles = computed(() => {
-  return [
-    {
-      label: "Administrator",
-      value: "admin",
-    },
-    {
-      label: "Editor",
-      value: "editor",
-    },
-    {
-      label: "Viewer",
-      value: "viewer",
-    },
-  ];
-});
-
-const invitationRoles = [
-  {
-    label: "Administrator",
-    value: "admin",
-  },
-  {
-    label: "Editor",
-    value: "editor",
-  },
-  {
-    label: "Viewer",
-    value: "viewer",
-  },
-];
 
 const updateStudyOwner = async (id: string) => {
   studyOwnerLoading.value = true;
@@ -198,16 +196,6 @@ const removeContributor = async (id: string) => {
 
   window.location.reload();
 };
-
-contributors.value.sort((a, b) => {
-  if (a.status === "accepted") {
-    return -1;
-  }
-  if (b.status === "accepted") {
-    return 1;
-  }
-  return 0;
-});
 
 const getFirstLetters = (name: string) => {
   if (!name) {
@@ -294,7 +282,11 @@ const getFirstLetters = (name: string) => {
 
       <n-space justify="end" align="center">
         <n-button
-          :disabled="contributor.role !== 'admin'"
+          v-if="
+            study.owner !== contributor.id &&
+            contributor.status === 'accepted' &&
+            contributor.role === 'admin'
+          "
           type="info"
           @click="updateStudyOwner(contributor.id)"
           :loading="studyOwnerLoading"
@@ -302,20 +294,32 @@ const getFirstLetters = (name: string) => {
           Make Study Owner
         </n-button>
 
-        <n-divider vertical />
+        <n-divider
+          vertical
+          v-if="
+            study.owner !== contributor.id &&
+            contributor.status === 'accepted' &&
+            contributor.role === 'admin'
+          "
+        />
 
         <n-select
           v-model:value="contributor.role"
           :options="contributorRoles"
           :consistent-menu-width="false"
           class="w-40"
+          :disabled="
+            study.role === 'editor' || study.role === 'viewer' || study.owner === contributor.id
+          "
         />
 
         <n-button
           type="primary"
           @click="updateContributorRole(contributor.id, contributor.role)"
           :loading="roleChangeLoading"
-          :disabled="!contributor.role"
+          :disabled="
+            study.role === 'editor' || study.role === 'viewer' || study.owner === contributor.id
+          "
         >
           <template #icon>
             <f-icon icon="material-symbols:save" />
@@ -326,7 +330,7 @@ const getFirstLetters = (name: string) => {
 
         <n-popconfirm @positive-click="removeContributor(contributor.id)">
           <template #trigger>
-            <n-button type="error">
+            <n-button type="error" :disabled="study.owner === contributor.id">
               <template #icon>
                 <Icon icon="fluent:delete-24-filled" width="20" height="20" />
               </template>
@@ -362,14 +366,20 @@ const getFirstLetters = (name: string) => {
         <n-select
           v-model:value="formValue.role"
           placeholder=""
-          :options="invitationRoles"
+          :options="contributorRoles"
           :consistent-menu-width="false"
           class="!w-40"
         />
       </n-form-item>
 
       <n-form-item>
-        <n-button size="large" type="primary" @click="sendInvitation" :loading="invitationLoading">
+        <n-button
+          size="large"
+          type="primary"
+          @click="sendInvitation"
+          :loading="invitationLoading"
+          :disabled="study.role === 'editor' || study.role === 'viewer'"
+        >
           <template #icon>
             <f-icon icon="mingcute:invite-fill" />
           </template>

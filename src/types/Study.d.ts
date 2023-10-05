@@ -23,7 +23,7 @@ export interface Study {
 }
 
 export interface StudyContributor {
-  id?: string;
+  id: string;
   name?: string;
   email_address: string;
   ORCID?: string;
