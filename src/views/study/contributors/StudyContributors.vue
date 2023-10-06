@@ -5,6 +5,7 @@ import validator from "validator";
 
 import LottieLoader from "@/components/loader/LottieLoader.vue";
 import FadeTransition from "@/components/transitions/FadeTransition.vue";
+import { useAuthStore } from "@/stores/auth";
 import { useStudyStore } from "@/stores/study";
 import type { StudyContributors } from "@/types/Study";
 import type { Study } from "@/types/Study";
@@ -14,13 +15,14 @@ const route = useRoute();
 const router = useRouter();
 const push = usePush();
 const studyStore = useStudyStore();
+const authStore = useAuthStore();
 
 const contributors = ref<StudyContributors>([]);
 const study: Ref<Study> = computed(() => studyStore.study);
 
 const requestLoading = ref(false);
 const invitationLoading = ref(false);
-const roleChangeLoading = ref(false);
+const roleChangeLoading = ref({});
 const studyOwnerLoading = ref(false);
 
 const contributorRoles = [
@@ -57,11 +59,17 @@ onBeforeMount(async () => {
 
   const data = await response.json();
 
+  for (const item of data) {
+    console.log(item);
+    roleChangeLoading.value[item.id] = false;
+  }
+
   console.log(data);
 
   contributors.value = data.map((contributor: any) => {
     return {
       ...contributor,
+      updatedRole: contributor.role,
     };
   });
 
@@ -70,6 +78,17 @@ onBeforeMount(async () => {
       return -1;
     }
     if (b.status === "accepted") {
+      return 1;
+    }
+    return 0;
+  });
+
+  // put the owner at the top
+  contributors.value.sort((a, b) => {
+    if (a.role === "owner") {
+      return -1;
+    }
+    if (b.role === "owner") {
       return 1;
     }
     return 0;
@@ -118,6 +137,10 @@ const sendInvitation = (e: MouseEvent) => {
       invitationLoading.value = false;
 
       if (!response.ok) {
+        if (response.status === 403) {
+          router.push({ name: "studies:all-studies" });
+        }
+
         push.error("Something went wrong.");
         throw new Error("Network response was not ok");
       }
@@ -151,8 +174,7 @@ const owner = computed(() => {
 const updateStudyOwner = async (id: string) => {
   studyOwnerLoading.value = true;
 
-  const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributor/owner`, {
-    body: JSON.stringify({ user_id: id }),
+  const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributor/owner/${id}`, {
     method: "PUT",
   });
 
@@ -169,14 +191,14 @@ const updateStudyOwner = async (id: string) => {
 
 const updateContributorRole = async (id: string, role: string) => {
   if (role) {
-    roleChangeLoading.value = true;
+    roleChangeLoading.value[id] = true;
 
     const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributor/${id}`, {
       body: JSON.stringify({ role }),
       method: "PUT",
     });
 
-    roleChangeLoading.value = false;
+    roleChangeLoading.value[id] = false;
 
     if (!response.ok) {
       push.error("Something went wrong.");
@@ -249,9 +271,6 @@ const getFirstLetters = (name: string) => {
       </div>
     </n-card>
 
-    <pre>{{ study.owner }}</pre>
-    <pre>{{ contributors }}</pre>
-
     <FadeTransition>
       <LottieLoader v-if="requestLoading" />
 
@@ -292,14 +311,14 @@ const getFirstLetters = (name: string) => {
               [{{ contributor.email_address }}]
             </span>
 
+            <n-tag type="info" size="large" v-if="contributor.role === 'owner'"> Owner </n-tag>
+
             <span v-if="contributor.status === 'invited'" class="text-sm text-slate-400">
               [{{ contributor.status }}]
             </span>
           </div>
 
           <n-space justify="end" align="center">
-            <n-tag type="info" size="large" v-if="contributor.role === 'owner'"> Owner </n-tag>
-
             <n-button
               v-if="
                 study.owner !== contributor.id &&
@@ -323,7 +342,7 @@ const getFirstLetters = (name: string) => {
             />
 
             <n-select
-              v-model:value="contributor.role"
+              v-model:value="contributor.updatedRole"
               :options="contributorRoles"
               :consistent-menu-width="false"
               class="w-40"
@@ -333,8 +352,8 @@ const getFirstLetters = (name: string) => {
 
             <n-button
               type="primary"
-              @click="updateContributorRole(contributor.id, contributor.role)"
-              :loading="roleChangeLoading"
+              @click="updateContributorRole(contributor.id, contributor.updatedRole)"
+              :loading="roleChangeLoading[contributor.id]"
               v-if="study.owner !== contributor.id"
               :disabled="
                 study.role === 'editor' || study.role === 'viewer' || study.owner === contributor.id
@@ -360,7 +379,9 @@ const getFirstLetters = (name: string) => {
               </template>
 
               {{
-                contributor.status === "invited"
+                contributor.status === "accepted" && contributor.id === authStore.user.id
+                  ? "Are you sure you want to leave this study?"
+                  : contributor.status === "invited"
                   ? "Are you sure you want to cancel this invitation?"
                   : "Are you sure you want to remove this user from the study?"
               }}
@@ -382,6 +403,7 @@ const getFirstLetters = (name: string) => {
         <n-input
           v-model:value="formValue.email"
           placeholder="someone@email.org"
+          :disabled="study.role === 'editor' || study.role === 'viewer'"
           class="!w-[350px]"
         />
       </n-form-item>
@@ -393,6 +415,7 @@ const getFirstLetters = (name: string) => {
           :options="contributorRoles"
           :consistent-menu-width="false"
           class="!w-40"
+          :disabled="study.role === 'editor' || study.role === 'viewer'"
         />
       </n-form-item>
 
