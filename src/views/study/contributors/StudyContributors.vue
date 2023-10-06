@@ -345,6 +345,8 @@ const getFirstLetters = (name: string) => {
               "
             />
 
+            {{ study.role }}
+
             <n-select
               v-model:value="contributor.updatedRole"
               :options="contributorRoles"

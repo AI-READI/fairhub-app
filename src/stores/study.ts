@@ -3,11 +3,7 @@ import { defineStore } from "pinia";
 import type { Study } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
-import { useAuthStore } from "./auth";
-
 export const useStudyStore = defineStore("study", () => {
-  const authStore = useAuthStore();
-
   const loading = ref(false);
 
   const allStudies = ref<Study[]>([]);
