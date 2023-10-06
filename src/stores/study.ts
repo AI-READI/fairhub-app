@@ -50,16 +50,6 @@ export const useStudyStore = defineStore("study", () => {
 
     allStudies.value = studies as Study[];
 
-    for (const study of allStudies.value) {
-      /**
-       * TODO: Remove this once we have the user object
-       */
-
-      console.log("authStore.user", authStore.user);
-      study.owner = authStore.user.id;
-      study.role = "owner";
-    }
-
     // if (allStudies.value.length === 0) {
     //   for (let i = 0; i < 5; i++) {
     //     const s: Study = {
@@ -109,9 +99,6 @@ export const useStudyStore = defineStore("study", () => {
     const s = data as Study;
 
     study.value = s;
-
-    study.value.owner = authStore.user.id;
-    study.value.role = "owner";
 
     console.log("study", study.value);
 

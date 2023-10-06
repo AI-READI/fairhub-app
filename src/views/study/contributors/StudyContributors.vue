@@ -271,6 +271,9 @@ const getFirstLetters = (name: string) => {
       </div>
     </n-card>
 
+    <pre>{{ contributors }}</pre>
+    <pre>{{ study.owner }}</pre>
+
     <FadeTransition>
       <LottieLoader v-if="requestLoading" />
 
