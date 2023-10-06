@@ -48,6 +48,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "filesize": "^10.0.12",
     "jwt-decode": "^3.1.2",
+    "lodash": "^4.17.21",
     "marked": "^4.2.12",
     "md-editor-v3": "^4.3.0",
     "mermaid": "^10.4.0",

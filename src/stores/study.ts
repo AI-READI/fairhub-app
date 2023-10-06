@@ -99,6 +99,8 @@ export const useStudyStore = defineStore("study", () => {
     const s = data as Study;
 
     study.value = s;
+    // study.value.owner = s.owner_id;
+    console.log("response study", study.value);
 
     console.log("study", study.value);
 

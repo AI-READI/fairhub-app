@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { faker } from "@faker-js/faker";
 import { Icon } from "@iconify/vue";
+import { capitalize } from "lodash";
 import validator from "validator";
 
 import LottieLoader from "@/components/loader/LottieLoader.vue";
@@ -324,7 +325,7 @@ const getFirstLetters = (name: string) => {
           <n-space justify="end" align="center">
             <n-button
               v-if="
-                study.owner !== contributor.id &&
+                study.owner === contributor.id &&
                 contributor.status === 'accepted' &&
                 contributor.role === 'admin'
               "
@@ -338,7 +339,7 @@ const getFirstLetters = (name: string) => {
             <n-divider
               vertical
               v-if="
-                study.owner !== contributor.id &&
+                study.owner === contributor.id &&
                 contributor.status === 'accepted' &&
                 contributor.role === 'admin'
               "
@@ -349,7 +350,7 @@ const getFirstLetters = (name: string) => {
               :options="contributorRoles"
               :consistent-menu-width="false"
               class="w-40"
-              v-if="study.owner !== contributor.id"
+              v-if="study.owner !== contributor.id && contributor.status === 'accepted'"
               :disabled="study.role === 'editor' || study.role === 'viewer'"
             />
 
@@ -357,7 +358,7 @@ const getFirstLetters = (name: string) => {
               type="primary"
               @click="updateContributorRole(contributor.id, contributor.updatedRole)"
               :loading="roleChangeLoading[contributor.id]"
-              v-if="study.owner !== contributor.id"
+              v-if="study.owner !== contributor.id && contributor.status === 'accepted'"
               :disabled="
                 study.role === 'editor' || study.role === 'viewer' || study.owner === contributor.id
               "
@@ -366,6 +367,10 @@ const getFirstLetters = (name: string) => {
                 <f-icon icon="material-symbols:save" />
               </template>
             </n-button>
+
+            <n-tag type="warning" size="medium" v-if="contributor.status === 'invited'">
+              {{ capitalize(contributor.role) }}
+            </n-tag>
 
             <n-divider vertical v-if="study.owner !== contributor.id" />
 
