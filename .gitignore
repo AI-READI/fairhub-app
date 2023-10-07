@@ -9,7 +9,6 @@ lerna-debug.log*
 
 node_modules
 .DS_Store
-.yarn/*
 dist
 dist-ssr
 coverage
@@ -21,7 +20,6 @@ coverage
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-!.vscode/settings.json
 .idea
 *.suo
 *.ntvs*
@@ -31,8 +29,3 @@ coverage
 
 # API Platform specific files
 *.pyc
-
-# Auto generate typescript files
-# auto-imports.d.ts is needed for vue-tsc to work. Other solution is to flip build and tsc in package.json `"build": "run-s build-only type-check",`
-!auto-imports.d.ts
-components.d.ts

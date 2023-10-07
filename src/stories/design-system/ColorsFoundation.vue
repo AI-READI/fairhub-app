@@ -3,8 +3,8 @@ import ColorsGrid from "./ColorsGrid.vue";
 
 const props = defineProps({
   colors: {
-    required: true,
     type: Object,
+    required: true,
   },
 });
 

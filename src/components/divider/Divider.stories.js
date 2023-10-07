@@ -3,16 +3,16 @@ import { NDivider } from "naive-ui";
 
 export default {
   title: "Components/Divider",
+  component: NDivider,
   argTypes: {
     "title-placement": {
       control: {
-        options: ["left", "right"],
         type: "select",
+        options: ["left", "right"],
       },
     },
     vertical: { control: { type: "boolean" } },
   },
-  component: NDivider,
 };
 
 const BasicTemplate = (args) => ({

@@ -49,6 +49,7 @@
 <script setup lang="ts">
 const allColors = [
   {
+    label: "Primary Colors",
     colors: [
       "text-primary-50",
       "text-primary-100",
@@ -61,9 +62,9 @@ const allColors = [
       "text-primary-800",
       "text-primary-900",
     ],
-    label: "Primary Colors",
   },
   {
+    label: "Secondary Colors",
     colors: [
       "text-secondary-50",
       "text-secondary-100",
@@ -76,7 +77,6 @@ const allColors = [
       "text-secondary-800",
       "text-secondary-900",
     ],
-    label: "Secondary Colors",
   },
 ];
 </script>

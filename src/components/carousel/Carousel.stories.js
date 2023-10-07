@@ -3,16 +3,16 @@ import { NCarousel } from "naive-ui";
 
 export default {
   title: "Components/Carousel",
+  component: NCarousel,
   argTypes: {
+    draggable: { control: { type: "boolean" } },
     autoplay: { control: { type: "boolean" } },
+    loop: { control: { type: "boolean" } },
     "dot-placement": {
       control: { type: "select" },
       options: ["top", "bottom", "left", "right"],
     },
-    draggable: { control: { type: "boolean" } },
-    loop: { control: { type: "boolean" } },
   },
-  component: NCarousel,
 };
 
 const Template = (args) => ({

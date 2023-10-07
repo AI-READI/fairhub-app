@@ -3,14 +3,17 @@ import { NCheckbox, NSpace } from "naive-ui";
 import type { PropType } from "vue";
 import { defineComponent, ref } from "vue";
 export default defineComponent({
+  setup() {
+    return {
+      value: ref(false),
+      disable: ref(true),
+    };
+  },
   components: {
     NCheckbox,
     NSpace,
   },
   props: {
-    disabled: { type: Boolean },
-    focusable: { type: Boolean },
-    indeterminate: { type: Boolean },
     mode: {
       type: String,
       validator: function (value: string) {
@@ -18,12 +21,9 @@ export default defineComponent({
       },
     },
     size: { type: String as PropType<"small" | "medium" | "large"> },
-  },
-  setup() {
-    return {
-      disable: ref(true),
-      value: ref(false),
-    };
+    focusable: { type: Boolean },
+    disabled: { type: Boolean },
+    indeterminate: { type: Boolean },
   },
 });
 </script>

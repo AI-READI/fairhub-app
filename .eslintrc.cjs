@@ -2,6 +2,7 @@
 require("@rushstack/eslint-patch/modern-module-resolution");
 
 module.exports = {
+  root: true,
   extends: [
     "plugin:vue/vue3-essential",
     "eslint:recommended",
@@ -9,56 +10,37 @@ module.exports = {
     "@vue/eslint-config-prettier",
     "plugin:storybook/recommended",
   ],
-  overrides: [
-    {
-      extends: ["plugin:cypress/recommended"],
-      files: ["cypress/e2e/**.{cy,spec}.{js,ts,jsx,tsx}"],
-    },
-  ],
-  parserOptions: {
-    ecmaVersion: "latest",
-  },
-  plugins: ["unused-imports", "simple-import-sort", "prettier", "sort-keys-custom-order"],
-  root: true,
+  plugins: ["unused-imports", "simple-import-sort", "prettier"],
   rules: {
-    "@typescript-eslint/no-unused-vars": [
-      "warn", // or "error"
-      {
-        argsIgnorePattern: "^_",
-        caughtErrorsIgnorePattern: "^_",
-        varsIgnorePattern: "^_",
-      },
-    ],
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "no-unused-vars": "off",
     "prettier/prettier": [
       "error",
       {
         endOfLine: "auto",
       },
     ],
-    "simple-import-sort/exports": "error",
-    "simple-import-sort/imports": "error",
-    // For JS objects sorting
-    "sort-keys-custom-order/object-keys": [
-      "error",
-      { orderedKeys: ["id", "username", "name", "title", "50", "path"] },
-    ],
-    // For TS types sorting
-    "sort-keys-custom-order/type-keys": [
-      "error",
-      { orderedKeys: ["id", "username", "name", "title", "50", "path"] },
-    ],
+    "no-unused-vars": "off",
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
       "warn",
       {
-        args: "after-used",
-        argsIgnorePattern: "^_",
         vars: "all",
         varsIgnorePattern: "^_",
+        args: "after-used",
+        argsIgnorePattern: "^_",
       },
     ],
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+  },
+  overrides: [
+    {
+      files: ["cypress/e2e/**.{cy,spec}.{js,ts,jsx,tsx}"],
+      extends: ["plugin:cypress/recommended"],
+    },
+  ],
+  parserOptions: {
+    ecmaVersion: "latest",
   },
 };

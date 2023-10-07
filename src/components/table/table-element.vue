@@ -8,14 +8,14 @@ export default defineComponent({
     NTable,
   },
   props: {
-    bordered: { type: Boolean },
-    cascade: { type: Boolean },
     mode: {
       type: String,
       validator: function (value: string) {
         return ["basic", "border", "size", "stripe"].indexOf(value) !== -1;
       },
     },
+    bordered: { type: Boolean },
+    cascade: { type: Boolean },
     size: { type: String as PropType<"small" | "medium" | "large"> },
   },
 });

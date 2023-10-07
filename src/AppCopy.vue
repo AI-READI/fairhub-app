@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ChartNetwork } from "@vicons/carbon";
 import {
   DocumentFlowchart24Regular,
   PeopleAdd24Regular,
@@ -6,13 +7,27 @@ import {
   PeopleTeamToolbox24Regular,
   Settings24Regular,
 } from "@vicons/fluent";
-import { BugReportOutlined, DashboardRound } from "@vicons/material";
+import { PersonCircleOutline, SearchSharp } from "@vicons/ionicons5";
+import { BugReportOutlined, DashboardRound, LogOutSharp } from "@vicons/material";
 import { Help, History, Home2, ListDetails } from "@vicons/tabler";
 import type { MenuOption } from "naive-ui";
-import { NIcon, NLayoutSider, NMenu, NSpace } from "naive-ui";
+import {
+  NAvatar,
+  NDropdown,
+  NIcon,
+  NInput,
+  NLayout,
+  NLayoutContent,
+  NLayoutSider,
+  NMenu,
+  NSpace,
+} from "naive-ui";
 import type { Component } from "vue";
-import { computed, h, ref } from "vue";
-import { RouterLink, useRoute } from "vue-router";
+import { h, ref } from "vue";
+import { RouterLink, RouterView } from "vue-router";
+
+// eslint-disable-next-line no-undef
+const development = process.env.NODE_ENV === "development";
 
 const sidebarCollapsed = ref(false);
 
@@ -188,6 +203,61 @@ const lowerMenuOptions: MenuOption[] = [
   },
 ];
 
+const profileOptions = [
+  {
+    label: "View Profile",
+    key: "view-profile",
+    icon: renderIcon(PersonCircleOutline),
+  },
+  {
+    label: "Integrations",
+    key: "integrations",
+    icon: renderIcon(ChartNetwork),
+  },
+  {
+    type: "divider",
+    key: "d1",
+  },
+  {
+    label: "Logout",
+    key: "logout",
+    icon: renderIcon(LogOutSharp),
+  },
+  // {
+  //   label: "Others",
+  //   key: "others1",
+  //   children: [
+  //     {
+  //       label: "Jordan Baker",
+  //       key: "jordan baker",
+  //     },
+  //     {
+  //       label: "Tom Buchanan",
+  //       key: "tom buchanan",
+  //     },
+  //     {
+  //       label: "Others",
+  //       key: "others2",
+  //       disabled: true,
+  //       children: [
+  //         {
+  //           label: "Chicken",
+  //           key: "chicken",
+  //         },
+  //         {
+  //           label: "Beef",
+  //           key: "beef",
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
+];
+
+const handleSelect = (key: string | number) => {
+  console.info(String(key));
+};
+
 /**
  * A function that toggles the sidebar
  * @param {boolean} collapsed Event emitted by the sidebar when the collapse button is clicked
@@ -197,48 +267,85 @@ const toggleSidebar = (collapsed: boolean) => {
   sidebarCollapsed.value = collapsed;
   return;
 };
-
-/**
- * A computed property that returns true if the sidebar should be completely hidden
- * @returns {boolean}
- */
-const hideSidebar = computed(() => {
-  const currentRoute = useRoute();
-  if (currentRoute.path === "/") {
-    return false;
-  }
-  return true;
-});
 </script>
 
 <template>
-  <n-layout-sider
-    v-if="hideSidebar"
-    bordered
-    show-trigger
-    :collapsed="sidebarCollapsed"
-    collapse-mode="width"
-    :collapsed-width="64"
-    :width="240"
-    :native-scrollbar="true"
-    @update:collapsed="toggleSidebar"
-    class="h-[calc(100vh-56px)]"
-  >
-    <n-space vertical justify="space-between" class="h-full">
-      <n-menu
-        :collapsed-width="64"
-        :collapsed-icon-size="22"
-        :collapsed="sidebarCollapsed"
-        :options="upperMenuOptions"
-      />
+  <div>
+    <header :class="{ 'debug-screens': development }">
+      <n-space justify="space-between" align="center" class="pl-4 pr-2">
+        <h1 class="relative top-0 left-0 p-2 text-4xl font-black">fairhub.io</h1>
 
-      <n-menu
-        :collapsed-width="64"
-        :collapsed-icon-size="22"
-        :collapsed="sidebarCollapsed"
-        :options="lowerMenuOptions"
-        class="pb-4"
-      />
+        <n-space justify="space-between" align="center">
+          <n-input size="large" placeholder="Search">
+            <template #suffix>
+              <n-icon :component="SearchSharp" />
+            </template>
+          </n-input>
+
+          <div class="flex justify-center space-x-3">
+            <n-dropdown
+              :options="profileOptions"
+              placement="bottom-start"
+              trigger="hover"
+              @select="handleSelect"
+              :show-arrow="true"
+            >
+              <n-avatar
+                :size="48"
+                src="https://api.dicebear.com/5.x/lorelei/svg?seed=fairhubio"
+                class="hover:cursor-pointer hover:opacity-80"
+              />
+            </n-dropdown>
+          </div>
+        </n-space>
+      </n-space>
+    </header>
+
+    <n-space vertical size="large" :class="{ 'debug-screens': development }">
+      <n-layout has-sider>
+        <!-- <div class=""> -->
+        <!-- <header :class="{ 'debug-screens': development }" class="flex">
+            <h1 class="ml-7 p-2 text-3xl font-black">fairhub.io</h1>
+            <button @click="toggleSidebar">toggle</button>
+          </header> -->
+        <n-layout-sider
+          bordered
+          show-trigger
+          :collapsed="sidebarCollapsed"
+          collapse-mode="width"
+          :collapsed-width="64"
+          :width="240"
+          :native-scrollbar="true"
+          @update:collapsed="toggleSidebar"
+          class="h-[calc(100vh-56px)]"
+        >
+          <n-space vertical justify="space-between" class="h-full">
+            <n-menu
+              :collapsed-width="64"
+              :collapsed-icon-size="22"
+              :collapsed="sidebarCollapsed"
+              :options="upperMenuOptions"
+            />
+            <n-menu
+              :collapsed-width="64"
+              :collapsed-icon-size="22"
+              :collapsed="sidebarCollapsed"
+              :options="lowerMenuOptions"
+              class="pb-4"
+            />
+          </n-space>
+        </n-layout-sider>
+        <!-- </div> -->
+        <n-layout-content class="h-[calc(100vh-56px)]">
+          <RouterView />
+        </n-layout-content>
+      </n-layout>
     </n-space>
-  </n-layout-sider>
+  </div>
+  <!-- <header :class="{ 'debug-screens': development }">
+    <h1 class="relative top-0 left-0 p-2 text-4xl font-black">fairhub.io</h1>
+  </header>
+  <RouterView /> -->
 </template>
+
+<style scoped></style>

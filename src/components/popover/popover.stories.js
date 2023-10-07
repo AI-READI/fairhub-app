@@ -4,29 +4,29 @@ import { ref } from "vue";
 
 export default {
   title: "Components/Popover",
+  component: NPopover,
   argTypes: {
-    animated: { control: { type: "boolean" } },
-    disabled: { control: { type: "boolean" } },
-    overlap: { control: { type: "boolean" } },
-    placement: {
-      control: { type: "select" },
-      options: ["top-start", "top", "right", "bottom", "left", "left-end"],
-    },
-    scrollable: { control: { type: "boolean" } },
     trigger: {
       control: { type: "select" },
       options: ["hover", "click", "focus", "manual"],
+    },
+    placement: {
+      control: { type: "select" },
+      options: ["top-start", "top", "right", "bottom", "left", "left-end"],
     },
     width: {
       control: { type: "select" },
       options: ["number", "trigger"],
     },
+    scrollable: { control: { type: "boolean" } },
+    overlap: { control: { type: "boolean" } },
+    disabled: { control: { type: "boolean" } },
+    animated: { control: { type: "boolean" } },
   },
-  component: NPopover,
 };
 
 const BasicTemplate = (args) => ({
-  components: { NButton, NPopover },
+  components: { NPopover, NButton },
   setup() {
     return { args };
   },
@@ -42,7 +42,7 @@ export const Basic = BasicTemplate.bind({});
 Basic.args = {};
 
 const TriggerTemplate = (args) => ({
-  components: { NButton, NPopover },
+  components: { NPopover, NButton },
   setup() {
     return { args, showPopover: ref(false) };
   },

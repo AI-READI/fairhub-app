@@ -3,16 +3,16 @@ import { NSwitch } from "naive-ui";
 
 export default {
   title: "Components/Switch",
+  component: NSwitch,
   argTypes: {
-    "default-value": { control: { type: "boolean" } },
-    loading: { control: { type: "boolean" } },
-    round: { control: { type: "boolean" } },
     size: {
       control: { type: "select" },
       options: ["medium", "large"],
     },
+    round: { control: { type: "boolean" } },
+    "default-value": { control: { type: "boolean" } },
+    loading: { control: { type: "boolean" } },
   },
-  component: NSwitch,
 };
 
 const BasicTemplate = (args) => ({
