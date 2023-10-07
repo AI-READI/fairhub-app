@@ -9,29 +9,30 @@ export default defineComponent({
     NSpace,
   },
   props: {
-    clearable: { type: Boolean },
-    disabled: { type: Boolean },
     mode: {
       type: String,
       validator: function (value: string) {
         return ["basic", "size"].indexOf(value) !== -1;
       },
     },
+    disabled: { type: Boolean },
+    clearable: { type: Boolean },
     size: { type: String as PropType<"tiny" | "small" | "medium" | "large"> },
   },
 
   setup() {
     return {
+      value: ref(null),
       options: [
         {
-          disabled: true,
           label: "Everybody's Got Something to Hide Except Me and My Monkey",
           value: "song0",
+          disabled: true,
         },
         {
-          disabled: true,
           label: "You Won't See",
           value: "song3",
+          disabled: true,
         },
         {
           label: "In My Life",
@@ -42,7 +43,6 @@ export default defineComponent({
           value: "song12",
         },
       ],
-      value: ref(null),
     };
   },
 });

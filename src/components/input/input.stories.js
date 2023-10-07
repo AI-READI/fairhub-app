@@ -2,10 +2,8 @@ import Input from "./input-element.vue";
 
 export default {
   title: "Components/Input",
+  component: Input,
   argTypes: {
-    mode: {
-      table: { disable: true },
-    },
     size: {
       control: { type: "select" },
       options: ["small", "medium", "large"],
@@ -14,8 +12,10 @@ export default {
       control: { type: "select" },
       options: ["success", "warning", "error"],
     },
+    mode: {
+      table: { disable: true },
+    },
   },
-  component: Input,
 };
 const Template = (args) => ({
   components: { Input },

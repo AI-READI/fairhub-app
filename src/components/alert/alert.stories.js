@@ -2,19 +2,19 @@ import { html } from "code-tag";
 import { NAlert, NIcon, NSpace } from "naive-ui";
 export default {
   title: "Components/Alert",
+  component: NAlert,
   argTypes: {
-    bordered: { control: { type: "boolean" } },
-    closable: { control: { type: "boolean" } },
     type: {
       control: { type: "select" },
       options: ["primary", "info", "success", "warning", "error"],
     },
+    closable: { control: { type: "boolean" } },
+    bordered: { control: { type: "boolean" } },
   },
-  component: NAlert,
 };
 
 const TitleTemplate = (args) => ({
-  components: { NAlert, NIcon, NSpace },
+  components: { NAlert, NSpace, NIcon },
   setup() {
     return { args };
   },

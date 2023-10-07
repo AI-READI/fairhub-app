@@ -15,7 +15,7 @@
       <div class="grid grid-cols-4 gap-4">
         <div v-for="radius in item.radii" :key="radius" class="flex flex-col">
           <div class="flex w-max flex-col py-3">
-            <div class="h-[150px] w-[150px] bg-primary-200" :class="radius" />
+            <div class="bg-primary-200 h-[150px] w-[150px]" :class="radius" />
 
             <span class="mt-2 w-auto text-sm font-medium">{{ radius }}</span>
           </div>

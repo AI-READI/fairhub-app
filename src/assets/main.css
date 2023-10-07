@@ -1,0 +1,135 @@
+@import "./base.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.sb-show-main {
+  @apply bg-transparent font-sans;
+}
+
+.sbdocs.sbdocs-content > * {
+  @apply !font-sans !text-slate-700;
+}
+
+.story-content {
+  @apply w-full text-slate-700;
+  @apply mx-auto max-w-5xl;
+}
+
+.story-content > h1 {
+  @apply pb-4 text-3xl !font-semibold !text-slate-700;
+}
+
+.story-content > h2,
+.story-content > div > h2 {
+  @apply pb-4 text-2xl !font-semibold !text-slate-700;
+}
+
+.story-content > p {
+  @apply !pb-4 text-base;
+}
+
+.story-content > hr {
+  @apply !mt-4 mb-8 border-t-2 !border-slate-200;
+}
+
+.sbdocs.sbdocs-p > strong {
+  @apply font-bold;
+}
+
+.n-menu-item-content-header > a {
+  @apply flex grow;
+}
+
+@layer base {
+  /* inter var - latin */
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 100 900;
+    src: url("/fonts/inter-var-latin.woff2") format("woff2");
+  }
+
+  h1 {
+    @apply !font-primary text-2xl font-bold md:text-4xl;
+  }
+
+  h2 {
+    @apply !font-primary text-xl font-bold md:text-3xl;
+  }
+
+  h3 {
+    @apply !font-primary text-lg font-bold md:text-2xl;
+  }
+
+  h4 {
+    @apply !font-primary text-base font-bold md:text-lg;
+  }
+
+  body {
+    @apply !font-primary text-sm md:text-base;
+  }
+
+  .layout {
+    /* 750px */
+    /* max-width: 43.75rem; */
+
+    /* 1100px */
+    max-width: 68.75rem;
+    @apply mx-auto w-11/12;
+  }
+
+  .bg-dark a.custom-link {
+    @apply border-gray-200 hover:border-gray-200/0;
+  }
+
+  /* Class to adjust with sticky footer */
+  .min-h-main {
+    @apply min-h-[calc(100vh-56px)];
+  }
+}
+
+@layer utilities {
+  .animated-underline {
+    background-image: linear-gradient(#33333300, #33333300),
+      linear-gradient(to right, var(--clr-primary-400), var(--clr-primary-500));
+    background-size: 100% 2px, 0 2px;
+    background-position: 100% 100%, 0 100%;
+    background-repeat: no-repeat;
+    transition: 0.3s ease;
+    transition-property: background-size, color, background-color, border-color;
+  }
+  .animated-underline:hover,
+  .animated-underline:focus-visible {
+    background-size: 0 2px, 100% 2px;
+  }
+
+  .bg-primary {
+    @apply bg-primary-500;
+  }
+
+    .bg-secondary {
+    @apply bg-secondary-500;
+  }
+
+   .border-primary {
+    @apply border-primary-500;
+  }
+
+    .border-secondary {
+    @apply border-secondary-500;
+  }
+
+     .text-primary {
+    @apply text-primary-500;
+  }
+
+    .text-secondary {
+    @apply text-secondary-500;
+  }
+
+
+}
+
+

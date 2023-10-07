@@ -3,16 +3,16 @@ import { NCollapse, NCollapseItem } from "naive-ui";
 
 export default {
   title: "Components/Collapse",
+  component: NCollapse,
   argTypes: {
-    accordion: { control: { type: "boolean" } },
     "arrow-placement": {
       control: { type: "select" },
       options: ["right", "left"],
     },
+    accordion: { control: { type: "boolean" } },
     filterable: { control: { type: "boolean" } },
     multiple: { control: { type: "boolean" } },
   },
-  component: NCollapse,
 };
 
 const BasicTemplate = (args) => ({

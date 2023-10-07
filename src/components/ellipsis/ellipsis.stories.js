@@ -3,8 +3,8 @@ import { NEllipsis } from "naive-ui";
 
 export default {
   title: "Components/Ellipsis",
-  argTypes: {},
   component: NEllipsis,
+  argTypes: {},
 };
 
 const BasicTemplate = (args) => ({

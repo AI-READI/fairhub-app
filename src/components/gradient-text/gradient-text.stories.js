@@ -3,8 +3,8 @@ import { NGradientText } from "naive-ui";
 
 export default {
   title: "Components/Gradient Text",
-  argTypes: {},
   component: NGradientText,
+  argTypes: {},
 };
 
 const TypeTemplate = (args) => ({

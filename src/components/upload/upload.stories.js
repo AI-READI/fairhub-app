@@ -1,23 +1,23 @@
 import UploadElement from "./upload-element.vue";
 export default {
+  components: { UploadElement },
   title: "Components/Upload",
+  component: UploadElement,
   argTypes: {
-    directory: {
-      control: { type: "boolean" },
-    },
-    disabled: {
-      control: { type: "boolean" },
-    },
-    mode: { table: { disable: true } },
-    multiple: {
-      control: { type: "boolean" },
-    },
     showPreviewButton: {
       control: { type: "boolean" },
     },
+    multiple: {
+      control: { type: "boolean" },
+    },
+    directory: {
+      control: { type: "boolean" },
+    },
+    mode: { table: { disable: true } },
+    disabled: {
+      control: { type: "boolean" },
+    },
   },
-  component: UploadElement,
-  components: { UploadElement },
 };
 const Template = (args) => ({
   components: { UploadElement },

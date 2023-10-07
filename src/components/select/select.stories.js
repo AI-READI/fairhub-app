@@ -2,14 +2,14 @@ import Select from "./select-element.vue";
 
 export default {
   title: "Components/Select",
+  component: Select,
   argTypes: {
-    mode: { table: { disable: true } },
     size: {
       control: { type: "select" },
       options: ["small", "medium", "large"],
     },
+    mode: { table: { disable: true } },
   },
-  component: Select,
 };
 const Template = (args) => ({
   components: { Select },

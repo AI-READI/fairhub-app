@@ -1,18 +1,18 @@
 import PaginationElement from "./pagination-element.vue";
 
 export default {
+  components: { PaginationElement },
   title: "Components/Pagination",
+  component: PaginationElement,
   argTypes: {
     disabled: { control: { type: "boolean" } },
-    mode: { table: { disable: true } },
     simple: { control: { type: "boolean" } },
     size: {
       control: { type: "select" },
       options: ["small", "medium", "large"],
     },
+    mode: { table: { disable: true } },
   },
-  component: PaginationElement,
-  components: { PaginationElement },
 };
 const Template = (args) => ({
   components: { PaginationElement },
