@@ -24,6 +24,7 @@ const study: Ref<Study> = computed(() => studyStore.study);
 const requestLoading = ref(false);
 const invitationLoading = ref(false);
 const roleChangeLoading = ref({});
+const removeLoading = ref({});
 const studyOwnerLoading = ref(false);
 
 const contributorRoles = [
@@ -61,11 +62,9 @@ onBeforeMount(async () => {
   const data = await response.json();
 
   for (const item of data) {
-    console.log(item);
     roleChangeLoading.value[item.id] = false;
+    removeLoading.value[item.id] = false;
   }
-
-  console.log(data);
 
   contributors.value = data.map((contributor: any) => {
     return {
@@ -74,11 +73,23 @@ onBeforeMount(async () => {
     };
   });
 
+  // put editor at the third position
   contributors.value.sort((a, b) => {
-    if (a.status === "accepted") {
+    if (a.role === "editor") {
       return -1;
     }
-    if (b.status === "accepted") {
+    if (b.role === "editor") {
+      return 1;
+    }
+    return 0;
+  });
+
+  //put admin at the second position
+  contributors.value.sort((a, b) => {
+    if (a.role === "admin") {
+      return -1;
+    }
+    if (b.role === "admin") {
       return 1;
     }
     return 0;
@@ -91,6 +102,17 @@ onBeforeMount(async () => {
     }
     if (b.role === "owner") {
       return 1;
+    }
+    return 0;
+  });
+
+  // put the invited at the bottom
+  contributors.value.sort((a, b) => {
+    if (a.status === "invited") {
+      return 1;
+    }
+    if (b.status === "invited") {
+      return -1;
     }
     return 0;
   });
@@ -212,9 +234,13 @@ const updateContributorRole = async (id: string, role: string) => {
 };
 
 const removeContributor = async (id: string) => {
+  removeLoading.value[id] = true;
+
   const response = await fetch(`${baseURL}/study/${route.params.studyId}/contributor/${id}`, {
     method: "DELETE",
   });
+
+  removeLoading.value[id] = false;
 
   if (!response.ok) {
     push.error("Something went wrong.");
@@ -272,9 +298,6 @@ const getFirstLetters = (name: string) => {
       </div>
     </n-card>
 
-    <pre>{{ contributors }}</pre>
-    <pre>{{ study.owner }}</pre>
-
     <FadeTransition>
       <LottieLoader v-if="requestLoading" />
 
@@ -322,10 +345,10 @@ const getFirstLetters = (name: string) => {
             </span>
           </div>
 
-          <n-space justify="end" align="center">
+          <n-space align="center">
             <n-button
               v-if="
-                study.owner === contributor.id &&
+                study.role === 'owner' &&
                 contributor.status === 'accepted' &&
                 contributor.role === 'admin'
               "
@@ -337,15 +360,13 @@ const getFirstLetters = (name: string) => {
             </n-button>
 
             <n-divider
-              vertical
               v-if="
-                study.owner === contributor.id &&
+                study.role === 'owner' &&
                 contributor.status === 'accepted' &&
                 contributor.role === 'admin'
               "
+              vertical
             />
-
-            {{ study.role }}
 
             <n-select
               v-model:value="contributor.updatedRole"
@@ -370,18 +391,30 @@ const getFirstLetters = (name: string) => {
               </template>
             </n-button>
 
+            <n-divider
+              v-if="study.owner !== contributor.id && contributor.status === 'accepted'"
+              vertical
+            />
+
             <n-tag type="warning" size="medium" v-if="contributor.status === 'invited'">
               {{ capitalize(contributor.role) }}
             </n-tag>
 
-            <n-divider vertical v-if="study.owner !== contributor.id" />
+            <n-divider v-if="contributor.status === 'invited'" vertical />
 
             <n-popconfirm
               @positive-click="removeContributor(contributor.id)"
               v-if="study.owner !== contributor.id"
             >
               <template #trigger>
-                <n-button type="error" :disabled="study.owner === contributor.id">
+                <n-button
+                  type="error"
+                  :loading="removeLoading[contributor.id]"
+                  :disabled="
+                    (study.role === 'editor' || study.role === 'viewer') &&
+                    contributor.id !== authStore.user.id
+                  "
+                >
                   <template #icon>
                     <Icon icon="fluent:delete-24-filled" width="20" height="20" />
                   </template>
