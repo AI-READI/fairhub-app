@@ -82,6 +82,10 @@
   .bg-dark a.custom-link {
     @apply border-gray-200 hover:border-gray-200/0;
   }
+
+  pre {
+    @apply text-xs;
+  }
 }
 
 @layer utilities {
