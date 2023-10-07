@@ -3,11 +3,7 @@ import { defineStore } from "pinia";
 import type { Study } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
-import { useAuthStore } from "./auth";
-
 export const useStudyStore = defineStore("study", () => {
-  const authStore = useAuthStore();
-
   const loading = ref(false);
 
   const allStudies = ref<Study[]>([]);
@@ -49,16 +45,6 @@ export const useStudyStore = defineStore("study", () => {
     console.log("response studies", studies);
 
     allStudies.value = studies as Study[];
-
-    for (const study of allStudies.value) {
-      /**
-       * TODO: Remove this once we have the user object
-       */
-
-      console.log("authStore.user", authStore.user);
-      study.owner = authStore.user.id;
-      study.role = "owner";
-    }
 
     // if (allStudies.value.length === 0) {
     //   for (let i = 0; i < 5; i++) {
@@ -109,9 +95,8 @@ export const useStudyStore = defineStore("study", () => {
     const s = data as Study;
 
     study.value = s;
-
-    study.value.owner = authStore.user.id;
-    study.value.role = "owner";
+    // study.value.owner = s.owner_id;
+    console.log("response study", study.value);
 
     console.log("study", study.value);
 

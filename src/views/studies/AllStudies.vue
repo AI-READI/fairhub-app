@@ -16,6 +16,7 @@ const studyStore = useStudyStore();
 
 const studies = computed(() => {
   const allStudies = studyStore.allStudies;
+  console.log("all studies", allStudies);
 
   const filteredStudies = [];
 
@@ -27,6 +28,24 @@ const studies = computed(() => {
       console.log("owner", study.owner, authStore.user);
 
       if (study.role === "owner") {
+        filteredStudies.push(study);
+      }
+    }
+
+    if (permissions.admin) {
+      if (study.role === "admin") {
+        filteredStudies.push(study);
+      }
+    }
+
+    if (permissions.editor) {
+      if (study.role === "editor") {
+        filteredStudies.push(study);
+      }
+    }
+
+    if (permissions.viewer) {
+      if (study.role === "viewer") {
         filteredStudies.push(study);
       }
     }
@@ -128,6 +147,11 @@ const navigateToStudy = (studyId: string) => {
             <n-space>
               <n-switch size="small" v-model:value="filterStore.permissions.owner" />
               <span class="text-sm font-medium"> Owner </span>
+            </n-space>
+
+            <n-space>
+              <n-switch size="small" v-model:value="filterStore.permissions.admin" />
+              <span class="text-sm font-medium"> Admin </span>
             </n-space>
 
             <n-space>

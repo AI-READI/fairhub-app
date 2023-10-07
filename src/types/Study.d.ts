@@ -23,12 +23,13 @@ export interface Study {
 }
 
 export interface StudyContributor {
-  id?: string;
+  id: string;
   name?: string;
   email_address: string;
   ORCID?: string;
   role: string;
   status: "invited" | "accepted" | "declined";
+  updatedRole: string; // tempRole is used to store the role of the contributor before the user clicks the save button
 }
 
 export interface StudyContributors extends Array<StudyContributor> {}

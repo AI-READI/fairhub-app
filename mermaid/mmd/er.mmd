@@ -26,6 +26,17 @@ erDiagram
         string timezone "Might not need this either"
     }
 
+    NOTIFICATION {
+        string id PK "UUIDv4"
+        string user_id FK "USER.id"
+        string title
+        string message
+        string type "info|warning|error|success"
+        string target "url for the item"
+        boolean read
+        timestamp created_at
+    }
+
     STUDY_CONTRIBUTOR {
         string study_id PK "UUIDv4"
         string user_id PK,FK "USER.id"
@@ -102,6 +113,7 @@ erDiagram
 
     USER ||--|| USER_DETAILS : "has"
     USER ||--o{ TOKEN_BLACKLIST : "has"
+    USER ||--o{ NOTIFICATION : "has"
 
     USER ||--o{ EMAIL_VERIFICATION : "has"
 
