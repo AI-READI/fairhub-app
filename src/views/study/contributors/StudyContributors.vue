@@ -23,8 +23,8 @@ const study: Ref<Study> = computed(() => studyStore.study);
 
 const requestLoading = ref(false);
 const invitationLoading = ref(false);
-const roleChangeLoading = ref({});
-const removeLoading = ref({});
+const roleChangeLoading = ref<{ [key: string]: boolean }>({});
+const removeLoading = ref<{ [key: string]: boolean }>({});
 const studyOwnerLoading = ref(false);
 
 const contributorRoles = [
@@ -283,7 +283,7 @@ const getFirstLetters = (name: string) => {
 
       <div class="flex items-start justify-start space-x-4 pt-4">
         <n-avatar class="mt-1 flex items-center justify-center bg-sky-900" size="large">
-          {{ getFirstLetters(owner.name) }}
+          {{ getFirstLetters(owner.name as string) }}
         </n-avatar>
 
         <div class="flex flex-col">
