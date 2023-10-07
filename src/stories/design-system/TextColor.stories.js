@@ -2,10 +2,10 @@ import TextColor from "./TextColor.vue";
 
 export default {
   title: "Design System/Text Colors",
-  component: TextColor,
   argTypes: {
     colorClass: { table: { disable: true } },
   },
+  component: TextColor,
 };
 
 const Template = (args) => ({

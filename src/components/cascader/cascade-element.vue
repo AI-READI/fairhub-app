@@ -9,23 +9,23 @@ function getOptions(depth = 3, iterator = 1, prefix = "") {
   for (let i = 1; i <= length; ++i) {
     if (iterator === 1) {
       options.push({
-        value: `v-${i}`,
-        label: `l-${i}`,
-        disabled: i % 5 === 0,
         children: getOptions(depth, iterator + 1, "" + String(i)),
+        disabled: i % 5 === 0,
+        label: `l-${i}`,
+        value: `v-${i}`,
       });
     } else if (iterator === depth) {
       options.push({
-        value: `v-${prefix}-${i}`,
-        label: `l-${prefix}-${i}`,
         disabled: i % 5 === 0,
+        label: `l-${prefix}-${i}`,
+        value: `v-${prefix}-${i}`,
       });
     } else {
       options.push({
-        value: `v-${prefix}-${i}`,
-        label: `l-${prefix}-${i}`,
-        disabled: i % 5 === 0,
         children: getOptions(depth, iterator + 1, `${prefix}-${i}`),
+        disabled: i % 5 === 0,
+        label: `l-${prefix}-${i}`,
+        value: `v-${prefix}-${i}`,
       });
     }
   }
@@ -33,9 +33,9 @@ function getOptions(depth = 3, iterator = 1, prefix = "") {
 }
 export default defineComponent({
   components: {
-    NSwitch,
-    NSpace,
     NCascader,
+    NSpace,
+    NSwitch,
   },
   props: {
     mode: {
@@ -50,14 +50,14 @@ export default defineComponent({
   setup() {
     return {
       checkStrategyIsChild: ref(true),
-      showPath: ref(true),
-      hoverTrigger: ref(false),
       filterable: ref(false),
-      value: ref(null),
-      options: getOptions(),
       handleUpdateValue(value: string, option: CascaderOption) {
         console.log(value, option);
       },
+      hoverTrigger: ref(false),
+      options: getOptions(),
+      showPath: ref(true),
+      value: ref(null),
     };
   },
 });

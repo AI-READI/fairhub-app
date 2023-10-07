@@ -3,15 +3,15 @@ import { NRate, NSpace } from "naive-ui";
 
 export default {
   title: "Components/Rate",
-  component: NRate,
   argTypes: {
+    "allow-half": { control: { type: "boolean" } },
+    clearable: { control: { type: "boolean" } },
     size: {
       control: { type: "select" },
       options: ["small", "medium", "large"],
     },
-    clearable: { control: { type: "boolean" } },
-    "allow-half": { control: { type: "boolean" } },
   },
+  component: NRate,
 };
 
 const TitleTemplate = (args) => ({

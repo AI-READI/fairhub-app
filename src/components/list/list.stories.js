@@ -3,16 +3,16 @@ import { NButton, NList, NListItem, NSpace, NTag, NThing } from "naive-ui";
 
 export default {
   title: "Components/List",
-  component: NList,
   argTypes: {
     bordered: { control: { type: "boolean" } },
     clickable: { control: { type: "boolean" } },
     hoverable: { control: { type: "boolean" } },
   },
+  component: NList,
 };
 
 const BasicTemplate = (args) => ({
-  components: { NList, NThing, NListItem, NButton },
+  components: { NButton, NList, NListItem, NThing },
   setup() {
     return { args };
   },
@@ -42,7 +42,7 @@ export const Basic = BasicTemplate.bind({});
 Basic.args = {};
 
 const HoverableTemplate = (args) => ({
-  components: { NList, NSpace, NTag, NButton, NListItem, NThing },
+  components: { NButton, NList, NListItem, NSpace, NTag, NThing },
   setup() {
     return { args };
   },

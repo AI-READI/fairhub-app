@@ -1,15 +1,43 @@
 <script setup lang="ts">
-import { RouterView } from "vue-router";
+import type { GlobalThemeOverrides } from "naive-ui";
+import { materialTheme, Notifications, Notivue } from "notivue";
 
-// eslint-disable-next-line no-undef
-const development = process.env.NODE_ENV === "development";
+import { theme } from "@/stores/settings";
+
+const themeOverrides: GlobalThemeOverrides = {
+  Button: {},
+  Form: {
+    feedbackPadding: "4px 0 8px 2px",
+    labelFontWeight: "600",
+  },
+};
 </script>
 
 <template>
-  <header :class="{ 'debug-screens': development }">
-    <h1 class="fixed top-0 left-0 p-2 text-4xl font-black">fairhub.io</h1>
-  </header>
-  <RouterView />
-</template>
+  <n-config-provider :theme="theme" :theme-overrides="themeOverrides">
+    <n-dialog-provider>
+      <n-message-provider>
+        <AppHeader />
 
-<style scoped></style>
+        <Notivue v-slot="item">
+          <Notifications :item="item" :theme="materialTheme" />
+        </Notivue>
+
+        <n-space vertical size="large">
+          <n-layout has-sider>
+            <AppSidebar />
+            <DatasetSidebar />
+
+            <n-layout-content class="h-[calc(100vh-56px)] py-4 pl-6">
+              <router-view v-slot="{ Component }">
+                <transition name="fade" appear mode="out-in">
+                  <component :is="Component" />
+                </transition>
+              </router-view>
+            </n-layout-content>
+          </n-layout>
+        </n-space>
+      </n-message-provider>
+    </n-dialog-provider>
+  </n-config-provider>
+</template>

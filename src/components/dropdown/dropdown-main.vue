@@ -10,6 +10,9 @@ export default defineComponent({
     NDropdown,
   },
   props: {
+    animated: { type: Boolean },
+    inverted: { type: Boolean },
+    keyboard: { type: Boolean },
     mode: {
       type: String,
       validator: function (value: string) {
@@ -17,36 +20,32 @@ export default defineComponent({
       },
     },
     size: { type: String as PropType<"small" | "medium" | "large"> },
-    animated: { type: Boolean },
-    keyboard: { type: Boolean },
-    inverted: { type: Boolean },
   },
   setup() {
     const message = useMessage();
     return {
-      options: [
-        {
-          label: "Marina Bay Sands",
-          key: "marina bay sands",
-          disabled: true,
-        },
-        {
-          label: "Brown's Hotel, London",
-          key: "brown's hotel, london",
-        },
-        {
-          label: "Atlantis Bahamas, Nassau",
-          key: "atlantis nahamas, nassau",
-        },
-        {
-          label: "The Beverly Hills Hotel, Los Angeles",
-          key: "the beverly hills hotel, los angeles",
-        },
-      ],
-
       handleSelect(key: string | number) {
         message.info(String(key));
       },
+      options: [
+        {
+          disabled: true,
+          key: "marina bay sands",
+          label: "Marina Bay Sands",
+        },
+        {
+          key: "brown's hotel, london",
+          label: "Brown's Hotel, London",
+        },
+        {
+          key: "atlantis nahamas, nassau",
+          label: "Atlantis Bahamas, Nassau",
+        },
+        {
+          key: "the beverly hills hotel, los angeles",
+          label: "The Beverly Hills Hotel, Los Angeles",
+        },
+      ],
     };
   },
 });

@@ -1,7 +1,6 @@
 import Table from "./table-element.vue";
 export default {
   title: "Components/Table",
-  component: Table,
   argTypes: {
     bordered: { control: { type: "boolean" } },
     cascade: { control: { type: "boolean" } },
@@ -11,6 +10,7 @@ export default {
       options: ["small", "medium", "large"],
     },
   },
+  component: Table,
 };
 const Template = (args) => ({
   components: { Table },

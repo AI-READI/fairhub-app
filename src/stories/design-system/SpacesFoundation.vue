@@ -1,8 +1,8 @@
 <script setup>
 const props = defineProps({
   spaces: {
-    type: Object,
     required: true,
+    type: Object,
   },
 });
 </script>

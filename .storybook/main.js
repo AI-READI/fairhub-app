@@ -1,5 +1,4 @@
 const path = require("path");
-const tailwindConfigPath = path.join(__dirname, "../tailwind.config.js");
 
 module.exports = {
   stories: [

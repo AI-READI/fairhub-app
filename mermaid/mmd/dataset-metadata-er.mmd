@@ -1,0 +1,219 @@
+erDiagram
+      DATASET_ALTERNATE_IDENTIFIER {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string identifier
+        string identifier_type "NULLABLE"
+        timestamp created_at
+    }
+
+    DATASET_TITLE {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string title
+        string type "NULLABLE"
+        timestamp created_at
+    }
+
+    DATASET_CONTRIBUTOR {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string name
+        string name_type "NULLABLE"
+        string name_identifier
+        string name_identifier_scheme
+        string name_identifier_scheme_uri
+        boolean creator "true if creator, false if contributor"
+        string contributor_type "NULLABLE | required if contributor"
+        timestamp created_at
+    }
+
+    DATASET_CONTRIBUTOR_AFFILIATION {
+        string id PK "UUIDv4"
+        string contributor_id FK "DATASET_CONTRIBUTOR.id"
+        string identifier 
+        string identifier_scheme
+        string identifier_scheme_uri
+        timestamp created_at
+    }
+
+    DATASET_DATE {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string date
+        string date_type "NULLABLE"
+        string date_information
+        timestamp created_at
+    }
+
+    DATASET_RECORD_KEYS {
+        string dataset_id PK,FK "DATASET.id"
+        string keys_type "NULLABLE"
+        string keys_details
+    }
+
+    DATASET_DE_IDENT_LEVEL {
+        string dataset_id PK,FK "DATASET.id"
+        string type "NULLABLE"
+        boolean direct
+        boolean hipaa
+        boolean dates
+        boolean nonarr
+        boolean k_anon
+        string details
+    }
+
+    DATASET_CONSENT {
+        string dataset_id PK,FK "DATASET.id"
+        string type "NULLABLE"
+        boolean noncommercial
+        boolean geog_restrict
+        boolean research_type
+        boolean genetic_only
+        boolean no_methods
+        string details
+    }
+
+    DATASET_README {
+        string dataset_id PK,FK "DATASET.id"
+        string content
+    }
+
+    DATASET_DESCRIPTION {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string description
+        string description_type "NULLABLE"
+        timestamp created_at
+    }
+
+    DATASET_SUBJECT {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string subject
+        string scheme
+        string scheme_uri
+        string value_uri
+        string classification_code
+        timestamp created_at
+    }
+
+    DATASET_ACCESS {
+        string dataset_id PK,FK "DATASET.id"
+        string type "NULLABLE"
+        string description
+        string url
+        timestamp url_last_checked "milliseconds format"
+    }
+
+    DATASET_RIGHTS {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string rights
+        string uri
+        string identifier
+        string identifier_scheme
+        timestamp created_at
+    }
+
+    DATASET_FUNDER {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string name
+        string identifier
+        string identifier_type "NULLABLE"
+        string identifier_scheme_uri
+        string award_number
+        string award_uri
+        string award_title
+        timestamp created_at
+    }
+
+     DATASET_OTHER {
+        string dataset_id PK,FK "DATASET.id"
+        string resource_type
+        string language "NULLABLE"
+        string managing_organization_name
+        string managing_organization_ror_id
+        string publisher
+        string standards_followed "Used for the README file"
+        string acknowledgement "Used for the README file"
+        string[] size
+    }
+
+    DATASET_RELATED_ITEM {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string type "NULLABLE"
+        string relation_type "NULLABLE"
+        timestamp created_at
+    }
+
+    DATASET_RELATED_ITEM_IDENTIFIER {
+        string id PK "UUIDv4"
+        string related_item_id FK "DATASET_RELATED_ITEM.id"
+        string identifier
+        string type "NULLABLE"
+        string metadata_scheme "NULLABLE"
+        string scheme_uri "NULLABLE"
+        string scheme_type "NULLABLE"
+        timestamp created_at
+    }
+
+    DATASET_RELATED_ITEM_CONTRIBUTOR {
+        string id PK "UUIDv4"
+        string related_item_id FK "DATASET_RELATED_ITEM.id"
+        string name
+        string name_type "NULLABLE"
+        boolean creator "true if creator, false if contributor"
+        string contributor_type "NULLABLE | required if contributor"
+        timestamp created_at
+    }
+
+    DATASET_RELATED_ITEM_TITLE {
+        string id PK "UUIDv4"
+        string related_item_id FK "DATASET_RELATED_ITEM.id"
+        string title
+        string type "NULLABLE"
+        timestamp created_at
+    }
+
+    DATASET_RELATED_ITEM_OTHER {
+        string related_item_id PK,FK "DATASET_RELATED_ITEM.id"
+        timestamp publication_year
+        string volume
+        string issue
+        string number_value
+        string number_type "NULLABLE"
+        string first_page
+        string last_page
+        string publisher
+        string edition
+    }
+
+    DATASET_ALTERNATE_IDENTIFIER }o--|| DATASET : "is identified by"
+    DATASET_TITLE }o--|| DATASET : "has title"
+    DATASET_DESCRIPTION }o--|| DATASET : "has description"
+    DATASET_CONTRIBUTOR }o--|| DATASET : "has contributor"
+    DATASET_CONTRIBUTOR_AFFILIATION }o--|| DATASET_CONTRIBUTOR : "has affiliation"
+    DATASET_DATE }o--|| DATASET : "has date"
+    DATASET_RECORD_KEYS ||--|| DATASET : "has record key"
+    DATASET_DE_IDENT_LEVEL ||--|| DATASET : "has deidentification level"
+    DATASET_CONSENT ||--|| DATASET : "has consent"
+    DATASET_README ||--|| DATASET : "has readme"
+
+    DATASET ||--o{ DATASET_SUBJECT : "has subject"
+    DATASET ||--|| DATASET_ACCESS : "has access"
+    DATASET ||--o{ DATASET_RIGHTS : "has rights"
+    DATASET ||--o{ DATASET_FUNDER : "has funder"
+    DATASET ||--|| DATASET_OTHER : "has other details"
+    DATASET ||--o{ DATASET_RELATED_ITEM : "has related item"
+
+
+    DATASET_RELATED_ITEM ||--o{ DATASET_RELATED_ITEM_IDENTIFIER : "has identifier"
+    DATASET_RELATED_ITEM ||--o{ DATASET_RELATED_ITEM_CONTRIBUTOR : "has contributor"
+    DATASET_RELATED_ITEM ||--o{ DATASET_RELATED_ITEM_TITLE : "has title"
+    DATASET_RELATED_ITEM ||--|| DATASET_RELATED_ITEM_OTHER : "has other details"
+
+
+    

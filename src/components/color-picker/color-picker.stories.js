@@ -3,15 +3,15 @@ import { NColorPicker } from "naive-ui";
 
 export default {
   title: "Components/Color Picker",
-  component: NColorPicker,
   argTypes: {
+    disabled: { control: { type: "boolean" } },
+    show: { control: { type: "boolean" } },
     size: {
       control: { type: "select" },
       options: ["small", "medium", "large"],
     },
-    disabled: { control: { type: "boolean" } },
-    show: { control: { type: "boolean" } },
   },
+  component: NColorPicker,
 };
 
 const SizeTemplate = (args) => ({
