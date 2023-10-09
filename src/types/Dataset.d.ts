@@ -47,6 +47,7 @@ export interface DatasetIdentifiers extends Array<DatasetIdentifier> {}
 export interface DatasetDescription {
   id: string;
   description: string;
+  origin: string;
   type:
     | "Abstract"
     | "Methods"

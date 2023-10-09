@@ -84,9 +84,13 @@ const init = async () => {
           (title) => title.dataset_id === dataset.id && title.type === "MainTitle"
         ).title;
 
-        dataset.description = dataset_description.find(
-          (description) => description.dataset_id === dataset.id && description.type === "Abstract"
-        ).description;
+        const d = dataset_description.find((description) => description.dataset_id === dataset.id);
+
+        if (d && d.type === "Abstract") {
+          dataset.description = d.description;
+        } else {
+          dataset.description = "";
+        }
       }
 
       return h.response(response).code(200);
@@ -143,9 +147,13 @@ const init = async () => {
         (title) => title.dataset_id === datasetid && title.type === "MainTitle"
       ).title;
 
-      const description = dataset_description.find(
-        (description) => description.dataset_id === datasetid && description.type === "Abstract"
-      ).description;
+      const d = dataset_description.find((description) => description.dataset_id === datasetid);
+
+      let description = "";
+
+      if (d && d.type === "Abstract") {
+        description = d.description;
+      }
 
       return h.response({ ...dataset, title, description }).code(200);
     },
@@ -295,6 +303,79 @@ const init = async () => {
       dataset_title.splice(dataset_title.indexOf(title), 1);
 
       return h.response(title).code(200);
+    },
+    method: "DELETE",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/description",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      const descriptions = dataset_description.filter(
+        (description) => description.dataset_id === datasetid
+      );
+
+      if (!descriptions) {
+        return h.response({ message: "Dataset not found" }).code(404);
+      }
+
+      return h.response(descriptions).code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/description",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      // const requestPayload = request.payload;
+      const payload = JSON.parse(request.payload);
+
+      for (const item of payload) {
+        if ("id" in item) {
+          const description = dataset_description.find((description) => item.id === description.id);
+
+          if (!description) {
+            return h.response({ message: "description not found" }).code(404);
+          }
+
+          description.description = item.description;
+          description.type = item.type;
+        } else {
+          dataset_description.push({
+            id: nanoid(),
+            created_at: Date.now() / 1000,
+            dataset_id: datasetid,
+            description: item.description,
+            type: item.type,
+          });
+        }
+      }
+
+      return h.response({ message: "descriptions updated" }).code(200);
+    },
+    method: "POST",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/description/{descriptionid}",
+    handler: (request, h) => {
+      const { descriptionid } = request.params;
+
+      const description = dataset_description.find(
+        (description) => description.id === descriptionid
+      );
+
+      if (!description) {
+        return h.response({ message: "description not found" }).code(404);
+      }
+
+      // remove alternative identifier
+      dataset_description.splice(dataset_description.indexOf(description), 1);
+
+      return h.response(description).code(200);
     },
     method: "DELETE",
   });

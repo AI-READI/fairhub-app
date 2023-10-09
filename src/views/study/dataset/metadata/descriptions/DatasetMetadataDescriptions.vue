@@ -2,93 +2,132 @@
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
-import { useAuthStore } from "@/stores/auth";
-import { useDatasetStore } from "@/stores/dataset";
 import type { DatasetDescriptions } from "@/types/Dataset";
+
+// import { baseURL } from "@/utils/constants";
+const baseURL = "http://localhost:3001/api";
 
 const route = useRoute();
 const router = useRouter();
-const { error, success } = useMessage();
-
-const authStore = useAuthStore();
-const datasetStore = useDatasetStore();
+const push = usePush();
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
   studyId: route.params.studyId as string,
 };
 
+const studyId = routeParams.studyId;
+const datasetId = routeParams.datasetId;
+
 const datasetDescriptions = ref<DatasetDescriptions>([]);
-
-onBeforeMount(async () => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
-  }
-
-  /**
-   * TODO: replace this with a call to the API
-   */
-  if (datasetDescriptions.value.length === 0) {
-    datasetDescriptions.value.push({
-      id: nanoid(),
-      description: "lorem ipsum dolor sit amet",
-      type: "Abstract",
-    });
-  }
-});
-
 const descriptionTypeOptions = FORM_JSON.datasetDescriptionTypeOptions;
 
-const updateDatasetDescriptions = (e: MouseEvent) => {
+onBeforeMount(async () => {
+  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/description`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    push.error("Something went wrong.");
+
+    throw new Error("Something went wrong.");
+  }
+
+  const data = await response.json();
+
+  datasetDescriptions.value = data.map((item: any) => {
+    return {
+      ...item,
+      origin: "remote",
+    };
+  });
+});
+
+const onCreate = () => {
+  return {
+    id: nanoid(),
+    description: "",
+    origin: "local",
+    type: null,
+  };
+};
+
+const onRemove = async (index: number) => {
+  const item = datasetDescriptions.value[index];
+
+  if (item.origin === "remote") {
+    const response = await fetch(
+      `${baseURL}/study/${studyId}/dataset/${datasetId}/description/${item.id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok) {
+      push.error("Something went wrong.");
+
+      throw new Error("Something went wrong.");
+    }
+  }
+
+  push.success("Description removed successfully");
+
+  // // refresh page
+  // router.go(0);
+};
+
+const updateDatasetDescription = async (e: MouseEvent) => {
   e.preventDefault();
 
-  const dts: DatasetDescriptions = datasetDescriptions.value;
+  const tempDescriptions = datasetDescriptions.value;
 
-  for (const item of dts) {
-    item.description = item.description.trim();
-
+  for (const item of tempDescriptions) {
     // remove any items that have an empty title
     if (item.description === "") {
-      dts.splice(dts.indexOf(item), 1);
+      tempDescriptions.splice(tempDescriptions.indexOf(item), 1);
     }
 
     // remove any items that have a duplicate title and type
-    if (dts.filter((i) => i.description === item.description && i.type === item.type).length > 1) {
-      dts.splice(dts.indexOf(item), 1);
+    if (
+      tempDescriptions.filter((i) => i.description === item.description && i.type === item.type)
+        .length > 1
+    ) {
+      tempDescriptions.splice(tempDescriptions.indexOf(item), 1);
     }
   }
 
+  const data = tempDescriptions.map((item) => {
+    const entry = {
+      description: item.description,
+      type: item.type,
+    };
+
+    if (item.origin === "local") {
+      return entry;
+    } else {
+      return {
+        ...entry,
+        id: item.id,
+      };
+    }
+  });
+
   // call the API to update the dataset
-  datasetStore.datasetDescriptions = dts;
-
-  success("Dataset descriptions updated successfully.");
-
-  router.push({
-    name: "dataset:overview",
-    params: {
-      datasetId: routeParams.datasetId,
-      studyId: routeParams.studyId,
-    },
+  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/description`, {
+    body: JSON.stringify(data),
+    method: "POST",
   });
-};
 
-const onCreate = () => {
-  datasetDescriptions.value.push({
-    id: nanoid(),
-    description: "",
-    type: "Abstract",
-  });
-};
+  if (!response.ok) {
+    push.error("Something went wrong.");
 
-const remove = (id: string) => {
-  const dts: DatasetDescriptions = datasetDescriptions.value;
-
-  const item = dts.find((i) => i.id === id);
-
-  if (item) {
-    dts.splice(dts.indexOf(item), 1);
+    throw new Error("Something went wrong.");
   }
+
+  push.success("Descriptions updated successfully");
+
+  // refresh page
+  router.go(0);
 };
 </script>
 
@@ -96,69 +135,76 @@ const remove = (id: string) => {
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
       title="Descriptions"
-      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
       linkName="dataset:overview"
-      :linkParams="{ datasetId: routeParams.datasetId, studyId: routeParams.studyId }"
+      :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
     />
 
     <n-divider />
 
     <p class="pb-8 pt-2">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, diam id aliquam
-      ultrices, nunc nisl tincidunt nunc, vitae aliquam nunc nisl sit amet nunc.
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+      voluptatem, quibusdam, quos voluptas quae quas voluptatum
     </p>
 
-    <n-list>
-      <n-list-item v-for="description in datasetDescriptions" :key="description.id">
-        <div class="mb-2 mr-5 flex w-full items-start space-x-5">
+    <n-dynamic-input
+      v-model:value="datasetDescriptions"
+      :on-create="onCreate"
+      :on-remove="onRemove"
+      class="my-5"
+    >
+      <template #default="{ value }">
+        <div class="mb-2 mr-5 flex w-full items-center space-x-5">
           <div class="flex w-full flex-col space-y-2">
-            <span class="font-semibold"> Description </span>
+            <span> Description </span>
 
-            <n-input
-              v-model:value="description.description"
-              size="large"
-              type="textarea"
-              rows="1"
-            />
+            <n-input v-model:value="value.description" size="large" type="textarea" rows="1" />
           </div>
 
           <div class="flex w-full flex-col space-y-2">
-            <span class="font-semibold"> Type </span>
-
+            <span> Type </span>
             <n-select
-              v-model:value="description.type"
+              v-model:value="value.type"
               :options="descriptionTypeOptions"
               size="large"
+              placeholder="Abstract"
             />
           </div>
-
-          <div class="flex flex-col space-y-3">
-            <span> &nbsp; </span>
-
-            <n-button @click="remove(description.id)">
-              <f-icon icon="gridicons:trash" />
-            </n-button>
-          </div>
         </div>
-      </n-list-item>
-    </n-list>
-
-    <n-button @click="onCreate" class="my-10" dashed type="info">
-      <template #icon>
-        <f-icon icon="gridicons:create" />
       </template>
 
-      Add a new description
-    </n-button>
+      <template #action="{ index, create, remove }">
+        <div class="flex items-end space-x-2 pb-3">
+          <n-popover trigger="hover">
+            <template #trigger>
+              <n-button @click="() => create(index)">
+                <f-icon icon="gridicons:create" />
+              </n-button>
+            </template>
+
+            <span>Add a new description</span>
+          </n-popover>
+
+          <n-popconfirm @positive-click="remove(index)">
+            <template #trigger>
+              <n-button type="error">
+                <f-icon icon="gridicons:trash" />
+              </n-button>
+            </template>
+
+            Are you sure you want to remove this description?
+          </n-popconfirm>
+        </div>
+      </template>
+    </n-dynamic-input>
 
     <n-divider />
 
     <div class="flex justify-start">
-      <n-button size="large" type="primary" @click="updateDatasetDescriptions">
+      <n-button size="large" type="primary" @click="updateDatasetDescription">
         <template #icon>
           <f-icon icon="material-symbols:save" />
         </template>
-
         Save changes
       </n-button>
     </div>
