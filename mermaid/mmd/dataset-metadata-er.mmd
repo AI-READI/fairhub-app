@@ -1,9 +1,9 @@
 erDiagram
-      DATASET_ALTERNATE_IDENTIFIER {
+      DATASET_ALTERNATIVE_IDENTIFIER {
         string id PK "UUIDv4"
         string dataset_id FK "DATASET.id"
         string identifier
-        string identifier_type "NULLABLE"
+        string type "NULLABLE"
         timestamp created_at
     }
 
@@ -83,7 +83,7 @@ erDiagram
         string id PK "UUIDv4"
         string dataset_id FK "DATASET.id"
         string description
-        string description_type "NULLABLE"
+        string type "NULLABLE"
         timestamp created_at
     }
 
@@ -191,7 +191,7 @@ erDiagram
         string edition
     }
 
-    DATASET_ALTERNATE_IDENTIFIER }o--|| DATASET : "is identified by"
+    DATASET_ALTERNATIVE_IDENTIFIER }o--|| DATASET : "is identified by"
     DATASET_TITLE }o--|| DATASET : "has title"
     DATASET_DESCRIPTION }o--|| DATASET : "has description"
     DATASET_CONTRIBUTOR }o--|| DATASET : "has contributor"

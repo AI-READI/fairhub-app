@@ -30,6 +30,16 @@ const dataset_description = [
   },
 ];
 
+const dataset_alternative_identifier = [
+  {
+    id: nanoid(),
+    created_at: "1696375695",
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    identifier: "10.1038/s41597-023-02463-x",
+    type: "doi",
+  },
+];
+
 const init = async () => {
   const server = Hapi.server({
     host: "localhost",
@@ -87,10 +97,7 @@ const init = async () => {
   server.route({
     path: "/api/study/{studyid}/dataset",
     handler: (request, h) => {
-      console.log(request.payload);
       const { title, description } = request.payload;
-
-      console.log(title, description, request.payload, request.payload.title);
 
       const dataset_id = nanoid();
 
@@ -143,6 +150,153 @@ const init = async () => {
       return h.response({ ...dataset, title, description }).code(200);
     },
     method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/alternative-identifier",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      const alternative_identifiers = dataset_alternative_identifier.filter(
+        (identifier) => identifier.dataset_id === datasetid
+      );
+
+      if (!alternative_identifiers) {
+        return h.response({ message: "Dataset not found" }).code(404);
+      }
+
+      return h.response(alternative_identifiers).code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/alternative-identifier",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      // const requestPayload = request.payload;
+      const payload = JSON.parse(request.payload);
+
+      for (const item of payload) {
+        if ("id" in item) {
+          const alternative_identifier = dataset_alternative_identifier.find(
+            (identifier) => item.id === identifier.id
+          );
+
+          if (!alternative_identifier) {
+            return h.response({ message: "Alternative identifier not found" }).code(404);
+          }
+
+          alternative_identifier.identifier = item.identifier;
+          alternative_identifier.type = item.type;
+        } else {
+          dataset_alternative_identifier.push({
+            id: nanoid(),
+            created_at: Date.now() / 1000,
+            dataset_id: datasetid,
+            identifier: item.identifier,
+            type: item.type,
+          });
+        }
+      }
+
+      return h.response({ message: "Alternative identifiers updated" }).code(200);
+    },
+    method: "POST",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/alternative-identifier/{identifierid}",
+    handler: (request, h) => {
+      const { datasetid, identifierid } = request.params;
+
+      const alternative_identifier = dataset_alternative_identifier.find(
+        (identifier) => identifier.id === identifierid
+      );
+
+      if (!alternative_identifier) {
+        return h.response({ message: "Alternative identifier not found" }).code(404);
+      }
+
+      // remove alternative identifier
+      dataset_alternative_identifier.splice(
+        dataset_alternative_identifier.indexOf(alternative_identifier),
+        1
+      );
+
+      return h.response(alternative_identifier).code(200);
+    },
+    method: "DELETE",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/title",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      const titles = dataset_title.filter((title) => title.dataset_id === datasetid);
+
+      if (!titles) {
+        return h.response({ message: "Dataset not found" }).code(404);
+      }
+
+      return h.response(titles).code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/title",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      // const requestPayload = request.payload;
+      const payload = JSON.parse(request.payload);
+
+      for (const item of payload) {
+        if ("id" in item) {
+          const title = dataset_title.find((title) => item.id === title.id);
+
+          if (!title) {
+            return h.response({ message: "title not found" }).code(404);
+          }
+
+          title.title = item.title;
+          title.type = item.type;
+        } else {
+          dataset_title.push({
+            id: nanoid(),
+            title: item.title,
+            created_at: Date.now() / 1000,
+            dataset_id: datasetid,
+            type: item.type,
+          });
+        }
+      }
+
+      return h.response({ message: "titles updated" }).code(200);
+    },
+    method: "POST",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/title/{titleid}",
+    handler: (request, h) => {
+      const { titleid } = request.params;
+
+      const title = dataset_title.find((title) => title.id === titleid);
+
+      if (!title) {
+        return h.response({ message: "title not found" }).code(404);
+      }
+
+      // remove alternative identifier
+      dataset_title.splice(dataset_title.indexOf(title), 1);
+
+      return h.response(title).code(200);
+    },
+    method: "DELETE",
   });
 
   await server.start();

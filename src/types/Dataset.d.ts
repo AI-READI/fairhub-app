@@ -9,6 +9,7 @@ export interface Dataset {
 export interface DatasetTitle {
   id: string;
   title: string;
+  origin: string;
   type: "MainTitle" | "AlternativeTitle" | "Subtitle" | "TranslatedTitle" | "Other";
 }
 
@@ -17,6 +18,7 @@ export interface DatasetTitles extends Array<DatasetTitle> {}
 export interface DatasetIdentifier {
   id: string;
   identifier: string;
+  origin: string;
   type:
     | "ark"
     | "arxiv"
