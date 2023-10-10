@@ -33,9 +33,10 @@ const rules: FormRules = {
   },
 };
 
-onBeforeMount(async () => {
-  // userStore.fetchProfile();
+const loading = ref(false);
+const push = usePush();
 
+onBeforeMount(async () => {
   const response = await fetch(`${baseURL}/user/profile`, {
     method: "GET",
   });
@@ -54,6 +55,8 @@ const updateProfile = (e: MouseEvent) => {
 
   userFormRef.value?.validate(async (errors) => {
     if (!errors) {
+      loading.value = true;
+
       const response = await fetch(`${baseURL}/user/profile`, {
         body: JSON.stringify(userProfile.value),
         headers: {
@@ -62,9 +65,17 @@ const updateProfile = (e: MouseEvent) => {
         method: "PUT",
       });
 
+      loading.value = false;
       if (!response.ok) {
+        push.error({
+          title: "Error",
+          message: "There was an error updating your profile",
+        });
         throw new Error("User not found");
       }
+      push.success({
+        title: "User Profile Updated",
+      });
     } else {
       console.log("There was an error");
       console.log(errors);
@@ -172,7 +183,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
           </n-form-item>
 
           <div class="flex justify-start">
-            <n-button type="primary" size="large" @click="updateProfile">
+            <n-button type="primary" size="large" @click="updateProfile" :loading="loading">
               <template #icon>
                 <f-icon icon="material-symbols:save" />
               </template>
