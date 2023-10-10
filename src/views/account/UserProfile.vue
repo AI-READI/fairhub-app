@@ -31,31 +31,6 @@ const rules: FormRules = {
     required: true,
     trigger: ["blur", "input"],
   },
-  first_name: {
-    message: "Please enter your first name",
-    required: true,
-    trigger: ["blur", "input"],
-  },
-  institution: {
-    message: "Please enter your institution",
-    required: true,
-    trigger: ["blur", "input"],
-  },
-  last_name: {
-    message: "Please enter your last name",
-    required: true,
-    trigger: ["blur", "input"],
-  },
-  location: {
-    message: "Please enter your location",
-    required: true,
-    trigger: ["blur", "input"],
-  },
-  timezone: {
-    message: "Please select a timezone",
-    required: true,
-    trigger: ["blur", "input"],
-  },
 };
 
 onBeforeMount(async () => {
@@ -71,22 +46,14 @@ onBeforeMount(async () => {
 
   const user = await response.json();
 
-  console.log("response user", user);
-
   userProfile.value = user as UserProfile;
-
-  console.log("profile", userProfile);
 });
 
 const updateProfile = (e: MouseEvent) => {
   e.preventDefault();
-  console.log("update profile", userProfile.value);
-  console.log(userProfile.value.last_name.length > 0);
-  console.log(userFormRef.value);
+
   userFormRef.value?.validate(async (errors) => {
     if (!errors) {
-      // simple replace for now
-      console.log("before sending", userProfile.value);
       const response = await fetch(`${baseURL}/user/profile`, {
         body: JSON.stringify(userProfile.value),
         headers: {
