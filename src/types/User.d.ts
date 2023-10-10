@@ -8,7 +8,6 @@ export interface UserProfile {
   password: string;
   profile_image: string;
   timezone: string;
-  value: UserProfile;
 }
 
 export interface User {

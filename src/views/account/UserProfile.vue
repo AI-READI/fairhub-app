@@ -1,28 +1,103 @@
 <script setup lang="ts">
 import type { FormInst, UploadFileInfo } from "naive-ui";
-import { ref, toRaw } from "vue";
+import { ref } from "vue";
 
-import { useUserStore } from "@/stores/user";
+import { UserProfile } from "@/types/User";
+import { baseURL } from "@/utils/constants";
 import { timezones } from "@/utils/constants";
 
 const userFormRef = ref<FormInst | null>(null);
 
-const userStore = useUserStore();
+const userProfile = ref<UserProfile>({
+  username: "",
+  email_address: "",
+  first_name: "",
+  institution: "",
+  last_name: "",
+  location: "",
+  password: "",
+  profile_image: "",
+  timezone: "",
+});
 
-const userProfile = userStore.profile;
+const rules: FormRules = {
+  username: {
+    message: "Please enter a username",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+  email_address: {
+    message: "Please enter an email address",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+  first_name: {
+    message: "Please enter your first name",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+  institution: {
+    message: "Please enter your institution",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+  last_name: {
+    message: "Please enter your last name",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+  location: {
+    message: "Please enter your location",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+  timezone: {
+    message: "Please select a timezone",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+};
 
-onBeforeMount(() => {
-  userStore.fetchProfile();
+onBeforeMount(async () => {
+  // userStore.fetchProfile();
+
+  const response = await fetch(`${baseURL}/user/profile`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error("User not found");
+  }
+
+  const user = await response.json();
+
+  console.log("response user", user);
+
+  userProfile.value = user as UserProfile;
+
+  console.log("profile", userProfile);
 });
 
 const updateProfile = (e: MouseEvent) => {
   e.preventDefault();
-
-  userFormRef.value?.validate((errors) => {
+  console.log("update profile", userProfile.value);
+  console.log(userProfile.value.last_name.length > 0);
+  console.log(userFormRef.value);
+  userFormRef.value?.validate(async (errors) => {
     if (!errors) {
       // simple replace for now
-      userStore.profile = toRaw(userProfile);
-      userStore.updateProfile(userProfile);
+      console.log("before sending", userProfile.value);
+      const response = await fetch(`${baseURL}/user/profile`, {
+        body: JSON.stringify(userProfile.value),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PUT",
+      });
+
+      if (!response.ok) {
+        throw new Error("User not found");
+      }
     } else {
       console.log("There was an error");
       console.log(errors);
@@ -45,7 +120,7 @@ const file2Base64 = (file: File): Promise<string> => {
 
 async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileInfo[] }) {
   if (!file.file) return;
-  userProfile.profile_image = await file2Base64(file.file);
+  userProfile.value.profile_image = await file2Base64(file.file);
 }
 </script>
 
@@ -57,12 +132,23 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
 
     <div class="flex w-full space-x-10">
       <div class="w-full max-w-screen-md px-2">
-        <n-form ref="userFormRef" size="large" label-placement="top">
+        <n-form
+          ref="userFormRef"
+          size="large"
+          label-placement="top"
+          :rules="rules"
+          :model="userProfile"
+        >
           <n-form-item label="Username" path="username">
-            <n-input v-model:value="userProfile.username" placeholder="loid.forger" type="text" />
+            <n-input
+              v-model:value="userProfile.username"
+              placeholder="loid.forger"
+              type="text"
+              disabled
+            />
           </n-form-item>
 
-          <n-form-item label="Email Address" path="email">
+          <n-form-item label="Email Address" path="email_address">
             <n-input
               v-model:value="userProfile.email_address"
               placeholder="loid.forger@ucsd.edu"
@@ -72,7 +158,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
             />
           </n-form-item>
 
-          <n-form-item label="First Name" path="firstname">
+          <n-form-item label="First Name" path="first_name">
             <n-input
               v-model:value="userProfile.first_name"
               type="text"
@@ -80,7 +166,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
               clearable
             />
           </n-form-item>
-          <n-form-item label="Last Name" path="lastname">
+          <n-form-item label="Last Name" path="last_name">
             <n-input
               v-model:value="userProfile.last_name"
               type="text"
@@ -94,11 +180,17 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
               v-model:value="userProfile.institution"
               placeholder="University of California, Santa Diego"
               type="text"
+              clearable
             />
           </n-form-item>
 
-          <n-form-item label="Location" path="Location">
-            <n-input v-model:value="userProfile.location" placeholder="San Diego, CA" type="text" />
+          <n-form-item label="Location" path="location">
+            <n-input
+              v-model:value="userProfile.location"
+              placeholder="San Diego, CA"
+              type="text"
+              clearable
+            />
           </n-form-item>
 
           <n-form-item label="Timezone" path="timezone">
