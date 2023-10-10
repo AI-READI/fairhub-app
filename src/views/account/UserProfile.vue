@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { FormInst, UploadFileInfo } from "naive-ui";
-import { ref } from "vue";
 
-import { UserProfile } from "@/types/User";
+import type { UserProfile } from "@/types/User";
 import { baseURL } from "@/utils/constants";
 import { timezones } from "@/utils/constants";
+
+const loading = ref(false);
+const push = usePush();
 
 const userFormRef = ref<FormInst | null>(null);
 
@@ -33,15 +35,13 @@ const rules: FormRules = {
   },
 };
 
-const loading = ref(false);
-const push = usePush();
-
 onBeforeMount(async () => {
   const response = await fetch(`${baseURL}/user/profile`, {
     method: "GET",
   });
 
   if (!response.ok) {
+    push.error("Something went wrong");
     throw new Error("User not found");
   }
 
@@ -64,10 +64,7 @@ const updateProfile = (e: MouseEvent) => {
 
       loading.value = false;
       if (!response.ok) {
-        push.error({
-          title: "Error",
-          message: "There was an error updating your profile",
-        });
+        push.error("Something went wrong");
         throw new Error("User not found");
       }
       push.success("User Profile Updated");
@@ -151,7 +148,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
           <n-form-item label="Institution" path="institution">
             <n-input
               v-model:value="userProfile.institution"
-              placeholder="University of California, Santa Diego"
+              placeholder="University of California, San Diego"
               type="text"
               clearable
             />
