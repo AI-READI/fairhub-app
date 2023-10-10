@@ -1,23 +1,73 @@
 <script setup lang="ts">
 import type { FormInst, UploadFileInfo } from "naive-ui";
-import { ref, toRaw } from "vue";
 
-import { useUserStore } from "@/stores/user";
+import type { UserProfile } from "@/types/User";
+import { baseURL } from "@/utils/constants";
 import { timezones } from "@/utils/constants";
+
+const loading = ref(false);
+const push = usePush();
 
 const userFormRef = ref<FormInst | null>(null);
 
-const userStore = useUserStore();
+const userProfile = ref<UserProfile>({
+  username: "",
+  email_address: "",
+  first_name: "",
+  institution: "",
+  last_name: "",
+  location: "",
+  password: "",
+  profile_image: "",
+  timezone: "",
+});
 
-const userProfile = userStore.profile;
+const rules: FormRules = {
+  username: {
+    message: "Please enter a username",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+  email_address: {
+    message: "Please enter an email address",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+};
+
+onBeforeMount(async () => {
+  const response = await fetch(`${baseURL}/user/profile`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    push.error("Something went wrong");
+    throw new Error("User not found");
+  }
+
+  const user = await response.json();
+
+  userProfile.value = user as UserProfile;
+});
 
 const updateProfile = (e: MouseEvent) => {
   e.preventDefault();
 
-  userFormRef.value?.validate((errors) => {
+  userFormRef.value?.validate(async (errors) => {
     if (!errors) {
-      // simple replace for now
-      userStore.profile = toRaw(userProfile);
+      loading.value = true;
+
+      const response = await fetch(`${baseURL}/user/profile`, {
+        body: JSON.stringify(userProfile.value),
+        method: "PUT",
+      });
+
+      loading.value = false;
+      if (!response.ok) {
+        push.error("Something went wrong");
+        throw new Error("User not found");
+      }
+      push.success("User Profile Updated");
     } else {
       console.log("There was an error");
       console.log(errors);
@@ -40,7 +90,7 @@ const file2Base64 = (file: File): Promise<string> => {
 
 async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileInfo[] }) {
   if (!file.file) return;
-  userProfile.image = await file2Base64(file.file);
+  userProfile.value.profile_image = await file2Base64(file.file);
 }
 </script>
 
@@ -51,20 +101,26 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
     <n-divider />
 
     <div class="flex w-full space-x-10">
-      <div class="w-full max-w-screen-md px-2">
-        <n-form ref="userFormRef" size="large" label-placement="top">
+      <div class="w-full pl-2 pr-4">
+        <n-form
+          ref="userFormRef"
+          size="large"
+          label-placement="top"
+          :rules="rules"
+          :model="userProfile"
+        >
           <n-form-item label="Username" path="username">
             <n-input
               v-model:value="userProfile.username"
               placeholder="loid.forger"
-              disabled
               type="text"
+              disabled
             />
           </n-form-item>
 
-          <n-form-item label="Email Address" path="email">
+          <n-form-item label="Email Address" path="email_address">
             <n-input
-              v-model:value="userProfile.email"
+              v-model:value="userProfile.email_address"
               placeholder="loid.forger@ucsd.edu"
               clearable
               disabled
@@ -72,11 +128,19 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
             />
           </n-form-item>
 
-          <n-form-item label="Full Name" path="fullname">
+          <n-form-item label="Given Name" path="first_name">
             <n-input
-              v-model:value="userProfile.fullname"
+              v-model:value="userProfile.first_name"
               type="text"
-              placeholder="Loid Forger"
+              placeholder="Loid"
+              clearable
+            />
+          </n-form-item>
+          <n-form-item label="Family Name" path="last_name">
+            <n-input
+              v-model:value="userProfile.last_name"
+              type="text"
+              placeholder="Forger"
               clearable
             />
           </n-form-item>
@@ -84,13 +148,19 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
           <n-form-item label="Institution" path="institution">
             <n-input
               v-model:value="userProfile.institution"
-              placeholder="University of California, Santa Diego"
+              placeholder="University of California, San Diego"
               type="text"
+              clearable
             />
           </n-form-item>
 
-          <n-form-item label="Location" path="Location">
-            <n-input v-model:value="userProfile.location" placeholder="San Diego, CA" type="text" />
+          <n-form-item label="Location" path="location">
+            <n-input
+              v-model:value="userProfile.location"
+              placeholder="San Diego, CA"
+              type="text"
+              clearable
+            />
           </n-form-item>
 
           <n-form-item label="Timezone" path="timezone">
@@ -105,7 +175,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
           </n-form-item>
 
           <div class="flex justify-start">
-            <n-button type="primary" size="large" @click="updateProfile">
+            <n-button type="primary" size="large" @click="updateProfile" :loading="loading">
               <template #icon>
                 <f-icon icon="material-symbols:save" />
               </template>
@@ -116,7 +186,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
         </n-form>
       </div>
 
-      <div class="flex flex-col space-y-5 px-2">
+      <!-- <div class="flex flex-col space-y-5 px-2">
         <n-image width="300" :src="userProfile.image" />
 
         <n-upload accept=".jpeg,.png" directory-dnd @change="onChange" class="mx-auto w-max">
@@ -127,7 +197,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
             </template>
           </n-button>
         </n-upload>
-      </div>
+      </div> -->
     </div>
   </main>
 </template>
