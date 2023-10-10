@@ -59,9 +59,6 @@ const updateProfile = (e: MouseEvent) => {
 
       const response = await fetch(`${baseURL}/user/profile`, {
         body: JSON.stringify(userProfile.value),
-        headers: {
-          "Content-Type": "application/json",
-        },
         method: "PUT",
       });
 
@@ -73,9 +70,7 @@ const updateProfile = (e: MouseEvent) => {
         });
         throw new Error("User not found");
       }
-      push.success({
-        title: "User Profile Updated",
-      });
+      push.success("User Profile Updated");
     } else {
       console.log("There was an error");
       console.log(errors);
@@ -109,7 +104,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
     <n-divider />
 
     <div class="flex w-full space-x-10">
-      <div class="w-full max-w-screen-md px-2">
+      <div class="w-full pl-2 pr-4">
         <n-form
           ref="userFormRef"
           size="large"
@@ -136,19 +131,19 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
             />
           </n-form-item>
 
-          <n-form-item label="First Name" path="first_name">
+          <n-form-item label="Given Name" path="first_name">
             <n-input
               v-model:value="userProfile.first_name"
               type="text"
-              placeholder="Loid Forger"
+              placeholder="Loid"
               clearable
             />
           </n-form-item>
-          <n-form-item label="Last Name" path="last_name">
+          <n-form-item label="Family Name" path="last_name">
             <n-input
               v-model:value="userProfile.last_name"
               type="text"
-              placeholder="Loid Forger"
+              placeholder="Forger"
               clearable
             />
           </n-form-item>
