@@ -9,9 +9,11 @@ export const useUserStore = defineStore("user", () => {
   const profile = ref<UserProfile>({
     username: "",
     email: "",
+    first_name: "",
     fullname: "",
     image: "",
     institution: "",
+    last_name: "",
     location: "",
     password: "",
     timezone: "",
