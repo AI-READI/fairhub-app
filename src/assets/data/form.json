@@ -170,6 +170,223 @@
       "value": "Organizational"
     }
   ],
+  "datasetContributorTypeOptions": [
+    {
+      "label": "Contact Person",
+      "value": "ContactPerson",
+      "description": "Person with knowledge of how to access, troubleshoot, or otherwise field issues related to the resource"
+    },
+    {
+      "label": "Data Collector",
+      "value": "DataCollector",
+      "description": "Person/institution responsible for finding or gathering/collecting data under the guidelines of the author(s) or Principal Investigator (PI)"
+    },
+    {
+      "label": "Data Curator",
+      "value": "DataCurator",
+      "description": "Person tasked with reviewing, enhancing, cleaning, or standardizing metadata and the associated data submitted for storage, use, and maintenance within a data centre or repository"
+    },
+    {
+      "label": "Data Manager",
+      "value": "DataManager",
+      "description": "Person (or organisation with a staff of data managers, such as a data centre) responsible for maintaining the finished resource"
+    },
+    {
+      "label": "Distributor",
+      "value": "Distributor",
+      "description": "Institution tasked with responsibility to generate/disseminate copies of the resource in either electronic or print form"
+    },
+    {
+      "label": "Editor",
+      "value": "Editor",
+      "description": "A person who oversees the details related to the publication format of the resource"
+    },
+    {
+      "label": "Hosting Institution",
+      "value": "HostingInstitution",
+      "description": "Typically, the organisation allowing the resource to be available on the internet through the provision of its hardware/software/operating support"
+    },
+    {
+      "label": "Producer",
+      "value": "Producer",
+      "description": "Typically, a person or organisation responsible for the artistry and form of a media product"
+    },
+    {
+      "label": "Project Leader",
+      "value": "ProjectLeader",
+      "description": "Person officially designated as head of project team or sub-project team instrumental in the work necessary to development of the resource"
+    },
+    {
+      "label": "Project Manager",
+      "value": "ProjectManager",
+      "description": "Person officially designated as manager of a project. Project may consist of one or many project teams and sub-teams."
+    },
+    {
+      "label": "Project Member",
+      "value": "ProjectMember",
+      "description": "Person on the membership list of a designated project/project team"
+    },
+    {
+      "label": "Registration Agency",
+      "value": "RegistrationAgency",
+      "description": "Institution/organisation officially appointed by a Registration Authority to handle specific tasks within a defined area of responsibility"
+    },
+    {
+      "label": "Registration Authority",
+      "value": "RegistrationAuthority",
+      "description": "A standards-setting body from which Registration Agencies obtain official recognition and guidance"
+    },
+    {
+      "label": "Related Person",
+      "value": "RelatedPerson",
+      "description": "A person without a specifically defined role in the development of the resource, but who is someone the author wishes to recognize"
+    },
+    {
+      "label": "Researcher",
+      "value": "Researcher",
+      "description": "A person involved in analysing data or the results of an experiment or formal study. May indicate an intern or assistant to one of the authors who helped with research but who was not so `key” as `o be listed as an author."
+    },
+    {
+      "label": "Research Group",
+      "value": "ResearchGroup",
+      "description": "Typically refers to a group of individuals with a lab, department, or division that has a specifically defined focus of activity."
+    },
+    {
+      "label": "Rights Holder",
+      "value": "RightsHolder",
+      "description": "Person or institution owning or managing property rights, including intellectual property rights over the resource"
+    },
+    {
+      "label": "Sponsor",
+      "value": "Sponsor",
+      "description": "Person or organisation that issued a contract or under the auspices of which a work has been written, printed, published, developed, etc."
+    },
+    {
+      "label": "Supervisor",
+      "value": "Supervisor",
+      "description": "Designated administrator over one or more groups/teams working to produce a resource, or over one or more steps of a development process"
+    },
+    {
+      "label": "Work Package Leader",
+      "value": "WorkPackageLeader",
+      "description": "A Work Package is a recognized data product, not all of which is included in publication. The package, instead, may include notes, discarded documents, etc. The Work Package Leader is"
+    },
+    {
+      "label": "Other",
+      "value": "Other",
+      "description": "Any person or institution making a significant contribution to the development and/or maintenance of the resource, but whose contribution is not adequately described by any of the other values for contributorType"
+    },
+    {
+      "label": "Study Lead",
+      "value": "StudyLead",
+      "description": "The individual who, if not the sponsor themselves, leads and co-ordinates the scientific and clinical activity within a clinical study, including co-ordinating the work of principal investigators at clinical sites. May be known as the Co-ordinating Investigator, the Study Chair, Study Director or similar terms."
+    },
+    {
+      "label": "Clinical Trial Site Principal Investigator",
+      "value": "CTSitePrincipalInvestigator",
+      "description": "The individual responsible for the safe conduct of a clinical trial at a particular clinical site."
+    },
+    {
+      "label": "Clinical Study Manager",
+      "value": "ClinicalStudyManager",
+      "description": "An individual responsible for the operational management of a clinical study. Similar to a Project Manager but a study manager is heavily involved in the management of data and data collection."
+    },
+    {
+      "label": "Trial Sponsor",
+      "value": "TrialSponsor",
+      "description": "The organisation or individual that has the formal, legal role of a clinical trial sponsor, and is legally responsible for all aspects of a clinical trial."
+    },
+    {
+      "label": "Sponsor Contact",
+      "value": "SponsorContact",
+      "description": "An individual representing the sponsor and acting as an initial contact point."
+    },
+    {
+      "label": "Public Contact",
+      "value": "PublicContact",
+      "description": "An individual designated as dealing with non-scientific queries from the public or press."
+    },
+    {
+      "label": "Recruitment Contact",
+      "value": "RecruitmentContact",
+      "description": "An individual designated as providing periodic updates on recruitment information or status, at all sites, usually for monitoring purposes."
+    },
+    {
+      "label": "Study Funder",
+      "value": "StudyFunder",
+      "description": "An organisation providing some or all of the additional funds required for the study."
+    },
+    {
+      "label": "Funder Contact",
+      "value": "FunderContact",
+      "description": "An individual representing the funder and acting as an initial contact point."
+    },
+    {
+      "label": "Independent Monitoring Committee Member",
+      "value": "IndependentMonitoringCommitteeMember",
+      "description": "A member of a safety monitoring committee for a clinical trial, independent of the researchers and research activity."
+    },
+    {
+      "label": "Medicinal Product Supplier",
+      "value": "MedicinalProductSupplier",
+      "description": "Organisation that provides one or more of the medicines investigated in a clinical study."
+    },
+    {
+      "label": "Medical Device Supplier",
+      "value": "MedicalDeviceSupplier",
+      "description": "Organisation that provides one or more of the medical devices in a clinical study."
+    },
+    {
+      "label": "Logistics Support Organisation",
+      "value": "LogisticsSupportOrganisation",
+      "description": "Organisation that provides logistical input, e.g. provides a drug distribution service."
+    },
+    {
+      "label": "Scientific Support Organisation",
+      "value": "ScientificSupportOrganisation",
+      "description": "Organisation that provides scientific support, e.g. a national or international research network."
+    },
+    {
+      "label": "Central Laboratory",
+      "value": "CentralLaboratory",
+      "description": "Organisation that provides a central specialist laboratory testing facility.."
+    },
+    {
+      "label": "Central Imaging Facility",
+      "value": "CentralImagingFacility",
+      "description": "Organisation that provides a central specialist imaging or scanning facility."
+    },
+    {
+      "label": "Clinical Organisation",
+      "value": "ClinicalOrganisation",
+      "description": "Organisation, usually a primary or secondary health care organisation, that manages one or more of the sites where a clinical study takes place."
+    },
+    {
+      "label": "Clinical Site",
+      "value": "ClinicalSite",
+      "description": "Organisation or location, usually in a primary or secondary health care organisation, that is one of the sites where a clinical study takes place."
+    },
+    {
+      "label": "Collaborating Organisation",
+      "value": "CollaboratingOrganisation",
+      "description": "May be listed as a secondary sponsor, an organisation other than the lead sponsor involved in supporting a study."
+    },
+    {
+      "label": "Sponsor Investigator",
+      "value": "SponsorInvestigator",
+      "description": "An individual with the role of sponsor as well as being the co-ordinating investigator for the study."
+    },
+    {
+      "label": "Results Contact",
+      "value": "ResultsContact",
+      "description": "The individual, occasionally organisation, to be contacted for further information on the study results."
+    },
+    {
+      "label": "Research Group Member",
+      "value": "ResearchGroupMember",
+      "description": "From PubMed, an 'investigator' is an individual (e.g., collaborator or investigator) who is not an author of a paper but is listed as a member of a collective/corporate group that is an author of the paper."
+    }
+  ],
   "studyMetadataIdentificationPrimaryIdentifierTypeOptions": [
     {
       "label": "NIH Grant Number",

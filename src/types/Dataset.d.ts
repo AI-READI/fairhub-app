@@ -79,3 +79,19 @@ export interface DatasetCreator {
 export interface DatasetCreators {
   creators: DatasetCreator[];
 }
+
+export interface DatasetContributor {
+  id: string;
+  name: string;
+  affiliations: DatasetPersonAffiliation[];
+  contributor_type: string;
+  name_identifier: string;
+  name_identifier_scheme: string;
+  name_identifier_scheme_uri: string;
+  name_type: "Personal" | "Organizational";
+  origin: string;
+}
+
+export interface DatasetContributors {
+  contributors: DatasetContributor[];
+}

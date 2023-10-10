@@ -256,7 +256,7 @@ const saveMetadata = (e: MouseEvent) => {
             <n-form-item
               ignore-path-change
               label="Identifier"
-              :path="`creators[${index}].creators[${idx}]`"
+              :path="`creators[${index}].affiliations[${idx}]`"
               class="w-full"
             >
               <n-input
@@ -269,7 +269,7 @@ const saveMetadata = (e: MouseEvent) => {
             <n-form-item
               ignore-path-change
               label="Scheme"
-              :path="`creators[${index}].creators[${idx}]`"
+              :path="`creators[${index}].affiliations[${idx}]`"
               class="ml-3 w-full"
             >
               <n-input
@@ -282,7 +282,7 @@ const saveMetadata = (e: MouseEvent) => {
             <n-form-item
               ignore-path-change
               label="Scheme URI"
-              :path="`creators[${index}].creators[${idx}]`"
+              :path="`creators[${index}].affiliations[${idx}]`"
               class="ml-3 w-full"
             >
               <n-input

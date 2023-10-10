@@ -60,6 +60,27 @@ const dataset_creator = [
   },
 ];
 
+const dataset_contributor = [
+  {
+    id: nanoid(),
+    name: "Samuel L. Jackson",
+    affiliations: [
+      {
+        identifier: "0156zyn36",
+        scheme: "ROR",
+        scheme_uri: "https://ror.org/",
+      },
+    ],
+    contributor_type: "ContactPerson",
+    created_at: "1696375695",
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    name_identifier: "0000-0001-5109-3700",
+    name_identifier_scheme: "ORCID",
+    name_identifier_scheme_uri: "https://orcid.org/",
+    name_type: "Personal",
+  },
+];
+
 const init = async () => {
   const server = Hapi.server({
     host: "localhost",
@@ -469,6 +490,85 @@ const init = async () => {
       dataset_creator.splice(dataset_creator.indexOf(creator), 1);
 
       return h.response(creator).code(200);
+    },
+    method: "DELETE",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/contributor",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      const contributors = dataset_contributor.filter(
+        (contributor) => contributor.dataset_id === datasetid
+      );
+
+      return h.response(contributors).code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/contributor",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      // const requestPayload = request.payload;
+      const payload = JSON.parse(request.payload);
+
+      for (const item of payload) {
+        if ("id" in item) {
+          const contributor = dataset_contributor.find((contributor) => item.id === contributor.id);
+
+          if (!contributor) {
+            return h.response({ message: "contributor not found" }).code(404);
+          }
+
+          contributor.name = item.name;
+          contributor.name_type = item.name_type;
+          contributor.contributor_type = item.contributor_type;
+          contributor.name_identifier = item.name_identifier;
+          contributor.name_identifier_scheme = item.name_identifier_scheme;
+          contributor.name_identifier_scheme_uri = item.name_identifier_scheme_uri;
+          contributor.affiliations = item.affiliations;
+        } else {
+          dataset_contributor.push({
+            id: nanoid(),
+            name: item.name,
+            affiliations: item.affiliations,
+            contributor_type: item.contributor_type,
+            created_at: Date.now() / 1000,
+            dataset_id: datasetid,
+            name_identifier: item.name_identifier,
+            name_identifier_scheme: item.name_identifier_scheme,
+            name_identifier_scheme_uri: item.name_identifier_scheme_uri,
+            name_type: item.name_type,
+          });
+        }
+      }
+
+      return h.response({ message: "contributors updated" }).code(200);
+    },
+    method: "POST",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/contributor/{contributorid}",
+    handler: (request, h) => {
+      const { contributorid } = request.params;
+
+      const contributor = dataset_contributor.find(
+        (contributor) => contributor.id === contributorid
+      );
+
+      if (!contributor) {
+        return h.response({ message: "contributor not found" }).code(404);
+      }
+
+      // remove alternative identifier
+      dataset_contributor.splice(dataset_contributor.indexOf(contributor), 1);
+
+      return h.response(contributor).code(200);
     },
     method: "DELETE",
   });
