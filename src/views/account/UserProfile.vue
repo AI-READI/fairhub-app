@@ -9,7 +9,8 @@ const userFormRef = ref<FormInst | null>(null);
 
 const userStore = useUserStore();
 
-const userProfile = userStore.profile;
+const userProfile = userStore.fetchProfile();
+console.log(userProfile);
 
 const updateProfile = (e: MouseEvent) => {
   e.preventDefault();
