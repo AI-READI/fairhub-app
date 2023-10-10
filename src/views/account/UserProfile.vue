@@ -8,8 +8,10 @@ import { timezones } from "@/utils/constants";
 const userFormRef = ref<FormInst | null>(null);
 
 const userStore = useUserStore();
+userStore.fetchProfile();
 
-const userProfile = userStore.fetchProfile();
+const userProfile = userStore.profile;
+
 console.log(userProfile);
 
 const updateProfile = (e: MouseEvent) => {

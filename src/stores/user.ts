@@ -35,7 +35,7 @@ export const useUserStore = defineStore("user", () => {
     profile.value = user as UserProfile;
 
     loading.value = false;
-
+    console.log("profile", profile);
     return profile;
   };
 

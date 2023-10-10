@@ -1,9 +1,11 @@
 export interface UserProfile {
   username: string;
   email: string;
+  first_name: string;
   fullname: string;
   image: string;
   institution: string;
+  last_name: string;
   location: string;
   password: string;
   timezone: string;
