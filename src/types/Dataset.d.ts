@@ -58,3 +58,24 @@ export interface DatasetDescription {
 }
 
 export interface DatasetDescriptions extends Array<DatasetDescription> {}
+
+export interface DatasetPersonAffiliation {
+  identifier: string;
+  scheme: string;
+  scheme_uri: string;
+}
+
+export interface DatasetCreator {
+  id: string;
+  name: string;
+  affiliations: DatasetPersonAffiliation[];
+  name_identifier: string;
+  name_identifier_scheme: string;
+  name_identifier_scheme_uri: string;
+  name_type: "Personal" | "Organizational";
+  origin: string;
+}
+
+export interface DatasetCreators {
+  creators: DatasetCreator[];
+}

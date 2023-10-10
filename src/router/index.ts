@@ -20,6 +20,7 @@ import DatasetMetadataOther from "@/views/study/dataset/metadata/about/DatasetMe
 import DatasetMetadataAccess from "@/views/study/dataset/metadata/access/DatasetMetadataAccess.vue";
 import DatasetMetadataConsent from "@/views/study/dataset/metadata/consent/DatasetMetadataConsent.vue";
 import DatasetMetadataContributors from "@/views/study/dataset/metadata/contributors/DatasetMetadataContributors.vue";
+import DatasetMetadataCreator from "@/views/study/dataset/metadata/creators/DatasetMetadataCreator.vue";
 import DatasetMetadataDates from "@/views/study/dataset/metadata/dates/DatasetMetadataDates.vue";
 import DatasetMetadataDeIdentification from "@/views/study/dataset/metadata/deidentification/DatasetMetadataDeIdentification.vue";
 import DatasetMetadataDescriptions from "@/views/study/dataset/metadata/descriptions/DatasetMetadataDescriptions.vue";
@@ -200,6 +201,11 @@ const router = createRouter({
                       name: "dataset:metadata:contributors",
                       path: "contributors",
                       component: DatasetMetadataContributors,
+                    },
+                    {
+                      name: "dataset:metadata:creators",
+                      path: "creators",
+                      component: DatasetMetadataCreator,
                     },
                     {
                       name: "dataset:metadata:dates",

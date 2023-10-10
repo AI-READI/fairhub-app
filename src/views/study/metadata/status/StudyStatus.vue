@@ -17,7 +17,7 @@ const moduleData = ref<StudyStatusModule>({
   completion_date: null,
   completion_date_type: null,
   overall_status: null,
-  start_date: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+  start_date: null,
   start_date_type: null,
   why_stopped: "",
 });

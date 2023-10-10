@@ -160,6 +160,16 @@
       "value": "Other"
     }
   ],
+  "datasetNameTypeOptions": [
+    {
+      "label": "Personal",
+      "value": "Personal"
+    },
+    {
+      "label": "Organizational",
+      "value": "Organizational"
+    }
+  ],
   "studyMetadataIdentificationPrimaryIdentifierTypeOptions": [
     {
       "label": "NIH Grant Number",

@@ -25,17 +25,11 @@ erDiagram
         string name_identifier_scheme_uri
         boolean creator "true if creator, false if contributor"
         string contributor_type "NULLABLE | required if contributor"
+        json affiliations "[{identifier: 'x', scheme: 'x', scheme_uri: 'x'}, ...}]"
         timestamp created_at
     }
 
-    DATASET_CONTRIBUTOR_AFFILIATION {
-        string id PK "UUIDv4"
-        string contributor_id FK "DATASET_CONTRIBUTOR.id"
-        string identifier 
-        string identifier_scheme
-        string identifier_scheme_uri
-        timestamp created_at
-    }
+
 
     DATASET_DATE {
         string id PK "UUIDv4"
@@ -195,7 +189,6 @@ erDiagram
     DATASET_TITLE }o--|| DATASET : "has title"
     DATASET_DESCRIPTION }o--|| DATASET : "has description"
     DATASET_CONTRIBUTOR }o--|| DATASET : "has contributor"
-    DATASET_CONTRIBUTOR_AFFILIATION }o--|| DATASET_CONTRIBUTOR : "has affiliation"
     DATASET_DATE }o--|| DATASET : "has date"
     DATASET_RECORD_KEYS ||--|| DATASET : "has record key"
     DATASET_DE_IDENT_LEVEL ||--|| DATASET : "has deidentification level"
