@@ -1,14 +1,14 @@
 export interface UserProfile {
   username: string;
-  email: string;
+  email_address: string;
   first_name: string;
-  fullname: string;
-  image: string;
   institution: string;
   last_name: string;
   location: string;
   password: string;
+  profile_image: string;
   timezone: string;
+  value: UserProfile;
 }
 
 export interface User {

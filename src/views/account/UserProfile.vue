@@ -8,11 +8,12 @@ import { timezones } from "@/utils/constants";
 const userFormRef = ref<FormInst | null>(null);
 
 const userStore = useUserStore();
-userStore.fetchProfile();
 
 const userProfile = userStore.profile;
 
-console.log(userProfile);
+onBeforeMount(() => {
+  userStore.fetchProfile();
+});
 
 const updateProfile = (e: MouseEvent) => {
   e.preventDefault();
@@ -21,6 +22,7 @@ const updateProfile = (e: MouseEvent) => {
     if (!errors) {
       // simple replace for now
       userStore.profile = toRaw(userProfile);
+      userStore.updateProfile(userProfile);
     } else {
       console.log("There was an error");
       console.log(errors);
@@ -43,7 +45,7 @@ const file2Base64 = (file: File): Promise<string> => {
 
 async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileInfo[] }) {
   if (!file.file) return;
-  userProfile.image = await file2Base64(file.file);
+  userProfile.profile_image = await file2Base64(file.file);
 }
 </script>
 
@@ -57,17 +59,12 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
       <div class="w-full max-w-screen-md px-2">
         <n-form ref="userFormRef" size="large" label-placement="top">
           <n-form-item label="Username" path="username">
-            <n-input
-              v-model:value="userProfile.username"
-              placeholder="loid.forger"
-              disabled
-              type="text"
-            />
+            <n-input v-model:value="userProfile.username" placeholder="loid.forger" type="text" />
           </n-form-item>
 
           <n-form-item label="Email Address" path="email">
             <n-input
-              v-model:value="userProfile.email"
+              v-model:value="userProfile.email_address"
               placeholder="loid.forger@ucsd.edu"
               clearable
               disabled
@@ -75,9 +72,17 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
             />
           </n-form-item>
 
-          <n-form-item label="Full Name" path="fullname">
+          <n-form-item label="First Name" path="firstname">
             <n-input
-              v-model:value="userProfile.fullname"
+              v-model:value="userProfile.first_name"
+              type="text"
+              placeholder="Loid Forger"
+              clearable
+            />
+          </n-form-item>
+          <n-form-item label="Last Name" path="lastname">
+            <n-input
+              v-model:value="userProfile.last_name"
               type="text"
               placeholder="Loid Forger"
               clearable
@@ -119,7 +124,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
         </n-form>
       </div>
 
-      <div class="flex flex-col space-y-5 px-2">
+      <!-- <div class="flex flex-col space-y-5 px-2">
         <n-image width="300" :src="userProfile.image" />
 
         <n-upload accept=".jpeg,.png" directory-dnd @change="onChange" class="mx-auto w-max">
@@ -130,7 +135,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
             </template>
           </n-button>
         </n-upload>
-      </div>
+      </div> -->
     </div>
   </main>
 </template>

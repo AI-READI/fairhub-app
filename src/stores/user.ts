@@ -8,21 +8,21 @@ export const useUserStore = defineStore("user", () => {
 
   const profile = ref<UserProfile>({
     username: "",
-    email: "",
+    email_address: "",
     first_name: "",
-    fullname: "",
-    image: "",
     institution: "",
     last_name: "",
     location: "",
     password: "",
+    profile_image: "",
     timezone: "",
+    value: undefined,
   });
 
   const fetchProfile = async () => {
     loading.value = true;
 
-    const response = await fetch(`${baseURL}/profile`, {
+    const response = await fetch(`${baseURL}/user/profile`, {
       method: "GET",
     });
 
@@ -41,16 +41,31 @@ export const useUserStore = defineStore("user", () => {
     return profile;
   };
 
-  // const profile = {
-  //   username: "admin",
-  //   email: "aydan.gasimova2@gmail.com",
-  //   fullname: "Aydan Gasimova",
-  //   image: ` https://api.dicebear.com/5.x/shapes/svg?seed=${Math.random()}`,
-  //   institution: "CALMI2",
-  //   location: "San Diego, CA",
-  //   password: "admin",
-  //   timezone: "America/Los_Angeles",
-  // };
+  const updateProfile = async (profile: UserProfile) => {
+    loading.value = true;
 
-  return { fetchProfile, loading, profile };
+    const response = await fetch(`${baseURL}/user/profile`, {
+      body: JSON.stringify(profile),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "PUT",
+    });
+
+    if (!response.ok) {
+      throw new Error("User not found");
+    }
+
+    const user = await response.json();
+
+    console.log("response user", user);
+
+    profile.value = user as UserProfile;
+
+    loading.value = false;
+    console.log("profile", profile);
+    return profile;
+  };
+
+  return { fetchProfile, loading, profile, updateProfile };
 });
