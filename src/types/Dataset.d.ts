@@ -60,6 +60,7 @@ export interface DatasetDescription {
 export interface DatasetDescriptions extends Array<DatasetDescription> {}
 
 export interface DatasetPersonAffiliation {
+  name: string;
   identifier: string;
   scheme: string;
   scheme_uri: string;
@@ -94,4 +95,12 @@ export interface DatasetContributor {
 
 export interface DatasetContributors {
   contributors: DatasetContributor[];
+}
+
+export interface DatasetDate {
+  id: string;
+  date: string;
+  information: string;
+  origin: string;
+  type: string;
 }

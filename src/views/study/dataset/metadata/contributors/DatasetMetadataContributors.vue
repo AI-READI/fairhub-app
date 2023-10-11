@@ -101,11 +101,16 @@ const saveMetadata = (e: MouseEvent) => {
         const entry = {
           name: item.name,
           affiliations: item.affiliations,
+          contributor_type: item.contributor_type,
           name_identifier: item.name_identifier,
           name_identifier_scheme: item.name_identifier_scheme,
           name_identifier_scheme_uri: item.name_identifier_scheme_uri,
           name_type: item.name_type,
         };
+
+        if (entry.name_type === "Organizational") {
+          entry.affiliations = [];
+        }
 
         if (item.origin === "local") {
           return entry;
@@ -265,53 +270,94 @@ const saveMetadata = (e: MouseEvent) => {
 
         <n-form-item
           label="Affiliations"
-          :path="`contributors[${index}].affiliations`"
+          :path="`creators[${index}].affiliations`"
           ignore-path-change
+          :rule="{
+            message: 'Please add at least one affiliation',
+            required: item.name_type === 'Personal',
+            type: 'array',
+            trigger: ['blur', 'input'],
+          }"
         >
+          <!-- outer form item is only used to diplay the label and the required mark -->
+
           <n-dynamic-input
             v-model:value="item.affiliations"
             #="{ index: idx, value }"
             :on-create="addEntryToAffiliationsList"
             class="[&>div>*]:!self-center"
           >
-            <n-form-item
-              ignore-path-change
-              label="Identifier"
-              :path="`contributors[${index}].affiliations[${idx}]`"
-              class="w-full"
-            >
-              <n-input
-                v-model:value="item.affiliations[idx].identifier"
-                placeholder="0156zyn36"
-                @keydown.enter.prevent
-              />
-            </n-form-item>
+            <div class="flex w-full flex-col space-y-4">
+              <n-form-item
+                ignore-path-change
+                :show-feedback="false"
+                label="Name"
+                :path="`creators[${index}].affiliations[${idx}].name`"
+                class="w-full"
+                :rule="{
+                  message: 'Please add at least one affiliation',
+                  required: !item.affiliations[idx].identifier,
+                  trigger: ['blur', 'input'],
+                }"
+              >
+                <n-input
+                  v-model:value="item.affiliations[idx].name"
+                  placeholder="University of Marley"
+                  @keydown.enter.prevent
+                />
+              </n-form-item>
 
-            <n-form-item
-              ignore-path-change
-              label="Scheme"
-              :path="`contributors[${index}].affiliations[${idx}]`"
-              class="ml-3 w-full"
-            >
-              <n-input
-                v-model:value="item.affiliations[idx].scheme"
-                placeholder="ROR"
-                @keydown.enter.prevent
-              />
-            </n-form-item>
+              <div class="flex">
+                <n-form-item
+                  ignore-path-change
+                  label="Identifier"
+                  :path="`creators[${index}].affiliations[${idx}].identifier`"
+                  class="w-full"
+                  :rule="{
+                    message: 'Identifier is required if name of affiliation is empty',
+                    required: !item.affiliations[idx].name,
+                    trigger: ['blur', 'input'],
+                  }"
+                >
+                  <n-input
+                    v-model:value="item.affiliations[idx].identifier"
+                    placeholder="0156zyn36"
+                    @keydown.enter.prevent
+                  />
+                </n-form-item>
 
-            <n-form-item
-              ignore-path-change
-              label="Scheme URI"
-              :path="`contributors[${index}].affiliations[${idx}]`"
-              class="ml-3 w-full"
-            >
-              <n-input
-                v-model:value="item.affiliations[idx].scheme_uri"
-                placeholder="https://ror.org/"
-                @keydown.enter.prevent
-              />
-            </n-form-item>
+                <n-form-item
+                  ignore-path-change
+                  label="Scheme"
+                  :path="`creators[${index}].affiliations[${idx}].scheme`"
+                  class="ml-3 w-full"
+                  :rule="{
+                    message: 'Scheme is required if identifier is present',
+                    required: item.affiliations[idx].identifier,
+                    trigger: ['blur', 'input'],
+                  }"
+                >
+                  <n-input
+                    v-model:value="item.affiliations[idx].scheme"
+                    placeholder="ROR"
+                    @keydown.enter.prevent
+                  />
+                </n-form-item>
+
+                <n-form-item
+                  ignore-path-change
+                  label="Scheme URI"
+                  :path="`creators[${index}].affiliations[${idx}]`"
+                  class="ml-3 w-full"
+                >
+                  <n-input
+                    v-model:value="item.affiliations[idx].scheme_uri"
+                    placeholder="https://ror.org/"
+                    @keydown.enter.prevent
+                  />
+                </n-form-item>
+              </div>
+            </div>
           </n-dynamic-input>
         </n-form-item>
       </CollapsibleCard>

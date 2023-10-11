@@ -25,16 +25,15 @@ erDiagram
         string name_identifier_scheme_uri
         boolean creator "true if creator, false if contributor"
         string contributor_type "NULLABLE | required if contributor"
-        json affiliations "[{identifier: 'x', scheme: 'x', scheme_uri: 'x'}, ...}]"
+        json affiliations "[{name: 'x', identifier: 'x', scheme: 'x', scheme_uri: 'x'}, ...}]"
         timestamp created_at
     }
-
 
 
     DATASET_DATE {
         string id PK "UUIDv4"
         string dataset_id FK "DATASET.id"
-        string date
+        string date "NULLABLE"
         string date_type "NULLABLE"
         string date_information
         timestamp created_at

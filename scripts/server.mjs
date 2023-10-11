@@ -46,6 +46,7 @@ const dataset_creator = [
     name: "Samuel L. Jackson",
     affiliations: [
       {
+        name: "University of Manchester",
         identifier: "0156zyn36",
         scheme: "ROR",
         scheme_uri: "https://ror.org/",
@@ -66,6 +67,7 @@ const dataset_contributor = [
     name: "Samuel L. Jackson",
     affiliations: [
       {
+        name: "University of Manchester",
         identifier: "0156zyn36",
         scheme: "ROR",
         scheme_uri: "https://ror.org/",
