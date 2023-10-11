@@ -5,8 +5,8 @@ import { nanoid } from "nanoid";
 const datasets = [
   {
     id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
-    created_at: "1696375695",
-    updated_on: "1696377695",
+    created_at: 1183135260000,
+    updated_on: 1183135260000,
   },
 ];
 
@@ -14,7 +14,7 @@ const dataset_title = [
   {
     id: nanoid(),
     title: "Dataset 1",
-    created_at: "1696375695",
+    created_at: 1183135260000,
     dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
     type: "MainTitle",
   },
@@ -23,7 +23,7 @@ const dataset_title = [
 const dataset_description = [
   {
     id: nanoid(),
-    created_at: "1696375695",
+    created_at: 1183135260000,
     dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
     description: "Dataset 1",
     type: "Abstract",
@@ -33,7 +33,7 @@ const dataset_description = [
 const dataset_alternative_identifier = [
   {
     id: nanoid(),
-    created_at: "1696375695",
+    created_at: 1183135260000,
     dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
     identifier: "10.1038/s41597-023-02463-x",
     type: "doi",
@@ -52,7 +52,7 @@ const dataset_creator = [
         scheme_uri: "https://ror.org/",
       },
     ],
-    created_at: "1696375695",
+    created_at: 1183135260000,
     dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
     name_identifier: "0000-0001-5109-3700",
     name_identifier_scheme: "ORCID",
@@ -74,12 +74,23 @@ const dataset_contributor = [
       },
     ],
     contributor_type: "ContactPerson",
-    created_at: "1696375695",
+    created_at: 1183135260000,
     dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
     name_identifier: "0000-0001-5109-3700",
     name_identifier_scheme: "ORCID",
     name_identifier_scheme_uri: "https://orcid.org/",
     name_type: "Personal",
+  },
+];
+
+const dataset_date = [
+  {
+    id: nanoid(),
+    created_at: 1183135260000,
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    date: 1696921200000,
+    information: "The date the data was collected",
+    type: "Collected",
   },
 ];
 
@@ -571,6 +582,73 @@ const init = async () => {
       dataset_contributor.splice(dataset_contributor.indexOf(contributor), 1);
 
       return h.response(contributor).code(200);
+    },
+    method: "DELETE",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/date",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      const dates = dataset_date.filter((date) => date.dataset_id === datasetid);
+
+      return h.response(dates).code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/date",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      // const requestPayload = request.payload;
+      const payload = JSON.parse(request.payload);
+
+      for (const item of payload) {
+        if ("id" in item) {
+          const date = dataset_date.find((date) => item.id === date.id);
+
+          if (!date) {
+            return h.response({ message: "date not found" }).code(404);
+          }
+
+          date.date = item.date;
+          date.type = item.type;
+          date.information = item.information;
+        } else {
+          dataset_date.push({
+            id: nanoid(),
+            created_at: Date.now() / 1000,
+            dataset_id: datasetid,
+            date: item.date,
+            information: item.information,
+            type: item.type,
+          });
+        }
+      }
+
+      return h.response({ message: "dates updated" }).code(200);
+    },
+    method: "POST",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/date/{dateid}",
+    handler: (request, h) => {
+      const { dateid } = request.params;
+
+      const date = dataset_date.find((date) => date.id === dateid);
+
+      if (!date) {
+        return h.response({ message: "date not found" }).code(404);
+      }
+
+      // remove alternative identifier
+      dataset_date.splice(dataset_date.indexOf(date), 1);
+
+      return h.response(date).code(200);
     },
     method: "DELETE",
   });

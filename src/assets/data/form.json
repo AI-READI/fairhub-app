@@ -170,6 +170,68 @@
       "value": "Organizational"
     }
   ],
+  "datasetDateTypeOptions": [
+    {
+      "label": "Accepted",
+      "value": "Accepted",
+      "description": "The date that the publisher accepted the resource into their system."
+    },
+    {
+      "label": "Available",
+      "value": "Available",
+      "description": "The date the resource is made publicly available. May be a range."
+    },
+    {
+      "label": "Copyrighted",
+      "value": "Copyrighted",
+      "description": "The specific, documented date at which the resource receives a copyrighted status, if applicable."
+    },
+    {
+      "label": "Collected",
+      "value": "Collected",
+      "description": "The date or date range in which the resource content was collected."
+    },
+    {
+      "label": "Created",
+      "value": "Created",
+      "description": "The date the resource itself was put together; this could refer to a timeframe in ancient history, a date range, or a single date for a final component, e.g., the finalised file with all the data."
+    },
+    {
+      "label": "Issued",
+      "value": "Issued",
+      "description": "The date that the resource is published or distributed, e.g., to a data centre"
+    },
+    {
+      "label": "Submitted",
+      "value": "Submitted",
+      "description": "The date the creator submits the resource to the publisher. This could be different from Accepted if the publisher then applies a selection process."
+    },
+    {
+      "label": "Updated",
+      "value": "Updated",
+      "description": "The date of the last update to the resource, when the resource is being added to. May be a range."
+    },
+    {
+      "label": "Valid",
+      "value": "Valid",
+      "description": "The date or date range during which the dataset or resource is accurate."
+    },
+    {
+      "label": "Withdrawn",
+      "value": "Withdrawn",
+      "description": "The date the resource is removed."
+    },
+    {
+      "label": "Controlled Access In Force",
+      "value": "ControlledAccessInForce",
+      "description": "The date the resource is made available under controlled access of some form. May be a range. To indicate the end of such a period, use Available."
+    },
+    {
+      "label": "Other",
+      "value": "Other",
+      "description": "Date type not defined elsewhere."
+    }
+  ],
   "datasetContributorTypeOptions": [
     {
       "label": "Contact Person",

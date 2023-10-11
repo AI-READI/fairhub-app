@@ -10,7 +10,7 @@ export interface DatasetTitle {
   id: string;
   title: string;
   origin: string;
-  type: "MainTitle" | "AlternativeTitle" | "Subtitle" | "TranslatedTitle" | "Other";
+  type: "MainTitle" | "AlternativeTitle" | "Subtitle" | "TranslatedTitle" | "Other" | null;
 }
 
 export interface DatasetTitles extends Array<DatasetTitle> {}
@@ -39,7 +39,8 @@ export interface DatasetIdentifier {
     | "url"
     | "urn"
     | "w3id"
-    | "other";
+    | "other"
+    | null;
 }
 
 export interface DatasetIdentifiers extends Array<DatasetIdentifier> {}
@@ -54,7 +55,8 @@ export interface DatasetDescription {
     | "SeriesInformation"
     | "TableOfContents"
     | "TechnicalInfo"
-    | "Other";
+    | "Other"
+    | null;
 }
 
 export interface DatasetDescriptions extends Array<DatasetDescription> {}
@@ -73,7 +75,7 @@ export interface DatasetCreator {
   name_identifier: string;
   name_identifier_scheme: string;
   name_identifier_scheme_uri: string;
-  name_type: "Personal" | "Organizational";
+  name_type: "Personal" | "Organizational" | null;
   origin: string;
 }
 
@@ -85,7 +87,7 @@ export interface DatasetContributor {
   id: string;
   name: string;
   affiliations: DatasetPersonAffiliation[];
-  contributor_type: string;
+  contributor_type: string | null;
   name_identifier: string;
   name_identifier_scheme: string;
   name_identifier_scheme_uri: string;
@@ -99,8 +101,12 @@ export interface DatasetContributors {
 
 export interface DatasetDate {
   id: string;
-  date: string;
+  date: number | null;
   information: string;
   origin: string;
-  type: string;
+  type: string | null;
+}
+
+export interface DatasetDates {
+  dates: DatasetDate[];
 }
