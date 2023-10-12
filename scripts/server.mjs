@@ -94,6 +94,31 @@ const dataset_date = [
   },
 ];
 
+const dataset_record_keys = [
+  {
+    id: nanoid(),
+    created_at: 1183135260000,
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    details: "Details of the record keys",
+    type: "NotKnown",
+  },
+];
+
+const dataset_de_ident_level = [
+  {
+    id: nanoid(),
+    created_at: 1183135260000,
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    dates: true,
+    details: "Details of the de-identification level",
+    direct: true,
+    hipaa: true,
+    k_anon: true,
+    nonarr: true,
+    type: "NotKnown",
+  },
+];
+
 const init = async () => {
   const server = Hapi.server({
     host: "localhost",
@@ -651,6 +676,106 @@ const init = async () => {
       return h.response(date).code(200);
     },
     method: "DELETE",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/record-keys",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      // return the record key for the dataset
+      const record_key = dataset_record_keys.find(
+        (record_key) => record_key.dataset_id === datasetid
+      );
+
+      return h.response(record_key).code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/record-keys",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      // const requestPayload = request.payload;
+      const payload = JSON.parse(request.payload);
+
+      const record_key = dataset_record_keys.find(
+        (record_key) => record_key.dataset_id === datasetid
+      );
+
+      if (record_key) {
+        record_key.details = payload.details;
+        record_key.type = payload.type;
+      } else {
+        dataset_record_keys.push({
+          id: nanoid(),
+          created_at: Date.now() / 1000,
+          dataset_id: datasetid,
+          details: payload.details,
+          type: payload.type,
+        });
+      }
+
+      return h.response({ message: "record keys updated" }).code(200);
+    },
+    method: "PUT",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/de-identification-level",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      // return the record key for the dataset
+      const de_ident_level = dataset_de_ident_level.find(
+        (de_ident_level) => de_ident_level.dataset_id === datasetid
+      );
+
+      return h.response(de_ident_level).code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/de-identification-level",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      // const requestPayload = request.payload;
+      const payload = JSON.parse(request.payload);
+
+      const de_ident_level = dataset_de_ident_level.find(
+        (de_ident_level) => de_ident_level.dataset_id === datasetid
+      );
+
+      if (de_ident_level) {
+        de_ident_level.details = payload.details;
+        de_ident_level.type = payload.type;
+        de_ident_level.dates = payload.dates;
+        de_ident_level.direct = payload.direct;
+        de_ident_level.hipaa = payload.hipaa;
+        de_ident_level.k_anon = payload.k_anon;
+        de_ident_level.nonarr = payload.nonarr;
+      } else {
+        dataset_de_ident_level.push({
+          id: nanoid(),
+          created_at: Date.now() / 1000,
+          dataset_id: datasetid,
+          dates: payload.dates,
+          details: payload.details,
+          direct: payload.direct,
+          hipaa: payload.hipaa,
+          k_anon: payload.k_anon,
+          nonarr: payload.nonarr,
+          type: payload.type,
+        });
+      }
+
+      return h.response({ message: "de-identification level updated" }).code(200);
+    },
+    method: "PUT",
   });
 
   await server.start();

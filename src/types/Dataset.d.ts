@@ -110,3 +110,18 @@ export interface DatasetDate {
 export interface DatasetDates {
   dates: DatasetDate[];
 }
+
+export interface DatasetRecordKeys {
+  details: string;
+  type: string | null;
+}
+
+export interface DatasetDeIdentLevel {
+  dates: boolean;
+  details: string;
+  direct: boolean;
+  hipaa: boolean;
+  k_anon: boolean;
+  nonarr: boolean;
+  type: string | null;
+}

@@ -208,8 +208,6 @@ const saveMetadata = (e: MouseEvent) => {
         Add a new date
       </n-button>
 
-      <pre>{{ moduleData }}</pre>
-
       <n-divider />
 
       <div class="flex justify-start">

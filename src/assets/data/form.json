@@ -449,6 +449,50 @@
       "description": "From PubMed, an 'investigator' is an individual (e.g., collaborator or investigator) who is not an author of a paper but is listed as a member of a collective/corporate group that is an author of the paper."
     }
   ],
+  "datasetRecordKeysTypeOptions": [
+    {
+      "label": "Not Known",
+      "value": "NotKnown",
+      "description": "No clear information available about the record keys in use."
+    },
+    {
+      "label": "Anonymised",
+      "value": "Anonymised",
+      "description": "Data controller or manager describes dataset as `anonymised`, in their interpretation of the term."
+    },
+    {
+      "label": "Pseudonymised",
+      "value": "Pseudonymised",
+      "description": "Data controller or manager describes dataset as `pseudonymised`, in their interpretation of the term."
+    },
+    {
+      "label": "Identifiable",
+      "value": "Identifiable",
+      "description": "Data controller or manager describes dataset as `identifiable`, in their interpretation of the term."
+    }
+  ],
+  "datasetDeIdentTypeOptions": [
+    {
+      "label": "Not Known",
+      "value": "NotKnown",
+      "description": "No clear information available about the de-identification, if any, applied to the data."
+    },
+    {
+      "label": "No De-identification",
+      "value": "NoDeIdentification",
+      "description": "Confirmed that no de-identification measures have been applied to the data set."
+    },
+    {
+      "label": "De-identification Applied",
+      "value": "DeIdentificationApplied",
+      "description": "Some de-identification measures have been applied. Details should be described in comments and / or indicated in the linked boolean fields, or in separate documents."
+    },
+    {
+      "label": "De-identification Applied & Primary Outcomes Re-assessed",
+      "value": "DeIdentificationAppliedPrimaryOutcomesReAssessed",
+      "description": "Some de-identification measures have been applied and are described. In addition the data has been re-analysed against the primary outcomes and the results described."
+    }
+  ],
   "studyMetadataIdentificationPrimaryIdentifierTypeOptions": [
     {
       "label": "NIH Grant Number",
