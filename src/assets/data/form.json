@@ -530,6 +530,68 @@
       "description": "A descriptive statement regarding consent is available, but it does not fit into categories 1 - 5"
     }
   ],
+  "datasetAccessTypeOptions": [
+    {
+      "label": "Public On Screen Access",
+      "value": "PublicOnScreenAccess",
+      "description": "Completely open access on the web but content not available in any other format."
+    },
+    {
+      "label": "Public On Screen Access and Download",
+      "value": "PublicOnScreenAccessAndDownload",
+      "description": "Completely open access, material viewable and also directly available as a file download."
+    },
+    {
+      "label": "Public On Screen and API Access",
+      "value": "PublicOnScreenAndApiAccess",
+      "description": "Completely open access, material viewable and also available through an API."
+    },
+    {
+      "label": "Public Download - Self Attestation Required",
+      "value": "PublicDownloadSelfAttestationRequired",
+      "description": "Public and downloadable (only) once the user identifies and/or describes themselves."
+    },
+    {
+      "label": "Public On Screen Access - Self Attestation Required",
+      "value": "PublicOnScreenAccessSelfAttestationRequired",
+      "description": "Public and viewable (only) once the user identifies and/or describes themselves."
+    },
+    {
+      "label": "Restricted Download",
+      "value": "RestrictedDownload",
+      "description": "The user is an authenticated member of a defined group and can download the material (includes pay-walled journal articles)."
+    },
+    {
+      "label": "Restricted On Screen Access",
+      "value": "RestrictedOnScreenAccess",
+      "description": "The user is an authenticated member of a defined group but can only view the material. Analysis tools may be available."
+    },
+    {
+      "label": "Case By Case Download",
+      "value": "CaseByCaseDownload",
+      "description": "Based on a review of an individual request, often also requiring supporting documentation."
+    },
+    {
+      "label": "Case By Case On Screen Access",
+      "value": "CaseByCaseOnScreenAccess",
+      "description": "Based on a review of an individual request, often also requiring supporting documentation. Analysis tools may be available."
+    },
+    {
+      "label": "Non Public Access - No Details",
+      "value": "NonPublicAccessNoDetails",
+      "description": "The site asserts that the resource is not publicly available but provides no further details."
+    },
+    {
+      "label": "Other",
+      "value": "Other",
+      "description": "None of the listed options."
+    },
+    {
+      "label": "Not Yet Known",
+      "value": "NotYetKnown",
+      "description": "Dummy value supplied by default on entity creation."
+    }
+  ],
   "studyMetadataIdentificationPrimaryIdentifierTypeOptions": [
     {
       "label": "NIH Grant Number",

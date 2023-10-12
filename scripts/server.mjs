@@ -147,6 +147,18 @@ const dataset_subject = [
   },
 ];
 
+const dataset_access = [
+  {
+    id: nanoid(),
+    created_at: 1183135260000,
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    description: "Description of the access type",
+    type: "PublicOnScreenAccess",
+    url: "https://www.example.com",
+    url_last_checked: 1183135260000,
+  },
+];
+
 const init = async () => {
   const server = Hapi.server({
     host: "localhost",
@@ -926,6 +938,50 @@ const init = async () => {
       return h.response(subject).code(200);
     },
     method: "DELETE",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/access",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      const access = dataset_access.find((access) => access.dataset_id === datasetid);
+
+      return h.response(access).code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/access",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      // const requestPayload = request.payload;
+      const payload = JSON.parse(request.payload);
+
+      const access = dataset_access.find((access) => access.dataset_id === datasetid);
+
+      if (access) {
+        access.description = payload.description;
+        access.type = payload.type;
+        access.url = payload.url;
+        access.url_last_checked = payload.url_last_checked;
+      } else {
+        dataset_access.push({
+          id: nanoid(),
+          created_at: Date.now() / 1000,
+          dataset_id: datasetid,
+          description: payload.description,
+          type: payload.type,
+          url: payload.url,
+          url_last_checked: payload.url_last_checked,
+        });
+      }
+
+      return h.response({ message: "access updated" }).code(200);
+    },
+    method: "PUT",
   });
 
   await server.start();

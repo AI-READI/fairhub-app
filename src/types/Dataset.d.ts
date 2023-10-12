@@ -149,3 +149,10 @@ export interface DatasetSubject {
 export interface DatasetSubjects {
   subjects: DatasetSubject[];
 }
+
+export interface DatasetAccess {
+  description: string;
+  type: string | null;
+  url: string;
+  url_last_checked: number | null;
+}
