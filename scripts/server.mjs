@@ -202,6 +202,77 @@ const dataset_other = [
   },
 ];
 
+const dataset_related_item = [
+  {
+    id: "42dec85c-22f2-4f4e-a5ad-f0121067f507",
+    created_at: 1183135260000,
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    relation_type: "IsCitedBy",
+    type: "JournalArticle",
+  },
+];
+
+const dataset_related_item_identifier = [
+  {
+    id: nanoid(),
+    created_at: 1183135260000,
+    identifier: "10.1038/s41597-023-02463-x",
+    metadata_scheme: "dc",
+    related_item_id: "42dec85c-22f2-4f4e-a5ad-f0121067f507",
+    scheme_type: "dcterms",
+    scheme_uri: "https://www.dublincore.org/specifications/dublin-core/dces/",
+    type: "doi",
+  },
+];
+
+const dataset_related_item_creator = [
+  {
+    id: nanoid(),
+    name: "Ethan Hawke",
+    created_at: 1183135260000,
+    name_type: "Personal",
+    related_item_id: "42dec85c-22f2-4f4e-a5ad-f0121067f507",
+  },
+];
+
+const dataset_related_item_contributor = [
+  {
+    id: nanoid(),
+    name: "Samuel L. Jackson",
+    contributor_type: "ContactPerson",
+    created_at: 1183135260000,
+    name_type: "Personal",
+    related_item_id: "42dec85c-22f2-4f4e-a5ad-f0121067f507",
+  },
+];
+
+const dataset_related_item_title = [
+  {
+    id: nanoid(),
+    title: "Title",
+    created_at: 1183135260000,
+    related_item_id: "42dec85c-22f2-4f4e-a5ad-f0121067f507",
+    type: "MainTitle",
+  },
+];
+
+const dataset_related_item_other = [
+  {
+    id: nanoid(),
+    created_at: 1183135260000,
+    edition: "Edition",
+    first_page: "1",
+    issue: "1",
+    last_page: "15",
+    number_type: "SequenceNumber",
+    number_value: "1",
+    publication_year: 2021,
+    publisher: "Publisher",
+    related_item_id: "42dec85c-22f2-4f4e-a5ad-f0121067f507",
+    volume: "1",
+  },
+];
+
 const init = async () => {
   const server = Hapi.server({
     host: "localhost",
@@ -1264,6 +1335,249 @@ const init = async () => {
       return h.response({ message: "other metadata updated" }).code(200);
     },
     method: "PUT",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/related-item",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      const relatedItems = dataset_related_item.filter(
+        (relatedItem) => relatedItem.dataset_id === datasetid
+      );
+
+      for (const relatedItem of relatedItems) {
+        const relatedItemIdentifiers = dataset_related_item_identifier.filter(
+          (relatedItemIdentifier) => relatedItemIdentifier.related_item_id === relatedItem.id
+        );
+
+        relatedItem.identifiers = relatedItemIdentifiers;
+
+        const relatedItemCreators = dataset_related_item_creator.filter(
+          (relatedItemCreator) => relatedItemCreator.related_item_id === relatedItem.id
+        );
+
+        relatedItem.creators = relatedItemCreators;
+
+        const relatedItemContributors = dataset_related_item_contributor.filter(
+          (relatedItemContributor) => relatedItemContributor.related_item_id === relatedItem.id
+        );
+
+        relatedItem.contributors = relatedItemContributors;
+
+        const relatedItemTitles = dataset_related_item_title.filter(
+          (relatedItemTitle) => relatedItemTitle.related_item_id === relatedItem.id
+        );
+
+        relatedItem.titles = relatedItemTitles;
+
+        const relatedItemOther = dataset_related_item_other.find(
+          (relatedItemOther) => relatedItemOther.related_item_id === relatedItem.id
+        );
+
+        relatedItem.publication_year = relatedItemOther.publication_year;
+        relatedItem.volume = relatedItemOther.volume;
+        relatedItem.issue = relatedItemOther.issue;
+        relatedItem.number_value = relatedItemOther.number_value;
+        relatedItem.number_type = relatedItemOther.number_type;
+        relatedItem.first_page = relatedItemOther.first_page;
+        relatedItem.last_page = relatedItemOther.last_page;
+        relatedItem.publisher = relatedItemOther.publisher;
+        relatedItem.edition = relatedItemOther.edition;
+      }
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/related-item",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      const payload = JSON.parse(request.payload);
+
+      for (const item of payload) {
+        if ("id" in item) {
+          const relatedItem = dataset_related_item.find(
+            (relatedItem) => item.id === relatedItem.id
+          );
+
+          if (!relatedItem) {
+            return h.response({ message: "related item not found" }).code(404);
+          }
+
+          relatedItem.type = item.type;
+          relatedItem.relation_type = item.relation_type;
+        } else {
+          const id = nanoid();
+
+          item.id = id;
+
+          dataset_related_item.push({
+            id,
+            created_at: Date.now() / 1000,
+            dataset_id: datasetid,
+            relation_type: item.relation_type,
+            type: item.type,
+          });
+        }
+
+        const relatedItemIdentifiers = item.identifiers;
+
+        for (const identifier of relatedItemIdentifiers) {
+          if ("id" in identifier) {
+            const relatedItemIdentifier = dataset_related_item_identifier.find(
+              (relatedItemIdentifier) => identifier.id === relatedItemIdentifier.id
+            );
+
+            if (!relatedItemIdentifier) {
+              return h.response({ message: "related item identifier not found" }).code(404);
+            }
+
+            relatedItemIdentifier.identifier = identifier.identifier;
+            relatedItemIdentifier.identifier_type = identifier.identifier_type;
+            relatedItemIdentifier.identifier_value = identifier.identifier_value;
+          } else {
+            dataset_related_item_identifier.push({
+              id: nanoid(),
+              created_at: Date.now() / 1000,
+              identifier: identifier.identifier,
+              identifier_type: identifier.identifier_type,
+              identifier_value: identifier.identifier_value,
+              related_item_id: item.id,
+            });
+          }
+        }
+
+        const relatedItemCreators = item.creators;
+
+        for (const creator of relatedItemCreators) {
+          if ("id" in creator) {
+            const relatedItemCreator = dataset_related_item_creator.find(
+              (relatedItemCreator) => creator.id === relatedItemCreator.id
+            );
+
+            if (!relatedItemCreator) {
+              return h.response({ message: "related item creator not found" }).code(404);
+            }
+
+            relatedItemCreator.name = creator.name;
+            relatedItemCreator.name_type = creator.name_type;
+            relatedItemCreator.name_identifier = creator.name_identifier;
+            relatedItemCreator.name_identifier_scheme = creator.name_identifier_scheme;
+            relatedItemCreator.name_identifier_scheme_uri = creator.name_identifier_scheme_uri;
+            relatedItemCreator.affiliations = creator.affiliations;
+          } else {
+            dataset_related_item_creator.push({
+              id: nanoid(),
+              name: creator.name,
+              affiliations: creator.affiliations,
+              created_at: Date.now() / 1000,
+              name_identifier: creator.name_identifier,
+              name_identifier_scheme: creator.name_identifier_scheme,
+              name_identifier_scheme_uri: creator.name_identifier_scheme_uri,
+              name_type: creator.name_type,
+              related_item_id: item.id,
+            });
+          }
+        }
+
+        const relatedItemContributors = item.contributors;
+
+        for (const contributor of relatedItemContributors) {
+          if ("id" in contributor) {
+            const relatedItemContributor = dataset_related_item_contributor.find(
+              (relatedItemContributor) => contributor.id === relatedItemContributor.id
+            );
+
+            if (!relatedItemContributor) {
+              return h.response({ message: "related item contributor not found" }).code(404);
+            }
+
+            relatedItemContributor.name = contributor.name;
+            relatedItemContributor.name_type = contributor.name_type;
+            relatedItemContributor.contributor_type = contributor.contributor_type;
+            relatedItemContributor.name_identifier = contributor.name_identifier;
+            relatedItemContributor.name_identifier_scheme = contributor.name_identifier_scheme;
+            relatedItemContributor.name_identifier_scheme_uri =
+              contributor.name_identifier_scheme_uri;
+            relatedItemContributor.affiliations = contributor.affiliations;
+          } else {
+            dataset_related_item_contributor.push({
+              id: nanoid(),
+              name: contributor.name,
+              affiliations: contributor.affiliations,
+              contributor_type: contributor.contributor_type,
+              created_at: Date.now() / 1000,
+              name_identifier: contributor.name_identifier,
+              name_identifier_scheme: contributor.name_identifier_scheme,
+              name_identifier_scheme_uri: contributor.name_identifier_scheme_uri,
+              name_type: contributor.name_type,
+              related_item_id: item.id,
+            });
+          }
+        }
+
+        const relatedItemTitles = item.titles;
+
+        for (const title of relatedItemTitles) {
+          if ("id" in title) {
+            const relatedItemTitle = dataset_related_item_title.find(
+              (relatedItemTitle) => title.id === relatedItemTitle.id
+            );
+
+            if (!relatedItemTitle) {
+              return h.response({ message: "related item title not found" }).code(404);
+            }
+
+            relatedItemTitle.title = title.title;
+            relatedItemTitle.title_type = title.title_type;
+          } else {
+            dataset_related_item_title.push({
+              id: nanoid(),
+              title: title.title,
+              created_at: Date.now() / 1000,
+              related_item_id: item.id,
+              title_type: title.title_type,
+            });
+          }
+        }
+
+        const relatedItemOther = dataset_related_item_other.find(
+          (relatedItemOther) => relatedItemOther.related_item_id === item.id
+        );
+
+        if (relatedItemOther) {
+          relatedItemOther.publication_year = item.publication_year;
+          relatedItemOther.volume = item.volume;
+          relatedItemOther.issue = item.issue;
+          relatedItemOther.number_value = item.number_value;
+          relatedItemOther.number_type = item.number_type;
+          relatedItemOther.first_page = item.first_page;
+          relatedItemOther.last_page = item.last_page;
+          relatedItemOther.publisher = item.publisher;
+          relatedItemOther.edition = item.edition;
+        } else {
+          dataset_related_item_other.push({
+            id: nanoid(),
+            created_at: Date.now() / 1000,
+            edition: item.edition,
+            first_page: item.first_page,
+            issue: item.issue,
+            last_page: item.last_page,
+            number_type: item.number_type,
+            number_value: item.number_value,
+            publication_year: item.publication_year,
+            publisher: item.publisher,
+            related_item_id: item.id,
+            volume: item.volume,
+          });
+        }
+      }
+
+      return h.response({ message: "related items updated" }).code(200);
+    },
+    method: "POST",
   });
 
   await server.start();
