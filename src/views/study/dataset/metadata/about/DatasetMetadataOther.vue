@@ -1,83 +1,207 @@
 <script setup lang="ts">
-import { useAuthStore } from "@/stores/auth";
-import { useDatasetStore } from "@/stores/dataset";
+import type { FormInst } from "naive-ui";
+
+import LANGUAGES_JSON from "@/assets/data/languages.json";
+import type { DatasetOther } from "@/types/Dataset";
+
+// import { baseURL } from "@/utils/constants";
+const baseURL = "http://localhost:3001/api";
 
 const route = useRoute();
-const router = useRouter();
-const { error, success } = useMessage();
-
-const authStore = useAuthStore();
-const datasetStore = useDatasetStore();
+const push = usePush();
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
   studyId: route.params.studyId as string,
 };
 
-const datasetResources = ref([]);
+const studyId = routeParams.studyId;
+const datasetId = routeParams.datasetId;
+
+const moduleData = ref<DatasetOther>({
+  language: null,
+  resource_type: "",
+  size: [],
+});
+
+const formRef = ref<FormInst | null>(null);
+
+const rules: FormRules = {
+  language: {
+    message: "Please enter a publisher.",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+  resource_type: {
+    message: "Please enter a publisher.",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+};
+
+const loading = ref(false);
+
+const languageOptions = LANGUAGES_JSON.map((language) => ({
+  label: language.name,
+  value: language.alpha2,
+}));
 
 onBeforeMount(async () => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
+  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/other`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
   }
+
+  const data = await response.json();
+
+  moduleData.value = data;
 });
+
+const addEntryToSize = () => {
+  return "";
+};
+
+const saveMetadata = (e: MouseEvent) => {
+  e.preventDefault();
+  formRef.value?.validate(async (errors) => {
+    if (!errors) {
+      loading.value = true;
+
+      // remove empty sizes
+      const sizes = moduleData.value.size.filter((size) => size.trim() !== "");
+
+      // remove sizes with duplicate names
+      const uniqueSizes = [...new Set(sizes)];
+
+      const data = {
+        language: moduleData.value.language,
+        resource_type: moduleData.value.resource_type,
+        size: uniqueSizes,
+      };
+
+      const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/other`, {
+        body: JSON.stringify(data),
+        method: "PUT",
+      });
+
+      loading.value = false;
+
+      if (!response.ok) {
+        push.error({
+          title: "Failed to save status",
+          message: "Something went wrong. Please try again later.",
+        });
+
+        throw new Error("Network response was not ok");
+      }
+
+      push.success("Publisher saved successfully");
+
+      console.log("success");
+    } else {
+      console.log("error");
+      console.log(errors);
+    }
+  });
+};
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
-      title="Additional Details"
-      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-      linkName="dataset:overview"
-      :linkParams="{ datasetId: routeParams.datasetId, studyId: routeParams.studyId }"
+      title="Additional Metadata"
+      description="Some metadata that didn't really fit in other sections."
+      linkName="study:overview"
+      :linkParams="{
+        studyId: route.params.studyId,
+      }"
     />
 
     <n-divider />
 
-    <p class="pb-8 pt-2">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, diam id aliquam
-      ultrices, nunc nisl tincidunt nunc, vitae aliquam nunc nisl sit amet nunc.
-    </p>
+    <h3>Language</h3>
 
-    <n-list>
-      <n-list-item v-for="resource in datasetResources" :key="resource">
-        <div class="mb-2 mr-5 flex w-full items-start space-x-5">
-          <div class="flex w-full flex-col space-y-2">
-            <span class="font-semibold"> Item </span>
+    <p class="pb-8 pt-2">The primary language used in the dataset.</p>
 
-            <n-input v-model:value="resource['value']" size="large" type="textarea" rows="1" />
-          </div>
+    <n-form
+      ref="formRef"
+      :model="moduleData"
+      :rules="rules"
+      size="large"
+      label-placement="top"
+      class="pr-4"
+    >
+      <n-form-item label="Publisher" path="publisher">
+        <n-select
+          v-model:value="moduleData.language"
+          placeholder="Not Known"
+          clearable
+          filterable
+          :options="languageOptions"
+        />
+      </n-form-item>
 
-          <div class="flex flex-col space-y-3">
-            <span> &nbsp; </span>
+      <n-divider />
 
-            <n-button>
-              <f-icon icon="gridicons:trash" />
-            </n-button>
-          </div>
-        </div>
-      </n-list-item>
-    </n-list>
+      <h3>Resource Type</h3>
 
-    <n-button class="my-10" dashed type="info">
-      <template #icon>
-        <f-icon icon="gridicons:create" />
-      </template>
+      <p class="pb-8 pt-2">
+        The recommended content is a single term of some detail about the domain or content of the
+        dataset so that a pair can be formed with the type subproperty. For example, a resource name
+        of `Diabetes` yields `Diabetes dataset`.
+      </p>
 
-      Add a item
-    </n-button>
+      <n-form-item label="Name" path="managing_organization_name">
+        <n-input v-model:value="moduleData.resource_type" placeholder="Diabetes" clearable />
+      </n-form-item>
 
-    <n-divider />
+      <n-form-item label="Type">
+        <n-input value="Dataset" disabled clearable />
+      </n-form-item>
 
-    <div class="flex justify-start">
-      <n-button size="large" type="primary">
-        <template #icon>
-          <f-icon icon="material-symbols:save" />
-        </template>
+      <n-divider />
 
-        Save changes
-      </n-button>
-    </div>
+      <h3>Size</h3>
+
+      <p class="pb-8 pt-2">
+        Size (e.g., bytes, pages, inches, etc.) or duration (extent), e.g., hours, minutes, days,
+        etc., of a resource
+      </p>
+
+      <n-dynamic-input
+        v-model:value="moduleData.size"
+        #="{ index: idx, value }"
+        :on-create="addEntryToSize"
+      >
+        <n-form-item
+          ignore-path-change
+          :show-feedback="false"
+          :show-label="false"
+          :path="`size[${idx}]`"
+          class="w-full"
+        >
+          <n-input
+            v-model:value="moduleData.size[idx]"
+            placeholder="45 minutes"
+            @keydown.enter.prevent
+          />
+        </n-form-item>
+      </n-dynamic-input>
+
+      <n-divider />
+
+      <div class="flex justify-start">
+        <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+          <template #icon>
+            <f-icon icon="material-symbols:save" />
+          </template>
+
+          Save Metadata
+        </n-button>
+      </div>
+    </n-form>
   </main>
 </template>

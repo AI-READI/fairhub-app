@@ -171,6 +171,37 @@ const dataset_rights = [
   },
 ];
 
+const dataset_funder = [
+  {
+    id: nanoid(),
+    name: "Funder 1",
+    award_number: "123456",
+    award_title: "Award title",
+    award_uri: "https://www.example.com",
+    created_at: 1183135260000,
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    identifier: "123456",
+    identifier_scheme_uri: "https://www.example.com",
+    identifier_type: "ROR",
+  },
+];
+
+const dataset_other = [
+  {
+    id: nanoid(),
+    acknowledgement: "Lorem ipsum",
+    created_at: 1183135260000,
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    language: "en",
+    managing_organization_name: "Boston Dynamics",
+    managing_organization_ror_id: "123456",
+    publisher: "Boston Dynamics",
+    resource_type: "Resource type",
+    size: ["15 pages", "1.2 MB"],
+    standards_followed: "Lorem ipsum",
+  },
+];
+
 const init = async () => {
   const server = Hapi.server({
     host: "localhost",
@@ -1063,6 +1094,176 @@ const init = async () => {
       return h.response(right).code(200);
     },
     method: "DELETE",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/funder",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      const funders = dataset_funder.filter((funder) => funder.dataset_id === datasetid);
+
+      return h.response(funders).code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/funder",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      const payload = JSON.parse(request.payload);
+
+      for (const item of payload) {
+        if ("id" in item) {
+          const funder = dataset_funder.find((funder) => item.id === funder.id);
+
+          if (!funder) {
+            return h.response({ message: "funder not found" }).code(404);
+          }
+
+          funder.name = item.name;
+          funder.award_number = item.award_number;
+          funder.award_title = item.award_title;
+          funder.award_uri = item.award_uri;
+          funder.identifier = item.identifier;
+          funder.identifier_scheme = item.identifier_scheme;
+          funder.identifier_scheme_uri = item.identifier_scheme_uri;
+          funder.identifier_type = item.identifier_type;
+        } else {
+          dataset_funder.push({
+            id: nanoid(),
+            name: item.name,
+            award_number: item.award_number,
+            award_title: item.award_title,
+            award_uri: item.award_uri,
+            created_at: Date.now() / 1000,
+            dataset_id: datasetid,
+            identifier: item.identifier,
+            identifier_scheme: item.identifier_scheme,
+            identifier_scheme_uri: item.identifier_scheme_uri,
+            identifier_type: item.identifier_type,
+          });
+        }
+      }
+
+      return h.response({ message: "funders updated" }).code(200);
+    },
+    method: "POST",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/funder/{funderid}",
+    handler: (request, h) => {
+      const { funderid } = request.params;
+
+      const funder = dataset_funder.find((funder) => funder.id === funderid);
+
+      if (!funder) {
+        return h.response({ message: "funder not found" }).code(404);
+      }
+
+      // remove alternative identifier
+      dataset_funder.splice(dataset_funder.indexOf(funder), 1);
+
+      return h.response(funder).code(200);
+    },
+    method: "DELETE",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/publisher",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      const otherMetadata = dataset_other.find((other) => other.dataset_id === datasetid);
+
+      if (!otherMetadata) {
+        return h.response({ message: "other metadata not found" }).code(404);
+      }
+
+      const publisher = otherMetadata.publisher;
+      const managing_organization_name = otherMetadata.managing_organization_name;
+      const managing_organization_ror_id = otherMetadata.managing_organization_ror_id;
+
+      return h
+        .response({
+          managing_organization_name,
+          managing_organization_ror_id,
+          publisher,
+        })
+        .code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/publisher",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      const otherMetadata = dataset_other.find((other) => other.dataset_id === datasetid);
+
+      if (!otherMetadata) {
+        return h.response({ message: "other metadata not found" }).code(404);
+      }
+
+      const payload = JSON.parse(request.payload);
+
+      otherMetadata.publisher = payload.publisher;
+
+      return h.response({ message: "publisher updated" }).code(200);
+    },
+    method: "PUT",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/other",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      const otherMetadata = dataset_other.find((other) => other.dataset_id === datasetid);
+
+      if (!otherMetadata) {
+        return h.response({ message: "other metadata not found" }).code(404);
+      }
+
+      const language = otherMetadata.language;
+      const resource_type = otherMetadata.resource_type;
+      const size = otherMetadata.size;
+
+      return h
+        .response({
+          language,
+          resource_type,
+          size,
+        })
+        .code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/other",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      const otherMetadata = dataset_other.find((other) => other.dataset_id === datasetid);
+
+      if (!otherMetadata) {
+        return h.response({ message: "other metadata not found" }).code(404);
+      }
+
+      const payload = JSON.parse(request.payload);
+
+      otherMetadata.language = payload.language;
+      otherMetadata.resource_type = payload.resource_type;
+      otherMetadata.size = payload.size;
+
+      return h.response({ message: "other metadata updated" }).code(200);
+    },
+    method: "PUT",
   });
 
   await server.start();

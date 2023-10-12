@@ -1,83 +1,163 @@
 <script setup lang="ts">
-import { useAuthStore } from "@/stores/auth";
-import { useDatasetStore } from "@/stores/dataset";
+import type { FormInst } from "naive-ui";
+
+import type { DatasetPublisher } from "@/types/Dataset";
+
+// import { baseURL } from "@/utils/constants";
+const baseURL = "http://localhost:3001/api";
 
 const route = useRoute();
-const router = useRouter();
-const { error, success } = useMessage();
-
-const authStore = useAuthStore();
-const datasetStore = useDatasetStore();
+const push = usePush();
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
   studyId: route.params.studyId as string,
 };
 
-const datasetResources = ref([]);
+const studyId = routeParams.studyId;
+const datasetId = routeParams.datasetId;
+
+const moduleData = ref<DatasetPublisher>({
+  managing_organization_name: "",
+  managing_organization_ror_id: "",
+  publisher: "",
+});
+
+const formRef = ref<FormInst | null>(null);
+
+const rules: FormRules = {
+  managing_organization_name: {
+    message: "Please enter a publisher.",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+  publisher: {
+    message: "Please enter a publisher.",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+};
+
+const loading = ref(false);
 
 onBeforeMount(async () => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
+  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/publisher`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
   }
+
+  const data = await response.json();
+
+  moduleData.value = data;
 });
+
+const saveMetadata = (e: MouseEvent) => {
+  e.preventDefault();
+  formRef.value?.validate(async (errors) => {
+    if (!errors) {
+      loading.value = true;
+
+      const data = {
+        managing_organization_name: moduleData.value.managing_organization_name,
+        managing_organization_ror_id: moduleData.value.managing_organization_ror_id,
+        publisher: moduleData.value.publisher,
+      };
+
+      const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/publisher`, {
+        body: JSON.stringify(data),
+        method: "PUT",
+      });
+
+      loading.value = false;
+
+      if (!response.ok) {
+        push.error({
+          title: "Failed to save status",
+          message: "Something went wrong. Please try again later.",
+        });
+
+        throw new Error("Network response was not ok");
+      }
+
+      push.success("Publisher saved successfully");
+
+      console.log("success");
+    } else {
+      console.log("error");
+      console.log(errors);
+    }
+  });
+};
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
       title="Publisher"
-      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-      linkName="dataset:overview"
-      :linkParams="{ datasetId: routeParams.datasetId, studyId: routeParams.studyId }"
+      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+      linkName="study:overview"
+      :linkParams="{
+        studyId: route.params.studyId,
+      }"
     />
 
     <n-divider />
 
-    <p class="pb-8 pt-2">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, diam id aliquam
-      ultrices, nunc nisl tincidunt nunc, vitae aliquam nunc nisl sit amet nunc.
-    </p>
+    <n-form
+      ref="formRef"
+      :model="moduleData"
+      :rules="rules"
+      size="large"
+      label-placement="top"
+      class="pr-4"
+    >
+      <n-form-item label="Publisher" path="publisher">
+        <n-input
+          v-model:value="moduleData.publisher"
+          placeholder="World Data Center for Climate (WDCC)"
+          clearable
+        />
+      </n-form-item>
 
-    <n-list>
-      <n-list-item v-for="resource in datasetResources" :key="resource">
-        <div class="mb-2 mr-5 flex w-full items-start space-x-5">
-          <div class="flex w-full flex-col space-y-2">
-            <span class="font-semibold"> Item </span>
+      <n-divider />
 
-            <n-input v-model:value="resource['value']" size="large" type="textarea" rows="1" />
-          </div>
+      <h3>Managing Organization</h3>
 
-          <div class="flex flex-col space-y-3">
-            <span> &nbsp; </span>
+      <p class="pb-8 pt-2">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+        voluptatem, quibusdam, quos voluptas quae quas voluptatum
+      </p>
 
-            <n-button>
-              <f-icon icon="gridicons:trash" />
-            </n-button>
-          </div>
-        </div>
-      </n-list-item>
-    </n-list>
+      <n-form-item label="Name" path="managing_organization_name">
+        <n-input
+          v-model:value="moduleData.managing_organization_name"
+          placeholder="World Data Center for Climate (WDCC)"
+          clearable
+        />
+      </n-form-item>
 
-    <n-button class="my-10" dashed type="info">
-      <template #icon>
-        <f-icon icon="gridicons:create" />
-      </template>
+      <n-form-item label="ROR ID" path="managing_organization_ror_id">
+        <n-input
+          v-model:value="moduleData.managing_organization_ror_id"
+          placeholder="World Data Center for Climate (WDCC)"
+          clearable
+        />
+      </n-form-item>
 
-      Add a item
-    </n-button>
+      <n-divider />
 
-    <n-divider />
+      <div class="flex justify-start">
+        <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+          <template #icon>
+            <f-icon icon="material-symbols:save" />
+          </template>
 
-    <div class="flex justify-start">
-      <n-button size="large" type="primary">
-        <template #icon>
-          <f-icon icon="material-symbols:save" />
-        </template>
-
-        Save changes
-      </n-button>
-    </div>
+          Save Metadata
+        </n-button>
+      </div>
+    </n-form>
   </main>
 </template>

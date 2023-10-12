@@ -592,6 +592,13 @@
       "description": "Dummy value supplied by default on entity creation."
     }
   ],
+  "datasetFunderIdentifierTypeOptions": [
+    { "value": "Crossref Funder ID", "label": "Crossref Funder ID" },
+    { "value": "GRID", "label": "GRID" },
+    { "value": "ISNI", "label": "ISNI" },
+    { "value": "ROR", "label": "ROR" },
+    { "value": "Other", "label": "Other" }
+  ],
   "studyMetadataIdentificationPrimaryIdentifierTypeOptions": [
     {
       "label": "NIH Grant Number",
