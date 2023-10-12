@@ -125,3 +125,13 @@ export interface DatasetDeIdentLevel {
   nonarr: boolean;
   type: string | null;
 }
+
+export interface DatasetConsent {
+  details: string;
+  genetic_only: boolean;
+  geog_restrict: boolean;
+  no_methods: boolean;
+  noncommercial: boolean;
+  research_type: boolean;
+  type: string | null;
+}

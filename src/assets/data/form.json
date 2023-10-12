@@ -493,6 +493,43 @@
       "description": "Some de-identification measures have been applied and are described. In addition the data has been re-analysed against the primary outcomes and the results described."
     }
   ],
+  "datasetConsentTypeOptions": [
+    {
+      "label": "Not Known",
+      "value": "NotKnown",
+      "description": "No clear information available about consent for secondary use, or if any exists."
+    },
+    {
+      "label": "No Explicit Consent",
+      "value": "NoExplicitConsent",
+      "description": "No specific consent was given for the sharing of data or its re-use beyond the study in which it was originally collected."
+    },
+    {
+      "label": "No Restriction",
+      "value": "NoRestriction",
+      "description": "No explicit restriction in the consent documents, though a broad consent to re-use is assumed, or this category is meaningless."
+    },
+    {
+      "label": "General Research Use",
+      "value": "GeneralResearchUse",
+      "description": "Consent indicates that use is allowed for general research use for any research purpose."
+    },
+    {
+      "label": "Health Medical Biomedical Research",
+      "value": "HealthMedicalBiomedicalResearch",
+      "description": "Consent indicates that use is allowed for health/medical/biomedical purposes; does not include the study of population origins or ancestry, or the development of methods / algorithms (e.g. for ML)"
+    },
+    {
+      "label": "Disease Specific Research",
+      "value": "DiseaseSpecificResearch",
+      "description": "Consent indicates that use, for health / medical / biomedical research is allowed provided it is related to a specified disease (area). The disease (area) must be named or coded in the associated comments field."
+    },
+    {
+      "label": "Consent Specified Not Elsewhere Categorised",
+      "value": "ConsentSpecifiedNotElsewhereCategorised",
+      "description": "A descriptive statement regarding consent is available, but it does not fit into categories 1 - 5"
+    }
+  ],
   "studyMetadataIdentificationPrimaryIdentifierTypeOptions": [
     {
       "label": "NIH Grant Number",

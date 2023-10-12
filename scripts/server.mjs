@@ -119,6 +119,21 @@ const dataset_de_ident_level = [
   },
 ];
 
+const dataset_consent = [
+  {
+    id: nanoid(),
+    created_at: 1183135260000,
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    details: "Details of the de-identification level",
+    genetic_only: true,
+    geog_restrict: true,
+    no_methods: true,
+    noncommercial: true,
+    research_type: true,
+    type: "NotKnown",
+  },
+];
+
 const init = async () => {
   const server = Hapi.server({
     host: "localhost",
@@ -774,6 +789,57 @@ const init = async () => {
       }
 
       return h.response({ message: "de-identification level updated" }).code(200);
+    },
+    method: "PUT",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/consent",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      // return the record key for the dataset
+      const consent = dataset_consent.find((consent) => consent.dataset_id === datasetid);
+
+      return h.response(consent).code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/consent",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      // const requestPayload = request.payload;
+      const payload = JSON.parse(request.payload);
+
+      const consent = dataset_consent.find((consent) => consent.dataset_id === datasetid);
+
+      if (consent) {
+        consent.details = payload.details;
+        consent.type = payload.type;
+        consent.genetic_only = payload.genetic_only;
+        consent.geog_restrict = payload.geog_restrict;
+        consent.no_methods = payload.no_methods;
+        consent.noncommercial = payload.noncommercial;
+        consent.research_type = payload.research_type;
+      } else {
+        dataset_consent.push({
+          id: nanoid(),
+          created_at: Date.now() / 1000,
+          dataset_id: datasetid,
+          details: payload.details,
+          genetic_only: payload.genetic_only,
+          geog_restrict: payload.geog_restrict,
+          no_methods: payload.no_methods,
+          noncommercial: payload.noncommercial,
+          research_type: payload.research_type,
+          type: payload.type,
+        });
+      }
+
+      return h.response({ message: "consent updated" }).code(200);
     },
     method: "PUT",
   });

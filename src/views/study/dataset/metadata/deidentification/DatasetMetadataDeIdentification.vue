@@ -25,7 +25,7 @@ const moduleData = ref<DatasetDeIdentLevel>({
   hipaa: false,
   k_anon: false,
   nonarr: false,
-  type: "",
+  type: null,
 });
 
 const formRef = ref<FormInst | null>(null);
