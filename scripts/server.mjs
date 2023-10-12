@@ -134,6 +134,19 @@ const dataset_consent = [
   },
 ];
 
+const dataset_subject = [
+  {
+    id: nanoid(),
+    classification_code: "D000001",
+    created_at: 1183135260000,
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    scheme: "MeSH",
+    scheme_uri: "https://www.nlm.nih.gov/mesh/",
+    subject: "Subject 1",
+    value_uri: "https://www.nlm.nih.gov/mesh/d000001",
+  },
+];
+
 const init = async () => {
   const server = Hapi.server({
     host: "localhost",
@@ -842,6 +855,77 @@ const init = async () => {
       return h.response({ message: "consent updated" }).code(200);
     },
     method: "PUT",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/subject",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      const subjects = dataset_subject.filter((subject) => subject.dataset_id === datasetid);
+
+      return h.response(subjects).code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/subject",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      // const requestPayload = request.payload;
+      const payload = JSON.parse(request.payload);
+
+      for (const item of payload) {
+        if ("id" in item) {
+          const subject = dataset_subject.find((subject) => item.id === subject.id);
+
+          if (!subject) {
+            return h.response({ message: "subject not found" }).code(404);
+          }
+
+          subject.subject = item.subject;
+          subject.classification_code = item.classification_code;
+          subject.scheme = item.scheme;
+          subject.scheme_uri = item.scheme_uri;
+          subject.value_uri = item.value_uri;
+        } else {
+          dataset_subject.push({
+            id: nanoid(),
+            classification_code: item.classification_code,
+            created_at: Date.now() / 1000,
+            dataset_id: datasetid,
+            scheme: item.scheme,
+            scheme_uri: item.scheme_uri,
+            subject: item.subject,
+            value_uri: item.value_uri,
+          });
+        }
+      }
+
+      return h.response({ message: "subjects updated" }).code(200);
+    },
+    method: "POST",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/subject/{subjectid}",
+    handler: (request, h) => {
+      const { subjectid } = request.params;
+
+      const subject = dataset_subject.find((subject) => subject.id === subjectid);
+
+      if (!subject) {
+        return h.response({ message: "subject not found" }).code(404);
+      }
+
+      // remove alternative identifier
+      dataset_subject.splice(dataset_subject.indexOf(subject), 1);
+
+      return h.response(subject).code(200);
+    },
+    method: "DELETE",
   });
 
   await server.start();

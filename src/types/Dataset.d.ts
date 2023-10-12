@@ -135,3 +135,17 @@ export interface DatasetConsent {
   research_type: boolean;
   type: string | null;
 }
+
+export interface DatasetSubject {
+  id: string;
+  classification_code: string;
+  origin: string;
+  scheme: string;
+  scheme_uri: string;
+  subject: string;
+  value_uri: string;
+}
+
+export interface DatasetSubjects {
+  subjects: DatasetSubject[];
+}
