@@ -159,6 +159,18 @@ const dataset_access = [
   },
 ];
 
+const dataset_rights = [
+  {
+    id: nanoid(),
+    created_at: 1183135260000,
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    identifier: "cc-by-4.0",
+    identifier_scheme: "SPDX",
+    rights: "CMU License",
+    uri: "https://creativecommons.org/licenses/by/4.0/",
+  },
+];
+
 const init = async () => {
   const server = Hapi.server({
     host: "localhost",
@@ -982,6 +994,75 @@ const init = async () => {
       return h.response({ message: "access updated" }).code(200);
     },
     method: "PUT",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/rights",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      const rights = dataset_rights.filter((right) => right.dataset_id === datasetid);
+
+      return h.response(rights).code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/rights",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+
+      // const requestPayload = request.payload;
+      const payload = JSON.parse(request.payload);
+
+      for (const item of payload) {
+        if ("id" in item) {
+          const right = dataset_rights.find((right) => item.id === right.id);
+
+          if (!right) {
+            return h.response({ message: "right not found" }).code(404);
+          }
+
+          right.identifier = item.identifier;
+          right.identifier_scheme = item.identifier_scheme;
+          right.rights = item.rights;
+          right.uri = item.uri;
+        } else {
+          dataset_rights.push({
+            id: nanoid(),
+            created_at: Date.now() / 1000,
+            dataset_id: datasetid,
+            identifier: item.identifier,
+            identifier_scheme: item.identifier_scheme,
+            rights: item.rights,
+            uri: item.uri,
+          });
+        }
+      }
+
+      return h.response({ message: "rights updated" }).code(200);
+    },
+    method: "POST",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/rights/{rightid}",
+    handler: (request, h) => {
+      const { rightid } = request.params;
+
+      const right = dataset_rights.find((right) => right.id === rightid);
+
+      if (!right) {
+        return h.response({ message: "right not found" }).code(404);
+      }
+
+      // remove alternative identifier
+      dataset_rights.splice(dataset_rights.indexOf(right), 1);
+
+      return h.response(right).code(200);
+    },
+    method: "DELETE",
   });
 
   await server.start();

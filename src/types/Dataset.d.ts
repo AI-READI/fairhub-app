@@ -156,3 +156,16 @@ export interface DatasetAccess {
   url: string;
   url_last_checked: number | null;
 }
+
+export interface DatasetRight {
+  id: string;
+  identifier: string;
+  identifier_scheme: string;
+  origin: string;
+  rights: string;
+  uri: string;
+}
+
+export interface DatasetRights {
+  rights: DatasetRight[];
+}
