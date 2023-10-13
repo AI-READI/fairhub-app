@@ -91,7 +91,7 @@ export interface DatasetContributor {
   name_identifier: string;
   name_identifier_scheme: string;
   name_identifier_scheme_uri: string;
-  name_type: "Personal" | "Organizational";
+  name_type: "Personal" | "Organizational" | null;
   origin: string;
 }
 

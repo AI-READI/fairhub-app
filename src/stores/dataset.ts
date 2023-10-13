@@ -15,8 +15,9 @@ export const useDatasetStore = defineStore("dataset", () => {
   const dataset = ref<Dataset>({
     id: "",
     title: "",
+    created_at: 0,
     description: "",
-    latest_version: "",
+    updated_at: 0,
   });
 
   const datasetTitles = ref<DatasetTitles>([]);
@@ -34,8 +35,9 @@ export const useDatasetStore = defineStore("dataset", () => {
         {
           id: "1",
           title: "Dataset 1",
+          created_at: 0,
           description: "Dataset 1 description",
-          latest_version: "",
+          updated_at: 0,
         },
       ];
     }
