@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { useSidebarStore } from "@/stores/sidebar";
 import type { Dataset } from "@/types/Dataset";
+import { baseURL } from "@/utils/constants";
 import { displayHumanFriendlyDateAndTime } from "@/utils/date";
-// import { baseURL } from "@/utils/constants";
-const baseURL = "http://localhost:3001/api";
 
 const router = useRouter();
 const route = useRoute();

@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { useSidebarStore } from "@/stores/sidebar";
 import type { Dataset } from "@/types/Dataset";
-
-// import { baseURL } from "@/utils/constants";
-const baseURL = "http://localhost:3001/api";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const push = usePush();

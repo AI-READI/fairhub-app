@@ -3,9 +3,7 @@ import type { FormInst } from "naive-ui";
 
 import FORM_JSON from "@/assets/data/form.json";
 import type { DatasetAccess } from "@/types/Dataset";
-
-// import { baseURL } from "@/utils/constants";
-const baseURL = "http://localhost:3001/api";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const push = usePush();

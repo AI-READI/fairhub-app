@@ -3,9 +3,7 @@ import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import type { DatasetSubjects } from "@/types/Dataset";
-
-// import { baseURL } from "@/utils/constants";
-const baseURL = "http://localhost:3001/api";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();

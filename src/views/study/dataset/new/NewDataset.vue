@@ -2,13 +2,11 @@
 import { faker } from "@faker-js/faker";
 
 import { useSidebarStore } from "@/stores/sidebar";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const push = usePush();
-
-// import { baseURL } from "@/utils/constants";
-const baseURL = "http://localhost:3001/api";
 
 const sidebarStore = useSidebarStore();
 
