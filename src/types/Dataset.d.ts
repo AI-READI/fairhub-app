@@ -197,3 +197,60 @@ export interface DatasetOther {
   resource_type: string;
   size: string[];
 }
+
+export interface DatasetRelatedItemIdentifier {
+  id: string;
+  identifier: string;
+  metadata_scheme: string;
+  origin: string;
+  scheme_type: string | null;
+  scheme_uri: string;
+  type: string | null;
+  value_uri: string;
+}
+
+export interface DatasetRelatedItemCreator {
+  id: string;
+  name: string;
+  name_type: string | null;
+  origin: string;
+}
+
+export interface DatasetRelatedItemContributor {
+  id: string;
+  name: string;
+  contributor_type: string | null;
+  name_type: string | null;
+  origin: string;
+}
+
+export interface DatasetRelatedItemTitle {
+  id: string;
+  title: string;
+  origin: string;
+  type: string | null;
+}
+
+export interface DatasetRelatedItem {
+  id: string;
+  contributors: DatasetRelatedItemContributor[];
+  creators: DatasetRelatedItemCreator[];
+  edition: string;
+  first_page: string;
+  identifiers: DatasetRelatedItemIdentifier[];
+  issue: string;
+  last_page: string;
+  number_type: string | null;
+  number_value: string;
+  origin: string;
+  publication_year: number | null;
+  publisher: string;
+  relation_type: string | null;
+  titles: DatasetRelatedItemTitle[];
+  type: string | null;
+  volume: string;
+}
+
+export interface DatasetRelatedItems {
+  related_items: DatasetRelatedItem[];
+}

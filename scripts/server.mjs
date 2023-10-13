@@ -1385,6 +1385,8 @@ const init = async () => {
         relatedItem.publisher = relatedItemOther.publisher;
         relatedItem.edition = relatedItemOther.edition;
       }
+
+      return h.response(relatedItems).code(200);
     },
     method: "GET",
   });
