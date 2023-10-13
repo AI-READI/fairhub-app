@@ -47,6 +47,36 @@ onBeforeMount(async () => {
       origin: "remote",
     };
   });
+
+  for (const item of moduleData.related_items) {
+    item.identifiers = item.identifiers.map((identifier: any) => {
+      return {
+        ...identifier,
+        origin: "remote",
+      };
+    });
+
+    item.creators = item.creators.map((creator: any) => {
+      return {
+        ...creator,
+        origin: "remote",
+      };
+    });
+
+    item.contributors = item.contributors.map((contributor: any) => {
+      return {
+        ...contributor,
+        origin: "remote",
+      };
+    });
+
+    item.titles = item.titles.map((title: any) => {
+      return {
+        ...title,
+        origin: "remote",
+      };
+    });
+  }
 });
 
 const removeRelatedItem = async (id: string) => {
@@ -64,11 +94,10 @@ const removeRelatedItem = async (id: string) => {
       push.error("Something went wrong.");
       throw new Error("Network response was not ok");
     }
-
-    push.success("Creator removed successfully.");
   }
 
   moduleData.related_items = moduleData.related_items.filter((item) => item.id !== id);
+  push.success("Resource removed successfully.");
 };
 
 const addRelatedItem = () => {
@@ -91,6 +120,166 @@ const addRelatedItem = () => {
     type: null,
     volume: "",
   });
+};
+
+const removeIdentifier = async (item_id: string, index: number) => {
+  const item = moduleData.related_items.find((item) => item.id === item_id);
+
+  if (item && item.origin === "remote") {
+    const identifier = item.identifiers[index];
+
+    if (identifier && identifier.origin === "remote") {
+      const response = await fetch(
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/related-item/${item_id}/identifier/${identifier.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        push.error("Something went wrong.");
+        throw new Error("Network response was not ok");
+      }
+    }
+  }
+
+  item?.identifiers.splice(index, 1);
+
+  push.success("Identifier removed successfully.");
+};
+
+const addIdentifier = (item_id: string) => {
+  const item = moduleData.related_items.find((item) => item.id === item_id);
+
+  if (item) {
+    item.identifiers.push({
+      id: nanoid(),
+      identifier: "",
+      metadata_scheme: "",
+      origin: "local",
+      scheme_type: "",
+      scheme_uri: "",
+      type: null,
+    });
+  }
+};
+
+const removeCreator = async (item_id: string, index: number) => {
+  const item = moduleData.related_items.find((item) => item.id === item_id);
+
+  if (item && item.origin === "remote") {
+    const creator = item.creators[index];
+
+    if (creator && creator.origin === "remote") {
+      const response = await fetch(
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/related-item/${item_id}/creator/${creator.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        push.error("Something went wrong.");
+        throw new Error("Network response was not ok");
+      }
+    }
+  }
+
+  item?.creators.splice(index, 1);
+
+  push.success("Creator removed successfully.");
+};
+
+const addCreator = (item_id: string) => {
+  const item = moduleData.related_items.find((item) => item.id === item_id);
+
+  if (item) {
+    item.creators.push({
+      id: nanoid(),
+      name: "",
+      name_type: null,
+      origin: "local",
+    });
+  }
+};
+
+const removeContributor = async (item_id: string, index: number) => {
+  const item = moduleData.related_items.find((item) => item.id === item_id);
+
+  if (item && item.origin === "remote") {
+    const contributor = item.contributors[index];
+
+    if (contributor && contributor.origin === "remote") {
+      const response = await fetch(
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/related-item/${item_id}/contributor/${contributor.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        push.error("Something went wrong.");
+        throw new Error("Network response was not ok");
+      }
+    }
+  }
+
+  item?.contributors.splice(index, 1);
+
+  push.success("Contributor removed successfully.");
+};
+
+const addContributor = (item_id: string) => {
+  const item = moduleData.related_items.find((item) => item.id === item_id);
+
+  if (item) {
+    item.contributors.push({
+      id: nanoid(),
+      name: "",
+      contributor_type: null,
+      name_type: null,
+      origin: "local",
+    });
+  }
+};
+
+const removeTitle = async (item_id: string, index: number) => {
+  const item = moduleData.related_items.find((item) => item.id === item_id);
+
+  if (item && item.origin === "remote") {
+    const title = item.titles[index];
+
+    if (title && title.origin === "remote") {
+      const response = await fetch(
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/related-item/${item_id}/title/${title.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        push.error("Something went wrong.");
+        throw new Error("Network response was not ok");
+      }
+    }
+  }
+
+  item?.titles.splice(index, 1);
+
+  push.success("Title removed successfully.");
+};
+
+const addTitle = (item_id: string) => {
+  const item = moduleData.related_items.find((item) => item.id === item_id);
+
+  if (item) {
+    item.titles.push({
+      id: nanoid(),
+      title: "",
+      origin: "local",
+      type: item.titles.length ? null : "MainTitle",
+    });
+  }
 };
 
 const saveMetadata = (e: MouseEvent) => {
@@ -155,7 +344,7 @@ const saveMetadata = (e: MouseEvent) => {
         v-for="(item, index) in moduleData.related_items"
         :key="item.id"
         class="mb-5 shadow-md"
-        :title="item.type || `Date ${index + 1}`"
+        :title="`Item ${index + 1}`"
         bordered
       >
         <template #header-extra>
@@ -166,11 +355,11 @@ const saveMetadata = (e: MouseEvent) => {
                   <f-icon icon="ep:delete" />
                 </template>
 
-                Remove date
+                Remove resource
               </n-button>
             </template>
 
-            Are you sure you want to remove this date?
+            Are you sure you want to remove this resource?
           </n-popconfirm>
         </template>
 
@@ -207,6 +396,366 @@ const saveMetadata = (e: MouseEvent) => {
             :options="FORM_JSON.datasetRelatedItemRelationTypeOptions"
           />
         </n-form-item>
+
+        <h3>Titles</h3>
+
+        <p class="pb-8 pt-2">The titles for this resource.</p>
+
+        <div class="flex flex-col divide-y-2 divide-dotted divide-slate-200">
+          <div
+            class="flex w-full flex-row items-center justify-between space-x-8 pt-3"
+            v-for="(title, idx) in item.titles"
+            :key="idx"
+          >
+            <n-space vertical class="w-full">
+              <div class="flex w-full flex-row items-center justify-between space-x-4">
+                <n-form-item
+                  label="Name"
+                  :path="`related_items[${index}].titles[${idx}].name`"
+                  :rule="{
+                    message: 'Please enter the name of this title',
+                    required: true,
+                    trigger: ['blur', 'change'],
+                  }"
+                  class="w-full"
+                >
+                  <n-input
+                    v-model:value="title.title"
+                    placeholder="family name, given name"
+                    clearable
+                  />
+                </n-form-item>
+
+                <n-form-item
+                  label="Type"
+                  :path="`related_items[${index}].titles[${idx}].name_type`"
+                  :rule="{
+                    message: 'Please select the type of this title',
+                    required: true,
+                    trigger: ['blur', 'input'],
+                  }"
+                  class="w-full"
+                >
+                  <n-select
+                    v-model:value="title.type"
+                    placeholder="Alternative Title"
+                    clearable
+                    :disabled="title.type === 'MainTitle'"
+                    :options="FORM_JSON.datasetTitleTypeOptions"
+                  />
+                </n-form-item>
+              </div>
+            </n-space>
+
+            <n-popconfirm @positive-click="removeTitle(item.id, idx)" class="self-justify-end">
+              <template #trigger>
+                <n-button
+                  class="ml-0"
+                  size="large"
+                  type="error"
+                  :disabled="title.type === 'MainTitle'"
+                >
+                  <f-icon icon="gridicons:trash" />
+                </n-button>
+              </template>
+
+              Are you sure you want to remove this title?
+            </n-popconfirm>
+          </div>
+        </div>
+
+        <n-button class="mb-10 w-full" dashed type="success" @click="addTitle(item.id)">
+          <template #icon>
+            <f-icon icon="gridicons:create" />
+          </template>
+
+          Add a title
+        </n-button>
+
+        <n-divider />
+
+        <h3>Identifiers</h3>
+
+        <p class="pb-8 pt-2">The identifier for this resource.</p>
+
+        <div class="flex flex-col divide-y-2 divide-dotted divide-slate-200">
+          <div
+            class="flex w-full flex-row items-center justify-between space-x-8 pt-3"
+            v-for="(identifier, idx) in item.identifiers"
+            :key="idx"
+          >
+            <n-space vertical class="w-full">
+              <div class="flex w-full flex-row items-center justify-between space-x-4">
+                <n-form-item
+                  label="Identifier"
+                  :path="`related_items[${index}].identifiers[${idx}].identifier`"
+                  :rule="{
+                    message: 'Please enter the type of this identifier',
+                    required: true,
+                    trigger: ['blur', 'change'],
+                  }"
+                  class="w-full"
+                >
+                  <n-input v-model:value="identifier.identifier" placeholder="DOI" clearable />
+                </n-form-item>
+
+                <n-form-item
+                  label="Type"
+                  :path="`related_items[${index}].identifiers[${idx}].type`"
+                  :rule="{
+                    message: 'Please select the type of this identifier',
+                    required: true,
+                    trigger: ['blur', 'input'],
+                  }"
+                  class="w-full"
+                >
+                  <n-select
+                    v-model:value="identifier.type"
+                    placeholder="DOI"
+                    clearable
+                    :options="FORM_JSON.datasetIdentifierTypeOptions"
+                  />
+                </n-form-item>
+              </div>
+
+              <div class="flex w-full flex-row items-center justify-between space-x-4">
+                <n-form-item
+                  label="Metadata Scheme"
+                  :path="`related_items[${index}].identifiers[${idx}].metadata_scheme`"
+                  :rule="{
+                    message: 'Please enter the metadata scheme of this identifier',
+                    required:
+                      item.relation_type === 'HasMetadata' ||
+                      item.relation_type === 'IsMetadataFor',
+                    trigger: ['blur', 'change'],
+                  }"
+                  class="w-full"
+                >
+                  <n-input
+                    v-model:value="identifier.metadata_scheme"
+                    placeholder="Lorem Ipsum"
+                    clearable
+                  />
+                </n-form-item>
+
+                <n-form-item
+                  label="Scheme URI"
+                  :path="`related_items[${index}].identifiers[${idx}].scheme_uri`"
+                  :rule="{
+                    message: 'Please enter the scheme URI of this identifier',
+                    required:
+                      item.relation_type === 'HasMetadata' ||
+                      item.relation_type === 'IsMetadataFor',
+                    trigger: ['blur', 'change'],
+                  }"
+                  class="w-full"
+                >
+                  <n-input
+                    v-model:value="identifier.scheme_uri"
+                    placeholder="https://somesite.io"
+                    clearable
+                  />
+                </n-form-item>
+
+                <n-form-item
+                  label="Relation Type"
+                  :path="`related_items[${index}].identifiers[${idx}].scheme_type`"
+                  :rule="{
+                    message: 'Please enter the scheme type of this identifier',
+                    required:
+                      item.relation_type === 'HasMetadata' ||
+                      item.relation_type === 'IsMetadataFor',
+                    trigger: ['blur', 'change'],
+                  }"
+                  class="w-full"
+                >
+                  <n-input v-model:value="identifier.scheme_type" placeholder="XSD" clearable />
+                </n-form-item>
+              </div>
+            </n-space>
+
+            <n-popconfirm @positive-click="removeIdentifier(item.id, idx)" class="self-justify-end">
+              <template #trigger>
+                <n-button class="ml-0" size="large" type="error">
+                  <f-icon icon="gridicons:trash" />
+                </n-button>
+              </template>
+
+              Are you sure you want to remove this identifier?
+            </n-popconfirm>
+          </div>
+        </div>
+
+        <n-button class="mb-10 w-full" dashed type="success" @click="addIdentifier(item.id)">
+          <template #icon>
+            <f-icon icon="gridicons:create" />
+          </template>
+
+          Add an identifier
+        </n-button>
+
+        <n-divider />
+
+        <h3>Creators</h3>
+
+        <p class="pb-8 pt-2">The creators for this resource.</p>
+
+        <div class="flex flex-col divide-y-2 divide-dotted divide-slate-200">
+          <div
+            class="flex w-full flex-row items-center justify-between space-x-8 pt-3"
+            v-for="(creator, idx) in item.creators"
+            :key="idx"
+          >
+            <n-space vertical class="w-full">
+              <div class="flex w-full flex-row items-center justify-between space-x-4">
+                <n-form-item
+                  label="Name"
+                  :path="`related_items[${index}].creators[${idx}].name`"
+                  :rule="{
+                    message: 'Please enter the name of this creator',
+                    required: true,
+                    trigger: ['blur', 'change'],
+                  }"
+                  class="w-full"
+                >
+                  <n-input
+                    v-model:value="creator.name"
+                    placeholder="family name, given name"
+                    clearable
+                  />
+                </n-form-item>
+
+                <n-form-item
+                  label="Type"
+                  :path="`related_items[${index}].creators[${idx}].name_type`"
+                  :rule="{
+                    message: 'Please select the type of this creator',
+                    required: true,
+                    trigger: ['blur', 'input'],
+                  }"
+                  class="w-full"
+                >
+                  <n-select
+                    v-model:value="creator.name_type"
+                    placeholder="Personal"
+                    clearable
+                    :options="FORM_JSON.datasetNameTypeOptions"
+                  />
+                </n-form-item>
+              </div>
+            </n-space>
+
+            <n-popconfirm @positive-click="removeCreator(item.id, idx)" class="self-justify-end">
+              <template #trigger>
+                <n-button class="ml-0" size="large" type="error">
+                  <f-icon icon="gridicons:trash" />
+                </n-button>
+              </template>
+
+              Are you sure you want to remove this creator?
+            </n-popconfirm>
+          </div>
+        </div>
+
+        <n-button class="mb-10 w-full" dashed type="success" @click="addCreator(item.id)">
+          <template #icon>
+            <f-icon icon="gridicons:create" />
+          </template>
+
+          Add a creator
+        </n-button>
+
+        <n-divider />
+
+        <h3>Contributors</h3>
+
+        <p class="pb-8 pt-2">The contributors for this resource.</p>
+
+        <div class="flex flex-col divide-y-2 divide-dotted divide-slate-200">
+          <div
+            class="flex w-full flex-row items-center justify-between space-x-8 pt-3"
+            v-for="(contributor, idx) in item.contributors"
+            :key="idx"
+          >
+            <n-space vertical class="w-full">
+              <div class="flex w-full flex-row items-center justify-between space-x-4">
+                <n-form-item
+                  label="Name"
+                  :path="`related_items[${index}].contributors[${idx}].name`"
+                  :rule="{
+                    message: 'Please enter the name of this contributor',
+                    required: true,
+                    trigger: ['blur', 'change'],
+                  }"
+                  class="w-full"
+                >
+                  <n-input
+                    v-model:value="contributor.name"
+                    placeholder="family name, given name"
+                    clearable
+                  />
+                </n-form-item>
+
+                <n-form-item
+                  label="Type"
+                  :path="`related_items[${index}].contributors[${idx}].name_type`"
+                  :rule="{
+                    message: 'Please select the type of this contributor',
+                    required: true,
+                    trigger: ['blur', 'input'],
+                  }"
+                  class="w-full"
+                >
+                  <n-select
+                    v-model:value="contributor.name_type"
+                    placeholder="Personal"
+                    clearable
+                    :options="FORM_JSON.datasetNameTypeOptions"
+                  />
+                </n-form-item>
+
+                <n-form-item
+                  label="Contributor Type"
+                  :path="`related_items[${index}].contributors[${idx}].contributor_type`"
+                  :rule="{
+                    message: 'Please select the type of this contributor',
+                    required: true,
+                    trigger: ['blur', 'input'],
+                  }"
+                  class="w-full"
+                >
+                  <n-select
+                    v-model:value="contributor.contributor_type"
+                    placeholder="Contact Person"
+                    clearable
+                    :options="FORM_JSON.datasetContributorTypeOptions"
+                  />
+                </n-form-item>
+              </div>
+            </n-space>
+
+            <n-popconfirm
+              @positive-click="removeContributor(item.id, idx)"
+              class="self-justify-end"
+            >
+              <template #trigger>
+                <n-button class="ml-0" size="large" type="error">
+                  <f-icon icon="gridicons:trash" />
+                </n-button>
+              </template>
+
+              Are you sure you want to remove this contributor?
+            </n-popconfirm>
+          </div>
+        </div>
+
+        <n-button class="mb-10 w-full" dashed type="success" @click="addContributor(item.id)">
+          <template #icon>
+            <f-icon icon="gridicons:create" />
+          </template>
+
+          Add a contributor
+        </n-button>
 
         <!-- <n-form-item
           label="Date Value"

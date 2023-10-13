@@ -203,10 +203,9 @@ export interface DatasetRelatedItemIdentifier {
   identifier: string;
   metadata_scheme: string;
   origin: string;
-  scheme_type: string | null;
+  scheme_type: string;
   scheme_uri: string;
   type: string | null;
-  value_uri: string;
 }
 
 export interface DatasetRelatedItemCreator {

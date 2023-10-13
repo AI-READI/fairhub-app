@@ -1582,6 +1582,92 @@ const init = async () => {
     method: "POST",
   });
 
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/related-item/{relateditemid}/identifier/{identifierid}",
+    handler: (request, h) => {
+      const { identifierid } = request.params;
+
+      const identifier = dataset_related_item_identifier.find(
+        (identifier) => identifier.id === identifierid
+      );
+
+      if (!identifier) {
+        return h.response({ message: "identifier not found" }).code(404);
+      }
+
+      // remove alternative identifier
+      dataset_related_item_identifier.splice(
+        dataset_related_item_identifier.indexOf(identifier),
+        1
+      );
+
+      return h.response(identifier).code(200);
+    },
+    method: "DELETE",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/related-item/{relateditemid}/creator/{creatorid}",
+    handler: (request, h) => {
+      const { creatorid } = request.params;
+
+      const creator = dataset_related_item_creator.find((creator) => creator.id === creatorid);
+
+      if (!creator) {
+        return h.response({ message: "creator not found" }).code(404);
+      }
+
+      // remove alternative identifier
+      dataset_related_item_creator.splice(dataset_related_item_creator.indexOf(creator), 1);
+
+      return h.response(creator).code(200);
+    },
+    method: "DELETE",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/related-item/{relateditemid}/contributor/{contributorid}",
+    handler: (request, h) => {
+      const { contributorid } = request.params;
+
+      const contributor = dataset_related_item_contributor.find(
+        (contributor) => contributor.id === contributorid
+      );
+
+      if (!contributor) {
+        return h.response({ message: "contributor not found" }).code(404);
+      }
+
+      // remove alternative identifier
+      dataset_related_item_contributor.splice(
+        dataset_related_item_contributor.indexOf(contributor),
+        1
+      );
+
+      return h.response(contributor).code(200);
+    },
+    method: "DELETE",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/related-item/{relateditemid}/title/{titleid}",
+    handler: (request, h) => {
+      const { titleid } = request.params;
+
+      const title = dataset_related_item_title.find((title) => title.id === titleid);
+
+      if (!title) {
+        return h.response({ message: "title not found" }).code(404);
+      }
+
+      // remove alternative identifier
+      dataset_related_item_title.splice(dataset_related_item_title.indexOf(title), 1);
+
+      return h.response(title).code(200);
+    },
+    method: "DELETE",
+  });
+
   await server.start();
 
   console.log("Server running on %s", server.info.uri);
