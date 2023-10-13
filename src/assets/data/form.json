@@ -913,6 +913,24 @@
       "description": "Indicates A is replaced by B"
     }
   ],
+  "datasetRelatedItemNumberTypeOptions": [
+    {
+      "label": "Article",
+      "value": "Article"
+    },
+    {
+      "label": "Chapter",
+      "value": "Chapter"
+    },
+    {
+      "label": "Report",
+      "value": "Report"
+    },
+    {
+      "label": "Other",
+      "value": "Other"
+    }
+  ],
   "studyMetadataIdentificationPrimaryIdentifierTypeOptions": [
     {
       "label": "NIH Grant Number",

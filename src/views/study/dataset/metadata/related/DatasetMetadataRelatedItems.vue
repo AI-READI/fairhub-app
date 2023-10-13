@@ -116,7 +116,14 @@ const addRelatedItem = () => {
     publication_year: null,
     publisher: "",
     relation_type: null,
-    titles: [],
+    titles: [
+      {
+        id: nanoid(),
+        title: "",
+        origin: "local",
+        type: "MainTitle",
+      },
+    ],
     type: null,
     volume: "",
   });
@@ -286,15 +293,92 @@ const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
     if (!errors) {
-      const data: any = moduleData.related_items.map((item) => {
-        const entry = {};
+      const data: any = moduleData.related_items.map((related_item) => {
+        const entry = {
+          id: related_item.id,
+          contributors: related_item.contributors.map((contributor: any) => {
+            const entry = {
+              name: contributor.name,
+              contributor_type: contributor.contributor_type,
+              name_type: contributor.name_type,
+            };
 
-        if (item.origin === "local") {
+            if (contributor.origin === "local") {
+              return entry;
+            } else {
+              return {
+                ...entry,
+                id: contributor.id,
+              };
+            }
+          }),
+          creators: related_item.creators.map((creator: any) => {
+            const entry = {
+              name: creator.name,
+              name_type: creator.name_type,
+            };
+
+            if (creator.origin === "local") {
+              return entry;
+            } else {
+              return {
+                ...entry,
+                id: creator.id,
+              };
+            }
+          }),
+          edition: related_item.edition,
+          first_page: related_item.first_page,
+          identifiers: related_item.identifiers.map((identifier: any) => {
+            const entry = {
+              identifier: identifier.identifier,
+              metadata_scheme: identifier.metadata_scheme,
+              scheme_type: identifier.scheme_type,
+              scheme_uri: identifier.scheme_uri,
+              type: identifier.type,
+            };
+
+            if (identifier.origin === "local") {
+              return entry;
+            } else {
+              return {
+                ...entry,
+                id: identifier.id,
+              };
+            }
+          }),
+          issue: related_item.issue,
+          last_page: related_item.last_page,
+          number_type: related_item.number_type,
+          number_value: related_item.number_value,
+          publication_year: related_item.publication_year,
+          publisher: related_item.publisher,
+          relation_type: related_item.relation_type,
+          titles: related_item.titles.map((title: any) => {
+            const entry = {
+              title: title.title,
+              type: title.type,
+            };
+
+            if (title.origin === "local") {
+              return entry;
+            } else {
+              return {
+                ...entry,
+                id: title.id,
+              };
+            }
+          }),
+          type: related_item.type,
+          volume: related_item.volume,
+        };
+
+        if (related_item.origin === "local") {
           return entry;
         } else {
           return {
             ...entry,
-            id: item.id,
+            id: related_item.id,
           };
         }
       });
@@ -363,6 +447,10 @@ const saveMetadata = (e: MouseEvent) => {
           </n-popconfirm>
         </template>
 
+        <h3>About</h3>
+
+        <p class="pb-8 pt-2">High level metadata about this resource</p>
+
         <n-form-item
           label="Type"
           :path="`related_items[${index}].type`"
@@ -397,6 +485,8 @@ const saveMetadata = (e: MouseEvent) => {
           />
         </n-form-item>
 
+        <n-divider />
+
         <h3>Titles</h3>
 
         <p class="pb-8 pt-2">The titles for this resource.</p>
@@ -411,7 +501,7 @@ const saveMetadata = (e: MouseEvent) => {
               <div class="flex w-full flex-row items-center justify-between space-x-4">
                 <n-form-item
                   label="Name"
-                  :path="`related_items[${index}].titles[${idx}].name`"
+                  :path="`related_items[${index}].titles[${idx}].title`"
                   :rule="{
                     message: 'Please enter the name of this title',
                     required: true,
@@ -428,7 +518,7 @@ const saveMetadata = (e: MouseEvent) => {
 
                 <n-form-item
                   label="Type"
-                  :path="`related_items[${index}].titles[${idx}].name_type`"
+                  :path="`related_items[${index}].titles[${idx}].type`"
                   :rule="{
                     message: 'Please select the type of this title',
                     required: true,
@@ -756,6 +846,60 @@ const saveMetadata = (e: MouseEvent) => {
 
           Add a contributor
         </n-button>
+
+        <n-divider />
+
+        <h3>Other</h3>
+
+        <p class="pb-8 pt-2">Any additional details about this resource.</p>
+
+        <n-form-item label="Publication Year" :path="`related_items[${index}].publication_year`">
+          <n-date-picker v-model:value="item.publication_year" type="year" clearable />
+        </n-form-item>
+
+        <n-form-item label="Volume" :path="`related_items[${index}].volume`">
+          <n-input v-model:value="item.volume" placeholder="1" clearable />
+        </n-form-item>
+
+        <n-form-item label="Issue" :path="`related_items[${index}].issue`">
+          <n-input v-model:value="item.issue" placeholder="1" clearable />
+        </n-form-item>
+
+        <n-form-item label="Number" :path="`related_items[${index}].number_value`">
+          <n-input
+            v-model:value="item.number_value"
+            placeholder="Number of the related item, e.g., report number of article number"
+            clearable
+          />
+        </n-form-item>
+
+        <n-form-item
+          label="Type of resource's number"
+          :path="`related_items[${index}].number_type`"
+        >
+          <n-select
+            v-model:value="item.number_type"
+            placeholder="Chapter"
+            clearable
+            :options="FORM_JSON.datasetRelatedItemNumberTypeOptions"
+          />
+        </n-form-item>
+
+        <n-form-item label="First Page" :path="`related_items[${index}].first_page`">
+          <n-input v-model:value="item.first_page" placeholder="1" clearable />
+        </n-form-item>
+
+        <n-form-item label="Last Page" :path="`related_items[${index}].last_page`">
+          <n-input v-model:value="item.last_page" placeholder="1" clearable />
+        </n-form-item>
+
+        <n-form-item label="Publisher" :path="`related_items[${index}].publisher`">
+          <n-input v-model:value="item.publisher" placeholder="1" clearable />
+        </n-form-item>
+
+        <n-form-item label="Edition" :path="`related_items[${index}].edition`">
+          <n-input v-model:value="item.edition" placeholder="1" clearable />
+        </n-form-item>
 
         <!-- <n-form-item
           label="Date Value"

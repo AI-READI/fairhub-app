@@ -264,7 +264,7 @@ const dataset_related_item_other = [
     first_page: "1",
     issue: "1",
     last_page: "15",
-    number_type: "SequenceNumber",
+    number_type: "Article",
     number_value: "1",
     publication_year: 2021,
     publisher: "Publisher",
