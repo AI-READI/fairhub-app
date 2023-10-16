@@ -2,6 +2,7 @@
 import { useSidebarStore } from "@/stores/sidebar";
 import type { Dataset } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
+// const baseURL = "http://localhost:3001/api";
 import { displayHumanFriendlyDateAndTime } from "@/utils/date";
 
 const router = useRouter();
@@ -100,13 +101,13 @@ const navigateToDataset = (datasetId: string) => {
               @click="navigateToDataset(dataset.id)"
             >
               <div class="flex justify-between pt-2">
-                <h3>{{ dataset.title }}</h3>
+                <h3>{{ dataset.title || "Untitled Dataset" }}</h3>
               </div>
 
               <n-divider />
 
               <div class="flex flex-col space-y-4">
-                <p>{{ dataset.description }}</p>
+                <p>{{ dataset.description || "No description provided" }}</p>
 
                 <!-- <n-divider v-if="dataset.latest_version" /> -->
 

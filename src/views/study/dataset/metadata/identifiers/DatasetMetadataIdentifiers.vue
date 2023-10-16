@@ -83,8 +83,8 @@ const updateDatasetIdentifier = async (e: MouseEvent) => {
   const tempIdentifiers = datasetIdentifiers.value;
 
   for (const item of tempIdentifiers) {
-    // remove any items that have an empty title
-    if (item.identifier === "") {
+    // remove any items that have an empty title or type
+    if (!item.identifier || !item.type) {
       tempIdentifiers.splice(tempIdentifiers.indexOf(item), 1);
     }
 

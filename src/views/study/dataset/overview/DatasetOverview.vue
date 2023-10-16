@@ -2,6 +2,7 @@
 import { useSidebarStore } from "@/stores/sidebar";
 import type { Dataset } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
+// const baseURL = "http://localhost:3001/api";
 
 const route = useRoute();
 const push = usePush();
@@ -56,9 +57,9 @@ onBeforeMount(async () => {
 
     <div class="flex w-full justify-between">
       <div class="pr-8">
-        <h2>{{ dataset.title }}</h2>
+        <h2>{{ dataset.title || "Untitled Dataset" }}</h2>
 
-        <p class="py-4">{{ dataset.description }}</p>
+        <p class="py-4">{{ dataset.description || "No descripiton provided" }}</p>
       </div>
     </div>
   </main>
