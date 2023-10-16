@@ -283,6 +283,7 @@ const saveMetadata = (e: MouseEvent) => {
             v-model:value="item.affiliations"
             #="{ index: idx, value }"
             :on-create="addEntryToAffiliationsList"
+            :disabled="item.name_type === 'Organizational'"
             class="[&>div>*]:!self-center"
           >
             <div class="flex w-full flex-col space-y-4">
@@ -294,13 +295,14 @@ const saveMetadata = (e: MouseEvent) => {
                 class="w-full"
                 :rule="{
                   message: 'Please add at least one affiliation',
-                  required: !item.affiliations[idx].identifier,
+                  required: !item.affiliations[idx].identifier && item.name_type === 'Personal',
                   trigger: ['blur', 'input'],
                 }"
               >
                 <n-input
                   v-model:value="item.affiliations[idx].name"
                   placeholder="University of Marley"
+                  :disabled="item.name_type === 'Organizational'"
                   @keydown.enter.prevent
                 />
               </n-form-item>
@@ -313,13 +315,14 @@ const saveMetadata = (e: MouseEvent) => {
                   class="w-full"
                   :rule="{
                     message: 'Identifier is required if name of affiliation is empty',
-                    required: !item.affiliations[idx].name,
+                    required: !item.affiliations[idx].name && item.name_type === 'Personal',
                     trigger: ['blur', 'input'],
                   }"
                 >
                   <n-input
                     v-model:value="item.affiliations[idx].identifier"
                     placeholder="0156zyn36"
+                    :disabled="item.name_type === 'Organizational'"
                     @keydown.enter.prevent
                   />
                 </n-form-item>
@@ -331,12 +334,13 @@ const saveMetadata = (e: MouseEvent) => {
                   class="ml-3 w-full"
                   :rule="{
                     message: 'Scheme is required if identifier is present',
-                    required: item.affiliations[idx].identifier,
+                    required: item.affiliations[idx].identifier && item.name_type === 'Personal',
                     trigger: ['blur', 'input'],
                   }"
                 >
                   <n-input
                     v-model:value="item.affiliations[idx].scheme"
+                    :disabled="item.name_type === 'Organizational'"
                     placeholder="ROR"
                     @keydown.enter.prevent
                   />
@@ -351,6 +355,7 @@ const saveMetadata = (e: MouseEvent) => {
                   <n-input
                     v-model:value="item.affiliations[idx].scheme_uri"
                     placeholder="https://ror.org/"
+                    :disabled="item.name_type === 'Organizational'"
                     @keydown.enter.prevent
                   />
                 </n-form-item>

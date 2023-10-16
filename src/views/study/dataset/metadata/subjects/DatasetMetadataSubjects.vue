@@ -163,7 +163,7 @@ const saveMetadata = (e: MouseEvent) => {
 
         <n-form-item
           label="Subject"
-          :path="`dates[${index}].subject`"
+          :path="`subjects[${index}].subject`"
           :rule="{
             message: 'Please add the subject',
             required: true,
@@ -177,11 +177,11 @@ const saveMetadata = (e: MouseEvent) => {
           />
         </n-form-item>
 
-        <n-form-item label="Scheme" :path="`dates[${index}].scheme`">
+        <n-form-item label="Scheme" :path="`subjects[${index}].scheme`">
           <n-input v-model:value="item.scheme" placeholder="ANZSRC Fields of Research" clearable />
         </n-form-item>
 
-        <n-form-item label="Scheme URI" :path="`dates[${index}].scheme_uri`">
+        <n-form-item label="Scheme URI" :path="`subjects[${index}].scheme_uri`">
           <n-input
             v-model:value="item.scheme_uri"
             placeholder="https://id.loc.gov/authorities/subjects.html"
@@ -189,7 +189,7 @@ const saveMetadata = (e: MouseEvent) => {
           />
         </n-form-item>
 
-        <n-form-item label="Value URI" :path="`dates[${index}].value_uri`">
+        <n-form-item label="Value URI" :path="`subjects[${index}].value_uri`">
           <n-input
             v-model:value="item.value_uri"
             placeholder="https://id.loc.gov/authorities/subjects/sh85118622.html"
@@ -197,7 +197,7 @@ const saveMetadata = (e: MouseEvent) => {
           />
         </n-form-item>
 
-        <n-form-item label="Classification Code" :path="`dates[${index}].classification_code`">
+        <n-form-item label="Classification Code" :path="`subjects[${index}].classification_code`">
           <n-input
             v-model:value="item.classification_code"
             placeholder="https://id.loc.gov/authorities/subjects/sh85118622.html"
