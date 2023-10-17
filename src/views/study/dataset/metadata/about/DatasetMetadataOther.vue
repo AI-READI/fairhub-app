@@ -77,9 +77,11 @@ const saveMetadata = (e: MouseEvent) => {
       const uniqueSizes = [...new Set(sizes)];
 
       const data = {
+        acknowledgement: moduleData.value.acknowledgement,
         language: moduleData.value.language,
         resource_type: moduleData.value.resource_type,
         size: uniqueSizes,
+        standards_followed: moduleData.value.standards_followed,
       };
 
       const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/other`, {
