@@ -325,14 +325,14 @@ const saveMetadata = (e: MouseEvent) => {
               };
             }
           }),
-          edition: related_item.edition,
-          first_page: related_item.first_page,
+          edition: related_item.edition || "",
+          first_page: related_item.first_page || "",
           identifiers: related_item.identifiers.map((identifier: any) => {
             const entry = {
               identifier: identifier.identifier,
-              metadata_scheme: identifier.metadata_scheme,
-              scheme_type: identifier.scheme_type,
-              scheme_uri: identifier.scheme_uri,
+              metadata_scheme: identifier.metadata_scheme || "",
+              scheme_type: identifier.scheme_type || "",
+              scheme_uri: identifier.scheme_uri || "",
               type: identifier.type,
             };
 
@@ -345,13 +345,13 @@ const saveMetadata = (e: MouseEvent) => {
               };
             }
           }),
-          issue: related_item.issue,
-          last_page: related_item.last_page,
-          number_type: related_item.number_type,
-          number_value: related_item.number_value,
-          publication_year: related_item.publication_year,
-          publisher: related_item.publisher,
-          relation_type: related_item.relation_type,
+          issue: related_item.issue || "",
+          last_page: related_item.last_page || "",
+          number_type: related_item.number_type || "",
+          number_value: related_item.number_value || "",
+          publication_year: related_item.publication_year || null,
+          publisher: related_item.publisher || "",
+          relation_type: related_item.relation_type || null,
           titles: related_item.titles.map((title: any) => {
             const entry = {
               title: title.title,
@@ -367,8 +367,8 @@ const saveMetadata = (e: MouseEvent) => {
               };
             }
           }),
-          type: related_item.type,
-          volume: related_item.volume,
+          type: related_item.type || null,
+          volume: related_item.volume || "",
         };
 
         if (related_item.origin === "local") {
@@ -646,7 +646,7 @@ const saveMetadata = (e: MouseEvent) => {
                 </n-form-item>
 
                 <n-form-item
-                  label="Relation Type"
+                  label="Scheme Type"
                   :path="`related_items[${index}].identifiers[${idx}].scheme_type`"
                   :rule="{
                     message: 'Please enter the scheme type of this identifier',

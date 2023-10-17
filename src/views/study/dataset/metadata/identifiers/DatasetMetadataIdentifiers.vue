@@ -99,8 +99,8 @@ const updateDatasetIdentifier = async (e: MouseEvent) => {
 
   const data = tempIdentifiers.map((item) => {
     const entry = {
-      identifier: item.identifier,
-      type: item.type,
+      identifier: item.identifier || "",
+      type: item.type || null,
     };
 
     if (item.origin === "local") {

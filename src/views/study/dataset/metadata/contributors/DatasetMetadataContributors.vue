@@ -98,11 +98,18 @@ const saveMetadata = (e: MouseEvent) => {
       const data: any = moduleData.contributors.map((item) => {
         const entry = {
           name: item.name,
-          affiliations: item.affiliations,
+          affiliations: item.affiliations.map((affiliation) => {
+            return {
+              name: affiliation.name || "",
+              identifier: affiliation.identifier || "",
+              scheme: affiliation.scheme || "",
+              scheme_uri: affiliation.scheme_uri || "",
+            };
+          }),
           contributor_type: item.contributor_type,
           name_identifier: item.name_identifier,
-          name_identifier_scheme: item.name_identifier_scheme,
-          name_identifier_scheme_uri: item.name_identifier_scheme_uri,
+          name_identifier_scheme: item.name_identifier_scheme || "",
+          name_identifier_scheme_uri: item.name_identifier_scheme_uri || "",
           name_type: item.name_type,
         };
 

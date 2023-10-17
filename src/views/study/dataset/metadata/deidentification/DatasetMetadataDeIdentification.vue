@@ -63,7 +63,7 @@ const saveMetadata = (e: MouseEvent) => {
 
       const data = {
         dates: moduleData.value.dates,
-        details: moduleData.value.details,
+        details: moduleData.value.details || "",
         direct: moduleData.value.direct,
         hipaa: moduleData.value.hipaa,
         k_anon: moduleData.value.k_anon,

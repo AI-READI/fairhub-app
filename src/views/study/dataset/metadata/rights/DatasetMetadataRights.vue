@@ -82,10 +82,10 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data: any = moduleData.rights.map((item) => {
         const entry = {
-          identifier: item.identifier,
-          identifier_scheme: item.identifier_scheme,
+          identifier: item.identifier || "",
+          identifier_scheme: item.identifier_scheme || "",
           rights: item.rights,
-          uri: item.uri,
+          uri: item.uri || "",
         };
 
         if (item.origin === "local") {

@@ -61,10 +61,10 @@ const saveMetadata = (e: MouseEvent) => {
       loading.value = true;
 
       const data = {
-        description: moduleData.value.description,
-        type: moduleData.value.type,
-        url: moduleData.value.url,
-        url_last_checked: moduleData.value.url_last_checked,
+        description: moduleData.value.description || "",
+        type: moduleData.value.type || null,
+        url: moduleData.value.url || "",
+        url_last_checked: moduleData.value.url_last_checked || null,
       };
 
       const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/access`, {
