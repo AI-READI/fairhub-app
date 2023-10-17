@@ -17,9 +17,11 @@ const studyId = routeParams.studyId;
 const datasetId = routeParams.datasetId;
 
 const moduleData = ref<DatasetOther>({
+  acknowledgement: "",
   language: null,
   resource_type: "",
   size: [],
+  standards_followed: "",
 });
 
 const formRef = ref<FormInst | null>(null);
@@ -188,6 +190,43 @@ const saveMetadata = (e: MouseEvent) => {
           />
         </n-form-item>
       </n-dynamic-input>
+
+      <n-divider />
+
+      <h3>Standards Followed</h3>
+
+      <p class="pb-8 pt-2">
+        Mention the standards followed to structure the dataset, format the data files, etc. Make
+        sure to include identifiers of the standards when available and/or link to the associated
+        documentation.
+      </p>
+
+      <n-form-item label="Name" path="managing_organization_name">
+        <n-input
+          v-model:value="moduleData.standards_followed"
+          placeholder="Lorem "
+          clearable
+          type="textarea"
+        />
+      </n-form-item>
+
+      <n-divider />
+
+      <h3>Acknowledgement</h3>
+
+      <p class="pb-8 pt-2">
+        Brief description of how to acknowledge the dataset, in APA format (refer to the
+        ACKNOWLEDGEMENT.txt file for additional details).
+      </p>
+
+      <n-form-item label="Name" path="managing_organization_name">
+        <n-input
+          v-model:value="moduleData.standards_followed"
+          placeholder="Lorem "
+          clearable
+          type="textarea"
+        />
+      </n-form-item>
 
       <n-divider />
 
