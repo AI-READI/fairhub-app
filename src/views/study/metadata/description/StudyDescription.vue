@@ -55,8 +55,8 @@ const saveMetadata = (e: MouseEvent) => {
   formRef.value?.validate(async (errors) => {
     if (!errors) {
       const data = {
-        brief_summary: moduleData.value.brief_summary,
-        detailed_description: moduleData.value.detailed_description,
+        brief_summary: moduleData.value.brief_summary || "",
+        detailed_description: moduleData.value.detailed_description || "",
       };
 
       const response = await fetch(

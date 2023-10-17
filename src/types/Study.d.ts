@@ -36,10 +36,10 @@ export interface StudyContributors extends Array<StudyContributor> {}
 
 export interface StudyIdentifier {
   id: string;
-  domain: string;
   identifier: string;
-  link: string;
-  type: string | null;
+  identifier_domain: string;
+  identifier_link: string;
+  identifier_type: string | null;
 }
 
 export interface SecondaryStudyIdentifier extends StudyIdentifier {

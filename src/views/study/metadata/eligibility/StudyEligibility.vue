@@ -125,19 +125,19 @@ const saveMetadata = (e: MouseEvent) => {
   formRef.value?.validate(async (errors) => {
     if (!errors) {
       const data = {
-        exclusion_criteria: moduleData.criteria.exclusion_criteria,
-        gender: moduleData.gender,
-        gender_based: moduleData.gender_based,
-        gender_description: moduleData.gender_description,
+        exclusion_criteria: moduleData.criteria.exclusion_criteria || null,
+        gender: moduleData.gender || null,
+        gender_based: moduleData.gender_based || null,
+        gender_description: moduleData.gender_description || null,
         healthy_volunteers:
           moduleData.study_type === "Interventional" ? moduleData.healthy_volunteers : null,
-        inclusion_criteria: moduleData.criteria.inclusion_criteria,
-        maximum_age_unit: moduleData.maximum_age.unit,
-        maximum_age_value: moduleData.maximum_age.age,
-        minimum_age_unit: moduleData.minimum_age.unit,
-        minimum_age_value: moduleData.minimum_age.age,
-        sampling_method: moduleData.sampling_method,
-        study_population: moduleData.study_population,
+        inclusion_criteria: moduleData.criteria.inclusion_criteria || null,
+        maximum_age_unit: moduleData.maximum_age.unit || null,
+        maximum_age_value: moduleData.maximum_age.age || null,
+        minimum_age_unit: moduleData.minimum_age.unit || null,
+        minimum_age_value: moduleData.minimum_age.age || null,
+        sampling_method: moduleData.sampling_method || "",
+        study_population: moduleData.study_population || "",
       };
 
       console.log("data", data);
