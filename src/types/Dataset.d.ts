@@ -193,9 +193,11 @@ export interface DatasetFunders {
 }
 
 export interface DatasetOther {
+  acknowledgement: string;
   language: string | null;
   resource_type: string;
   size: string[];
+  standards_followed: string;
 }
 
 export interface DatasetRelatedItemIdentifier {

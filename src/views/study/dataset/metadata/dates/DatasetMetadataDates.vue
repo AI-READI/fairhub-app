@@ -83,7 +83,7 @@ const saveMetadata = (e: MouseEvent) => {
       const data: any = moduleData.dates.map((item) => {
         const entry = {
           date: item.date,
-          information: item.information,
+          information: item.information || "",
           type: item.type,
         };
 

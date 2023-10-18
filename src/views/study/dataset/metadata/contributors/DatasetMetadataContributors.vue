@@ -98,11 +98,18 @@ const saveMetadata = (e: MouseEvent) => {
       const data: any = moduleData.contributors.map((item) => {
         const entry = {
           name: item.name,
-          affiliations: item.affiliations,
+          affiliations: item.affiliations.map((affiliation) => {
+            return {
+              name: affiliation.name || "",
+              identifier: affiliation.identifier || "",
+              scheme: affiliation.scheme || "",
+              scheme_uri: affiliation.scheme_uri || "",
+            };
+          }),
           contributor_type: item.contributor_type,
           name_identifier: item.name_identifier,
-          name_identifier_scheme: item.name_identifier_scheme,
-          name_identifier_scheme_uri: item.name_identifier_scheme_uri,
+          name_identifier_scheme: item.name_identifier_scheme || "",
+          name_identifier_scheme_uri: item.name_identifier_scheme_uri || "",
           name_type: item.name_type,
         };
 
@@ -268,7 +275,7 @@ const saveMetadata = (e: MouseEvent) => {
 
         <n-form-item
           label="Affiliations"
-          :path="`creators[${index}].affiliations`"
+          :path="`contributors[${index}].affiliations`"
           ignore-path-change
           :rule="{
             message: 'Please add at least one affiliation',
@@ -289,12 +296,12 @@ const saveMetadata = (e: MouseEvent) => {
             <div class="flex w-full flex-col space-y-4">
               <n-form-item
                 ignore-path-change
-                :show-feedback="false"
+                :show-feedback="true"
                 label="Name"
-                :path="`creators[${index}].affiliations[${idx}].name`"
+                :path="`contributors[${index}].affiliations[${idx}].name`"
                 class="w-full"
                 :rule="{
-                  message: 'Please add at least one affiliation',
+                  message: 'Affiliation name is required if identifier is empty',
                   required: !item.affiliations[idx].identifier && item.name_type === 'Personal',
                   trigger: ['blur', 'input'],
                 }"
@@ -311,7 +318,7 @@ const saveMetadata = (e: MouseEvent) => {
                 <n-form-item
                   ignore-path-change
                   label="Identifier"
-                  :path="`creators[${index}].affiliations[${idx}].identifier`"
+                  :path="`contributors[${index}].affiliations[${idx}].identifier`"
                   class="w-full"
                   :rule="{
                     message: 'Identifier is required if name of affiliation is empty',
@@ -330,7 +337,7 @@ const saveMetadata = (e: MouseEvent) => {
                 <n-form-item
                   ignore-path-change
                   label="Scheme"
-                  :path="`creators[${index}].affiliations[${idx}].scheme`"
+                  :path="`contributors[${index}].affiliations[${idx}].scheme`"
                   class="ml-3 w-full"
                   :rule="{
                     message: 'Scheme is required if identifier is present',
@@ -349,7 +356,7 @@ const saveMetadata = (e: MouseEvent) => {
                 <n-form-item
                   ignore-path-change
                   label="Scheme URI"
-                  :path="`creators[${index}].affiliations[${idx}]`"
+                  :path="`contributors[${index}].affiliations[${idx}]`"
                   class="ml-3 w-full"
                 >
                   <n-input
@@ -364,8 +371,6 @@ const saveMetadata = (e: MouseEvent) => {
           </n-dynamic-input>
         </n-form-item>
       </CollapsibleCard>
-
-      <pre>{{ moduleData.contributors }}</pre>
 
       <n-button class="my-10 w-full" dashed type="success" @click="addContributor">
         <template #icon>

@@ -83,11 +83,11 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data: any = moduleData.subjects.map((item) => {
         const entry = {
-          classification_code: item.classification_code,
-          scheme: item.scheme,
-          scheme_uri: item.scheme_uri,
+          classification_code: item.classification_code || "",
+          scheme: item.scheme || "",
+          scheme_uri: item.scheme_uri || "",
           subject: item.subject,
-          value_uri: item.value_uri,
+          value_uri: item.value_uri || "",
         };
 
         if (item.origin === "local") {

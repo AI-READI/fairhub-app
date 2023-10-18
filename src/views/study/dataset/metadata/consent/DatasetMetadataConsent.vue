@@ -59,7 +59,7 @@ const saveMetadata = (e: MouseEvent) => {
       loading.value = true;
 
       const data = {
-        details: moduleData.value.details,
+        details: moduleData.value.details || "",
         genetic_only: moduleData.value.genetic_only,
         geog_restrict: moduleData.value.geog_restrict,
         no_methods: moduleData.value.no_methods,

@@ -2,7 +2,7 @@
 import { useVersionStore } from "@/stores/version";
 
 const route = useRoute();
-const { success } = useMessage();
+const push = usePush();
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
@@ -24,7 +24,7 @@ const deleteVersion = async (_versionId: string) => {
 
   await versionStore.getAllVersions(routeParams.datasetId);
 
-  success("Version deleted successfully");
+  push.success("Version deleted successfully");
 };
 </script>
 
@@ -111,7 +111,13 @@ const deleteVersion = async (_versionId: string) => {
         Some details about the version
 
         <template #action>
-          We can add a button here to view the version on the discover platform
+          <n-button type="info" size="large">
+            <template #icon>
+              <f-icon icon="ph:eye-fill" />
+            </template>
+
+            View dataset on discover.fairhub.io
+          </n-button>
         </template>
       </n-card>
     </div>

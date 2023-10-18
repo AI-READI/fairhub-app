@@ -54,8 +54,8 @@ const saveMetadata = (e: MouseEvent) => {
       loading.value = true;
 
       const data = {
-        details: moduleData.value.details,
-        type: moduleData.value.type,
+        details: moduleData.value.details || "",
+        type: moduleData.value.type || null,
       };
 
       const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/record-keys`, {

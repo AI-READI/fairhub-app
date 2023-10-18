@@ -78,11 +78,11 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data: any = moduleData.central_contact_list.map((item) => {
         const entry = {
-          name: item.name,
-          affiliation: item.affiliation,
-          email_address: item.email_address,
-          phone: item.phone,
-          phone_ext: item.phone_ext,
+          name: item.name || "",
+          affiliation: item.affiliation || "",
+          email_address: item.email_address || "",
+          phone: item.phone || "",
+          phone_ext: item.phone_ext || "",
         };
 
         if (item.origin === "local") {

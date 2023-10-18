@@ -87,12 +87,12 @@ const saveMetadata = (e: MouseEvent) => {
       const data: any = moduleData.funders.map((item) => {
         const entry = {
           name: item.name,
-          award_number: item.award_number,
-          award_title: item.award_title,
-          award_uri: item.award_uri,
-          identifier: item.identifier,
-          identifier_scheme_uri: item.identifier_scheme_uri,
-          identifier_type: item.identifier_type,
+          award_number: item.award_number || "",
+          award_title: item.award_title || "",
+          award_uri: item.award_uri || "",
+          identifier: item.identifier || "",
+          identifier_scheme_uri: item.identifier_scheme_uri || "",
+          identifier_type: item.identifier_type || null,
         };
 
         if (item.origin === "local") {

@@ -15,10 +15,10 @@ const formRef = ref<FormInst | null>(null);
 const moduleData: StudyIdentificationModule = reactive({
   primary: {
     id: "",
-    domain: "",
     identifier: "",
-    link: "",
-    type: null,
+    identifier_domain: "",
+    identifier_link: "",
+    identifier_type: null,
   },
   secondary: [],
 });
@@ -51,21 +51,11 @@ onBeforeMount(async () => {
 
   const data = await response.json();
 
-  moduleData.primary = {
-    id: data.primary.id,
-    domain: data.primary.identifier_domain,
-    identifier: data.primary.identifier,
-    link: data.primary.identifier_link,
-    type: data.primary.identifier_type,
-  };
+  moduleData.primary = data.primary;
 
   moduleData.secondary = data.secondary.map((item: any) => ({
-    id: item.id,
-    domain: item.identifier_domain,
-    identifier: item.identifier,
-    link: item.identifier_link,
+    ...item,
     origin: "remote",
-    type: item.identifier_type,
   }));
 });
 
@@ -94,11 +84,11 @@ const removeSecondaryIdentifier = async (id: string) => {
 const addSecondaryIdentifier = () => {
   moduleData.secondary.push({
     id: nanoid(),
-    domain: "",
     identifier: "",
-    link: "",
+    identifier_domain: "",
+    identifier_link: "",
+    identifier_type: null,
     origin: "local",
-    type: "",
   });
 };
 
@@ -108,18 +98,17 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data = {
         primary: {
-          id: moduleData.primary.id,
           identifier: moduleData.primary.identifier,
-          identifier_domain: moduleData.primary.domain,
-          identifier_link: moduleData.primary.link,
-          identifier_type: moduleData.primary.type,
+          identifier_domain: moduleData.primary.identifier_domain || "",
+          identifier_link: moduleData.primary.identifier_link || "",
+          identifier_type: moduleData.primary.identifier_type,
         },
         secondary: moduleData.secondary.map((item) => {
           const entry = {
             identifier: item.identifier,
-            identifier_domain: item.domain,
-            identifier_link: item.link,
-            identifier_type: item.type,
+            identifier_domain: item.identifier_domain || "",
+            identifier_link: item.identifier_link || "",
+            identifier_type: item.identifier_type,
           };
 
           if (item.origin === "local") {
@@ -199,9 +188,9 @@ const saveMetadata = (e: MouseEvent) => {
         />
       </n-form-item>
 
-      <n-form-item label="Type" path="primary.type">
+      <n-form-item label="Type" path="primary.identifier_type">
         <n-select
-          v-model:value="moduleData.primary.type"
+          v-model:value="moduleData.primary.identifier_type"
           placeholder="NIH Grant Number"
           clearable
           :options="FORM_JSON.studyMetadataIdentificationPrimaryIdentifierTypeOptions"
@@ -210,24 +199,28 @@ const saveMetadata = (e: MouseEvent) => {
 
       <n-form-item
         label="Domain"
-        path="primary.domain"
+        path="primary.identifier_domain"
         placeholder="ClinicalTrials.gov"
         :rule="{
           message: 'Please enter a domain',
           required:
-            moduleData.primary.type &&
-            (moduleData.primary.type === 'Other Grant/Funding Number' ||
-              moduleData.primary.type === 'Other Identifier' ||
-              moduleData.primary.type === 'Registry Identifier'),
+            moduleData.primary.identifier_type &&
+            (moduleData.primary.identifier_type === 'Other Grant/Funding Number' ||
+              moduleData.primary.identifier_type === 'Other Identifier' ||
+              moduleData.primary.identifier_type === 'Registry Identifier'),
           trigger: ['blur', 'input'],
         }"
       >
-        <n-input v-model:value="moduleData.primary.domain" placeholder="Add a domain" clearable />
+        <n-input
+          v-model:value="moduleData.primary.identifier_domain"
+          placeholder="Add a domain"
+          clearable
+        />
       </n-form-item>
 
-      <n-form-item label="Link" path="primary.link">
+      <n-form-item label="Link" path="primary.identifier_link">
         <n-input
-          v-model:value="moduleData.primary.link"
+          v-model:value="moduleData.primary.identifier_link"
           placeholder="https://clinicaltrials.gov"
           clearable
         />
@@ -279,7 +272,7 @@ const saveMetadata = (e: MouseEvent) => {
 
         <n-form-item
           label="Type"
-          :path="`secondary[${index}].type`"
+          :path="`secondary[${index}].identifier_type`"
           :rule="{
             message: 'Please select a study type',
             required: true,
@@ -287,7 +280,7 @@ const saveMetadata = (e: MouseEvent) => {
           }"
         >
           <n-select
-            v-model:value="item.type"
+            v-model:value="item.identifier_type"
             placeholder="Other Grant/Funding Number"
             clearable
             :options="FORM_JSON.studyMetadataIdentificationPrimaryIdentifierTypeOptions"
@@ -296,23 +289,27 @@ const saveMetadata = (e: MouseEvent) => {
 
         <n-form-item
           label="Domain"
-          :path="`secondary[${index}].domain`"
+          :path="`secondary[${index}].identifier_domain`"
           :rule="{
             message: 'Please enter a domain',
             required:
-              item.type &&
-              (item.type === 'Other Grant/Funding Number' ||
-                item.type === 'Other Identifier' ||
-                item.type === 'Registry Identifier'),
+              item.identifier_type &&
+              (item.identifier_type === 'Other Grant/Funding Number' ||
+                item.identifier_type === 'Other Identifier' ||
+                item.identifier_type === 'Registry Identifier'),
             trigger: ['blur', 'input'],
           }"
         >
-          <n-input v-model:value="item.domain" placeholder="ClinicalTrials.gov" clearable />
+          <n-input
+            v-model:value="item.identifier_domain"
+            placeholder="ClinicalTrials.gov"
+            clearable
+          />
         </n-form-item>
 
-        <n-form-item label="Link" :path="`secondary[${index}].link`">
+        <n-form-item label="Link" :path="`secondary[${index}].identifier_link`">
           <n-input
-            v-model:value="moduleData.primary.link"
+            v-model:value="item.identifier_link"
             placeholder="https://clinicaltrials.gov"
             clearable
           />
@@ -326,6 +323,8 @@ const saveMetadata = (e: MouseEvent) => {
 
         Add an alternative identifier
       </n-button>
+
+      <pre>{{ moduleData }}</pre>
 
       <n-divider />
 
