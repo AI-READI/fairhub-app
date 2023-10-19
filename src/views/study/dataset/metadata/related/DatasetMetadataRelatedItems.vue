@@ -293,7 +293,6 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data: any = moduleData.related_items.map((related_item) => {
         const entry = {
-          id: related_item.id,
           contributors: related_item.contributors.map((contributor: any) => {
             const entry = {
               name: contributor.name,
