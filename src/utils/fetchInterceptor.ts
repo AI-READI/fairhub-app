@@ -25,6 +25,11 @@ window.fetch = async (url: string, options?: RequestInit): Promise<Response> => 
   // Make the fetch request with the modified URL and options
   const response = await originalFetch(url, options);
 
+  if (response) {
+    const responseClone = response.clone();
+    console.log(await responseClone.text());
+  }
+
   // Modify the response
 
   if (response.status === 401 && !url.endsWith("/auth/login")) {
