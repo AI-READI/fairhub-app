@@ -51,6 +51,8 @@ onBeforeMount(async () => {
 
   const data = await response.json();
 
+  console.log(data);
+
   moduleData.primary = data.primary;
 
   moduleData.secondary = data.secondary.map((item: any) => ({
@@ -188,7 +190,15 @@ const saveMetadata = (e: MouseEvent) => {
         />
       </n-form-item>
 
-      <n-form-item label="Type" path="primary.identifier_type">
+      <n-form-item
+        label="Type"
+        path="primary.identifier_type"
+        :rule="{
+          message: 'Please select a identifier type',
+          required: true,
+          trigger: ['blur', 'change'],
+        }"
+      >
         <n-select
           v-model:value="moduleData.primary.identifier_type"
           placeholder="NIH Grant Number"
@@ -323,8 +333,6 @@ const saveMetadata = (e: MouseEvent) => {
 
         Add an alternative identifier
       </n-button>
-
-      <pre>{{ moduleData }}</pre>
 
       <n-divider />
 
