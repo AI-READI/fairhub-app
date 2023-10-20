@@ -78,7 +78,11 @@ const current = computed(() => steps.findIndex((step) => step.route === route.na
 
 <template>
   <div>
-    <div v-if="route.name != 'dataset:publish:versions'">
+    <div
+      v-if="
+        route.name != 'dataset:publish:versions' && route.name != 'dataset:publish:versions:new'
+      "
+    >
       <n-steps :current="current" class="px-2 py-2">
         <n-step
           v-for="step in steps"

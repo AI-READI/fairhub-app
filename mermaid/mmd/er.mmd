@@ -82,6 +82,11 @@ erDiagram
         timestamp published_on
     }
 
+    VERSION_README {
+        string version_id PK,FK "VERSION.id"
+        string content
+    }
+
      VERSION_PARTICIPANT {
         string version_id PK,FK
         string participant_id PK,FK
@@ -119,5 +124,7 @@ erDiagram
 
     USER ||--o{ STUDY_CONTRIBUTOR : "part of"
     PARTICIPANT }o--|| STUDY : participates
+    
     VERSION ||--o{ VERSION_PARTICIPANT : has
     VERSION_PARTICIPANT }o--|| PARTICIPANT : "part of"
+    VERSION ||--|| VERSION_README : "has readme"

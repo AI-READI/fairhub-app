@@ -37,6 +37,7 @@ import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue"
 import PublishChangelog from "@/views/study/dataset/publish/changelog/PublishChangelog.vue";
 import PublishDatasetMetadata from "@/views/study/dataset/publish/metadata/PublishDatasetMetadata.vue";
 import PublishStudyMetadata from "@/views/study/dataset/publish/metadata/PublishStudyMetadata.vue";
+import NewVersion from "@/views/study/dataset/publish/new/NewVersion.vue";
 import PublishSelectParticipants from "@/views/study/dataset/publish/participants/PublishSelectParticipants.vue";
 import PublishReadme from "@/views/study/dataset/publish/readme/PublishReadme.vue";
 import PublishRouterView from "@/views/study/dataset/publish/root/PublishRouterView.vue";
@@ -158,19 +159,24 @@ const router = createRouter({
           component: StudyContributors,
         },
         {
-          name: "study:all-datasets",
           path: "datasets",
-          component: AllDatasets,
-        },
-        {
-          name: "dataset:root",
-          path: "dataset",
           children: [
+            {
+              name: "study:all-datasets",
+              path: "",
+              component: AllDatasets,
+            },
             {
               name: "dataset:new",
               path: "new",
               component: NewDataset,
             },
+          ],
+        },
+        {
+          name: "dataset:root",
+          path: "dataset",
+          children: [
             {
               path: ":datasetId",
               children: [
@@ -272,6 +278,11 @@ const router = createRouter({
                       name: "dataset:publish:versions",
                       path: "versions",
                       component: PublishAllVersions,
+                    },
+                    {
+                      name: "dataset:publish:versions:new",
+                      path: "new",
+                      component: NewVersion,
                     },
                     {
                       path: ":versionId",

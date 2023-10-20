@@ -67,10 +67,7 @@ erDiagram
         string details
     }
 
-    DATASET_README {
-        string dataset_id PK,FK "DATASET.id"
-        string content
-    }
+    
 
     DATASET_DESCRIPTION {
         string id PK "UUIDv4"
@@ -192,7 +189,6 @@ erDiagram
     DATASET_RECORD_KEYS ||--|| DATASET : "has record key"
     DATASET_DE_IDENT_LEVEL ||--|| DATASET : "has deidentification level"
     DATASET_CONSENT ||--|| DATASET : "has consent"
-    DATASET_README ||--|| DATASET : "has readme"
 
     DATASET ||--o{ DATASET_SUBJECT : "has subject"
     DATASET ||--|| DATASET_ACCESS : "has access"

@@ -273,6 +273,31 @@ const dataset_related_item_other = [
   },
 ];
 
+const versions = [
+  {
+    id: "42dec85c-22f2-4f4e-a5ad-f0121067f507",
+    title: "Version 1",
+    changelog: "Changelog",
+    created_at: 1697762742,
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    doi: "10.1038/s41597-023-02463-x",
+    published: true,
+    published_on: 1697762742,
+    updated_on: 1697762742,
+  },
+  {
+    id: "42dec85c-22f2-4f4e-a5ad-f0121067f508",
+    title: "Version 2",
+    changelog: "Changelog",
+    created_at: 1697562742,
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    doi: "",
+    published: false,
+    published_on: 0,
+    updated_on: 1697362742,
+  },
+];
+
 const init = async () => {
   const server = Hapi.server({
     host: "localhost",
@@ -1666,6 +1691,41 @@ const init = async () => {
       return h.response(title).code(200);
     },
     method: "DELETE",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/version",
+    handler: (request, h) => {
+      // const { datasetid } = request.params;
+
+      const v = versions;
+
+      return h.response(v).code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/version/new",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+      const { title } = request.payload;
+
+      versions.push({
+        id: nanoid(),
+        title,
+        changelog: "",
+        created_at: Date.now() / 1000,
+        dataset_id: datasetid,
+        doi: "",
+        published: false,
+        published_on: 0,
+        updated_on: Date.now() / 1000,
+      });
+
+      return h.response(newVersion).code(200);
+    },
+    method: "POST",
   });
 
   await server.start();
