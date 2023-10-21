@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { config, MdEditor } from "md-editor-v3";
 
-import { useAuthStore } from "@/stores/auth";
-import { useVersionStore } from "@/stores/version";
 import { sanitize } from "@/utils/helpers";
 import TargetBlankExtension from "@/utils/TargetBlankExtension";
 
@@ -24,11 +22,6 @@ config({
 
 const route = useRoute();
 const router = useRouter();
-const { error } = useMessage();
-
-const authStore = useAuthStore();
-
-const versionStore = useVersionStore();
 
 const routeParams = {
   datasetId: route.params.datasetId,
@@ -36,15 +29,10 @@ const routeParams = {
   versionId: route.params.versionId,
 };
 
-const version = ref(versionStore.version);
-
 const readme = ref("");
 
 onBeforeMount(() => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
-  }
+  readme.value = `# README`;
 });
 
 function handleNextButton() {
@@ -82,11 +70,21 @@ const autoGenerateReadme = async () => {
 
     <n-divider />
 
-    <p class="mb-10">
-      A `README.md` file is a text file that introduces and explains a dataset. It contains
-      information that is commonly required to understand what the dataset is about and how to use
-      it. It is automatically displayed to users when they request access to this dataset.
-    </p>
+    <div class="mb-3 flex items-start space-x-10">
+      <p>
+        A `README.md` file is a text file that introduces and explains a dataset. It contains
+        information that is commonly required to understand what the dataset is about and how to use
+        it. It is automatically displayed to users when they request access to this dataset.
+      </p>
+
+      <n-button secondary type="info" @click="autoGenerateReadme">
+        <template #icon>
+          <f-icon icon="mdi:auto-mode" />
+        </template>
+
+        Auto-generate README
+      </n-button>
+    </div>
 
     <MdEditor
       v-model="readme"

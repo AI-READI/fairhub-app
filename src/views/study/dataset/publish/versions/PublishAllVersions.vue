@@ -183,13 +183,15 @@ const deleteVersion = async (id: string) => {
                 Some details about the version
 
                 <template #action>
-                  <n-button type="info">
-                    <template #icon>
-                      <f-icon icon="ph:eye-fill" />
-                    </template>
+                  <a :href="`https://dx.doi.org/${version.doi}`" target="_blank" rel="noopener">
+                    <n-button type="info">
+                      <template #icon>
+                        <f-icon icon="ph:eye-fill" />
+                      </template>
 
-                    View dataset on discover.fairhub.io
-                  </n-button>
+                      View dataset on data.fairhub.io
+                    </n-button>
+                  </a>
                 </template>
               </n-card>
             </div>

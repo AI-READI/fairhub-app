@@ -17,8 +17,10 @@ const routeParams = {
 const studyId = routeParams.studyId;
 const datasetId = routeParams.datasetId;
 
-const datasetIdentifiers = ref<DatasetIdentifiers>([]);
-const identifierTypeOptions = FORM_JSON.datasetIdentifierTypeOptions;
+const formRef = ref<FormInst | null>(null);
+const moduleData = reactive<DatasetIdentifiers>({
+  identifiers: [],
+});
 
 onBeforeMount(async () => {
   const response = await fetch(
@@ -36,7 +38,7 @@ onBeforeMount(async () => {
 
   const data = await response.json();
 
-  datasetIdentifiers.value = data.map((item: any) => {
+  moduleData.identifiers = data.map((item: any) => {
     return {
       ...item,
       origin: "remote",
@@ -44,19 +46,10 @@ onBeforeMount(async () => {
   });
 });
 
-const onCreate = () => {
-  return {
-    id: nanoid(),
-    identifier: "",
-    origin: "local",
-    type: null,
-  };
-};
+const removeIdentifier = async (item_id: string) => {
+  const item = moduleData.identifiers.find((item) => item.id === item_id);
 
-const onRemove = async (index: number) => {
-  const item = datasetIdentifiers.value[index];
-
-  if (item.origin === "remote") {
+  if (item && item.origin === "remote") {
     const response = await fetch(
       `${baseURL}/study/${studyId}/dataset/${datasetId}/alternative-identifier/${item.id}`,
       {
@@ -73,65 +66,76 @@ const onRemove = async (index: number) => {
 
   push.success("Alternative identifier removed successfully");
 
-  // // refresh page
-  // router.go(0);
+  moduleData.identifiers = moduleData.identifiers.filter((item) => item.id !== item_id);
 };
 
-const updateDatasetIdentifier = async (e: MouseEvent) => {
+const addIdentifier = () => {
+  moduleData.identifiers.push({
+    id: nanoid(),
+    identifier: "",
+    origin: "local",
+    type: null,
+  });
+};
+
+const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
+  formRef.value?.validate(async (errors) => {
+    if (!errors) {
+      const tempIdentifiers = moduleData.identifiers;
 
-  const tempIdentifiers = datasetIdentifiers.value;
+      for (const item of tempIdentifiers) {
+        // remove any items that have a duplicate title and type
+        if (
+          tempIdentifiers.filter((i) => i.identifier === item.identifier && i.type === item.type)
+            .length > 1
+        ) {
+          tempIdentifiers.splice(tempIdentifiers.indexOf(item), 1);
+        }
+      }
 
-  for (const item of tempIdentifiers) {
-    // remove any items that have an empty title or type
-    if (!item.identifier || !item.type) {
-      tempIdentifiers.splice(tempIdentifiers.indexOf(item), 1);
-    }
+      const data = tempIdentifiers.map((item) => {
+        const entry = {
+          identifier: item.identifier || "",
+          type: item.type || null,
+        };
 
-    // remove any items that have a duplicate title and type
-    if (
-      tempIdentifiers.filter((i) => i.identifier === item.identifier && i.type === item.type)
-        .length > 1
-    ) {
-      tempIdentifiers.splice(tempIdentifiers.indexOf(item), 1);
-    }
-  }
+        if (item.origin === "local") {
+          return entry;
+        } else {
+          return {
+            ...entry,
+            id: item.id,
+          };
+        }
+      });
 
-  const data = tempIdentifiers.map((item) => {
-    const entry = {
-      identifier: item.identifier || "",
-      type: item.type || null,
-    };
+      // call the API to update the dataset
+      const response = await fetch(
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/alternative-identifier`,
+        {
+          body: JSON.stringify(data),
+          method: "POST",
+        }
+      );
 
-    if (item.origin === "local") {
-      return entry;
+      if (!response.ok) {
+        push.error("Something went wrong.");
+
+        throw new Error("Something went wrong.");
+      }
+
+      push.success("Dataset alternative identifiers updated successfully");
+
+      // refresh page
+      router.go(0);
+
+      console.log("success");
     } else {
-      return {
-        ...entry,
-        id: item.id,
-      };
+      console.log("error");
+      console.log(errors);
     }
   });
-
-  // call the API to update the dataset
-  const response = await fetch(
-    `${baseURL}/study/${studyId}/dataset/${datasetId}/alternative-identifier`,
-    {
-      body: JSON.stringify(data),
-      method: "POST",
-    }
-  );
-
-  if (!response.ok) {
-    push.error("Something went wrong.");
-
-    throw new Error("Something went wrong.");
-  }
-
-  push.success("Dataset alternative identifiers updated successfully");
-
-  // refresh page
-  router.go(0);
 };
 </script>
 
@@ -167,65 +171,77 @@ const updateDatasetIdentifier = async (e: MouseEvent) => {
       will be attached to your dataset at the time of publication.
     </p>
 
-    <n-dynamic-input
-      v-model:value="datasetIdentifiers"
-      :on-create="onCreate"
-      :on-remove="onRemove"
-      class="my-5"
-    >
-      <template #default="{ value }">
-        <div class="mb-2 mr-5 flex w-full items-center space-x-5">
-          <div class="flex w-full flex-col space-y-2">
-            <span> Identifier </span>
-            <n-input
-              v-model:value="value.identifier"
-              type="text"
-              size="large"
-              placeholder="10.1038/s41597-023-02463-x"
-            />
+    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
+      <div
+        class="flex w-full flex-row items-center justify-between space-x-8"
+        v-for="(item, index) in moduleData.identifiers"
+        :key="index"
+      >
+        <n-space vertical class="w-full">
+          <div class="flex w-full flex-row items-center justify-between space-x-4">
+            <n-form-item
+              label="Name"
+              :path="`identifiers[${index}].identifier`"
+              :rule="{
+                message: 'Please enter the identifier',
+                required: true,
+                trigger: ['blur', 'change'],
+              }"
+              class="w-full"
+            >
+              <n-input
+                v-model:value="item.identifier"
+                placeholder="10.1038/s41597-023-02463-x"
+                clearable
+              />
+            </n-form-item>
+
+            <n-form-item
+              label="Type"
+              :path="`identifiers[${index}].type`"
+              :rule="{
+                message: 'Please select the type of this identifier',
+                required: true,
+                trigger: ['blur', 'input'],
+              }"
+              class="w-full"
+            >
+              <n-select
+                v-model:value="item.type"
+                placeholder="DOI"
+                clearable
+                :options="FORM_JSON.datasetIdentifierTypeOptions"
+              />
+            </n-form-item>
           </div>
+        </n-space>
 
-          <div class="flex w-full flex-col space-y-2">
-            <span> Type </span>
-            <n-select
-              v-model:value="value.type"
-              :options="identifierTypeOptions"
-              size="large"
-              placeholder="DOI"
-            />
-          </div>
-        </div>
-      </template>
+        <n-popconfirm @positive-click="removeIdentifier(item.id)" class="self-justify-end">
+          <template #trigger>
+            <n-button class="ml-0" size="large" type="error">
+              <f-icon icon="gridicons:trash" />
+            </n-button>
+          </template>
 
-      <template #action="{ index, create, remove }">
-        <div class="flex items-end space-x-2 pb-3">
-          <n-popover trigger="hover">
-            <template #trigger>
-              <n-button @click="() => create(index)">
-                <f-icon icon="gridicons:create" />
-              </n-button>
-            </template>
+          Are you sure you want to remove this identifier?
+        </n-popconfirm>
+      </div>
 
-            <span>Add a new title</span>
-          </n-popover>
+      <n-button class="mb-10 w-full" dashed type="success" @click="addIdentifier">
+        <template #icon>
+          <f-icon icon="gridicons:create" />
+        </template>
 
-          <n-popconfirm @positive-click="remove(index)">
-            <template #trigger>
-              <n-button type="error">
-                <f-icon icon="gridicons:trash" />
-              </n-button>
-            </template>
+        Add a new identifier
+      </n-button>
 
-            Are you sure you want to remove this identifier?
-          </n-popconfirm>
-        </div>
-      </template>
-    </n-dynamic-input>
+      <n-divider />
+    </n-form>
 
     <n-divider />
 
     <div class="flex justify-start">
-      <n-button size="large" type="primary" @click="updateDatasetIdentifier">
+      <n-button size="large" type="primary" @click="saveMetadata">
         <template #icon>
           <f-icon icon="material-symbols:save" />
         </template>

@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { config, MdEditor } from "md-editor-v3";
 
-import { useAuthStore } from "@/stores/auth";
-import { useVersionStore } from "@/stores/version";
 import { sanitize } from "@/utils/helpers";
 import TargetBlankExtension from "@/utils/TargetBlankExtension";
 
@@ -24,11 +22,6 @@ config({
 
 const route = useRoute();
 const router = useRouter();
-const { error } = useMessage();
-
-const authStore = useAuthStore();
-
-const versionStore = useVersionStore();
 
 const routeParams = {
   datasetId: route.params.datasetId,
@@ -36,17 +29,10 @@ const routeParams = {
   versionId: route.params.versionId,
 };
 
-const version = ref(versionStore.version);
-
 const changelog = ref("");
 
 onBeforeMount(() => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
-  }
-
-  changelog.value = version.value.changelog;
+  changelog.value = `# Changelog`;
 });
 
 function handleNextButton() {
@@ -61,12 +47,6 @@ function handleNextButton() {
       studyId: routeParams.studyId,
       versionId: routeParams.versionId,
     },
-  });
-}
-
-function handleBackButton() {
-  router.push({
-    name: "dataset:publish:versions",
   });
 }
 </script>
@@ -104,14 +84,6 @@ function handleBackButton() {
     <n-divider />
 
     <div class="flex items-center justify-end">
-      <n-button size="large" type="warning" @click="handleBackButton" class="hidden">
-        <template #icon>
-          <f-icon icon="ic:round-arrow-back-ios" />
-        </template>
-
-        Review dataset metadata
-      </n-button>
-
       <n-button size="large" type="primary" @click="handleNextButton">
         <template #icon>
           <f-icon icon="ic:round-arrow-forward-ios" />

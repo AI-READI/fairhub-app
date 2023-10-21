@@ -13,7 +13,9 @@ export interface DatasetTitle {
   type: "MainTitle" | "AlternativeTitle" | "Subtitle" | "TranslatedTitle" | "Other" | null;
 }
 
-export interface DatasetTitles extends Array<DatasetTitle> {}
+export interface DatasetTitles {
+  titles: DatasetTitle[];
+}
 
 export interface DatasetIdentifier {
   id: string;
@@ -43,7 +45,9 @@ export interface DatasetIdentifier {
     | null;
 }
 
-export interface DatasetIdentifiers extends Array<DatasetIdentifier> {}
+export interface DatasetIdentifiers {
+  identifiers: DatasetIdentifier[];
+}
 
 export interface DatasetDescription {
   id: string;
@@ -59,7 +63,9 @@ export interface DatasetDescription {
     | null;
 }
 
-export interface DatasetDescriptions extends Array<DatasetDescription> {}
+export interface DatasetDescriptions {
+  descriptions: DatasetDescription[];
+}
 
 export interface DatasetPersonAffiliation {
   name: string;
