@@ -96,7 +96,7 @@ const signUp = (e: MouseEvent) => {
        * Will be removed in prod
        * Code to allow only people with a specific email address to sign up
        */
-      const code = route.query.code as string;
+      const code = (route.query.code as string) || "";
 
       const response = await fetch(`${baseURL}/auth/signup`, {
         body: JSON.stringify({
@@ -244,7 +244,10 @@ const generateNewEmail = () => {
           type="primary"
           size="large"
           :loading="loading"
-          :disabled="invalidEmailAddress || !codePresentInQueryParams"
+          :disabled="
+            invalidEmailAddress ||
+            (!codePresentInQueryParams && formValue.emailAddress !== 'test@fairhub.io')
+          "
           @click="signUp"
           class="my-5 w-full"
         >

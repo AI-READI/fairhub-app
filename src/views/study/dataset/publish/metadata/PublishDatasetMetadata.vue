@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import CollapsibleCard from "@/components/cards/CollapsibleCard.vue";
-
 const route = useRoute();
 const router = useRouter();
 
@@ -15,17 +13,6 @@ onBeforeMount(() => {
    * TODO: Fetch dataset minimised metadata
    */
 });
-
-function handleBackButton() {
-  router.push({
-    name: "dataset:publish:version:study-metadata",
-    params: {
-      datasetId: routeParams.datasetId,
-      studyId: routeParams.studyId,
-      versionId: routeParams.versionId,
-    },
-  });
-}
 
 function handleNextButton() {
   router.push({
