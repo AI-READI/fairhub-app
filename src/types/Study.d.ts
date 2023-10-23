@@ -29,6 +29,7 @@ export interface StudyContributor {
   ORCID?: string;
   role: string;
   status: "invited" | "accepted" | "declined";
+  token?: string;
   updatedRole: string; // tempRole is used to store the role of the contributor before the user clicks the save button
 }
 

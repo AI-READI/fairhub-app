@@ -2,7 +2,7 @@
 import { useSidebarStore } from "@/stores/sidebar";
 import type { Version } from "@/types/Version";
 // import { baseURL } from "@/utils/constants";
-const baseURL = "http://localhost:5000";
+const baseURL = "http://localhost:3001/api";
 import { displayHumanFriendlyDateAndTime } from "@/utils/date";
 
 const route = useRoute();

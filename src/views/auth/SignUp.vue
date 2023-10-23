@@ -5,11 +5,11 @@ import { baseURL } from "@/utils/constants";
 
 const push = usePush();
 const router = useRouter();
+const route = useRoute();
 
 const loading = ref(false);
 
 const formRef = ref<FormInst | null>(null);
-
 const rules: FormRules = {
   emailAddress: {
     message: "Please enter your email address",
@@ -30,6 +30,10 @@ const formValue = ref({
 });
 
 const invalidEmailAddress = computed(() => !formValue.value.emailAddress.includes("@")); //add email validation
+
+const codePresentInQueryParams = computed(() => {
+  return route.query.code !== undefined;
+});
 
 const validPasswordRequirements = reactive({
   length: false,
@@ -88,8 +92,15 @@ const signUp = (e: MouseEvent) => {
 
       loading.value = true;
 
+      /**
+       * Will be removed in prod
+       * Code to allow only people with a specific email address to sign up
+       */
+      const code = route.query.code as string;
+
       const response = await fetch(`${baseURL}/auth/signup`, {
         body: JSON.stringify({
+          code,
           email_address: emailAddress,
           password,
         }),
@@ -233,7 +244,7 @@ const generateNewEmail = () => {
           type="primary"
           size="large"
           :loading="loading"
-          :disabled="invalidEmailAddress"
+          :disabled="invalidEmailAddress || !codePresentInQueryParams"
           @click="signUp"
           class="my-5 w-full"
         >
