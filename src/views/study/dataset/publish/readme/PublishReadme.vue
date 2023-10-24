@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { config, MdEditor } from "md-editor-v3";
 
-import { useAuthStore } from "@/stores/auth";
-import { useVersionStore } from "@/stores/version";
 import { sanitize } from "@/utils/helpers";
 import TargetBlankExtension from "@/utils/TargetBlankExtension";
+
+// import { baseURL } from "@/utils/constants";
+const baseURL = "http://localhost:3001/api";
 
 config({
   editorConfig: {
@@ -24,11 +25,7 @@ config({
 
 const route = useRoute();
 const router = useRouter();
-const { error } = useMessage();
-
-const authStore = useAuthStore();
-
-const versionStore = useVersionStore();
+const push = usePush();
 
 const routeParams = {
   datasetId: route.params.datasetId,
@@ -36,18 +33,52 @@ const routeParams = {
   versionId: route.params.versionId,
 };
 
-const version = ref(versionStore.version);
-
 const readme = ref("");
+const saveLoading = ref(false);
+const autogenerateLoading = ref(false);
 
-onBeforeMount(() => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
+onBeforeMount(async () => {
+  const response = await fetch(
+    `${baseURL}/study/${routeParams.studyId}/dataset/${routeParams.datasetId}/version/${routeParams.versionId}/readme`,
+    {
+      method: "GET",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Something went wrong.");
   }
+
+  const data = await response.json();
+
+  readme.value = data.readme;
 });
 
-function handleNextButton() {
+const handleNextButton = async () => {
+  const data = {
+    readme: readme.value,
+  };
+
+  saveLoading.value = true;
+
+  const response = await fetch(
+    `${baseURL}/study/${routeParams.studyId}/dataset/${routeParams.datasetId}/version/${routeParams.versionId}/readme`,
+    {
+      body: JSON.stringify(data),
+      method: "PUT",
+    }
+  );
+
+  saveLoading.value = false;
+
+  if (!response.ok) {
+    push.error("Something went wrong.");
+
+    throw new Error("Something went wrong.");
+  }
+
+  push.success("Readme updated successfully.");
+
   router.push({
     name: "dataset:publish:version:summary",
     params: {
@@ -56,14 +87,33 @@ function handleNextButton() {
       versionId: routeParams.versionId,
     },
   });
-}
+};
 
 const autoGenerateReadme = async () => {
-  console.log("autoGenerateReadme");
+  autogenerateLoading.value = true;
 
-  const response = await fetch("https://jaspervdj.be/lorem-markdownum/markdown.txt");
+  const response = await fetch(
+    `${baseURL}/study/${routeParams.studyId}/dataset/${routeParams.datasetId}/version/${routeParams.versionId}/autogenerate-readme`,
+    {
+      method: "POST",
+    }
+  );
 
-  readme.value = await response.text();
+  if (!response.ok) {
+    push.error("Something went wrong.");
+
+    throw new Error("Something went wrong.");
+  }
+
+  const data = await response.json();
+
+  readme.value = data.readme;
+
+  // const response = await fetch("https://jaspervdj.be/lorem-markdownum/markdown.txt");
+
+  // readme.value = await response.text();
+
+  autogenerateLoading.value = false;
 };
 </script>
 
@@ -82,11 +132,21 @@ const autoGenerateReadme = async () => {
 
     <n-divider />
 
-    <p class="mb-10">
-      A `README.md` file is a text file that introduces and explains a dataset. It contains
-      information that is commonly required to understand what the dataset is about and how to use
-      it. It is automatically displayed to users when they request access to this dataset.
-    </p>
+    <div class="mb-3 flex items-start space-x-10">
+      <p>
+        A `README.md` file is a text file that introduces and explains a dataset. It contains
+        information that is commonly required to understand what the dataset is about and how to use
+        it. It is automatically displayed to users when they request access to this dataset.
+      </p>
+
+      <n-button secondary type="info" @click="autoGenerateReadme" :loading="autogenerateLoading">
+        <template #icon>
+          <f-icon icon="mdi:auto-mode" />
+        </template>
+
+        Auto-generate README
+      </n-button>
+    </div>
 
     <MdEditor
       v-model="readme"
@@ -99,7 +159,13 @@ const autoGenerateReadme = async () => {
     <n-divider />
 
     <div class="flex items-center justify-between">
-      <n-button size="large" secondary type="info" @click="autoGenerateReadme">
+      <n-button
+        size="large"
+        secondary
+        type="info"
+        @click="autoGenerateReadme"
+        :loading="autogenerateLoading"
+      >
         <template #icon>
           <f-icon icon="mdi:auto-mode" />
         </template>
@@ -107,7 +173,7 @@ const autoGenerateReadme = async () => {
         Auto-generate README
       </n-button>
 
-      <n-button size="large" type="primary" @click="handleNextButton">
+      <n-button size="large" type="primary" @click="handleNextButton" :loading="saveLoading">
         <template #icon>
           <f-icon icon="ic:round-arrow-forward-ios" />
         </template>

@@ -11,20 +11,19 @@ const push = usePush();
 const sidebarStore = useSidebarStore();
 
 const routeParams = {
+  datasetId: route.params.datasetId,
   studyId: route.params.studyId,
 };
 
 const studyId = routeParams.studyId as string;
+const datasetId = routeParams.datasetId as string;
 
-onBeforeMount(async () => {
-  sidebarStore.setAppSidebarCollapsed(false);
-});
+const loading = ref(false);
 
 const formRef = ref<FormInst | null>(null);
 
-const dataset = ref({
+const version = ref({
   title: faker.commerce.productName(),
-  description: faker.commerce.productDescription(),
 });
 
 const rules: FormRules = {
@@ -35,32 +34,32 @@ const rules: FormRules = {
       trigger: ["blur", "input"],
     },
   ],
-  description: [
-    {
-      message: "Please input a dataset description",
-      required: true,
-      trigger: ["blur", "input"],
-    },
-  ],
 };
 
-const createDataset = (e: MouseEvent) => {
+onBeforeMount(async () => {
+  sidebarStore.setAppSidebarCollapsed(true);
+});
+
+const createVersion = (e: MouseEvent) => {
   e.preventDefault();
 
   formRef.value?.validate(async (errors) => {
     if (!errors) {
       const body = {
-        title: dataset.value.title,
-        description: dataset.value.description,
+        title: version.value.title,
       };
 
-      const response = await fetch(`${baseURL}/study/${studyId}/dataset`, {
+      loading.value = true;
+
+      const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/version`, {
         body: JSON.stringify(body),
         headers: {
           "Content-Type": "application/json",
         },
         method: "POST",
       });
+
+      loading.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong.");
@@ -72,7 +71,12 @@ const createDataset = (e: MouseEvent) => {
 
       console.log(data);
 
-      router.push({ name: "dataset:overview", params: { datasetId: data.id, studyId } });
+      push.success("New draft version created successfully");
+
+      router.push({
+        name: "dataset:publish:version:participants",
+        params: { datasetId, studyId, versionId: data.id },
+      });
     } else {
       console.log("error");
       console.log(errors);
@@ -83,42 +87,35 @@ const createDataset = (e: MouseEvent) => {
 
 <template>
   <main class="flex h-full w-full flex-col">
-    <h1>Create a new dataset</h1>
+    <PageBackNavigationHeader
+      title="Create a new version for this dataset"
+      description=""
+      linkName="dataset:publish:versions"
+      :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
+    />
 
     <n-divider />
 
     <n-form
       ref="formRef"
-      :model="dataset"
+      :model="version"
       :rules="rules"
       size="large"
       label-placement="top"
       class="pr-4"
     >
       <n-form-item label="Title" path="title">
-        <n-input v-model:value="dataset.title" placeholder="Add a dataset title" />
-      </n-form-item>
-
-      <n-form-item label="Description" path="description">
-        <n-input
-          v-model:value="dataset.description"
-          placeholder="Add a dataset description"
-          type="textarea"
-          :autosize="{
-            minRows: 3,
-            maxRows: 5,
-          }"
-        />
+        <n-input v-model:value="version.title" placeholder="Add a version title" />
       </n-form-item>
 
       <n-divider />
 
       <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="createDataset">
+        <n-button size="large" type="primary" @click="createVersion" :loading="loading">
           <template #icon>
             <f-icon icon="gridicons:create" />
           </template>
-          Create Dataset
+          Create version
         </n-button>
       </div>
     </n-form>

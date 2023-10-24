@@ -56,7 +56,7 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data = {
         brief_summary: moduleData.value.brief_summary,
-        detailed_description: moduleData.value.detailed_description,
+        detailed_description: moduleData.value.detailed_description || "",
       };
 
       const response = await fetch(

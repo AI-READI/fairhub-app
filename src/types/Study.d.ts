@@ -29,6 +29,7 @@ export interface StudyContributor {
   ORCID?: string;
   role: string;
   status: "invited" | "accepted" | "declined";
+  token?: string;
   updatedRole: string; // tempRole is used to store the role of the contributor before the user clicks the save button
 }
 
@@ -36,10 +37,10 @@ export interface StudyContributors extends Array<StudyContributor> {}
 
 export interface StudyIdentifier {
   id: string;
-  domain: string;
   identifier: string;
-  link: string;
-  type: string | null;
+  identifier_domain: string;
+  identifier_link: string;
+  identifier_type: string | null;
 }
 
 export interface SecondaryStudyIdentifier extends StudyIdentifier {

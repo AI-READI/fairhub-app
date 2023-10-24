@@ -77,9 +77,9 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data: any = moduleData.overall_official_list.map((item) => {
         const entry = {
-          name: item.name,
-          affiliation: item.affiliation,
-          role: item.role,
+          name: item.name || "",
+          affiliation: item.affiliation || "",
+          role: item.role || null,
         };
 
         if (item.origin === "local") {

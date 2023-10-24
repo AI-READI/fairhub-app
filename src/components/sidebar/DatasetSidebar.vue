@@ -53,6 +53,11 @@ const dynamicUpperMenuOptions: MenuOption[] = [
       },
       {
         // contains both creators and contributors
+        icon: renderIcon("fa6-solid:person"),
+        key: "dataset:metadata:creators",
+        label: "Creators",
+      },
+      {
         icon: renderIcon("ic:baseline-people"),
         key: "dataset:metadata:contributors",
         label: "Contributors",

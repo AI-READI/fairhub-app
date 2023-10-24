@@ -90,12 +90,12 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data = moduleData.location_list.map((item) => {
         const entry = {
-          city: item.city,
-          country: item.country,
-          facility: item.facility,
-          state: item.state,
-          status: item.status,
-          zip: item.zip,
+          city: item.city || "",
+          country: item.country || "",
+          facility: item.facility || "",
+          state: item.state || "",
+          status: item.status || "",
+          zip: item.zip || "",
         };
 
         if (item.origin === "local") {

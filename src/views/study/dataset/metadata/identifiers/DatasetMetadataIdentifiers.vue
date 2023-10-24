@@ -2,110 +2,169 @@
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
-import { useAuthStore } from "@/stores/auth";
-import { useDatasetStore } from "@/stores/dataset";
 import type { DatasetIdentifiers } from "@/types/Dataset";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
-const { error, success } = useMessage();
-
-const authStore = useAuthStore();
-const datasetStore = useDatasetStore();
+const push = usePush();
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
   studyId: route.params.studyId as string,
 };
 
-const datasetIdentifiers = ref<DatasetIdentifiers>([]);
+const studyId = routeParams.studyId;
+const datasetId = routeParams.datasetId;
 
-computed(() => {
-  console.log("datasetStore.datasetTitles", datasetStore.datasetTitles);
-  return datasetStore.datasetTitles;
+const formRef = ref<FormInst | null>(null);
+const moduleData = reactive<DatasetIdentifiers>({
+  identifiers: [],
 });
+
+const getLoading = ref(false);
 
 onBeforeMount(async () => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
+  getLoading.value = true;
+
+  const response = await fetch(
+    `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/alternative-identifier`,
+    {
+      method: "GET",
+    }
+  );
+
+  getLoading.value = false;
+
+  if (!response.ok) {
+    push.error("Something went wrong.");
+
+    throw new Error("Something went wrong.");
   }
 
-  /**
-   * TODO: replace this with a call to the API
-   */
-  if (datasetIdentifiers.value.length === 0) {
-    datasetIdentifiers.value.push({
-      id: nanoid(),
-      identifier: "10.5072/1234",
-      type: "doi",
-    });
-  }
+  const data = await response.json();
 
-  /**
-   * TODO: get latest version for dataset
-   */
-  // if (datasetTitles.value.length > 0) {
-  //   datasetTitles.value[0].title = dataset.value.title;
-  // }
+  moduleData.identifiers = data.map((item: any) => {
+    return {
+      ...item,
+      origin: "remote",
+    };
+  });
 });
 
-const identifierTypeOptions = FORM_JSON.datasetIdentifierTypeOptions;
+const removeIdentifier = async (item_id: string) => {
+  const item = moduleData.identifiers.find((item) => item.id === item_id);
 
-const updateDatasetIdentifier = (e: MouseEvent) => {
-  e.preventDefault();
+  if (item && item.origin === "remote") {
+    const response = await fetch(
+      `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/alternative-identifier/${item.id}`,
+      {
+        method: "DELETE",
+      }
+    );
 
-  const dts: DatasetIdentifiers = datasetIdentifiers.value;
+    if (!response.ok) {
+      push.error("Something went wrong.");
 
-  for (const item of dts) {
-    // remove any items that have an empty title
-    if (item.identifier === "") {
-      dts.splice(dts.indexOf(item), 1);
-    }
-
-    // remove any items that have a duplicate title and type
-    if (dts.filter((i) => i.identifier === item.identifier && i.type === item.type).length > 1) {
-      dts.splice(dts.indexOf(item), 1);
+      throw new Error("Something went wrong.");
     }
   }
 
-  // call the API to update the dataset
-  datasetStore.datasetIdentifiers = dts;
+  push.success("Alternative identifier removed successfully");
 
-  success("Dataset titles updated successfully.");
+  moduleData.identifiers = moduleData.identifiers.filter((item) => item.id !== item_id);
+};
 
-  router.push({
-    name: "dataset:overview",
-    params: {
-      datasetId: routeParams.datasetId,
-      studyId: routeParams.studyId,
-    },
+const addIdentifier = () => {
+  moduleData.identifiers.push({
+    id: nanoid(),
+    identifier: "",
+    origin: "local",
+    type: null,
   });
 };
 
-const onCreate = () => {
-  return {
-    id: nanoid(),
-    title: "",
-    type: "alternativeTitle",
-  };
+const saveMetadata = (e: MouseEvent) => {
+  e.preventDefault();
+  formRef.value?.validate(async (errors) => {
+    if (!errors) {
+      const tempIdentifiers = moduleData.identifiers;
+
+      for (const item of tempIdentifiers) {
+        // remove any items that have a duplicate title and type
+        if (
+          tempIdentifiers.filter((i) => i.identifier === item.identifier && i.type === item.type)
+            .length > 1
+        ) {
+          tempIdentifiers.splice(tempIdentifiers.indexOf(item), 1);
+        }
+      }
+
+      const data = tempIdentifiers.map((item) => {
+        const entry = {
+          identifier: item.identifier || "",
+          type: item.type || null,
+        };
+
+        if (item.origin === "local") {
+          return entry;
+        } else {
+          return {
+            ...entry,
+            id: item.id,
+          };
+        }
+      });
+
+      // call the API to update the dataset
+      const response = await fetch(
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/alternative-identifier`,
+        {
+          body: JSON.stringify(data),
+          method: "POST",
+        }
+      );
+
+      if (!response.ok) {
+        push.error("Something went wrong.");
+
+        throw new Error("Something went wrong.");
+      }
+
+      push.success("Dataset alternative identifiers updated successfully");
+
+      // refresh page
+      router.go(0);
+
+      console.log("success");
+    } else {
+      console.log("error");
+      console.log(errors);
+    }
+  });
 };
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
-    <h1>Identifiers</h1>
+    <PageBackNavigationHeader
+      title="Identifiers"
+      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      linkName="dataset:overview"
+      :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
+    />
 
     <n-divider />
 
     <h3>Primary Identifier</h3>
 
-    <p class="py-2">
+    <p class="pb-8 pt-2">
       The primary identifier for your dataset is generated automatically when you publish a version
-      of your dataset. You can find the identifier for the latest version of your dataset on the
+      of your dataset. You can find the identifier for the latest published version of your dataset
+      on the
       <RouterLink :to="{ name: 'dataset:overview', params: routeParams }" class="hover:underline">
-        dataset overview</RouterLink
-      >
+        dataset overview
+      </RouterLink>
       page.
     </p>
 
@@ -113,49 +172,93 @@ const onCreate = () => {
 
     <h3>Alternative Identifiers</h3>
 
-    <p class="py-2">
+    <p class="pb-8 pt-2">
       If you would like to add alternative identifiers for your dataset, you can do so here. These
       will be attached to your dataset at the time of publication.
     </p>
 
-    <n-dynamic-input v-model:value="datasetIdentifiers" :on-create="onCreate" class="my-5">
-      <template #default="{ value }">
-        <div class="mb-2 mr-5 flex w-full items-center space-x-5">
-          <div class="flex w-full flex-col space-y-2">
-            <span> Identifier </span>
-            <n-input v-model:value="value.identifier" type="text" size="large" />
-          </div>
+    <FadeTransition>
+      <LottieLoader v-if="getLoading" />
 
-          <div class="flex w-full flex-col space-y-2">
-            <span> Type </span>
-            <n-select v-model:value="value.type" :options="identifierTypeOptions" size="large" />
-          </div>
-        </div>
-      </template>
+      <n-form
+        v-else
+        ref="formRef"
+        :model="moduleData"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+      >
+        <div
+          class="flex w-full flex-row items-center justify-between space-x-8"
+          v-for="(item, index) in moduleData.identifiers"
+          :key="index"
+        >
+          <n-space vertical class="w-full">
+            <div class="flex w-full flex-row items-center justify-between space-x-4">
+              <n-form-item
+                label="Name"
+                :path="`identifiers[${index}].identifier`"
+                :rule="{
+                  message: 'Please enter the identifier',
+                  required: true,
+                  trigger: ['blur', 'change'],
+                }"
+                class="w-full"
+              >
+                <n-input
+                  v-model:value="item.identifier"
+                  placeholder="10.1038/s41597-023-02463-x"
+                  clearable
+                />
+              </n-form-item>
 
-      <template #action="{ index, create, remove }">
-        <div class="flex items-end space-x-2 pb-3">
-          <n-popover trigger="hover">
+              <n-form-item
+                label="Type"
+                :path="`identifiers[${index}].type`"
+                :rule="{
+                  message: 'Please select the type of this identifier',
+                  required: true,
+                  trigger: ['blur', 'input'],
+                }"
+                class="w-full"
+              >
+                <n-select
+                  v-model:value="item.type"
+                  placeholder="DOI"
+                  clearable
+                  :options="FORM_JSON.datasetIdentifierTypeOptions"
+                />
+              </n-form-item>
+            </div>
+          </n-space>
+
+          <n-popconfirm @positive-click="removeIdentifier(item.id)" class="self-justify-end">
             <template #trigger>
-              <n-button @click="() => create(index)">
-                <f-icon icon="gridicons:create" />
+              <n-button class="ml-0" size="large" type="error">
+                <f-icon icon="gridicons:trash" />
               </n-button>
             </template>
 
-            <span>Add a new title</span>
-          </n-popover>
-
-          <n-button @click="() => remove(index)">
-            <f-icon icon="gridicons:trash" />
-          </n-button>
+            Are you sure you want to remove this identifier?
+          </n-popconfirm>
         </div>
-      </template>
-    </n-dynamic-input>
+
+        <n-button class="mb-10 w-full" dashed type="success" @click="addIdentifier">
+          <template #icon>
+            <f-icon icon="gridicons:create" />
+          </template>
+
+          Add a new identifier
+        </n-button>
+
+        <n-divider />
+      </n-form>
+    </FadeTransition>
 
     <n-divider />
 
     <div class="flex justify-start">
-      <n-button size="large" type="primary" @click="updateDatasetIdentifier">
+      <n-button size="large" type="primary" @click="saveMetadata">
         <template #icon>
           <f-icon icon="material-symbols:save" />
         </template>

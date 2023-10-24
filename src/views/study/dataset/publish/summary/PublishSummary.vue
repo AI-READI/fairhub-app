@@ -2,7 +2,6 @@
 import { config } from "md-editor-v3";
 
 import { useAuthStore } from "@/stores/auth";
-import { useVersionStore } from "@/stores/version";
 import TargetBlankExtension from "@/utils/TargetBlankExtension";
 
 config({
@@ -27,17 +26,11 @@ const { error } = useMessage();
 
 const authStore = useAuthStore();
 
-const versionStore = useVersionStore();
-
 const routeParams = {
   datasetId: route.params.datasetId,
   studyId: route.params.studyId,
   versionId: route.params.versionId,
 };
-
-const version = ref(versionStore.version);
-
-const readme = ref("");
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
@@ -56,14 +49,6 @@ function handleNextButton() {
     },
   });
 }
-
-const autoGenerateReadme = async () => {
-  console.log("autoGenerateReadme");
-
-  const response = await fetch("https://jaspervdj.be/lorem-markdownum/markdown.txt");
-
-  readme.value = await response.text();
-};
 </script>
 
 <template>

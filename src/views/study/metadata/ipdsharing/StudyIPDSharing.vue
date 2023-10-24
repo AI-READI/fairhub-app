@@ -57,11 +57,11 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data = {
         ipd_sharing: moduleData.ipd_sharing,
-        ipd_sharing_access_criteria: moduleData.access_criteria,
-        ipd_sharing_description: moduleData.description,
-        ipd_sharing_info_type_list: moduleData.info_type_list,
-        ipd_sharing_time_frame: moduleData.time_frame,
-        ipd_sharing_url: moduleData.url,
+        ipd_sharing_access_criteria: moduleData.access_criteria || "",
+        ipd_sharing_description: moduleData.description || "",
+        ipd_sharing_info_type_list: moduleData.info_type_list || [],
+        ipd_sharing_time_frame: moduleData.time_frame || "",
+        ipd_sharing_url: moduleData.url || "",
       };
 
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/ipdsharing`, {

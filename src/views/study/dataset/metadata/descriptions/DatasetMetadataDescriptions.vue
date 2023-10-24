@@ -2,93 +2,144 @@
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
-import { useAuthStore } from "@/stores/auth";
-import { useDatasetStore } from "@/stores/dataset";
 import type { DatasetDescriptions } from "@/types/Dataset";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
-const { error, success } = useMessage();
-
-const authStore = useAuthStore();
-const datasetStore = useDatasetStore();
+const push = usePush();
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
   studyId: route.params.studyId as string,
 };
 
-const datasetDescriptions = ref<DatasetDescriptions>([]);
+const studyId = routeParams.studyId;
+const datasetId = routeParams.datasetId;
 
-onBeforeMount(async () => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
-  }
-
-  /**
-   * TODO: replace this with a call to the API
-   */
-  if (datasetDescriptions.value.length === 0) {
-    datasetDescriptions.value.push({
-      id: nanoid(),
-      description: "lorem ipsum dolor sit amet",
-      type: "Abstract",
-    });
-  }
+const formRef = ref<FormInst | null>(null);
+const moduleData = reactive<DatasetDescriptions>({
+  descriptions: [],
 });
 
-const descriptionTypeOptions = FORM_JSON.datasetDescriptionTypeOptions;
+const loading = ref(false);
 
-const updateDatasetDescriptions = (e: MouseEvent) => {
-  e.preventDefault();
+onBeforeMount(async () => {
+  loading.value = true;
 
-  const dts: DatasetDescriptions = datasetDescriptions.value;
-
-  for (const item of dts) {
-    item.description = item.description.trim();
-
-    // remove any items that have an empty title
-    if (item.description === "") {
-      dts.splice(dts.indexOf(item), 1);
+  const response = await fetch(
+    `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/description`,
+    {
+      method: "GET",
     }
+  );
 
-    // remove any items that have a duplicate title and type
-    if (dts.filter((i) => i.description === item.description && i.type === item.type).length > 1) {
-      dts.splice(dts.indexOf(item), 1);
+  loading.value = false;
+
+  if (!response.ok) {
+    push.error("Something went wrong.");
+
+    throw new Error("Something went wrong.");
+  }
+
+  const data = await response.json();
+
+  moduleData.descriptions = data.map((item: any) => {
+    return {
+      ...item,
+      origin: "remote",
+    };
+  });
+});
+
+const removeDescription = async (item_id: string) => {
+  const item = moduleData.descriptions.find((item) => item.id === item_id);
+
+  if (item && item.origin === "remote") {
+    const response = await fetch(
+      `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/description/${item.id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok) {
+      push.error("Something went wrong.");
+
+      throw new Error("Something went wrong.");
     }
   }
 
-  // call the API to update the dataset
-  datasetStore.datasetDescriptions = dts;
-
-  success("Dataset descriptions updated successfully.");
-
-  router.push({
-    name: "dataset:overview",
-    params: {
-      datasetId: routeParams.datasetId,
-      studyId: routeParams.studyId,
-    },
-  });
+  moduleData.descriptions = moduleData.descriptions.filter((item) => item.id !== item_id);
 };
 
-const onCreate = () => {
-  datasetDescriptions.value.push({
+const addDescription = () => {
+  moduleData.descriptions.push({
     id: nanoid(),
     description: "",
-    type: "Abstract",
+    origin: "local",
+    type: null,
   });
 };
 
-const remove = (id: string) => {
-  const dts: DatasetDescriptions = datasetDescriptions.value;
+const saveMetadata = (e: MouseEvent) => {
+  e.preventDefault();
+  formRef.value?.validate(async (errors) => {
+    if (!errors) {
+      const tempDescriptions = moduleData.descriptions;
 
-  const item = dts.find((i) => i.id === id);
+      for (const item of tempDescriptions) {
+        // remove any items that have a duplicate description and type
+        if (
+          tempDescriptions.filter((i) => i.description === item.description && i.type === item.type)
+            .length > 1
+        ) {
+          tempDescriptions.splice(tempDescriptions.indexOf(item), 1);
+        }
+      }
 
-  if (item) {
-    dts.splice(dts.indexOf(item), 1);
-  }
+      const data = tempDescriptions.map((item) => {
+        const entry = {
+          description: item.description || "",
+          type: item.type || null,
+        };
+
+        if (item.origin === "local") {
+          return entry;
+        } else {
+          return {
+            ...entry,
+            id: item.id,
+          };
+        }
+      });
+
+      // call the API to update the dataset
+      const response = await fetch(
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/description`,
+        {
+          body: JSON.stringify(data),
+          method: "POST",
+        }
+      );
+
+      if (!response.ok) {
+        push.error("Something went wrong.");
+
+        throw new Error("Something went wrong.");
+      }
+
+      push.success("Dataset descriptions updated successfully");
+
+      // refresh page
+      router.go(0);
+
+      console.log("success");
+    } else {
+      console.log("error");
+      console.log(errors);
+    }
+  });
 };
 </script>
 
@@ -96,69 +147,104 @@ const remove = (id: string) => {
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
       title="Descriptions"
-      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
       linkName="dataset:overview"
-      :linkParams="{ datasetId: routeParams.datasetId, studyId: routeParams.studyId }"
+      :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
     />
 
     <n-divider />
 
     <p class="pb-8 pt-2">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, diam id aliquam
-      ultrices, nunc nisl tincidunt nunc, vitae aliquam nunc nisl sit amet nunc.
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+      voluptatem, quibusdam, quos voluptas quae quas voluptatum
     </p>
 
-    <n-list>
-      <n-list-item v-for="description in datasetDescriptions" :key="description.id">
-        <div class="mb-2 mr-5 flex w-full items-start space-x-5">
-          <div class="flex w-full flex-col space-y-2">
-            <span class="font-semibold"> Description </span>
+    <FadeTransition>
+      <LottieLoader v-if="loading" />
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
+      >
+        <div
+          class="flex w-full flex-row items-center justify-between space-x-8"
+          v-for="(item, index) in moduleData.descriptions"
+          :key="index"
+        >
+          <n-space vertical class="w-full">
+            <div class="flex w-full flex-row items-start justify-between space-x-4">
+              <n-form-item
+                label="Description"
+                :path="`descriptions[${index}].description`"
+                :rule="{
+                  message: 'Please enter the description',
+                  required: true,
+                  trigger: ['blur', 'change'],
+                }"
+                class="w-full"
+              >
+                <n-input
+                  v-model:value="item.description"
+                  placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                  type="textarea"
+                  clearable
+                />
+              </n-form-item>
 
-            <n-input
-              v-model:value="description.description"
-              size="large"
-              type="textarea"
-              rows="1"
-            />
-          </div>
+              <n-form-item
+                label="Type"
+                :path="`descriptions[${index}].type`"
+                :rule="{
+                  message: 'Please select the type of this description',
+                  required: true,
+                  trigger: ['blur', 'input'],
+                }"
+                class="w-full"
+              >
+                <n-select
+                  v-model:value="item.type"
+                  placeholder="Methods"
+                  clearable
+                  :disabled="item.type === 'Abstract'"
+                  :options="FORM_JSON.datasetDescriptionTypeOptions"
+                />
+              </n-form-item>
+            </div>
+          </n-space>
 
-          <div class="flex w-full flex-col space-y-2">
-            <span class="font-semibold"> Type </span>
+          <n-popconfirm @positive-click="removeDescription(item.id)" class="self-justify-end">
+            <template #trigger>
+              <n-button class="ml-0" size="large" type="error" :disabled="item.type === 'Abstract'">
+                <f-icon icon="gridicons:trash" />
+              </n-button>
+            </template>
 
-            <n-select
-              v-model:value="description.type"
-              :options="descriptionTypeOptions"
-              size="large"
-            />
-          </div>
-
-          <div class="flex flex-col space-y-3">
-            <span> &nbsp; </span>
-
-            <n-button @click="remove(description.id)">
-              <f-icon icon="gridicons:trash" />
-            </n-button>
-          </div>
+            Are you sure you want to remove this description?
+          </n-popconfirm>
         </div>
-      </n-list-item>
-    </n-list>
 
-    <n-button @click="onCreate" class="my-10" dashed type="info">
-      <template #icon>
-        <f-icon icon="gridicons:create" />
-      </template>
+        <n-button class="mb-10 w-full" dashed type="success" @click="addDescription">
+          <template #icon>
+            <f-icon icon="gridicons:create" />
+          </template>
 
-      Add a new description
-    </n-button>
+          Add a new description
+        </n-button>
+
+        <n-divider />
+      </n-form>
+    </FadeTransition>
 
     <n-divider />
 
     <div class="flex justify-start">
-      <n-button size="large" type="primary" @click="updateDatasetDescriptions">
+      <n-button size="large" type="primary" @click="saveMetadata">
         <template #icon>
           <f-icon icon="material-symbols:save" />
         </template>
-
         Save changes
       </n-button>
     </div>

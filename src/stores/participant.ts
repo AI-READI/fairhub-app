@@ -24,6 +24,7 @@ export const useParticipantStore = defineStore("participant", () => {
           age: faker.number.int({ max: 99, min: 18 }),
           first_name: faker.person.firstName(),
           last_name: faker.person.lastName(),
+          selected: false,
         };
 
         allParticipants.value.push(p);

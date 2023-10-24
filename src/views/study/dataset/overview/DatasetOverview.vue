@@ -1,71 +1,66 @@
 <script setup lang="ts">
-import { useMessage } from "naive-ui";
-import type { Ref } from "vue";
-import { computed, onBeforeMount } from "vue";
-import { useRoute, useRouter } from "vue-router";
-
-import { useAuthStore } from "@/stores/auth";
-import { useDatasetStore } from "@/stores/dataset";
 import { useSidebarStore } from "@/stores/sidebar";
-import { useStudyStore } from "@/stores/study";
 import type { Dataset } from "@/types/Dataset";
-import type { Study } from "@/types/Study";
+import { baseURL } from "@/utils/constants";
+// const baseURL = "http://localhost:3001/api";
 
-const router = useRouter();
 const route = useRoute();
-const { error } = useMessage();
-
-const authStore = useAuthStore();
+const push = usePush();
 
 const sidebarStore = useSidebarStore();
-const datasetStore = useDatasetStore();
-const studyStore = useStudyStore();
 
-const study: Ref<Study> = computed(() => studyStore.study);
-
-const dataset: Ref<Dataset> = computed(() => datasetStore.dataset);
+const dataset = ref<Dataset>({
+  id: "",
+  title: "",
+  created_at: 0,
+  description: "",
+  updated_at: 0,
+});
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
   studyId: route.params.studyId as string,
 };
 
-onBeforeMount(() => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
+const studyId = routeParams.studyId;
+const datasetId = routeParams.datasetId;
+
+onBeforeMount(async () => {
+  sidebarStore.setAppSidebarCollapsed(true);
+
+  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    push.error("Something went wrong.");
+
+    throw new Error("Something went wrong.");
   }
 
-  const studyId = routeParams.studyId;
-  const datasetId = routeParams.datasetId;
+  const data = await response.json();
 
-  datasetStore.getDataset(datasetId, studyId);
-
-  sidebarStore.setAppSidebarCollapsed(true);
+  dataset.value = data;
 });
 </script>
 
 <template>
-  <FadeTransition>
-    <LottieLoader v-if="datasetStore.loading" />
+  <main class="flex h-full w-full flex-col space-y-8 pr-6">
+    <PageBackNavigationHeader
+      title="Overview"
+      description="View an overview of your dataset"
+      linkName="study:all-datasets"
+      :linkParams="{ studyId: routeParams.studyId }"
+    />
 
-    <main class="flex h-full w-full flex-col pr-6" px-4 v-else>
-      <PageBackNavigationHeader
-        title="Dataset metadata"
-        description="View an overview of your dataset"
-        linkName="study:all-datasets"
-        :linkParams="{ studyId: routeParams.studyId }"
-      />
+    <n-divider />
 
-      <n-divider />
+    <div class="flex w-full justify-between">
+      <div class="pr-8">
+        <h2>{{ dataset.title || "Untitled Dataset" }}</h2>
 
-      <div class="flex w-full justify-between">
-        <div class="pr-8">
-          <h2>{{ dataset.title }}</h2>
-
-          <p class="py-4">{{ dataset.description }}</p>
-        </div>
+        <p class="py-4">{{ dataset.description || "No description provided" }}</p>
       </div>
-    </main>
-  </FadeTransition>
+    </div>
+  </main>
 </template>

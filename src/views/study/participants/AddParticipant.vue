@@ -3,9 +3,6 @@ import { faker } from "@faker-js/faker";
 import type { FormInst, FormRules } from "naive-ui";
 import { useMessage } from "naive-ui";
 import { nanoid } from "nanoid";
-import type { Ref } from "vue";
-import { onBeforeMount, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import type { Participant } from "@/types/Participant";
@@ -36,6 +33,7 @@ const participant: Ref<Participant> = ref({
   age: faker.number.int(100),
   first_name: faker.person.firstName(),
   last_name: faker.person.lastName(),
+  selected: false,
 });
 
 const rules: FormRules = {
@@ -81,6 +79,7 @@ const addParticipant = (e: MouseEvent) => {
         age: participant.value.age,
         first_name: participant.value.first_name,
         last_name: participant.value.last_name,
+        selected: false,
       };
 
       const studyId = routeParams.studyId;

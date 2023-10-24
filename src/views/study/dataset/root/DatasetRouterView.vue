@@ -4,7 +4,7 @@ import { onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-import { useDatasetStore } from "@/stores/dataset";
+// import { useDatasetStore } from "@/stores/dataset";
 import { useSidebarStore } from "@/stores/sidebar";
 
 const route = useRoute();
@@ -12,7 +12,7 @@ const router = useRouter();
 const { error } = useMessage();
 
 const authStore = useAuthStore();
-const datasetStore = useDatasetStore();
+// const datasetStore = useDatasetStore();
 const sidebarStore = useSidebarStore();
 
 const routeParams = {
@@ -31,7 +31,7 @@ onBeforeMount(() => {
   const studyId = routeParams.studyId;
   const datasetId = routeParams.datasetId;
 
-  datasetStore.getDataset(datasetId, studyId);
+  // datasetStore.getDataset(datasetId, studyId);
 
   if (route.name && route.name === "dataset:root") {
     console.log("redirecting to datset overview");
