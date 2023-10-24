@@ -1,4 +1,7 @@
 <script setup lang="ts">
+// import { baseURL } from "@/utils/constants";
+const baseURL = "http://localhost:3001/api";
+
 const route = useRoute();
 const router = useRouter();
 
@@ -8,10 +11,23 @@ const routeParams = {
   versionId: route.params.versionId,
 };
 
-onBeforeMount(() => {
-  /**
-   * TODO: Fetch dataset minimised metadata
-   */
+const getSpinner = ref(false);
+
+const moduleData = ref({});
+
+onBeforeMount(async () => {
+  getSpinner.value = true;
+
+  const response = await fetch(
+    `${baseURL}/study/${routeParams.studyId}/dataset/${routeParams.datasetId}/metadata/minimal`,
+    {
+      method: "GET",
+    }
+  );
+
+  getSpinner.value = false;
+
+  moduleData.value = await response.json();
 });
 
 function handleNextButton() {

@@ -277,6 +277,7 @@ const saveMetadata = (e: MouseEvent) => {
             v-model:value="item.affiliations"
             #="{ index: idx, value }"
             :on-create="addEntryToAffiliationsList"
+            :disabled="item.name_type === 'Organizational'"
             class="[&>div>*]:!self-center"
           >
             <div class="flex w-full flex-col space-y-4">
@@ -295,6 +296,7 @@ const saveMetadata = (e: MouseEvent) => {
                 <n-input
                   v-model:value="item.affiliations[idx].name"
                   placeholder="University of Marley"
+                  :disabled="item.name_type === 'Organizational'"
                   @keydown.enter.prevent
                 />
               </n-form-item>
@@ -313,6 +315,7 @@ const saveMetadata = (e: MouseEvent) => {
                 >
                   <n-input
                     v-model:value="item.affiliations[idx].identifier"
+                    :disabled="item.name_type === 'Organizational'"
                     placeholder="0156zyn36"
                     @keydown.enter.prevent
                   />
@@ -332,6 +335,7 @@ const saveMetadata = (e: MouseEvent) => {
                   <n-input
                     v-model:value="item.affiliations[idx].scheme"
                     placeholder="ROR"
+                    :disabled="item.name_type === 'Organizational'"
                     @keydown.enter.prevent
                   />
                 </n-form-item>
@@ -346,6 +350,7 @@ const saveMetadata = (e: MouseEvent) => {
                     v-model:value="item.affiliations[idx].scheme_uri"
                     placeholder="https://ror.org/"
                     @keydown.enter.prevent
+                    :disabled="item.name_type === 'Organizational'"
                   />
                 </n-form-item>
               </div>
