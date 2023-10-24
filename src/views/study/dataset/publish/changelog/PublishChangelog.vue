@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { config, MdEditor } from "md-editor-v3";
 
-// import { baseURL } from "@/utils/constants";
-const baseURL = "http://localhost:3001/api";
-import LottieLoader from "@/components/loader/LottieLoader.vue";
-import FadeTransition from "@/components/transitions/FadeTransition.vue";
 import { sanitize } from "@/utils/helpers";
 import TargetBlankExtension from "@/utils/TargetBlankExtension";
+
+// import { baseURL } from "@/utils/constants";
+const baseURL = "http://localhost:3001/api";
 
 config({
   editorConfig: {

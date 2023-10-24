@@ -145,7 +145,7 @@ function onUpdate() {
           <transition-group name="fade" tag="div" class="flex flex-wrap">
             <n-card
               v-for="item in allMockedParticipants"
-              v-show="selectedParticipantRows.includes(item.id)"
+              v-show="selectedParticipantRows.includes(item.id as DataTableRowKey)"
               :key="item.id"
               class="m-2 w-max shadow-md"
             >

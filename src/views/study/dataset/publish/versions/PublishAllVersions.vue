@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useSidebarStore } from "@/stores/sidebar";
 import type { Version } from "@/types/Version";
+import { displayHumanFriendlyDateAndTime } from "@/utils/date";
+
 // import { baseURL } from "@/utils/constants";
 const baseURL = "http://localhost:3001/api";
-import { displayHumanFriendlyDateAndTime } from "@/utils/date";
 
 const route = useRoute();
 const push = usePush();

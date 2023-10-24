@@ -4,14 +4,13 @@ import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import { useSidebarStore } from "@/stores/sidebar";
-import { useVersionStore } from "@/stores/version";
 
 const route = useRoute();
 const router = useRouter();
 const { error } = useMessage();
 
 const authStore = useAuthStore();
-const versionStore = useVersionStore();
+
 const sidebarStore = useSidebarStore();
 
 const routeParams = {
@@ -31,8 +30,6 @@ onBeforeMount(() => {
   const studyId = routeParams.studyId;
   const datasetId = routeParams.datasetId;
   const versionId = routeParams.versionId;
-
-  versionStore.getVersion(versionId);
 
   if (route.name && route.name === "dataset:publish:root") {
     console.log("redirecting to datset overview");

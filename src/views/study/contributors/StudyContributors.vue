@@ -415,7 +415,7 @@ const copyInviteURL = (token: string) => {
               v-if="contributor.status === 'invited'"
               secondary
               type="info"
-              @click="copyInviteURL(contributor.token)"
+              @click="copyInviteURL(contributor.token as string)"
             >
               <template #icon>
                 <f-icon icon="carbon:copy" />
