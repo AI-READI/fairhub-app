@@ -95,12 +95,13 @@ const signUp = (e: MouseEvent) => {
       /**
        * Will be removed in prod
        * Code to allow only people with a specific email address to sign up
+       * TODO: re-enable later
        */
-      const code = (route.query.code as string) || "";
+      // const code = (route.query.code as string) || "";
 
       const response = await fetch(`${baseURL}/auth/signup`, {
         body: JSON.stringify({
-          code,
+          // code,
           email_address: emailAddress,
           password,
         }),
