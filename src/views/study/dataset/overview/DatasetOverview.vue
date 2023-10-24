@@ -59,7 +59,7 @@ onBeforeMount(async () => {
       <div class="pr-8">
         <h2>{{ dataset.title || "Untitled Dataset" }}</h2>
 
-        <p class="py-4">{{ dataset.description || "No descripiton provided" }}</p>
+        <p class="py-4">{{ dataset.description || "No description provided" }}</p>
       </div>
     </div>
   </main>
