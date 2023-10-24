@@ -137,27 +137,33 @@
   "datasetDescriptionTypeOptions": [
     {
       "label": "Abstract",
-      "value": "Abstract"
+      "value": "Abstract",
+      "disabled": true
     },
     {
       "label": "Methods",
-      "value": "Methods"
+      "value": "Methods",
+      "disabled": false
     },
     {
       "label": "Series Information",
-      "value": "SeriesInformation"
+      "value": "SeriesInformation",
+      "disabled": false
     },
     {
       "label": "Table of Contents",
-      "value": "TableOfContents"
+      "value": "TableOfContents",
+      "disabled": false
     },
     {
       "label": "Technical Info",
-      "value": "TechnicalInfo"
+      "value": "TechnicalInfo",
+      "disabled": false
     },
     {
       "label": "Other",
-      "value": "Other"
+      "value": "Other",
+      "disabled": false
     }
   ],
   "datasetNameTypeOptions": [
