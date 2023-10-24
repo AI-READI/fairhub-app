@@ -23,7 +23,7 @@ const moduleData = reactive<DatasetTitles>({
 });
 
 onBeforeMount(async () => {
-  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/title`, {
+  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/title`, {
     method: "GET",
   });
 
@@ -48,7 +48,7 @@ const removeTitle = async (item_id: string) => {
 
   if (item && item.origin === "remote") {
     const response = await fetch(
-      `${baseURL}/study/${studyId}/dataset/${datasetId}/title/${item.id}`,
+      `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/title/${item.id}`,
       {
         method: "DELETE",
       }
@@ -106,10 +106,13 @@ const saveMetadata = (e: MouseEvent) => {
       });
 
       // call the API to update the dataset
-      const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/title`, {
-        body: JSON.stringify(data),
-        method: "POST",
-      });
+      const response = await fetch(
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/title`,
+        {
+          body: JSON.stringify(data),
+          method: "POST",
+        }
+      );
 
       if (!response.ok) {
         push.error("Something went wrong.");

@@ -25,9 +25,12 @@ const moduleData = reactive<DatasetCreators>({
 });
 
 onBeforeMount(async () => {
-  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/creator`, {
-    method: "GET",
-  });
+  const response = await fetch(
+    `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/creator`,
+    {
+      method: "GET",
+    }
+  );
 
   if (!response.ok) {
     push.error("Something went wrong.");
@@ -59,9 +62,12 @@ const removeCreator = async (id: string) => {
   const item = moduleData.creators.find((item) => item.id === id);
 
   if (item && item.origin === "remote") {
-    const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/creator/${id}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/creator/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     if (!response.ok) {
       push.error("Something went wrong.");
@@ -122,11 +128,14 @@ const saveMetadata = (e: MouseEvent) => {
         }
       });
 
-      const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/creator`, {
-        body: JSON.stringify(data),
+      const response = await fetch(
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/creator`,
+        {
+          body: JSON.stringify(data),
 
-        method: "POST",
-      });
+          method: "POST",
+        }
+      );
 
       if (!response.ok) {
         push.error("Something went wrong.");

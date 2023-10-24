@@ -24,7 +24,7 @@ const moduleData = reactive<DatasetIdentifiers>({
 
 onBeforeMount(async () => {
   const response = await fetch(
-    `${baseURL}/study/${studyId}/dataset/${datasetId}/alternative-identifier`,
+    `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/alternative-identifier`,
     {
       method: "GET",
     }
@@ -51,7 +51,7 @@ const removeIdentifier = async (item_id: string) => {
 
   if (item && item.origin === "remote") {
     const response = await fetch(
-      `${baseURL}/study/${studyId}/dataset/${datasetId}/alternative-identifier/${item.id}`,
+      `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/alternative-identifier/${item.id}`,
       {
         method: "DELETE",
       }
@@ -112,7 +112,7 @@ const saveMetadata = (e: MouseEvent) => {
 
       // call the API to update the dataset
       const response = await fetch(
-        `${baseURL}/study/${studyId}/dataset/${datasetId}/alternative-identifier`,
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/alternative-identifier`,
         {
           body: JSON.stringify(data),
           method: "POST",

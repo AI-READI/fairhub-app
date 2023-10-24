@@ -47,7 +47,7 @@ const languageOptions = LANGUAGES_JSON.map((language) => ({
 }));
 
 onBeforeMount(async () => {
-  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/other`, {
+  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/other`, {
     method: "GET",
   });
 
@@ -84,10 +84,13 @@ const saveMetadata = (e: MouseEvent) => {
         standards_followed: moduleData.value.standards_followed,
       };
 
-      const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/other`, {
-        body: JSON.stringify(data),
-        method: "PUT",
-      });
+      const response = await fetch(
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/other`,
+        {
+          body: JSON.stringify(data),
+          method: "PUT",
+        }
+      );
 
       loading.value = false;
 

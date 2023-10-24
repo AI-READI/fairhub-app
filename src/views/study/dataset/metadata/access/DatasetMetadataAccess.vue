@@ -41,7 +41,7 @@ const rules: FormRules = {
 const loading = ref(false);
 
 onBeforeMount(async () => {
-  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/access`, {
+  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/access`, {
     method: "GET",
   });
 
@@ -67,10 +67,13 @@ const saveMetadata = (e: MouseEvent) => {
         url_last_checked: moduleData.value.url_last_checked || null,
       };
 
-      const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/access`, {
-        body: JSON.stringify(data),
-        method: "PUT",
-      });
+      const response = await fetch(
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/access`,
+        {
+          body: JSON.stringify(data),
+          method: "PUT",
+        }
+      );
 
       loading.value = false;
 

@@ -24,9 +24,12 @@ const moduleData = reactive<DatasetSubjects>({
 });
 
 onBeforeMount(async () => {
-  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/subject`, {
-    method: "GET",
-  });
+  const response = await fetch(
+    `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/subject`,
+    {
+      method: "GET",
+    }
+  );
 
   if (!response.ok) {
     push.error("Something went wrong.");
@@ -50,9 +53,12 @@ const removeDate = async (id: string) => {
   const item = moduleData.subjects.find((item) => item.id === id);
 
   if (item && item.origin === "remote") {
-    const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/subject/${id}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/subject/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     if (!response.ok) {
       push.error("Something went wrong.");
@@ -100,11 +106,14 @@ const saveMetadata = (e: MouseEvent) => {
         }
       });
 
-      const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/subject`, {
-        body: JSON.stringify(data),
+      const response = await fetch(
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/subject`,
+        {
+          body: JSON.stringify(data),
 
-        method: "POST",
-      });
+          method: "POST",
+        }
+      );
 
       if (!response.ok) {
         push.error("Something went wrong.");

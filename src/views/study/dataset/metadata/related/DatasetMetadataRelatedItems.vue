@@ -24,9 +24,12 @@ const moduleData = reactive<DatasetRelatedItems>({
 });
 
 onBeforeMount(async () => {
-  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/related-item`, {
-    method: "GET",
-  });
+  const response = await fetch(
+    `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/related-item`,
+    {
+      method: "GET",
+    }
+  );
 
   if (!response.ok) {
     push.error("Something went wrong.");
@@ -81,7 +84,7 @@ const removeRelatedItem = async (id: string) => {
 
   if (item && item.origin === "remote") {
     const response = await fetch(
-      `${baseURL}/study/${studyId}/dataset/${datasetId}/related-item/${id}`,
+      `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/related-item/${id}`,
       {
         method: "DELETE",
       }
@@ -134,7 +137,7 @@ const removeIdentifier = async (item_id: string, index: number) => {
 
     if (identifier && identifier.origin === "remote") {
       const response = await fetch(
-        `${baseURL}/study/${studyId}/dataset/${datasetId}/related-item/${item_id}/identifier/${identifier.id}`,
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/related-item/${item_id}/identifier/${identifier.id}`,
         {
           method: "DELETE",
         }
@@ -176,7 +179,7 @@ const removeCreator = async (item_id: string, index: number) => {
 
     if (creator && creator.origin === "remote") {
       const response = await fetch(
-        `${baseURL}/study/${studyId}/dataset/${datasetId}/related-item/${item_id}/creator/${creator.id}`,
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/related-item/${item_id}/creator/${creator.id}`,
         {
           method: "DELETE",
         }
@@ -215,7 +218,7 @@ const removeContributor = async (item_id: string, index: number) => {
 
     if (contributor && contributor.origin === "remote") {
       const response = await fetch(
-        `${baseURL}/study/${studyId}/dataset/${datasetId}/related-item/${item_id}/contributor/${contributor.id}`,
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/related-item/${item_id}/contributor/${contributor.id}`,
         {
           method: "DELETE",
         }
@@ -255,7 +258,7 @@ const removeTitle = async (item_id: string, index: number) => {
 
     if (title && title.origin === "remote") {
       const response = await fetch(
-        `${baseURL}/study/${studyId}/dataset/${datasetId}/related-item/${item_id}/title/${title.id}`,
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/related-item/${item_id}/title/${title.id}`,
         {
           method: "DELETE",
         }
@@ -380,7 +383,7 @@ const saveMetadata = (e: MouseEvent) => {
       });
 
       const response = await fetch(
-        `${baseURL}/study/${studyId}/dataset/${datasetId}/related-item`,
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/related-item`,
         {
           body: JSON.stringify(data),
 

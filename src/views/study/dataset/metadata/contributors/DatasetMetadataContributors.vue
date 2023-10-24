@@ -25,9 +25,12 @@ const moduleData = reactive<DatasetContributors>({
 });
 
 onBeforeMount(async () => {
-  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/contributor`, {
-    method: "GET",
-  });
+  const response = await fetch(
+    `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/contributor`,
+    {
+      method: "GET",
+    }
+  );
 
   if (!response.ok) {
     push.error("Something went wrong.");
@@ -60,7 +63,7 @@ const removeContributor = async (id: string) => {
 
   if (item && item.origin === "remote") {
     const response = await fetch(
-      `${baseURL}/study/${studyId}/dataset/${datasetId}/contributor/${id}`,
+      `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/contributor/${id}`,
       {
         method: "DELETE",
       }
@@ -127,11 +130,14 @@ const saveMetadata = (e: MouseEvent) => {
         }
       });
 
-      const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/contributor`, {
-        body: JSON.stringify(data),
+      const response = await fetch(
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/contributor`,
+        {
+          body: JSON.stringify(data),
 
-        method: "POST",
-      });
+          method: "POST",
+        }
+      );
 
       if (!response.ok) {
         push.error("Something went wrong.");

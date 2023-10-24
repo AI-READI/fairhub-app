@@ -40,7 +40,7 @@ const loading = ref(false);
 
 onBeforeMount(async () => {
   const response = await fetch(
-    `${baseURL}/study/${studyId}/dataset/${datasetId}/de-identification-level`,
+    `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/de-identification-level`,
     {
       method: "GET",
     }
@@ -72,7 +72,7 @@ const saveMetadata = (e: MouseEvent) => {
       };
 
       const response = await fetch(
-        `${baseURL}/study/${studyId}/dataset/${datasetId}/de-identification-level`,
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/de-identification-level`,
         {
           body: JSON.stringify(data),
           method: "PUT",

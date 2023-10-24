@@ -39,9 +39,12 @@ const rules: FormRules = {
 const loading = ref(false);
 
 onBeforeMount(async () => {
-  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/publisher`, {
-    method: "GET",
-  });
+  const response = await fetch(
+    `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/publisher`,
+    {
+      method: "GET",
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -64,10 +67,13 @@ const saveMetadata = (e: MouseEvent) => {
         publisher: moduleData.value.publisher || "",
       };
 
-      const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/publisher`, {
-        body: JSON.stringify(data),
-        method: "PUT",
-      });
+      const response = await fetch(
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/publisher`,
+        {
+          body: JSON.stringify(data),
+          method: "PUT",
+        }
+      );
 
       loading.value = false;
 
