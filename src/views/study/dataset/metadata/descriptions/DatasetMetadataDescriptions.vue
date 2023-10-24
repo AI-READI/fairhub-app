@@ -22,13 +22,19 @@ const moduleData = reactive<DatasetDescriptions>({
   descriptions: [],
 });
 
+const loading = ref(false);
+
 onBeforeMount(async () => {
+  loading.value = true;
+
   const response = await fetch(
     `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/description`,
     {
       method: "GET",
     }
   );
+
+  loading.value = false;
 
   if (!response.ok) {
     push.error("Something went wrong.");
@@ -63,6 +69,8 @@ const removeDescription = async (item_id: string) => {
       throw new Error("Something went wrong.");
     }
   }
+
+  moduleData.descriptions = moduleData.descriptions.filter((item) => item.id !== item_id);
 };
 
 const addDescription = () => {
@@ -151,74 +159,84 @@ const saveMetadata = (e: MouseEvent) => {
       voluptatem, quibusdam, quos voluptas quae quas voluptatum
     </p>
 
-    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
-      <div
-        class="flex w-full flex-row items-center justify-between space-x-8"
-        v-for="(item, index) in moduleData.descriptions"
-        :key="index"
+    <FadeTransition>
+      <LottieLoader v-if="loading" />
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
       >
-        <n-space vertical class="w-full">
-          <div class="flex w-full flex-row items-start justify-between space-x-4">
-            <n-form-item
-              label="Description"
-              :path="`descriptions[${index}].description`"
-              :rule="{
-                message: 'Please enter the description',
-                required: true,
-                trigger: ['blur', 'change'],
-              }"
-              class="w-full"
-            >
-              <n-input
-                v-model:value="item.description"
-                placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                type="textarea"
-                clearable
-              />
-            </n-form-item>
+        <div
+          class="flex w-full flex-row items-center justify-between space-x-8"
+          v-for="(item, index) in moduleData.descriptions"
+          :key="index"
+        >
+          <n-space vertical class="w-full">
+            <div class="flex w-full flex-row items-start justify-between space-x-4">
+              <n-form-item
+                label="Description"
+                :path="`descriptions[${index}].description`"
+                :rule="{
+                  message: 'Please enter the description',
+                  required: true,
+                  trigger: ['blur', 'change'],
+                }"
+                class="w-full"
+              >
+                <n-input
+                  v-model:value="item.description"
+                  placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                  type="textarea"
+                  clearable
+                />
+              </n-form-item>
 
-            <n-form-item
-              label="Type"
-              :path="`descriptions[${index}].type`"
-              :rule="{
-                message: 'Please select the type of this description',
-                required: true,
-                trigger: ['blur', 'input'],
-              }"
-              class="w-full"
-            >
-              <n-select
-                v-model:value="item.type"
-                placeholder="Methods"
-                clearable
-                :disabled="item.type === 'Abstract'"
-                :options="FORM_JSON.datasetDescriptionTypeOptions"
-              />
-            </n-form-item>
-          </div>
-        </n-space>
+              <n-form-item
+                label="Type"
+                :path="`descriptions[${index}].type`"
+                :rule="{
+                  message: 'Please select the type of this description',
+                  required: true,
+                  trigger: ['blur', 'input'],
+                }"
+                class="w-full"
+              >
+                <n-select
+                  v-model:value="item.type"
+                  placeholder="Methods"
+                  clearable
+                  :disabled="item.type === 'Abstract'"
+                  :options="FORM_JSON.datasetDescriptionTypeOptions"
+                />
+              </n-form-item>
+            </div>
+          </n-space>
 
-        <n-popconfirm @positive-click="removeDescription(item.id)" class="self-justify-end">
-          <template #trigger>
-            <n-button class="ml-0" size="large" type="error" :disabled="item.type === 'Abstract'">
-              <f-icon icon="gridicons:trash" />
-            </n-button>
+          <n-popconfirm @positive-click="removeDescription(item.id)" class="self-justify-end">
+            <template #trigger>
+              <n-button class="ml-0" size="large" type="error" :disabled="item.type === 'Abstract'">
+                <f-icon icon="gridicons:trash" />
+              </n-button>
+            </template>
+
+            Are you sure you want to remove this description?
+          </n-popconfirm>
+        </div>
+
+        <n-button class="mb-10 w-full" dashed type="success" @click="addDescription">
+          <template #icon>
+            <f-icon icon="gridicons:create" />
           </template>
 
-          Are you sure you want to remove this description?
-        </n-popconfirm>
-      </div>
+          Add a new description
+        </n-button>
 
-      <n-button class="mb-10 w-full" dashed type="success" @click="addDescription">
-        <template #icon>
-          <f-icon icon="gridicons:create" />
-        </template>
-
-        Add a new description
-      </n-button>
-
-      <n-divider />
-    </n-form>
+        <n-divider />
+      </n-form>
+    </FadeTransition>
 
     <n-divider />
 

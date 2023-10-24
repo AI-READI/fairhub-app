@@ -36,15 +36,20 @@ const rules: FormRules = {
   },
 };
 
+const getLoading = ref(false);
 const loading = ref(false);
 
 onBeforeMount(async () => {
+  getLoading.value = true;
+
   const response = await fetch(
     `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/de-identification-level`,
     {
       method: "GET",
     }
   );
+
+  getLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -115,87 +120,90 @@ const saveMetadata = (e: MouseEvent) => {
     />
 
     <n-divider />
-
-    <n-form
-      ref="formRef"
-      :model="moduleData"
-      :rules="rules"
-      size="large"
-      label-placement="top"
-      class="pr-4"
-    >
-      <n-form-item label="Type" path="type">
-        <n-select
-          v-model:value="moduleData.type"
-          placeholder="Not Known"
-          clearable
-          :options="FORM_JSON.datasetDeIdentTypeOptions"
-        />
-      </n-form-item>
-
-      <n-form-item label="Were direct identifiers removed?" path="direct" show-require-mark>
-        <n-switch v-model:value="moduleData.direct" :round="true" class="mx-1" size="large">
-          <template #checked> Yes </template>
-          <template #unchecked> No </template>
-        </n-switch>
-      </n-form-item>
-
-      <n-form-item
-        label="Were US HIPAA de-identification rules applied?"
-        path="hipaa"
-        show-require-mark
+    <FadeTransition>
+      <LottieLoader v-if="getLoading" />
+      <n-form
+        v-else
+        ref="formRef"
+        :model="moduleData"
+        :rules="rules"
+        size="large"
+        label-placement="top"
+        class="pr-4"
       >
-        <n-switch v-model:value="moduleData.hipaa" :round="true" class="mx-1" size="large">
-          <template #checked> Yes </template>
-          <template #unchecked> No </template>
-        </n-switch>
-      </n-form-item>
+        <n-form-item label="Type" path="type">
+          <n-select
+            v-model:value="moduleData.type"
+            placeholder="Not Known"
+            clearable
+            :options="FORM_JSON.datasetDeIdentTypeOptions"
+          />
+        </n-form-item>
 
-      <n-form-item
-        label="Were dates rebased and/or replaced by integers?"
-        path="dates"
-        show-require-mark
-      >
-        <n-switch v-model:value="moduleData.dates" :round="true" class="mx-1" size="large">
-          <template #checked> Yes </template>
-          <template #unchecked> No </template>
-        </n-switch>
-      </n-form-item>
+        <n-form-item label="Were direct identifiers removed?" path="direct" show-require-mark>
+          <n-switch v-model:value="moduleData.direct" :round="true" class="mx-1" size="large">
+            <template #checked> Yes </template>
+            <template #unchecked> No </template>
+          </n-switch>
+        </n-form-item>
 
-      <n-form-item label="Were narrative text fields removed?" path="nonarr" show-require-mark>
-        <n-switch v-model:value="moduleData.nonarr" :round="true" class="mx-1" size="large">
-          <template #checked> Yes </template>
-          <template #unchecked> No </template>
-        </n-switch>
-      </n-form-item>
+        <n-form-item
+          label="Were US HIPAA de-identification rules applied?"
+          path="hipaa"
+          show-require-mark
+        >
+          <n-switch v-model:value="moduleData.hipaa" :round="true" class="mx-1" size="large">
+            <template #checked> Yes </template>
+            <template #unchecked> No </template>
+          </n-switch>
+        </n-form-item>
 
-      <n-form-item label="Was k-anonymisation (k>=2) achieved?" path="k_anon" show-require-mark>
-        <n-switch v-model:value="moduleData.k_anon" :round="true" class="mx-1" size="large">
-          <template #checked> Yes </template>
-          <template #unchecked> No </template>
-        </n-switch>
-      </n-form-item>
+        <n-form-item
+          label="Were dates rebased and/or replaced by integers?"
+          path="dates"
+          show-require-mark
+        >
+          <n-switch v-model:value="moduleData.dates" :round="true" class="mx-1" size="large">
+            <template #checked> Yes </template>
+            <template #unchecked> No </template>
+          </n-switch>
+        </n-form-item>
 
-      <n-form-item label="Details" path="details">
-        <n-input
-          v-model:value="moduleData.details"
-          type="textarea"
-          placeholder="Provide further details of the de-identification of the dataset, perhaps referring to other documents and/or a URL"
-          clearable
-        />
-      </n-form-item>
+        <n-form-item label="Were narrative text fields removed?" path="nonarr" show-require-mark>
+          <n-switch v-model:value="moduleData.nonarr" :round="true" class="mx-1" size="large">
+            <template #checked> Yes </template>
+            <template #unchecked> No </template>
+          </n-switch>
+        </n-form-item>
 
-      <n-divider />
+        <n-form-item label="Was k-anonymisation (k>=2) achieved?" path="k_anon" show-require-mark>
+          <n-switch v-model:value="moduleData.k_anon" :round="true" class="mx-1" size="large">
+            <template #checked> Yes </template>
+            <template #unchecked> No </template>
+          </n-switch>
+        </n-form-item>
 
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
-          <template #icon>
-            <f-icon icon="material-symbols:save" />
-          </template>
+        <n-form-item label="Details" path="details">
+          <n-input
+            v-model:value="moduleData.details"
+            type="textarea"
+            placeholder="Provide further details of the de-identification of the dataset, perhaps referring to other documents and/or a URL"
+            clearable
+          />
+        </n-form-item>
 
-          Save Metadata
-        </n-button>
-      </div>
-    </n-form>
+        <n-divider />
+
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>

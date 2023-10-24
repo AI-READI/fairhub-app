@@ -22,13 +22,19 @@ const moduleData = reactive<DatasetIdentifiers>({
   identifiers: [],
 });
 
+const getLoading = ref(false);
+
 onBeforeMount(async () => {
+  getLoading.value = true;
+
   const response = await fetch(
     `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/alternative-identifier`,
     {
       method: "GET",
     }
   );
+
+  getLoading.value = false;
 
   if (!response.ok) {
     push.error("Something went wrong.");
@@ -171,72 +177,83 @@ const saveMetadata = (e: MouseEvent) => {
       will be attached to your dataset at the time of publication.
     </p>
 
-    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
-      <div
-        class="flex w-full flex-row items-center justify-between space-x-8"
-        v-for="(item, index) in moduleData.identifiers"
-        :key="index"
+    <FadeTransition>
+      <LottieLoader v-if="getLoading" />
+
+      <n-form
+        v-else
+        ref="formRef"
+        :model="moduleData"
+        size="large"
+        label-placement="top"
+        class="pr-4"
       >
-        <n-space vertical class="w-full">
-          <div class="flex w-full flex-row items-center justify-between space-x-4">
-            <n-form-item
-              label="Name"
-              :path="`identifiers[${index}].identifier`"
-              :rule="{
-                message: 'Please enter the identifier',
-                required: true,
-                trigger: ['blur', 'change'],
-              }"
-              class="w-full"
-            >
-              <n-input
-                v-model:value="item.identifier"
-                placeholder="10.1038/s41597-023-02463-x"
-                clearable
-              />
-            </n-form-item>
+        <div
+          class="flex w-full flex-row items-center justify-between space-x-8"
+          v-for="(item, index) in moduleData.identifiers"
+          :key="index"
+        >
+          <n-space vertical class="w-full">
+            <div class="flex w-full flex-row items-center justify-between space-x-4">
+              <n-form-item
+                label="Name"
+                :path="`identifiers[${index}].identifier`"
+                :rule="{
+                  message: 'Please enter the identifier',
+                  required: true,
+                  trigger: ['blur', 'change'],
+                }"
+                class="w-full"
+              >
+                <n-input
+                  v-model:value="item.identifier"
+                  placeholder="10.1038/s41597-023-02463-x"
+                  clearable
+                />
+              </n-form-item>
 
-            <n-form-item
-              label="Type"
-              :path="`identifiers[${index}].type`"
-              :rule="{
-                message: 'Please select the type of this identifier',
-                required: true,
-                trigger: ['blur', 'input'],
-              }"
-              class="w-full"
-            >
-              <n-select
-                v-model:value="item.type"
-                placeholder="DOI"
-                clearable
-                :options="FORM_JSON.datasetIdentifierTypeOptions"
-              />
-            </n-form-item>
-          </div>
-        </n-space>
+              <n-form-item
+                label="Type"
+                :path="`identifiers[${index}].type`"
+                :rule="{
+                  message: 'Please select the type of this identifier',
+                  required: true,
+                  trigger: ['blur', 'input'],
+                }"
+                class="w-full"
+              >
+                <n-select
+                  v-model:value="item.type"
+                  placeholder="DOI"
+                  clearable
+                  :options="FORM_JSON.datasetIdentifierTypeOptions"
+                />
+              </n-form-item>
+            </div>
+          </n-space>
 
-        <n-popconfirm @positive-click="removeIdentifier(item.id)" class="self-justify-end">
-          <template #trigger>
-            <n-button class="ml-0" size="large" type="error">
-              <f-icon icon="gridicons:trash" />
-            </n-button>
+          <n-popconfirm @positive-click="removeIdentifier(item.id)" class="self-justify-end">
+            <template #trigger>
+              <n-button class="ml-0" size="large" type="error">
+                <f-icon icon="gridicons:trash" />
+              </n-button>
+            </template>
+
+            Are you sure you want to remove this identifier?
+          </n-popconfirm>
+        </div>
+
+        <n-button class="mb-10 w-full" dashed type="success" @click="addIdentifier">
+          <template #icon>
+            <f-icon icon="gridicons:create" />
           </template>
 
-          Are you sure you want to remove this identifier?
-        </n-popconfirm>
-      </div>
+          Add a new identifier
+        </n-button>
 
-      <n-button class="mb-10 w-full" dashed type="success" @click="addIdentifier">
-        <template #icon>
-          <f-icon icon="gridicons:create" />
-        </template>
-
-        Add a new identifier
-      </n-button>
-
-      <n-divider />
-    </n-form>
+        <n-divider />
+      </n-form>
+    </FadeTransition>
 
     <n-divider />
 

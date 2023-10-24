@@ -2,6 +2,8 @@
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
+import LottieLoader from "@/components/loader/LottieLoader.vue";
+import FadeTransition from "@/components/transitions/FadeTransition.vue";
 import type { DatasetTitles } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
@@ -22,10 +24,16 @@ const moduleData = reactive<DatasetTitles>({
   titles: [],
 });
 
+const loading = ref(false);
+
 onBeforeMount(async () => {
+  loading.value = true;
+
   const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/title`, {
     method: "GET",
   });
+
+  loading.value = false;
 
   if (!response.ok) {
     push.error("Something went wrong.");
@@ -62,8 +70,7 @@ const removeTitle = async (item_id: string) => {
 
     push.success("Title deleted successfully");
 
-    // refresh page
-    router.go(0);
+    moduleData.titles = moduleData.titles.filter((item) => item.id !== item_id);
   }
 };
 
@@ -150,73 +157,87 @@ const saveMetadata = (e: MouseEvent) => {
       voluptatem, quibusdam, quos voluptas quae quas voluptatum
     </p>
 
-    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
-      <div
-        class="flex w-full flex-row items-center justify-between space-x-8"
-        v-for="(item, index) in moduleData.titles"
-        :key="index"
+    <FadeTransition>
+      <LottieLoader v-if="loading" />
+
+      <n-form
+        v-else
+        ref="formRef"
+        :model="moduleData"
+        size="large"
+        label-placement="top"
+        class="pr-4"
       >
-        <n-space vertical class="w-full">
-          <div class="flex w-full flex-row items-center justify-between space-x-4">
-            <n-form-item
-              label="Name"
-              :path="`titles[${index}].title`"
-              :rule="{
-                message: 'Please enter the title',
-                required: true,
-                trigger: ['blur', 'change'],
-              }"
-              class="w-full"
-            >
-              <n-input
-                v-model:value="item.title"
-                placeholder="10.1038/s41597-023-02463-x"
-                clearable
-              />
-            </n-form-item>
+        <div
+          class="flex w-full flex-row items-center justify-between space-x-8"
+          v-for="(item, index) in moduleData.titles"
+          :key="index"
+        >
+          <n-space vertical class="w-full">
+            <div class="flex w-full flex-row items-center justify-between space-x-4">
+              <n-form-item
+                label="Name"
+                :path="`titles[${index}].title`"
+                :rule="{
+                  message: 'Please enter the title',
+                  required: true,
+                  trigger: ['blur', 'change'],
+                }"
+                class="w-full"
+              >
+                <n-input
+                  v-model:value="item.title"
+                  placeholder="10.1038/s41597-023-02463-x"
+                  clearable
+                />
+              </n-form-item>
 
-            <n-form-item
-              label="Type"
-              :path="`titles[${index}].type`"
-              :rule="{
-                message: 'Please select the type of this title',
-                required: true,
-                trigger: ['blur', 'input'],
-              }"
-              class="w-full"
-            >
-              <n-select
-                v-model:value="item.type"
-                placeholder="DOI"
-                clearable
+              <n-form-item
+                label="Type"
+                :path="`titles[${index}].type`"
+                :rule="{
+                  message: 'Please select the type of this title',
+                  required: true,
+                  trigger: ['blur', 'input'],
+                }"
+                class="w-full"
+              >
+                <n-select
+                  v-model:value="item.type"
+                  placeholder="DOI"
+                  clearable
+                  :disabled="item.type === 'MainTitle'"
+                  :options="FORM_JSON.datasetTitleTypeOptions"
+                />
+              </n-form-item>
+            </div>
+          </n-space>
+
+          <n-popconfirm @positive-click="removeTitle(item.id)" class="self-justify-end">
+            <template #trigger>
+              <n-button
+                class="ml-0"
+                size="large"
+                type="error"
                 :disabled="item.type === 'MainTitle'"
-                :options="FORM_JSON.datasetTitleTypeOptions"
-              />
-            </n-form-item>
-          </div>
-        </n-space>
+              >
+                <f-icon icon="gridicons:trash" />
+              </n-button>
+            </template>
 
-        <n-popconfirm @positive-click="removeTitle(item.id)" class="self-justify-end">
-          <template #trigger>
-            <n-button class="ml-0" size="large" type="error" :disabled="item.type === 'MainTitle'">
-              <f-icon icon="gridicons:trash" />
-            </n-button>
+            Are you sure you want to remove this title?
+          </n-popconfirm>
+        </div>
+
+        <n-button class="mb-10 w-full" dashed type="success" @click="addTitle">
+          <template #icon>
+            <f-icon icon="gridicons:create" />
           </template>
 
-          Are you sure you want to remove this title?
-        </n-popconfirm>
-      </div>
-
-      <n-button class="mb-10 w-full" dashed type="success" @click="addTitle">
-        <template #icon>
-          <f-icon icon="gridicons:create" />
-        </template>
-
-        Add a new title
-      </n-button>
-
-      <n-divider />
-    </n-form>
+          Add a new title
+        </n-button>
+      </n-form>
+    </FadeTransition>
 
     <n-divider />
 
