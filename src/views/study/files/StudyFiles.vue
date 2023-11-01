@@ -15,20 +15,51 @@ const directory = ref<StudyFiles>({
 });
 
 const columns = ref<DataTableColumns>([
-  {
-    title: "",
-    key: "icon",
-    render(row: any) {
-      return h(Icon, {
-        height: 24,
-        icon: row.is_directory ? "flat-color-icons:folder" : "flat-color-icons:file",
-        width: 24,
-      });
-    },
-  },
+  // {
+  //   title: "",
+  //   key: "icon",
+  //   render(row: any) {
+  //     return h(Icon, {
+  //       height: 24,
+  //       icon: row.is_directory ? "flat-color-icons:folder" : "flat-color-icons:file",
+  //       width: 24,
+  //     });
+  //   },
+  // },
   {
     title: "Name",
     key: "name",
+    render(row: any) {
+      return h(
+        "div",
+        {
+          class: "flex items-center space-x-2",
+        },
+        [
+          h(Icon, {
+            height: 24,
+            icon: row.is_directory ? "flat-color-icons:folder" : "flat-color-icons:file",
+            width: 24,
+          }),
+          h(
+            "span",
+            {
+              class: {
+                "text-blue-500 cursor-pointer hover:underline hover:text-blue-700 transition-colors":
+                  row.is_directory,
+                "text-gray-500": !row.is_directory,
+              },
+              onClick: () => {
+                if (row.is_directory) {
+                  navigateToFolder(row.name);
+                }
+              },
+            },
+            splitPath(row.name).pop()
+          ),
+        ]
+      );
+    },
   },
   {
     title: "Updated",
@@ -47,6 +78,7 @@ const columns = ref<DataTableColumns>([
 ]);
 
 const getLoading = ref(false);
+const selectedFolderPath = ref("");
 
 onBeforeMount(async () => {
   getLoading.value = true;
@@ -76,13 +108,55 @@ onBeforeMount(async () => {
 
   getLoading.value = false;
 });
+
+const splitPath = (path: string) => {
+  return path.split("/").filter((item) => item);
+};
+
+const currentFolderPath = computed(() => {
+  return splitPath(selectedFolderPath.value);
+});
+
+const navigateToFolder = async (folderPath: string = "") => {
+  getLoading.value = true;
+
+  selectedFolderPath.value = folderPath;
+
+  const studyId = route.params.studyId;
+
+  const response = await fetch(
+    `${baseURL}/study/${studyId}/files?path=${encodeURIComponent(folderPath)}`,
+    {
+      method: "GET",
+    }
+  );
+
+  if (!response.ok) {
+    push.error("Something went wrong.");
+    throw new Error("Network response was not ok");
+  }
+
+  const data: StudyFile[] = await response.json();
+
+  const processedData = data.map((file: any) => {
+    return {
+      ...file,
+    };
+  });
+
+  directory.value = {
+    files: processedData,
+  };
+
+  getLoading.value = false;
+};
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
       title="Files"
-      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+      description="Lorem ipsum dolor sit amet consectetur adipisicing elit."
       linkName="study:overview"
       :linkParams="{
         studyId: route.params.studyId,
@@ -91,12 +165,25 @@ onBeforeMount(async () => {
 
     <n-divider />
 
+    <n-breadcrumb class="mb-5">
+      <n-breadcrumb-item @click="navigateToFolder('/')">
+        <f-icon icon="iconamoon:home-duotone" />
+        <span> pooled-data-pilot </span>
+      </n-breadcrumb-item>
+
+      <n-breadcrumb-item
+        v-for="(item, index) in currentFolderPath"
+        :key="index"
+        @click="navigateToFolder(currentFolderPath.filter((_, i) => i <= index).join('/'))"
+      >
+        {{ item }}
+      </n-breadcrumb-item>
+    </n-breadcrumb>
+
     <FadeTransition>
       <LottieLoader v-if="getLoading" />
 
       <n-data-table :columns="columns" :data="directory.files" :bordered="false" v-else />
     </FadeTransition>
-
-    <pre>{{ directory }}</pre>
   </main>
 </template>
