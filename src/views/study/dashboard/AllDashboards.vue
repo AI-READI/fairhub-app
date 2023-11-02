@@ -1,78 +1,73 @@
 <script setup lang="ts">
-import { filesize } from "filesize";
+import { useMessage } from "naive-ui";
+import { onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
 
 import { push } from "@/main";
 import { useAuthStore } from "@/stores/auth";
 import { useFilterStore } from "@/stores/filter";
+import { useRedcapStore } from "@/stores/redcap";
 import { useStudyStore } from "@/stores/study";
+import type { RedcapProjectDashboard } from "@/types/Redcap";
 import type { Study } from "@/types/Study";
-import { displayHumanFriendlyDateAndTime } from "@/utils/date";
 
 const router = useRouter();
+const route = useRoute();
+const { error } = useMessage();
 
 const authStore = useAuthStore();
 const filterStore = useFilterStore();
 const studyStore = useStudyStore();
+const redcapStore = useRedcapStore();
 
-const studies = computed(() => {
-  const allStudies = studyStore.allStudies;
-  console.log("all studies", allStudies);
+const study: Ref<Study> = computed(() => studyStore.study);
+const redcapProjectDashboards: Ref<RedcapProjectDashboard[]> = computed(() => {
+  const allRedcapProjectDashboards = redcapStore.allRedcapProjectDashboards;
+  console.log("all redcap project dashboards", allRedcapProjectDashboards);
 
-  const filteredStudies = [];
+  const filteredRedcapProjectDashboards = [];
 
-  // filter for permissions
-  for (const study of allStudies) {
+  for (const redcapProjectDashboard in allRedcapProjectDashboards) {
     const permissions = filterStore.permissions;
 
     if (permissions.owner) {
       console.log("owner", study.owner, authStore.user);
 
       if (study.role === "owner") {
-        filteredStudies.push(study);
+        filteredRedcapProjectDashboards.push(redcapProjectDashboard);
       }
     }
 
     if (permissions.admin) {
       if (study.role === "admin") {
-        filteredStudies.push(study);
+        filteredRedcapProjectDashboards.push(redcapProjectDashboard);
       }
     }
 
     if (permissions.editor) {
       if (study.role === "editor") {
-        filteredStudies.push(study);
+        filteredRedcapProjectDashboards.push(redcapProjectDashboard);
       }
     }
 
     if (permissions.viewer) {
       if (study.role === "viewer") {
-        filteredStudies.push(study);
+        filteredRedcapProjectDashboards.push(redcapProjectDashboard);
       }
     }
   }
 
-  // sort the studies based on the sort option
-
-  filteredStudies.sort((a: Study, b: Study) => {
-    if (sortOption.value === "title") {
-      return a.title.localeCompare(b.title);
-    } else if (sortOption.value === "last_updated") {
-      return new Date(b.updated_on).getTime() - new Date(a.updated_on).getTime();
-    } else if (sortOption.value === "size") {
-      return b.size - a.size;
-    } else {
-      return 0;
-    }
+  filteredRedcapProjectDashboards.sort((a: RedcapProjectDashboard, b: RedcapProjectDashboard) => {
+    return a.name.localeCompare(b.name);
   });
 
   if (sortOrder.value === "desc") {
-    filteredStudies.reverse();
+    filteredRedcapProjectDashboards.reverse();
   }
 
-  console.log("sorted filtered studies", filteredStudies);
+  console.log("sorted filtered redcap project dashboards", filteredRedcapProjectDashboards);
 
-  return filteredStudies;
+  return filteredRedcapProjectDashboards;
 });
 
 const sortOption = computed(() => filterStore.sort);
@@ -86,46 +81,97 @@ const toggleSortOrder = () => {
   filterStore.toggleSortOrder();
 };
 
-const sortOptions = [
-  { key: "title", label: "Title" },
-  { key: "last_updated", label: "Last Updated" },
-  { key: "size", label: "Size" },
-];
+const studyRouteParams = {
+  studyId: route.params.studyId as string,
+};
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
     push.error("You are not logged in. Please log in to continue");
 
     router.push({ name: "login" });
-
-    return;
   }
 
-  const x = push.info("Your workspace is being loaded. Please wait...");
-
-  studyStore.fetchAllStudies().then(() => {
-    setTimeout(() => {
-      x.clear();
-    }, 1000);
+  const x = push.info("Available dashboards are being loaded. Please wait...");
+  const studyId = studyRouteParams.studyId;
+  studyStore.getStudy(studyId).then(() => {
+    redcapStore.fetchAllRedcapProjectDashboards(studyId).then(() => {
+      setTimeout(() => {
+        x.clear();
+      }, 1000);
+    });
   });
 });
 
-const navigateToStudy = (studyId: string) => {
-  router.push({ name: "study:overview", params: { studyId } });
-};
+const dashboards = computed(() => {
+  const allDashboards = redcapStore.allRedcapProjectDashboards;
+  console.log("redcap project dashboards", allDashboards);
+
+  const filteredDashboards = [];
+  // filter for permissions
+  for (const dashboard of allDashboards) {
+    const permissions = filterStore.permissions;
+
+    if (permissions.owner) {
+      console.log("owner", study.owner, authStore.user);
+
+      if (study.role === "owner") {
+        filteredDashboards.push(study);
+      }
+    }
+
+    if (permissions.admin) {
+      if (study.role === "admin") {
+        filteredDashboards.push(study);
+      }
+    }
+
+    if (permissions.editor) {
+      if (study.role === "editor") {
+        filteredDashboards.push(study);
+      }
+    }
+
+    if (permissions.viewer) {
+      if (study.role === "viewer") {
+        filteredDashboards.push(study);
+      }
+    }
+  }
+});
+
+// const study: Ref<Study> = computed(() => studyStore.study);
+// const redcapProjectDashboard: Ref<RedcapProjectDashboard> = computed(() => redcapStore.redcapProjectDashboard)
+// const routeParams = {
+//   studyId: route.params.studyId as string,
+//   redcapProjectId: route.params.redcapProjectId as string,
+//   dashboardId: route.params.dashboardId as string,
+// };
+
+// onBeforeMount(() => {
+//   if (!authStore.isAuthenticated) {
+//     error("You are not logged in.");
+//     router.push({ name: "home" });
+//   }
+
+//   const studyId = routeParams.studyId;
+//   const redcapProjectId = routeParams.redcapProjectId;
+//   const redcapProjectDashboardId = routeParams.redcapProjectDashboardId;
+
+// });
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col space-y-4 px-6">
     <n-space justify="space-between">
-      <h2>All Studies</h2>
+      <h2>All Dashboards</h2>
 
-      <RouterLink :to="{ name: 'studies:new-study' }">
+      <RouterLink :to="{ name: 'study:dashboard:connect-new-dashboard' }">
         <n-button size="large" type="primary">
           <template #icon>
             <f-icon icon="ion:add-circle-outline" />
           </template>
-          New Study
+          Connect New Dashboard
         </n-button>
       </RouterLink>
     </n-space>
@@ -212,14 +258,14 @@ const navigateToStudy = (studyId: string) => {
       <n-divider />
 
       <FadeTransition>
-        <LottieLoader v-if="studyStore.loading" />
+        <LottieLoader v-if="redcapStore.loading" />
 
         <TransitionGroup name="fade" tag="ul" class="list-none p-0" v-else>
           <li
             class="my-5 flex w-full cursor-pointer items-start rounded-md border border-slate-100 shadow-sm transition-all hover:border-slate-200 hover:bg-slate-50 hover:shadow-md"
-            v-for="study in studies"
-            :key="study.id"
-            @click="navigateToStudy(study.id)"
+            v-for="redcapProjectDashboard in redcapProjectDashboards"
+            :key="redcapProjectDashboard.name"
+            @click="navigateToDashboard(redcapProjectDashboard.name)"
           >
             <div class="flex h-full w-[200px] items-center">
               <img :src="study.image" class="h-full w-full rounded-l-md object-cover" />
@@ -228,46 +274,14 @@ const navigateToStudy = (studyId: string) => {
             <div class="flex h-full w-full grow flex-col space-y-2 px-6 py-3">
               <div class="flex flex-col space-y-2">
                 <div class="flex justify-between pt-2">
-                  <h3>{{ study.title }}</h3>
-                  <span> {{ filesize(study.size || 0) }} </span>
+                  <h3>{{ redcapProjectDashboard.name }}</h3>
                 </div>
-
-                <n-divider v-if="study.description" />
-
-                <p v-if="study.description">{{ study.description }}</p>
               </div>
-
-              <n-divider />
-
-              <p class="pt-2">
-                <span class="font-bold"> Last updated: </span>
-                <span> {{ displayHumanFriendlyDateAndTime(study.updated_on) }} </span>
-              </p>
-
-              <!-- needs last_published and last_published.doi -->
-
-              <!-- <n-divider />
-              
-             <div class="align-center flex space-x-3 divide-x pt-2">
-              <p>
-                <span class="font-bold"> Latest published version: </span>
-                <span v-if="study.last_published">
-                  {{ study.last_published.version }} ({{ study.last_published.date }})
-                </span>
-
-                <span v-else> Not published yet </span>
-              </p>
-
-              <p class="pl-2" v-if="study.last_published">
-                <span class="font-bold"> Latest DOI: </span>
-                <span class="text-blue-500"> {{ study.last_published!.doi }} </span>
-              </p>
-            </div> -->
             </div>
           </li>
           <n-empty
-            v-if="studies.length === 0"
-            description="No studies found"
+            v-if="redcapProjectDashboards.length === 0"
+            description="No dashboards found"
             size="huge"
             class="my-10"
           >

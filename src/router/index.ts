@@ -15,7 +15,9 @@ import Integrations from "@/views/integrations/IntegrationPage.vue";
 import AllSettings from "@/views/settings/AllSettings.vue";
 import AllStudies from "@/views/studies/AllStudies.vue";
 import StudyContributors from "@/views/study/contributors/StudyContributors.vue";
-import DashBoard from "@/views/study/dashboard/DashBoard.vue";
+import AllDashboards from "@/views/study/dashboard/AllDashboards.vue";
+import ConnectDashboard from "@/views/study/dashboard/ConnectDashboard.vue";
+import ViewDashboard from "@/views/study/dashboard/ViewDashboard.vue";
 import DatasetMetadataOther from "@/views/study/dataset/metadata/about/DatasetMetadataOther.vue";
 import DatasetMetadataAccess from "@/views/study/dataset/metadata/access/DatasetMetadataAccess.vue";
 import DatasetMetadataConsent from "@/views/study/dataset/metadata/consent/DatasetMetadataConsent.vue";
@@ -67,6 +69,9 @@ import NewStudy from "@/views/study/new/NewStudy.vue";
 import StudyOverview from "@/views/study/overview/StudyOverview.vue";
 import AddParticipant from "@/views/study/participants/AddParticipant.vue";
 import StudyParticipants from "@/views/study/participants/StudyParticipants.vue";
+import AddRedcap from "@/views/study/redcap/AddRedcap.vue";
+import AllRedcap from "@/views/study/redcap/AllRedcap.vue";
+import EditRedcap from "@/views/study/redcap/EditRedcap.vue";
 import StudyRouterView from "@/views/study/root/StudyRouterView.vue";
 
 const router = createRouter({
@@ -147,9 +152,44 @@ const router = createRouter({
           component: StudyFiles,
         },
         {
-          name: "study:dashboard",
+          path: "redcap",
+          children: [
+            {
+              name: "study:redcap:all-redcap-project-apis",
+              path: "all",
+              component: AllRedcap,
+            },
+            {
+              name: "study:redcap:add-redcap-project-api",
+              path: "",
+              component: AddRedcap,
+            },
+            {
+              name: "study:redcap:edit-redcap-project-api",
+              path: ":projectId",
+              component: EditRedcap,
+            },
+          ],
+        },
+        {
           path: "dashboard",
-          component: DashBoard,
+          children: [
+            {
+              name: "study:dashboard:all-dashboards",
+              path: "all",
+              component: AllDashboards,
+            },
+            {
+              name: "study:dashboard:view-dashboard",
+              path: "",
+              component: ViewDashboard,
+            },
+            {
+              name: "study:dashboard:connect-new-dashboard",
+              path: "connect",
+              component: ConnectDashboard,
+            },
+          ],
         },
         {
           name: "study:contributors",
