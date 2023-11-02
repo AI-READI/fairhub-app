@@ -28,10 +28,12 @@ const rules: FormRules = {
   },
 };
 
+const isDevelopment = process.env.NODE_ENV === "development";
+
 const formValue = ref({
   acceptTerms: false,
-  emailAddress: "test@fairhub.io",
-  password: "asdkj45@ksdSA",
+  emailAddress: isDevelopment ? "test@fairhub.io" : "",
+  password: isDevelopment ? "asdkj45@ksdSA" : "",
 });
 
 const invalidEmailAddress = computed(() => !formValue.value.emailAddress.includes("@")); //add email validation
@@ -39,6 +41,10 @@ const invalidEmailAddress = computed(() => !formValue.value.emailAddress.include
 onBeforeMount(() => {
   if (authStore.isAuthenticated) {
     router.push({ name: "studies:all-studies" });
+  }
+
+  if (route.query.email !== undefined) {
+    formValue.value.emailAddress = route.query.email as string;
   }
 });
 
@@ -183,7 +189,7 @@ const generateNewEmail = () => {
             clearable
           />
 
-          <n-button class="ml-2" @click="generateNewEmail">
+          <n-button class="ml-2" @click="generateNewEmail" v-if="isDevelopment">
             <template #icon>
               <f-icon icon="mdi:auto-fix" />
             </template>
