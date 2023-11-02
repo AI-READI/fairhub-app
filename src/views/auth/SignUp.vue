@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import { faker } from "@faker-js/faker";
 
+import { useAuthStore } from "@/stores/auth";
 import { baseURL } from "@/utils/constants";
 
 const push = usePush();
 const router = useRouter();
+const route = useRoute();
+
+const authStore = useAuthStore();
 
 const loading = ref(false);
 
-const formRef = ref<FormInst | null>(null);
+const environment = process.env.NODE_ENV;
 
+const formRef = ref<FormInst | null>(null);
 const rules: FormRules = {
   emailAddress: {
     message: "Please enter your email address",
@@ -23,13 +28,29 @@ const rules: FormRules = {
   },
 };
 
+const isDevelopment = process.env.NODE_ENV === "development";
+
 const formValue = ref({
   acceptTerms: false,
-  emailAddress: "test@fairhub.io",
-  password: "asdkj45@ksdSA",
+  emailAddress: isDevelopment ? "test@fairhub.io" : "",
+  password: isDevelopment ? "asdkj45@ksdSA" : "",
 });
 
 const invalidEmailAddress = computed(() => !formValue.value.emailAddress.includes("@")); //add email validation
+
+onBeforeMount(() => {
+  if (authStore.isAuthenticated) {
+    router.push({ name: "studies:all-studies" });
+  }
+
+  if (route.query.email !== undefined) {
+    formValue.value.emailAddress = route.query.email as string;
+  }
+});
+
+const codePresentInQueryParams = computed(() => {
+  return route.query.code !== undefined;
+});
 
 const validPasswordRequirements = reactive({
   length: false,
@@ -88,8 +109,15 @@ const signUp = (e: MouseEvent) => {
 
       loading.value = true;
 
+      /**
+       * fallback will be removed in prod
+       * Code to allow only people with a specific email address to sign up
+       */
+      const code = (route.query.code as string) || "";
+
       const response = await fetch(`${baseURL}/auth/signup`, {
         body: JSON.stringify({
+          code,
           email_address: emailAddress,
           password,
         }),
@@ -139,6 +167,11 @@ const generateNewEmail = () => {
       >
         Create an account on fairhub.io
       </h1>
+      <n-divider />
+
+      <n-alert type="error" v-if="!codePresentInQueryParams" title="Restricted">
+        Only invited users can sign up for an account on fairhub.io
+      </n-alert>
 
       <n-divider />
 
@@ -148,10 +181,15 @@ const generateNewEmail = () => {
             v-model:value="formValue.emailAddress"
             placeholder="me@fairhub.io"
             @keydown.enter.prevent
+            :disabled="
+              environment === 'development' &&
+              !codePresentInQueryParams &&
+              formValue.emailAddress !== 'test@fairhub.io'
+            "
             clearable
           />
 
-          <n-button class="ml-2" @click="generateNewEmail">
+          <n-button class="ml-2" @click="generateNewEmail" v-if="isDevelopment">
             <template #icon>
               <f-icon icon="mdi:auto-fix" />
             </template>
@@ -165,6 +203,11 @@ const generateNewEmail = () => {
               type="password"
               show-password-on="mousedown"
               placeholder=""
+              :disabled="
+                environment === 'development' &&
+                !codePresentInQueryParams &&
+                formValue.emailAddress !== 'test@fairhub.io'
+              "
               @input="handlePasswordInput"
             />
           </n-form-item>
@@ -233,7 +276,12 @@ const generateNewEmail = () => {
           type="primary"
           size="large"
           :loading="loading"
-          :disabled="invalidEmailAddress"
+          :disabled="
+            invalidEmailAddress ||
+            (environment === 'development' &&
+              !codePresentInQueryParams &&
+              formValue.emailAddress !== 'test@fairhub.io')
+          "
           @click="signUp"
           class="my-5 w-full"
         >

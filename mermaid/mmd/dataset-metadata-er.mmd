@@ -1,9 +1,9 @@
 erDiagram
-      DATASET_ALTERNATE_IDENTIFIER {
+      DATASET_ALTERNATIVE_IDENTIFIER {
         string id PK "UUIDv4"
         string dataset_id FK "DATASET.id"
         string identifier
-        string identifier_type "NULLABLE"
+        string type "NULLABLE"
         timestamp created_at
     }
 
@@ -25,24 +25,17 @@ erDiagram
         string name_identifier_scheme_uri
         boolean creator "true if creator, false if contributor"
         string contributor_type "NULLABLE | required if contributor"
+        json affiliations "[{name: 'x', identifier: 'x', scheme: 'x', scheme_uri: 'x'}, ...}]"
         timestamp created_at
     }
 
-    DATASET_CONTRIBUTOR_AFFILIATION {
-        string id PK "UUIDv4"
-        string contributor_id FK "DATASET_CONTRIBUTOR.id"
-        string identifier 
-        string identifier_scheme
-        string identifier_scheme_uri
-        timestamp created_at
-    }
 
     DATASET_DATE {
         string id PK "UUIDv4"
         string dataset_id FK "DATASET.id"
-        string date
-        string date_type "NULLABLE"
-        string date_information
+        timestamp date "NULLABLE"
+        string type "NULLABLE"
+        string information
         timestamp created_at
     }
 
@@ -74,16 +67,13 @@ erDiagram
         string details
     }
 
-    DATASET_README {
-        string dataset_id PK,FK "DATASET.id"
-        string content
-    }
+    
 
     DATASET_DESCRIPTION {
         string id PK "UUIDv4"
         string dataset_id FK "DATASET.id"
         string description
-        string description_type "NULLABLE"
+        string type "NULLABLE"
         timestamp created_at
     }
 
@@ -154,9 +144,9 @@ erDiagram
         string related_item_id FK "DATASET_RELATED_ITEM.id"
         string identifier
         string type "NULLABLE"
-        string metadata_scheme "NULLABLE"
-        string scheme_uri "NULLABLE"
-        string scheme_type "NULLABLE"
+        string metadata_scheme 
+        string scheme_uri 
+        string scheme_type 
         timestamp created_at
     }
 
@@ -180,7 +170,7 @@ erDiagram
 
     DATASET_RELATED_ITEM_OTHER {
         string related_item_id PK,FK "DATASET_RELATED_ITEM.id"
-        timestamp publication_year
+        timestamp publication_year "NULLABLE"
         string volume
         string issue
         string number_value
@@ -191,16 +181,14 @@ erDiagram
         string edition
     }
 
-    DATASET_ALTERNATE_IDENTIFIER }o--|| DATASET : "is identified by"
+    DATASET_ALTERNATIVE_IDENTIFIER }o--|| DATASET : "is identified by"
     DATASET_TITLE }o--|| DATASET : "has title"
     DATASET_DESCRIPTION }o--|| DATASET : "has description"
     DATASET_CONTRIBUTOR }o--|| DATASET : "has contributor"
-    DATASET_CONTRIBUTOR_AFFILIATION }o--|| DATASET_CONTRIBUTOR : "has affiliation"
     DATASET_DATE }o--|| DATASET : "has date"
     DATASET_RECORD_KEYS ||--|| DATASET : "has record key"
     DATASET_DE_IDENT_LEVEL ||--|| DATASET : "has deidentification level"
     DATASET_CONSENT ||--|| DATASET : "has consent"
-    DATASET_README ||--|| DATASET : "has readme"
 
     DATASET ||--o{ DATASET_SUBJECT : "has subject"
     DATASET ||--|| DATASET_ACCESS : "has access"

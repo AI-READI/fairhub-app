@@ -1,23 +1,11 @@
 <script setup lang="ts">
+import { faker } from "@faker-js/faker";
 import type { DataTableColumns, DataTableRowKey } from "naive-ui";
-import { useMessage } from "naive-ui";
-import { computed, onBeforeMount, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
 
-import { useAuthStore } from "@/stores/auth";
-import { useDatasetStore } from "@/stores/dataset";
-import { useParticipantStore } from "@/stores/participant";
-import { useVersionStore } from "@/stores/version";
 import type { Participant } from "@/types/Participant";
 
 const route = useRoute();
 const router = useRouter();
-const { error } = useMessage();
-
-const authStore = useAuthStore();
-const datasetStore = useDatasetStore();
-const participantStore = useParticipantStore();
-const versionStore = useVersionStore();
 
 const routeParams = {
   datasetId: route.params.datasetId,
@@ -25,32 +13,35 @@ const routeParams = {
   versionId: route.params.versionId,
 };
 
-const participants = computed(() => participantStore.allParticipants);
-const version = ref(versionStore.version);
+const allMockedParticipants = ref<Participant[]>([]);
+
+for (let i = 0; i < 10; i++) {
+  const participant = {
+    id: faker.string.uuid(),
+    address: faker.location.streetAddress(),
+    age: faker.number.int({ max: 99, min: 18 }),
+    first_name: faker.person.firstName(),
+    last_name: faker.person.lastName(),
+    selected: faker.datatype.boolean(),
+  };
+
+  allMockedParticipants.value.push(participant);
+}
 
 const rowKey = (row: RowData) => row.id;
 const selectedParticipantRows = ref<DataTableRowKey[]>([]);
 
 onBeforeMount(() => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
-  }
-
-  const datasetId = routeParams.datasetId as string;
-  const studyId = routeParams.studyId as string;
-
-  datasetStore.getDataset(datasetId, studyId);
-  participantStore.fetchAllParticipants(studyId);
-
-  for (const participant of version.value?.participants || []) {
+  for (const participant of allMockedParticipants.value || []) {
     if (!participant.id) {
       continue;
     }
 
     const id = participant.id as DataTableRowKey;
 
-    selectedParticipantRows.value.push(id);
+    if (participant.selected) {
+      selectedParticipantRows.value.push(id);
+    }
   }
 });
 
@@ -99,45 +90,42 @@ function handleNextButton() {
   });
 }
 
-function handleBackButton() {
-  router.push({
-    name: "dataset:publish:versions",
-  });
-}
-
 function onUpdate() {
-  if (!version.value) {
-    return;
-  }
+  console.log(selectedParticipantRows.value);
 
-  version.value.participants = [];
+  // version.value.participants = [];
 
-  for (const selectedParticipant of selectedParticipantRows.value) {
-    const participant = participants.value.find(
-      (item: Participant) => item.id === selectedParticipant
-    );
+  // for (const selectedParticipant of selectedParticipantRows.value) {
+  //   const participant = participants.value.find(
+  //     (item: Participant) => item.id === selectedParticipant
+  //   );
 
-    if (!participant) {
-      continue;
-    }
+  //   if (!participant) {
+  //     continue;
+  //   }
 
-    version.value.participants.push(participant);
-  }
+  //   version.value.participants.push(participant);
+  // }
 
-  versionStore.updateParticipants(version.value.participants);
+  // versionStore.updateParticipants(version.value.participants);
 }
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
-    <h2>Select Participants</h2>
+    <PageBackNavigationHeader
+      title="Select Participants"
+      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      linkName="dataset:publish:versions"
+      :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
+    />
 
     <n-divider />
 
     <n-data-table
       :columns="columns"
       striped
-      :data="participants"
+      :data="allMockedParticipants"
       :row-key="rowKey"
       v-model:checked-row-keys="selectedParticipantRows"
       @update:checked-row-keys="onUpdate"
@@ -145,43 +133,45 @@ function onUpdate() {
 
     <n-divider />
 
-    <n-collapse>
-      <n-collapse-item name="selected-participants">
-        <template #header>
-          <h4 class="font-normal">View selected participants</h4>
-        </template>
+    <!-- <pre>{{ allMockedParticipants }}</pre> -->
 
-        <transition-group name="fade" tag="div" class="flex flex-wrap">
-          <n-card v-for="item in version.participants" :key="item.id" class="m-2 w-max shadow-md">
-            <p>
-              <span class="font-bold">Participant ID: </span>
-              <span>{{ item.id }}</span>
-            </p>
+    <FadeTransition>
+      <n-collapse v-show="selectedParticipantRows.length > 0">
+        <n-collapse-item name="selected-participants">
+          <template #header>
+            <h4 class="font-normal">View selected participants</h4>
+          </template>
 
-            <p>
-              <span class="font-bold">Name: </span>
-              <span>{{ item.first_name }} {{ item.last_name }}</span>
-            </p>
+          <transition-group name="fade" tag="div" class="flex flex-wrap">
+            <n-card
+              v-for="item in allMockedParticipants"
+              v-show="selectedParticipantRows.includes(item.id as DataTableRowKey)"
+              :key="item.id"
+              class="m-2 w-max shadow-md"
+            >
+              <p>
+                <span class="font-bold"> ID: </span>
+                <span>{{ item.id }}</span>
+              </p>
 
-            <p>
-              <span class="font-bold">Age: </span>
-              <span>{{ item.age }}</span>
-            </p>
-          </n-card>
-        </transition-group>
-      </n-collapse-item>
-    </n-collapse>
+              <p>
+                <span class="font-bold"> Name: </span>
+                <span>{{ item.first_name }} {{ item.last_name }}</span>
+              </p>
+
+              <p>
+                <span class="font-bold"> Age: </span>
+                <span>{{ item.age }}</span>
+              </p>
+            </n-card>
+          </transition-group>
+        </n-collapse-item>
+      </n-collapse>
+    </FadeTransition>
 
     <n-divider />
 
-    <div class="flex items-center justify-between">
-      <n-button size="large" type="warning" @click="handleBackButton">
-        <template #icon>
-          <f-icon icon="ic:round-arrow-back-ios" />
-        </template>
-        View all versions
-      </n-button>
-
+    <div class="flex items-center justify-end">
       <n-button
         size="large"
         type="primary"

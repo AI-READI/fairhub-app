@@ -205,9 +205,7 @@ const saveMetadata = (e: MouseEvent) => {
           ? moduleData.design_info.time_perspective_list
           : [],
 
-        design_who_masked_list: isInterventionalStudy
-          ? moduleData.design_info.who_masked_list
-          : null,
+        design_who_masked_list: isInterventionalStudy ? moduleData.design_info.who_masked_list : [],
 
         enrollment_count: moduleData.enrollment_info.enrollment_count,
         enrollment_type: moduleData.enrollment_info.enrollment_type,

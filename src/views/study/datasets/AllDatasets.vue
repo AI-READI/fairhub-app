@@ -1,35 +1,46 @@
 <script setup lang="ts">
-import { useMessage } from "naive-ui";
-import { computed, onBeforeMount } from "vue";
-import { useRoute, useRouter } from "vue-router";
-
-import { useDatasetStore } from "@/stores/dataset";
 import { useSidebarStore } from "@/stores/sidebar";
+import type { Dataset } from "@/types/Dataset";
+import { baseURL } from "@/utils/constants";
+// const baseURL = "http://localhost:3001/api";
+import { displayHumanFriendlyDateAndTime } from "@/utils/date";
 
 const router = useRouter();
 const route = useRoute();
-const { error, success } = useMessage();
+const push = usePush();
 
-const datasetStore = useDatasetStore();
 const sidebarStore = useSidebarStore();
+
+const loading = ref(true);
+const datasets = ref<Dataset[]>([]);
 
 const routeParams = {
   studyId: route.params.studyId as string,
 };
 
-const datasets = computed(() => datasetStore.allDatasets);
-
-onBeforeMount(() => {
+onBeforeMount(async () => {
   const studyId = routeParams.studyId as string;
 
   sidebarStore.setAppSidebarCollapsed(false);
 
-  datasetStore.fetchAllDatasets(studyId);
-});
+  const response = await fetch(`${baseURL}/study/${studyId}/dataset`, {
+    method: "GET",
+  });
 
-// const deleteDatasetVersion = () => {
-//   success("Dataset version deleted.");
-// };
+  loading.value = false;
+
+  if (!response.ok) {
+    push.error("Something went wrong.");
+
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+
+  console.log(data);
+
+  datasets.value = data;
+});
 
 const navigateToDataset = (datasetId: string) => {
   sidebarStore.setAppSidebarCollapsed(true);
@@ -60,7 +71,7 @@ const navigateToDataset = (datasetId: string) => {
     <n-divider />
 
     <FadeTransition>
-      <div class="flex flex-col items-center" v-if="datasetStore.loading">
+      <div class="flex flex-col items-center" v-if="loading">
         <Vue3Lottie
           animationLink="https://assets2.lottiefiles.com/private_files/lf30_b0iey3ml.json"
           :height="150"
@@ -90,83 +101,29 @@ const navigateToDataset = (datasetId: string) => {
               @click="navigateToDataset(dataset.id)"
             >
               <div class="flex justify-between pt-2">
-                <h3>{{ dataset.title }}</h3>
-
-                <div class="flex items-center space-x-3">
-                  <!-- <RouterLink
-                  :to="{
-                    name: 'dataset:new',
-                    params: {
-                      versionId: 'new',
-                      datasetId: dataset.id,
-                    },
-                  }"
-                  v-if="dataset.latest_version === dataset.publishedVersion"
-                >
-                  <n-button strong secondary type="primary">
-                    <template #icon>
-                      <f-icon icon="fluent:form-new-24-filled" />
-                    </template>
-                    Create a new version
-                  </n-button>
-                </RouterLink> -->
-
-                  <!-- <div
-                  v-if="dataset.latest_version !== dataset.publishedVersion"
-                  class="flex items-center space-x-3"
-                >
-                  <RouterLink
-                    :to="{
-                      name: 'publish-select-participants',
-                      params: {
-                        versionId: dataset.latest_version,
-                        datasetId: dataset.id,
-                      },
-                    }"
-                  >
-                    <n-button strong secondary type="info">
-                      <template #icon>
-                        <f-icon icon="material-symbols:resume" />
-                      </template>
-                      Resume working on this version
-                    </n-button>
-                  </RouterLink>
-
-                  <n-popconfirm @positive-click="deleteDatasetVersion">
-                    <template #trigger>
-                      <n-button strong secondary type="error">
-                        <template #icon>
-                          <f-icon icon="ph:trash-fill" />
-                        </template>
-                        Discard this version
-                      </n-button>
-                    </template>
-                    Are you sure you want to discard this version?
-                  </n-popconfirm>
-                </div> -->
-                </div>
+                <h3>{{ dataset.title || "Untitled Dataset" }}</h3>
               </div>
 
               <n-divider />
 
-              <div class="flex flex-col">
-                <p>{{ dataset.description }}</p>
+              <div class="flex flex-col space-y-4">
+                <p>{{ dataset.description || "No description provided" }}</p>
 
-                <n-divider v-if="dataset.latest_version" />
+                <!-- <n-divider v-if="dataset.latest_version" /> -->
 
-                <p v-if="dataset.latest_version">
+                <!-- <p v-if="dataset.latest_version">
                   <span class="font-bold"> Latest version: </span>
                   <span>
                     {{ dataset.latest_version }}
                   </span>
-                </p>
+                </p> -->
 
-                <!-- <p>
-                <span class="font-bold"> Created on: </span>
-                <span>
-                  {{ displayHumanFriendlyDateAndTime(dataset.lastPublished) }}
-                </span>
-              </p> -->
+                <p>
+                  <span class="font-bold"> Created on: </span>
+                  <span>
+                    {{ displayHumanFriendlyDateAndTime(dataset.created_at) }}
+                  </span>
+                </p>
               </div>
             </div>
           </div>

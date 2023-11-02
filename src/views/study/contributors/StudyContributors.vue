@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import { faker } from "@faker-js/faker";
-import { Icon } from "@iconify/vue";
 import { capitalize } from "lodash";
 import validator from "validator";
 
-import LottieLoader from "@/components/loader/LottieLoader.vue";
-import FadeTransition from "@/components/transitions/FadeTransition.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useStudyStore } from "@/stores/study";
 import type { StudyContributors } from "@/types/Study";
@@ -263,6 +260,18 @@ const getFirstLetters = (name: string) => {
     .slice(0, 2)
     .join("");
 };
+
+const copyInviteURL = (token: string, emailAddress: string) => {
+  if (!token) {
+    return;
+  }
+
+  const url = `${window.location.origin}/auth/signup?code=${token}&email=${emailAddress}`;
+
+  navigator.clipboard.writeText(url);
+
+  push.success("Invite link copied to clipboard!");
+};
 </script>
 
 <template>
@@ -368,6 +377,7 @@ const getFirstLetters = (name: string) => {
               vertical
             />
 
+            <!-- Permission selector. shown to admins and owners only  -->
             <n-select
               v-model:value="contributor.updatedRole"
               :options="contributorRoles"
@@ -377,6 +387,10 @@ const getFirstLetters = (name: string) => {
               :disabled="study.role === 'editor' || study.role === 'viewer'"
             />
 
+            <!--
+              Save button. shown to admins and owners only
+              disabled if the user is an editor or viewer
+            -->
             <n-button
               type="primary"
               @click="updateContributorRole(contributor.id, contributor.updatedRole)"
@@ -395,6 +409,22 @@ const getFirstLetters = (name: string) => {
               v-if="study.owner !== contributor.id && contributor.status === 'accepted'"
               vertical
             />
+
+            <!-- dev only  -->
+            <n-button
+              v-if="contributor.status === 'invited'"
+              secondary
+              type="info"
+              @click="copyInviteURL(contributor.token as string, contributor.email_address)"
+            >
+              <template #icon>
+                <f-icon icon="carbon:copy" />
+              </template>
+
+              Copy invite link
+            </n-button>
+
+            <n-divider v-if="contributor.status === 'invited'" vertical />
 
             <n-tag type="warning" size="medium" v-if="contributor.status === 'invited'">
               {{ capitalize(contributor.role) }}
@@ -416,7 +446,7 @@ const getFirstLetters = (name: string) => {
                   "
                 >
                   <template #icon>
-                    <Icon icon="fluent:delete-24-filled" width="20" height="20" />
+                    <f-icon icon="fluent:delete-24-filled" width="20" height="20" />
                   </template>
                 </n-button>
               </template>
@@ -437,7 +467,7 @@ const getFirstLetters = (name: string) => {
     <n-divider />
 
     <h3 class="flex items-center">
-      <Icon icon="carbon:user-follow" width="23" height="20" class="mr-2" />
+      <f-icon icon="carbon:user-follow" width="23" height="20" class="mr-2" />
       Invite a new contributor
     </h3>
 

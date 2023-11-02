@@ -1,17 +1,9 @@
 <script setup lang="ts">
-import type { Ref } from "vue";
-
-import CollapsibleCard from "@/components/cards/CollapsibleCard.vue";
-import { useAuthStore } from "@/stores/auth";
-import { useStudyStore } from "@/stores/study";
-import type { Study } from "@/types/Study";
+// import { baseURL } from "@/utils/constants";
+const baseURL = "http://localhost:3001/api";
 
 const route = useRoute();
 const router = useRouter();
-const { error } = useMessage();
-
-const authStore = useAuthStore();
-const studyStore = useStudyStore();
 
 const routeParams = {
   datasetId: route.params.datasetId,
@@ -19,29 +11,24 @@ const routeParams = {
   versionId: route.params.versionId,
 };
 
-const study: Ref<Study> = computed(() => studyStore.study);
+const getSpinner = ref(false);
 
-onBeforeMount(() => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
-  }
+const moduleData = ref({});
 
-  const studyId = routeParams.studyId as string;
+onBeforeMount(async () => {
+  getSpinner.value = true;
 
-  studyStore.getStudy(studyId);
+  const response = await fetch(
+    `${baseURL}/study/${routeParams.studyId}/dataset/${routeParams.datasetId}/metadata/minimal`,
+    {
+      method: "GET",
+    }
+  );
+
+  getSpinner.value = false;
+
+  moduleData.value = await response.json();
 });
-
-function handleBackButton() {
-  router.push({
-    name: "dataset:publish:version:study-metadata",
-    params: {
-      datasetId: routeParams.datasetId,
-      studyId: routeParams.studyId,
-      versionId: routeParams.versionId,
-    },
-  });
-}
 
 function handleNextButton() {
   router.push({
@@ -67,14 +54,6 @@ function handleNextButton() {
         versionId: routeParams.versionId,
       }"
     />
-
-    <n-divider />
-
-    <h3>Dataset Metadata</h3>
-
-    <p class="py-1">
-      Details about your dataset are displayed here. Go to the appropriate page to edit the details.
-    </p>
 
     <n-divider />
 
@@ -426,14 +405,6 @@ function handleNextButton() {
     <n-divider />
 
     <div class="flex items-center justify-end">
-      <n-button size="large" type="warning" @click="handleBackButton" class="hidden">
-        <template #icon>
-          <f-icon icon="ic:round-arrow-back-ios" />
-        </template>
-
-        Review study metadata
-      </n-button>
-
       <n-button size="large" type="primary" @click="handleNextButton">
         <template #icon>
           <f-icon icon="ic:round-arrow-forward-ios" />

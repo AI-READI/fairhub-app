@@ -3,7 +3,7 @@ import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
-import type { DatasetContributors } from "@/types/Dataset";
+import type { DatasetCreators } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
@@ -20,13 +20,13 @@ const datasetId = routeParams.datasetId;
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData = reactive<DatasetContributors>({
-  contributors: [],
+const moduleData = reactive<DatasetCreators>({
+  creators: [],
 });
 
 onBeforeMount(async () => {
   const response = await fetch(
-    `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/contributor`,
+    `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/creator`,
     {
       method: "GET",
     }
@@ -42,7 +42,7 @@ onBeforeMount(async () => {
 
   console.log(data);
 
-  moduleData.contributors = data.map((item: any) => {
+  moduleData.creators = data.map((item: any) => {
     return {
       ...item,
       origin: "remote",
@@ -58,12 +58,12 @@ const addEntryToAffiliationsList = () => {
   };
 };
 
-const removeContributor = async (id: string) => {
-  const item = moduleData.contributors.find((item) => item.id === id);
+const removeCreator = async (id: string) => {
+  const item = moduleData.creators.find((item) => item.id === id);
 
   if (item && item.origin === "remote") {
     const response = await fetch(
-      `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/contributor/${id}`,
+      `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/creator/${id}`,
       {
         method: "DELETE",
       }
@@ -74,18 +74,17 @@ const removeContributor = async (id: string) => {
       throw new Error("Network response was not ok");
     }
 
-    push.success("Contributor removed successfully.");
+    push.success("Creator removed successfully.");
   }
 
-  moduleData.contributors = moduleData.contributors.filter((item) => item.id !== id);
+  moduleData.creators = moduleData.creators.filter((item) => item.id !== id);
 };
 
-const addContributor = () => {
-  moduleData.contributors.push({
+const addCreator = () => {
+  moduleData.creators.push({
     id: nanoid(),
     name: "",
     affiliations: [],
-    contributor_type: null,
     name_identifier: "",
     name_identifier_scheme: "",
     name_identifier_scheme_uri: "",
@@ -98,7 +97,7 @@ const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
     if (!errors) {
-      const data: any = moduleData.contributors.map((item) => {
+      const data: any = moduleData.creators.map((item) => {
         const entry = {
           name: item.name,
           affiliations: item.affiliations.map((affiliation) => {
@@ -109,9 +108,8 @@ const saveMetadata = (e: MouseEvent) => {
               scheme_uri: affiliation.scheme_uri || "",
             };
           }),
-          contributor_type: item.contributor_type,
           name_identifier: item.name_identifier,
-          name_identifier_scheme: item.name_identifier_scheme || "",
+          name_identifier_scheme: item.name_identifier_scheme,
           name_identifier_scheme_uri: item.name_identifier_scheme_uri || "",
           name_type: item.name_type,
         };
@@ -131,7 +129,7 @@ const saveMetadata = (e: MouseEvent) => {
       });
 
       const response = await fetch(
-        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/contributor`,
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/creator`,
         {
           body: JSON.stringify(data),
 
@@ -144,7 +142,7 @@ const saveMetadata = (e: MouseEvent) => {
 
         throw new Error("Network response was not ok");
       } else {
-        push.success("Contributor saved successfully.");
+        push.success("Creators saved successfully.");
 
         // refresh page
         router.go(0);
@@ -162,7 +160,7 @@ const saveMetadata = (e: MouseEvent) => {
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
-      title="Contributors"
+      title="Creators"
       description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
       linkName="dataset:overview"
       :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
@@ -172,48 +170,31 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
       <CollapsibleCard
-        v-for="(item, index) in moduleData.contributors"
+        v-for="(item, index) in moduleData.creators"
         :key="item.id"
         class="mb-5 shadow-md"
-        :title="item.name || `Contributor ${index + 1}`"
+        :title="item.name || `Creator ${index + 1}`"
         bordered
       >
         <template #header-extra>
-          <n-popconfirm @positive-click="removeContributor(item.id)">
+          <n-popconfirm @positive-click="removeCreator(item.id)">
             <template #trigger>
               <n-button type="error" secondary>
                 <template #icon>
                   <f-icon icon="ep:delete" />
                 </template>
 
-                Remove contributor
+                Remove creator
               </n-button>
             </template>
 
-            Are you sure you want to remove this contributor?
+            Are you sure you want to remove this creator?
           </n-popconfirm>
         </template>
 
         <n-form-item
-          label="Contributor Type"
-          :path="`contributors[${index}].contributor_type`"
-          :rule="{
-            message: 'Please select an intervention type',
-            required: true,
-            trigger: ['blur', 'change'],
-          }"
-        >
-          <n-select
-            v-model:value="item.contributor_type"
-            placeholder="ContactPerson"
-            clearable
-            :options="FORM_JSON.datasetContributorTypeOptions"
-          />
-        </n-form-item>
-
-        <n-form-item
           label="Name"
-          :path="`contributors[${index}].name`"
+          :path="`creators[${index}].name`"
           :rule="{
             message: 'Please enter a name',
             required: true,
@@ -225,7 +206,7 @@ const saveMetadata = (e: MouseEvent) => {
 
         <n-form-item
           label="Name Type"
-          :path="`contributors[${index}].name_type`"
+          :path="`creators[${index}].name_type`"
           :rule="{
             message: 'Please select an intervention type',
             required: true,
@@ -242,7 +223,7 @@ const saveMetadata = (e: MouseEvent) => {
 
         <n-form-item
           label="Name Identifier"
-          :path="`contributors[${index}].name_identifier`"
+          :path="`creators[${index}].name_identifier`"
           :rule="{
             message: 'Please enter a name identifier',
             required: true,
@@ -258,7 +239,7 @@ const saveMetadata = (e: MouseEvent) => {
 
         <n-form-item
           label="Name Identifier Scheme"
-          :path="`contributors[${index}].name_identifier_scheme`"
+          :path="`creators[${index}].name_identifier_scheme`"
           :rule="{
             message: 'Please enter a name identifier scheme',
             required: true,
@@ -270,7 +251,7 @@ const saveMetadata = (e: MouseEvent) => {
 
         <n-form-item
           label="Name Identifier Scheme URI"
-          :path="`contributors[${index}].name_identifier_scheme_uri`"
+          :path="`creators[${index}].name_identifier_scheme_uri`"
         >
           <n-input
             v-model:value="item.name_identifier_scheme_uri"
@@ -281,7 +262,7 @@ const saveMetadata = (e: MouseEvent) => {
 
         <n-form-item
           label="Affiliations"
-          :path="`contributors[${index}].affiliations`"
+          :path="`creators[${index}].affiliations`"
           ignore-path-change
           :rule="{
             message: 'Please add at least one affiliation',
@@ -302,13 +283,13 @@ const saveMetadata = (e: MouseEvent) => {
             <div class="flex w-full flex-col space-y-4">
               <n-form-item
                 ignore-path-change
-                :show-feedback="true"
+                :show-feedback="false"
                 label="Name"
-                :path="`contributors[${index}].affiliations[${idx}].name`"
+                :path="`creators[${index}].affiliations[${idx}].name`"
                 class="w-full"
                 :rule="{
-                  message: 'Affiliation name is required if identifier is empty',
-                  required: !item.affiliations[idx].identifier && item.name_type === 'Personal',
+                  message: 'Please add at least one affiliation',
+                  required: !item.affiliations[idx].identifier,
                   trigger: ['blur', 'input'],
                 }"
               >
@@ -324,18 +305,18 @@ const saveMetadata = (e: MouseEvent) => {
                 <n-form-item
                   ignore-path-change
                   label="Identifier"
-                  :path="`contributors[${index}].affiliations[${idx}].identifier`"
+                  :path="`creators[${index}].affiliations[${idx}].identifier`"
                   class="w-full"
                   :rule="{
                     message: 'Identifier is required if name of affiliation is empty',
-                    required: !item.affiliations[idx].name && item.name_type === 'Personal',
+                    required: !item.affiliations[idx].name,
                     trigger: ['blur', 'input'],
                   }"
                 >
                   <n-input
                     v-model:value="item.affiliations[idx].identifier"
-                    placeholder="0156zyn36"
                     :disabled="item.name_type === 'Organizational'"
+                    placeholder="0156zyn36"
                     @keydown.enter.prevent
                   />
                 </n-form-item>
@@ -343,18 +324,18 @@ const saveMetadata = (e: MouseEvent) => {
                 <n-form-item
                   ignore-path-change
                   label="Scheme"
-                  :path="`contributors[${index}].affiliations[${idx}].scheme`"
+                  :path="`creators[${index}].affiliations[${idx}].scheme`"
                   class="ml-3 w-full"
                   :rule="{
                     message: 'Scheme is required if identifier is present',
-                    required: item.affiliations[idx].identifier && item.name_type === 'Personal',
+                    required: item.affiliations[idx].identifier,
                     trigger: ['blur', 'input'],
                   }"
                 >
                   <n-input
                     v-model:value="item.affiliations[idx].scheme"
-                    :disabled="item.name_type === 'Organizational'"
                     placeholder="ROR"
+                    :disabled="item.name_type === 'Organizational'"
                     @keydown.enter.prevent
                   />
                 </n-form-item>
@@ -362,14 +343,14 @@ const saveMetadata = (e: MouseEvent) => {
                 <n-form-item
                   ignore-path-change
                   label="Scheme URI"
-                  :path="`contributors[${index}].affiliations[${idx}]`"
+                  :path="`creators[${index}].affiliations[${idx}]`"
                   class="ml-3 w-full"
                 >
                   <n-input
                     v-model:value="item.affiliations[idx].scheme_uri"
                     placeholder="https://ror.org/"
-                    :disabled="item.name_type === 'Organizational'"
                     @keydown.enter.prevent
+                    :disabled="item.name_type === 'Organizational'"
                   />
                 </n-form-item>
               </div>
@@ -378,12 +359,12 @@ const saveMetadata = (e: MouseEvent) => {
         </n-form-item>
       </CollapsibleCard>
 
-      <n-button class="my-10 w-full" dashed type="success" @click="addContributor">
+      <n-button class="my-10 w-full" dashed type="success" @click="addCreator">
         <template #icon>
           <f-icon icon="gridicons:create" />
         </template>
 
-        Add a new contributor
+        Add a new creator
       </n-button>
 
       <n-divider />

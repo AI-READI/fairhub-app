@@ -80,7 +80,11 @@ const createStudy = (e: MouseEvent) => {
 
       message.success("Study created successfully.");
 
-      router.push({ name: "studies:all-studies" }); // TODO: Redirect to study page
+      /**
+       * TODO: Redirect to the newly created study
+       */
+
+      router.push({ name: "studies:all-studies" });
     } else {
       console.log("error");
       console.log(errors);

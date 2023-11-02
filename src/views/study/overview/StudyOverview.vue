@@ -42,7 +42,7 @@ const editStudyDetails = () => {
   <FadeTransition>
     <LottieLoader v-if="studyStore.loading" />
 
-    <main class="flex h-full w-full flex-col space-y-8 pr-6" px-4 v-else>
+    <main class="flex h-full w-full flex-col space-y-8 pr-6" v-else>
       <div class="flex items-center justify-between">
         <h1>Overview</h1>
 

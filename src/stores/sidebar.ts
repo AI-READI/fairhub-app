@@ -10,7 +10,7 @@ export const useSidebarStore = defineStore("sidebar", () => {
     collapseAppSidebar.value = collapse;
   };
 
-  const setDatasetSidebarCollapse = (collapse: boolean) => {
+  const setDatasetSidebarCollapsed = (collapse: boolean) => {
     collapseDatasetSidebar.value = collapse;
   };
 
@@ -18,6 +18,6 @@ export const useSidebarStore = defineStore("sidebar", () => {
     collapseAppSidebar,
     collapseDatasetSidebar,
     setAppSidebarCollapsed,
-    setDatasetSidebarCollapse,
+    setDatasetSidebarCollapsed,
   };
 });
