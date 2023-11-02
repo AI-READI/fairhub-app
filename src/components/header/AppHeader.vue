@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { RouterLink, useRouter } from "vue-router";
+import { RouterLink } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-
-const router = useRouter();
 
 const authStore = useAuthStore();
 
@@ -87,6 +85,15 @@ const handleSelect = (key: string | number) => {
                 <f-icon icon="majesticons:login" />
               </template>
               Login
+            </n-button>
+          </RouterLink>
+
+          <RouterLink to="/auth/signup" v-if="!authStore.isAuthenticated">
+            <n-button type="info">
+              <template #icon>
+                <f-icon icon="mdi:register" />
+              </template>
+              Sign Up
             </n-button>
           </RouterLink>
 
