@@ -1,10 +1,10 @@
 <script setup>
-const props = defineProps({
-  spaces: {
-    required: true,
-    type: Object,
-  },
-});
+// const props = defineProps({
+//   spaces: {
+//     required: true,
+//     type: Object,
+//   },
+// });
 </script>
 
 <template>

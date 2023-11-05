@@ -1,22 +1,54 @@
 /* eslint-disable no-undef */
-import { faker } from "@faker-js/faker";
 import Hapi from "@hapi/hapi";
-import jwt from "jsonwebtoken";
 import { nanoid } from "nanoid";
 
-const token_blacklist = {};
-const users = {
-  "test@fairhub.io": {
-    id: "1",
-    username: "test",
-    emailAddress: "test@fairhub.io",
-    first_name: "Test",
-    last_name: "User",
-    password: "asdkj45@ksdSA",
+const versions = [
+  {
+    id: "42dec85c-22f2-4f4e-a5ad-f0121067f507",
+    title: "Version 1",
+    changelog: "# Changelog",
+    created_at: 1697762742,
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    doi: "10.1038/s41597-023-02463-x",
+    published: true,
+    published_on: 1697762742,
+    updated_on: 1697762742,
   },
-};
+  {
+    id: "42dec85c-22f2-4f4e-a5ad-f0121067f508",
+    title: "Version 2",
+    changelog: "# Changelog",
+    created_at: 1697562742,
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    doi: "",
+    published: false,
+    published_on: 0,
+    updated_on: 1697362742,
+  },
+];
 
-const SECRET = "DONT_TELL_ANYONE";
+const version_readme = [
+  {
+    id: nanoid(),
+    created_at: 1697762742,
+    readme: "# Readme",
+    version_id: "42dec85c-22f2-4f4e-a5ad-f0121067f507",
+  },
+  {
+    id: nanoid(),
+    created_at: 1697762742,
+    readme: "# Readme",
+    version_id: "42dec85c-22f2-4f4e-a5ad-f0121067f508",
+  },
+];
+
+const generateMarkdown = async () => {
+  const response = await fetch("https://jaspervdj.be/lorem-markdownum/markdown.txt");
+
+  const text = await response.text();
+
+  return text;
+};
 
 const init = async () => {
   const server = Hapi.server({
@@ -46,315 +78,134 @@ const init = async () => {
   });
 
   server.route({
-    path: "/auth/sign-up",
+    path: "/api/study/{studyid}/dataset/{datasetid}/version",
     handler: (request, h) => {
-      const { emailAddress, password } = request.payload;
+      // const { datasetid } = request.params;
 
-      if (users[emailAddress]) {
-        return h
-          .response({
-            error: "user already exists",
-          })
-          .code(400);
-      }
+      const v = versions;
 
-      // TODO: hash password
-      users[emailAddress] = {
+      return h.response(v).code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/version/new",
+    handler: (request, h) => {
+      const { datasetid } = request.params;
+      const { title } = request.payload;
+
+      versions.push({
         id: nanoid(),
-        username: faker.internet.userName(),
-        emailAddress,
-        first_name: faker.person.firstName(),
-        last_name: faker.person.lastName(),
-        password,
-      };
+        title,
+        changelog: "",
+        created_at: Date.now() / 1000,
+        dataset_id: datasetid,
+        doi: "",
+        published: false,
+        published_on: 0,
+        updated_on: Date.now() / 1000,
+      });
 
-      console.log(users);
-
-      return h
-        .response({
-          message: "User created",
-        })
-        .code(200);
+      return h.response(newVersion).code(200);
     },
     method: "POST",
   });
 
   server.route({
-    path: "/auth/login",
+    path: "/api/study/{studyid}/dataset/{datasetid}/version/{versionid}/changelog",
+    handler: async (request, h) => {
+      const { versionid } = request.params;
+
+      const version = versions.find((version) => version.id === versionid);
+
+      if (!version) {
+        return h.response({ message: "version not found" }).code(404);
+      }
+
+      const changelog = await generateMarkdown();
+
+      return h.response({ changelog }).code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/version/{versionid}/changelog",
     handler: (request, h) => {
-      const { emailAddress, password } = request.payload;
+      const { versionid } = request.params;
 
-      console.log(users);
-      console.log(emailAddress, password);
+      const version = versions.find((version) => version.id === versionid);
 
-      if (!users[emailAddress]) {
-        return h
-          .response({
-            error: "user does not exist",
-          })
-          .code(400);
+      if (!version) {
+        return h.response({ message: "version not found" }).code(404);
       }
 
-      // TODO: hash password
-      if (users[emailAddress].password !== password) {
-        return h
-          .response({
-            error: "invalid password",
-          })
-          .code(400);
-      }
+      const payload = JSON.parse(request.payload);
 
-      const jti = nanoid();
+      version.changelog = payload.changelog;
 
-      const accessToken = jwt.sign({}, SECRET, {
-        audience: "https://example.com",
-        expiresIn: "1h",
-        issuer: "https://example.com",
-        subject: users[emailAddress].id,
-      });
-
-      const refreshToken = jwt.sign({}, SECRET, {
-        audience: "https://example.com",
-        expiresIn: "3d",
-        issuer: "https://example.com",
-        jwtid: jti,
-        subject: users[emailAddress].id,
-      });
-
-      console.log("accessToken", accessToken);
-      console.log("refreshToken", refreshToken);
-
-      return h
-        .response({
-          accessToken,
-          refreshToken,
-          user: {
-            id: users[emailAddress].id,
-            username: users[emailAddress].username,
-            email_address: emailAddress,
-            first_name: users[emailAddress].first_name,
-            last_name: users[emailAddress].last_name,
-          },
-        })
-        .code(200);
+      return h.response({ message: "changelog updated" }).code(200);
     },
-    method: "POST",
+    method: "PUT",
   });
 
   server.route({
-    path: "/auth/validate",
-    handler: async (request, h) => {
-      const authorization = request.headers.authorization;
+    path: "/api/study/{studyid}/dataset/{datasetid}/version/{versionid}/readme",
+    handler: (request, h) => {
+      const { versionid } = request.params;
 
-      if (!authorization) {
-        return h
-          .response({
-            error: "no authorization header",
-          })
-          .code(400);
+      const version = versions.find((version) => version.id === versionid);
+
+      if (!version) {
+        return h.response({ message: "version not found" }).code(404);
       }
 
-      const token = authorization.split(" ")[1];
+      const readme = version_readme.find((readme) => readme.version_id === versionid);
 
-      // verify token
-      try {
-        // get the jti and expired claims from the token
-        const decoded = await jwt.verify(token, SECRET);
-
-        console.log(decoded);
-
-        if (token_blacklist[decoded.jti]) {
-          return h
-            .response({
-              error: "token has been blacklisted",
-            })
-            .code(400);
-        }
-
-        return h
-          .response({
-            message: "token is valid",
-          })
-          .code(200);
-      } catch (err) {
-        if (err.name === "TokenExpiredError") {
-          return h
-            .response({
-              error: "token expired",
-            })
-            .code(403);
-        }
-
-        if (err.name === "JsonWebTokenError") {
-          return h
-            .response({
-              error: "invalid token",
-            })
-            .code(403);
-        }
-
-        return h
-          .response({
-            error: "invalid token",
-          })
-          .code(403);
+      if (!readme) {
+        return h.response({ message: "readme not found" }).code(404);
       }
+
+      return h.response({ readme: readme.readme }).code(200);
     },
-    method: "POST",
+    method: "GET",
   });
 
   server.route({
-    path: "/auth/refresh",
-    handler: async (request, h) => {
-      const authorization = request.headers.authorization;
+    path: "/api/study/{studyid}/dataset/{datasetid}/version/{versionid}/readme",
+    handler: (request, h) => {
+      const { versionid } = request.params;
 
-      if (!authorization) {
-        return h
-          .response({
-            error: "no authorization header",
-          })
-          .code(400);
+      const version = versions.find((version) => version.id === versionid);
+
+      if (!version) {
+        return h.response({ message: "version not found" }).code(404);
       }
 
-      const token = authorization.split(" ")[1];
+      const readme = version_readme.find((readme) => readme.version_id === versionid);
 
-      // verify token
-      try {
-        // get the jti and expired claims from the token
-        const decoded = await jwt.verify(token, SECRET);
-
-        console.log(decoded);
-
-        if (token_blacklist[decoded.jti]) {
-          return h
-            .response({
-              error: "token has been blacklisted",
-            })
-            .code(401);
-        }
-
-        const old_jti = decoded.jti;
-
-        // blacklist token jti
-        token_blacklist[old_jti] = {
-          expires: decoded.exp,
-          user_id: decoded.subject,
-        };
-
-        const jti = nanoid();
-
-        const emailAddress = users.find((user) => user.id === decoded.subject).emailAddress;
-
-        const accessToken = jwt.sign({}, SECRET, {
-          audience: "https://example.com",
-          expiresIn: "1h",
-          issuer: "https://example.com",
-          subject: users[emailAddress].id,
-        });
-
-        const refreshToken = jwt.sign({}, SECRET, {
-          audience: "https://example.com",
-          expiresIn: "3d",
-          issuer: "https://example.com",
-          jwtid: jti,
-          subject: users[emailAddress].id,
-        });
-
-        console.log("accessToken", accessToken);
-        console.log("refreshToken", refreshToken);
-
-        return h
-          .response({
-            accessToken,
-            refreshToken,
-            user: {
-              id: users[emailAddress].id,
-              username: users[emailAddress].username,
-              email_address: emailAddress,
-              first_name: users[emailAddress].first_name,
-              last_name: users[emailAddress].last_name,
-            },
-          })
-          .code(200);
-      } catch (err) {
-        if (err.name === "TokenExpiredError") {
-          return h
-            .response({
-              error: "token expired",
-            })
-            .code(401);
-        }
-
-        console.log(err);
-
-        return h
-          .response({
-            error: "invalid token",
-          })
-          .code(401);
+      if (!readme) {
+        return h.response({ message: "readme not found" }).code(404);
       }
+
+      const payload = JSON.parse(request.payload);
+
+      readme.readme = payload.readme;
+
+      return h.response({ message: "readme updated" }).code(200);
     },
-    method: "POST",
+    method: "PUT",
   });
 
   server.route({
-    path: "/auth/logout",
+    path: "/api/study/{studyid}/dataset/{datasetid}/version/{versionid}/autogenerate-readme",
     handler: async (request, h) => {
-      // get authorization header
-      const authorization = request.headers.authorization;
+      // some logic here to generate a readme
 
-      if (!authorization) {
-        return h
-          .response({
-            error: "no authorization header",
-          })
-          .code(400);
-      }
+      const text = await generateMarkdown();
 
-      const token = authorization.split(" ")[1];
-
-      // verify token
-      try {
-        // get the jti and expired claims from the token
-        const decoded = await jwt.verify(token, SECRET);
-
-        console.log(decoded);
-
-        token_blacklist[decoded.jti] = {
-          expires: decoded.exp,
-          user_id: decoded.sub,
-        };
-
-        console.log(token_blacklist);
-
-        return h
-          .response({
-            message: "logout successful",
-          })
-          .code(200);
-      } catch (err) {
-        if (err.name === "TokenExpiredError") {
-          return h
-            .response({
-              error: "token expired",
-            })
-            .code(200);
-        }
-
-        if (err.name === "JsonWebTokenError") {
-          return h
-            .response({
-              error: "invalid token",
-            })
-            .code(403);
-        }
-
-        return h
-          .response({
-            error: "invalid token",
-          })
-          .code(403);
-      }
+      return h.response({ readme: text }).code(200);
     },
     method: "POST",
   });

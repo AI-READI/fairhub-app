@@ -17,7 +17,7 @@ const moduleData = ref<StudyStatusModule>({
   completion_date: null,
   completion_date_type: null,
   overall_status: null,
-  start_date: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+  start_date: null,
   start_date_type: null,
   why_stopped: "",
 });
@@ -76,11 +76,14 @@ const saveMetadata = (e: MouseEvent) => {
       loading.value = true;
 
       const data = {
-        ...moduleData.value,
         completion_date: moduleData.value.completion_date
           ? dayjs(moduleData.value.completion_date).format("YYYY-MM-DD HH:mm:ss")
           : null,
+        completion_date_type: moduleData.value.completion_date_type || null,
+        overall_status: moduleData.value.overall_status || null,
         start_date: dayjs(moduleData.value.start_date).format("YYYY-MM-DD HH:mm:ss"),
+        start_date_type: moduleData.value.start_date_type || null,
+        why_stopped: moduleData.value.why_stopped || "",
       };
 
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/status`, {
@@ -99,9 +102,7 @@ const saveMetadata = (e: MouseEvent) => {
         throw new Error("Network response was not ok");
       }
 
-      push.success({
-        title: "Status saved successfully",
-      });
+      push.success("Status saved successfully");
 
       console.log("success");
     } else {

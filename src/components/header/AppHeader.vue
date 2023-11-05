@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { RouterLink, useRouter } from "vue-router";
+import { RouterLink } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 
-const router = useRouter();
+// const router = useRouter();
 
 const authStore = useAuthStore();
 
@@ -100,7 +100,7 @@ const handleSelect = (key: string | number) => {
           >
             <n-avatar
               :size="48"
-              src="https://api.dicebear.com/5.x/lorelei/svg?seed=fairhubio"
+              :src="`https://api.dicebear.com/7.x/lorelei/svg?seed=${authStore.user?.id}}`"
               class="hover:cursor-pointer hover:opacity-80"
             />
           </n-dropdown>

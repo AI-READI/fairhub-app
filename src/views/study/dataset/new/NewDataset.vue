@@ -1,22 +1,13 @@
 <script setup lang="ts">
 import { faker } from "@faker-js/faker";
-import type { FormInst, FormRules } from "naive-ui";
-import { useMessage } from "naive-ui";
-import { nanoid } from "nanoid";
-import { onBeforeMount, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
 
-import { useAuthStore } from "@/stores/auth";
-import { useDatasetStore } from "@/stores/dataset";
 import { useSidebarStore } from "@/stores/sidebar";
-import type { Dataset } from "@/types/Dataset";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
-const { error } = useMessage();
+const push = usePush();
 
-const authStore = useAuthStore();
-const datasetStore = useDatasetStore();
 const sidebarStore = useSidebarStore();
 
 const routeParams = {
@@ -25,12 +16,7 @@ const routeParams = {
 
 const studyId = routeParams.studyId as string;
 
-onBeforeMount(() => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
-  }
-
+onBeforeMount(async () => {
   sidebarStore.setAppSidebarCollapsed(false);
 });
 
@@ -61,45 +47,38 @@ const rules: FormRules = {
 const createDataset = (e: MouseEvent) => {
   e.preventDefault();
 
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate(async (errors) => {
     if (!errors) {
-      const data: Dataset = {
-        id: nanoid(),
+      const body = {
         title: dataset.value.title,
         description: dataset.value.description,
-        latest_version: "",
       };
 
-      datasetStore.addDataset(data).then(() => {
-        router.push({ name: "study:all-datasets", params: { studyId } });
+      const response = await fetch(`${baseURL}/study/${studyId}/dataset`, {
+        body: JSON.stringify(body),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
       });
 
-      // addDataset(dataset.value).then((_datasetId) => {
-      //   console.log(datasetStore.allDatasets);
+      if (!response.ok) {
+        push.error("Something went wrong.");
 
-      //   // router.push({ name: "dataset:overview", params: { studyId, datasetId } });
-      // });
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+
+      console.log(data);
+
+      router.push({ name: "dataset:overview", params: { datasetId: data.id, studyId } });
     } else {
       console.log("error");
       console.log(errors);
     }
   });
 };
-
-// const addDataset = async (dataset: Dataset): Promise<string> => {
-//   // const response = await fetch(`${baseURL}/dataset/add`, {
-//   //   body: JSON.stringify(dataset),
-//   //   headers: {
-//   //     "Content-Type": "application/json",
-//   //   },
-//   //   method: "POST",
-//   // });
-//   // return response.json();
-
-//   const response = await datasetStore.addDataset(dataset);
-
-//   return response;
-// };
 </script>
 
 <template>

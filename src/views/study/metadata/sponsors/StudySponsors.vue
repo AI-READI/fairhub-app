@@ -63,11 +63,11 @@ const saveMetadata = (e: MouseEvent) => {
   formRef.value?.validate(async (errors) => {
     if (!errors) {
       const data = {
-        lead_sponsor_name: moduleData.lead_sponsor_name,
-        responsible_party_investigator_affiliation: moduleData.responsible_party.affiliation,
-        responsible_party_investigator_name: moduleData.responsible_party.name,
-        responsible_party_investigator_title: moduleData.responsible_party.title,
-        responsible_party_type: moduleData.responsible_party.type,
+        lead_sponsor_name: moduleData.lead_sponsor_name || "",
+        responsible_party_investigator_affiliation: moduleData.responsible_party.affiliation || "",
+        responsible_party_investigator_name: moduleData.responsible_party.name || "",
+        responsible_party_investigator_title: moduleData.responsible_party.title || "",
+        responsible_party_type: moduleData.responsible_party.type || null,
       };
 
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/sponsors`, {

@@ -13,7 +13,7 @@ export const useParticipantStore = defineStore("participant", () => {
   const fetchAllParticipants = async (studyId: string) => {
     loading.value = true;
     // const response = await fetch(`${baseURL}/study/${studyId}/participants`);
-
+    console.log(studyId);
     // allParticipants.value = await response.json();
 
     if (allParticipants.value.length === 0) {
@@ -24,6 +24,7 @@ export const useParticipantStore = defineStore("participant", () => {
           age: faker.number.int({ max: 99, min: 18 }),
           first_name: faker.person.firstName(),
           last_name: faker.person.lastName(),
+          selected: false,
         };
 
         allParticipants.value.push(p);
@@ -32,9 +33,9 @@ export const useParticipantStore = defineStore("participant", () => {
 
     console.log("participants", allParticipants.value);
 
-    allParticipants.value.forEach((participant) => {
-      //   participant.id = nanoid(5);  //was changing on load
-    });
+    // allParticipants.value.forEach((participant) => {
+    //   //   participant.id = nanoid(5);  //was changing on load
+    // });
 
     loading.value = false;
   };

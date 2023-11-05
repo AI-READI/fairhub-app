@@ -4,4 +4,5 @@ export interface Participant {
   age: number;
   first_name: string;
   last_name: string;
+  selected: boolean;
 }

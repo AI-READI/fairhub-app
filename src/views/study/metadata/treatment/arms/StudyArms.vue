@@ -86,10 +86,10 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data = moduleData.arms.map((item) => {
         const entry = {
-          description: item.description,
+          description: item.description || "",
           intervention_list:
             moduleData.study_type === "Interventional" ? item.intervention_list : [],
-          label: item.label,
+          label: item.label || "",
           type: moduleData.study_type === "Interventional" ? item.type : null,
         };
 
