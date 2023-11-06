@@ -91,6 +91,12 @@ const handleNextButton = async () => {
     },
   });
 };
+
+function handleBackButton() {
+  router.push({
+    name: "dataset:publish:versions",
+  });
+}
 </script>
 
 <template>
@@ -118,6 +124,18 @@ const handleNextButton = async () => {
 
     <FadeTransition>
       <LottieLoader v-if="getSpinner" />
+      <MdEditor
+        v-else
+        v-model="changelog"
+        language="en-US"
+        preview-theme="vuepress"
+        :show-code-row-number="true"
+        :sanitize="sanitize"
+      />
+    </FadeTransition>
+    <FadeTransition>
+      <LottieLoader v-if="getSpinner" />
+
       <MdEditor
         v-else
         v-model="changelog"
