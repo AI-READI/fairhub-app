@@ -1,119 +1,204 @@
 <script setup lang="ts">
-import { useVersionStore } from "@/stores/version";
+import { useSidebarStore } from "@/stores/sidebar";
+import type { Version } from "@/types/Version";
+import { displayHumanFriendlyDateAndTime } from "@/utils/date";
+
+// import { baseURL } from "@/utils/constants";
+const baseURL = "http://localhost:5000";
 
 const route = useRoute();
-const { success } = useMessage();
+const push = usePush();
+const router = useRouter();
+
+const sidebarStore = useSidebarStore();
+
+const loading = ref(true);
+const versions = ref<Version[]>([]);
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
   studyId: route.params.studyId as string,
 };
 
-const versionStore = useVersionStore();
+onBeforeMount(async () => {
+  const studyId = routeParams.studyId as string;
+  const datasetId = routeParams.datasetId as string;
 
-const allVersions = computed(() => versionStore.allVersions);
+  sidebarStore.setAppSidebarCollapsed(true);
+  sidebarStore.setDatasetSidebarCollapsed(false);
 
-onBeforeMount(() => {
-  const datasetId = route.params.datasetId as string;
+  const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/version`, {
+    method: "GET",
+  });
 
-  versionStore.getAllVersions(datasetId);
+  loading.value = false;
+
+  if (!response.ok) {
+    push.error("Something went wrong.");
+
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+
+  versions.value = data;
 });
 
-const deleteVersion = async (_versionId: string) => {
-  // await versionStore.deleteVersion(versionId);
+const deleteVersion = async (id: string) => {
+  const response = await fetch(
+    `${baseURL}/study/${routeParams.studyId}/dataset/${routeParams.datasetId}/version/${id}`,
+    {
+      method: "DELETE",
+    }
+  );
 
-  await versionStore.getAllVersions(routeParams.datasetId);
+  if (!response.ok) {
+    push.error("Something went wrong.");
 
-  success("Version deleted successfully");
+    throw new Error("Network response was not ok");
+  }
+
+  push.success("Version deleted successfully");
+
+  // reload page
+  router.go(0);
 };
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
-    <PageBackNavigationHeader
-      title="All Versions"
-      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-      linkName="dataset:overview"
-      :linkParams="{ datasetId: routeParams.datasetId, studyId: routeParams.studyId }"
-    />
+    <n-space justify="space-between">
+      <h2>All Versions</h2>
+
+      <RouterLink
+        :to="{
+          name: 'dataset:publish:versions:new',
+        }"
+      >
+        <n-button size="large" type="primary">
+          <template #icon>
+            <f-icon icon="ion:add-circle-outline" />
+          </template>
+          Create a new version
+        </n-button>
+      </RouterLink>
+    </n-space>
 
     <n-divider />
 
-    <h3>Unpublished versions</h3>
+    <FadeTransition>
+      <div class="flex flex-col items-center" v-if="loading">
+        <Vue3Lottie
+          animationLink="https://assets2.lottiefiles.com/private_files/lf30_b0iey3ml.json"
+          :height="150"
+          :width="200"
+        />
 
-    <p class="py-2">
-      Any releases that have not been published will be listed here. You can continue to edit these
-      versions until they are published.
-    </p>
+        <p class="flex justify-center">Checking for previously published datasets...</p>
+      </div>
 
-    <div class="py-4">
-      <n-card
-        v-for="version in allVersions"
-        :key="version.id"
-        :title="version.title"
-        v-show="!version.published"
-      >
-        <template #header-extra> Last modified here </template>
+      <div class="flex w-full flex-col" v-else>
+        <FadeTransition>
+          <div v-if="versions.length === 0" class="my-8">
+            <Vue3Lottie
+              animationLink="https://assets8.lottiefiles.com/packages/lf20_tmsiddoc.json"
+              :height="150"
+              :width="150"
+            />
 
-        Some details about the version
-
-        <template #action>
-          <div class="flex items-center space-x-3">
-            <RouterLink
-              :to="{
-                name: 'dataset:publish:version:participants',
-                params: {
-                  versionId: version.id,
-                  datasetId: routeParams.datasetId,
-                  studyId: routeParams.studyId,
-                },
-              }"
-            >
-              <n-button strong secondary type="info">
-                <template #icon>
-                  <f-icon icon="material-symbols:resume" />
-                </template>
-                Resume working on this version
-              </n-button>
-            </RouterLink>
-
-            <n-popconfirm @positive-click="deleteVersion(version.id)">
-              <template #trigger>
-                <n-button strong secondary type="error">
-                  <template #icon>
-                    <f-icon icon="ph:trash-fill" />
-                  </template>
-                  Discard this version
-                </n-button>
-              </template>
-              Are you sure you want to discard this version?
-            </n-popconfirm>
+            <p class="text-center">We could not any versions of this dataset.</p>
           </div>
-        </template>
-      </n-card>
-    </div>
 
-    <n-divider />
+          <div v-else>
+            <h3>Unpublished versions</h3>
 
-    <h3>Published versions</h3>
+            <p class="py-2">
+              Any releases that have not been published will be listed here. You can continue to
+              edit these versions until they are published.
+            </p>
 
-    <p class="py-2">Published versions of this dataset are listed here.</p>
+            <div class="py-4">
+              <n-card
+                v-for="version in versions"
+                :key="version.id"
+                :title="version.title"
+                v-show="!version.published"
+              >
+                <template #header-extra>
+                  {{ displayHumanFriendlyDateAndTime(version.updated_on) }}
+                </template>
 
-    <div class="py-4">
-      <n-card
-        v-for="version in allVersions"
-        :key="version.id"
-        :title="version.title"
-        v-show="version.published"
-      >
-        <template #header-extra> published date here </template>
+                Some details about the version
 
-        Some details about the version
+                <template #action>
+                  <div class="flex w-full items-center justify-between space-x-3">
+                    <RouterLink
+                      :to="{
+                        name: 'dataset:publish:version:participants',
+                        params: {
+                          versionId: version.id,
+                          datasetId: routeParams.datasetId,
+                          studyId: routeParams.studyId,
+                        },
+                      }"
+                    >
+                      <n-button strong secondary type="info">
+                        <template #icon>
+                          <f-icon icon="material-symbols:resume" />
+                        </template>
+                        Resume working on this version
+                      </n-button>
+                    </RouterLink>
 
-        <template #action>
-          We can add a button here to view the version on the discover platform
-        </template>
-      </n-card>
-    </div>
+                    <n-popconfirm @positive-click="deleteVersion(version.id)">
+                      <template #trigger>
+                        <n-button strong secondary type="error">
+                          <template #icon>
+                            <f-icon icon="ph:trash-fill" />
+                          </template>
+                          Discard this version
+                        </n-button>
+                      </template>
+                      Are you sure you want to discard this version?
+                    </n-popconfirm>
+                  </div>
+                </template>
+              </n-card>
+            </div>
+
+            <h3 class="pt-6">Published versions</h3>
+
+            <p class="py-2">Published versions of this dataset are listed here.</p>
+
+            <div class="py-4">
+              <n-card
+                v-for="version in versions"
+                :key="version.id"
+                :title="version.title"
+                v-show="version.published"
+              >
+                <template #header-extra>
+                  {{ displayHumanFriendlyDateAndTime(version.published_on) }}
+                </template>
+
+                Some details about the version
+
+                <template #action>
+                  <a :href="`https://dx.doi.org/${version.doi}`" target="_blank" rel="noopener">
+                    <n-button type="info">
+                      <template #icon>
+                        <f-icon icon="ph:eye-fill" />
+                      </template>
+
+                      View dataset on data.fairhub.io
+                    </n-button>
+                  </a>
+                </template>
+              </n-card>
+            </div>
+          </div>
+        </FadeTransition>
+      </div>
+    </FadeTransition>
   </main>
 </template>
