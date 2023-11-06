@@ -77,7 +77,7 @@ function handleNextButton() {
       <!--          </ul>-->
       <!--        </n-descriptions-item>-->
       <!--      </n-descriptions>-->
-      <n-table :bordered="false" striped>
+      <n-table :bordered="false" striped :single-line="false">
         <thead>
           <tr>
             <th>Identifier</th>
@@ -299,7 +299,7 @@ function handleNextButton() {
       <!--        </n-descriptions-item>-->
       <!--      </n-descriptions>-->
 
-      <n-table :bordered="false" striped>
+      <n-table :bordered="false" striped :single-line="false">
         <thead>
           <tr>
             <th>Dates</th>
@@ -342,7 +342,7 @@ function handleNextButton() {
       <!--          {{ dataset_metadata.publisher.publisher }}-->
       <!--        </n-descriptions-item>-->
       <!--      </n-descriptions>-->
-      <n-table :bordered="false" striped>
+      <n-table :bordered="false" striped :single-line="false">
         <thead>
           <tr>
             <th>Publisher</th>
@@ -513,7 +513,7 @@ function handleNextButton() {
       </template>
     </CollapsibleCard>
     <CollapsibleCard title="Rights">
-      <n-table :bordered="false" striped>
+      <n-table :bordered="false" striped :single-line="false">
         <thead>
           <tr>
             <th>Rights</th>
@@ -558,7 +558,7 @@ function handleNextButton() {
       <!--        </n-descriptions-item>-->
       <!--      </n-descriptions>-->
       <!--      -->
-      <n-table :bordered="false" striped>
+      <n-table :bordered="false" striped :single-line="false">
         <thead>
           <tr>
             <th>Name</th>
@@ -602,7 +602,7 @@ function handleNextButton() {
       <!--        </n-descriptions-item>-->
       <!--      </n-descriptions>-->
 
-      <n-table :bordered="true">
+      <n-table :bordered="true" :single-line="false" stripped>
         <thead>
           <tr>
             <th>Type</th>
@@ -619,7 +619,7 @@ function handleNextButton() {
         </tbody>
       </n-table>
       <n-h4>Titles</n-h4>
-      <n-table>
+      <n-table :single-line="false" striped>
         <thead>
           <tr>
             <th>Title</th>
@@ -644,7 +644,7 @@ function handleNextButton() {
         </tbody>
       </n-table>
       <n-h4>Identifiers</n-h4>
-      <n-table>
+      <n-table :single-line="false" striped>
         <thead>
           <tr>
             <th>Identifier</th>
@@ -667,7 +667,7 @@ function handleNextButton() {
         </tbody>
       </n-table>
       <n-h4>Creators</n-h4>
-      <n-table>
+      <n-table :single-line="false" striped>
         <thead>
           <tr>
             <th>Name(s)</th>
@@ -690,7 +690,7 @@ function handleNextButton() {
         </tbody>
       </n-table>
       <n-h4>Contributors</n-h4>
-      <n-table>
+      <n-table :single-line="false" striped>
         <thead>
           <tr>
             <th>Name(s)</th>
