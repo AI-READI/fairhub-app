@@ -261,7 +261,7 @@ function handleNextButton() {
       <!--        </n-descriptions-item>-->
       <!--      </n-descriptions>-->
       <!--      -->
-      <p>{{ study_metadata.oversight }}</p>
+      <p>{{ study_metadata.oversight ? "Yes" : "No" }}</p>
       <template #action>
         <RouterLink
           :to="{
