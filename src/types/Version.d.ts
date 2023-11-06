@@ -21,14 +21,15 @@ export interface VersionStudyMetadata {
   description: VersionStudyDescription;
   design: VersionDesign;
   eligibility: VersionStudyEligibility;
-  identification: VersionStudyIdentifier[];
   interventions: VersionStudyIntervention[];
   ipd_sharing: VersionStudyIPDSharing;
   links: VersionStudyLink[];
   locations: VersionStudyLocation[];
   overall_officials: StudyOverallOfficial[];
   oversight: "";
+  primary_identifier: VersionStudyIdentifier | null;
   references: VersionStudyReference[];
+  secondary_identifiers: VersionStudyIdentifier[];
   sponsors: VersionStudySponsor;
   status: VersionStudyStatusModule;
 }
@@ -127,16 +128,16 @@ export interface VersionStudyDescription {
 }
 
 export interface VersionDatasetMetadata {
-  about: VersionDatasetAbout[];
+  about: VersionDatasetAbout;
   access: VersionDatasetAccess;
-  consent: VersionDatasetConsent[];
+  consent: VersionDatasetConsent;
   contributors: VersionDatasetContributor[];
-  creator: VersionDatasetCreator[];
-  dates: VersionDatasetDates;
+  creators: VersionDatasetCreator[];
+  dates: VersionDatasetDate[];
   de_identification: VersionDatasetDeIdentifier;
-  descriptions: VersionDatasetDescriptions;
+  descriptions: VersionDatasetDescriptions[];
   funders: VersionDatasetFunders[];
-  identifiers: VersionDatasetIdentifiers[];
+  identifiers: VersionDatasetIdentifier[];
   publisher: VersionDatasetPublisher;
   record_keys: VersionDatasetRecordKeys;
   related_items: VersionDatasetRelatedItem[];
@@ -148,72 +149,57 @@ export interface VersionDatasetMetadata {
 export interface VersionDatasetIdentifier {
   id: string;
   identifier: string;
-  origin: string;
   type: string | null;
 }
 
-export interface VersionDatasetDescription {
+export interface VersionDatasetAbout {
+  id: string;
+  language: string | null;
+  resource_type: string | null;
+}
+
+export interface VersionDatasetDescriptions {
   id: string;
   description: string;
   type: string | null;
 }
 
-export interface VersionDatasetPersonAffiliation {
-  name: string;
-  identifier: string;
-  scheme: string;
-}
+// export interface VersionDatasetPersonAffiliation {
+//   name: string;
+//   identifier: string;
+//   scheme: string;
+// }
 
 export interface VersionDatasetCreator {
   id: string;
   name: string;
-  affiliations: VersionDatasetPersonAffiliation[];
-  name_identifier: string;
-  name_identifier_scheme: string;
-  name_identifier_scheme_uri: string;
-  origin: string;
+  name_type: "Personal" | "Organizational" | null;
 }
 
 export interface VersionDatasetContributor {
   id: string;
   name: string;
-  affiliations: VersionDatasetPersonAffiliation[];
-  contributor_type: string | null;
-  name_identifier: string;
-  name_identifier_scheme: string;
-  name_identifier_scheme_uri: string;
+  contributor_type: string;
   name_type: "Personal" | "Organizational" | null;
-  origin: string;
-}
-
-export interface VersionDatasetContributors {
-  contributors: VersionDatasetContributor[];
 }
 
 export interface VersionDatasetDate {
   id: string;
   date: number | null;
-  information: string;
-  origin: string;
   type: string | null;
-}
-
-export interface VersionDatasetDates {
-  dates: VersionDatasetDate[];
 }
 
 export interface VersionDatasetPublisher {
   managing_organization_name: string;
-  managing_organization_ror_id: string;
   publisher: string;
 }
 
 export interface VersionDatasetRecordKeys {
   details: string;
-  type: string | null;
+  key_type: string | null;
 }
 
-export interface VersionDatasetDeIdentLevel {
+export interface VersionDatasetDeIdentifier {
   dates: boolean;
   details: string;
   direct: boolean;
@@ -222,22 +208,14 @@ export interface VersionDatasetDeIdentLevel {
 
 export interface VersionDatasetConsent {
   details: string;
-  genetic_only: boolean;
-  geog_restrict: boolean;
-  no_methods: boolean;
   noncommercial: boolean;
   research_type: boolean;
-  type: string | null;
 }
 
-export interface VersionDatasetSubject {
+export interface VersionDatasetSubjects {
   id: string;
-  classification_code: string;
-  origin: string;
   scheme: string;
-  scheme_uri: string;
   subject: string;
-  value_uri: string;
 }
 
 export interface VersionDatasetAccess {
@@ -247,42 +225,28 @@ export interface VersionDatasetAccess {
   url_last_checked: number | null;
 }
 
-export interface VersionDatasetRight {
+export interface VersionDatasetRights {
   id: string;
-  identifier: string;
-  identifier_scheme: string;
-  origin: string;
+  identifier: string | null;
   rights: string;
-  uri: string;
 }
 
-export interface VersionDatasetFunder {
+export interface VersionDatasetFunders {
   id: string;
   name: string;
   award_number: string;
-  award_title: string;
-  award_uri: string;
   identifier: string;
-  identifier_scheme_uri: string;
-  identifier_type: string | null;
-  origin: string;
 }
 
 export interface VersionDatasetOther {
   acknowledgement: string;
   language: string | null;
-  resource_type: string;
   size: string[];
-  standards_followed: string;
 }
 
 export interface VersionDatasetRelatedItemIdentifier {
   id: string;
   identifier: string;
-  metadata_scheme: string;
-  origin: string;
-  scheme_type: string;
-  scheme_uri: string;
   type: string | null;
 }
 
@@ -290,21 +254,17 @@ export interface VersionDatasetRelatedItemCreator {
   id: string;
   name: string;
   name_type: string | null;
-  origin: string;
 }
 
 export interface VersionDatasetRelatedItemContributor {
   id: string;
   name: string;
-  contributor_type: string | null;
   name_type: string | null;
-  origin: string;
 }
 
 export interface VersionDatasetRelatedItemTitle {
   id: string;
   title: string;
-  origin: string;
   type: string | null;
 }
 
@@ -312,15 +272,9 @@ export interface VersionDatasetRelatedItem {
   id: string;
   contributors: VersionDatasetRelatedItemContributor[];
   creators: VersionDatasetRelatedItemCreator[];
-  edition: string;
   identifiers: VersionDatasetRelatedItemIdentifier[];
-  number_type: string | null;
-  number_value: string;
-  origin: string;
   publication_year: number | null;
   publisher: string;
-  relation_type: string | null;
   titles: VersionDatasetRelatedItemTitle[];
   type: string | null;
-  volume: string;
 }
