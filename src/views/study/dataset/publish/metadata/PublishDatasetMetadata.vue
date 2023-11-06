@@ -77,7 +77,7 @@ function handleNextButton() {
       <!--          </ul>-->
       <!--        </n-descriptions-item>-->
       <!--      </n-descriptions>-->
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="false" striped>
         <thead>
           <tr>
             <th>Identifier</th>
@@ -121,7 +121,7 @@ function handleNextButton() {
         </thead>
         <tbody>
           <tr v-for="item in dataset_metadata.titles" :key="item.id">
-            <td>{{ item.type }}</td>
+            <td>{{ item.type.replace(/([a-z])([A-Z])/g, "$1 $2") }}</td>
             <td>{{ item.title }}</td>
           </tr>
         </tbody>
@@ -156,7 +156,7 @@ function handleNextButton() {
         </thead>
         <tbody>
           <tr v-for="item in dataset_metadata.descriptions" :key="item.id">
-            <td>{{ item.type }}</td>
+            <td v-if="item.type">{{ item.type.replace(/([a-z])([A-Z])/g, "$1 $2") }}</td>
             <td>{{ item.description }}</td>
           </tr>
         </tbody>
@@ -309,7 +309,7 @@ function handleNextButton() {
         <tbody>
           <tr v-for="item in dataset_metadata.dates" :key="item.id">
             <td>{{ item.date }}</td>
-            <td>{{ item.type }}</td>
+            <td v-if="item.type">{{ item.type.replace(/([a-z])([A-Z])/g, "$1 $2") }}</td>
           </tr>
         </tbody>
       </n-table>
@@ -635,7 +635,9 @@ function handleNextButton() {
             </td>
             <td>
               <ul class="m-0 list-none p-0">
-                <li v-for="i in item.titles" :key="i.id">{{ i.type }}</li>
+                <li v-for="i in item.titles" :key="i.id">
+                  <div v-if="i.type">{{ i.type?.replace(/([a-z])([A-Z])/g, "$1 $2") }}</div>
+                </li>
               </ul>
             </td>
           </tr>

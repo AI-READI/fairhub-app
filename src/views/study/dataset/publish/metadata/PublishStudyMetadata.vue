@@ -77,7 +77,7 @@ function handleNextButton() {
       <!--          </ul>-->
       <!--        </n-descriptions-item>-->
       <!--      </n-descriptions>-->
-      <n-table :bordered="false" striped>
+      <n-table :bordered="false" striped :single-line="false">
         <thead>
           <tr>
             <th>Identifier(s)</th>
