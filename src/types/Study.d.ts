@@ -184,6 +184,8 @@ export interface StudyOverallOfficial {
   id: string;
   name: string;
   affiliation: string;
+  origin: string;
+  role: string | null;
 }
 
 export interface StudyOverallOfficials {
