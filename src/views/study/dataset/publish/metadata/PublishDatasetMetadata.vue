@@ -747,13 +747,13 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Language</th>
-            <th>Publisher</th>
+            <th>Standards Followed</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>{{ dataset_metadata.about.language }}</td>
-            <td>{{ dataset_metadata.about.resource_type || "" }}</td>
+            <td>{{ dataset_metadata.about.language || "-" }}</td>
+            <td>{{ dataset_metadata.about.standards_followed || "-" }}</td>
           </tr>
         </tbody>
       </n-table>

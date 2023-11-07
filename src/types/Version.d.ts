@@ -155,7 +155,7 @@ export interface VersionDatasetIdentifier {
 export interface VersionDatasetAbout {
   id: string;
   language: string | null;
-  resource_type: string | null;
+  standards_followed: string | null;
 }
 
 export interface VersionDatasetDescriptions {

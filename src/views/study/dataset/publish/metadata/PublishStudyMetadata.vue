@@ -759,11 +759,13 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Citation</th>
+            <th>Identifier</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="item in study_metadata.references" :key="item.id">
             <td>{{ item.citation }}</td>
+            <td>{{ item.identifier }}</td>
           </tr>
         </tbody>
       </n-table>
