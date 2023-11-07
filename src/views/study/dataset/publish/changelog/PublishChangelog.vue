@@ -124,17 +124,6 @@ function handleBackButton() {
 
     <FadeTransition>
       <LottieLoader v-if="getSpinner" />
-      <MdEditor
-        v-else
-        v-model="changelog"
-        language="en-US"
-        preview-theme="vuepress"
-        :show-code-row-number="true"
-        :sanitize="sanitize"
-      />
-    </FadeTransition>
-    <FadeTransition>
-      <LottieLoader v-if="getSpinner" />
 
       <MdEditor
         v-else
