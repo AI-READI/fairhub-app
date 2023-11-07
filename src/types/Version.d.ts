@@ -52,7 +52,7 @@ export interface VersionDesign {
 
 export interface VersionStudyIPDSharing {
   ipd_sharing: string | null;
-  time_frame: string;
+  ipd_sharing_info_type_list: [] | null;
 }
 
 export interface VersionStudyReference {

@@ -58,7 +58,7 @@ function handleNextButton() {
 
     <n-divider />
 
-    <CollapsibleCard title="Primary Identifier" bordered>
+    <CollapsibleCard title="Identifier" bordered>
       <!--      <n-descriptions label-placement="left">-->
       <!--        <n-descriptions-item label="Identifier(s)">-->
       <!--          <ul class="m-0 list-none p-0">-->
@@ -77,6 +77,7 @@ function handleNextButton() {
       <!--          </ul>-->
       <!--        </n-descriptions-item>-->
       <!--      </n-descriptions>-->
+      <n-h4>Primary Identifier</n-h4>
       <n-table :bordered="false" striped :single-line="false">
         <thead>
           <tr>
@@ -420,18 +421,17 @@ function handleNextButton() {
       <!--          </ul>-->
       <!--        </n-descriptions-item>-->
       <!--      </n-descriptions>-->
-      <n-table :bordered="false" :single-line="false" striped>
-        <thead>
-          <tr>
-            <th>Arm label(s)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in study_metadata.arms" :key="item.id">
-            <td>{{ item.label }}</td>
-          </tr>
-        </tbody>
+      <n-table :bordered="true">
+        <tr>
+          <th>Label</th>
+          <td>
+            <ul :key="item.label" v-for="item in study_metadata.arms">
+              <li class="m-0 list-none p-0">{{ item.label }}</li>
+            </ul>
+          </td>
+        </tr>
       </n-table>
+      <!--     <div v-for="item in study_metadata.arms" :key="item.id">{{ item.label }}</div>-->
       <template #action>
         <RouterLink
           :to="{
@@ -463,11 +463,13 @@ function handleNextButton() {
       <n-table :bordered="false" :single-line="false" striped>
         <thead>
           <tr>
+            <th>Name</th>
             <th>Type</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="item in study_metadata.interventions" :key="item.id">
+            <td>{{ item.name }}</td>
             <td>{{ item.type }}</td>
           </tr>
         </tbody>
@@ -707,12 +709,20 @@ function handleNextButton() {
       <n-table :bordered="false" :single-line="false" striped>
         <thead>
           <tr>
-            <th>Facility</th>
+            <th>Is there a plan to share IPD?</th>
+            <th>Type</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>{{ study_metadata.ipd_sharing.ipd_sharing }}</td>
+            <td>
+              <span
+                v-for="item in study_metadata.ipd_sharing.ipd_sharing_info_type_list"
+                :key="item"
+                ><n-tag type="info" class="mr-1">{{ item }}</n-tag></span
+              >
+            </td>
           </tr>
         </tbody>
       </n-table>
