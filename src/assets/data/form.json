@@ -55,83 +55,83 @@
   "datasetIdentifierTypeOptions": [
     {
       "label": "ARK",
-      "value": "ark"
+      "value": "ARK"
     },
     {
       "label": "arXiv",
       "value": "arXiv"
     },
     {
-      "label": "bibcode",
+      "label": "Bibcode",
       "value": "bibcode"
     },
     {
       "label": "DOI",
-      "value": "doi"
+      "value": "DOI"
     },
     {
       "label": "EAN13",
-      "value": "ean13"
+      "value": "EAN13"
     },
     {
       "label": "EISSN",
-      "value": "eissn"
+      "value": "EISSN"
     },
     {
       "label": "Handle",
-      "value": "handle"
+      "value": "Handle"
     },
     {
       "label": "IGSN",
-      "value": "igsn"
+      "value": "IGSN"
     },
     {
       "label": "ISBN",
-      "value": "isbn"
+      "value": "ISBN"
     },
     {
       "label": "ISSN",
-      "value": "issn"
+      "value": "ISSN"
     },
     {
       "label": "ISTC",
-      "value": "istc"
+      "value": "ISTC"
     },
     {
       "label": "LISSN",
-      "value": "lissn"
+      "value": "LISSN"
     },
     {
       "label": "LSID",
-      "value": "lsid"
+      "value": "LSID"
     },
     {
       "label": "PMID",
-      "value": "pmid"
+      "value": "PMID"
     },
     {
       "label": "PURL",
-      "value": "purl"
+      "value": "PURL"
     },
     {
       "label": "UPC",
-      "value": "upc"
+      "value": "UPC"
     },
     {
       "label": "URL",
-      "value": "url"
+      "value": "URL"
     },
     {
       "label": "URN",
-      "value": "urn"
+      "value": "URN"
     },
     {
-      "label": "w3id",
+      "label": "W3ID",
       "value": "w3id"
     },
     {
-      "label": "other",
-      "value": "other"
+      "label": "Other",
+      "value": "Other"
     }
   ],
   "datasetDescriptionTypeOptions": [

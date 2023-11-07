@@ -75,7 +75,7 @@ const saveMetadata = (e: MouseEvent) => {
       const data = moduleData.link_list.map((item) => {
         const entry = {
           title: item.label || "",
-          url: item.url || "",
+          url: item.url,
         };
 
         if (item.origin === "local") {

@@ -111,7 +111,7 @@ const saveMetadata = (e: MouseEvent) => {
           }),
           contributor_type: item.contributor_type,
           name_identifier: item.name_identifier,
-          name_identifier_scheme: item.name_identifier_scheme || "",
+          name_identifier_scheme: item.name_identifier_scheme,
           name_identifier_scheme_uri: item.name_identifier_scheme_uri || "",
           name_type: item.name_type,
         };

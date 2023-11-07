@@ -352,7 +352,7 @@ const saveMetadata = (e: MouseEvent) => {
           number_value: related_item.number_value || "",
           publication_year: related_item.publication_year || null,
           publisher: related_item.publisher || "",
-          relation_type: related_item.relation_type || null,
+          relation_type: related_item.relation_type,
           titles: related_item.titles.map((title: any) => {
             const entry = {
               title: title.title,
@@ -368,7 +368,7 @@ const saveMetadata = (e: MouseEvent) => {
               };
             }
           }),
-          type: related_item.type || null,
+          type: related_item.type,
           volume: related_item.volume || "",
         };
 
@@ -899,28 +899,6 @@ const saveMetadata = (e: MouseEvent) => {
         <n-form-item label="Edition" :path="`related_items[${index}].edition`">
           <n-input v-model:value="item.edition" placeholder="1" clearable />
         </n-form-item>
-
-        <!-- <n-form-item
-          label="Date Value"
-          :path="`dates[${index}].date`"
-          :rule="{
-            message: 'Please select a date',
-            required: true,
-            type: 'number',
-            trigger: ['blur', 'input'],
-          }"
-        >
-          <n-date-picker v-model:value="item.date" type="date" clearable />
-        </n-form-item> -->
-
-        <!-- <n-form-item label="Name Identifier" :path="`dates[${index}].information`">
-          <n-input
-            v-model:value="item.information"
-            placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-            type="textarea"
-            clearable
-          />
-        </n-form-item> -->
       </CollapsibleCard>
 
       <n-button class="my-10 w-full" dashed type="success" @click="addRelatedItem">
@@ -930,8 +908,6 @@ const saveMetadata = (e: MouseEvent) => {
 
         Add a new related item
       </n-button>
-
-      <pre>{{ moduleData.related_items }}</pre>
 
       <n-divider />
 

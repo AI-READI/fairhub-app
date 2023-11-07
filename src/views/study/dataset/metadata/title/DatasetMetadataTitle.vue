@@ -98,8 +98,8 @@ const saveMetadata = (e: MouseEvent) => {
 
       const data = tempTitles.map((item) => {
         const entry = {
-          title: item.title || "",
-          type: item.type || null,
+          title: item.title,
+          type: item.type,
         };
 
         if (item.origin === "local") {

@@ -100,8 +100,8 @@ const saveMetadata = (e: MouseEvent) => {
 
       const data = tempDescriptions.map((item) => {
         const entry = {
-          description: item.description || "",
-          type: item.type || null,
+          description: item.description,
+          type: item.type,
         };
 
         if (item.origin === "local") {

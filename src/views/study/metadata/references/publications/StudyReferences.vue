@@ -77,7 +77,7 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data = moduleData.reference_list.map((item) => {
         const entry = {
-          citation: item.citation || "",
+          citation: item.citation,
           identifier: item.identifier || "",
           type: item.type || null,
         };
