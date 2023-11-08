@@ -53,7 +53,7 @@ function handleNextButton() {
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col pr-6" v-if="dataset_metadata">
+  <main class="metadata flex h-full w-full flex-col pr-6" v-if="dataset_metadata">
     <PageBackNavigationHeader
       title="Dataset Metadata"
       description="Details about your dataset are displayed here"
@@ -77,7 +77,7 @@ function handleNextButton() {
       <!--          </ul>-->
       <!--        </n-descriptions-item>-->
       <!--      </n-descriptions>-->
-      <n-table :bordered="false" striped :single-line="false">
+      <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Identifier</th>
@@ -86,8 +86,12 @@ function handleNextButton() {
         </thead>
         <tbody>
           <tr v-for="item in dataset_metadata.identifiers" :key="item.id">
-            <td>{{ item.identifier || "" }}</td>
-            <td>{{ item.type || "" }}</td>
+            <td>{{ item.identifier || "-" }}</td>
+            <td>{{ item.type || "-" }}</td>
+          </tr>
+          <tr v-if="!dataset_metadata.identifiers.length">
+            <td>-</td>
+            <td>-</td>
           </tr>
         </tbody>
       </n-table>
@@ -112,7 +116,7 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Titles">
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
             <th>Type</th>
@@ -123,6 +127,10 @@ function handleNextButton() {
           <tr v-for="item in dataset_metadata.titles" :key="item.id">
             <td>{{ item.type.replace(/([a-z])([A-Z])/g, "$1 $2") }}</td>
             <td>{{ item.title }}</td>
+          </tr>
+          <tr v-if="!dataset_metadata.titles.length">
+            <td>-</td>
+            <td>-</td>
           </tr>
         </tbody>
       </n-table>
@@ -147,7 +155,7 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Descriptions">
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
             <th>Type</th>
@@ -158,6 +166,10 @@ function handleNextButton() {
           <tr v-for="item in dataset_metadata.descriptions" :key="item.id">
             <td v-if="item.type">{{ item.type.replace(/([a-z])([A-Z])/g, "$1 $2") }}</td>
             <td>{{ item.description }}</td>
+          </tr>
+          <tr v-if="!dataset_metadata.descriptions.length">
+            <td>-</td>
+            <td>-</td>
           </tr>
         </tbody>
       </n-table>
@@ -191,7 +203,7 @@ function handleNextButton() {
       <!--          </ul>-->
       <!--        </n-descriptions-item>-->
       <!--      </n-descriptions>-->
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
             <th>Name</th>
@@ -200,8 +212,12 @@ function handleNextButton() {
         </thead>
         <tbody>
           <tr v-for="item in dataset_metadata.creators" :key="item.id">
-            <td>{{ item.name || "" }}</td>
-            <td>{{ item.name_type || "" }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.name_type }}</td>
+          </tr>
+          <tr v-if="!dataset_metadata.creators.length">
+            <td>-</td>
+            <td>-</td>
           </tr>
         </tbody>
       </n-table>
@@ -217,7 +233,7 @@ function handleNextButton() {
       <template #action>
         <RouterLink
           :to="{
-            name: 'dataset:metadata:contributors',
+            name: 'dataset:metadata:creators',
             params: {
               studyId: routeParams.studyId,
               datasetId: routeParams.datasetId,
@@ -234,25 +250,7 @@ function handleNextButton() {
       </template>
     </CollapsibleCard>
     <CollapsibleCard title="Contributors">
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Name">-->
-      <!--          <ul class="m-0 list-none p-0">-->
-      <!--            <li :key="item.id" v-for="item in dataset_metadata.contributors">-->
-      <!--              {{ item.name || "" }}-->
-      <!--            </li>-->
-      <!--          </ul>-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Contributor Type">-->
-      <!--          <ul class="m-0 list-none p-0">-->
-      <!--            <li :key="item.id" v-for="item in dataset_metadata.contributors">-->
-      <!--              {{ item.contributor_type || "" }}-->
-      <!--            </li>-->
-      <!--          </ul>-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
             <th>Name</th>
@@ -265,6 +263,11 @@ function handleNextButton() {
             <td>{{ item.name || "" }}</td>
             <td>{{ item.name_type || "" }}</td>
             <td>{{ item.contributor_type || "" }}</td>
+          </tr>
+          <tr v-if="!dataset_metadata.contributors.length">
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
           </tr>
         </tbody>
       </n-table>
@@ -299,7 +302,7 @@ function handleNextButton() {
       <!--        </n-descriptions-item>-->
       <!--      </n-descriptions>-->
 
-      <n-table :bordered="false" striped :single-line="false">
+      <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Dates</th>
@@ -310,6 +313,10 @@ function handleNextButton() {
           <tr v-for="item in dataset_metadata.dates" :key="item.id">
             <td>{{ item.date }}</td>
             <td v-if="item.type">{{ item.type.replace(/([a-z])([A-Z])/g, "$1 $2") }}</td>
+          </tr>
+          <tr v-if="!dataset_metadata.dates.length">
+            <td>-</td>
+            <td>-</td>
           </tr>
         </tbody>
       </n-table>
@@ -342,7 +349,7 @@ function handleNextButton() {
       <!--          {{ dataset_metadata.publisher.publisher }}-->
       <!--        </n-descriptions-item>-->
       <!--      </n-descriptions>-->
-      <n-table :bordered="false" striped :single-line="false">
+      <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Publisher</th>
@@ -351,8 +358,8 @@ function handleNextButton() {
         </thead>
         <tbody>
           <tr>
-            <td>{{ dataset_metadata.publisher.managing_organization_name }}</td>
-            <td>{{ dataset_metadata.publisher.publisher }}</td>
+            <td>{{ dataset_metadata.publisher.managing_organization_name || "-" }}</td>
+            <td>{{ dataset_metadata.publisher.publisher || "-" }}</td>
           </tr>
         </tbody>
       </n-table>
@@ -377,9 +384,10 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Record Keys">
-      <n-tag type="info">
+      <n-tag type="info" v-if="dataset_metadata.record_keys.key_type">
         {{ dataset_metadata.record_keys.key_type }}
       </n-tag>
+      <div v-else>-</div>
       <template #action>
         <RouterLink
           :to="{
@@ -401,14 +409,25 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="De-identification">
-      <n-descriptions label-placement="left">
+      <!--       <n-table :bordered="true">-->
+      <!--        <tr>-->
+      <!--          <th>Type</th>-->
+      <!--          <td>{{ study_metadata.design.study_type || "-" }}</td>-->
+      <!--        </tr>-->
+      <!--       </n-table>-->
+      <n-descriptions label-placement="top" bordered>
         <n-descriptions-item label="Were direct identifiers removed?">
-          {{ dataset_metadata.de_identification.direct ? "Yes" : "No" }}
+          {{
+            dataset_metadata.de_identification.direct === true
+              ? "Yes"
+              : dataset_metadata.de_identification.direct === false
+              ? "No"
+              : "-"
+          }}
         </n-descriptions-item>
-      </n-descriptions>
-      <n-descriptions label-placement="left">
+
         <n-descriptions-item label="Type">
-          {{ dataset_metadata.de_identification.type }}
+          {{ dataset_metadata.de_identification.type || "-" }}
         </n-descriptions-item>
       </n-descriptions>
       <template #action>
@@ -432,16 +451,17 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Consent">
-      <n-descriptions label-placement="left">
-        <n-descriptions-item label="Non-commercial">
-          {{ dataset_metadata.consent.noncommercial ? "Yes" : "No" }}
-        </n-descriptions-item>
-      </n-descriptions>
-      <n-descriptions label-placement="left">
-        <n-descriptions-item label="Research Type">
-          {{ dataset_metadata.consent.research_type ? "Yes" : "No" }}
-        </n-descriptions-item>
-      </n-descriptions>
+      <n-table :bordered="true" striped :single-line="false">
+        <tr>
+          <th>Non-commercial</th>
+          <td>{{ dataset_metadata.consent.noncommercial === true ? "Yes" : "No" }}</td>
+        </tr>
+        <tr>
+          <th>Research type</th>
+          <td>{{ dataset_metadata.consent.research_type === true ? "Yes" : "No" }}</td>
+        </tr>
+      </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -462,9 +482,14 @@ function handleNextButton() {
       </template>
     </CollapsibleCard>
     <CollapsibleCard title="Subjects">
-      <n-p :key="item.id" v-for="item in dataset_metadata.subjects">
-        {{ item.subject }}
-      </n-p>
+      <n-table :bordered="true" striped :single-line="false">
+        <tbody>
+          <tr :key="item.id" v-for="item in dataset_metadata.subjects">
+            <td>{{ item.subject }}</td>
+          </tr>
+        </tbody>
+      </n-table>
+      <n-p v-if="!dataset_metadata.subjects.length">-</n-p>
       <template #action>
         <RouterLink
           :to="{
@@ -485,14 +510,19 @@ function handleNextButton() {
       </template>
     </CollapsibleCard>
     <CollapsibleCard title="Access">
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Description">-->
-      <!--          {{ dataset_metadata.access.description }}-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <!--      -->
-      <div>{{ dataset_metadata.access.description || "" }}</div>
-
+      <n-table :bordered="true" striped :single-line="false">
+        <thead>
+          <th>Description</th>
+        </thead>
+        <tbody>
+          <tr v-if="dataset_metadata.subjects.length">
+            <td>{{ dataset_metadata.access.description }}</td>
+          </tr>
+          <tr v-else>
+            <td>-</td>
+          </tr>
+        </tbody>
+      </n-table>
       <template #action>
         <RouterLink
           :to="{
@@ -513,7 +543,7 @@ function handleNextButton() {
       </template>
     </CollapsibleCard>
     <CollapsibleCard title="Rights">
-      <n-table :bordered="false" striped :single-line="false">
+      <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Rights</th>
@@ -524,6 +554,10 @@ function handleNextButton() {
           <tr v-for="item in dataset_metadata.rights" :key="item.id">
             <td>{{ item.rights }}</td>
             <td>{{ item.identifier || "" }}</td>
+          </tr>
+          <tr v-if="!dataset_metadata.rights.length">
+            <td>-</td>
+            <td>-</td>
           </tr>
         </tbody>
       </n-table>
@@ -548,17 +582,7 @@ function handleNextButton() {
       </template>
     </CollapsibleCard>
     <CollapsibleCard title="Funders">
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Name">-->
-      <!--          <ul class="m-0 list-none p-0">-->
-      <!--            <li :key="item.id" v-for="item in dataset_metadata.funders">-->
-      <!--              {{ item.name }}-->
-      <!--            </li>-->
-      <!--          </ul>-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <!--      -->
-      <n-table :bordered="false" striped :single-line="false">
+      <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Name</th>
@@ -569,6 +593,10 @@ function handleNextButton() {
           <tr v-for="item in dataset_metadata.funders" :key="item.id">
             <td>{{ item.name }}</td>
             <td>{{ item.identifier || "" }}</td>
+          </tr>
+          <tr v-if="!dataset_metadata.funders.length">
+            <td>-</td>
+            <td>-</td>
           </tr>
         </tbody>
       </n-table>
@@ -592,17 +620,7 @@ function handleNextButton() {
       </template>
     </CollapsibleCard>
     <CollapsibleCard title="Related Items">
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Relation Type">-->
-      <!--          <ul class="m-0 list-none p-0">-->
-      <!--            <li :key="item.id" v-for="item in dataset_metadata.related_items">-->
-      <!--              {{ item.relation_type }}-->
-      <!--            </li>-->
-      <!--          </ul>-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-
-      <n-table :bordered="true" :single-line="false" stripped>
+      <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Type</th>
@@ -611,104 +629,142 @@ function handleNextButton() {
           </tr>
         </thead>
         <tbody>
+          <tr v-if="!dataset_metadata.related_items.length">
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+          </tr>
           <tr v-for="item in dataset_metadata.related_items" :key="item.id">
-            <td>{{ item.type || "" }}</td>
-            <td>{{ item.publisher || "" }}</td>
-            <td>{{ item.publication_year || "" }}</td>
+            <td>{{ item.type }}</td>
+            <td>{{ item.publisher }}</td>
+            <td>{{ item.publication_year }}</td>
           </tr>
         </tbody>
       </n-table>
       <n-h4>Titles</n-h4>
-      <n-table :single-line="false" striped>
+      <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Title</th>
             <th>Type</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="dataset_metadata.related_items.length">
           <tr v-for="item in dataset_metadata.related_items" :key="item.id">
-            <td>
+            <td class="related-item" v-if="dataset_metadata.related_items.length">
               <ul class="m-0 list-none p-0">
-                <li v-for="i in item.titles" :key="i.id">{{ i.title }}</li>
+                <li class="related-item" v-for="i in item.titles" :key="i.id">{{ i.title }}</li>
               </ul>
             </td>
-            <td>
+            <td class="related-item" v-if="dataset_metadata.related_items.length">
               <ul class="m-0 list-none p-0">
-                <li v-for="i in item.titles" :key="i.id">
+                <li class="related-item" v-for="i in item.titles" :key="i.id">
                   <div v-if="i.type">{{ i.type?.replace(/([a-z])([A-Z])/g, "$1 $2") }}</div>
                 </li>
               </ul>
             </td>
           </tr>
         </tbody>
+        <tbody v-else>
+          <tr>
+            <td>-</td>
+            <td>-</td>
+          </tr>
+        </tbody>
       </n-table>
       <n-h4>Identifiers</n-h4>
-      <n-table :single-line="false" striped>
+      <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Identifier</th>
             <th>Type</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="dataset_metadata.related_items.length">
           <tr v-for="item in dataset_metadata.related_items" :key="item.id">
-            <td>
+            <td class="related-item" v-if="dataset_metadata.related_items.length">
               <ul class="m-0 list-none p-0">
-                <li v-for="i in item.identifiers" :key="i.id">{{ i.identifier }}</li>
+                <li class="related-item" v-for="i in item.identifiers" :key="i.id">
+                  {{ i.identifier }}
+                </li>
               </ul>
             </td>
-            <td>
+            <td class="related-item" v-if="dataset_metadata.related_items.length">
               <ul class="m-0 list-none p-0">
-                <li v-for="i in item.identifiers" :key="i.id">{{ i.type }}</li>
+                <li class="related-item" v-for="i in item.identifiers" :key="i.id">{{ i.type }}</li>
               </ul>
             </td>
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr>
+            <td>-</td>
+            <td>-</td>
           </tr>
         </tbody>
       </n-table>
       <n-h4>Creators</n-h4>
-      <n-table :single-line="false" striped>
+      <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Name(s)</th>
             <th>Name Type</th>
           </tr>
         </thead>
-        <tbody>
+
+        <tbody v-if="dataset_metadata.related_items.length">
           <tr v-for="item in dataset_metadata.related_items" :key="item.id">
-            <td>
+            <td class="related-item" v-if="dataset_metadata.related_items.length">
               <ul class="m-0 list-none p-0">
-                <li v-for="i in item.creators" :key="i.id">{{ i.name }}</li>
+                <li class="related-item" v-for="i in item.identifiers" :key="i.id">
+                  {{ i.identifier }}
+                </li>
               </ul>
             </td>
-            <td>
+            <td class="related-item" v-if="dataset_metadata.related_items.length">
               <ul class="m-0 list-none p-0">
-                <li v-for="i in item.creators" :key="i.id">{{ i.name_type }}</li>
+                <li class="related-item" v-for="i in item.identifiers" :key="i.id">{{ i.type }}</li>
               </ul>
             </td>
           </tr>
         </tbody>
+        <tbody v-else>
+          <tr>
+            <td>-</td>
+            <td>-</td>
+          </tr>
+        </tbody>
       </n-table>
       <n-h4>Contributors</n-h4>
-      <n-table :single-line="false" striped>
+      <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Name(s)</th>
             <th>Name Type</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="dataset_metadata.related_items.length">
           <tr v-for="item in dataset_metadata.related_items" :key="item.id">
-            <td>
+            <td class="related-item">
               <ul class="m-0 list-none p-0">
-                <li v-for="i in item.contributors" :key="i.id">{{ i.name }}</li>
+                <li class="related-item" v-for="i in item.contributors" :key="i.id">
+                  {{ i.name }}
+                </li>
               </ul>
             </td>
-            <td>
+            <td class="related-item">
               <ul class="m-0 list-none p-0">
-                <li v-for="i in item.contributors" :key="i.id">{{ i.name_type }}</li>
+                <li class="related-item" v-for="i in item.contributors" :key="i.id">
+                  {{ i.name_type }}
+                </li>
               </ul>
             </td>
+          </tr>
+        </tbody>
+        <tbody v-else>
+          <tr>
+            <td>-</td>
+            <td>-</td>
           </tr>
         </tbody>
       </n-table>
@@ -732,28 +788,31 @@ function handleNextButton() {
       </template>
     </CollapsibleCard>
     <CollapsibleCard title="Additional Details">
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Language">-->
-      <!--          {{ dataset_metadata.about.language }}-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Size">-->
-      <!--          {{ dataset_metadata.about.size[0] || "" }}-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <!--      -->
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Language</th>
-            <th>Standards Followed</th>
+            <th>Resource Type</th>
+            <th>Size</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>{{ dataset_metadata.about.language || "-" }}</td>
-            <td>{{ dataset_metadata.about.standards_followed || "-" }}</td>
+            <td>{{ dataset_metadata.about.resource_type || "-" }}</td>
+            <td>
+              <ul
+                class="m-0 list-none p-0"
+                v-if="dataset_metadata.about.size && dataset_metadata.about.size.length"
+              >
+                <li v-for="item in dataset_metadata.about.size" :key="item">
+                  {{ item }}
+                </li>
+              </ul>
+              <ul class="m-0 list-none p-0" v-else>
+                <li>-</li>
+              </ul>
+            </td>
           </tr>
         </tbody>
       </n-table>

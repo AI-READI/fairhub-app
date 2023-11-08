@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// import { NDescriptions, NDescriptionsItem } from "naive-ui";
 import type { VersionStudyMetadata } from "@/types/Version";
 import { baseURL } from "@/utils/constants";
 
@@ -44,7 +43,7 @@ function handleNextButton() {
 </script>
 
 <template>
-  <main class="flex h-full w-full flex-col pr-6" v-if="study_metadata">
+  <main class="metadata flex h-full w-full flex-col pr-6" v-if="study_metadata">
     <PageBackNavigationHeader
       title="Study Metadata"
       description="Details about your study are displayed here"
@@ -59,26 +58,8 @@ function handleNextButton() {
     <n-divider />
 
     <CollapsibleCard title="Identifier" bordered>
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Identifier(s)">-->
-      <!--          <ul class="m-0 list-none p-0">-->
-      <!--            <li :key="item.identifier" v-for="item in study_metadata.identification">-->
-      <!--              {{ item.identifier }}-->
-      <!--            </li>-->
-      <!--          </ul>-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Identifier Type">-->
-      <!--          <ul class="m-0 list-none p-0">-->
-      <!--            <li :key="item.identifier_type" v-for="item in study_metadata.identification">-->
-      <!--              {{ item.identifier_type }}-->
-      <!--            </li>-->
-      <!--          </ul>-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
       <n-h4>Primary Identifier</n-h4>
-      <n-table :bordered="false" striped :single-line="false">
+      <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Identifier(s)</th>
@@ -87,13 +68,13 @@ function handleNextButton() {
         </thead>
         <tbody>
           <tr v-if="study_metadata.primary_identifier">
-            <td>{{ study_metadata.primary_identifier.identifier }}</td>
-            <td>{{ study_metadata.primary_identifier.identifier_type }}</td>
+            <td>{{ study_metadata.primary_identifier.identifier || "-" }}</td>
+            <td>{{ study_metadata.primary_identifier.identifier_type || "-" }}</td>
           </tr>
         </tbody>
       </n-table>
       <n-h4>Secondary Identifiers</n-h4>
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Identifier(s)</th>
@@ -105,9 +86,12 @@ function handleNextButton() {
             <td>{{ item.identifier }}</td>
             <td>{{ item.identifier_type }}</td>
           </tr>
+          <tr v-if="!study_metadata.secondary_identifiers.length">
+            <td>-</td>
+            <td>-</td>
+          </tr>
         </tbody>
       </n-table>
-
       <template #action>
         <RouterLink
           :to="{
@@ -138,7 +122,7 @@ function handleNextButton() {
       <!--          {{ study_metadata.status.start_date || "" }}-->
       <!--        </n-descriptions-item>-->
       <!--      </n-descriptions>-->
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Overall Status</th>
@@ -147,8 +131,8 @@ function handleNextButton() {
         </thead>
         <tbody>
           <tr>
-            <td>{{ study_metadata.status.overall_status }}</td>
-            <td>{{ study_metadata.status.start_date }}</td>
+            <td>{{ study_metadata.status.overall_status || "-" }}</td>
+            <td>{{ study_metadata.status.start_date || "-" }}</td>
           </tr>
         </tbody>
       </n-table>
@@ -173,17 +157,7 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Sponsors" bordered>
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Type">-->
-      <!--          {{ study_metadata.sponsors.responsible_party_type || "" }}-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Investigator Name">-->
-      <!--          {{ study_metadata.sponsors.responsible_party_investigator_name || "" }}-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Investigator Name</th>
@@ -192,8 +166,8 @@ function handleNextButton() {
         </thead>
         <tbody>
           <tr>
-            <td>{{ study_metadata.sponsors.responsible_party_investigator_name }}</td>
-            <td>{{ study_metadata.sponsors.responsible_party_type }}</td>
+            <td>{{ study_metadata.sponsors.responsible_party_investigator_name || "-" }}</td>
+            <td>{{ study_metadata.sponsors.responsible_party_type || "-" }}</td>
           </tr>
         </tbody>
       </n-table>
@@ -217,12 +191,7 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Collaborators" bordered>
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Full Name">-->
-      <!--          {{ study_metadata.sponsors.lead_sponsor_name || "" }}-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Full Name</th>
@@ -231,8 +200,8 @@ function handleNextButton() {
         </thead>
         <tbody>
           <tr>
-            <td>{{ study_metadata.sponsors.responsible_party_investigator_name }}</td>
-            <td>{{ study_metadata.sponsors.responsible_party_type }}</td>
+            <td>{{ study_metadata.sponsors.responsible_party_investigator_name || "-" }}</td>
+            <td>{{ study_metadata.sponsors.responsible_party_type || "-" }}</td>
           </tr>
         </tbody>
       </n-table>
@@ -256,13 +225,13 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Oversight" bordered>
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Does this study have a DMC?">-->
-      <!--          {{ study_metadata.oversight }}-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <!--      -->
-      <p>{{ study_metadata.oversight ? "Yes" : "No" }}</p>
+      <n-table striped :single-line="false">
+        <tbody>
+          <tr>
+            <td>{{ study_metadata.oversight ? "Yes" : "No" }}</td>
+          </tr>
+        </tbody>
+      </n-table>
       <template #action>
         <RouterLink
           :to="{
@@ -283,12 +252,13 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Description" bordered>
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Brief Summary">-->
-      <!--          {{ study_metadata.description.brief_summary || "" }}-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <p>{{ study_metadata.description.brief_summary }}</p>
+      <n-table>
+        <tbody>
+          <tr>
+            <td>{{ study_metadata.description.brief_summary || "-" }}</td>
+          </tr>
+        </tbody>
+      </n-table>
 
       <template #action>
         <RouterLink
@@ -313,6 +283,7 @@ function handleNextButton() {
       <n-space>
         <n-tag type="info" v-for="item in study_metadata.conditions" :key="item">{{ item }} </n-tag>
       </n-space>
+      <div v-if="!study_metadata.conditions.length">-</div>
       <template #action>
         <RouterLink
           :to="{
@@ -333,7 +304,7 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Design" bordered>
-      <n-table :bordered="true">
+      <n-table :bordered="true" striped :single-line="false">
         <tr>
           <th>Type</th>
           <td>{{ study_metadata.design.study_type || "-" }}</td>
@@ -409,27 +380,20 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Arms" bordered>
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Arm label">-->
-      <!--          <ul class="m-0 list-none p-0">-->
-      <!--            <li :key="item.label" v-for="item in study_metadata.arms">-->
-      <!--              {{ item.label }}-->
-      <!--            </li>-->
-      <!--          </ul>-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <n-table :bordered="true">
-        <tr>
-          <th>Label</th>
-          <tbody>
-            <tr v-for="item in study_metadata.arms" :key="item.id">
-              <td>{{ item.label }}</td>
-            </tr>
-            <tr v-if="!study_metadata.arms.length">
-              <td>-</td>
-            </tr>
-          </tbody>
-        </tr>
+      <n-table :bordered="true" striped :single-line="false">
+        <thead>
+          <tr>
+            <th>Label</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in study_metadata.arms" :key="item.id">
+            <td>{{ item.label }}</td>
+          </tr>
+          <tr v-if="!study_metadata.interventions.length">
+            <td>-</td>
+          </tr>
+        </tbody>
       </n-table>
       <!--     <div v-for="item in study_metadata.arms" :key="item.id">{{ item.label }}</div>-->
       <template #action>
@@ -451,16 +415,7 @@ function handleNextButton() {
       </template>
     </CollapsibleCard>
     <CollapsibleCard title="Interventions" bordered>
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Type">-->
-      <!--          <ul class="m-0 list-none p-0">-->
-      <!--            <li :key="item.type" v-for="item in study_metadata.interventions">-->
-      <!--              {{ item.type }}-->
-      <!--            </li>-->
-      <!--          </ul>-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
             <th>Name</th>
@@ -499,7 +454,7 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Eligibility" bordered>
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
             <th>Gender</th>
@@ -533,7 +488,7 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Contacts" bordered>
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
             <th>Affiliation</th>
@@ -571,7 +526,7 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Overal Officials" bordered>
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
             <th>Affiliation</th>
@@ -609,7 +564,7 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Locations" bordered>
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
             <th>Facility</th>
@@ -653,7 +608,7 @@ function handleNextButton() {
       <!--        </n-descriptions-item>-->
       <!--      </n-descriptions>-->
       <!--      -->
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
             <th>Is there a plan to share IPD?</th>
@@ -664,15 +619,16 @@ function handleNextButton() {
           <tr>
             <td>{{ study_metadata.ipd_sharing.ipd_sharing || "-" }}</td>
             <td v-if="study_metadata.ipd_sharing.ipd_sharing_info_type_list.length">
-              <n-tag
-                type="info"
-                class="mr-1"
-                :key="item"
-                v-for="item in study_metadata.ipd_sharing.ipd_sharing_info_type_list"
-                >{{ item }}</n-tag
-              >
+              <n-space>
+                <n-tag
+                  type="info"
+                  :key="item"
+                  v-for="item in study_metadata.ipd_sharing.ipd_sharing_info_type_list"
+                  >{{ item }}
+                </n-tag>
+              </n-space>
             </td>
-            <td v-if="!study_metadata.ipd_sharing.ipd_sharing_info_type_list.length">-</td>
+            <td v-else>-</td>
           </tr>
         </tbody>
       </n-table>
@@ -696,7 +652,7 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="References" bordered>
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
             <th>Citation</th>
@@ -734,7 +690,7 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Links" bordered>
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
             <th>Url</th>
@@ -772,25 +728,7 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Available IPD" bordered>
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Name of the URL">-->
-      <!--          <ul class="m-0 list-none p-0">-->
-      <!--            <li :key="item.url" v-for="item in study_metadata.available_ipd">-->
-      <!--              {{ item.url }}-->
-      <!--            </li>-->
-      <!--          </ul>-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Identifier">-->
-      <!--          <ul class="m-0 list-none p-0">-->
-      <!--            <li :key="item.identifier" v-for="item in study_metadata.available_ipd">-->
-      <!--              {{ item.identifier }}-->
-      <!--            </li>-->
-      <!--          </ul>-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <n-table :bordered="false" :single-line="false" striped>
+      <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
             <th>Url</th>
