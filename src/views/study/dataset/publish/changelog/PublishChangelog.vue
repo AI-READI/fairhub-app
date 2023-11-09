@@ -92,11 +92,11 @@ const handleNextButton = async () => {
   });
 };
 
-function handleBackButton() {
-  router.push({
-    name: "dataset:publish:versions",
-  });
-}
+// function handleBackButton() {
+//   router.push({
+//     name: "dataset:publish:versions",
+//   });
+// }
 </script>
 
 <template>

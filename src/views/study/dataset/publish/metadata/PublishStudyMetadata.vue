@@ -618,7 +618,12 @@ function handleNextButton() {
         <tbody>
           <tr>
             <td>{{ study_metadata.ipd_sharing.ipd_sharing || "-" }}</td>
-            <td v-if="study_metadata.ipd_sharing.ipd_sharing_info_type_list.length">
+            <td
+              v-if="
+                study_metadata.ipd_sharing.ipd_sharing_info_type_list &&
+                study_metadata.ipd_sharing.ipd_sharing_info_type_list.length
+              "
+            >
               <n-space>
                 <n-tag
                   type="info"
