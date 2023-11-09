@@ -41,13 +41,24 @@ export interface VersionStudyIPD {
 }
 
 export interface VersionDesign {
+  bio_spec_description: string | null;
   bio_spec_retention: string;
-  design_observational_model_list: [];
-  design_time_perspective_list: [];
-  enrollment_count: string;
-  enrollment_type: string;
-  study_type: string;
-  target_duration: string;
+  design_allocation: string | null;
+  design_intervention_model: string | null;
+  design_intervention_model_description: string;
+  design_masking: string | null;
+  design_masking_description: string | null;
+  design_observational_model_list: [] | null;
+  design_primary_purpose: string | null;
+  design_time_perspective_list: [] | null;
+  design_who_masked_list: [] | null;
+  enrollment_count: string | null;
+  enrollment_type: string | null;
+  number_arms: number | null;
+  number_groups_cohorts: number | null;
+  phase_list: [] | null;
+  study_type: string | null;
+  target_duration: string | null;
 }
 
 export interface VersionStudyIPDSharing {

@@ -309,7 +309,7 @@ function handleNextButton() {
           <th>Type</th>
           <td>{{ study_metadata.design.study_type || "-" }}</td>
         </tr>
-        <tr>
+        <tr v-if="study_metadata.design.study_type === 'Observational'">
           <th>Observational Models</th>
           <td>
             <ul class="m-0 flex list-none flex-wrap p-0">
@@ -325,7 +325,7 @@ function handleNextButton() {
             </ul>
           </td>
         </tr>
-        <tr>
+        <tr v-if="study_metadata.design.study_type === 'Observational'">
           <th>Time Perspective</th>
           <td>
             <ul class="m-0 flex list-none flex-wrap p-0">
@@ -338,25 +338,84 @@ function handleNextButton() {
             </ul>
           </td>
         </tr>
-        <tr>
+        <tr v-if="study_metadata.design.study_type === 'Observational'">
           <th>Retention</th>
           <td>{{ study_metadata.design.bio_spec_retention || "-" }}</td>
         </tr>
-        <tr>
+        <tr v-if="study_metadata.design.study_type === 'Observational'">
           <th>Total number of participants</th>
           <td>{{ study_metadata.design.enrollment_count || "-" }}</td>
         </tr>
-        <tr>
+        <tr v-if="study_metadata.design.study_type === 'Observational'">
           <th>Enrollment type</th>
           <td>{{ study_metadata.design.enrollment_type || "-" }}</td>
         </tr>
-        <tr>
+        <tr v-if="study_metadata.design.study_type === 'Observational'">
           <th>Target Duration</th>
           <td>{{ study_metadata.design.target_duration || "-" }}</td>
         </tr>
-        <tr>
+        <tr v-if="study_metadata.design.study_type === 'Observational'">
           <th>Number of study groups/cohorts</th>
-          <td>{{ study_metadata.design.target_duration || "-" }}</td>
+          <td>{{ study_metadata.design.number_groups_cohorts || "-" }}</td>
+        </tr>
+        <tr v-if="study_metadata.design.study_type === 'Interventional'">
+          <th>Design Allocation</th>
+          <td>{{ study_metadata.design.design_allocation || "-" }}</td>
+        </tr>
+        <tr v-if="study_metadata.design.study_type === 'Interventional'">
+          <th>Design Intervention Model</th>
+          <td>{{ study_metadata.design.design_intervention_model || "-" }}</td>
+        </tr>
+        <tr v-if="study_metadata.design.study_type === 'Interventional'">
+          <th>Design Intervention Model Description</th>
+          <td>{{ study_metadata.design.design_intervention_model_description || "-" }}</td>
+        </tr>
+        <tr v-if="study_metadata.design.study_type === 'Interventional'">
+          <th>Design Primary Purpose</th>
+          <td>{{ study_metadata.design.design_primary_purpose || "-" }}</td>
+        </tr>
+        <tr v-if="study_metadata.design.study_type === 'Interventional'">
+          <th>Design Masking</th>
+          <td>{{ study_metadata.design.design_masking || "-" }}</td>
+        </tr>
+        <tr v-if="study_metadata.design.study_type === 'Interventional'">
+          <th>Design Masking Description</th>
+          <td>{{ study_metadata.design.design_masking_description || "-" }}</td>
+        </tr>
+        <tr v-if="study_metadata.design.study_type === 'Interventional'">
+          <th>Design Who Masked List</th>
+          <td>
+            <ul class="m-0 flex list-none flex-wrap p-0">
+              <li :key="item" v-for="item in study_metadata.design.design_who_masked_list">
+                {{ item }}
+              </li>
+            </ul>
+            <ul
+              v-if="study_metadata.design.design_who_masked_list"
+              class="m-0 flex list-none flex-wrap p-0"
+            >
+              <li v-if="!study_metadata.design.design_who_masked_list.length">-</li>
+            </ul>
+          </td>
+        </tr>
+        <tr v-if="study_metadata.design.study_type === 'Interventional'">
+          <th>Phase List</th>
+          <td>
+            <ul class="m-0 flex list-none flex-wrap p-0">
+              <li :key="item" v-for="item in study_metadata.design.phase_list">
+                <n-space>
+                  <n-tag class="mr-2" type="info">{{ item }}</n-tag></n-space
+                >
+              </li>
+            </ul>
+            <ul v-if="study_metadata.design.phase_list" class="m-0 flex list-none flex-wrap p-0">
+              <li v-if="!study_metadata.design.phase_list.length">-</li>
+            </ul>
+          </td>
+        </tr>
+        <tr v-if="study_metadata.design.study_type === 'Interventional'">
+          <th>Number Arms</th>
+          <td>{{ study_metadata.design.number_arms || "-" }}</td>
         </tr>
       </n-table>
 
