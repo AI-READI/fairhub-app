@@ -62,7 +62,7 @@ function handleNextButton() {
       <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
-            <th>Identifier(s)</th>
+            <th>Identifier</th>
             <th>Identifier Type</th>
           </tr>
         </thead>
@@ -77,7 +77,7 @@ function handleNextButton() {
       <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
-            <th>Identifier(s)</th>
+            <th>Identifier</th>
             <th>Identifier Type</th>
           </tr>
         </thead>
@@ -225,13 +225,7 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Oversight" bordered>
-      <n-table striped :single-line="false">
-        <tbody>
-          <tr>
-            <td>{{ study_metadata.oversight ? "Yes" : "No" }}</td>
-          </tr>
-        </tbody>
-      </n-table>
+      <p>{{ study_metadata.oversight ? "Yes" : "No" }}</p>
       <template #action>
         <RouterLink
           :to="{

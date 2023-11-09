@@ -271,6 +271,7 @@ export interface VersionDatasetRelatedItemCreator {
 export interface VersionDatasetRelatedItemContributor {
   id: string;
   name: string;
+  contributor_type: string | null;
   name_type: string | null;
 }
 
