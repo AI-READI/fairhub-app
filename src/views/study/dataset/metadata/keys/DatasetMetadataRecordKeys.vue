@@ -58,7 +58,7 @@ const saveMetadata = (e: MouseEvent) => {
 
       const data = {
         details: moduleData.value.details || "",
-        type: moduleData.value.type || null,
+        type: moduleData.value.type,
       };
 
       const response = await fetch(

@@ -261,12 +261,12 @@ const getFirstLetters = (name: string) => {
     .join("");
 };
 
-const copyInviteURL = (token: string) => {
+const copyInviteURL = (token: string, emailAddress: string) => {
   if (!token) {
     return;
   }
 
-  const url = `${window.location.origin}/auth/signup?code=${token}`;
+  const url = `${window.location.origin}/auth/signup?code=${token}&email=${emailAddress}`;
 
   navigator.clipboard.writeText(url);
 
@@ -415,7 +415,7 @@ const copyInviteURL = (token: string) => {
               v-if="contributor.status === 'invited'"
               secondary
               type="info"
-              @click="copyInviteURL(contributor.token as string)"
+              @click="copyInviteURL(contributor.token as string, contributor.email_address)"
             >
               <template #icon>
                 <f-icon icon="carbon:copy" />

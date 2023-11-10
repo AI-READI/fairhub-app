@@ -266,3 +266,16 @@ export interface StudyReferencesModule {
   link_list: StudyLink[];
   reference_list: StudyReference[];
 }
+
+export interface StudyFile {
+  id: string;
+  name: string;
+  content_length: number;
+  // created_at: number;
+  is_directory: boolean;
+  updated_on: number;
+}
+
+export interface StudyFiles {
+  files: StudyFile[];
+}

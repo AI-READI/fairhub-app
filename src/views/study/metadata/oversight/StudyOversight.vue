@@ -87,9 +87,7 @@ const saveMetadata = async (value: boolean) => {
         </div>
       </div>
 
-      <template #action>
-        <!-- Thinking of hiding this and just updating on change -->
-
+      <!-- <template #action>
         <div class="flex justify-start">
           <n-button size="large" type="primary" @click="saveMetadata" disabled>
             <template #icon>
@@ -98,7 +96,7 @@ const saveMetadata = async (value: boolean) => {
             Save changes
           </n-button>
         </div>
-      </template>
+      </template> -->
     </n-card>
   </main>
 </template>

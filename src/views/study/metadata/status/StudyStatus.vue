@@ -80,9 +80,9 @@ const saveMetadata = (e: MouseEvent) => {
           ? dayjs(moduleData.value.completion_date).format("YYYY-MM-DD HH:mm:ss")
           : null,
         completion_date_type: moduleData.value.completion_date_type || null,
-        overall_status: moduleData.value.overall_status || null,
+        overall_status: moduleData.value.overall_status,
         start_date: dayjs(moduleData.value.start_date).format("YYYY-MM-DD HH:mm:ss"),
-        start_date_type: moduleData.value.start_date_type || null,
+        start_date_type: moduleData.value.start_date_type,
         why_stopped: moduleData.value.why_stopped || "",
       };
 

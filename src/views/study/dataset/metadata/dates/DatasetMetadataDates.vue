@@ -194,7 +194,7 @@ const saveMetadata = (e: MouseEvent) => {
           />
         </n-form-item>
 
-        <n-form-item label="Name Identifier" :path="`dates[${index}].information`">
+        <n-form-item label="Information" :path="`dates[${index}].information`">
           <n-input
             v-model:value="item.information"
             placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit."

@@ -125,13 +125,13 @@ const saveMetadata = (e: MouseEvent) => {
   formRef.value?.validate(async (errors) => {
     if (!errors) {
       const data = {
-        exclusion_criteria: moduleData.criteria.exclusion_criteria || [],
-        gender: moduleData.gender || null,
-        gender_based: moduleData.gender_based || null,
+        exclusion_criteria: moduleData.criteria.exclusion_criteria,
+        gender: moduleData.gender,
+        gender_based: moduleData.gender_based,
         gender_description: moduleData.gender_description || "",
         healthy_volunteers:
           moduleData.study_type === "Interventional" ? moduleData.healthy_volunteers : null,
-        inclusion_criteria: moduleData.criteria.inclusion_criteria || [],
+        inclusion_criteria: moduleData.criteria.inclusion_criteria,
         maximum_age_unit: moduleData.maximum_age.unit,
         maximum_age_value: moduleData.maximum_age.age,
         minimum_age_unit: moduleData.minimum_age.unit,
