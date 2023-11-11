@@ -168,6 +168,7 @@ const navigateToFolder = async (folderPath: string = "") => {
     <n-breadcrumb class="mb-5">
       <n-breadcrumb-item @click="navigateToFolder('/')">
         <f-icon icon="iconamoon:home-duotone" />
+
         <span> pooled-data-pilot </span>
       </n-breadcrumb-item>
 

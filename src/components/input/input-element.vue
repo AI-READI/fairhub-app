@@ -42,6 +42,7 @@ export default defineComponent({
       placeholder="Basic Input"
       :maxlength="maxlength"
     />
+
     <n-input v-model:value="value" type="textarea" placeholder="Basic Textarea" />
   </n-space>
 
@@ -56,7 +57,9 @@ export default defineComponent({
       type="text"
       :maxlength="maxlength"
     />
+
     <n-input round placeholder="Medium" />
+
     <n-input size="large" round placeholder="Large" />
   </n-space>
 
@@ -73,9 +76,11 @@ export default defineComponent({
         <n-icon />
       </template>
     </n-input>
+
     <n-input round placeholder="1,400,000">
       <template #suffix> $ </template>
     </n-input>
+
     <n-input round>
       <template #suffix>
         <n-icon />
@@ -100,7 +105,9 @@ export default defineComponent({
         {{ value.includes("Yes") ? "99+" : value.length }}
       </template>
     </n-input>
+
     <n-input type="textarea" maxlength="30" />
+
     <n-input type="textarea" default-value="What?">
       <template #count="{ value }">
         {{ value.includes("What?") ? "99+" : value.length }}

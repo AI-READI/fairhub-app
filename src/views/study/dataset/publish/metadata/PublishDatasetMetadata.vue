@@ -81,20 +81,26 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Identifier</th>
+
             <th>Type</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in dataset_metadata.identifiers" :key="item.id">
             <td>{{ item.identifier || "-" }}</td>
+
             <td>{{ item.type || "-" }}</td>
           </tr>
+
           <tr v-if="!dataset_metadata.identifiers.length">
             <td>-</td>
+
             <td>-</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -120,20 +126,26 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Type</th>
+
             <th>Title</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in dataset_metadata.titles" :key="item.id">
             <td>{{ item.type.replace(/([a-z])([A-Z])/g, "$1 $2") }}</td>
+
             <td>{{ item.title }}</td>
           </tr>
+
           <tr v-if="!dataset_metadata.titles.length">
             <td>-</td>
+
             <td>-</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -159,20 +171,26 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Type</th>
+
             <th>Description</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in dataset_metadata.descriptions" :key="item.id">
             <td v-if="item.type">{{ item.type.replace(/([a-z])([A-Z])/g, "$1 $2") }}</td>
+
             <td>{{ item.description }}</td>
           </tr>
+
           <tr v-if="!dataset_metadata.descriptions.length">
             <td>-</td>
+
             <td>-</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -198,20 +216,26 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Name</th>
+
             <th>Name Type</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in dataset_metadata.creators" :key="item.id">
             <td>{{ item.name }}</td>
+
             <td>{{ item.name_type }}</td>
           </tr>
+
           <tr v-if="!dataset_metadata.creators.length">
             <td>-</td>
+
             <td>-</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -231,28 +255,38 @@ function handleNextButton() {
         </RouterLink>
       </template>
     </CollapsibleCard>
+
     <CollapsibleCard title="Contributors" bordered>
       <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
             <th>Name</th>
+
             <th>Name Type</th>
+
             <th>Contributor Type</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in dataset_metadata.contributors" :key="item.id">
             <td>{{ item.name || "" }}</td>
+
             <td>{{ item.name_type || "" }}</td>
+
             <td>{{ item.contributor_type || "" }}</td>
           </tr>
+
           <tr v-if="!dataset_metadata.contributors.length">
             <td>-</td>
+
             <td>-</td>
+
             <td>-</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -272,21 +306,27 @@ function handleNextButton() {
         </RouterLink>
       </template>
     </CollapsibleCard>
+
     <CollapsibleCard title="Dates" bordered>
       <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Dates</th>
+
             <th>Type</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in dataset_metadata.dates" :key="item.id">
             <td>{{ item.date }}</td>
+
             <td v-if="item.type">{{ item.type.replace(/([a-z])([A-Z])/g, "$1 $2") }}</td>
           </tr>
+
           <tr v-if="!dataset_metadata.dates.length">
             <td>-</td>
+
             <td>-</td>
           </tr>
         </tbody>
@@ -317,16 +357,20 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Publisher</th>
+
             <th>Organization name</th>
           </tr>
         </thead>
+
         <tbody>
           <tr>
             <td>{{ dataset_metadata.publisher.managing_organization_name || "-" }}</td>
+
             <td>{{ dataset_metadata.publisher.publisher || "-" }}</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -351,7 +395,9 @@ function handleNextButton() {
       <n-tag type="info" v-if="dataset_metadata.record_keys.key_type">
         {{ dataset_metadata.record_keys.key_type }}
       </n-tag>
+
       <div>-</div>
+
       <template #action>
         <RouterLink
           :to="{
@@ -394,6 +440,7 @@ function handleNextButton() {
           {{ dataset_metadata.de_identification.type || "-" }}
         </n-descriptions-item>
       </n-descriptions>
+
       <template #action>
         <RouterLink
           :to="{
@@ -418,10 +465,13 @@ function handleNextButton() {
       <n-table :bordered="true" striped :single-line="false">
         <tr>
           <th>Non-commercial</th>
+
           <td>{{ dataset_metadata.consent.noncommercial === true ? "Yes" : "No" }}</td>
         </tr>
+
         <tr>
           <th>Research type</th>
+
           <td>{{ dataset_metadata.consent.research_type === true ? "Yes" : "No" }}</td>
         </tr>
       </n-table>
@@ -445,6 +495,7 @@ function handleNextButton() {
         </RouterLink>
       </template>
     </CollapsibleCard>
+
     <CollapsibleCard title="Subjects" bordered>
       <n-table :bordered="true" striped :single-line="false">
         <tbody>
@@ -453,7 +504,9 @@ function handleNextButton() {
           </tr>
         </tbody>
       </n-table>
+
       <n-p v-if="!dataset_metadata.subjects.length">-</n-p>
+
       <template #action>
         <RouterLink
           :to="{
@@ -473,6 +526,7 @@ function handleNextButton() {
         </RouterLink>
       </template>
     </CollapsibleCard>
+
     <CollapsibleCard title="Access" bordered>
       <n-space
         ><n-tag type="info">{{ dataset_metadata.access.description }}</n-tag></n-space
@@ -497,21 +551,27 @@ function handleNextButton() {
         </RouterLink>
       </template>
     </CollapsibleCard>
+
     <CollapsibleCard title="Rights" bordered>
       <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Rights</th>
+
             <th>Identifier</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in dataset_metadata.rights" :key="item.id">
             <td>{{ item.rights }}</td>
+
             <td>{{ item.identifier || "" }}</td>
           </tr>
+
           <tr v-if="!dataset_metadata.rights.length">
             <td>-</td>
+
             <td>-</td>
           </tr>
         </tbody>
@@ -536,28 +596,38 @@ function handleNextButton() {
         </RouterLink>
       </template>
     </CollapsibleCard>
+
     <CollapsibleCard title="Funders" bordered>
       <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Name</th>
+
             <th>Identifier</th>
+
             <th>-</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in dataset_metadata.funders" :key="item.id">
             <td>{{ item.name }}</td>
+
             <td>{{ item.identifier || "" }}</td>
+
             <td>-</td>
           </tr>
+
           <tr v-if="!dataset_metadata.funders.length">
             <td>-</td>
+
             <td>-</td>
+
             <td>-</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -577,6 +647,7 @@ function handleNextButton() {
         </RouterLink>
       </template>
     </CollapsibleCard>
+
     <CollapsibleCard title="Related Items" bordered>
       <div v-for="(item, index) in dataset_metadata.related_items" :key="item.id">
         <div v-if="item">
@@ -584,30 +655,40 @@ function handleNextButton() {
             <n-h3 v-if="i.type === 'MainTitle'">{{ i.title }}</n-h3>
           </div>
         </div>
+
         <n-table v-if="item" :bordered="true" striped :single-line="false">
           <thead>
             <tr>
               <th>Type</th>
+
               <th>Publisher</th>
+
               <th>Publication_year</th>
             </tr>
           </thead>
+
           <tbody>
             <tr>
               <td>{{ item.type || "-" }}</td>
+
               <td>{{ item.publisher || "-" }}</td>
+
               <td>{{ item.publication_year || "-" }}</td>
             </tr>
           </tbody>
         </n-table>
+
         <n-h4>Titles</n-h4>
+
         <n-table v-if="item" :bordered="true" striped :single-line="false">
           <thead>
             <tr>
               <th>Title</th>
+
               <th>Type</th>
             </tr>
           </thead>
+
           <tbody>
             <tr v-for="i in item.titles" :key="i.id">
               <td class="related-item">
@@ -615,6 +696,7 @@ function handleNextButton() {
                   <li class="related-item">{{ i.title }}</li>
                 </ul>
               </td>
+
               <td class="related-item">
                 <ul class="m-0 list-none p-0">
                   <li class="related-item">
@@ -624,21 +706,27 @@ function handleNextButton() {
               </td>
             </tr>
           </tbody>
+
           <tbody v-if="item.titles">
             <tr v-if="!item.titles.length">
               <td>-</td>
+
               <td>-</td>
             </tr>
           </tbody>
         </n-table>
+
         <n-h4>Identifiers</n-h4>
+
         <n-table v-if="item" :bordered="true" striped :single-line="false">
           <thead>
             <tr>
               <th>Identifier</th>
+
               <th>Type</th>
             </tr>
           </thead>
+
           <tbody>
             <tr>
               <td class="related-item">
@@ -648,6 +736,7 @@ function handleNextButton() {
                   </li>
                 </ul>
               </td>
+
               <td class="related-item">
                 <ul class="m-0 list-none p-0">
                   <li class="related-item" v-for="i in item.identifiers" :key="i.id">
@@ -657,18 +746,23 @@ function handleNextButton() {
               </td>
             </tr>
           </tbody>
+
           <tbody v-if="item.identifiers">
             <tr v-if="!item.identifiers.length">
               <td>-</td>
+
               <td>-</td>
             </tr>
           </tbody>
         </n-table>
+
         <n-h4>Creators</n-h4>
+
         <n-table v-if="item" :bordered="true" striped :single-line="false">
           <thead>
             <tr>
               <th>Name(s)</th>
+
               <th>Name Type</th>
             </tr>
           </thead>
@@ -682,6 +776,7 @@ function handleNextButton() {
                   </li>
                 </ul>
               </td>
+
               <td class="related-item">
                 <ul class="m-0 list-none p-0">
                   <li class="related-item" v-for="i in item.creators" :key="i.id">
@@ -691,22 +786,29 @@ function handleNextButton() {
               </td>
             </tr>
           </tbody>
+
           <tbody v-if="item.creators">
             <tr v-if="!item.creators.length">
               <td>-</td>
+
               <td>-</td>
             </tr>
           </tbody>
         </n-table>
+
         <n-h4>Contributors</n-h4>
+
         <n-table v-if="item" :bordered="true" striped :single-line="false">
           <thead>
             <tr>
               <th>Name(s)</th>
+
               <th>Name Type</th>
+
               <th>Contributor Type</th>
             </tr>
           </thead>
+
           <tbody>
             <tr>
               <td class="related-item">
@@ -716,6 +818,7 @@ function handleNextButton() {
                   </li>
                 </ul>
               </td>
+
               <td class="related-item">
                 <ul class="m-0 list-none p-0">
                   <li class="related-item" v-for="i in item.contributors" :key="i.id">
@@ -723,6 +826,7 @@ function handleNextButton() {
                   </li>
                 </ul>
               </td>
+
               <td class="related-item">
                 <ul class="m-0 list-none p-0">
                   <li class="related-item" v-for="i in item.contributors" :key="i.id">
@@ -732,16 +836,21 @@ function handleNextButton() {
               </td>
             </tr>
           </tbody>
+
           <tbody v-if="item.contributors">
             <tr v-if="!item.contributors.length">
               <td>-</td>
+
               <td>-</td>
+
               <td>-</td>
             </tr>
           </tbody>
         </n-table>
+
         <n-divider v-if="index !== dataset_metadata.related_items.length - 1" />
       </div>
+
       <template #action>
         <RouterLink
           :to="{
@@ -761,19 +870,25 @@ function handleNextButton() {
         </RouterLink>
       </template>
     </CollapsibleCard>
+
     <CollapsibleCard title="Additional Details" bordered>
       <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Language</th>
+
             <th>Resource Type</th>
+
             <th>Size</th>
           </tr>
         </thead>
+
         <tbody>
           <tr>
             <td>{{ dataset_metadata.about.language || "-" }}</td>
+
             <td>{{ dataset_metadata.about.resource_type || "-" }}</td>
+
             <td>
               <ul
                 class="m-0 list-none p-0"
@@ -783,6 +898,7 @@ function handleNextButton() {
                   {{ item }}
                 </li>
               </ul>
+
               <ul class="m-0 list-none p-0" v-else>
                 <li>-</li>
               </ul>
@@ -790,6 +906,7 @@ function handleNextButton() {
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -809,7 +926,9 @@ function handleNextButton() {
         </RouterLink>
       </template>
     </CollapsibleCard>
+
     <n-divider />
+
     <div class="flex items-center justify-end">
       <n-button size="large" type="primary" @click="handleNextButton">
         <template #icon>

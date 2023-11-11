@@ -151,16 +151,19 @@ function onUpdate() {
             >
               <p>
                 <span class="font-bold"> ID: </span>
+
                 <span>{{ item.id }}</span>
               </p>
 
               <p>
                 <span class="font-bold"> Name: </span>
+
                 <span>{{ item.first_name }} {{ item.last_name }}</span>
               </p>
 
               <p>
                 <span class="font-bold"> Age: </span>
+
                 <span>{{ item.age }}</span>
               </p>
             </n-card>

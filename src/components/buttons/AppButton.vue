@@ -2,6 +2,7 @@
   <button type="button" :class="classes" @click="onClick" :style="style">
     {{ label }}
   </button>
+
   <n-button>naive-ui</n-button>
 </template>
 

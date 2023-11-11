@@ -25,6 +25,7 @@ export default defineComponent({
 
 <template>
   <n-button v-if="mode === 'size'">Basic</n-button>
+
   <n-upload
     :show-preview-button="showPreviewButton"
     :multiple="multiple"
@@ -53,6 +54,7 @@ export default defineComponent({
       <div style="margin-bottom: 12px">
         <Icon icon="material-symbols:cloud-upload" width="80" height="80" />
       </div>
+
       <n-text style="font-size: 16px"> Click or drag a file to upload </n-text>
     </n-upload-dragger>
   </n-upload>

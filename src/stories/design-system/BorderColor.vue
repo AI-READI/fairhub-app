@@ -8,18 +8,23 @@
     </p>
 
     <hr />
+
     <h2>Default colors</h2>
+
     <div class="grid grid-cols-4 gap-4">
       <div class="flex w-max flex-col py-3">
         <div class="border-primary h-[80px] w-[250px] border-2 bg-white" />
+
         <span class="mt-2 w-auto text-sm font-medium">border-primary</span>
       </div>
 
       <div class="flex w-max flex-col py-3">
         <div class="border-secondary h-[80px] w-[250px] border-2 bg-white" />
+
         <span class="mt-2 w-auto text-sm font-medium">border-secondary</span>
       </div>
     </div>
+
     <p>
       If you need to control over shades you can use the following classes to stay in primary color
       range.
@@ -32,6 +37,7 @@
         <div v-for="color in item.colors" :key="color" class="flex flex-col">
           <div class="flex w-max flex-col py-3">
             <div class="h-[80px] w-[250px] border-2 bg-white" :class="color" />
+
             <span class="mt-2 w-auto text-sm font-medium">{{ color }}</span>
           </div>
         </div>

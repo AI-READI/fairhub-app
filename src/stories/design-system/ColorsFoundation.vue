@@ -30,6 +30,7 @@ const getRootColors = () => {
         <ColorsGrid :colors="color" :title="key" />
       </div>
     </div>
+
     <ColorsGrid
       :colors="getRootColors()"
       title="Root Colors"

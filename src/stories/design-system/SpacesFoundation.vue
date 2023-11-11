@@ -12,8 +12,10 @@
     <div class="spaces__wrapper" v-for="(space, key) in spaces" :key="key">
       <div class="spaces__content">
         <p class="key">{{ key }}</p>
+
         <p class="space">{{ space }}</p>
       </div>
+
       <div class="spaces__space" :style="`width: ${space}`" />
     </div>
   </div>

@@ -167,6 +167,7 @@ const generateNewEmail = () => {
       >
         Create an account on fairhub.io
       </h1>
+
       <n-divider />
 
       <n-alert type="error" v-if="!codePresentInQueryParams" title="Restricted">
@@ -221,6 +222,7 @@ const generateNewEmail = () => {
               }"
             >
               <f-icon icon="ph:check-fat-fill" />
+
               <span class="text-xs"> one lowercase character </span>
             </div>
 
@@ -232,6 +234,7 @@ const generateNewEmail = () => {
               }"
             >
               <f-icon icon="ph:check-fat-fill" />
+
               <span class="text-xs"> one uppercase character </span>
             </div>
 
@@ -243,6 +246,7 @@ const generateNewEmail = () => {
               }"
             >
               <f-icon icon="ph:check-fat-fill" />
+
               <span class="text-xs"> one special character </span>
             </div>
 
@@ -254,6 +258,7 @@ const generateNewEmail = () => {
               }"
             >
               <f-icon icon="ph:check-fat-fill" />
+
               <span class="text-xs"> one numeric character </span>
             </div>
 
@@ -265,6 +270,7 @@ const generateNewEmail = () => {
               }"
             >
               <f-icon icon="ph:check-fat-fill" />
+
               <span class="text-xs"> 8 character minimum </span>
             </div>
           </div>

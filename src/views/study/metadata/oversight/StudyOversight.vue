@@ -77,6 +77,7 @@ const saveMetadata = async (value: boolean) => {
           @update:value="saveMetadata"
         >
           <template #checked> Yes </template>
+
           <template #unchecked> No </template>
         </n-switch>
 

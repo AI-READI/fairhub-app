@@ -59,39 +59,51 @@ function handleNextButton() {
 
     <CollapsibleCard title="Identifier" bordered>
       <n-h4>Primary Identifier</n-h4>
+
       <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Identifier</th>
+
             <th>Identifier Type</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-if="study_metadata.primary_identifier">
             <td>{{ study_metadata.primary_identifier.identifier || "-" }}</td>
+
             <td>{{ study_metadata.primary_identifier.identifier_type || "-" }}</td>
           </tr>
         </tbody>
       </n-table>
+
       <n-h4>Secondary Identifiers</n-h4>
+
       <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
             <th>Identifier</th>
+
             <th>Identifier Type</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in study_metadata.secondary_identifiers" :key="item.id">
             <td>{{ item.identifier }}</td>
+
             <td>{{ item.identifier_type }}</td>
           </tr>
+
           <tr v-if="!study_metadata.secondary_identifiers.length">
             <td>-</td>
+
             <td>-</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -126,12 +138,15 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Overall Status</th>
+
             <th>Start Date</th>
           </tr>
         </thead>
+
         <tbody>
           <tr>
             <td>{{ study_metadata.status.overall_status || "-" }}</td>
+
             <td>{{ study_metadata.status.start_date || "-" }}</td>
           </tr>
         </tbody>
@@ -161,16 +176,20 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Investigator Name</th>
+
             <th>Type</th>
           </tr>
         </thead>
+
         <tbody>
           <tr>
             <td>{{ study_metadata.sponsors.responsible_party_investigator_name || "-" }}</td>
+
             <td>{{ study_metadata.sponsors.responsible_party_type || "-" }}</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -195,16 +214,20 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Full Name</th>
+
             <th>Type</th>
           </tr>
         </thead>
+
         <tbody>
           <tr>
             <td>{{ study_metadata.sponsors.responsible_party_investigator_name || "-" }}</td>
+
             <td>{{ study_metadata.sponsors.responsible_party_type || "-" }}</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -226,6 +249,7 @@ function handleNextButton() {
 
     <CollapsibleCard title="Oversight" bordered>
       <p>{{ study_metadata.oversight ? "Yes" : "No" }}</p>
+
       <template #action>
         <RouterLink
           :to="{
@@ -277,7 +301,9 @@ function handleNextButton() {
       <n-space>
         <n-tag type="info" v-for="item in study_metadata.conditions" :key="item">{{ item }} </n-tag>
       </n-space>
+
       <div v-if="!study_metadata.conditions.length">-</div>
+
       <template #action>
         <RouterLink
           :to="{
@@ -301,10 +327,13 @@ function handleNextButton() {
       <n-table :bordered="true" striped :single-line="false">
         <tr>
           <th>Type</th>
+
           <td>{{ study_metadata.design.study_type || "-" }}</td>
         </tr>
+
         <tr v-if="study_metadata.design.study_type === 'Observational'">
           <th>Observational Models</th>
+
           <td>
             <ul class="m-0 flex list-none flex-wrap p-0">
               <n-space>
@@ -315,12 +344,15 @@ function handleNextButton() {
                   <n-tag type="info">{{ item }}</n-tag>
                 </li></n-space
               >
+
               <li v-if="!study_metadata.design.design_observational_model_list">-</li>
             </ul>
           </td>
         </tr>
+
         <tr v-if="study_metadata.design.study_type === 'Observational'">
           <th>Time Perspective</th>
+
           <td>
             <ul class="m-0 flex list-none flex-wrap p-0">
               <li :key="item" v-for="item in study_metadata.design.design_time_perspective_list">
@@ -328,62 +360,88 @@ function handleNextButton() {
                   <n-tag type="info">{{ item }}</n-tag></n-space
                 >
               </li>
+
               <li v-if="!study_metadata.design.design_time_perspective_list">-</li>
             </ul>
           </td>
         </tr>
+
         <tr v-if="study_metadata.design.study_type === 'Observational'">
           <th>Retention</th>
+
           <td>{{ study_metadata.design.bio_spec_retention || "-" }}</td>
         </tr>
+
         <tr v-if="study_metadata.design.study_type === 'Observational'">
           <th>Total number of participants</th>
+
           <td>{{ study_metadata.design.enrollment_count || "-" }}</td>
         </tr>
+
         <tr v-if="study_metadata.design.study_type === 'Observational'">
           <th>Enrollment type</th>
+
           <td>{{ study_metadata.design.enrollment_type || "-" }}</td>
         </tr>
+
         <tr v-if="study_metadata.design.study_type === 'Observational'">
           <th>Target Duration</th>
+
           <td>{{ study_metadata.design.target_duration || "-" }}</td>
         </tr>
+
         <tr v-if="study_metadata.design.study_type === 'Observational'">
           <th>Number of study groups/cohorts</th>
+
           <td>{{ study_metadata.design.number_groups_cohorts || "-" }}</td>
         </tr>
+
         <tr v-if="study_metadata.design.study_type === 'Interventional'">
           <th>Design Allocation</th>
+
           <td>{{ study_metadata.design.design_allocation || "-" }}</td>
         </tr>
+
         <tr v-if="study_metadata.design.study_type === 'Interventional'">
           <th>Design Intervention Model</th>
+
           <td>{{ study_metadata.design.design_intervention_model || "-" }}</td>
         </tr>
+
         <tr v-if="study_metadata.design.study_type === 'Interventional'">
           <th>Design Intervention Model Description</th>
+
           <td>{{ study_metadata.design.design_intervention_model_description || "-" }}</td>
         </tr>
+
         <tr v-if="study_metadata.design.study_type === 'Interventional'">
           <th>Design Primary Purpose</th>
+
           <td>{{ study_metadata.design.design_primary_purpose || "-" }}</td>
         </tr>
+
         <tr v-if="study_metadata.design.study_type === 'Interventional'">
           <th>Design Masking</th>
+
           <td>{{ study_metadata.design.design_masking || "-" }}</td>
         </tr>
+
         <tr v-if="study_metadata.design.study_type === 'Interventional'">
           <th>Design Masking Description</th>
+
           <td>{{ study_metadata.design.design_masking_description || "-" }}</td>
         </tr>
+
         <tr v-if="study_metadata.design.study_type === 'Interventional'">
           <th>Design Who Masked List</th>
+
           <td>
             <ul class="m-0 flex list-none flex-wrap p-0">
               <li :key="item" v-for="item in study_metadata.design.design_who_masked_list">
                 {{ item }}
               </li>
             </ul>
+
             <ul
               v-if="study_metadata.design.design_who_masked_list"
               class="m-0 flex list-none flex-wrap p-0"
@@ -392,8 +450,10 @@ function handleNextButton() {
             </ul>
           </td>
         </tr>
+
         <tr v-if="study_metadata.design.study_type === 'Interventional'">
           <th>Phase List</th>
+
           <td>
             <ul class="m-0 flex list-none flex-wrap p-0">
               <li :key="item" v-for="item in study_metadata.design.phase_list">
@@ -402,13 +462,16 @@ function handleNextButton() {
                 >
               </li>
             </ul>
+
             <ul v-if="study_metadata.design.phase_list" class="m-0 flex list-none flex-wrap p-0">
               <li v-if="!study_metadata.design.phase_list.length">-</li>
             </ul>
           </td>
         </tr>
+
         <tr v-if="study_metadata.design.study_type === 'Interventional'">
           <th>Number Arms</th>
+
           <td>{{ study_metadata.design.number_arms || "-" }}</td>
         </tr>
       </n-table>
@@ -439,10 +502,12 @@ function handleNextButton() {
             <th>Label</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in study_metadata.arms" :key="item.id">
             <td>{{ item.label }}</td>
           </tr>
+
           <tr v-if="!study_metadata.interventions.length">
             <td>-</td>
           </tr>
@@ -467,21 +532,27 @@ function handleNextButton() {
         </RouterLink>
       </template>
     </CollapsibleCard>
+
     <CollapsibleCard title="Interventions" bordered>
       <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
             <th>Name</th>
+
             <th>Type</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in study_metadata.interventions" :key="item.id">
             <td>{{ item.name }}</td>
+
             <td>{{ item.type }}</td>
           </tr>
+
           <tr v-if="!study_metadata.interventions.length">
             <td>-</td>
+
             <td>-</td>
           </tr>
         </tbody>
@@ -511,16 +582,20 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Gender</th>
+
             <th>Minimum Age</th>
           </tr>
         </thead>
+
         <tbody>
           <tr>
             <td>{{ study_metadata.eligibility.gender || "-" }}</td>
+
             <td>{{ study_metadata.eligibility.maximum_age_value || "-" }}</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -545,20 +620,26 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Affiliation</th>
+
             <th>Name</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in study_metadata.contacts" :key="item.id">
             <td>{{ item.affiliation }}</td>
+
             <td>{{ item.name }}</td>
           </tr>
+
           <tr v-if="!study_metadata.contacts.length">
             <td>-</td>
+
             <td>-</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -583,20 +664,26 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Affiliation</th>
+
             <th>Overall Official Name</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in study_metadata.overall_officials" :key="item.id">
             <td>{{ item.affiliation }}</td>
+
             <td>{{ item.name }}</td>
           </tr>
+
           <tr v-if="!study_metadata.overall_officials.length">
             <td>-</td>
+
             <td>-</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -621,20 +708,26 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Facility</th>
+
             <th>Country</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in study_metadata.locations" :key="item.id">
             <td>{{ item.facility }}</td>
+
             <td>{{ item.country }}</td>
           </tr>
+
           <tr v-if="!study_metadata.locations.length">
             <td>-</td>
+
             <td>-</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -665,12 +758,15 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Is there a plan to share IPD?</th>
+
             <th>Type</th>
           </tr>
         </thead>
+
         <tbody>
           <tr>
             <td>{{ study_metadata.ipd_sharing.ipd_sharing || "-" }}</td>
+
             <td
               v-if="
                 study_metadata.ipd_sharing.ipd_sharing_info_type_list &&
@@ -686,10 +782,12 @@ function handleNextButton() {
                 </n-tag>
               </n-space>
             </td>
+
             <td v-else>-</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -714,20 +812,26 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Citation</th>
+
             <th>Identifier</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in study_metadata.references" :key="item.id">
             <td>{{ item.citation }}</td>
+
             <td>{{ item.identifier }}</td>
           </tr>
+
           <tr v-if="!study_metadata.references.length">
             <td>-</td>
+
             <td>-</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -752,20 +856,26 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Url</th>
+
             <th>Title</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in study_metadata.links" :key="item.id">
             <td>{{ item.url }}</td>
+
             <td>{{ item.title }}</td>
           </tr>
+
           <tr v-if="!study_metadata.links.length">
             <td>-</td>
+
             <td>-</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
@@ -790,20 +900,26 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Url</th>
+
             <th>Identifier</th>
           </tr>
         </thead>
+
         <tbody>
           <tr v-for="item in study_metadata.available_ipd" :key="item.url">
             <td>{{ item.url }}</td>
+
             <td>{{ item.identifier }}</td>
           </tr>
+
           <tr v-if="!study_metadata.available_ipd.length">
             <td>-</td>
+
             <td>-</td>
           </tr>
         </tbody>
       </n-table>
+
       <template #action>
         <RouterLink
           :to="{
