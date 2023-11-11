@@ -90,6 +90,15 @@ const handleSelect = (key: string | number) => {
             </n-button>
           </RouterLink>
 
+          <RouterLink to="/auth/signup" v-if="!authStore.isAuthenticated">
+            <n-button type="info">
+              <template #icon>
+                <f-icon icon="mdi:register" />
+              </template>
+              Sign Up
+            </n-button>
+          </RouterLink>
+
           <n-dropdown
             :options="profileOptions"
             placement="bottom-start"
