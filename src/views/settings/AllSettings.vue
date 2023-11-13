@@ -42,6 +42,7 @@ const clearCache = () => {
           </n-button>
         </n-card>
       </n-tab-pane>
+
       <n-tab-pane name="Advanced" tab="Advanced">
         <n-card title="Clear Cache">
           <p class="pb-4">Clear the cache of the application.</p>

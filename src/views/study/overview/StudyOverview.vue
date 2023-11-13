@@ -68,6 +68,7 @@ const editStudyDetails = () => {
 
           <p class="py-4">
             <span class="font-bold">Last updated: </span>
+
             <span>{{ displayHumanFriendlyDateAndTime(study.updated_on) }}</span>
           </p>
 
@@ -98,11 +99,17 @@ const editStudyDetails = () => {
 
       <n-space vertical>
         <n-skeleton height="40px" width="33%" />
+
         <n-skeleton height="40px" width="66%" :sharp="false" />
+
         <n-skeleton height="40px" width="66%" :sharp="false" />
+
         <n-skeleton height="40px" width="33%" />
+
         <n-skeleton height="40px" width="66%" :sharp="false" />
+
         <n-skeleton height="40px" width="33%" />
+
         <n-skeleton height="40px" width="66%" :sharp="false" />
       </n-space>
     </main>

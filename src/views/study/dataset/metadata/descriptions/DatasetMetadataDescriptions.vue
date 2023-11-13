@@ -161,6 +161,7 @@ const saveMetadata = (e: MouseEvent) => {
 
     <FadeTransition>
       <LottieLoader v-if="loading" />
+
       <n-form
         ref="formRef"
         :model="moduleData"

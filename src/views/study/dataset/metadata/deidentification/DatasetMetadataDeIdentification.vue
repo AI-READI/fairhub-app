@@ -120,8 +120,10 @@ const saveMetadata = (e: MouseEvent) => {
     />
 
     <n-divider />
+
     <FadeTransition>
       <LottieLoader v-if="getLoading" />
+
       <n-form
         v-else
         ref="formRef"
@@ -143,6 +145,7 @@ const saveMetadata = (e: MouseEvent) => {
         <n-form-item label="Were direct identifiers removed?" path="direct" show-require-mark>
           <n-switch v-model:value="moduleData.direct" :round="true" class="mx-1" size="large">
             <template #checked> Yes </template>
+
             <template #unchecked> No </template>
           </n-switch>
         </n-form-item>
@@ -154,6 +157,7 @@ const saveMetadata = (e: MouseEvent) => {
         >
           <n-switch v-model:value="moduleData.hipaa" :round="true" class="mx-1" size="large">
             <template #checked> Yes </template>
+
             <template #unchecked> No </template>
           </n-switch>
         </n-form-item>
@@ -165,6 +169,7 @@ const saveMetadata = (e: MouseEvent) => {
         >
           <n-switch v-model:value="moduleData.dates" :round="true" class="mx-1" size="large">
             <template #checked> Yes </template>
+
             <template #unchecked> No </template>
           </n-switch>
         </n-form-item>
@@ -172,6 +177,7 @@ const saveMetadata = (e: MouseEvent) => {
         <n-form-item label="Were narrative text fields removed?" path="nonarr" show-require-mark>
           <n-switch v-model:value="moduleData.nonarr" :round="true" class="mx-1" size="large">
             <template #checked> Yes </template>
+
             <template #unchecked> No </template>
           </n-switch>
         </n-form-item>
@@ -179,6 +185,7 @@ const saveMetadata = (e: MouseEvent) => {
         <n-form-item label="Was k-anonymisation (k>=2) achieved?" path="k_anon" show-require-mark>
           <n-switch v-model:value="moduleData.k_anon" :round="true" class="mx-1" size="large">
             <template #checked> Yes </template>
+
             <template #unchecked> No </template>
           </n-switch>
         </n-form-item>

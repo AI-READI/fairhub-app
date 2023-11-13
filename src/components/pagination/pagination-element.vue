@@ -45,6 +45,7 @@ export default defineComponent({
     :page-count="100"
     v-if="mode === 'slot'"
   />
+
   <n-pagination v-model:page="page" :page-count="100" :page-slot="8" v-if="mode === 'slot'" />
 
   <n-pagination

@@ -4,6 +4,8 @@ import { RouterLink } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 
+// const router = useRouter();
+
 const authStore = useAuthStore();
 
 // eslint-disable-next-line no-undef

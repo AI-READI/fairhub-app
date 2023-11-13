@@ -6,18 +6,23 @@
       The consistent use of color in our product keeps cognitive loads low, and makes for a unified
       and engaging user experience. The colors are designed to be clear and accessible.
     </p>
+
     <hr />
 
     <h2>Default colors</h2>
+
     <p>These colors are used as default colors.</p>
+
     <div class="grid grid-cols-4 gap-4">
       <div class="flex w-max flex-col py-3">
         <div class="bg-primary h-[80px] w-[250px]" />
+
         <span class="mt-2 w-auto text-sm font-medium">bg-primary</span>
       </div>
 
       <div class="flex w-max flex-col py-3">
         <div class="bg-secondary h-[80px] w-[250px]" />
+
         <span class="mt-2 w-auto text-sm font-medium">bg-secondary</span>
       </div>
     </div>
@@ -26,6 +31,7 @@
       If you need to control over shades you can use the following classes to stay in primary color
       range.
     </p>
+
     <div v-for="item in allColors" :key="item.label" class="py-4">
       <h2>{{ item.label }}</h2>
 
