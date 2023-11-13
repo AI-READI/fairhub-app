@@ -355,11 +355,11 @@ function handleNextButton() {
 
           <td>
             <ul class="m-0 flex list-none flex-wrap p-0">
-              <li :key="item" v-for="item in study_metadata.design.design_time_perspective_list">
-                <n-space>
-                  <n-tag type="info">{{ item }}</n-tag></n-space
-                >
-              </li>
+              <n-space>
+                <li :key="item" v-for="item in study_metadata.design.design_time_perspective_list">
+                  <n-tag type="info">{{ item }}</n-tag>
+                </li>
+              </n-space>
 
               <li v-if="!study_metadata.design.design_time_perspective_list">-</li>
             </ul>

@@ -1,6 +1,3 @@
-import type { StudyOverallOfficial } from "@/types/Study";
-import StudyConditions from "@/views/study/metadata/conditions/StudyConditions.vue";
-
 export interface Version {
   id: string;
   title: string;
@@ -16,7 +13,7 @@ export interface VersionStudyMetadata {
   arms: VersionStudyArm[];
   available_ipd: VersionStudyIPD[];
   collaborators: VersionStudyCollaborator;
-  conditions: StudyConditions;
+  conditions: string;
   contacts: VersionStudyContact[];
   description: VersionStudyDescription;
   design: VersionDesign;
@@ -25,7 +22,7 @@ export interface VersionStudyMetadata {
   ipd_sharing: VersionStudyIPDSharing;
   links: VersionStudyLink[];
   locations: VersionStudyLocation[];
-  overall_officials: StudyOverallOfficial[];
+  overall_officials: VersionStudyOverallOfficial[];
   oversight: "";
   primary_identifier: VersionStudyIdentifier | null;
   references: VersionStudyReference[];
@@ -38,6 +35,12 @@ export interface VersionStudyIPD {
   id: string;
   identifier: string;
   url: string;
+}
+
+export interface VersionStudyOverallOfficial {
+  id: string;
+  name: string;
+  affiliation: string;
 }
 
 export interface VersionDesign {

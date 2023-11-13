@@ -497,7 +497,12 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Subjects" bordered>
-      <n-table :bordered="true" striped :single-line="false">
+      <n-table
+        :bordered="true"
+        striped
+        :single-line="false"
+        v-if="dataset_metadata.subjects && dataset_metadata.subjects.length"
+      >
         <tbody>
           <tr :key="item.id" v-for="item in dataset_metadata.subjects">
             <td>{{ item.subject }}</td>
@@ -528,9 +533,13 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Access" bordered>
-      <n-space
-        ><n-tag type="info">{{ dataset_metadata.access.description }}</n-tag></n-space
-      >
+      <n-space>
+        <n-tag type="info" v-if="dataset_metadata.access.description">
+          {{ dataset_metadata.access.description }}
+        </n-tag>
+      </n-space>
+
+      <div v-if="!dataset_metadata.access.description">-</div>
 
       <template #action>
         <RouterLink
@@ -649,14 +658,188 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Related Items" bordered>
-      <div v-for="(item, index) in dataset_metadata.related_items" :key="item.id">
-        <div v-if="item">
-          <div class="mt-5" v-for="i in item.titles" :key="i.id">
-            <n-h3 v-if="i.type === 'MainTitle'">{{ i.title }}</n-h3>
+      <div v-if="dataset_metadata.related_items.length !== 0">
+        <div v-for="(item, index) in dataset_metadata.related_items" :key="item.id">
+          <div v-if="item">
+            <div class="mt-5" v-for="i in item.titles" :key="i.id">
+              <n-h3 v-if="i.type === 'MainTitle'">{{ i.title }}</n-h3>
+            </div>
           </div>
-        </div>
 
-        <n-table v-if="item" :bordered="true" striped :single-line="false">
+          <n-table :bordered="true" striped :single-line="false">
+            <thead>
+              <tr>
+                <th>Type</th>
+
+                <th>Publisher</th>
+
+                <th>Publication_year</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>{{ item.type || "-" }}</td>
+
+                <td>{{ item.publisher || "-" }}</td>
+
+                <td>{{ item.publication_year || "-" }}</td>
+              </tr>
+            </tbody>
+          </n-table>
+
+          <n-h4>Titles</n-h4>
+
+          <n-table :bordered="true" striped :single-line="false">
+            <thead>
+              <tr>
+                <th>Title</th>
+
+                <th>Type</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr v-for="i in item.titles" :key="i.id">
+                <td class="p-0">
+                  <ul class="m-0 list-none p-0 even:bg-gray-50">
+                    <li class="p-0">{{ i.title }}</li>
+                  </ul>
+                </td>
+
+                <td class="p-0">
+                  <ul class="m-0 list-none p-0 even:bg-gray-50">
+                    <li class="p-0">
+                      <div v-if="i.type">{{ i.type?.replace(/([a-z])([A-Z])/g, "$1 $2") }}</div>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </n-table>
+
+          <n-h4>Identifiers</n-h4>
+
+          <n-table :bordered="true" striped :single-line="false">
+            <thead>
+              <tr>
+                <th>Identifier</th>
+
+                <th>Type</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr v-for="i in item.identifiers" :key="i.id">
+                <td class="p-0">
+                  <ul class="m-0 list-none p-0 even:bg-gray-50">
+                    <li class="p-0">
+                      {{ i.identifier }}
+                    </li>
+                  </ul>
+                </td>
+
+                <td class="p-0">
+                  <ul class="m-0 list-none p-0 even:bg-gray-50">
+                    <li class="p-0">
+                      {{ i.type }}
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </n-table>
+
+          <n-h4>Creators</n-h4>
+
+          <n-table :bordered="true" striped :single-line="false">
+            <thead>
+              <tr>
+                <th>Name(s)</th>
+
+                <th>Name Type</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr v-for="i in item.creators" :key="i.id">
+                <td class="p-0">
+                  <ul class="m-0 list-none p-0 even:bg-gray-50">
+                    <li class="p-0">
+                      {{ i.name }}
+                    </li>
+                  </ul>
+                </td>
+
+                <td class="p-0">
+                  <ul class="m-0 list-none p-0 even:bg-gray-50">
+                    <li class="p-0">
+                      {{ i.name_type || "-" }}
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </n-table>
+
+          <n-h4>Contributors</n-h4>
+
+          <n-table :bordered="true" striped :single-line="false">
+            <thead>
+              <tr>
+                <th>Name(s)</th>
+
+                <th>Name Type</th>
+
+                <th>Contributor Type</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr v-for="i in item.contributors" :key="i.id">
+                <td class="p-0">
+                  <ul class="m-0 list-none p-0 even:bg-gray-50">
+                    <li class="p-0">
+                      {{ i.name || "-" }}
+                    </li>
+                  </ul>
+                </td>
+
+                <td class="p-0">
+                  <ul class="m-0 list-none p-0 even:bg-gray-50">
+                    <li class="p-0">
+                      {{ i.name_type || "-" }}
+                    </li>
+                  </ul>
+                </td>
+
+                <td class="p-0">
+                  <ul class="m-0 list-none p-0 even:bg-gray-50">
+                    <li class="p-0">
+                      {{ i.contributor_type || "-" }}
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+
+            <tbody v-if="item.contributors">
+              <tr v-if="!item.contributors.length">
+                <td>-</td>
+
+                <td>-</td>
+
+                <td>-</td>
+              </tr>
+            </tbody>
+          </n-table>
+
+          <n-divider v-if="index !== dataset_metadata.related_items.length - 1" />
+        </div>
+      </div>
+
+      <div v-if="dataset_metadata.related_items.length === 0">
+        <n-table :bordered="true" striped :single-line="false">
           <thead>
             <tr>
               <th>Type</th>
@@ -669,18 +852,18 @@ function handleNextButton() {
 
           <tbody>
             <tr>
-              <td>{{ item.type || "-" }}</td>
+              <td>-</td>
 
-              <td>{{ item.publisher || "-" }}</td>
+              <td>-</td>
 
-              <td>{{ item.publication_year || "-" }}</td>
+              <td>-</td>
             </tr>
           </tbody>
         </n-table>
 
         <n-h4>Titles</n-h4>
 
-        <n-table v-if="item" :bordered="true" striped :single-line="false">
+        <n-table :bordered="true" striped :single-line="false">
           <thead>
             <tr>
               <th>Title</th>
@@ -690,35 +873,27 @@ function handleNextButton() {
           </thead>
 
           <tbody>
-            <tr v-for="i in item.titles" :key="i.id">
-              <td class="related-item">
+            <tr>
+              <td>
                 <ul class="m-0 list-none p-0">
-                  <li class="related-item">{{ i.title }}</li>
+                  <li class="p-3 even:bg-gray-50">-</li>
                 </ul>
               </td>
 
-              <td class="related-item">
+              <td>
                 <ul class="m-0 list-none p-0">
-                  <li class="related-item">
-                    <div v-if="i.type">{{ i.type?.replace(/([a-z])([A-Z])/g, "$1 $2") }}</div>
+                  <li class="p-3 even:bg-gray-50">
+                    <div>-</div>
                   </li>
                 </ul>
               </td>
-            </tr>
-          </tbody>
-
-          <tbody v-if="item.titles">
-            <tr v-if="!item.titles.length">
-              <td>-</td>
-
-              <td>-</td>
             </tr>
           </tbody>
         </n-table>
 
         <n-h4>Identifiers</n-h4>
 
-        <n-table v-if="item" :bordered="true" striped :single-line="false">
+        <n-table :bordered="true" striped :single-line="false">
           <thead>
             <tr>
               <th>Identifier</th>
@@ -729,36 +904,24 @@ function handleNextButton() {
 
           <tbody>
             <tr>
-              <td class="related-item">
+              <td>
                 <ul class="m-0 list-none p-0">
-                  <li class="related-item" v-for="i in item.identifiers" :key="i.id">
-                    {{ i.identifier }}
-                  </li>
+                  <li class="p-3 even:bg-gray-50">-</li>
                 </ul>
               </td>
 
-              <td class="related-item">
+              <td>
                 <ul class="m-0 list-none p-0">
-                  <li class="related-item" v-for="i in item.identifiers" :key="i.id">
-                    {{ i.type }}
-                  </li>
+                  <li class="p-3 even:bg-gray-50">-</li>
                 </ul>
               </td>
-            </tr>
-          </tbody>
-
-          <tbody v-if="item.identifiers">
-            <tr v-if="!item.identifiers.length">
-              <td>-</td>
-
-              <td>-</td>
             </tr>
           </tbody>
         </n-table>
 
         <n-h4>Creators</n-h4>
 
-        <n-table v-if="item" :bordered="true" striped :single-line="false">
+        <n-table :bordered="true" striped :single-line="false">
           <thead>
             <tr>
               <th>Name(s)</th>
@@ -769,36 +932,24 @@ function handleNextButton() {
 
           <tbody>
             <tr>
-              <td class="related-item">
+              <td>
                 <ul class="m-0 list-none p-0">
-                  <li class="related-item" v-for="i in item.creators" :key="i.id">
-                    {{ i.name }}
-                  </li>
+                  <li class="p-3 even:bg-gray-50">-</li>
                 </ul>
               </td>
 
-              <td class="related-item">
+              <td>
                 <ul class="m-0 list-none p-0">
-                  <li class="related-item" v-for="i in item.creators" :key="i.id">
-                    {{ i.name_type || "-" }}
-                  </li>
+                  <li class="p-3 even:bg-gray-50">-</li>
                 </ul>
               </td>
-            </tr>
-          </tbody>
-
-          <tbody v-if="item.creators">
-            <tr v-if="!item.creators.length">
-              <td>-</td>
-
-              <td>-</td>
             </tr>
           </tbody>
         </n-table>
 
         <n-h4>Contributors</n-h4>
 
-        <n-table v-if="item" :bordered="true" striped :single-line="false">
+        <n-table :bordered="true" striped :single-line="false">
           <thead>
             <tr>
               <th>Name(s)</th>
@@ -811,44 +962,26 @@ function handleNextButton() {
 
           <tbody>
             <tr>
-              <td class="related-item">
+              <td>
                 <ul class="m-0 list-none p-0">
-                  <li class="related-item" v-for="i in item.contributors" :key="i.id">
-                    {{ i.name || "-" }}
-                  </li>
+                  <li class="p-3 even:bg-gray-50">-</li>
                 </ul>
               </td>
 
-              <td class="related-item">
+              <td class="p-0">
                 <ul class="m-0 list-none p-0">
-                  <li class="related-item" v-for="i in item.contributors" :key="i.id">
-                    {{ i.name_type || "-" }}
-                  </li>
+                  <li class="p-3 even:bg-gray-50">-</li>
                 </ul>
               </td>
 
-              <td class="related-item">
+              <td class="p-0">
                 <ul class="m-0 list-none p-0">
-                  <li class="related-item" v-for="i in item.contributors" :key="i.id">
-                    {{ i.contributor_type || "-" }}
-                  </li>
+                  <li class="p-3 even:bg-gray-50">-</li>
                 </ul>
               </td>
-            </tr>
-          </tbody>
-
-          <tbody v-if="item.contributors">
-            <tr v-if="!item.contributors.length">
-              <td>-</td>
-
-              <td>-</td>
-
-              <td>-</td>
             </tr>
           </tbody>
         </n-table>
-
-        <n-divider v-if="index !== dataset_metadata.related_items.length - 1" />
       </div>
 
       <template #action>
