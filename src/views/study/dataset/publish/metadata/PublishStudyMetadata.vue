@@ -228,16 +228,6 @@ function handleNextButton() {
           </tr>
         </thead>
 
-        <!--        <tbody>-->
-        <!--          <tr v-for="item in study_metadata.arms" :key="item.id">-->
-        <!--            <td>{{ item.label }}</td>-->
-        <!--          </tr>-->
-
-        <!--          <tr v-if="!study_metadata.arms.length">-->
-        <!--            <td colspan="2" class="text-center italic text-gray-500">No Arms</td>-->
-        <!--          </tr>-->
-        <!--        </tbody>-->
-
         <tbody>
           <tr v-for="(item, index) in study_metadata.collaborators" :key="index">
             <td>

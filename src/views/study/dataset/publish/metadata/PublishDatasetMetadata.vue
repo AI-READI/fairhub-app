@@ -873,7 +873,7 @@ function handleNextButton() {
             </td>
 
             <td>
-              <ul class="m-0 p-0">
+              <ul class="m-0 list-none p-0">
                 <li v-for="item in dataset_metadata.about.size" :key="item">
                   {{ item }}
                 </li>
