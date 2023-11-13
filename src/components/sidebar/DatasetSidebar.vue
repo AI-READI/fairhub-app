@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import type { MenuOption } from "naive-ui";
+import type { MenuInst, MenuOption } from "naive-ui";
 import { NLayoutSider, NMenu, NSpace } from "naive-ui";
 import { computed, h, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -197,6 +197,20 @@ const showSidebar = computed(() => {
 
   return false;
 });
+
+const selectedKeyRef = ref("1");
+const menuInstRef = ref<MenuInst | null>(null);
+
+const selectAndExpand = (key: string) => {
+  selectedKeyRef.value = key;
+  menuInstRef.value?.showOption(key);
+};
+
+router.beforeEach((to, from) => {
+  if (typeof to.name !== "string") return;
+  const name: string = to.meta && to.meta.menuItem ? (to.meta.menuItem as string) : to.name;
+  selectAndExpand(name);
+});
 </script>
 
 <template>
@@ -213,6 +227,8 @@ const showSidebar = computed(() => {
   >
     <n-space vertical justify="space-between" class="h-full">
       <n-menu
+        ref="menuInstRef"
+        v-model:value="selectedKeyRef"
         :collapsed-width="64"
         :collapsed-icon-size="22"
         :default-expanded-keys="['dataset:metadata']"
