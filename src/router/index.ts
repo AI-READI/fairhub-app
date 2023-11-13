@@ -443,6 +443,7 @@ const router = createRouter({
       name: "all-settings",
       path: "/settings",
       component: AllSettings,
+      meta: { menuItem: "settings" },
     },
     {
       name: "help",
