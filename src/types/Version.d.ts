@@ -12,7 +12,7 @@ export interface Version {
 export interface VersionStudyMetadata {
   arms: VersionStudyArm[];
   available_ipd: VersionStudyIPD[];
-  collaborators: VersionStudyCollaborator;
+  collaborators: VersionStudyCollaborator[];
   conditions: string;
   contacts: VersionStudyContact[];
   description: VersionStudyDescription;
@@ -44,13 +44,11 @@ export interface VersionStudyOverallOfficial {
 }
 
 export interface VersionDesign {
-  bio_spec_description: string | null;
   bio_spec_retention: string;
   design_allocation: string | null;
   design_intervention_model: string | null;
   design_intervention_model_description: string;
   design_masking: string | null;
-  design_masking_description: string | null;
   design_observational_model_list: [] | null;
   design_primary_purpose: string | null;
   design_time_perspective_list: [] | null;
@@ -110,7 +108,7 @@ export interface VersionStudySponsor {
 }
 
 export interface VersionStudyCollaborator {
-  lead_sponsor_name: string;
+  collaborator_name: [] | null;
 }
 
 export interface VersionStudyIntervention {
@@ -229,7 +227,6 @@ export interface VersionDatasetConsent {
 
 export interface VersionDatasetSubjects {
   id: string;
-  scheme: string;
   subject: string;
 }
 

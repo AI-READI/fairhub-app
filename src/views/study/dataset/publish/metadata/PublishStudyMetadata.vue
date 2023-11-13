@@ -70,10 +70,20 @@ function handleNextButton() {
         </thead>
 
         <tbody>
-          <tr v-if="study_metadata.primary_identifier">
-            <td>{{ study_metadata.primary_identifier.identifier || "-" }}</td>
+          <tr
+            v-if="
+              study_metadata.primary_identifier &&
+              study_metadata.primary_identifier.identifier &&
+              study_metadata.primary_identifier.identifier_type
+            "
+          >
+            <td>{{ study_metadata.primary_identifier.identifier }}</td>
 
-            <td>{{ study_metadata.primary_identifier.identifier_type || "-" }}</td>
+            <td>{{ study_metadata.primary_identifier.identifier_type }}</td>
+          </tr>
+
+          <tr v-else>
+            <td colspan="2" class="text-center italic text-gray-500">No Primary Identifier</td>
           </tr>
         </tbody>
       </n-table>
@@ -97,9 +107,7 @@ function handleNextButton() {
           </tr>
 
           <tr v-if="!study_metadata.secondary_identifiers.length">
-            <td>-</td>
-
-            <td>-</td>
+            <td colspan="2" class="text-center italic text-gray-500">No Secondary Identifiers</td>
           </tr>
         </tbody>
       </n-table>
@@ -124,16 +132,6 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Status" bordered>
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Overall Status">-->
-      <!--          {{ study_metadata.status.overall_status || "" }}-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Start Date">-->
-      <!--          {{ study_metadata.status.start_date || "" }}-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
       <n-table :bordered="true" striped :single-line="false">
         <thead>
           <tr>
@@ -144,10 +142,14 @@ function handleNextButton() {
         </thead>
 
         <tbody>
-          <tr>
-            <td>{{ study_metadata.status.overall_status || "-" }}</td>
+          <tr v-if="study_metadata.status.overall_status && study_metadata.status.start_date">
+            <td>{{ study_metadata.status.overall_status }}</td>
 
-            <td>{{ study_metadata.status.start_date || "-" }}</td>
+            <td>{{ study_metadata.status.start_date }}</td>
+          </tr>
+
+          <tr v-else>
+            <td colspan="2" class="text-center italic text-gray-500">No Overall Status</td>
           </tr>
         </tbody>
       </n-table>
@@ -182,10 +184,19 @@ function handleNextButton() {
         </thead>
 
         <tbody>
-          <tr>
-            <td>{{ study_metadata.sponsors.responsible_party_investigator_name || "-" }}</td>
+          <tr
+            v-if="
+              study_metadata.sponsors.responsible_party_investigator_name &&
+              study_metadata.sponsors.responsible_party_type
+            "
+          >
+            <td>{{ study_metadata.sponsors.responsible_party_investigator_name }}</td>
 
-            <td>{{ study_metadata.sponsors.responsible_party_type || "-" }}</td>
+            <td>{{ study_metadata.sponsors.responsible_party_type }}</td>
+          </tr>
+
+          <tr v-else>
+            <td colspan="2" class="text-center italic text-gray-500">No Sponsors</td>
           </tr>
         </tbody>
       </n-table>
@@ -214,16 +225,28 @@ function handleNextButton() {
         <thead>
           <tr>
             <th>Full Name</th>
-
-            <th>Type</th>
           </tr>
         </thead>
 
-        <tbody>
-          <tr>
-            <td>{{ study_metadata.sponsors.responsible_party_investigator_name || "-" }}</td>
+        <!--        <tbody>-->
+        <!--          <tr v-for="item in study_metadata.arms" :key="item.id">-->
+        <!--            <td>{{ item.label }}</td>-->
+        <!--          </tr>-->
 
-            <td>{{ study_metadata.sponsors.responsible_party_type || "-" }}</td>
+        <!--          <tr v-if="!study_metadata.arms.length">-->
+        <!--            <td colspan="2" class="text-center italic text-gray-500">No Arms</td>-->
+        <!--          </tr>-->
+        <!--        </tbody>-->
+
+        <tbody>
+          <tr v-for="(item, index) in study_metadata.collaborators" :key="index">
+            <td>
+              {{ item }}
+            </td>
+          </tr>
+
+          <tr v-if="study_metadata.collaborators && !study_metadata.collaborators.length">
+            <td colspan="1" class="text-center italic text-gray-500">No Collaborators</td>
           </tr>
         </tbody>
       </n-table>
@@ -270,13 +293,13 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Description" bordered>
-      <n-table>
-        <tbody>
-          <tr>
-            <td>{{ study_metadata.description.brief_summary || "-" }}</td>
-          </tr>
-        </tbody>
-      </n-table>
+      <div class="border p-6" v-if="study_metadata.description.brief_summary">
+        {{ study_metadata.description.brief_summary }}
+      </div>
+
+      <div v-if="!study_metadata.description.brief_summary" class="italic text-gray-500">
+        No Description
+      </div>
 
       <template #action>
         <RouterLink
@@ -302,7 +325,7 @@ function handleNextButton() {
         <n-tag type="info" v-for="item in study_metadata.conditions" :key="item">{{ item }} </n-tag>
       </n-space>
 
-      <div v-if="!study_metadata.conditions.length">-</div>
+      <div v-if="!study_metadata.conditions.length" class="italic text-gray-500">No Conditions</div>
 
       <template #action>
         <RouterLink
@@ -324,115 +347,143 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Design" bordered>
-      <n-table :bordered="true" striped :single-line="false">
+      <n-table
+        :bordered="true"
+        striped
+        :single-line="false"
+        v-if="
+          study_metadata.design.study_type && study_metadata.design.study_type === 'Observational'
+        "
+      >
+        <tbody>
+          <tr>
+            <th>Type</th>
+
+            <td>{{ study_metadata.design.study_type }}</td>
+          </tr>
+
+          <tr>
+            <th>Observational Models</th>
+
+            <td>
+              <ul class="m-0 flex list-none flex-wrap p-0">
+                <n-space>
+                  <li
+                    :key="item"
+                    v-for="item in study_metadata.design.design_observational_model_list"
+                  >
+                    <n-tag type="info">{{ item }}</n-tag>
+                  </li></n-space
+                >
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <th>Time Perspective</th>
+
+            <td>
+              <ul class="m-0 flex list-none flex-wrap p-0">
+                <n-space>
+                  <li
+                    :key="item"
+                    v-for="item in study_metadata.design.design_time_perspective_list"
+                  >
+                    <n-tag type="info">{{ item }}</n-tag>
+                  </li>
+                </n-space>
+
+                <li v-if="!study_metadata.design.design_time_perspective_list">-</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <th>Retention</th>
+
+            <td>
+              {{ study_metadata.design.bio_spec_retention }}
+            </td>
+          </tr>
+
+          <tr>
+            <th>Total number of participants</th>
+
+            <td>
+              {{ study_metadata.design.enrollment_count }}
+            </td>
+          </tr>
+
+          <tr>
+            <th>Enrollment type</th>
+
+            <td>
+              {{ study_metadata.design.enrollment_type }}
+            </td>
+          </tr>
+
+          <tr>
+            <th>Target Duration</th>
+
+            <td>
+              {{ study_metadata.design.target_duration }}
+            </td>
+          </tr>
+
+          <tr>
+            <th>Number of study groups/cohorts</th>
+
+            <td>
+              {{ study_metadata.design.number_groups_cohorts }}
+            </td>
+          </tr>
+        </tbody>
+      </n-table>
+
+      <n-table
+        v-else-if="
+          study_metadata.design.study_type && study_metadata.design.study_type === 'Interventional'
+        "
+      >
         <tr>
           <th>Type</th>
 
-          <td>{{ study_metadata.design.study_type || "-" }}</td>
+          <td>{{ study_metadata.design.study_type }}</td>
         </tr>
 
-        <tr v-if="study_metadata.design.study_type === 'Observational'">
-          <th>Observational Models</th>
-
-          <td>
-            <ul class="m-0 flex list-none flex-wrap p-0">
-              <n-space>
-                <li
-                  :key="item"
-                  v-for="item in study_metadata.design.design_observational_model_list"
-                >
-                  <n-tag type="info">{{ item }}</n-tag>
-                </li></n-space
-              >
-
-              <li v-if="!study_metadata.design.design_observational_model_list">-</li>
-            </ul>
-          </td>
-        </tr>
-
-        <tr v-if="study_metadata.design.study_type === 'Observational'">
-          <th>Time Perspective</th>
-
-          <td>
-            <ul class="m-0 flex list-none flex-wrap p-0">
-              <n-space>
-                <li :key="item" v-for="item in study_metadata.design.design_time_perspective_list">
-                  <n-tag type="info">{{ item }}</n-tag>
-                </li>
-              </n-space>
-
-              <li v-if="!study_metadata.design.design_time_perspective_list">-</li>
-            </ul>
-          </td>
-        </tr>
-
-        <tr v-if="study_metadata.design.study_type === 'Observational'">
-          <th>Retention</th>
-
-          <td>{{ study_metadata.design.bio_spec_retention || "-" }}</td>
-        </tr>
-
-        <tr v-if="study_metadata.design.study_type === 'Observational'">
-          <th>Total number of participants</th>
-
-          <td>{{ study_metadata.design.enrollment_count || "-" }}</td>
-        </tr>
-
-        <tr v-if="study_metadata.design.study_type === 'Observational'">
-          <th>Enrollment type</th>
-
-          <td>{{ study_metadata.design.enrollment_type || "-" }}</td>
-        </tr>
-
-        <tr v-if="study_metadata.design.study_type === 'Observational'">
-          <th>Target Duration</th>
-
-          <td>{{ study_metadata.design.target_duration || "-" }}</td>
-        </tr>
-
-        <tr v-if="study_metadata.design.study_type === 'Observational'">
-          <th>Number of study groups/cohorts</th>
-
-          <td>{{ study_metadata.design.number_groups_cohorts || "-" }}</td>
-        </tr>
-
-        <tr v-if="study_metadata.design.study_type === 'Interventional'">
+        <tr>
           <th>Design Allocation</th>
 
-          <td>{{ study_metadata.design.design_allocation || "-" }}</td>
+          <td>
+            {{ study_metadata.design.design_allocation }}
+          </td>
         </tr>
 
-        <tr v-if="study_metadata.design.study_type === 'Interventional'">
+        <tr>
           <th>Design Intervention Model</th>
 
-          <td>{{ study_metadata.design.design_intervention_model || "-" }}</td>
+          <td>
+            {{ study_metadata.design.design_intervention_model }}
+          </td>
         </tr>
 
-        <tr v-if="study_metadata.design.study_type === 'Interventional'">
-          <th>Design Intervention Model Description</th>
-
-          <td>{{ study_metadata.design.design_intervention_model_description || "-" }}</td>
-        </tr>
-
-        <tr v-if="study_metadata.design.study_type === 'Interventional'">
+        <tr>
           <th>Design Primary Purpose</th>
 
-          <td>{{ study_metadata.design.design_primary_purpose || "-" }}</td>
+          <td>
+            {{ study_metadata.design.design_primary_purpose }}
+          </td>
         </tr>
 
-        <tr v-if="study_metadata.design.study_type === 'Interventional'">
+        <tr>
           <th>Design Masking</th>
 
-          <td>{{ study_metadata.design.design_masking || "-" }}</td>
+          <td>
+            {{ study_metadata.design.design_masking }}
+          </td>
         </tr>
 
-        <tr v-if="study_metadata.design.study_type === 'Interventional'">
-          <th>Design Masking Description</th>
-
-          <td>{{ study_metadata.design.design_masking_description || "-" }}</td>
-        </tr>
-
-        <tr v-if="study_metadata.design.study_type === 'Interventional'">
+        <tr>
           <th>Design Who Masked List</th>
 
           <td>
@@ -451,7 +502,7 @@ function handleNextButton() {
           </td>
         </tr>
 
-        <tr v-if="study_metadata.design.study_type === 'Interventional'">
+        <tr>
           <th>Phase List</th>
 
           <td>
@@ -469,12 +520,26 @@ function handleNextButton() {
           </td>
         </tr>
 
-        <tr v-if="study_metadata.design.study_type === 'Interventional'">
+        <tr>
           <th>Number Arms</th>
 
-          <td>{{ study_metadata.design.number_arms || "-" }}</td>
+          <td>
+            {{ study_metadata.design.number_arms }}
+          </td>
         </tr>
       </n-table>
+
+      <div
+        class="italic text-gray-500"
+        v-if="
+          !study_metadata.design.study_type &&
+          !study_metadata.design.enrollment_count &&
+          !study_metadata.design.enrollment_type &&
+          !study_metadata.design.design_allocation
+        "
+      >
+        No Design
+      </div>
 
       <template #action>
         <RouterLink
@@ -508,12 +573,12 @@ function handleNextButton() {
             <td>{{ item.label }}</td>
           </tr>
 
-          <tr v-if="!study_metadata.interventions.length">
-            <td>-</td>
+          <tr v-if="!study_metadata.arms.length">
+            <td colspan="2" class="text-center italic text-gray-500">No Arms</td>
           </tr>
         </tbody>
       </n-table>
-      <!--     <div v-for="item in study_metadata.arms" :key="item.id">{{ item.label }}</div>-->
+
       <template #action>
         <RouterLink
           :to="{
@@ -527,7 +592,7 @@ function handleNextButton() {
             <template #icon>
               <f-icon icon="material-symbols:edit" />
             </template>
-            Edit Interventions
+            Edit Arms
           </n-button>
         </RouterLink>
       </template>
@@ -551,9 +616,7 @@ function handleNextButton() {
           </tr>
 
           <tr v-if="!study_metadata.interventions.length">
-            <td>-</td>
-
-            <td>-</td>
+            <td colspan="2" class="text-center italic text-gray-500">No Interventions</td>
           </tr>
         </tbody>
       </n-table>
@@ -588,10 +651,16 @@ function handleNextButton() {
         </thead>
 
         <tbody>
-          <tr>
-            <td>{{ study_metadata.eligibility.gender || "-" }}</td>
+          <tr
+            v-if="study_metadata.eligibility.gender && study_metadata.eligibility.maximum_age_value"
+          >
+            <td>{{ study_metadata.eligibility.gender }}</td>
 
-            <td>{{ study_metadata.eligibility.maximum_age_value || "-" }}</td>
+            <td>{{ study_metadata.eligibility.maximum_age_value }}</td>
+          </tr>
+
+          <tr v-else>
+            <td colspan="2" class="text-center italic text-gray-500">No Eligibility</td>
           </tr>
         </tbody>
       </n-table>
@@ -633,9 +702,7 @@ function handleNextButton() {
           </tr>
 
           <tr v-if="!study_metadata.contacts.length">
-            <td>-</td>
-
-            <td>-</td>
+            <td colspan="2" class="text-center italic text-gray-500">No Contacts</td>
           </tr>
         </tbody>
       </n-table>
@@ -677,9 +744,7 @@ function handleNextButton() {
           </tr>
 
           <tr v-if="!study_metadata.overall_officials.length">
-            <td>-</td>
-
-            <td>-</td>
+            <td colspan="2" class="text-center italic text-gray-500">No Overall Officials</td>
           </tr>
         </tbody>
       </n-table>
@@ -721,9 +786,7 @@ function handleNextButton() {
           </tr>
 
           <tr v-if="!study_metadata.locations.length">
-            <td>-</td>
-
-            <td>-</td>
+            <td colspan="2" class="text-center italic text-gray-500">No Location</td>
           </tr>
         </tbody>
       </n-table>
@@ -748,12 +811,6 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="IPD Sharing" bordered>
-      <!--      <n-descriptions label-placement="left">-->
-      <!--        <n-descriptions-item label="Is there a plan to share IPD?">-->
-      <!--          {{ study_metadata.ipd_sharing.ipd_sharing || "" }}-->
-      <!--        </n-descriptions-item>-->
-      <!--      </n-descriptions>-->
-      <!--      -->
       <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
@@ -764,26 +821,29 @@ function handleNextButton() {
         </thead>
 
         <tbody>
-          <tr>
-            <td>{{ study_metadata.ipd_sharing.ipd_sharing || "-" }}</td>
+          <tr
+            v-if="
+              study_metadata.ipd_sharing.ipd_sharing ||
+              (study_metadata.ipd_sharing.ipd_sharing_info_type_list &&
+                study_metadata.ipd_sharing.ipd_sharing_info_type_list.length)
+            "
+          >
+            <td>{{ study_metadata.ipd_sharing.ipd_sharing }}</td>
 
-            <td
-              v-if="
-                study_metadata.ipd_sharing.ipd_sharing_info_type_list &&
-                study_metadata.ipd_sharing.ipd_sharing_info_type_list.length
-              "
-            >
+            <td>
               <n-space>
                 <n-tag
                   type="info"
-                  :key="item"
-                  v-for="item in study_metadata.ipd_sharing.ipd_sharing_info_type_list"
+                  :key="index"
+                  v-for="(item, index) in study_metadata.ipd_sharing.ipd_sharing_info_type_list"
                   >{{ item }}
                 </n-tag>
               </n-space>
             </td>
+          </tr>
 
-            <td v-else>-</td>
+          <tr v-else>
+            <td colspan="2" class="text-center italic text-gray-500">No IPD Sharing</td>
           </tr>
         </tbody>
       </n-table>
@@ -825,9 +885,7 @@ function handleNextButton() {
           </tr>
 
           <tr v-if="!study_metadata.references.length">
-            <td>-</td>
-
-            <td>-</td>
+            <td colspan="2" class="text-center italic text-gray-500">No Reference</td>
           </tr>
         </tbody>
       </n-table>
@@ -855,23 +913,21 @@ function handleNextButton() {
       <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
-            <th>Url</th>
+            <th>Name of the Link</th>
 
-            <th>Title</th>
+            <th>URL</th>
           </tr>
         </thead>
 
         <tbody>
           <tr v-for="item in study_metadata.links" :key="item.id">
-            <td>{{ item.url }}</td>
-
             <td>{{ item.title }}</td>
+
+            <td>{{ item.url }}</td>
           </tr>
 
           <tr v-if="!study_metadata.links.length">
-            <td>-</td>
-
-            <td>-</td>
+            <td colspan="2" class="text-center italic text-gray-500">No Link</td>
           </tr>
         </tbody>
       </n-table>
@@ -913,9 +969,7 @@ function handleNextButton() {
           </tr>
 
           <tr v-if="!study_metadata.available_ipd.length">
-            <td>-</td>
-
-            <td>-</td>
+            <td colspan="2" class="text-center italic text-gray-500">No Available IPD</td>
           </tr>
         </tbody>
       </n-table>
