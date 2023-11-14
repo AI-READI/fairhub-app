@@ -17,12 +17,12 @@ import AllStudies from "@/views/studies/AllStudies.vue";
 import StudyContributors from "@/views/study/contributors/StudyContributors.vue";
 import AllDashboards from "@/views/study/dashboard/AllDashboards.vue";
 import ConnectDashboard from "@/views/study/dashboard/ConnectDashboard.vue";
+import EditDashboard from "@/views/study/dashboard/EditDashboard.vue";
 import ViewDashboard from "@/views/study/dashboard/ViewDashboard.vue";
 import DatasetMetadataOther from "@/views/study/dataset/metadata/about/DatasetMetadataOther.vue";
 import DatasetMetadataAccess from "@/views/study/dataset/metadata/access/DatasetMetadataAccess.vue";
 import DatasetMetadataConsent from "@/views/study/dataset/metadata/consent/DatasetMetadataConsent.vue";
 import DatasetMetadataContributors from "@/views/study/dataset/metadata/contributors/DatasetMetadataContributors.vue";
-import DatasetMetadataCreator from "@/views/study/dataset/metadata/creators/DatasetMetadataCreator.vue";
 import DatasetMetadataDates from "@/views/study/dataset/metadata/dates/DatasetMetadataDates.vue";
 import DatasetMetadataDeIdentification from "@/views/study/dataset/metadata/deidentification/DatasetMetadataDeIdentification.vue";
 import DatasetMetadataDescriptions from "@/views/study/dataset/metadata/descriptions/DatasetMetadataDescriptions.vue";
@@ -39,7 +39,6 @@ import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue"
 import PublishChangelog from "@/views/study/dataset/publish/changelog/PublishChangelog.vue";
 import PublishDatasetMetadata from "@/views/study/dataset/publish/metadata/PublishDatasetMetadata.vue";
 import PublishStudyMetadata from "@/views/study/dataset/publish/metadata/PublishStudyMetadata.vue";
-import NewVersion from "@/views/study/dataset/publish/new/NewVersion.vue";
 import PublishSelectParticipants from "@/views/study/dataset/publish/participants/PublishSelectParticipants.vue";
 import PublishReadme from "@/views/study/dataset/publish/readme/PublishReadme.vue";
 import PublishRouterView from "@/views/study/dataset/publish/root/PublishRouterView.vue";
@@ -171,6 +170,11 @@ const router = createRouter({
               path: ":projectId",
               component: EditRedcap,
             },
+            {
+              name: "study:redcap:connect-redcap-project-dashboard",
+              path: ":projectId/connect-dashboard",
+              component: ConnectDashboard,
+            },
           ],
         },
         {
@@ -183,13 +187,13 @@ const router = createRouter({
             },
             {
               name: "study:dashboard:view-dashboard",
-              path: "",
+              path: ":dashboardId",
               component: ViewDashboard,
             },
             {
-              name: "study:dashboard:connect-new-dashboard",
-              path: "connect",
-              component: ConnectDashboard,
+              name: "study:dashboard:edit-dashboard",
+              path: ":dashboardId",
+              component: EditDashboard,
             },
           ],
         },
@@ -199,24 +203,19 @@ const router = createRouter({
           component: StudyContributors,
         },
         {
+          name: "study:all-datasets",
           path: "datasets",
-          children: [
-            {
-              name: "study:all-datasets",
-              path: "",
-              component: AllDatasets,
-            },
-            {
-              name: "dataset:new",
-              path: "new",
-              component: NewDataset,
-            },
-          ],
+          component: AllDatasets,
         },
         {
           name: "dataset:root",
           path: "dataset",
           children: [
+            {
+              name: "dataset:new",
+              path: "new",
+              component: NewDataset,
+            },
             {
               path: ":datasetId",
               children: [
@@ -247,11 +246,6 @@ const router = createRouter({
                       name: "dataset:metadata:contributors",
                       path: "contributors",
                       component: DatasetMetadataContributors,
-                    },
-                    {
-                      name: "dataset:metadata:creators",
-                      path: "creators",
-                      component: DatasetMetadataCreator,
                     },
                     {
                       name: "dataset:metadata:dates",
@@ -318,11 +312,6 @@ const router = createRouter({
                       name: "dataset:publish:versions",
                       path: "versions",
                       component: PublishAllVersions,
-                    },
-                    {
-                      name: "dataset:publish:versions:new",
-                      path: "new",
-                      component: NewVersion,
                     },
                     {
                       path: ":versionId",

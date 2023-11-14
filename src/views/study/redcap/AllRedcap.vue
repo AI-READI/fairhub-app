@@ -20,14 +20,17 @@ const filterStore = useFilterStore();
 const studyStore = useStudyStore();
 const redcapStore = useRedcapStore();
 
+const isLoading = computed(() => redcapStore.loading);
 const study: Ref<Study> = computed(() => studyStore.study);
 const redcapProjectViews: Ref<RedcapProjectView[]> = computed(() => {
   const allRedcapProjectViews = redcapStore.allRedcapProjectViews;
 
   const filteredRedcapProjectViews = [];
+
   for (const i in allRedcapProjectViews) {
     const redcapProjectView = allRedcapProjectViews[i];
     const permissions = filterStore.permissions;
+
     if (permissions.owner) {
       if (study.value.role === "owner") {
         filteredRedcapProjectViews.push(redcapProjectView);
@@ -87,7 +90,7 @@ const toggleSortOrder = () => {
 
 const sortOptions = [
   { key: "project_title", label: "Title" },
-  { key: "project_id", label: "ID" },
+  { key: "project_id", label: "REDCap PID" },
   { key: "project_api_url", label: "API URL" },
   { key: "project_api_active", label: "Active" },
 ];
@@ -113,46 +116,13 @@ onBeforeMount(() => {
   });
 });
 
-const redcapProjectApiLinks = computed(() => {
-  const allRedcapProjectViews = redcapStore.allRedcapProjectViews;
-  const filteredRedcapProjectViews = [];
-  // filter for permissions
-  for (const i in allRedcapProjectViews) {
-    const redcapProjectView = allRedcapProjectViews[i];
-    const permissions = filterStore.permissions;
-
-    if (permissions.owner) {
-      if (study.value.role === "owner") {
-        filteredRedcapProjectViews.push(redcapProjectView);
-      }
-    }
-
-    if (permissions.admin) {
-      if (study.value.role === "admin") {
-        filteredRedcapProjectViews.push(redcapProjectView);
-      }
-    }
-
-    if (permissions.editor) {
-      if (study.value.role === "editor") {
-        filteredRedcapProjectViews.push(redcapProjectView);
-      }
-    }
-
-    if (permissions.viewer) {
-      if (study.value.role === "viewer") {
-        filteredRedcapProjectViews.push(redcapProjectView);
-      }
-    }
-  }
-});
-
 const columns: string[] = [
   "Project Title",
-  "Project ID",
+  "REDCap PID",
   "Project API URL",
   "Active Instance",
-  "Actions",
+  "REDCap API Actions",
+  "Dashboard Actions",
 ];
 
 function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
@@ -172,9 +142,7 @@ function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
 <template>
   <main class="flex w-full flex-col pr-6">
     <n-space justify="space-between">
-      <!-- <h2>Study Participants</h2> -->
       <HeadingText title="REDCap" description="View, update, and delete study REDCap API links" />
-
       <RouterLink
         :to="{
           name: 'study:redcap:add-redcap-project-api',
@@ -189,160 +157,162 @@ function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
         </n-button>
       </RouterLink>
     </n-space>
-    <!-- <HeadingText title="REDCap" description="Define REDCap instances" /> -->
-    <div>
-      <div class="flex items-center space-x-3 border-t pt-4">
-        <n-popover trigger="click" placement="bottom-start">
-          <template #trigger>
-            <n-button strong tertiary type="info">
-              <template #icon>
-                <n-icon>
-                  <f-icon icon="icon-park-outline:permissions" height="20" />
-                </n-icon>
-              </template>
-              Permission
-            </n-button>
-          </template>
-
-          <n-space vertical>
-            <n-space>
-              <n-switch size="small" v-model:value="filterStore.permissions.owner" />
-              <span class="text-sm font-medium"> Owner </span>
-            </n-space>
-
-            <n-space>
-              <n-switch size="small" v-model:value="filterStore.permissions.admin" />
-              <span class="text-sm font-medium"> Admin </span>
-            </n-space>
-
-            <n-space>
-              <n-switch size="small" v-model:value="filterStore.permissions.editor" />
-              <span class="text-sm font-medium"> Editor </span>
-            </n-space>
-
-            <n-space>
-              <n-switch size="small" v-model:value="filterStore.permissions.viewer" />
-              <span class="text-sm font-medium"> Viewer </span>
-            </n-space>
+    <div class="flex items-center space-x-3 border-t pt-4">
+      <n-popover trigger="click" placement="bottom-start">
+        <template #trigger>
+          <n-button strong tertiary type="info">
+            <template #icon>
+              <n-icon>
+                <f-icon icon="icon-park-outline:permissions" height="20" />
+              </n-icon>
+            </template>
+            Permission
+          </n-button>
+        </template>
+        <n-space vertical>
+          <n-space>
+            <n-switch size="small" v-model:value="filterStore.permissions.owner" />
+            <span class="text-sm font-medium"> Owner </span>
           </n-space>
-        </n-popover>
-
-        <n-divider vertical />
-
-        <n-popover trigger="click" placement="bottom-start" class="w-[180px]">
-          <template #trigger>
-            <n-button strong tertiary type="info">
-              <template #icon>
-                <n-icon>
-                  <f-icon icon="iconoir:sort" height="20" />
-                </n-icon>
-              </template>
-              Sort
-            </n-button>
-          </template>
-
-          <n-space vertical>
-            <div
-              v-for="option in sortOptions"
-              :key="option.key"
-              @click="updateSort(option.key)"
-              class="flex cursor-pointer items-center justify-between space-x-4 rounded-md p-2 transition-all hover:bg-slate-100"
-            >
-              <span class="text-sm font-medium"> {{ option.label }} </span>
-
-              <FadeTransition>
-                <f-icon
-                  icon="mdi:tick"
-                  height="20"
-                  class="text-sky-400"
-                  v-if="sortOption === option.key"
-                />
-              </FadeTransition>
-            </div>
+          <n-space>
+            <n-switch size="small" v-model:value="filterStore.permissions.admin" />
+            <span class="text-sm font-medium"> Admin </span>
           </n-space>
-        </n-popover>
-
-        <n-button @click="toggleSortOrder" text type="info">
-          <n-icon>
-            <f-icon :icon="sortOrder === 'asc' ? 'bi:sort-up' : 'bi:sort-down'" height="20" />
-          </n-icon>
-        </n-button>
-      </div>
-
-      <n-divider />
-
-      <FadeTransition>
-        <LottieLoader v-if="redcapStore.loading" />
-
-        <TransitionGroup name="fade" tag="ul" class="list-none p-0" v-else>
-          <div class="redcap-choices">
-            <n-table :bordered="true" :single-line="false">
-              <thead>
-                <tr>
-                  <th v-for="(item, index) in columns" :key="index">{{ item }}</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr v-for="(item, index) in redcapProjectViews" :key="index">
-                  <td>{{ item.project_title }}</td>
-
-                  <td>{{ item.project_id }}</td>
-
-                  <td>{{ item.project_api_url }}</td>
-
-                  <td style="text-transform: Capitalize; text-align: center">
-                    {{ item.project_api_active }}
-                  </td>
-
-                  <td>
-                    <div class="flex items-center space-x-2">
-                      <RouterLink
-                        :to="{
-                          name: 'study:redcap:edit-redcap-project-api',
-                          params: {
-                            studyId: redcapRouteParams.studyId,
-                            projectId: item.project_id,
-                          },
-                        }"
-                      >
-                        <n-button size="small" type="primary">
-                          <template #icon>
-                            <f-icon icon="material-symbols:edit" />
-                          </template>
-                          Edit API Link
-                        </n-button>
-                      </RouterLink>
-                      <n-popconfirm
-                        @positive-click="
-                          deleteRedcapProjectApiLink(redcapRouteParams.studyId, item.project_id)
-                        "
-                      >
-                        <template #trigger>
-                          <n-button strong secondary type="error" size="small">
-                            <template #icon>
-                              <f-icon icon="ph:trash-fill" />
-                            </template>
-                            Delete API Link
-                          </n-button>
-                        </template>
-                        Are you sure you want to remove this API Link?
-                      </n-popconfirm>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </n-table>
-          </div>
-          <n-empty
-            v-if="redcapProjectViews.length === 0"
-            description="No REDCap API links found"
-            size="huge"
-            class="my-10"
+          <n-space>
+            <n-switch size="small" v-model:value="filterStore.permissions.editor" />
+            <span class="text-sm font-medium"> Editor </span>
+          </n-space>
+          <n-space>
+            <n-switch size="small" v-model:value="filterStore.permissions.viewer" />
+            <span class="text-sm font-medium"> Viewer </span>
+          </n-space>
+        </n-space>
+      </n-popover>
+      <n-divider vertical />
+      <n-popover trigger="click" placement="bottom-start" class="w-[180px]">
+        <template #trigger>
+          <n-button strong tertiary type="info">
+            <template #icon>
+              <n-icon>
+                <f-icon icon="iconoir:sort" height="20" />
+              </n-icon>
+            </template>
+            Sort
+          </n-button>
+        </template>
+        <n-space vertical>
+          <div
+            v-for="option in sortOptions"
+            :key="option.key"
+            @click="updateSort(option.key)"
+            class="flex cursor-pointer items-center justify-between space-x-4 rounded-md p-2 transition-all hover:bg-slate-100"
           >
-          </n-empty>
-        </TransitionGroup>
-      </FadeTransition>
+            <span class="text-sm font-medium"> {{ option.label }} </span>
+            <FadeTransition>
+              <f-icon
+                icon="mdi:tick"
+                height="20"
+                class="text-sky-400"
+                v-if="sortOption === option.key"
+              />
+            </FadeTransition>
+          </div>
+        </n-space>
+      </n-popover>
+      <n-button @click="toggleSortOrder" text type="info">
+        <n-icon>
+          <f-icon :icon="sortOrder === 'asc' ? 'bi:sort-up' : 'bi:sort-down'" height="20" />
+        </n-icon>
+      </n-button>
     </div>
+    <n-divider />
+    <div class="redcap-choices">
+      <n-table :bordered="true" :single-line="false">
+        <thead>
+          <FadeTransition>
+            <LottieLoader v-if="isLoading" />
+            <TransitionGroup name="fade" tag="tr" class="p-0" v-else>
+              <th v-for="(item, index) in columns" :key="index">{{ item }}</th>
+            </TransitionGroup>
+          </FadeTransition>
+        </thead>
+        <FadeTransition>
+          <LottieLoader v-if="isLoading" />
+          <TransitionGroup name="fade" tag="tbody" class="p-0" v-else>
+            <tr v-for="(item, index) in redcapProjectViews" :key="index">
+              <td>{{ item.project_title }}</td>
+              <td>{{ item.project_id }}</td>
+              <td>{{ item.project_api_url }}</td>
+              <td style="text-transform: Capitalize; text-align: center">
+                {{ item.project_api_active }}
+              </td>
+              <td>
+                <div class="flex items-center space-x-2">
+                  <RouterLink
+                    :to="{
+                      name: 'study:redcap:edit-redcap-project-api',
+                      params: {
+                        studyId: redcapRouteParams.studyId,
+                        projectId: item.project_id,
+                      },
+                    }"
+                  >
+                    <n-button size="small" type="primary">
+                      <template #icon>
+                        <f-icon icon="material-symbols:edit" />
+                      </template>
+                      Edit API Link
+                    </n-button>
+                  </RouterLink>
+                  <n-popconfirm
+                    @positive-click="
+                      deleteRedcapProjectApiLink(redcapRouteParams.studyId, item.project_id)
+                    "
+                  >
+                    <template #trigger>
+                      <n-button strong secondary type="error" size="small">
+                        <template #icon>
+                          <f-icon icon="ph:trash-fill" />
+                        </template>
+                        Delete API Link
+                      </n-button>
+                    </template>
+                    This will remove the API Link and delete all its associated Dashboards. Are you
+                    sure you want to do this?
+                  </n-popconfirm>
+                </div>
+              </td>
+              <td>
+                <div class="flex items-center space-x-2">
+                  <RouterLink
+                    :to="{
+                      name: 'study:redcap:connect-redcap-project-dashboard',
+                      params: {
+                        studyId: redcapRouteParams.studyId,
+                        projectId: item.project_id,
+                      },
+                    }"
+                  >
+                    <n-button size="small" type="primary">
+                      <template #icon>
+                        <f-icon icon="material-symbols:add-link" />
+                      </template>
+                      Connect Dashboard
+                    </n-button>
+                  </RouterLink>
+                </div>
+              </td>
+            </tr>
+          </TransitionGroup>
+        </FadeTransition>
+      </n-table>
+    </div>
+    <n-empty
+      v-if="redcapProjectViews.length === 0"
+      description="No REDCap API links found"
+      size="huge"
+      class="my-10"
+    >
+    </n-empty>
   </main>
 </template>

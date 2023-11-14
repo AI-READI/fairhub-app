@@ -1,0 +1,548 @@
+/*
+Imports
+*/
+
+import * as D3 from "d3";
+
+import Easing from "../animations/easing.js";
+import Chart from "../chart.js";
+import Filters from "../interfaces/filters.js";
+import Legend from "../interfaces/legend.js";
+import Tooltip from "../interfaces/tooltip.js";
+
+/*
+Line Chart Class
+*/
+
+class LineChart extends Chart {
+  // Initialization
+  constructor(config) {
+    // Configure Parent
+    super(config);
+
+    let self = this;
+
+    // Configure Line Chart
+    self.linewidth = config.linewidth;
+    self.pointradius = config.pointradius;
+    self.accessors = config.accessors;
+    self.transitions = config.transitions;
+    self.animations = config.animations;
+    self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
+    self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
+    self.filters = Object.hasOwn(config, "filters") ? config.filters : undefined;
+
+    /*
+    Setup
+    */
+
+    // Unique Subgroups
+    self.subgroups = super.getUniqueValuesByKey(self.data, self.accessors.subgroup.key);
+
+    // Color Scale
+    self.colorscale = D3.scaleOrdinal().domain(self.subgroups).range(self.palette);
+
+    // Mapping
+    self.mapping = self.#mapData(self.data);
+
+    // Unique Colors
+    self.colors = self.mapping.colors;
+
+    // Filters
+    if (self.filters !== undefined) {
+      self.filters.values = ["All"];
+      self.filters.values.push(...self.subgroups);
+    }
+
+    /*
+    Get Visualization and Interface Elements
+    */
+
+    // Visualization Parent
+    self.svg = D3.select(`${self.getID}_visualization`)
+      .classed("line-chart unrotated", true)
+      .attr("id", `${self.setID}_visualization`);
+
+    // Interface Parent
+    self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
+
+    /*
+    Generate Axes
+    */
+
+    self.x = D3.scaleTime()
+      .domain(D3.extent(self.mapping.data, (d) => new Date(d.x)))
+      .range([0, self.dataframe.width])
+      .nice();
+
+    self.y = D3.scaleLinear()
+      .domain([self.mapping.min, self.mapping.max])
+      .range([self.dataframe.height, 0]);
+
+    self.xAxis = self.svg
+      .append("g")
+      .classed("x-axis", true)
+      .attr("id", `${self.setID}_x-axis`)
+      .attr(
+        "transform",
+        `translate(${self.margin.left}, ${self.axisframe.height + self.margin.top})`
+      )
+      .call(D3.axisBottom(self.x).tickSizeOuter(5).tickPadding(10));
+
+    self.yAxis = self.svg
+      .append("g")
+      .classed("y-axis", true)
+      .attr("id", `${self.setID}_y-axis`)
+      .attr("transform", `translate(${self.margin.left}, ${self.margin.top})`)
+      .call(D3.axisLeft(self.y));
+
+    /*
+    Generate Data Elements
+    */
+
+    self.line = D3.line()
+      .x((d) => self.x(d.x))
+      .y((d) => self.y(d.y));
+
+    self.lines = self.svg
+      .append("g")
+      .classed("lines", true)
+      .attr("id", () => `${self.setID}_lines`)
+      .attr("transform", `translate(${self.margin.left}, ${self.margin.top})`);
+
+    self.lineseries = self.lines
+      .selectAll(".line-series")
+      .data(self.mapping.series)
+      .join("path")
+      .classed("line-series interactable", true)
+      .attr("id", (d) => `${self.setID}_line-series_${self.tokenize(d.subgroup)}`)
+      .attr("fill", "none")
+      .attr("stroke", (d) => d.color)
+      .attr("stroke-width", self.linewidth)
+      .attr("opacity", self.transitions.opacity.from)
+      .attr("d", (d) => self.line(d));
+
+    self.points = self.svg
+      .append("g")
+      .classed("points", true)
+      .attr("id", () => `${self.setID}_points`)
+      .attr("transform", `translate(${self.margin.left}, ${self.margin.bottom})`);
+
+    self.pointseries = self.points
+      .selectAll(".point-series")
+      .data(self.mapping.series)
+      .join("g")
+      .classed("point-series", true)
+      .attr("id", (d) => `${self.setID}_point-series_${self.tokenize(d.subgroup)}`)
+      .attr("fill", (d) => d.color)
+      .attr("stroke", (d) => d.color)
+      .selectAll(".point")
+      .data((d) => d)
+      .join("circle")
+      .classed("point interactable", true)
+      .attr("cx", (d) => self.x(d.x))
+      .attr("cy", (d) => self.y(d.y))
+      .attr("r", self.transitions.radius.from);
+
+    /*
+    Legend
+    */
+
+    self.Legend =
+      self.legend !== undefined
+        ? new Legend({
+            accessors: self.accessors,
+            animations: self.animations,
+            container: self.viewframe,
+            data: self.mapping.legend,
+            fontsize: self.legend.fontsize,
+            getID: self.getID,
+            getPrefix: `${self.getID}_line-series`,
+            height: self.legend.height,
+            hposition: self.legend.hposition,
+            itemsize: self.legend.itemsize,
+            margin: self.margin,
+            padding: self.legend.padding,
+            setID: self.setID,
+            transitions: self.transitions,
+            uid: self.uid,
+            vposition: self.legend.vposition,
+            width: self.legend.width,
+          })
+        : null;
+
+    /*
+    Tooltip
+    */
+
+    self.Tooltip =
+      self.tooltip !== undefined
+        ? new Tooltip({
+            accessors: [self.accessors.subgroup, self.accessors.x, self.accessors.y],
+            container: self.viewframe,
+            fontsize: self.tooltip.fontsize,
+            getID: self.getID,
+            height: self.tooltip.height,
+            hposition: self.tooltip.hposition,
+            itemsize: self.tooltip.itemsize,
+            margin: self.margin,
+            padding: self.tooltip.padding,
+            setID: self.setID,
+            uid: self.uid,
+            vposition: self.tooltip.vposition,
+            width: self.tooltip.width,
+          })
+        : null;
+
+    /*
+    Filters
+    */
+
+    self.Filters =
+      self.filters !== undefined
+        ? new Filters({
+            accessor: self.filters.accessor,
+            accessors: self.accessors,
+            container: self.viewframe,
+            default: "All",
+            fontsize: self.filters.fontsize,
+            getID: self.getID,
+            height: self.filters.height,
+            hposition: self.filters.hposition,
+            itemsize: self.filters.itemsize,
+            margin: self.margin,
+            options: self.filters.values,
+            padding: self.filters.padding,
+            parent: self,
+            setID: self.setID,
+            uid: self.uid,
+            vposition: self.filters.vposition,
+            width: self.filters.width,
+          })
+        : null;
+
+    return self;
+  }
+
+  // Update
+  update(filter) {
+    let self = this;
+
+    self.clear();
+
+    /*
+    Setup
+    */
+
+    // Set Filter
+    filter = filter === undefined ? "All" : filter;
+
+    // Map Data
+    self.mapping = self.#mapData(self.data, filter);
+
+    /*
+    Get Visualization and Interface Elements
+    */
+
+    // Visualization Parent
+    self.svg = D3.select(`${self.getID}_visualization`)
+      .classed("line-chart unrotated", true)
+      .attr("id", `${self.setID}_visualization`);
+
+    // Interface Parent
+    self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
+
+    /*
+    Generate Axes
+    */
+
+    self.x = D3.scaleTime()
+      .domain(D3.extent(self.mapping.data, (d) => new Date(d.x)))
+      .range([0, self.dataframe.width]);
+
+    self.y = D3.scaleLinear()
+      .domain([self.mapping.min, self.mapping.max])
+      .range([self.dataframe.height, 0]);
+
+    self.xAxis = self.svg
+      .append("g")
+      .classed("x-axis", true)
+      .attr("id", `${self.setID}_x-axis`)
+      .attr(
+        "transform",
+        `translate(${self.margin.left}, ${self.axisframe.height + self.margin.top})`
+      )
+      .call(D3.axisBottom(self.x).tickSizeOuter(5).tickPadding(10));
+
+    self.yAxis = self.svg
+      .append("g")
+      .classed("y-axis", true)
+      .attr("id", `${self.setID}_y-axis`)
+      .attr("transform", `translate(${self.margin.left}, ${self.margin.top})`)
+      .call(D3.axisLeft(self.y));
+
+    /*
+    Generate Data Elements
+    */
+
+    self.line = D3.line()
+      .x((d) => self.x(d.x))
+      .y((d) => self.y(d.y));
+
+    self.lines = self.svg
+      .append("g")
+      .classed("lines", true)
+      .attr("id", () => `${self.setID}_lines`)
+      .attr("transform", `translate(${self.margin.left}, ${self.margin.top})`);
+
+    self.lineseries = self.lines
+      .selectAll(".line-series")
+      .data(self.mapping.series)
+      .join("path")
+      .classed("line-series", true)
+      .attr("id", (d) => `${self.setID}_line-series_${self.tokenize(d.subgroup)}`)
+      .attr("fill", "none")
+      .attr("stroke", (d) => d.color)
+      .attr("stroke-width", self.linewidth)
+      .attr("opacity", self.transitions.opacity.from)
+      .attr("d", (d) => self.line(d));
+
+    self.points = self.svg
+      .append("g")
+      .classed("points", true)
+      .attr("id", () => `${self.setID}_points`)
+      .attr("transform", `translate(${self.margin.left}, ${self.margin.bottom})`);
+
+    self.pointseries = self.points
+      .selectAll(".point-series")
+      .data(self.mapping.series)
+      .join("g")
+      .classed("point-series", true)
+      .attr("id", (d) => `${self.setID}_point-series_${self.tokenize(d.subgroup)}`)
+      .attr("fill", (d) => d.color)
+      .attr("stroke", (d) => d.color)
+      .selectAll(".point")
+      .data((d) => d)
+      .join("circle")
+      .classed("point interactable", true)
+      .attr("cx", (d) => self.x(d.x))
+      .attr("cy", (d) => self.y(d.y))
+      .attr("r", self.transitions.radius.from)
+      .on("mouseover", (e, d) => self.#mouseOverPoint(e, d))
+      .on("mouseout", (e, d) => self.#mouseOutPoint(e, d));
+
+    /*
+    Legend
+    */
+
+    self.Legend =
+      self.legend !== undefined
+        ? new Legend({
+            animations: self.animations,
+            container: self.viewframe,
+            data: self.mapping.legend,
+            fontsize: self.legend.fontsize,
+            getID: self.getID,
+            getPrefix: `${self.getID}_line-series`,
+            height: self.legend.height,
+            hposition: self.legend.hposition,
+            itemsize: self.legend.itemsize,
+            margin: self.margin,
+            padding: self.legend.padding,
+            setID: self.setID,
+            transitions: self.transitions,
+            uid: self.uid,
+            vposition: self.legend.vposition,
+            width: self.legend.width,
+          })
+        : null;
+
+    /*
+    Tooltip
+    */
+
+    self.Tooltip =
+      self.tooltip !== undefined
+        ? new Tooltip({
+            accessors: [self.accessors.subgroup, self.accessors.x, self.accessors.y],
+            container: self.viewframe,
+            fontsize: self.tooltip.fontsize,
+            getID: self.getID,
+            height: self.tooltip.height,
+            hposition: self.tooltip.hposition,
+            itemsize: self.tooltip.itemsize,
+            margin: self.margin,
+            padding: self.tooltip.padding,
+            setID: self.setID,
+            uid: self.uid,
+            vposition: self.tooltip.vposition,
+            width: self.tooltip.width,
+          })
+        : null;
+
+    /*
+    Filters
+    */
+
+    self.Filters =
+      self.filters !== undefined
+        ? new Filters({
+            accessor: self.filters.accessor,
+            accessors: self.accessors,
+            container: self.viewframe,
+            default: filter,
+            fontsize: self.filters.fontsize,
+            getID: self.getID,
+            height: self.filters.height,
+            hposition: self.filters.hposition,
+            itemsize: self.filters.itemsize,
+            margin: self.margin,
+            options: self.filters.values,
+            padding: self.filters.padding,
+            parent: self,
+            setID: self.setID,
+            uid: self.uid,
+            vposition: self.filters.vposition,
+            width: self.filters.width,
+          })
+        : null;
+
+    return self;
+  }
+
+  clear() {
+    let self = this;
+
+    self.xAxis.remove();
+    self.yAxis.remove();
+    self.lineseries.remove();
+    self.pointseries.remove();
+    self.lines.remove();
+    self.points.remove();
+    if (self.Legend !== undefined && self.Legend !== null) self.Legend.clear();
+    if (self.Tooltip !== undefined && self.Tooltip !== null) self.Tooltip.clear();
+    if (self.Filters !== undefined && self.Filters !== null) self.Filters.clear();
+
+    return self;
+  }
+
+  /*
+Event Handlers
+*/
+
+  #mouseOverPoint(e, d) {
+    let self = this;
+
+    D3.select(e.target)
+      .transition()
+      .ease(Easing[self.animations.radius.easing])
+      .duration(self.animations.radius.duration)
+      .attr("r", self.transitions.radius.to);
+
+    this.Tooltip.update(e, d);
+
+    return self;
+  }
+
+  #mouseOutPoint(e, d) {
+    let self = this;
+
+    D3.select(e.target)
+      .transition()
+      .ease(Easing[self.animations.radius.easing])
+      .duration(self.animations.radius.duration)
+      .attr("r", self.transitions.radius.from);
+
+    this.Tooltip.refresh(e, d);
+
+    return self;
+  }
+
+  /*
+Map Data and Set Value Types
+*/
+
+  #mapData(data, filter) {
+    let self = this;
+
+    if (filter !== undefined && filter !== "All") {
+      data = data.filter((datum) => datum[self.accessors.subgroup.key] == filter);
+    }
+
+    let series = [];
+    let subgroups = [];
+    let colors = [];
+    let legend = [];
+    let maxs = [];
+    let mins = [];
+
+    // Remap Values from Accessor Keys to Fixed Keys
+    data = data.map((datum) => {
+      return {
+        color: self.colorscale(datum[self.accessors.color.key]),
+        subgroup: datum[self.accessors.subgroup.key],
+        x: new Date(datum[self.accessors.x.key]),
+        y: datum[self.accessors.y.key],
+      };
+    });
+    console.log(data);
+
+    // Get Unique Colors
+    colors.push(...super.getUniqueValuesByKey(data, "color"));
+    subgroups.push(...super.getUniqueValuesByKey(data, "subgroup"));
+
+    // Compute Series-wise Max and Min Values
+    for (const i in self.subgroups) {
+      let subgroup = self.subgroups[i];
+      let max = 0,
+        min = Infinity;
+      for (const j in data) {
+        let datum = data[j];
+        if (datum.subgroup === subgroup) {
+          max = datum.y > max ? datum.y : max;
+          min = datum.y < min ? datum.y : min;
+        }
+      }
+      maxs.push(max);
+      mins.push(min);
+    }
+
+    // Generate Series
+    series.push(
+      ...D3.zip(subgroups, colors).map(([subgroup, color]) => {
+        let subseries = data.filter((datum) => {
+          return datum.subgroup === subgroup;
+        });
+        subseries.subgroup = subgroup;
+        subseries.color = color;
+        return subseries;
+      })
+    );
+
+    // Generate Legend
+    legend.push(
+      ...D3.zip(subgroups, colors).map(([subgroup, color]) => {
+        return {
+          color: color,
+          subgroup: subgroup,
+        };
+      })
+    );
+
+    return {
+      colors: colors,
+      data: data,
+      legend: legend,
+      max: Math.ceil(Math.max(...maxs)),
+      min: Math.floor(Math.min(...mins)),
+      series: series,
+      subgroups: subgroups,
+    };
+  }
+}
+
+/*
+Exports
+*/
+
+export default LineChart;

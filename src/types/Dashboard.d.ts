@@ -1,7 +1,25 @@
-import type { Vmodule } from "./Vmodule";
+import type { DashboardModuleRenderer } from "./DashboardModule";
 
-export interface Dashboard {
+export type DashboardConnectorModule = {
   id: string;
   name: string;
-  modules: Vmodule[];
+  reportId: string;
+  selected: boolean;
+};
+
+export interface DashboardConnectorConstructor {
+  dashboard_modules: DashboardConnectorModule[];
+  dashboard_name: string;
+  project_id: string;
+}
+
+export interface DashboardConnector extends DashboardConnectorConstructor {
+  dashboard_id: string;
+}
+
+export interface DashboardView {
+  dashboard_id: string;
+  dashboard_modules: DashboardModuleRenderer[];
+  dashboard_name: string;
+  project_id: string;
 }

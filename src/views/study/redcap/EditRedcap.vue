@@ -7,7 +7,6 @@ import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import { useRedcapStore } from "@/stores/redcap";
-import { useStudyStore } from "@/stores/study";
 import type { RedcapProjectView } from "@/types/redcap";
 import { baseURL } from "@/utils/constants";
 
@@ -16,53 +15,34 @@ const route = useRoute();
 const { error, success } = useMessage();
 
 const authStore = useAuthStore();
-const studyStore = useStudyStore();
 const redcapStore = useRedcapStore();
 
 const redcapProjectView: Ref<RedcapProjectView> = computed(() => redcapStore.redcapProjectView);
+const isLoading = computed(() => redcapStore.loading);
 
 const routeParams = {
   projectId: route.params.projectId as string,
   studyId: route.params.studyId as string,
 };
 
-onBeforeMount(() => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
-  }
-
-  const studyId = routeParams.studyId;
-  const projectId = routeParams.projectId;
-
-  const redcapProjectView = redcapStore.getRedcapProjectView(studyId, projectId);
-
-  // const redcapProjectView: Ref<RedcapProjectView> = ref({
-  //   project_api_active: redcapProjectView.project_api_active,
-  //   project_api_url: redcapProjectView.project_api_url,
-  //   project_id: redcapProjectView.project_id,
-  //   project_title: redcapProjectView.project_title,
-  // });
-
-  const rules: FormRules = {
-    project_api_url: [
-      {
-        message: "Please input the REDCap Project View URL",
-        required: true,
-        trigger: ["blur", "input"],
-      },
-    ],
-    project_title: [
-      {
-        message: "Please input the REDCap Project title",
-        required: true,
-        trigger: ["blur", "input"],
-      },
-    ],
-  };
-});
-
 const formRef = ref<FormInst | null>(null);
+
+const rules: FormRules = {
+  project_api_url: [
+    {
+      message: "Please input the REDCap Project View URL",
+      required: true,
+      trigger: ["blur", "input"],
+    },
+  ],
+  project_title: [
+    {
+      message: "Please input the REDCap Project title",
+      required: true,
+      trigger: ["blur", "input"],
+    },
+  ],
+};
 
 const editRedcapProjectView = (e: MouseEvent) => {
   e.preventDefault();
@@ -103,6 +83,17 @@ const editRedcapProjectView = (e: MouseEvent) => {
     }
   });
 };
+
+onBeforeMount(() => {
+  if (!authStore.isAuthenticated) {
+    error("You are not logged in.");
+    router.push({ name: "home" });
+  }
+
+  const studyId = routeParams.studyId;
+  const projectId = routeParams.projectId;
+  redcapStore.getRedcapProjectView(studyId, projectId);
+});
 </script>
 
 <template>
@@ -127,6 +118,7 @@ const editRedcapProjectView = (e: MouseEvent) => {
           v-model:value="redcapProjectView.project_title"
           :placeholder="redcapProjectView.project_title"
           clearable
+          :loading="isLoading"
         />
       </n-form-item>
 
@@ -135,11 +127,17 @@ const editRedcapProjectView = (e: MouseEvent) => {
           v-model:value="redcapProjectView.project_api_url"
           :placeholder="redcapProjectView.project_api_url"
           clearable
+          :loading="isLoading"
         />
       </n-form-item>
 
       <n-form-item label="REDCap Project View Active" path="project_api_active">
-        <n-checkbox v-model:checked="redcapProjectView.project_api_active" size="large">
+        <n-checkbox
+          v-model:checked="redcapProjectView.project_api_active"
+          size="large"
+          :indeterminate="isLoading"
+          :disabled="isLoading"
+        >
         </n-checkbox>
       </n-form-item>
 

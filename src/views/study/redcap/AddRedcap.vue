@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { FormInst, FormRules } from "naive-ui";
-import { useMessage } from "naive-ui";
+import type { FormInst, FormRules, useMessage } from "naive-ui";
 import type { Ref } from "vue";
 import { onBeforeMount, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -18,13 +17,6 @@ const authStore = useAuthStore();
 const routeParams = {
   studyId: route.params.studyId as string,
 };
-
-onBeforeMount(() => {
-  if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
-    router.push({ name: "home" });
-  }
-});
 
 const formRef = ref<FormInst | null>(null);
 
@@ -107,6 +99,13 @@ const addRedcapProjectAPI = (e: MouseEvent) => {
     }
   });
 };
+
+onBeforeMount(() => {
+  if (!authStore.isAuthenticated) {
+    error("You are not logged in.");
+    router.push({ name: "home" });
+  }
+});
 </script>
 
 <template>
@@ -124,22 +123,19 @@ const addRedcapProjectAPI = (e: MouseEvent) => {
       class="pr-4"
     >
       <n-form-item label="REDCap Project Title" path="project_title">
-        <n-input
-          v-model:value="redcapProjectAPI.project_title"
-          placeholder="My REDCap Project"
-          clearable
-        />
+        <n-input v-model:value="redcapProjectAPI.project_title" placeholder="My REDCap Project" />
       </n-form-item>
 
       <n-form-item label="REDCap Project ID" path="project_id">
-        <n-input v-model:value="redcapProjectAPI.project_id" placeholder="12345" clearable />
+        <n-input v-model:value="redcapProjectAPI.project_id" placeholder="12345" />
       </n-form-item>
 
       <n-form-item label="REDCap Project API Key" path="project_api_key">
         <n-input
           v-model:value="redcapProjectAPI.project_api_key"
           placeholder="BF021AA2776011EEB9620242AC120002"
-          clearable
+          type="password"
+          show-password-on="click"
         />
       </n-form-item>
 
@@ -147,7 +143,6 @@ const addRedcapProjectAPI = (e: MouseEvent) => {
         <n-input
           v-model:value="redcapProjectAPI.project_api_url"
           placeholder="https://redcap.my-university.edu"
-          clearable
         />
       </n-form-item>
 

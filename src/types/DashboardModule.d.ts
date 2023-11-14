@@ -1,3 +1,11 @@
+import { Chart } from "@/modules/visualizations/chart";
+import { DoughnutChart } from "@/modules/visualizations/charts/doughnut";
+import { LineChart } from "@/modules/visualizations/charts/line";
+import { ProgressChart } from "@/modules/visualizations/charts/progress";
+import { RidgelineChart } from "@/modules/visualizations/charts/ridgeline";
+import { SankeyChart } from "@/modules/visualizations/charts/sankey";
+import { StackedbarChart } from "@/modules/visualizations/charts/stackedbar";
+
 import {
   Compound,
   DoubleCategorical,
@@ -9,7 +17,8 @@ import {
   SingleContinuous,
   SingleDiscrete,
   SingleTimeseries,
-} from "./Vtypes";
+  VdatumGeneric,
+} from "./Vdatum";
 
 /*
 Layout Position Modifiers
@@ -21,6 +30,7 @@ export interface BoundingBox {
   right?: number;
   top?: number;
 }
+export type Position = typeof BoundingBox;
 export type Padding = typeof BoundingBox;
 export type Border = typeof BoundingBox;
 export type Margin = typeof BoundingBox;
@@ -51,19 +61,19 @@ export interface Transitions {
 Data Accessors
 */
 
-export interface Vaccessor {
+export interface Accessor {
   name: string;
   key: string;
   type: string;
 }
-export interface Vaccessors {
-  color: Vaccessor;
-  filterby: Vaccessor;
-  group: Vaccessor;
-  subgroup?: Vaccessor;
-  value?: Vaccessor;
-  x?: Vaccessor;
-  y?: Vaccessor;
+export interface Accessors {
+  color: Accessor;
+  filterby: Accessor;
+  group: Accessor;
+  subgroup?: Accessor;
+  value?: Accessor;
+  x?: Accessor;
+  y?: Accessor;
 }
 
 /*
@@ -92,10 +102,11 @@ export interface Interface {
 Visualization
 */
 
-export interface Visualization {
-  accessors: Vaccessors;
+export interface VisualizationConfig {
+  id: string;
+  accessors: Accessors;
   animations?: Animations;
-  data:
+  data?:
     | SingleCategorical
     | DoubleCategorical
     | SingleDiscrete
@@ -106,22 +117,57 @@ export interface Visualization {
     | DoubleDiscreteTimeseries
     | DoubleContinuousTimeseries
     | Compound;
+  filters?: Filters;
+  height: number;
+  legend?: Legend;
+  margin?: Margin;
+  padding?: Padding;
   palette?: string[];
-  rotate: boolean;
+  position?: Position;
+  rotate?: boolean;
+  tooltip?: Tooltip;
   transitions?: Transitions;
   type: string;
+  width: number;
+}
+
+export interface VisualizationRenderer {
+  class?:
+    | Chart
+    | DoughnutChart
+    | LineChart
+    | ProgressChart
+    | RidgelineChart
+    | SankeyChart
+    | StackedbarChart;
+  config: VisualizationConfig;
+}
+
+export interface VisualizationData {
+  id: string;
+  data: VdatumGeneric;
 }
 
 /*
 Module
 */
 
-export interface VModule {
+export interface DashbordModuleData {
+  id: string;
+  name: string;
+  reportId: string;
+  selected: boolean;
+  visualizations: VisualizationData[];
+}
+
+export interface DashboardModuleRenderer {
   id: string;
   name: string;
   title: string;
-  interface: Interface;
-  ordering: string;
+  height: number;
+  reportId: string;
+  selected: boolean;
   subtitle: string;
-  visualizations: Visualization[];
+  visualizations: VisualizationRenderer[];
+  width: number;
 }

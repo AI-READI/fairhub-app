@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-import type { RedcapProjectDashboard } from "@/types/Redcap";
+import type { RedcapProjectView } from "@/types/Redcap";
 import { baseURL } from "@/utils/constants";
 
 export const useRedcapStore = defineStore("redcap", () => {
@@ -8,18 +8,6 @@ export const useRedcapStore = defineStore("redcap", () => {
 
   const allRedcapProjectViews = ref<RedcapProjectView[]>([]);
   const redcapProjectView = ref<RedcapProjectView>({
-    project_api_active: false,
-    project_api_url: "",
-    project_id: "",
-    project_title: "",
-  });
-  const allRedcapProjectDashboards = ref<RedcapProjectDashboard[]>([]);
-  const redcapProjectDashboard = ref<RedcapProjectDashboard>({
-    dashboard: {
-      id: "",
-      name: "",
-      modules: [],
-    },
     project_api_active: false,
     project_api_url: "",
     project_id: "",
@@ -37,40 +25,37 @@ export const useRedcapStore = defineStore("redcap", () => {
       throw new Error("RedcapProjectViews not found");
     }
 
-    const redcapProjectViews = await response.json();
+    const allRedcapProjectViewsResponse = await response.json();
 
-    console.log("response redcap projects views", redcapProjectViews);
+    console.log("response redcap projects views", allRedcapProjectViewsResponse);
 
-    allRedcapProjectViews.value = redcapProjectViews as RedcapProjectView[];
+    allRedcapProjectViews.value = allRedcapProjectViewsResponse as RedcapProjectView[];
 
     console.log("redcap projects views", allRedcapProjectViews.value);
 
-    /** Sort by name for now */
-    allRedcapProjectViews.value.sort((a, b) => a.project_title.localeCompare(b.project_title));
+    /** Sort by title for now */
+    allRedcapProjectViews.value.sort((a, b) => b.project_title.localeCompare(a.project_title));
 
     loading.value = false;
   };
 
   const getRedcapProjectView = async (studyId: string, projectId: string) => {
     loading.value = true;
+
     const query = new URLSearchParams({ project_id: projectId });
     const response = await fetch(`${baseURL}/study/${studyId}/redcap?${query}`, {
       method: "GET",
     });
 
-    console.log(response);
-
     if (!response.ok) {
       throw new Error("RedcapProjectView GET not found");
     }
 
-    const data = await response.json();
+    const redcapProjectViewResponse = await response.json();
 
-    const r = data as RedcapProjectView;
+    console.log("response redcap project view", redcapProjectViewResponse);
 
-    redcapProjectView.value = r;
-
-    console.log("response redcap project view", redcapProjectView.value);
+    redcapProjectView.value = redcapProjectViewResponse as RedcapProjectView;
 
     console.log("redcap project view", redcapProjectView.value);
 
@@ -98,75 +83,12 @@ export const useRedcapStore = defineStore("redcap", () => {
     return true;
   };
 
-  const fetchAllRedcapProjectDashboards = async (studyId: string) => {
-    loading.value = true;
-
-    const response = await fetch(`${baseURL}/study/${studyId}/redcap/dashboards`, {
-      method: "GET",
-    });
-
-    if (!response.ok) {
-      throw new Error("RedcapProjectDashboard GET not found");
-    }
-
-    const data = await response.json();
-
-    const r = data as RedcapProjectDashboard[];
-
-    allRedcapProjectDashboards.value = r;
-
-    console.log("response redcap project dashboards", allRedcapProjectDashboards.value);
-
-    console.log("redcap project dashboards", allRedcapProjectDashboards.value);
-
-    loading.value = false;
-
-    return allRedcapProjectDashboards.value;
-  };
-
-  const getRedcapProjectDashboard = async (
-    studyId: string,
-    redcapProjectId: string,
-    dashboardId: string
-  ) => {
-    loading.value = true;
-
-    const response = await fetch(
-      `${baseURL}/study/${studyId}/redcap/${redcapProjectId}/dashboard/${dashboardId}`,
-      {
-        method: "GET",
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("RedcapProjectDashboard GET not found");
-    }
-
-    const data = await response.json();
-
-    const d = data as RedcapProjectDashboard;
-
-    redcapProjectDashboard.value = d;
-
-    console.log("response redcap project dashboard");
-
-    console.log("redcap project dashboard", redcapProjectDashboard.value);
-
-    loading.value = false;
-
-    return redcapProjectDashboard;
-  };
-
   return {
-    allRedcapProjectDashboards,
     allRedcapProjectViews,
     deleteRedcapProjectAPI,
-    fetchAllRedcapProjectDashboards,
     fetchAllRedcapProjectViews,
-    getRedcapProjectDashboard,
     getRedcapProjectView,
     loading,
-    redcapProjectDashboard,
     redcapProjectView,
   };
 });
