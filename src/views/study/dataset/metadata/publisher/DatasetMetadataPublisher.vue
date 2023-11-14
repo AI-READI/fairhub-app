@@ -62,9 +62,9 @@ const saveMetadata = (e: MouseEvent) => {
       loading.value = true;
 
       const data = {
-        managing_organization_name: moduleData.value.managing_organization_name || "",
+        managing_organization_name: moduleData.value.managing_organization_name,
         managing_organization_ror_id: moduleData.value.managing_organization_ror_id || "",
-        publisher: moduleData.value.publisher || "",
+        publisher: moduleData.value.publisher,
       };
 
       const response = await fetch(

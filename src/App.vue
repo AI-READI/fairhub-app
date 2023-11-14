@@ -26,6 +26,7 @@ const themeOverrides: GlobalThemeOverrides = {
         <n-space vertical size="large">
           <n-layout has-sider>
             <AppSidebar />
+
             <DatasetSidebar />
 
             <n-layout-content class="h-[calc(100vh-56px)] py-4 pl-6">

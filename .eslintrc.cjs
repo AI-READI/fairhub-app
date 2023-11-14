@@ -60,5 +60,6 @@ module.exports = {
         varsIgnorePattern: "^_",
       },
     ],
+    "vue/padding-line-between-tags": ["error", [{ blankLine: "always", next: "*", prev: "*" }]],
   },
 };

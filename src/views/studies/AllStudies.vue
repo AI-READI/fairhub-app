@@ -147,21 +147,25 @@ const navigateToStudy = (studyId: string) => {
           <n-space vertical>
             <n-space>
               <n-switch size="small" v-model:value="filterStore.permissions.owner" />
+
               <span class="text-sm font-medium"> Owner </span>
             </n-space>
 
             <n-space>
               <n-switch size="small" v-model:value="filterStore.permissions.admin" />
+
               <span class="text-sm font-medium"> Admin </span>
             </n-space>
 
             <n-space>
               <n-switch size="small" v-model:value="filterStore.permissions.editor" />
+
               <span class="text-sm font-medium"> Editor </span>
             </n-space>
 
             <n-space>
               <n-switch size="small" v-model:value="filterStore.permissions.viewer" />
+
               <span class="text-sm font-medium"> Viewer </span>
             </n-space>
           </n-space>
@@ -229,6 +233,7 @@ const navigateToStudy = (studyId: string) => {
               <div class="flex flex-col space-y-2">
                 <div class="flex justify-between pt-2">
                   <h3>{{ study.title }}</h3>
+
                   <span> {{ filesize(study.size || 0) }} </span>
                 </div>
 
@@ -241,6 +246,7 @@ const navigateToStudy = (studyId: string) => {
 
               <p class="pt-2">
                 <span class="font-bold"> Last updated: </span>
+
                 <span> {{ displayHumanFriendlyDateAndTime(study.updated_on) }} </span>
               </p>
 
@@ -265,6 +271,7 @@ const navigateToStudy = (studyId: string) => {
             </div> -->
             </div>
           </li>
+
           <n-empty
             v-if="studies.length === 0"
             description="No studies found"

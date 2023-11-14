@@ -16,6 +16,7 @@
       <div class="grid grid-cols-1 gap-4">
         <div v-for="weight in item.weights" :key="weight" class="flex flex-col pb-4">
           <span :class="weight" class="text-5xl"> The five boxing wizards jump quickly </span>
+
           <span>{{ weight }}</span>
         </div>
       </div>

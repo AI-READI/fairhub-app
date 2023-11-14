@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FormInst, UploadFileInfo } from "naive-ui";
+import type { FormInst } from "naive-ui";
 
 import type { UserProfile } from "@/types/User";
 import { baseURL } from "@/utils/constants";
@@ -79,19 +79,19 @@ const handleUpdateValue = (value: string[]) => {
   console.log(value);
 };
 
-const file2Base64 = (file: File): Promise<string> => {
-  return new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result?.toString() || "");
-    reader.onerror = (error) => reject(error);
-  });
-};
+// const file2Base64 = (file: File): Promise<string> => {
+//   return new Promise<string>((resolve, reject) => {
+//     const reader = new FileReader();
+//     reader.readAsDataURL(file);
+//     reader.onload = () => resolve(reader.result?.toString() || "");
+//     reader.onerror = (error) => reject(error);
+//   });
+// };
 
-async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileInfo[] }) {
-  if (!file.file) return;
-  userProfile.value.profile_image = await file2Base64(file.file);
-}
+// async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileInfo[] }) {
+//   if (!file.file) return;
+//   userProfile.value.profile_image = await file2Base64(file.file);
+// }
 </script>
 
 <template>
@@ -136,6 +136,7 @@ async function onChange({ file }: { file: UploadFileInfo; fileList: UploadFileIn
               clearable
             />
           </n-form-item>
+
           <n-form-item label="Family Name" path="last_name">
             <n-input
               v-model:value="userProfile.last_name"

@@ -97,8 +97,8 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data: any = moduleData.interventions.map((item) => {
         const entry = {
-          name: item.name || "",
-          arm_group_label_list: item.arm_group_label_list || [],
+          name: item.name,
+          arm_group_label_list: item.arm_group_label_list,
           description: item.description || "",
           other_name_list: item.other_name_list || [],
           type: item.type,

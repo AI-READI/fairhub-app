@@ -154,6 +154,7 @@ const saveMetadata = (e: MouseEvent) => {
             size="large"
           >
             <template #checked> Yes </template>
+
             <template #unchecked> No </template>
           </n-switch>
         </n-form-item>
@@ -170,6 +171,7 @@ const saveMetadata = (e: MouseEvent) => {
             size="large"
           >
             <template #checked> Yes </template>
+
             <template #unchecked> No </template>
           </n-switch>
         </n-form-item>
@@ -186,6 +188,7 @@ const saveMetadata = (e: MouseEvent) => {
             size="large"
           >
             <template #checked> Yes </template>
+
             <template #unchecked> No </template>
           </n-switch>
         </n-form-item>
@@ -197,6 +200,7 @@ const saveMetadata = (e: MouseEvent) => {
         >
           <n-switch v-model:value="moduleData.genetic_only" :round="true" class="mx-1" size="large">
             <template #checked> Yes </template>
+
             <template #unchecked> No </template>
           </n-switch>
         </n-form-item>
@@ -208,6 +212,7 @@ const saveMetadata = (e: MouseEvent) => {
         >
           <n-switch v-model:value="moduleData.no_methods" :round="true" class="mx-1" size="large">
             <template #checked> Yes </template>
+
             <template #unchecked> No </template>
           </n-switch>
         </n-form-item>

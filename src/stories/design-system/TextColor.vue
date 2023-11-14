@@ -14,12 +14,15 @@
     <div class="grid grid-cols-4 gap-4">
       <div class="flex w-max flex-col py-3">
         <span class="text-primary text-5xl"> Aa </span>
+
         <span>text-primary</span>
 
         <span class="text-secondary text-5xl"> Aa </span>
+
         <div>text-secondary</div>
       </div>
     </div>
+
     <p>
       If you need to control over shades you can use the following classes to stay in primary color
       range.
@@ -31,6 +34,7 @@
       <div class="grid grid-cols-4 gap-4">
         <div v-for="color in item.colors" :key="color" class="flex flex-col">
           <span :class="color" class="text-5xl"> Aa </span>
+
           <span>{{ color }}</span>
         </div>
       </div>

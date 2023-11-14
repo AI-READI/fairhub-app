@@ -1,30 +1,33 @@
 <script setup>
-const props = defineProps({
-  title: {
-    default: "Root",
-    type: String,
-  },
-  colors: {
-    required: true,
-    type: Object,
-  },
-  useDefaultBackgroundColor: {
-    default: false,
-    type: Boolean,
-  },
-});
+// const props = defineProps({
+//   title: {
+//     default: "Root",
+//     type: String,
+//   },
+//   colors: {
+//     required: true,
+//     type: Object,
+//   },
+//   useDefaultBackgroundColor: {
+//     default: false,
+//     type: Boolean,
+//   },
+// });
 </script>
 
 <template>
   <div class="color-section">
     <h3>{{ title }}</h3>
+
     <div class="colors-container">
       <div v-for="(color, key) in colors" :key="key">
         <div class="colors-container__wrapper">
           <div>
             <div class="color" :style="`background-color: ${color}`" />
+
             <div class="color-description">
               <p class="key-color">{{ key }}</p>
+
               <p class="hex-color">{{ color }}</p>
             </div>
           </div>

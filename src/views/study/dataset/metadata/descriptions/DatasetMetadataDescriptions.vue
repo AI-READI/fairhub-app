@@ -100,8 +100,8 @@ const saveMetadata = (e: MouseEvent) => {
 
       const data = tempDescriptions.map((item) => {
         const entry = {
-          description: item.description || "",
-          type: item.type || null,
+          description: item.description,
+          type: item.type,
         };
 
         if (item.origin === "local") {
@@ -161,6 +161,7 @@ const saveMetadata = (e: MouseEvent) => {
 
     <FadeTransition>
       <LottieLoader v-if="loading" />
+
       <n-form
         ref="formRef"
         :model="moduleData"

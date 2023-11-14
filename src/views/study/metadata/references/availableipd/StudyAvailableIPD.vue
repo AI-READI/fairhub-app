@@ -80,9 +80,9 @@ const saveMetadata = (e: MouseEvent) => {
       const data = moduleData.ipd_list.map((item) => {
         const entry = {
           comment: item.comment || "",
-          identifier: item.identifier || "",
-          type: item.type || null,
-          url: item.url || "",
+          identifier: item.identifier,
+          type: item.type,
+          url: item.url,
         };
 
         if (item.origin === "local") {

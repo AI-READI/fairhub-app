@@ -57,8 +57,11 @@ export default defineComponent({
     :options="options"
     v-if="mode === 'basic'"
   />
+
   <n-select v-model:value="value" :options="options" v-if="mode === 'basic'" />
+
   <n-button v-if="mode === 'size'">Size</n-button>
+
   <n-space vertical v-if="mode === 'size'">
     <n-select
       v-model:value="value"
@@ -67,6 +70,7 @@ export default defineComponent({
       :mode="mode"
       v-if="mode === 'size'"
     />
+
     <n-select
       v-model:value="value"
       size="large"

@@ -70,12 +70,16 @@ export default defineComponent({
         <n-switch :size="size" :status="status" v-model:value="checkStrategyIsChild" />Child Check
         Strategy
       </n-space>
+
       <n-space
         ><n-switch v-model:value="showPath" :status="status" :size="size" />Show Path</n-space
       >
+
       <n-space><n-switch v-model:value="hoverTrigger" :status="status" />Hover Trigger</n-space>
+
       <n-space><n-switch v-model:value="filterable" />Filterable</n-space>
     </n-space>
+
     <n-cascader
       :status="status"
       :size="size"
