@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import type { MenuOption } from "naive-ui";
+import type { MenuInst, MenuOption } from "naive-ui";
 import { NLayoutSider, NMenu, NSpace } from "naive-ui";
 import { computed, h } from "vue";
+// import {ref} from "vue/dist/vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 
 import { useSidebarStore } from "@/stores/sidebar";
@@ -380,6 +381,20 @@ const defaultExpandedKeys = computed(() => {
   }
   return [];
 });
+
+const selectedKeyRef = ref("1");
+const menuInstRef = ref<MenuInst | null>(null);
+
+const selectAndExpand = (key: string) => {
+  selectedKeyRef.value = key;
+  menuInstRef.value?.showOption(key);
+};
+
+router.beforeEach((to, from) => {
+  if (typeof to.name !== "string") return;
+  const name: string = to.meta && to.meta.menuItem ? (to.meta.menuItem as string) : to.name;
+  selectAndExpand(name);
+});
 </script>
 
 <template>
@@ -397,6 +412,8 @@ const defaultExpandedKeys = computed(() => {
     <n-space vertical justify="space-between" class="h-full">
       <div class="flex flex-col justify-start divide-y">
         <n-menu
+          ref="menuInstRef"
+          v-model:value="selectedKeyRef"
           :collapsed-width="64"
           :collapsed-icon-size="22"
           :default-expanded-keys="defaultExpandedKeys"
@@ -407,6 +424,8 @@ const defaultExpandedKeys = computed(() => {
       </div>
 
       <n-menu
+        ref="menuInstRef"
+        v-model:value="selectedKeyRef"
         :collapsed-width="64"
         :collapsed-icon-size="22"
         :collapsed="sidebarCollapsed"
