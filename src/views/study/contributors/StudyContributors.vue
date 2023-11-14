@@ -244,6 +244,14 @@ const removeContributor = async (id: string) => {
     throw new Error("Network response was not ok");
   }
 
+  if (id === authStore.user.id) {
+    push.success("You have left the study!");
+
+    router.push({ name: "studies:all-studies" });
+
+    return;
+  }
+
   push.success("Contributor removed!");
 
   window.location.reload();
