@@ -137,6 +137,7 @@ function deleteDashboard(studyId: string, dashboardId: string) {
     <n-space justify="space-between">
       <h2>All Dashboards</h2>
     </n-space>
+
     <div>
       <div class="flex items-center space-x-3 border-t pt-4">
         <n-popover trigger="click" placement="bottom-start">
@@ -150,26 +151,36 @@ function deleteDashboard(studyId: string, dashboardId: string) {
               Permission
             </n-button>
           </template>
+
           <n-space vertical>
             <n-space>
               <n-switch size="small" v-model:value="filterStore.permissions.owner" />
+
               <span class="text-sm font-medium"> Owner </span>
             </n-space>
+
             <n-space>
               <n-switch size="small" v-model:value="filterStore.permissions.admin" />
+
               <span class="text-sm font-medium"> Admin </span>
             </n-space>
+
             <n-space>
               <n-switch size="small" v-model:value="filterStore.permissions.editor" />
+
               <span class="text-sm font-medium"> Editor </span>
             </n-space>
+
             <n-space>
               <n-switch size="small" v-model:value="filterStore.permissions.viewer" />
+
               <span class="text-sm font-medium"> Viewer </span>
             </n-space>
           </n-space>
         </n-popover>
+
         <n-divider vertical />
+
         <n-popover trigger="click" placement="bottom-start" class="w-[180px]">
           <template #trigger>
             <n-button strong tertiary type="info">
@@ -181,6 +192,7 @@ function deleteDashboard(studyId: string, dashboardId: string) {
               Sort
             </n-button>
           </template>
+
           <n-space vertical>
             <div
               v-for="option in sortOptions"
@@ -189,6 +201,7 @@ function deleteDashboard(studyId: string, dashboardId: string) {
               class="flex cursor-pointer items-center justify-between space-x-4 rounded-md p-2 transition-all hover:bg-slate-100"
             >
               <span class="text-sm font-medium"> {{ option.label }} </span>
+
               <FadeTransition>
                 <f-icon
                   icon="mdi:tick"
@@ -200,32 +213,40 @@ function deleteDashboard(studyId: string, dashboardId: string) {
             </div>
           </n-space>
         </n-popover>
+
         <n-button @click="toggleSortOrder" text type="info">
           <n-icon>
             <f-icon :icon="sortOrder === 'asc' ? 'bi:sort-up' : 'bi:sort-down'" height="20" />
           </n-icon>
         </n-button>
       </div>
+
       <n-divider />
+
       <div class="dashboard-choices">
         <n-table :bordered="true" :single-line="true">
           <thead>
             <FadeTransition>
               <LottieLoader v-if="isLoading" />
+
               <TransitionGroup name="fade" tag="tr" class="p-0" v-else>
                 <th v-for="(item, index) in columns" :key="index">{{ item }}</th>
               </TransitionGroup>
             </FadeTransition>
           </thead>
+
           <FadeTransition>
             <LottieLoader v-if="isLoading" />
+
             <TransitionGroup name="fade" tag="tbody" class="p-0" v-else>
               <tr
                 v-for="(dashboard, dashboard_index) in dashboardConnectors"
                 :key="dashboard_index"
               >
                 <td>{{ dashboard.project_id }}</td>
+
                 <td>{{ dashboard.dashboard_name }}</td>
+
                 <td>
                   <n-space>
                     <n-tag
@@ -238,6 +259,7 @@ function deleteDashboard(studyId: string, dashboardId: string) {
                     </n-tag>
                   </n-space>
                 </td>
+
                 <td>
                   <div class="flex items-center space-x-2">
                     <RouterLink
@@ -256,6 +278,7 @@ function deleteDashboard(studyId: string, dashboardId: string) {
                         View Dashboard
                       </n-button>
                     </RouterLink>
+
                     <RouterLink
                       :to="{
                         name: 'study:dashboard:edit-dashboard',
@@ -272,6 +295,7 @@ function deleteDashboard(studyId: string, dashboardId: string) {
                         Edit Dashboard
                       </n-button>
                     </RouterLink>
+
                     <n-popconfirm
                       @positive-click="
                         deleteDashboard(dashboardRouteParams.studyId, dashboard.dashboard_id)
@@ -294,6 +318,7 @@ function deleteDashboard(studyId: string, dashboardId: string) {
           </FadeTransition>
         </n-table>
       </div>
+
       <n-empty
         v-if="dashboardConnectors.length === 0"
         description="No Dashboard Found"

@@ -47,13 +47,16 @@ export default {
       preserveAspectRatio="xMinYMid meet"
       xmlns="http://www.w3.org/2000/svg"
     />
+
     <n-grid :cols="3" :x-gap="20" :id="`${visualization.setID}_interface`" class="interface">
       <n-grid-item v-if="visualization.legend">
         <n-card :id="`${visualization.setID}_legend`" :segmented="true" :bordered="false"></n-card>
       </n-grid-item>
+
       <n-grid-item v-if="visualization.tooltip">
         <n-card :id="`${visualization.setID}_tooltip`" :segmented="true" :bordered="false"></n-card>
       </n-grid-item>
+
       <n-grid-item v-if="visualization.filters">
         <n-dropdown
           trigger="click"

@@ -143,6 +143,7 @@ function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
   <main class="flex w-full flex-col pr-6">
     <n-space justify="space-between">
       <HeadingText title="REDCap" description="View, update, and delete study REDCap API links" />
+
       <RouterLink
         :to="{
           name: 'study:redcap:add-redcap-project-api',
@@ -157,6 +158,7 @@ function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
         </n-button>
       </RouterLink>
     </n-space>
+
     <div class="flex items-center space-x-3 border-t pt-4">
       <n-popover trigger="click" placement="bottom-start">
         <template #trigger>
@@ -169,26 +171,36 @@ function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
             Permission
           </n-button>
         </template>
+
         <n-space vertical>
           <n-space>
             <n-switch size="small" v-model:value="filterStore.permissions.owner" />
+
             <span class="text-sm font-medium"> Owner </span>
           </n-space>
+
           <n-space>
             <n-switch size="small" v-model:value="filterStore.permissions.admin" />
+
             <span class="text-sm font-medium"> Admin </span>
           </n-space>
+
           <n-space>
             <n-switch size="small" v-model:value="filterStore.permissions.editor" />
+
             <span class="text-sm font-medium"> Editor </span>
           </n-space>
+
           <n-space>
             <n-switch size="small" v-model:value="filterStore.permissions.viewer" />
+
             <span class="text-sm font-medium"> Viewer </span>
           </n-space>
         </n-space>
       </n-popover>
+
       <n-divider vertical />
+
       <n-popover trigger="click" placement="bottom-start" class="w-[180px]">
         <template #trigger>
           <n-button strong tertiary type="info">
@@ -200,6 +212,7 @@ function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
             Sort
           </n-button>
         </template>
+
         <n-space vertical>
           <div
             v-for="option in sortOptions"
@@ -208,6 +221,7 @@ function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
             class="flex cursor-pointer items-center justify-between space-x-4 rounded-md p-2 transition-all hover:bg-slate-100"
           >
             <span class="text-sm font-medium"> {{ option.label }} </span>
+
             <FadeTransition>
               <f-icon
                 icon="mdi:tick"
@@ -219,33 +233,43 @@ function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
           </div>
         </n-space>
       </n-popover>
+
       <n-button @click="toggleSortOrder" text type="info">
         <n-icon>
           <f-icon :icon="sortOrder === 'asc' ? 'bi:sort-up' : 'bi:sort-down'" height="20" />
         </n-icon>
       </n-button>
     </div>
+
     <n-divider />
+
     <div class="redcap-choices">
       <n-table :bordered="true" :single-line="false">
         <thead>
           <FadeTransition>
             <LottieLoader v-if="isLoading" />
+
             <TransitionGroup name="fade" tag="tr" class="p-0" v-else>
               <th v-for="(item, index) in columns" :key="index">{{ item }}</th>
             </TransitionGroup>
           </FadeTransition>
         </thead>
+
         <FadeTransition>
           <LottieLoader v-if="isLoading" />
+
           <TransitionGroup name="fade" tag="tbody" class="p-0" v-else>
             <tr v-for="(item, index) in redcapProjectViews" :key="index">
               <td>{{ item.project_title }}</td>
+
               <td>{{ item.project_id }}</td>
+
               <td>{{ item.project_api_url }}</td>
+
               <td style="text-transform: Capitalize; text-align: center">
                 {{ item.project_api_active }}
               </td>
+
               <td>
                 <div class="flex items-center space-x-2">
                   <RouterLink
@@ -264,6 +288,7 @@ function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
                       Edit API Link
                     </n-button>
                   </RouterLink>
+
                   <n-popconfirm
                     @positive-click="
                       deleteRedcapProjectApiLink(redcapRouteParams.studyId, item.project_id)
@@ -282,6 +307,7 @@ function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
                   </n-popconfirm>
                 </div>
               </td>
+
               <td>
                 <div class="flex items-center space-x-2">
                   <RouterLink
@@ -307,6 +333,7 @@ function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
         </FadeTransition>
       </n-table>
     </div>
+
     <n-empty
       v-if="redcapProjectViews.length === 0"
       description="No REDCap API links found"

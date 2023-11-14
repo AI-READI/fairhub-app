@@ -42,14 +42,18 @@ onBeforeMount(() => {
 <template>
   <main class="flex w-full flex-col pr-6">
     <HeadingText v-if="isLoading" title="Loading Dashboard" description="Please wait..." />
+
     <HeadingText
       :title="`${dashboardView.dashboard_name}`"
       :description="`${study.title} / REDCap PID: ${dashboardView.project_id}`"
       v-else
     />
+
     <n-divider />
+
     <FadeTransition>
       <LottieLoader v-if="isLoading" />
+
       <TransitionGroup name="fade" tag="div" class="p-0" v-else>
         <div
           v-for="(module, module_index) in dashboardView.dashboard_modules.filter(
@@ -59,9 +63,11 @@ onBeforeMount(() => {
         >
           <div :id="module.id">
             <h3>{{ module.title }}</h3>
+
             <p class="pb-8 pt-2">
               {{ module.subtitle }}
             </p>
+
             <DashboardModule
               :key="module.id"
               :vconfigs="module.visualizations as VisualizationRenderer[]"

@@ -159,6 +159,7 @@ onBeforeMount(() => {
       title="Connect Dashboard to REDCap"
       :description="`REDCap Project ID (pid): ${routeParams.projectId}`"
     />
+
     <n-divider />
 
     <n-form
@@ -176,12 +177,15 @@ onBeforeMount(() => {
           clearable
         />
       </n-form-item>
+
       <n-divider title-placement="center">Select Dashboard Modules</n-divider>
+
       <n-form-item
         id="select-and-report-id"
         path="selectionAndReportId"
         style="display: block"
       ></n-form-item>
+
       <n-grid
         :x-gap="0"
         :y-gap="0"
@@ -200,9 +204,11 @@ onBeforeMount(() => {
             </n-checkbox>
           </n-form-item>
         </n-grid-item>
+
         <n-grid-item :span="1">
           <div style="text-align: left; padding-left: 20px">→</div>
         </n-grid-item>
+
         <n-grid-item :span="3">
           <n-form-item :label="`REDCap Report ID`" path="reportId">
             <n-input
@@ -216,6 +222,7 @@ onBeforeMount(() => {
             />
           </n-form-item>
         </n-grid-item>
+
         <n-grid-item :span="5">
           <n-card
             :bordered="false"
@@ -241,6 +248,7 @@ onBeforeMount(() => {
       </n-grid>
       <!-- </n-form-item> -->
       <n-divider />
+
       <div class="flex justify-start">
         <n-button size="large" type="primary" @click="connectDashboard">
           <template #icon>
