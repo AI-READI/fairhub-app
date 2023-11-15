@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
+import { useRouter } from "vue-router";
 
 import FORM_JSON from "@/assets/data/form.json";
 import type { DatasetAccess } from "@/types/Dataset";
@@ -7,6 +8,8 @@ import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const push = usePush();
+
+const router = useRouter();
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
@@ -102,10 +105,7 @@ const saveMetadata = (e: MouseEvent) => {
     <PageBackNavigationHeader
       title="Access Details"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
-      linkName="study:overview"
-      :linkParams="{
-        studyId: route.params.studyId,
-      }"
+      @click="router.go(-1)"
     />
 
     <n-divider />

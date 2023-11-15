@@ -146,8 +146,7 @@ const saveMetadata = (e: MouseEvent) => {
     <PageBackNavigationHeader
       title="Titles"
       description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-      linkName="dataset:overview"
-      :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
+      @click="router.go(-1)"
     />
 
     <n-divider />

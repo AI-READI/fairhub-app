@@ -4,7 +4,7 @@ import type { FormInst } from "naive-ui";
 import FORM_JSON from "@/assets/data/form.json";
 import type { DatasetRecordKeys } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
-
+const router = useRouter();
 const route = useRoute();
 const push = usePush();
 
@@ -98,10 +98,7 @@ const saveMetadata = (e: MouseEvent) => {
     <PageBackNavigationHeader
       title="Record Keys"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
-      linkName="study:overview"
-      :linkParams="{
-        studyId: route.params.studyId,
-      }"
+      @click="router.go(-1)"
     />
 
     <n-divider />
