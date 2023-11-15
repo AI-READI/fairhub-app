@@ -94,10 +94,7 @@ const saveMetadata = (e: MouseEvent) => {
     <PageBackNavigationHeader
       title="IPD Sharing"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
-      linkName="study:overview"
-      :linkParams="{
-        studyId: route.params.studyId,
-      }"
+      @click="router.go(-1)"
     />
 
     <n-divider />
