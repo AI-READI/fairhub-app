@@ -22,7 +22,6 @@ class StackedBarChart extends Chart {
     const self = this;
 
     // Configure Stacked Bar Chart
-    self.accessors = config.accessors;
     self.rotate = config.rotate;
     self.transitions = config.transitions;
     self.animations = config.animations;
@@ -42,11 +41,10 @@ class StackedBarChart extends Chart {
     Setup
     */
 
-    // Set Unique Groups and Subgroups
+    // Set Unique Filters, Groups, and Subgroups
+    self.filterby = super.getUniqueValuesByKey(self.data, self.accessors.filterby.key);
     self.groups = super.getUniqueValuesByKey(self.data, self.accessors.group.key);
     self.subgroups = super.getUniqueValuesByKey(self.data, self.accessors.subgroup.key);
-    self.filterby = super.getUniqueValuesByKey(self.data, self.accessors.filterby.key);
-
     // Set Color Scale
     self.colorscale = D3.scaleOrdinal().domain(self.subgroups).range(self.palette);
 
@@ -58,6 +56,7 @@ class StackedBarChart extends Chart {
 
     // Set Mapping
     self.mapping = self.mapData(self.data);
+
     // Set Colors
     self.colors = self.mapping.colors;
 
@@ -135,11 +134,11 @@ class StackedBarChart extends Chart {
           .call(D3.axisRight(self.y).tickSizeOuter(0));
 
     self.xLabels = self.rotate
-      ? self.xAxis.selectAll("text").classed("label", true)
+      ? self.xAxis.selectAll("text").classed("label", true).attr("text-anchor", "start")
       : self.xAxis
           .selectAll(".tick")
           .data(self.groups)
-          .attr("transform", (d) => `translate(${self.x(d) + 1}, 0)`)
+          .attr("transform", (d) => `translate(${self.x(d)}, 0)`)
           .selectAll("text")
           .classed("label interactable", true)
           .attr("id", (d) => `${self.setID}_label_${self.tokenize(d)}`)
@@ -228,6 +227,7 @@ class StackedBarChart extends Chart {
     self.Legend =
       self.legend !== undefined
         ? new Legend({
+            accessor: "subgroup",
             animations: self.animations,
             color: self.colors,
             container: self.viewframe,
@@ -390,7 +390,7 @@ class StackedBarChart extends Chart {
           .call(D3.axisRight(self.y).tickSizeOuter(0));
 
     self.xLabels = self.rotate
-      ? self.xAxis.selectAll("text").classed("label", true)
+      ? self.xAxis.selectAll("text").classed("label", true).attr("text-anchor", "start")
       : self.xAxis
           .selectAll(".tick")
           .data(self.groups)
@@ -486,7 +486,7 @@ class StackedBarChart extends Chart {
     self.Legend =
       self.legend !== undefined
         ? new Legend({
-            accessors: self.accessors,
+            accessor: "subgroup",
             animations: self.animations,
             container: self.viewframe,
             data: self.mapping.legend,
@@ -675,12 +675,12 @@ class StackedBarChart extends Chart {
     const colors = [...super.getUniqueValuesByKey(data, "color")];
 
     // Compute Group-wise Value Range (Max and Min)
-    let maxs = [],
-      mins = [];
+    let maxs = [];
+    let mins = [];
     for (const i in groups) {
       const group = groups[i];
-      let max = 0,
-        min = 0;
+      let max = 0;
+      let min = 0;
       for (const j in data) {
         const datum = data[j];
         if (datum.group === group) {

@@ -1,14 +1,14 @@
 {
-  "name": "Devices",
-  "id": "devices",
-  "title": "Devices",
+  "name": "Current Medications",
+  "id": "current-medications",
+  "title": "Current Medication",
   "subtitle": "Devices subtitle",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "StackedBar",
+    "type": "Doughnut",
     "config": {
-      "id": "#devices_stacked-bar",
+      "id": "#devices_doughnut",
       "rotate": true,
       "width": 1080,
       "height": 500,
@@ -111,22 +111,17 @@
           "type": "String"
         },
         "group": {
-          "name": "Survey",
+          "name": "Current Medications Status",
           "key": "group",
           "type": "String"
         },
-        "subgroup": {
-          "name": "Status",
-          "key": "subgroup",
-          "type": "String"
-        },
         "color": {
-          "name": "Status",
-          "key": "subgroup",
+          "name": "Current Medications Status",
+          "key": "group",
           "type": "String"
         },
         "value": {
-          "name": "Count (n)",
+          "name": "Current Medications (N)",
           "key": "value",
           "type": "Number"
         }

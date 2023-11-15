@@ -19,8 +19,8 @@ export default {
         let config = vconfigs[i];
         let cls = config.class;
         let cfg = config.config;
+        console.log(cfg);
         let obj = new cls(cfg).update();
-        console.log(obj);
         visualizations.push(obj);
       }
     });
@@ -65,11 +65,13 @@ export default {
           placement="right-start"
           :id="`${visualization.setID}_filters`"
         >
-          <n-button>{{ "Sites" }}</n-button>
+          <n-button>{{ `Sites > ${visualization.selectedFilter}` }}</n-button>
         </n-dropdown>
       </n-grid-item>
     </n-grid>
   </div>
+
+  <n-divider />
 </template>
 
 <style>

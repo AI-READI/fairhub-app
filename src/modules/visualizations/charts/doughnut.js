@@ -32,17 +32,17 @@ class DoughnutChart extends Chart {
     Setup
     */
 
-    // Set Unique Groups
-    self.groups = super.getUniqueValuesByKey(self.data, self.accessors.group.key);
+    // Set Unique Filters and Groups
     self.filterby = super.getUniqueValuesByKey(self.data, self.accessors.filterby.key);
+    self.groups = super.getUniqueValuesByKey(self.data, self.accessors.group.key);
 
     // Set Color Scale
     self.colorscale = D3.scaleOrdinal().domain(self.groups).range(self.palette);
 
     // Filters
     if (self.filters !== undefined) {
-      self.filters.values = [];
-      self.filters.values.push(...self.filterby);
+      self.filters.keys = ["All"];
+      self.filters.keys.push(...self.filterby);
     }
 
     // Set Mapping
@@ -87,8 +87,8 @@ class DoughnutChart extends Chart {
       .attr("fill", (d) => d.color)
       .attr("stroke-width", "2px")
       .attr("opacity", self.transitions.opacity.from)
-      .on("mouseover", (e, d) => self.#mouseOverArc(e, d))
-      .on("mouseout", (e, d) => self.#mouseOutArc(e, d));
+      .on("mouseover", (e, d) => self.mouseOverArc(e, d))
+      .on("mouseout", (e, d) => self.mouseOutArc(e, d));
 
     /*
     Generate Text Labels
@@ -112,7 +112,7 @@ class DoughnutChart extends Chart {
       .attr("stroke", "black")
       .attr("fill", "none")
       .attr("stroke-width", 1)
-      .attr("points", (d) => self.#setLabels(d));
+      .attr("points", (d) => self.setLabels(d));
 
     self.labels = self.svg
       .append("g")
@@ -145,6 +145,7 @@ class DoughnutChart extends Chart {
     self.Legend =
       self.legend !== undefined
         ? new Legend({
+            accessor: "group",
             animations: self.animations,
             color: self.color,
             container: self.viewframe,
@@ -205,7 +206,7 @@ class DoughnutChart extends Chart {
             hposition: self.filters.hposition,
             itemsize: self.filters.itemsize,
             margin: self.margin,
-            options: self.filters.values,
+            options: self.filters.keys,
             padding: self.filters.padding,
             parent: self,
             setID: self.setID,
@@ -268,8 +269,8 @@ class DoughnutChart extends Chart {
       .attr("fill", (d) => d.color)
       .attr("stroke-width", "2px")
       .attr("opacity", self.transitions.opacity.from)
-      .on("mouseover", (e, d) => self.#mouseOverArc(e, d))
-      .on("mouseout", (e, d) => self.#mouseOutArc(e, d));
+      .on("mouseover", (e, d) => self.mouseOverArc(e, d))
+      .on("mouseout", (e, d) => self.mouseOutArc(e, d));
 
     /*
     Generate Text Labels
@@ -293,7 +294,7 @@ class DoughnutChart extends Chart {
       .attr("stroke", "black")
       .attr("fill", "none")
       .attr("stroke-width", 1)
-      .attr("points", (d) => self.#setLabels(d));
+      .attr("points", (d) => self.setLabels(d));
 
     self.labels = self.svg
       .append("g")
@@ -327,8 +328,8 @@ class DoughnutChart extends Chart {
     self.Legend =
       self.legend !== undefined
         ? new Legend({
+            accessor: "group",
             animations: self.animations,
-            color: self.colors,
             container: self.viewframe,
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
@@ -354,7 +355,7 @@ class DoughnutChart extends Chart {
     self.Tooltip =
       self.tooltip !== undefined
         ? new Tooltip({
-            accessors: [self.accessors.group, self.accessors.filterby, self.accessors.value],
+            accessors: [self.accessors.filterby, self.accessors.group, self.accessors.value],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,
@@ -387,7 +388,7 @@ class DoughnutChart extends Chart {
             hposition: self.filters.hposition,
             itemsize: self.filters.itemsize,
             margin: self.margin,
-            options: self.filters.values,
+            options: self.filters.keys,
             padding: self.filters.padding,
             parent: self,
             setID: self.setID,
@@ -415,7 +416,7 @@ class DoughnutChart extends Chart {
     return self;
   }
 
-  #setLabels(d) {
+  setLabels(d) {
     let self = this;
     let x = self.dataArc.centroid(d); // line insertion in the slice
     let y = self.labelArc.centroid(d); // line break: we use the other arc generator that has been built only for that
@@ -431,7 +432,7 @@ class DoughnutChart extends Chart {
   Event Handlers
   */
 
-  #mouseOverArc(e, d) {
+  mouseOverArc(e, d) {
     let self = this;
 
     D3.select(e.target)
@@ -445,10 +446,10 @@ class DoughnutChart extends Chart {
     return self;
   }
 
-  #mouseOutArc(e, d) {
+  mouseOutArc(e, d) {
     let self = this;
 
-    D3.select(e.target)
+    D3.selectAll(".data-arc")
       .transition()
       .ease(Easing[self.animations.opacity.easing])
       .duration(self.animations.opacity.duration)
@@ -461,7 +462,9 @@ class DoughnutChart extends Chart {
   mapData(data, filter) {
     let self = this;
 
-    if (filter !== undefined) {
+    self.selectedFilter = filter === undefined ? "All" : filter;
+
+    if (self.selectedFilter !== "All") {
       data = data.filter((datum) => datum[self.accessors.filterby.key] == filter);
     }
 
@@ -487,6 +490,7 @@ class DoughnutChart extends Chart {
         return {
           color: d.data.color,
           endAngle: d.endAngle,
+          filterby: d.data.filterby,
           group: d.data.group,
           index: d.index,
           padAngle: d.padAngle,
@@ -494,16 +498,17 @@ class DoughnutChart extends Chart {
           value: d.data.value,
         };
       });
+    console.log(doughnut);
 
     // Generate Legend
-    const legend = [
-      ...D3.zip(colors, groups).map(([color, group]) => {
-        return {
-          color: color,
-          group: group,
-        };
-      }),
-    ];
+    const legend = D3.zip(colors, groups).map(([color, group]) => {
+      return {
+        color: color,
+        group: group,
+      };
+    });
+
+    console.log(legend);
 
     return {
       colors: colors,

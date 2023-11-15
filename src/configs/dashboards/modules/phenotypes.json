@@ -1,8 +1,8 @@
 {
   "name": "Phenotypes",
   "id": "phenotypes",
-  "title": "Phenotypes",
-  "subtitle": "Participant Phenotypes",
+  "title": "AI-READI Pilot Participant Counts by Data Generation Site",
+  "subtitle": "Participant Counts Aggregated by Phenotype (Prediabetes, Type I Diabetes, and Type II Diabetes)",
   "width": 1280,
   "height": 720,
   "visualizations": [{
@@ -111,18 +111,13 @@
           "type": "String"
         },
         "group": {
-          "name": "Survey",
+          "name": "Phenotype",
           "key": "group",
           "type": "String"
         },
-        "subgroup": {
-          "name": "Status",
-          "key": "subgroup",
-          "type": "String"
-        },
         "color": {
-          "name": "Status",
-          "key": "subgroup",
+          "name": "Phenotype",
+          "key": "group",
           "type": "String"
         },
         "value": {

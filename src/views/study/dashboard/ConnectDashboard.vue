@@ -4,6 +4,7 @@ import { onBeforeMount, Ref, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
+// import { useDashboardModuleStore } from "@/stores/dashboardmodule";
 import type { DashboardConnectorConstructor } from "@/types/Dashboard";
 import { baseURL } from "@/utils/constants";
 
@@ -12,6 +13,7 @@ const route = useRoute();
 const { error, success } = useMessage();
 
 const authStore = useAuthStore();
+// const dashboardModuleStore = useDashboardModuleStore();
 
 const routeParams = {
   projectId: route.params.projectId as string,
@@ -23,7 +25,9 @@ const dashboardConnector: Ref<DashboardConnectorConstructor> = ref({
     { id: "overview", name: "Overview", reportId: "", selected: false },
     { id: "recruitment", name: "Recruitment", reportId: "", selected: false },
     { id: "phenotypes", name: "Phenotypes", reportId: "", selected: false },
-    { id: "devices", name: "Devices", reportId: "", selected: false },
+    { id: "race-ethnicity", name: "Race & Ethnicity", reportId: "", selected: false },
+    { id: "sex-gender", name: "Sex & Gender", reportId: "", selected: false },
+    { id: "current-medications", name: "Current Medications", reportId: "", selected: false },
   ],
   dashboard_name: "",
   project_id: routeParams.projectId,

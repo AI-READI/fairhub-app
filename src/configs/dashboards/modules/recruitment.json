@@ -1,14 +1,14 @@
 {
   "name": "Recruitment",
   "id": "recruitment",
-  "title": "Recruitment",
-  "subtitle": "Recruitment subtitle",
+  "title": "AI-READI Pilot Participant Recruitment Over Time",
+  "subtitle": "Participant Recruitment Counts by Race Relative to Recruitment Targets",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "StackedBar",
+    "type": "Line",
     "config": {
-      "id": "#recruitment_stacked-bar",
+      "id": "#recruitment_line",
       "rotate": true,
       "width": 1080,
       "height": 500,
@@ -38,6 +38,10 @@
         "translate": {
           "from": "left",
           "to": "left"
+        },
+        "radius": {
+          "from": 8,
+          "to": 16
         }
       },
       "animations": {
@@ -107,27 +111,27 @@
       "accessors": {
         "filterby": {
           "name": "Site",
-          "key": "group",
-          "type": "String"
-        },
-        "group": {
-          "name": "Survey",
-          "key": "group",
+          "key": "filterby",
           "type": "String"
         },
         "subgroup": {
-          "name": "Status",
+          "name": "Race",
           "key": "subgroup",
+          "type": "String"
+        },
+        "datetime": {
+          "name": "Date",
+          "key": "datetime",
           "type": "String"
         },
         "color": {
-          "name": "Status",
+          "name": "Race",
           "key": "subgroup",
           "type": "String"
         },
-        "value": {
+        "y": {
           "name": "Count (n)",
-          "key": "value",
+          "key": "y",
           "type": "Number"
         }
       },

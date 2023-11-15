@@ -78,3 +78,5 @@ onBeforeMount(() => {
     </FadeTransition>
   </main>
 </template>
+
+<style></style>

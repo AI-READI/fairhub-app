@@ -43,15 +43,15 @@ class LineChart extends Chart {
     self.colorscale = D3.scaleOrdinal().domain(self.subgroups).range(self.palette);
 
     // Mapping
-    self.mapping = self.#mapData(self.data);
+    self.mapping = self.mapData(self.data);
 
     // Unique Colors
     self.colors = self.mapping.colors;
 
     // Filters
     if (self.filters !== undefined) {
-      self.filters.values = ["All"];
-      self.filters.values.push(...self.subgroups);
+      self.filters.keys = ["All"];
+      self.filters.keys.push(...self.subgroups);
     }
 
     /*
@@ -178,7 +178,7 @@ class LineChart extends Chart {
     self.Tooltip =
       self.tooltip !== undefined
         ? new Tooltip({
-            accessors: [self.accessors.subgroup, self.accessors.x, self.accessors.y],
+            accessors: [self.accessors.subgroup, self.accessors.datetime, self.accessors.y],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,
@@ -211,7 +211,7 @@ class LineChart extends Chart {
             hposition: self.filters.hposition,
             itemsize: self.filters.itemsize,
             margin: self.margin,
-            options: self.filters.values,
+            options: self.filters.keys,
             padding: self.filters.padding,
             parent: self,
             setID: self.setID,
@@ -238,7 +238,7 @@ class LineChart extends Chart {
     filter = filter === undefined ? "All" : filter;
 
     // Map Data
-    self.mapping = self.#mapData(self.data, filter);
+    self.mapping = self.mapData(self.data, filter);
 
     /*
     Get Visualization and Interface Elements
@@ -328,8 +328,8 @@ class LineChart extends Chart {
       .attr("cx", (d) => self.x(d.x))
       .attr("cy", (d) => self.y(d.y))
       .attr("r", self.transitions.radius.from)
-      .on("mouseover", (e, d) => self.#mouseOverPoint(e, d))
-      .on("mouseout", (e, d) => self.#mouseOutPoint(e, d));
+      .on("mouseover", (e, d) => self.mouseOverPoint(e, d))
+      .on("mouseout", (e, d) => self.mouseOutPoint(e, d));
 
     /*
     Legend
@@ -364,7 +364,7 @@ class LineChart extends Chart {
     self.Tooltip =
       self.tooltip !== undefined
         ? new Tooltip({
-            accessors: [self.accessors.subgroup, self.accessors.x, self.accessors.y],
+            accessors: [self.accessors.subgroup, self.accessors.datetime, self.accessors.y],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,
@@ -397,7 +397,7 @@ class LineChart extends Chart {
             hposition: self.filters.hposition,
             itemsize: self.filters.itemsize,
             margin: self.margin,
-            options: self.filters.values,
+            options: self.filters.keys,
             padding: self.filters.padding,
             parent: self,
             setID: self.setID,
@@ -430,7 +430,7 @@ class LineChart extends Chart {
 Event Handlers
 */
 
-  #mouseOverPoint(e, d) {
+  mouseOverPoint(e, d) {
     let self = this;
 
     D3.select(e.target)
@@ -444,7 +444,7 @@ Event Handlers
     return self;
   }
 
-  #mouseOutPoint(e, d) {
+  mouseOutPoint(e, d) {
     let self = this;
 
     D3.select(e.target)
@@ -462,42 +462,41 @@ Event Handlers
 Map Data and Set Value Types
 */
 
-  #mapData(data, filter) {
+  mapData(data, filter) {
     let self = this;
 
-    if (filter !== undefined && filter !== "All") {
-      data = data.filter((datum) => datum[self.accessors.subgroup.key] == filter);
-    }
+    self.selectedFilter = filter === undefined ? "All" : filter;
 
-    let series = [];
-    let subgroups = [];
-    let colors = [];
-    let legend = [];
-    let maxs = [];
-    let mins = [];
+    if (self.selectedFilter !== "All") {
+      data = data.filter((datum) => datum[self.accessors.filterby.key] == filter);
+    }
 
     // Remap Values from Accessor Keys to Fixed Keys
     data = data.map((datum) => {
       return {
         color: self.colorscale(datum[self.accessors.color.key]),
+        datetime: datum[self.accessors.datetime.key],
+        filterby: datum[self.accessors.filterby.key],
         subgroup: datum[self.accessors.subgroup.key],
-        x: new Date(datum[self.accessors.x.key]),
         y: datum[self.accessors.y.key],
       };
     });
-    console.log(data);
 
     // Get Unique Colors
-    colors.push(...super.getUniqueValuesByKey(data, "color"));
-    subgroups.push(...super.getUniqueValuesByKey(data, "subgroup"));
+    const filteroptions = [...super.getUniqueValuesByKey(data, "filterby")];
+    const subgroups = [...super.getUniqueValuesByKey(data, "subgroup")];
+    const colors = [...super.getUniqueValuesByKey(data, "color")];
+    const datetimes = [...super.getUniqueValuesByKey(data, "datetime")];
 
     // Compute Series-wise Max and Min Values
-    for (const i in self.subgroups) {
-      let subgroup = self.subgroups[i];
-      let max = 0,
-        min = Infinity;
+    let maxs = [];
+    let mins = [];
+    for (const i in subgroups) {
+      const subgroup = subgroups[i];
+      let max = 0;
+      let min = Infinity;
       for (const j in data) {
-        let datum = data[j];
+        const datum = data[j];
         if (datum.subgroup === subgroup) {
           max = datum.y > max ? datum.y : max;
           min = datum.y < min ? datum.y : min;
@@ -506,35 +505,35 @@ Map Data and Set Value Types
       maxs.push(max);
       mins.push(min);
     }
+    const max = Math.ceil(Math.max(...maxs));
+    const min = Math.floor(Math.min(...mins));
 
     // Generate Series
-    series.push(
-      ...D3.zip(subgroups, colors).map(([subgroup, color]) => {
-        let subseries = data.filter((datum) => {
-          return datum.subgroup === subgroup;
-        });
-        subseries.subgroup = subgroup;
-        subseries.color = color;
-        return subseries;
-      })
-    );
+    const series = D3.zip(subgroups, colors).map(([subgroup, color]) => {
+      let subseries = data.filter((datum) => {
+        return datum.subgroup === subgroup;
+      });
+      subseries.subgroup = subgroup;
+      subseries.color = color;
+      return subseries;
+    });
 
     // Generate Legend
-    legend.push(
-      ...D3.zip(subgroups, colors).map(([subgroup, color]) => {
-        return {
-          color: color,
-          subgroup: subgroup,
-        };
-      })
-    );
+    const legend = D3.zip(subgroups, colors).map(([subgroup, color]) => {
+      return {
+        color: color,
+        subgroup: subgroup,
+      };
+    });
 
     return {
       colors: colors,
       data: data,
+      datetimes: datetimes,
+      filters: filteroptions,
       legend: legend,
-      max: Math.ceil(Math.max(...maxs)),
-      min: Math.floor(Math.min(...mins)),
+      max: max,
+      min: min,
       series: series,
       subgroups: subgroups,
     };

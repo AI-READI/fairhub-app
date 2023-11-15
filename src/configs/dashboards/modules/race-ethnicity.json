@@ -1,14 +1,14 @@
 {
-  "name": "Overview",
-  "id": "overview",
-  "title": "AI-READI Pilot REDCap Survey Counts by Data Generation Site",
-  "subtitle": "Survey Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
+  "name": "Race & Ethnicity",
+  "id": "race-ethnicity",
+  "title": "AI-READI Pilot Participant Race & Ethnicity by Data Generation Site",
+  "subtitle": "Participant Counts Aggregated by Race & Ethnicity",
   "width": 1280,
   "height": 720,
   "visualizations": [{
     "type": "StackedBar",
     "config": {
-      "id": "#overview_stacked-bar",
+      "id": "#race-ethnicity_stacked-bar",
       "rotate": true,
       "width": 1080,
       "height": 420,
@@ -27,7 +27,7 @@
       "padding": {
         "top": 20,
         "left": 0,
-        "right": 240,
+        "right": 420,
         "bottom": 0
       },
       "transitions": {
@@ -111,17 +111,17 @@
           "type": "String"
         },
         "group": {
-          "name": "Survey",
+          "name": "Race",
           "key": "group",
           "type": "String"
         },
         "subgroup": {
-          "name": "Status",
+          "name": "Ethnicity",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Status",
+          "name": "Ethnicity",
           "key": "subgroup",
           "type": "String"
         },
