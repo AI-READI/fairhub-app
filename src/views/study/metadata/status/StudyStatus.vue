@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 import type { FormInst, FormRules } from "naive-ui";
-import { useRouter } from "vue-router";
 
 import FORM_JSON from "@/assets/data/form.json";
+import { getBackParams, getBackRoute } from "@/stores/nav";
 import type { StudyStatusModule } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
-const router = useRouter();
 const route = useRoute();
 const push = usePush();
 
@@ -119,7 +118,8 @@ const saveMetadata = (e: MouseEvent) => {
     <PageBackNavigationHeader
       title="Status"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
-      @click="router.go(-1)"
+      :linkName="getBackRoute()"
+      :linkParams="getBackParams()"
     />
 
     <n-divider />

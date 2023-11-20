@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
-
+import { getBackParams, getBackRoute } from "@/stores/nav";
 import { baseURL } from "@/utils/constants";
 
-const router = useRouter();
 const route = useRoute();
 const message = useMessage();
 
@@ -54,7 +52,8 @@ const saveMetadata = async (value: boolean) => {
     <PageBackNavigationHeader
       title="Oversight"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
-      @click="router.go(-1)"
+      :linkName="getBackRoute()"
+      :linkParams="getBackParams()"
     />
 
     <n-divider />

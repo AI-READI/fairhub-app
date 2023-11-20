@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
 
+import { getBackParams, getBackRoute } from "@/stores/nav";
 import { baseURL } from "@/utils/constants";
 
-const router = useRouter();
 const route = useRoute();
 const message = useMessage();
 
@@ -22,9 +22,7 @@ onBeforeMount(async () => {
     throw new Error("Network response was not ok");
   }
 
-  const data = await response.json();
-
-  moduleData.value = data;
+  moduleData.value = await response.json();
 });
 
 const addCollaborator = () => {
@@ -74,7 +72,8 @@ const saveMetadata = (e: MouseEvent) => {
     <PageBackNavigationHeader
       title="Collaborators"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
-      @click="router.go(-1)"
+      :linkName="getBackRoute()"
+      :linkParams="getBackParams()"
     />
 
     <n-divider />

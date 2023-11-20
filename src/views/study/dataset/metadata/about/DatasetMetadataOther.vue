@@ -2,9 +2,10 @@
 import type { FormInst } from "naive-ui";
 
 import LANGUAGES_JSON from "@/assets/data/languages.json";
+import { getBackParams, getBackRoute } from "@/stores/nav";
 import type { DatasetOther } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
-const router = useRouter();
+
 const route = useRoute();
 const push = usePush();
 
@@ -119,7 +120,8 @@ const saveMetadata = (e: MouseEvent) => {
     <PageBackNavigationHeader
       title="Additional Metadata"
       description="Some metadata that didn't really fit in other sections."
-      @click="router.go(-1)"
+      :linkName="getBackRoute()"
+      :linkParams="getBackParams()"
     />
 
     <n-divider />

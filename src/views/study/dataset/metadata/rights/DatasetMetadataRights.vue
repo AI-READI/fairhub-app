@@ -2,6 +2,7 @@
 import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
+import { getBackParams, getBackRoute } from "@/stores/nav";
 import type { DatasetRights } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
@@ -135,7 +136,8 @@ const saveMetadata = (e: MouseEvent) => {
     <PageBackNavigationHeader
       title="Rights"
       description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-      @click="router.go(-1)"
+      :linkName="getBackRoute()"
+      :linkParams="getBackParams()"
     />
 
     <n-divider />

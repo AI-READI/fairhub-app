@@ -3,6 +3,7 @@ import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
+import { getBackParams, getBackRoute } from "@/stores/nav";
 import type { DatasetFunders } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
@@ -142,7 +143,8 @@ const saveMetadata = (e: MouseEvent) => {
     <PageBackNavigationHeader
       title="Funders"
       description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-      @click="router.go(-1)"
+      :linkName="getBackRoute()"
+      :linkParams="getBackParams()"
     />
 
     <n-divider />
