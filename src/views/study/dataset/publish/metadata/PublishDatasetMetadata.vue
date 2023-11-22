@@ -424,12 +424,12 @@ function handleNextButton() {
               ? "Yes"
               : dataset_metadata.de_identification.direct === false
               ? "No"
-              : "-"
+              : ""
           }}
         </n-descriptions-item>
 
         <n-descriptions-item label="Type">
-          {{ dataset_metadata.de_identification.type || "-" }}
+          {{ dataset_metadata.de_identification.type }}
         </n-descriptions-item>
       </n-descriptions>
 
