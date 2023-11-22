@@ -305,12 +305,14 @@ const toggleSidebar = (collapsed: boolean) => {
 
 const navigateTo = (value: string) => {
   const routeName = value.split(":")[0];
-
   if (routeName === "studies") {
     sidebarStore.setAppSidebarCollapsed(false);
 
     router.push({
       name: value,
+      query: {
+        _clear: "true",
+      },
     });
 
     return;
@@ -318,11 +320,13 @@ const navigateTo = (value: string) => {
 
   if (routeName === "study") {
     sidebarStore.setAppSidebarCollapsed(false);
-
     router.push({
       name: value,
       params: {
         studyId: studyID.value,
+      },
+      query: {
+        _clear: "true",
       },
     });
 
@@ -336,6 +340,9 @@ const navigateTo = (value: string) => {
       name: value,
       params: {
         studyId: studyID.value,
+      },
+      query: {
+        _clear: "true",
       },
     });
 
@@ -372,8 +379,6 @@ const defaultExpandedKeys = computed(() => {
 
   if (currentRoute.name) {
     const name = currentRoute.name as string;
-
-    console.log("appsidebar-name", name, name.startsWith("study:metadata"));
 
     if (name.startsWith("study:metadata")) {
       return ["study:metadata"];

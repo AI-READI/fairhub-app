@@ -163,6 +163,9 @@ const navigateTo = (value: string) => {
         datasetId: datasetId.value,
         studyId: studyID.value,
       },
+      query: {
+        _clear: "true",
+      },
     });
 
     return;

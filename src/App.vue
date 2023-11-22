@@ -17,7 +17,7 @@ const themeOverrides: GlobalThemeOverrides = {
 
 router.beforeEach((to, from) => {
   if (typeof from.name !== "string") return;
-  prev_route.value = from;
+  prev_route.value = !to.query?._clear ? from : null;
   current_route.value = to;
 });
 </script>

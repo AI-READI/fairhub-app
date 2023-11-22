@@ -5,7 +5,6 @@ export const prev_route: Ref<RouteLocationNormalized | null | undefined> = ref(n
 export const current_route: Ref<RouteLocationNormalized | null | undefined> = ref(null);
 
 export function getBackRoute(): string {
-  console.log(prev_route.value);
   if (prev_route.value && typeof prev_route.value.name == "string") {
     if (prev_route.value.name == "dataset:publish:version:study-metadata") {
       return "dataset:publish:version:study-metadata";
@@ -20,7 +19,16 @@ export function getBackRoute(): string {
       return "study:overview";
     }
   }
-  return "studies:all-studies";
+  if (current_route.value && typeof current_route.value.name == "string") {
+    if (current_route.value.name.startsWith("dataset")) {
+      return "dataset:overview";
+    }
+    if (current_route.value.name.startsWith("study")) {
+      console.log("oh no were here");
+      return "study:overview";
+    }
+  }
+  return "study:overview";
 }
 
 export function getBackParams(): object {
@@ -32,5 +40,13 @@ export function getBackParams(): object {
       return prev_route.value?.params;
     }
   }
-  return prev_route.value ? prev_route.value.params : {};
+  if (current_route.value && typeof current_route.value.name == "string") {
+    if (current_route.value.name.startsWith("dataset")) {
+      return current_route.value?.params;
+    }
+    if (current_route.value.name.startsWith("study")) {
+      return current_route.value?.params;
+    }
+  }
+  return current_route.value ? current_route.value.params : {};
 }
