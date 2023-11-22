@@ -180,6 +180,8 @@ function handleNextButton() {
             <th>Investigator Name</th>
 
             <th>Type</th>
+
+            <th>Sponsor Name</th>
           </tr>
         </thead>
 
@@ -187,16 +189,19 @@ function handleNextButton() {
           <tr
             v-if="
               study_metadata.sponsors.responsible_party_investigator_name &&
-              study_metadata.sponsors.responsible_party_type
+              study_metadata.sponsors.responsible_party_type &&
+              study_metadata.sponsors.lead_sponsor_name
             "
           >
             <td>{{ study_metadata.sponsors.responsible_party_investigator_name }}</td>
 
             <td>{{ study_metadata.sponsors.responsible_party_type }}</td>
+
+            <td>{{ study_metadata.sponsors.lead_sponsor_name }}</td>
           </tr>
 
           <tr v-else>
-            <td colspan="2" class="text-center italic text-gray-500">No Sponsors</td>
+            <td colspan="3" class="text-center italic text-gray-500">No Sponsors</td>
           </tr>
         </tbody>
       </n-table>
@@ -636,21 +641,29 @@ function handleNextButton() {
           <tr>
             <th>Gender</th>
 
+            <th>Gender Based</th>
+
             <th>Minimum Age</th>
           </tr>
         </thead>
 
         <tbody>
           <tr
-            v-if="study_metadata.eligibility.gender && study_metadata.eligibility.maximum_age_value"
+            v-if="
+              study_metadata.eligibility.gender &&
+              study_metadata.eligibility.minimum_age_value &&
+              study_metadata.eligibility.gender_based
+            "
           >
             <td>{{ study_metadata.eligibility.gender }}</td>
 
-            <td>{{ study_metadata.eligibility.maximum_age_value }}</td>
+            <td>{{ study_metadata.eligibility.gender_based }}</td>
+
+            <td>{{ study_metadata.eligibility.minimum_age_value }}</td>
           </tr>
 
           <tr v-else>
-            <td colspan="2" class="text-center italic text-gray-500">No Eligibility</td>
+            <td colspan="3" class="text-center italic text-gray-500">No Eligibility</td>
           </tr>
         </tbody>
       </n-table>
@@ -716,13 +729,15 @@ function handleNextButton() {
       </template>
     </CollapsibleCard>
 
-    <CollapsibleCard title="Overal Officials" bordered>
+    <CollapsibleCard title="Overall Officials" bordered>
       <n-table :bordered="true" :single-line="false" striped>
         <thead>
           <tr>
             <th>Affiliation</th>
 
             <th>Overall Official Name</th>
+
+            <th>Role</th>
           </tr>
         </thead>
 
@@ -731,10 +746,12 @@ function handleNextButton() {
             <td>{{ item.affiliation }}</td>
 
             <td>{{ item.name }}</td>
+
+            <td>{{ item.role }}</td>
           </tr>
 
           <tr v-if="!study_metadata.overall_officials.length">
-            <td colspan="2" class="text-center italic text-gray-500">No Overall Officials</td>
+            <td colspan="3" class="text-center italic text-gray-500">No Overall Officials</td>
           </tr>
         </tbody>
       </n-table>

@@ -330,38 +330,42 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Publisher" bordered>
-      <n-table :bordered="true" striped :single-line="false">
-        <thead>
-          <tr>
-            <th>Publisher</th>
+      <!--      <n-table-->
+      <!--        :bordered="true"-->
+      <!--        striped-->
+      <!--        :single-line="false"-->
+      <!--        :v-if="dataset_metadata.publisher.publisher"-->
+      <!--      >-->
+      <!--        <tbody>-->
+      <!--          <tr>-->
+      <!--            <th>Publisher</th>-->
 
-            <th>Organization name</th>
-          </tr>
-        </thead>
+      <!--            <td v-if="dataset_metadata.publisher.publisher">-->
+      <!--              {{ dataset_metadata.publisher.publisher }}-->
+      <!--            </td>-->
+      <!--          </tr>-->
+      <!--        </tbody>-->
+      <!--      </n-table>-->
 
-        <tbody>
-          <tr>
-            <td v-if="dataset_metadata.publisher.publisher">
-              {{ dataset_metadata.publisher.managing_organization_name }}
-            </td>
+      <div
+        v-if="dataset_metadata.publisher && dataset_metadata.publisher.publisher"
+        class="border border-gray-100 p-3"
+      >
+        {{ dataset_metadata.publisher.publisher }}
+      </div>
 
-            <td v-if="dataset_metadata.publisher.managing_organization_name">
-              {{ dataset_metadata.publisher.publisher }}
-            </td>
+      <div v-else class="italic text-gray-500">No publisher</div>
 
-            <td
-              v-if="
-                !dataset_metadata.publisher.publisher &&
-                !dataset_metadata.publisher.managing_organization_name
-              "
-              colspan="2"
-              class="text-center italic text-gray-500"
-            >
-              No Publisher
-            </td>
-          </tr>
-        </tbody>
-      </n-table>
+      <n-h5>Managing Organization Name</n-h5>
+
+      <div
+        v-if="dataset_metadata.publisher && dataset_metadata.publisher.managing_organization_name"
+        class="border border-gray-100 p-3"
+      >
+        {{ dataset_metadata.publisher.managing_organization_name }}
+      </div>
+
+      <div v-else class="italic text-gray-500">No Managing Organization</div>
 
       <template #action>
         <RouterLink
@@ -485,18 +489,27 @@ function handleNextButton() {
     </CollapsibleCard>
 
     <CollapsibleCard title="Subjects" bordered>
-      <n-table
-        :bordered="true"
-        striped
-        :single-line="false"
-        v-if="dataset_metadata.subjects && dataset_metadata.subjects.length"
-      >
-        <tbody>
-          <tr :key="item.id" v-for="item in dataset_metadata.subjects">
-            <td>{{ item.subject }}</td>
-          </tr>
-        </tbody>
-      </n-table>
+      <!--      <n-table-->
+      <!--        :bordered="true"-->
+      <!--        striped-->
+      <!--        :single-line="false"-->
+      <!--        v-if="dataset_metadata.subjects && dataset_metadata.subjects.length"-->
+      <!--      >-->
+      <!--        <tbody>-->
+      <!--          <tr :key="item.id" v-for="item in dataset_metadata.subjects">-->
+      <!--            <td>{{ item.subject }}</td>-->
+      <!--          </tr>-->
+      <!--        </tbody>-->
+      <!--      </n-table>-->
+      <div v-if="dataset_metadata.subjects && dataset_metadata.subjects.length">
+        <ul
+          :key="item.id"
+          class="list-none border border-gray-100 p-3 even:bg-gray-50"
+          v-for="item in dataset_metadata.subjects"
+        >
+          <li>{{ item.subject }}</li>
+        </ul>
+      </div>
 
       <div v-if="!dataset_metadata.subjects.length" class="italic text-gray-500">No Subjects</div>
 

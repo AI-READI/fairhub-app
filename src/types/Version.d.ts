@@ -41,6 +41,7 @@ export interface VersionStudyOverallOfficial {
   id: string;
   name: string;
   affiliation: string;
+  role: string;
 }
 
 export interface VersionDesign {
@@ -103,7 +104,8 @@ export interface VersionStudyStatusModule {
 }
 
 export interface VersionStudySponsor {
-  responsible_party_investigator_name: string;
+  lead_sponsor_name: string;
+  responsible_party_investigator_name: string | null;
   responsible_party_type: string;
 }
 
@@ -125,7 +127,6 @@ export interface VersionStudyArm {
 export interface VersionStudyEligibility {
   gender: string | null;
   gender_based: string | null;
-  maximum_age_value: number | null;
   minimum_age_value: number | null;
 }
 
@@ -233,7 +234,7 @@ export interface VersionDatasetSubjects {
 export interface VersionDatasetAccess {
   description: string;
   type: string | null;
-  url: string;
+  url: string | null;
   url_last_checked: number | null;
 }
 
@@ -246,7 +247,7 @@ export interface VersionDatasetRights {
 export interface VersionDatasetFunders {
   id: string;
   name: string;
-  award_number: string;
+  award_number: string | null;
   identifier: string;
 }
 
