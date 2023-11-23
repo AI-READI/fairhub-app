@@ -44,12 +44,14 @@ erDiagram
         timestamp created_at
     }
 
-    STUDY_INVITED_CONTRIBUTOR {
-        string email_address PK
-        string study_id PK,FK "STUDY.id"
-        string permission "owner|editor|viewer"
+    INVITE {
+        string id PK "UUIDv4"
+        string email_address
+        string study_id FK "STUDY.id or nullable"
+        string permission "owner|admin|editor|viewer or nullable" 
         string token "passphrase"
         timestamp created_at
+        info info "study_id and email_address combo should be unique"
     }
 
     PARTICIPANT {
@@ -87,7 +89,7 @@ erDiagram
         string content
     }
 
-     VERSION_PARTICIPANT {
+    VERSION_PARTICIPANT {
         string version_id PK,FK
         string participant_id PK,FK
     }
@@ -107,7 +109,7 @@ erDiagram
 
 
     STUDY_CONTRIBUTOR }o--|| STUDY : contributes
-    STUDY_INVITED_CONTRIBUTOR }o--|| STUDY : "invited to"
+    INVITE }o--|| STUDY : "invited to"
     STUDY_METADATA ||--|| STUDY : "has metadata"
 
     STUDY ||--o{ DATASET : publishes
