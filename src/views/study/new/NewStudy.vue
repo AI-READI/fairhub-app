@@ -97,7 +97,7 @@ const createStudy = (e: MouseEvent) => {
   <main class="flex h-full w-full flex-col space-y-8 pr-6">
     <PageBackNavigationHeader
       title="Create a new study"
-      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+      description=""
       linkName="studies:all-studies"
     />
 
@@ -128,7 +128,10 @@ const createStudy = (e: MouseEvent) => {
       </n-form-item> -->
 
       <n-form-item label="Image" path="Image">
-        <n-input v-model:value="study.image" placeholder="Add an image" />
+        <n-input
+          v-model:value="study.image"
+          placeholder="Add a representative image to easily differentiate your study"
+        />
 
         <n-button @click="generateImageURL" class="ml-4">
           <template #icon>
