@@ -49,7 +49,7 @@ const UpperMenuOptions = computed(() => [
   {
     icon: renderIcon("tabler:home-2"),
     key: "studies:all-studies",
-    label: "All Studies",
+    label: "My Studies",
   },
   {
     icon: renderIcon("material-symbols:overview-key-rounded"),
