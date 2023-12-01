@@ -70,8 +70,6 @@ export default {
       </n-grid-item>
     </n-grid>
   </div>
-
-  <n-divider />
 </template>
 
 <style>

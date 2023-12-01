@@ -19,9 +19,9 @@
         "bottom": 0
       },
       "margin": {
-        "top": 20,
-        "left": 20,
-        "right": 20,
+        "top": 0,
+        "left": 0,
+        "right": 0,
         "bottom": 20
       },
       "padding": {
@@ -54,9 +54,15 @@
           "delay": 0,
           "duration": 600,
           "easing": "expOut"
+        },
+        "radius": {
+          "delay": 0,
+          "duration": 600,
+          "easing": "expOut"
         }
       },
       "legend": {
+        "title": "",
         "width": 120,
         "height": 140,
         "itemsize": 20,
@@ -71,10 +77,11 @@
         }
       },
       "tooltip": {
+        "title": "",
         "width": 720,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 12,
+        "fontsize": 10,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -88,7 +95,7 @@
         "width": 720,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 12,
+        "fontsize": 10,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -119,14 +126,14 @@
           "key": "subgroup",
           "type": "String"
         },
-        "datetime": {
-          "name": "Date",
-          "key": "datetime",
-          "type": "String"
+        "x": {
+          "name": "Week",
+          "key": "x",
+          "type": "Number"
         },
         "color": {
           "name": "Race",
-          "key": "subgroup",
+          "key": "color",
           "type": "String"
         },
         "y": {

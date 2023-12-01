@@ -82,7 +82,7 @@ class Interface {
 
   tokenize(token) {
     return typeof token === "string"
-      ? token.replace(/\s/g, "-").toLowerCase()
+      ? token.replace(/\s/g, "-").replace(/\|/g, "-").replace(/--/g, "-").toLowerCase()
       : `${Math.random().toString(16).slice(2, 6)}`.toLowerCase();
   }
 

@@ -52,7 +52,9 @@
           "easing": "expOut"
         }
       },
+      "labeling": false,
       "legend": {
+        "title": "Phenotype",
         "width": 200,
         "height": 140,
         "itemsize": 20,
@@ -67,6 +69,7 @@
         }
       },
       "tooltip": {
+        "title": "Data Point Details",
         "width": 720,
         "height": 140,
         "itemsize": 20,

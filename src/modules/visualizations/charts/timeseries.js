@@ -11,10 +11,10 @@ import Legend from "../interfaces/legend.js";
 import Tooltip from "../interfaces/tooltip.js";
 
 /*
-Line Chart Class
+Time Series Chart Class
 */
 
-class LineChart extends Chart {
+class TimeSeriesChart extends Chart {
   // Initialization
   constructor(config) {
     // Configure Parent
@@ -22,7 +22,7 @@ class LineChart extends Chart {
 
     let self = this;
 
-    // Configure Line Chart
+    // Configure Time Series Chart
     self.linewidth = config.linewidth;
     self.pointradius = config.pointradius;
     self.accessors = config.accessors;
@@ -36,10 +36,9 @@ class LineChart extends Chart {
     Setup
     */
 
-    // Set Unique Filters, Subgroups, Color Scale
+    // Unique Filters, Groups, and Colorscale
     self.filterby = super.getUniqueValuesByKey(self.data, self.accessors.filterby.key);
     self.subgroups = super.getUniqueValuesByKey(self.data, self.accessors.subgroup.key);
-    self.xvalues = super.getUniqueValuesByKey(self.data, self.accessors.x.key);
     self.colorscale = D3.scaleOrdinal()
       .domain(super.getUniqueValuesByKey(self.data, self.accessors.color.key))
       .range(self.palette);
@@ -72,20 +71,21 @@ class LineChart extends Chart {
     Generate Axes
     */
 
-    self.x = D3.scaleLinear()
-      .domain(D3.extent(self.mapping.data, (d) => d.x))
-      .range([0, self.dataframe.width]);
+    self.datetime = D3.scaleTime()
+      .domain(D3.extent(self.mapping.data, (d) => new Date(d.datetime)))
+      .range([0, self.dataframe.width])
+      .nice();
 
     self.y = D3.scaleLinear()
       .domain([self.mapping.min, self.mapping.max])
       .range([self.dataframe.height, 0]);
 
-    self.xAxis = self.svg
+    self.datetimeAxis = self.svg
       .append("g")
       .classed("x-axis", true)
       .attr("id", `${self.setID}_x-axis`)
       .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.bottom})`)
-      .call(D3.axisBottom(self.x).tickSizeOuter(5).tickPadding(10));
+      .call(D3.axisBottom(self.datetime).tickSizeOuter(0).tickPadding(10));
 
     self.yAxis = self.svg
       .append("g")
@@ -99,7 +99,7 @@ class LineChart extends Chart {
     */
 
     self.line = D3.line()
-      .x((d) => self.x(d.x))
+      .x((d) => self.datetime(new Date(d.datetime)))
       .y((d) => self.y(d.y));
 
     self.lines = self.svg
@@ -138,7 +138,7 @@ class LineChart extends Chart {
       .data((d) => d)
       .join("circle")
       .classed("point interactable", true)
-      .attr("cx", (d) => self.x(d.x))
+      .attr("cx", (d) => self.datetime(new Date(d.datetime)))
       .attr("cy", (d) => self.y(d.y))
       .attr("r", self.transitions.radius.from);
 
@@ -178,12 +178,7 @@ class LineChart extends Chart {
       self.tooltip !== undefined
         ? new Tooltip({
             title: self.tooltip.title,
-            accessors: [
-              self.accessors.filterby,
-              self.accessors.subgroup,
-              self.accessors.x,
-              self.accessors.y,
-            ],
+            accessors: [self.accessors.subgroup, self.accessors.datetime, self.accessors.y],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,
@@ -261,20 +256,20 @@ class LineChart extends Chart {
     Generate Axes
     */
 
-    self.x = D3.scaleLinear()
-      .domain(D3.extent(self.mapping.data, (d) => d.x))
+    self.datetime = D3.scaleTime()
+      .domain(D3.extent(self.mapping.data, (d) => new Date(d.datetime)))
       .range([0, self.dataframe.width]);
 
     self.y = D3.scaleLinear()
       .domain([self.mapping.min, self.mapping.max])
       .range([self.dataframe.height, 0]);
 
-    self.xAxis = self.svg
+    self.datetimeAxis = self.svg
       .append("g")
       .classed("x-axis", true)
       .attr("id", `${self.setID}_x-axis`)
       .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.bottom})`)
-      .call(D3.axisBottom(self.x).tickSizeOuter(5).tickPadding(10));
+      .call(D3.axisBottom(self.datetime).tickSizeOuter(5).tickPadding(10));
 
     self.yAxis = self.svg
       .append("g")
@@ -288,7 +283,7 @@ class LineChart extends Chart {
     */
 
     self.line = D3.line()
-      .x((d) => self.x(d.x))
+      .x((d) => self.datetime(new Date(d.datetime)))
       .y((d) => self.y(d.y));
 
     self.lines = self.svg
@@ -327,7 +322,7 @@ class LineChart extends Chart {
       .data((d) => d)
       .join("circle")
       .classed("point interactable", true)
-      .attr("cx", (d) => self.x(d.x))
+      .attr("cx", (d) => self.datetime(new Date(d.datetime)))
       .attr("cy", (d) => self.y(d.y))
       .attr("r", self.transitions.radius.from)
       .on("mouseover", (e, d) => self.mouseOverPoint(e, d))
@@ -347,7 +342,7 @@ class LineChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_line-series`,
+            getPrefix: `${self.getID}_point-series`,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
@@ -372,7 +367,7 @@ class LineChart extends Chart {
             accessors: [
               self.accessors.filterby,
               self.accessors.subgroup,
-              self.accessors.x,
+              self.accessors.datetime,
               self.accessors.y,
             ],
             container: self.viewframe,
@@ -423,7 +418,7 @@ class LineChart extends Chart {
   clear() {
     let self = this;
 
-    self.xAxis.remove();
+    self.datetimeAxis.remove();
     self.yAxis.remove();
     self.lineseries.remove();
     self.pointseries.remove();
@@ -481,74 +476,48 @@ Map Data and Set Value Types
       data = data.filter((datum) => datum[self.accessors.filterby.key] == filter);
     }
 
-    // Remap Values from Accessor Keys to Fixed Keys
     data = data
       .map((datum) => {
         return {
           color: self.colorscale(datum[self.accessors.color.key]),
+          datetime: datum[self.accessors.datetime.key],
           filterby: datum[self.accessors.filterby.key],
           subgroup: datum[self.accessors.subgroup.key],
-          x: datum[self.accessors.x.key],
           y: datum[self.accessors.y.key],
         };
       })
       .sort(function (x, y) {
-        return D3.ascending(x.x, y.x);
+        return D3.ascending(x.datetime, y.datetime);
       });
 
-    // // Cumulative Sum Y-Axis by Site and Subgroup
-    // let subgrouped = Object.groupBy(data, ({ subgroup }) => subgroup);
-    // let accumulateSubgroup = [];
-    // for (const [subgroup, subgroupdata] of Object.entries(subgrouped)) {
-    //   let yAccumulator = Object.assign({}, ...Object.entries({...self.subgroups}).map(([key, value]) => ({
-    //     [value]: 0
-    //   })));
-    //   accumulateSubgroup.push(...subgroupdata.map((datum) => {
-    //     yAccumulator[datum.subgroup] += datum.y;
-    //     return {
-    //       color: datum.color,
-    //       x: datum.x,
-    //       filterby: self.selectedFilter ,
-    //       subgroup: datum.subgroup,
-    //       y: yAccumulator[datum.subgroup]
-    //     }
-    //   }));
-    // }
-
-    // Sort by Week
+    // Cumulative Sum Y-Axis by Site and Subgroup
+    let subgrouped = Object.groupBy(data, ({ subgroup }) => subgroup);
+    let accumulated = [];
+    for (const [, subgroupdata] of Object.entries(subgrouped)) {
+      let yAccumulator = Object.assign(
+        {},
+        ...Object.entries({ ...self.subgroups }).map(([, value]) => ({
+          [value]: 0,
+        }))
+      );
+      accumulated.push(
+        ...subgroupdata.map((datum) => {
+          yAccumulator[datum.subgroup] += datum.y;
+          return {
+            color: datum.color,
+            datetime: datum.datetime,
+            filterby: self.selectedFilter,
+            subgroup: datum.subgroup,
+            y: yAccumulator[datum.subgroup],
+          };
+        })
+      );
+    }
     data = [
-      data.sort(function (x, y) {
-        return D3.ascending(x.x, y.x);
+      ...accumulated.sort(function (x, y) {
+        return D3.ascending(x.datetime, y.datetime);
       }),
     ];
-
-    let merged = [];
-    for (const i in self.filterby) {
-      const filterby = self.filterby[i];
-      for (const j in self.subgroups) {
-        const subgroup = self.subgroups[j];
-        for (const k in self.xvalues) {
-          const xvalue = self.xvalues[k];
-          // console.log(filter, subgroup, xvalue);
-          const filtered = data.filter(
-            (datum) => datum.filterby == filterby && datum.subgroup == subgroup && datum.x == xvalue
-          );
-          if (filtered.length > 0) {
-            merged.push(
-              filtered.reduce((a, b) => ({
-                color: b.color,
-                filterby: filterby,
-                subgroup: subgroup,
-                x: xvalue,
-                y: a.y + b.y,
-              }))
-            );
-          }
-        }
-      }
-    }
-    data = merged;
-    console.log(merged);
 
     // Get Unique Colors
     const filteroptions = [...super.getUniqueValuesByKey(data, "filterby")];
@@ -610,4 +579,4 @@ Map Data and Set Value Types
 Exports
 */
 
-export default LineChart;
+export default TimeSeriesChart;

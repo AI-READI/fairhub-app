@@ -1,27 +1,29 @@
 import { defineStore } from "pinia";
 import { toRaw } from "vue";
 
-import type { DashboardConnector, DashboardModule, DashboardView } from "@/types/Dashboard";
-import type { DashboardModuleData } from "@/types/DashboardModule";
+import type { DashboardConnector, DashboardView } from "@/types/Dashboard";
+import type { DashboardModuleView } from "@/types/DashboardModule";
 import { baseURL } from "@/utils/constants";
 export const useDashboardStore = defineStore("dashboard", () => {
   const loading = ref(false);
   const visualizationModules = import.meta.glob("@/modules/visualizations/charts/*.js", {
     eager: true,
   });
-  const allDashboardConnectors = ref<DashboardConnector[]>([]);
   const dashboardConnector = ref<DashboardConnector>({
     dashboard_id: "",
     dashboard_modules: [],
     dashboard_name: "",
     project_id: "",
+    reports: [],
   });
   const dashboardView = ref<DashboardView>({
     dashboard_id: "",
     dashboard_modules: [],
     dashboard_name: "",
     project_id: "",
+    reports: [],
   });
+  const allDashboardConnectors = ref<DashboardConnector[]>([]);
 
   const fetchAllDashboardConnectors = async (studyId: string) => {
     loading.value = true;
@@ -54,7 +56,7 @@ export const useDashboardStore = defineStore("dashboard", () => {
     loading.value = true;
 
     const query = new URLSearchParams({ dashboard_id: dashboardId });
-    const response = await fetch(`${baseURL}/study/${studyId}/dashboard?${query}`, {
+    const response = await fetch(`${baseURL}/study/${studyId}/dashboard-connector?${query}`, {
       method: "GET",
     });
 
@@ -101,7 +103,7 @@ export const useDashboardStore = defineStore("dashboard", () => {
     const dashboard_modules = [];
     for (let i = 0; i < dashboardView.value.dashboard_modules.length; i++) {
       const dashboard_module = toRaw(
-        dashboardView.value.dashboard_modules[i] as DashboardModuleData
+        dashboardView.value.dashboard_modules[i] as DashboardModuleView
       );
       if (dashboard_module.selected) {
         for (const path in dashboardModuleConfigs) {
@@ -137,7 +139,7 @@ export const useDashboardStore = defineStore("dashboard", () => {
       }
     }
 
-    dashboardView.value.dashboard_modules = reactive(dashboard_modules as DashboardModule[]);
+    dashboardView.value.dashboard_modules = reactive(dashboard_modules as DashboardModuleView[]);
 
     console.log("dashboard view", dashboardView.value);
 
@@ -149,9 +151,9 @@ export const useDashboardStore = defineStore("dashboard", () => {
   const deleteDashboardConnector = async (studyId: string, dashboardId: string) => {
     loading.value = true;
 
-    const response = await fetch(`${baseURL}/study/${studyId}/dashboard/delete`, {
-      body: JSON.stringify({ dashboard_id: dashboardId }),
-      method: "POST",
+    const query = new URLSearchParams({ dashboard_id: dashboardId });
+    const response = await fetch(`${baseURL}/study/${studyId}/dashboard/delete?${query}`, {
+      method: "DELETE",
     });
 
     if (!response.ok) {

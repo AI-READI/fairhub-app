@@ -14,7 +14,7 @@ import Tooltip from "../interfaces/tooltip.js";
 Stacked Bar Chart Class
 */
 
-class StackedBarChart extends Chart {
+class BarChart extends Chart {
   constructor(config) {
     // Configure Parent
     super(config);
@@ -28,26 +28,16 @@ class StackedBarChart extends Chart {
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
     self.filters = Object.hasOwn(config, "filters") ? config.filters : undefined;
-    self.ordering = {
-      appearance: D3.stackOrderAppearance,
-      ascending: D3.stackOrderAscending,
-      descending: D3.stackOrderDescending,
-      insideout: D3.stackOrderInsideOut,
-      none: D3.stackOrderNone,
-      reverse: D3.stackOrderReverse,
-    }[config.ordering];
 
     /*
     Setup
     */
 
-    // Set Unique Filters, Groups, Subgroups, ColorScale
+    // Set Unique Filters, Groups, and Subgroups
     self.filterby = super.getUniqueValuesByKey(self.data, self.accessors.filterby.key);
     self.groups = super.getUniqueValuesByKey(self.data, self.accessors.group.key);
-    self.subgroups = super.getUniqueValuesByKey(self.data, self.accessors.subgroup.key);
-    self.colorscale = D3.scaleOrdinal()
-      .domain(super.getUniqueValuesByKey(self.data, self.accessors.color.key))
-      .range(self.palette);
+    // Set Color Scale
+    self.colorscale = D3.scaleOrdinal().domain(self.filterby).range(self.palette);
 
     // Set Filters
     if (self.filters !== undefined) {
@@ -73,10 +63,10 @@ class StackedBarChart extends Chart {
     // Visualization Parent
     self.svg = self.rotate
       ? D3.select(`${self.getID}_visualization`)
-          .classed("stacked-bar-chart isrotated", true)
+          .classed("bar-chart isrotated", true)
           .attr("id", `${self.setID}_visualization`)
       : D3.select(`${self.getID}_visualization`)
-          .classed("stacked-bar-chart unrotated", true)
+          .classed("bar-chart unrotated", true)
           .attr("id", `${self.setID}_visualization`);
 
     // Interface Parent
@@ -168,55 +158,37 @@ class StackedBarChart extends Chart {
       .attr("id", `${self.setID}_bars`)
       .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`);
 
-    self.bargroups = self.bars
-      .selectAll(".bar-group")
-      .data(self.mapping.stacks)
-      .join("g")
-      .classed("bar-group data-element", true)
-      .attr("id", (d) => `${self.setID}_bar-group_${self.tokenize(d.subgroup)}`)
-      .attr("opacity", self.transitions.opacity.from);
-
     self.bar = self.rotate
-      ? self.bargroups
+      ? self.bars
           .selectAll("rect")
-          .data((d) => d)
+          .data(self.mapping.data)
           .enter()
           .append("rect")
           .classed("bar interactable", true)
-          .attr(
-            "id",
-            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.subgroup)}`
-          )
+          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.group)}`)
           .attr("data-group", (d) => d.group)
-          .attr("x", (d) => self.x(d.from))
+          .attr("x", (d) => self.x(d.value))
           .attr("y", (d) => self.y(d.group))
-          .attr("width", (d) => self.x(d.to) - self.x(d.from))
+          .attr("width", (d) => self.dataframe.width - self.x(d.value))
           .attr("height", self.y.bandwidth())
           .attr("fill", (d) => d.color)
           .attr("opacity", self.transitions.opacity.from)
-          .attr("stroke-width", "1")
-          .attr("stroke", "white")
           .text((d) => d.group)
           .on("mouseover", (e, d) => self.mouseOverBar(e, d))
           .on("mouseout", (e, d) => self.mouseOutBar(e, d))
-      : self.bargroups
+      : self.bars
           .selectAll("rect")
-          .data((d) => d)
+          .data(self.mapping.data)
           .enter()
           .append("rect")
           .classed("bar interactable", true)
-          .attr(
-            "id",
-            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.subgroup)}`
-          )
+          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.group)}`)
           .attr("x", (d) => self.x(d.group))
-          .attr("y", (d) => self.y(d.to))
+          .attr("y", (d) => self.y(self.dataframe.height - d.value))
           .attr("width", self.x.bandwidth())
-          .attr("height", (d) => self.y(d.from) - self.y(d.to))
+          .attr("height", (d) => self.dataframe.height - self.y(d.value))
           .attr("fill", (d) => d.color)
           .attr("opacity", self.transitions.opacity.from)
-          .attr("stroke-width", "1")
-          .attr("stroke", "white")
           .text((d) => d.group)
           .on("mouseover", (e, d) => self.mouseOverBar(e, d))
           .on("mouseout", (e, d) => self.mouseOutBar(e, d));
@@ -229,20 +201,21 @@ class StackedBarChart extends Chart {
       self.legend !== undefined
         ? new Legend({
             title: self.legend.title,
-            accessor: "subgroup",
-            animation: ["opacity", self.animations["opacity"]],
+            accessor: "filterby",
+            animations: self.animations,
+            color: self.colors,
             container: self.viewframe,
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_bar-group`,
+            getPrefix: `${self.getID}_bars`,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
             margin: self.margin,
             padding: self.legend.padding,
             setID: self.setID,
-            transition: ["opacity", self.transitions["opacity"]],
+            transitions: self.transitions,
             uid: self.uid,
             vposition: self.legend.vposition,
             width: self.legend.width,
@@ -257,12 +230,7 @@ class StackedBarChart extends Chart {
       self.tooltip !== undefined
         ? new Tooltip({
             title: self.tooltip.title,
-            accessors: [
-              self.accessors.filterby,
-              self.accessors.group,
-              self.accessors.subgroup,
-              self.accessors.value,
-            ],
+            accessors: [self.accessors.filterby, self.accessors.group, self.accessors.value],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,
@@ -330,10 +298,10 @@ class StackedBarChart extends Chart {
     // Grab SVG Generated From Vue Template
     self.svg = self.rotate
       ? D3.select(`${self.getID}_visualization`)
-          .classed("stacked-bar-chart isrotated", true)
+          .classed("bar-chart isrotated", true)
           .attr("id", `${self.setID}_visualization`)
       : D3.select(`${self.getID}_visualization`)
-          .classed("stacked-bar-chart unrotated", true)
+          .classed("bar-chart unrotated", true)
           .attr("id", `${self.setID}_visualization`);
 
     // Interface Parent
@@ -425,58 +393,39 @@ class StackedBarChart extends Chart {
       .attr("id", `${self.setID}_bars`)
       .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`);
 
-    self.bargroups = self.bars
-      .selectAll(".bar-group")
-      .data(self.mapping.stacks)
-      .join("g")
-      .classed("bar-group data-element", true)
-      .attr("id", (d) => `${self.setID}_bar-group_${self.tokenize(d.subgroup)}`)
-      .attr("fill", (d) => d.color)
-      .attr("opacity", self.transitions.opacity.from);
-
     self.bar = self.rotate
-      ? self.bargroups
+      ? self.bars
           .selectAll("rect")
-          .data((d) => d)
+          .data(self.mapping.data)
           .enter()
           .append("rect")
           .merge(self.bar)
           .classed("bar interactable", true)
-          .attr(
-            "id",
-            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.subgroup)}`
-          )
-          .attr("data-group", (d) => d.subgroup)
-          .attr("x", (d) => self.x(d.from))
+          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.group)}`)
+          .attr("data-group", (d) => d.group)
+          .attr("x", (d) => self.x(d.value))
           .attr("y", (d) => self.y(d.group))
-          .attr("width", (d) => self.x(d.to) - self.x(d.from))
+          .attr("width", (d) => self.dataframe.width - self.x(d.value))
           .attr("height", self.y.bandwidth())
           .attr("fill", (d) => d.color)
           .attr("opacity", self.transitions.opacity.from)
-          .attr("stroke-width", "1")
-          .attr("stroke", "white")
           .text((d) => d.group)
           .on("mouseover", (e, d) => self.mouseOverBar(e, d))
           .on("mouseout", (e, d) => self.mouseOutBar(e, d))
-      : self.bargroups
+      : self.bars
           .selectAll("rect")
-          .data((d) => d)
+          .data(self.mapping.data)
           .enter()
           .append("rect")
           .merge(self.bar)
           .classed("bar interactable", true)
-          .attr(
-            "id",
-            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.subgroup)}`
-          )
+          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.group)}`)
           .attr("x", (d) => self.x(d.group))
-          .attr("y", (d) => self.y(d.to))
+          .attr("y", (d) => self.y(d.value))
           .attr("width", self.x.bandwidth())
-          .attr("height", (d) => self.y(d.from) - self.y(d.to))
+          .attr("height", (d) => self.dataframe.height - self.y(d.value))
           .attr("fill", (d) => d.color)
           .attr("opacity", self.transitions.opacity.from)
-          .attr("stroke-width", "1")
-          .attr("stroke", "white")
           .text((d) => d.group)
           .on("mouseover", (e, d) => self.mouseOverBar(e, d))
           .on("mouseout", (e, d) => self.mouseOutBar(e, d));
@@ -489,20 +438,20 @@ class StackedBarChart extends Chart {
       self.legend !== undefined
         ? new Legend({
             title: self.legend.title,
-            accessor: "subgroup",
-            animation: ["opacity", self.animations["opacity"]],
+            accessor: "filterby",
+            animations: self.animations,
             container: self.viewframe,
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_bar-group`,
+            getPrefix: `${self.getID}_bars`,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
             margin: self.margin,
             padding: self.legend.padding,
             setID: self.setID,
-            transition: ["opacity", self.transitions["opacity"]],
+            transitions: self.transitions,
             uid: self.uid,
             vposition: self.legend.vposition,
             width: self.legend.width,
@@ -517,12 +466,7 @@ class StackedBarChart extends Chart {
       self.tooltip !== undefined
         ? new Tooltip({
             title: self.tooltip.title,
-            accessors: [
-              self.accessors.filterby,
-              self.accessors.group,
-              self.accessors.subgroup,
-              self.accessors.value,
-            ],
+            accessors: [self.accessors.filterby, self.accessors.group, self.accessors.value],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,
@@ -577,7 +521,6 @@ class StackedBarChart extends Chart {
     self.xAxis.remove();
     self.yAxis.remove();
     self.bar.remove();
-    self.bargroups.remove();
     self.bars.remove();
     // Clear Interface Components
     if (self.Legend !== null) self.Legend.clear();
@@ -595,7 +538,7 @@ class StackedBarChart extends Chart {
     const self = this;
 
     // Highlight Selected Axis Group
-    D3.selectAll(`[id^="${self.setID}_bar_${self.tokenize(group)}"]`)
+    D3.select(`${self.setID}_bar_${self.tokenize(group)}`)
       .transition()
       .ease(Easing[self.animations.opacity.easing])
       .duration(self.animations.opacity.duration)
@@ -608,7 +551,7 @@ class StackedBarChart extends Chart {
     const self = this;
 
     // Return All Bars to Unhighlighted State
-    D3.selectAll(`${self.getID}_visualization .bars .bar-group .bar`)
+    D3.selectAll(`${self.getID}_visualization .bars .bar`)
       .transition()
       .ease(Easing[self.animations.opacity.easing])
       .duration(self.animations.opacity.duration)
@@ -666,7 +609,6 @@ class StackedBarChart extends Chart {
         filterby: datum[self.accessors.filterby.key],
         from: 0,
         group: datum[self.accessors.group.key],
-        subgroup: datum[self.accessors.subgroup.key],
         to: 0,
         value: datum[self.accessors.value.key],
       };
@@ -675,7 +617,6 @@ class StackedBarChart extends Chart {
     // Get Unique Filters, Groups, Subgroups, and Colors
     const filteroptions = [...super.getUniqueValuesByKey(data, "filterby")];
     const groups = [...super.getUniqueValuesByKey(data, "group")];
-    const subgroups = [...super.getUniqueValuesByKey(data, "subgroup")];
     const colors = [...super.getUniqueValuesByKey(data, "color")];
 
     // Compute Group-wise Value Range (Max and Min)
@@ -698,38 +639,39 @@ class StackedBarChart extends Chart {
     const max = Math.ceil(Math.max(...maxs));
     const min = Math.floor(Math.min(...mins));
 
-    // Generate Stacks
-    let stacks = [];
-    let from = [];
-    for (const i in subgroups) {
-      const subgroup = subgroups[i];
-      let stack = [];
-      for (const j in groups) {
-        const group = groups[j];
-        for (const d in data) {
-          const datum = data[d];
-          if (datum.subgroup === subgroup && datum.group === group) {
-            if (typeof from[j] === "undefined") {
-              from[j] = 0;
-            }
-            datum.from = from[j];
-            datum.to = from[j] + datum.value;
-            from[j] = datum.to;
-            stack.push(datum);
-          }
-        }
-      }
-      stack.subgroup = subgroup;
-      stacks.push(stack);
-    }
+    // // Generate Bars
+    // let bars = [];
+    // let from = [];
+    // for (const i in subgroups) {
+    //   const subgroup = subgroups[i];
+    //   let stack = [];
+    //   for (const j in groups) {
+    //     const group = groups[j];
+    //     for (const d in data) {
+    //       const datum = data[d];
+    //       if (datum.subgroup === subgroup && datum.group === group) {
+    //         if (typeof from[j] === "undefined") {
+    //           from[j] = 0;
+    //         }
+    //         datum.from = from[j];
+    //         datum.to = from[j] + datum.value;
+    //         from[j] = datum.to;
+    //         stack.push(datum);
+    //       }
+    //     }
+    //   }
+    //   stack.subgroup = subgroup;
+    //   stacks.push(stack);
+    // }
 
     // Generate Legend
-    const legend = D3.zip(colors, subgroups).map(([color, subgroup]) => {
+    const legend = D3.zip(colors, filteroptions).map(([color, filterby]) => {
       return {
         color: color,
-        subgroup: subgroup,
+        filterby: filterby,
       };
     });
+    console.log(data);
 
     return {
       colors: colors,
@@ -739,8 +681,8 @@ class StackedBarChart extends Chart {
       legend: legend,
       max: max,
       min: min,
-      stacks: stacks,
-      subgroups: subgroups,
+      // stacks: stacks,
+      // subgroups: subgroups,
     };
   }
 }
@@ -749,4 +691,4 @@ class StackedBarChart extends Chart {
 Exports
 */
 
-export default StackedBarChart;
+export default BarChart;

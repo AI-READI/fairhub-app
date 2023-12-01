@@ -9,7 +9,7 @@
     "type": "StackedBar",
     "config": {
       "id": "#sex-gender_stacked-bar",
-      "rotate": true,
+      "rotate": false,
       "width": 1080,
       "height": 420,
       "position": {
@@ -53,6 +53,7 @@
         }
       },
       "legend": {
+        "title": "Survey Status",
         "width": 200,
         "height": 140,
         "itemsize": 20,
@@ -67,6 +68,7 @@
         }
       },
       "tooltip": {
+        "title": "",
         "width": 720,
         "height": 140,
         "itemsize": 20,
@@ -111,17 +113,17 @@
           "type": "String"
         },
         "group": {
-          "name": "Sex",
+          "name": "Gender",
           "key": "group",
           "type": "String"
         },
         "subgroup": {
-          "name": "Gender",
+          "name": "Sex",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Gender",
+          "name": "Sex",
           "key": "subgroup",
           "type": "String"
         },

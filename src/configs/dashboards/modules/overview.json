@@ -1,8 +1,8 @@
 {
   "name": "Overview",
   "id": "overview",
-  "title": "AI-READI Pilot REDCap Survey Counts by Data Generation Site",
-  "subtitle": "Survey Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
+  "title": "AI-READI Pilot REDCap Instrument Status by Data Generation Site",
+  "subtitle": "Instrument Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
   "width": 1280,
   "height": 720,
   "visualizations": [{
@@ -53,6 +53,7 @@
         }
       },
       "legend": {
+        "title": "Instrument Status",
         "width": 200,
         "height": 140,
         "itemsize": 20,
@@ -67,6 +68,7 @@
         }
       },
       "tooltip": {
+        "title": "Data Point Details",
         "width": 720,
         "height": 140,
         "itemsize": 20,

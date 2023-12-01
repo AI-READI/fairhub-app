@@ -1,15 +1,15 @@
 {
   "name": "Current Medications",
   "id": "current-medications",
-  "title": "Current Medication",
-  "subtitle": "Devices subtitle",
+  "title": "AI-READI Pilot Count of Current Medications by Data Generation Site",
+  "subtitle": "Distribution of Current Medications Count",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "Doughnut",
+    "type": "Bar",
     "config": {
-      "id": "#devices_doughnut",
-      "rotate": true,
+      "id": "#current-medications_bar",
+      "rotate": false,
       "width": 1080,
       "height": 500,
       "position": {
@@ -53,6 +53,7 @@
         }
       },
       "legend": {
+        "title": "",
         "width": 120,
         "height": 140,
         "itemsize": 20,
@@ -67,6 +68,7 @@
         }
       },
       "tooltip": {
+        "title": "",
         "width": 720,
         "height": 140,
         "itemsize": 20,
@@ -116,8 +118,8 @@
           "type": "String"
         },
         "color": {
-          "name": "Current Medications Status",
-          "key": "group",
+          "name": "Site",
+          "key": "filterby",
           "type": "String"
         },
         "value": {

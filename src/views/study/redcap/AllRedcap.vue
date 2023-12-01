@@ -154,7 +154,7 @@ function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
           <template #icon>
             <f-icon icon="ion:add-circle-outline" />
           </template>
-          Add REDCap Project
+          Add REDCap Project API Link
         </n-button>
       </RouterLink>
     </n-space>

@@ -27,6 +27,7 @@ class DoughnutChart extends Chart {
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
     self.filters = Object.hasOwn(config, "filters") ? config.filters : undefined;
+    self.labeling = Object.hasOwn(config, "labeling") ? config.labeling : undefined;
 
     /*
     Setup
@@ -94,49 +95,53 @@ class DoughnutChart extends Chart {
     Generate Text Labels
     */
 
-    self.labelArc = D3.arc()
-      .innerRadius(self.radius * 0.85)
-      .outerRadius(self.radius * 0.9);
+    if (self.labeling) {
+      self.labelArc = D3.arc()
+        .innerRadius(self.radius * 0.85)
+        .outerRadius(self.radius * 0.9);
 
-    self.labelLines = self.svg
-      .append("g")
-      .classed("label-lines", true)
-      .attr("id", `${self.setID}_label-lines`)
-      .attr("transform", `translate(${self.dataframe.width / 2}, ${self.dataframe.height / 2})`)
-      .selectAll(".label-line")
-      .data(self.mapping.doughnut)
-      .enter()
-      .append("polyline")
-      .classed("label-line", true)
-      .attr("id", (d) => `${self.setID}_label-line_${self.tokenize(d.group)}`)
-      .attr("stroke", "black")
-      .attr("fill", "none")
-      .attr("stroke-width", 1)
-      .attr("points", (d) => self.setLabels(d));
+      self.labelLines = self.svg
+        .append("g")
+        .classed("label-lines", true)
+        .attr("id", `${self.setID}_label-lines`)
+        .attr("transform", `translate(${self.dataframe.width / 2}, ${self.dataframe.height / 2})`)
+        .selectAll(".label-line")
+        .data(self.mapping.doughnut)
+        .enter()
+        .append("polyline")
+        .classed("label-line", true)
+        .attr("id", (d) => `${self.setID}_label-line_${self.tokenize(d.group)}`)
+        .attr("stroke", "black")
+        .attr("fill", "none")
+        .attr("stroke-width", 1)
+        .attr("points", (d) => self.setLabels(d));
 
-    self.labels = self.svg
-      .append("g")
-      .classed("labels", true)
-      .attr("id", () => `${self.setID}_labels`)
-      .attr("transform", `translate(${self.dataframe.width / 2}, ${self.dataframe.height / 2})`)
-      .selectAll(".label")
-      .data(self.mapping.doughnut)
-      .enter()
-      .append("text")
-      .text((d) => d.group)
-      .classed("label", true)
-      .attr("id", (d) => `${self.setID}_label_${self.tokenize(d.group)}`)
-      .attr(
-        "transform",
-        (d) =>
-          `translate(${
-            self.radius * 0.95 * (d.startAngle + (d.endAngle - d.startAngle) / 2 < Math.PI ? 1 : -1)
-          }, ${self.labelArc.centroid(d)[1]})`
-      )
-      .style("text-anchor", (d) =>
-        d.startAngle + (d.endAngle - d.startAngle) / 2 < Math.PI ? "start" : "end"
-      )
-      .style("text-transform", "capitalize");
+      self.labels = self.svg
+        .append("g")
+        .classed("labels", true)
+        .attr("id", () => `${self.setID}_labels`)
+        .attr("transform", `translate(${self.dataframe.width / 2}, ${self.dataframe.height / 2})`)
+        .selectAll(".label")
+        .data(self.mapping.doughnut)
+        .enter()
+        .append("text")
+        .text((d) => d.group)
+        .classed("label", true)
+        .attr("id", (d) => `${self.setID}_label_${self.tokenize(d.group)}`)
+        .attr(
+          "transform",
+          (d) =>
+            `translate(${
+              self.radius *
+              0.95 *
+              (d.startAngle + (d.endAngle - d.startAngle) / 2 < Math.PI ? 1 : -1)
+            }, ${self.labelArc.centroid(d)[1]})`
+        )
+        .style("text-anchor", (d) =>
+          d.startAngle + (d.endAngle - d.startAngle) / 2 < Math.PI ? "start" : "end"
+        )
+        .style("text-transform", "capitalize");
+    }
 
     /*
     Legend
@@ -145,6 +150,7 @@ class DoughnutChart extends Chart {
     self.Legend =
       self.legend !== undefined
         ? new Legend({
+            title: self.legend.title,
             accessor: "group",
             animations: self.animations,
             color: self.color,
@@ -173,6 +179,7 @@ class DoughnutChart extends Chart {
     self.Tooltip =
       self.tooltip !== undefined
         ? new Tooltip({
+            title: self.tooltip.title,
             accessors: [self.accessors.group, self.accessors.filterby, self.accessors.value],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
@@ -276,50 +283,54 @@ class DoughnutChart extends Chart {
     Generate Text Labels
     */
 
-    self.labelArc = D3.arc()
-      .innerRadius(self.radius * 0.85)
-      .outerRadius(self.radius * 0.9);
+    if (self.labeling) {
+      self.labelArc = D3.arc()
+        .innerRadius(self.radius * 0.85)
+        .outerRadius(self.radius * 0.9);
 
-    self.labelLines = self.svg
-      .append("g")
-      .classed("label-lines", true)
-      .attr("id", `${self.setID}_label-lines`)
-      .attr("transform", `translate(${self.dataframe.width / 2}, ${self.dataframe.height / 2})`)
-      .selectAll(".label-line")
-      .data(self.mapping.doughnut)
-      .enter()
-      .append("polyline")
-      .classed("label-line", true)
-      .attr("id", (d) => `${self.setID}_label-line_${self.tokenize(d.group)}`)
-      .attr("stroke", "black")
-      .attr("fill", "none")
-      .attr("stroke-width", 1)
-      .attr("points", (d) => self.setLabels(d));
+      self.labelLines = self.svg
+        .append("g")
+        .classed("label-lines", true)
+        .attr("id", `${self.setID}_label-lines`)
+        .attr("transform", `translate(${self.dataframe.width / 2}, ${self.dataframe.height / 2})`)
+        .selectAll(".label-line")
+        .data(self.mapping.doughnut)
+        .enter()
+        .append("polyline")
+        .classed("label-line", true)
+        .attr("id", (d) => `${self.setID}_label-line_${self.tokenize(d.group)}`)
+        .attr("stroke", "black")
+        .attr("fill", "none")
+        .attr("stroke-width", 1)
+        .attr("points", (d) => self.setLabels(d));
 
-    self.labels = self.svg
-      .append("g")
-      .classed("labels", true)
-      .attr("id", () => `${self.setID}_labels`)
-      .attr("transform", `translate(${self.dataframe.width / 2}, ${self.dataframe.height / 2})`)
-      .selectAll(".label")
-      .data(self.mapping.doughnut)
-      .enter()
-      .append("text")
-      .text((d) => d.group)
-      .classed("label", true)
-      .attr("id", (d) => `${self.setID}_label_${self.tokenize(d.group)}`)
-      .attr(
-        "transform",
-        (d) =>
-          `translate(${
-            self.radius * 0.95 * (d.startAngle + (d.endAngle - d.startAngle) / 2 < Math.PI ? 1 : -1)
-          }, ${self.labelArc.centroid(d)[1]})`
-      )
-      .attr("font-size", "1.2rem")
-      .style("text-anchor", (d) =>
-        d.startAngle + (d.endAngle - d.startAngle) / 2 < Math.PI ? "start" : "end"
-      )
-      .style("text-transform", "capitalize");
+      self.labels = self.svg
+        .append("g")
+        .classed("labels", true)
+        .attr("id", () => `${self.setID}_labels`)
+        .attr("transform", `translate(${self.dataframe.width / 2}, ${self.dataframe.height / 2})`)
+        .selectAll(".label")
+        .data(self.mapping.doughnut)
+        .enter()
+        .append("text")
+        .text((d) => d.group)
+        .classed("label", true)
+        .attr("id", (d) => `${self.setID}_label_${self.tokenize(d.group)}`)
+        .attr(
+          "transform",
+          (d) =>
+            `translate(${
+              self.radius *
+              0.95 *
+              (d.startAngle + (d.endAngle - d.startAngle) / 2 < Math.PI ? 1 : -1)
+            }, ${self.labelArc.centroid(d)[1]})`
+        )
+        .attr("font-size", "1.2rem")
+        .style("text-anchor", (d) =>
+          d.startAngle + (d.endAngle - d.startAngle) / 2 < Math.PI ? "start" : "end"
+        )
+        .style("text-transform", "capitalize");
+    }
 
     /*
     Legend
@@ -328,6 +339,7 @@ class DoughnutChart extends Chart {
     self.Legend =
       self.legend !== undefined
         ? new Legend({
+            title: self.legend.title,
             accessor: "group",
             animations: self.animations,
             container: self.viewframe,
@@ -355,6 +367,7 @@ class DoughnutChart extends Chart {
     self.Tooltip =
       self.tooltip !== undefined
         ? new Tooltip({
+            title: self.tooltip.title,
             accessors: [self.accessors.filterby, self.accessors.group, self.accessors.value],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
@@ -406,8 +419,10 @@ class DoughnutChart extends Chart {
 
     // Clear Visualization Components
     self.arcs.remove();
-    self.labelLines.remove();
-    self.labels.remove();
+    if (self.labeling) {
+      self.labelLines.remove();
+      self.labels.remove();
+    }
     // Clear Interface Components
     if (self.Legend !== null) self.Legend.clear();
     if (self.Tooltip !== null) self.Tooltip.clear();
@@ -498,7 +513,6 @@ class DoughnutChart extends Chart {
           value: d.data.value,
         };
       });
-    console.log(doughnut);
 
     // Generate Legend
     const legend = D3.zip(colors, groups).map(([color, group]) => {
@@ -507,8 +521,6 @@ class DoughnutChart extends Chart {
         group: group,
       };
     });
-
-    console.log(legend);
 
     return {
       colors: colors,

@@ -60,7 +60,7 @@ const editRedcapProjectView = (e: MouseEvent) => {
       };
 
       try {
-        const response = await fetch(`${baseURL}/study/${studyId}/redcap`, {
+        const response = await fetch(`${baseURL}/study/${studyId}/redcap/edit`, {
           body: JSON.stringify(data),
           method: "PUT",
         });
@@ -78,7 +78,7 @@ const editRedcapProjectView = (e: MouseEvent) => {
         error("Something went wrong.");
       }
     } else {
-      console.log("error");
+      error("Invalid form.");
       console.log(errors);
     }
   });
@@ -99,7 +99,7 @@ onBeforeMount(() => {
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-6">
     <HeadingText
-      title="Edit REDCap Project View"
+      title="Edit REDCap Project API Link"
       :description="`REDCap Project ID (pid): ${routeParams.projectId}`"
     />
 
@@ -148,7 +148,7 @@ onBeforeMount(() => {
           <template #icon>
             <f-icon icon="material-symbols:add" />
           </template>
-          Apply REDCap Project View Update
+          Apply API Link Updates
         </n-button>
       </div>
     </n-form>

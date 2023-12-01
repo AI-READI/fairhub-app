@@ -64,14 +64,26 @@ onBeforeMount(() => {
           <div :id="module.id">
             <h3>{{ module.title }}</h3>
 
-            <p class="pb-8 pt-2">
-              {{ module.subtitle }}
-            </p>
+            <p class="pb-8 pt-2">{{ module.subtitle }}<br /></p>
 
             <DashboardModule
               :key="module.id"
               :vconfigs="module.visualizations as VisualizationRenderer[]"
             />
+
+            <n-descriptions label-placement="left" label-align="left" size="small">
+              <n-descriptions-item
+                v-for="(report, report_index) in dashboardView.reports.filter(
+                  (report) => report.report_key === module.report_key
+                )"
+                :key="report_index"
+              >
+                <template #label>REDCap Report ID</template>
+                {{ module.report_id }}
+              </n-descriptions-item>
+            </n-descriptions>
+
+            <n-divider />
           </div>
         </div>
       </TransitionGroup>

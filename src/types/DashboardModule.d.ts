@@ -5,7 +5,6 @@ import { ProgressChart } from "@/modules/visualizations/charts/progress";
 import { RidgelineChart } from "@/modules/visualizations/charts/ridgeline";
 import { SankeyChart } from "@/modules/visualizations/charts/sankey";
 import { StackedbarChart } from "@/modules/visualizations/charts/stackedbar";
-
 import {
   Compound,
   DoubleCategorical,
@@ -18,7 +17,7 @@ import {
   SingleDiscrete,
   SingleTimeseries,
   VdatumGeneric,
-} from "./Vdatum";
+} from "@/types/Vdatum";
 
 /*
 Layout Position Modifiers
@@ -152,21 +151,16 @@ export interface VisualizationData {
 Module
 */
 
-export interface DashbordModuleData {
+export type DashboardModuleConnector = {
   id: string;
   name: string;
-  reportId: string;
+  report_key: string;
   selected: boolean;
-  visualizations: VisualizationData[];
-}
+};
 
-export interface DashboardModuleRenderer {
-  id: string;
-  name: string;
+export interface DashboardModuleView extends DashboardModuleConnector {
   title: string;
   height: number;
-  reportId: string;
-  selected: boolean;
   subtitle: string;
   visualizations: VisualizationRenderer[];
   width: number;

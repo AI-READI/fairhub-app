@@ -110,7 +110,7 @@ onBeforeMount(() => {
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-6">
-    <h2 class="header">Add a REDCap Project API</h2>
+    <h2 class="header">Add a New REDCap Project API Link</h2>
 
     <n-divider />
 

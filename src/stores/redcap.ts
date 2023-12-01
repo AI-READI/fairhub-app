@@ -67,9 +67,9 @@ export const useRedcapStore = defineStore("redcap", () => {
   const deleteRedcapProjectAPI = async (studyId: string, projectId: string) => {
     loading.value = true;
 
-    const response = await fetch(`${baseURL}/study/${studyId}/redcap/delete`, {
-      body: JSON.stringify({ project_id: projectId }),
-      method: "POST",
+    const query = new URLSearchParams({ project_id: projectId });
+    const response = await fetch(`${baseURL}/study/${studyId}/redcap/delete?${query}`, {
+      method: "DELETE",
     });
 
     if (!response.ok) {

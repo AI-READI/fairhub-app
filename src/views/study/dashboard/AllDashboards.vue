@@ -223,22 +223,18 @@ function deleteDashboard(studyId: string, dashboardId: string) {
 
       <n-divider />
 
-      <div class="dashboard-choices">
-        <n-table :bordered="true" :single-line="true">
-          <thead>
-            <FadeTransition>
-              <LottieLoader v-if="isLoading" />
+      <FadeTransition>
+        <LottieLoader v-if="isLoading" />
 
-              <TransitionGroup name="fade" tag="tr" class="p-0" v-else>
+        <TransitionGroup name="fade" tag="div" class="dashboard-choices" v-else>
+          <n-table :bordered="true" :single-line="true">
+            <thead>
+              <tr class="p-0">
                 <th v-for="(item, index) in columns" :key="index">{{ item }}</th>
-              </TransitionGroup>
-            </FadeTransition>
-          </thead>
+              </tr>
+            </thead>
 
-          <FadeTransition>
-            <LottieLoader v-if="isLoading" />
-
-            <TransitionGroup name="fade" tag="tbody" class="p-0" v-else>
+            <tbody class="p-0">
               <tr
                 v-for="(dashboard, dashboard_index) in dashboardConnectors"
                 :key="dashboard_index"
@@ -314,10 +310,10 @@ function deleteDashboard(studyId: string, dashboardId: string) {
                   </div>
                 </td>
               </tr>
-            </TransitionGroup>
-          </FadeTransition>
-        </n-table>
-      </div>
+            </tbody>
+          </n-table>
+        </TransitionGroup>
+      </FadeTransition>
 
       <n-empty
         v-if="dashboardConnectors.length === 0"

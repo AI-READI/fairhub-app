@@ -162,12 +162,12 @@ const router = createRouter({
             },
             {
               name: "study:redcap:add-redcap-project-api",
-              path: "",
+              path: "add",
               component: AddRedcap,
             },
             {
               name: "study:redcap:edit-redcap-project-api",
-              path: ":projectId",
+              path: ":projectId/edit",
               component: EditRedcap,
             },
             {
@@ -187,12 +187,12 @@ const router = createRouter({
             },
             {
               name: "study:dashboard:view-dashboard",
-              path: ":dashboardId",
+              path: ":dashboardId/view",
               component: ViewDashboard,
             },
             {
               name: "study:dashboard:edit-dashboard",
-              path: ":dashboardId",
+              path: ":dashboardId/edit",
               component: EditDashboard,
             },
           ],
