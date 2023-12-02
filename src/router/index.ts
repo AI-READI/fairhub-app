@@ -9,6 +9,7 @@ import SignUp from "@/views/auth/SignUp.vue";
 import Changelog from "@/views/help/ChangeLog.vue";
 import Documentation from "@/views/help/DocumentationPage.vue";
 import HelpPage from "@/views/help/HelpPage.vue";
+import InviteUsers from "@/views/help/InviteUsers.vue";
 import ReportIssue from "@/views/help/ReportIssue.vue";
 import HomePage from "@/views/home/HomePage.vue";
 import Integrations from "@/views/integrations/IntegrationPage.vue";
@@ -463,6 +464,11 @@ const router = createRouter({
           name: "report-issue",
           path: "report-issue",
           component: ReportIssue,
+        },
+        {
+          name: "invite-user",
+          path: "invite-user",
+          component: InviteUsers,
         },
       ],
       component: HelpPage,

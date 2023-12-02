@@ -35,6 +35,7 @@ const hideMenuOptions = computed(() => {
     "/help/report-issue",
     "/help/documentation",
     "/help/changelog",
+    "/help/invite-users",
     "/profile",
     "/integrations",
   ];
@@ -242,6 +243,20 @@ const lowerMenuOptions: MenuOption[] = [
               },
             },
             { default: () => "Report an Issue" }
+          ),
+      },
+      {
+        icon: renderIcon("carbon:user-follow"),
+        key: "invite-users",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                path: "/help/invite-user",
+              },
+            },
+            { default: () => "Invite User" }
           ),
       },
       {
