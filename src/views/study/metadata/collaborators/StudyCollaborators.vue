@@ -4,6 +4,7 @@ import type { FormInst } from "naive-ui";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
+const push = usePush();
 const message = useMessage();
 
 const formRef = ref<FormInst | null>(null);
@@ -53,10 +54,10 @@ const saveMetadata = (e: MouseEvent) => {
       );
 
       if (!response.ok) {
-        message.error("Something went wrong.");
+        push.error("Something went wrong.");
         return;
       } else {
-        message.success("Study updated successfully.");
+        push.success("Study updated successfully.");
       }
 
       console.log("success");
