@@ -2,7 +2,7 @@
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
-const message = useMessage();
+const push = usePush();
 
 const oversight_has_dmc = ref(false);
 const showLoader = ref(false);
@@ -36,10 +36,10 @@ const saveMetadata = async (value: boolean) => {
   });
 
   if (!response.ok) {
-    message.error("Something went wrong.");
+    push.error("Something went wrong.");
     return;
   } else {
-    message.success("Study updated successfully.");
+    push.success("Study updated successfully.");
   }
 
   showLoader.value = false;
