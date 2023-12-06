@@ -102,7 +102,9 @@ const saveMetadata = (e: MouseEvent) => {
         throw new Error("Network response was not ok");
       }
 
-      push.success("Status saved successfully");
+      push.success({
+        title: "Status saved successfully",
+      });
 
       console.log("success");
     } else {
