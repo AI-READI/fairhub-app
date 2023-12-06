@@ -3,13 +3,12 @@ import type { VisualizationRenderer } from "@/types/DashboardModule";
 
 export default {
   name: "DashboardModule",
-  props: {
-    vrenderers: [] as VisualizationRenderer[],
-  },
+  props: ["vrenderers"],
   setup(props: any) {
     const visualizations: any[] = reactive([]);
+    // const vrenderers: VisualizationRenderer[] = [];
     onMounted(() => {
-      const vrenderers = toRaw(props).vrenderers;
+      const vrenderers = props.vrenderers as VisualizationRenderer[];
       for (let i = 0; i < vrenderers.length; i++) {
         let vrenderer = vrenderers[i];
         let cls = vrenderer.class;
@@ -24,7 +23,7 @@ export default {
         visualization.update();
       }
     });
-    return { visualizations };
+    return { visualizations: visualizations };
   },
 };
 </script>

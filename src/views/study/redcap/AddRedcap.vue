@@ -136,6 +136,7 @@ onBeforeMount(() => {
           v-model:value="redcapProjectAPI.project_api_key"
           placeholder="BF021AA2776011EEB9620242AC120002"
           type="password"
+          autocomplete="off"
           show-password-on="click"
         />
       </n-form-item>

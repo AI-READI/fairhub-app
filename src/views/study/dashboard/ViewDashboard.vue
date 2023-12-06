@@ -28,7 +28,6 @@ const routeParams = {
 };
 
 onBeforeMount(() => {
-  console.log("beforeMount");
   if (!authStore.isAuthenticated) {
     error("You are not logged in.");
     router.push({ name: "home" });

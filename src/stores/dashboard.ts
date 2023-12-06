@@ -9,7 +9,6 @@ export const useDashboardStore = defineStore("dashboard", () => {
   const visualizationModules: object = import.meta.glob("@/modules/visualizations/charts/*.js", {
     eager: true,
   });
-  console.log(visualizationModules, typeof visualizationModules);
   const dashboardConnector = ref<DashboardConnector>({
     dashboard_id: "",
     dashboard_modules: [],
@@ -81,9 +80,12 @@ export const useDashboardStore = defineStore("dashboard", () => {
   const getDashboardView = async (studyId: string, dashboardId: string) => {
     loading.value = true;
 
-    const dashboardModuleConfigs = await import.meta.glob("@/configs/dashboards/modules/*.json", {
-      eager: true,
-    });
+    const dashboardModuleConfigs: object = await import.meta.glob(
+      "@/configs/dashboards/modules/*.json",
+      {
+        eager: true,
+      }
+    );
     const query = new URLSearchParams({ dashboard_id: dashboardId });
     const response = await fetch(`${baseURL}/study/${studyId}/dashboard?${query}`, {
       method: "GET",
@@ -104,14 +106,21 @@ export const useDashboardStore = defineStore("dashboard", () => {
     for (let i = 0; i < dashboardView.value.dashboard_modules.length; i++) {
       const dashboard_module = toRaw(<DashboardModuleView>dashboardView.value.dashboard_modules[i]);
       if (dashboard_module.selected) {
+        for (let j = 0; j < dashboardView.value.reports.length; j++) {
+          const report = dashboardView.value.reports[j];
+          if (report.report_key === dashboard_module.report_key) {
+            dashboard_module.report_id = report.report_id;
+          }
+        }
         for (const path in dashboardModuleConfigs) {
-          const dashboardModuleConfig = dashboardModuleConfigs[path] as DashboardModuleView;
+          const dashboardModuleConfig = dashboardModuleConfigs[
+            path as keyof typeof dashboardModuleConfigs
+          ]["default"] as DashboardModuleView;
           if (dashboard_module.id === dashboardModuleConfig.id) {
             dashboard_module.title = dashboardModuleConfig.title;
             dashboard_module.subtitle = dashboardModuleConfig.subtitle;
             dashboard_module.width = dashboardModuleConfig.width;
             dashboard_module.height = dashboardModuleConfig.height;
-            dashboard_module.report_id = dashboardModuleConfig.report_id;
             // Collect & Initialize Visualizations
             const visualizations = <VisualizationRenderer[]>[];
             for (let j = 0; j < dashboardModuleConfig.visualizations.length; j++) {

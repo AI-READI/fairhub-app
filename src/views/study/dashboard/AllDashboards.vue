@@ -226,7 +226,7 @@ async function deleteDashboard(studyId: string, dashboardId: string | undefined)
       <FadeTransition>
         <LottieLoader v-if="isLoading" />
 
-        <TransitionGroup name="fade" tag="div" class="dashboard-choices" v-else>
+        <div name="fade" tag="div" class="dashboard-choices" v-else>
           <n-table :bordered="true" :single-line="true">
             <thead>
               <tr class="p-0">
@@ -312,7 +312,7 @@ async function deleteDashboard(studyId: string, dashboardId: string | undefined)
               </tr>
             </tbody>
           </n-table>
-        </TransitionGroup>
+        </div>
       </FadeTransition>
 
       <n-empty
