@@ -11,7 +11,7 @@ import { baseURL } from "@/utils/constants";
 
 const router = useRouter();
 const { error } = useMessage();
-const message = useMessage();
+const push = usePush();
 
 const authStore = useAuthStore();
 
@@ -73,12 +73,12 @@ const createStudy = (e: MouseEvent) => {
       });
 
       if (!response.ok) {
-        message.error("Something went wrong. Please try again later.");
+        push.error("Something went wrong. Please try again later.");
 
         throw new Error(response.statusText);
       }
 
-      message.success("Study created successfully.");
+      push.success("Study created successfully.");
 
       /**
        * TODO: Redirect to the newly created study
