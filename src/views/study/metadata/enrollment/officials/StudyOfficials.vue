@@ -8,7 +8,7 @@ import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
-const message = useMessage();
+const push = usePush();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -49,7 +49,7 @@ const removeOverallOfficial = async (id: string) => {
     );
 
     if (!response.ok) {
-      message.error("Failed to delete overall official");
+      push.error("Failed to delete overall official");
       throw new Error("Network response was not ok");
     }
   }
@@ -58,7 +58,7 @@ const removeOverallOfficial = async (id: string) => {
     (item) => item.id !== id
   );
 
-  message.success("Official deleted successfully");
+  push.success("Official deleted successfully");
 };
 
 const addOverallOfficial = () => {
@@ -102,10 +102,10 @@ const saveMetadata = (e: MouseEvent) => {
       );
 
       if (!response.ok) {
-        message.error("Something went wrong. Please try again later.");
+        push.error("Something went wrong. Please try again later.");
         throw new Error("Network response was not ok");
       } else {
-        message.success("Study updated successfully.");
+        push.success("Study updated successfully.");
 
         // refresh page
         router.go(0);
