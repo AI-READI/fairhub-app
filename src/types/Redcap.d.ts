@@ -2,7 +2,7 @@ export interface RedcapProject {
   project_id: string;
   project_title: string;
 }
-export interface RedcapProjectView {
+export interface RedcapProjectView extends RedcapProject {
   project_api_active: boolean;
   project_api_url: string;
 }

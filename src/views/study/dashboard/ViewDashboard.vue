@@ -8,8 +8,9 @@ import { useAuthStore } from "@/stores/auth";
 import { useDashboardStore } from "@/stores/dashboard";
 import { useStudyStore } from "@/stores/study";
 import type { DashboardView } from "@/types/Dashboard";
+import type { DashboardModuleView } from "@/types/DashboardModule";
+import type { RedcapReport } from "@/types/Redcap";
 import type { Study } from "@/types/Study";
-
 const router = useRouter();
 const route = useRoute();
 const { error } = useMessage();
@@ -57,7 +58,7 @@ onBeforeMount(() => {
       <TransitionGroup name="fade" tag="div" class="p-0" v-else>
         <div
           v-for="(module, module_index) in dashboardView.dashboard_modules.filter(
-            (module) => module.selected
+            (module: DashboardModuleView) => module.selected
           )"
           :key="module_index"
         >
@@ -66,15 +67,12 @@ onBeforeMount(() => {
 
             <p class="pb-8 pt-2">{{ module.subtitle }}<br /></p>
 
-            <DashboardModule
-              :key="module.id"
-              :vconfigs="module.visualizations as VisualizationRenderer[]"
-            />
+            <DashboardModule :key="module.id" :vrenderers="module.visualizations" />
 
             <n-descriptions label-placement="left" label-align="left" size="small">
               <n-descriptions-item
                 v-for="(report, report_index) in dashboardView.reports.filter(
-                  (report) => report.report_key === module.report_key
+                  (report: RedcapReport) => report.report_key === module.report_key
                 )"
                 :key="report_index"
               >

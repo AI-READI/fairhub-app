@@ -118,12 +118,12 @@ const columns: string[] = [
   "Dashboard Actions",
 ];
 
-function deleteDashboard(studyId: string, dashboardId: string) {
+async function deleteDashboard(studyId: string, dashboardId: string | undefined) {
   if (!dashboardId) {
     return;
   }
 
-  const success = dashboardStore.deleteDashboardConnector(studyId, dashboardId);
+  const success = await dashboardStore.deleteDashboardConnector(studyId, dashboardId);
 
   if (success) {
     info("Dashboard deleted.");

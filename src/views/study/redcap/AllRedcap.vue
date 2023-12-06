@@ -56,7 +56,7 @@ const redcapProjectViews: Ref<RedcapProjectView[]> = computed(() => {
     }
   }
 
-  filteredRedcapProjectViews.sort((a: RedcapProjectViewAPI, b: RedcapProjectViewAPI) => {
+  filteredRedcapProjectViews.sort((a: RedcapProjectView, b: RedcapProjectView) => {
     if (sortOption.value === "project_title") {
       return b.project_title.localeCompare(a.project_title);
     } else if (sortOption.value === "project_id") {
@@ -125,12 +125,12 @@ const columns: string[] = [
   "Dashboard Actions",
 ];
 
-function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
+async function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
   if (!projectId) {
     return;
   }
 
-  const success = redcapStore.deleteRedcapProjectAPI(studyId, projectId);
+  const success = await redcapStore.deleteRedcapProjectAPI(studyId, projectId);
 
   if (success) {
     info("Project deleted.");

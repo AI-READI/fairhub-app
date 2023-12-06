@@ -3,30 +3,25 @@ import type { VisualizationRenderer } from "@/types/DashboardModule";
 
 export default {
   name: "DashboardModule",
-  methods: {
-    setFilter(value) {
-      console.log(value);
-    },
-  },
   props: {
-    vconfigs: [],
+    vrenderers: [] as VisualizationRenderer[],
   },
-  setup(props) {
-    const visualizations = reactive([]);
+  setup(props: any) {
+    const visualizations: any[] = reactive([]);
     onMounted(() => {
-      const vconfigs = props.vconfigs as VisualizationRenderer[];
-      for (let i = 0; i < vconfigs.length; i++) {
-        let config = vconfigs[i];
-        let cls = config.class;
-        let cfg = config.config;
-        console.log(cfg);
-        let obj = new cls(cfg).update();
-        visualizations.push(obj);
+      const vrenderers = toRaw(props).vrenderers;
+      for (let i = 0; i < vrenderers.length; i++) {
+        let vrenderer = vrenderers[i];
+        let cls = vrenderer.class;
+        let cfg = vrenderer.config;
+        let instance = new cls(cfg).update();
+        visualizations.push(instance);
       }
     });
     onUpdated(() => {
       for (let i = 0; i < visualizations.length; i++) {
-        toRaw(visualizations[i]).update();
+        const visualization = toRaw(visualizations[i]) as any;
+        visualization.update();
       }
     });
     return { visualizations };

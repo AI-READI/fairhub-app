@@ -8,6 +8,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { useDashboardStore } from "@/stores/dashboard";
 import type { DashboardConnector } from "@/types/Dashboard";
+import type { RedcapReport } from "@/types/Redcap";
 import { baseURL } from "@/utils/constants";
 
 const router = useRouter();
@@ -27,8 +28,8 @@ const routeParams = {
   studyId: route.params.studyId as string,
 };
 
-const checkboxGroupDefault = (report) => {
-  let ids = [];
+const checkboxGroupDefault = (report: RedcapReport) => {
+  let ids: string[] = [];
   for (let j = 0; j < dashboardConnector.value.dashboard_modules.length; j++) {
     const dashboard_module = dashboardConnector.value.dashboard_modules[j];
     if (dashboard_module.report_key === report.report_key && dashboard_module.selected) {
@@ -38,7 +39,7 @@ const checkboxGroupDefault = (report) => {
   return ids;
 };
 
-const reportDashboardModules = (report) => {
+const reportDashboardModules = (report: RedcapReport) => {
   let report_dashboard_modules = [];
   for (let j = 0; j < dashboardConnector.value.dashboard_modules.length; j++) {
     const dashboard_module = dashboardConnector.value.dashboard_modules[j];
@@ -49,7 +50,7 @@ const reportDashboardModules = (report) => {
   return report_dashboard_modules;
 };
 
-const selectDashboardModules = (ids, report) => {
+const selectDashboardModules = (ids: string[], report: RedcapReport) => {
   let report_dashboard_modules = reportDashboardModules(report);
   let selected_dashboard_modules = [];
   for (let i = 0; i < dashboardConnector.value.dashboard_modules.length; i++) {
@@ -284,7 +285,7 @@ onBeforeMount(() => {
           >
             <n-checkbox-group
               @update:value="
-                (ids) => {
+                (ids: string[]) => {
                   selectDashboardModules(ids, report);
                 }
               "

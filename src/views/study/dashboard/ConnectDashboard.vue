@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { FormInst, FormRules, useMessage } from "naive-ui";
-import { onBeforeMount, Ref, ref } from "vue";
+import type { FormInst, FormRules } from "naive-ui";
+import { useMessage } from "naive-ui";
+import type { Ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-// import { useDashboardModuleStore } from "@/stores/dashboardmodule";
 import type { DashboardConnector } from "@/types/Dashboard";
+import type { RedcapReport } from "@/types/Redcap";
 import { baseURL } from "@/utils/constants";
 
 const router = useRouter();
@@ -57,7 +59,7 @@ const dashboardConnector: Ref<DashboardConnector> = ref({
 });
 
 // const reportDashboardModules: Ref<>
-const reportDashboardModules = (report) => {
+const reportDashboardModules = (report: RedcapReport) => {
   let dashboard_modules = [];
   for (let j = 0; j < dashboardConnector.value.dashboard_modules.length; j++) {
     const dashboard_module = dashboardConnector.value.dashboard_modules[j];
@@ -68,7 +70,7 @@ const reportDashboardModules = (report) => {
   return dashboard_modules;
 };
 
-const selectDashboardModules = (ids) => {
+const selectDashboardModules = (ids: string[]) => {
   let dashboard_modules = [];
   for (let i = 0; i < ids.length; i++) {
     const id = ids[i];

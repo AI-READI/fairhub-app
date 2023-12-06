@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import type { FormInst, FormRules, useMessage } from "naive-ui";
+import type { FormInst, FormRules } from "naive-ui";
+import { useMessage } from "naive-ui";
 import type { Ref } from "vue";
 import { onBeforeMount, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-import type { RedcapProjectAPI } from "@/types/redcap";
+import type { RedcapProjectAPI } from "@/types/Redcap";
 import { baseURL } from "@/utils/constants";
 
 const router = useRouter();

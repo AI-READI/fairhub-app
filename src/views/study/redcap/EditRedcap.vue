@@ -7,7 +7,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import { useRedcapStore } from "@/stores/redcap";
-import type { RedcapProjectView } from "@/types/redcap";
+import type { RedcapProjectView } from "@/types/Redcap";
 import { baseURL } from "@/utils/constants";
 
 const router = useRouter();

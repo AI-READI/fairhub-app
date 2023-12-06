@@ -2,13 +2,14 @@ import { defineStore } from "pinia";
 import { toRaw } from "vue";
 
 import type { DashboardConnector, DashboardView } from "@/types/Dashboard";
-import type { DashboardModuleView } from "@/types/DashboardModule";
+import type { DashboardModuleView, VisualizationRenderer } from "@/types/DashboardModule";
 import { baseURL } from "@/utils/constants";
 export const useDashboardStore = defineStore("dashboard", () => {
   const loading = ref(false);
-  const visualizationModules = import.meta.glob("@/modules/visualizations/charts/*.js", {
+  const visualizationModules: object = import.meta.glob("@/modules/visualizations/charts/*.js", {
     eager: true,
   });
+  console.log(visualizationModules, typeof visualizationModules);
   const dashboardConnector = ref<DashboardConnector>({
     dashboard_id: "",
     dashboard_modules: [],
@@ -80,10 +81,9 @@ export const useDashboardStore = defineStore("dashboard", () => {
   const getDashboardView = async (studyId: string, dashboardId: string) => {
     loading.value = true;
 
-    const dashboardModuleConfigs: array = await import.meta.glob(
-      "@/configs/dashboards/modules/*.json",
-      { eager: true }
-    );
+    const dashboardModuleConfigs = await import.meta.glob("@/configs/dashboards/modules/*.json", {
+      eager: true,
+    });
     const query = new URLSearchParams({ dashboard_id: dashboardId });
     const response = await fetch(`${baseURL}/study/${studyId}/dashboard?${query}`, {
       method: "GET",
@@ -97,41 +97,43 @@ export const useDashboardStore = defineStore("dashboard", () => {
 
     console.log("response dashboard view", dashboardViewResponse);
 
-    dashboardView.value = dashboardViewResponse as DashboardView;
+    dashboardView.value = <DashboardView>dashboardViewResponse;
 
     // Structure Dashboard Module Config & Initialize Visualizations
     const dashboard_modules = [];
     for (let i = 0; i < dashboardView.value.dashboard_modules.length; i++) {
-      const dashboard_module = toRaw(
-        dashboardView.value.dashboard_modules[i] as DashboardModuleView
-      );
+      const dashboard_module = toRaw(<DashboardModuleView>dashboardView.value.dashboard_modules[i]);
       if (dashboard_module.selected) {
         for (const path in dashboardModuleConfigs) {
-          const dashboardModuleConfig = dashboardModuleConfigs[path];
+          const dashboardModuleConfig = dashboardModuleConfigs[path] as DashboardModuleView;
           if (dashboard_module.id === dashboardModuleConfig.id) {
-            const visualizations = [] as VisualizationRenderer[];
+            dashboard_module.title = dashboardModuleConfig.title;
+            dashboard_module.subtitle = dashboardModuleConfig.subtitle;
+            dashboard_module.width = dashboardModuleConfig.width;
+            dashboard_module.height = dashboardModuleConfig.height;
+            dashboard_module.report_id = dashboardModuleConfig.report_id;
+            // Collect & Initialize Visualizations
+            const visualizations = <VisualizationRenderer[]>[];
             for (let j = 0; j < dashboardModuleConfig.visualizations.length; j++) {
               const visualization = dashboardModuleConfig.visualizations[j];
               const visualizationData = dashboard_module.visualizations[j].data;
               visualization.config.data = visualizationData;
               for (const vmPath in visualizationModules) {
                 const visualizationClass = vmPath
-                  .split("/")
-                  .pop()
-                  .replace(/\.\w+$/, "");
-                if (visualization.type.toLowerCase() === visualizationClass) {
-                  const cls = visualizationModules[vmPath].default;
+                  ?.split("/")
+                  ?.pop()
+                  ?.replace(/\.\w+$/, "");
+                if (visualization.type?.toLowerCase() === visualizationClass) {
+                  const cls =
+                    visualizationModules[vmPath as keyof typeof visualizationModules]["default"];
                   const cfg = visualization.config;
-                  const vizRenderer = { class: cls, config: cfg } as VisualizationRenderer;
+                  const vizRenderer: VisualizationRenderer = { class: cls, config: cfg };
                   visualizations.push(vizRenderer);
+                } else {
+                  continue;
                 }
               }
             }
-            dashboard_module.id = dashboardModuleConfig.id;
-            dashboard_module.title = dashboardModuleConfig.title;
-            dashboard_module.subtitle = dashboardModuleConfig.subtitle;
-            dashboard_module.width = dashboardModuleConfig.width;
-            dashboard_module.height = dashboardModuleConfig.height;
             dashboard_module.visualizations = visualizations;
             dashboard_modules.push(dashboard_module);
           }
