@@ -9,7 +9,7 @@ import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
-const message = useMessage();
+const push = usePush();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -60,14 +60,14 @@ const removeLocation = async (id: string) => {
     );
 
     if (!response.ok) {
-      message.error("Failed to delete location");
+      push.error("Failed to delete location");
       throw new Error("Network response was not ok");
     }
   }
 
   moduleData.location_list = moduleData.location_list.filter((item) => item.id !== id);
 
-  message.success("Location removed");
+  push.success("Location removed");
 };
 
 const addLocation = () => {
@@ -115,10 +115,10 @@ const saveMetadata = (e: MouseEvent) => {
       });
 
       if (!response.ok) {
-        message.error("Something went wrong. Please try again later.");
+        push.error("Something went wrong. Please try again later.");
         throw new Error("Network response was not ok");
       } else {
-        message.success("Study updated successfully.");
+        push.success("Study updated successfully.");
 
         // refresh page
         router.go(0);
