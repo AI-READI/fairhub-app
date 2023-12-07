@@ -73,6 +73,7 @@ const createDataset = (e: MouseEvent) => {
       console.log(data);
 
       router.push({ name: "dataset:overview", params: { datasetId: data.id, studyId } });
+      push.success("Dataset created successfully.");
     } else {
       console.log("error");
       console.log(errors);
