@@ -5,6 +5,8 @@ import type { Ref } from "vue";
 import { onBeforeMount, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import { DashboardModulesManifest } from "@/configs/dashboards/modules-manifest";
+import { RedcapReportsManifest } from "@/configs/dashboards/reports-manifest";
 import { useAuthStore } from "@/stores/auth";
 import type { DashboardConnector } from "@/types/Dashboard";
 import type { RedcapReport } from "@/types/Redcap";
@@ -15,7 +17,6 @@ const route = useRoute();
 const { error, success } = useMessage();
 
 const authStore = useAuthStore();
-// const dashboardModuleStore = useDashboardModuleStore();
 
 const routeParams = {
   projectId: route.params.projectId as string,
@@ -23,39 +24,10 @@ const routeParams = {
 };
 
 const dashboardConnector: Ref<DashboardConnector> = ref({
-  dashboard_modules: [
-    { id: "overview", name: "Overview", report_key: "instrument-status", selected: false },
-    { id: "recruitment", name: "Recruitment", report_key: "participant-value", selected: false },
-    { id: "phenotypes", name: "Phenotypes", report_key: "participant-value", selected: false },
-    {
-      id: "race-ethnicity",
-      name: "Race & Ethnicity",
-      report_key: "participant-value",
-      selected: false,
-    },
-    { id: "sex-gender", name: "Sex & Gender", report_key: "participant-value", selected: false },
-    {
-      id: "current-medications",
-      name: "Current Medications",
-      report_key: "repeat-instrument",
-      selected: false,
-    },
-  ],
+  dashboard_modules: DashboardModulesManifest,
   dashboard_name: "",
   project_id: routeParams.projectId,
-  reports: [
-    { report_id: "", report_key: "instrument-status", report_name: "REDCap Instruments Report" },
-    {
-      report_id: "",
-      report_key: "participant-value",
-      report_name: "REDCap Participant Values Report",
-    },
-    {
-      report_id: "",
-      report_key: "repeat-instrument",
-      report_name: "REDCap Repeat Instruments Report",
-    },
-  ],
+  reports: RedcapReportsManifest,
 });
 
 // const reportDashboardModules: Ref<>
@@ -289,9 +261,9 @@ onBeforeMount(() => {
             :required="true"
           >
             <n-checkbox-group @update:value="selectDashboardModules">
-              <n-grid :cols="12" :x-gap="0" :y-gap="0">
+              <n-grid :cols="12" :x-gap="60" :y-gap="40">
                 <n-grid-item
-                  :span="3"
+                  :span="4"
                   v-for="(dashboardModule, dashboard_module_index) in reportDashboardModules(
                     report
                   )"

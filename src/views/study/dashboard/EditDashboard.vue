@@ -291,9 +291,9 @@ onBeforeMount(() => {
               "
               :default-value="checkboxGroupDefault(report)"
             >
-              <n-grid :cols="12" :x-gap="0" :y-gap="0">
+              <n-grid :cols="12" :x-gap="60" :y-gap="40">
                 <n-grid-item
-                  :span="3"
+                  :span="4"
                   v-for="(
                     report_dashboard_module, report_dashboard_module_index
                   ) in reportDashboardModules(report)"
