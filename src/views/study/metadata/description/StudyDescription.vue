@@ -5,7 +5,6 @@ import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
-const message = useMessage();
 const push = usePush();
 
 const formRef = ref<FormInst | null>(null);

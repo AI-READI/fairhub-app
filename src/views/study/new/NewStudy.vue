@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { faker } from "@faker-js/faker";
 import type { FormInst, FormRules } from "naive-ui";
-import { useMessage } from "naive-ui";
 import { nanoid } from "nanoid";
 import { onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -10,14 +9,13 @@ import { useAuthStore } from "@/stores/auth";
 import { baseURL } from "@/utils/constants";
 
 const router = useRouter();
-const { error } = useMessage();
 const push = usePush();
 
 const authStore = useAuthStore();
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
+    push.error("You are not logged in.");
     router.push({ name: "home" });
   }
 });

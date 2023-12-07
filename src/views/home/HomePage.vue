@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { useMessage } from "naive-ui";
 import { ref } from "vue";
 
 import HomePageAnimationJSON from "@/assets/animations/home_page.json";
 import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();
-const { error } = useMessage();
+const push = usePush();
 
 const authStore = useAuthStore();
 
@@ -20,7 +19,7 @@ const navigateToStudies = () => {
   if (authStore.isAuthenticated) {
     router.push({ name: "studies:all-studies" });
   } else {
-    error("You must be logged in to view studies");
+    push.error("You must be logged in to view studies");
 
     authStore.navigateToLogin();
   }
