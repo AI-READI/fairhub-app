@@ -63,7 +63,7 @@ const removeDate = async (id: string) => {
       throw new Error("Network response was not ok");
     }
 
-    push.success("Creator removed successfully.");
+    push.success("Date removed successfully.");
   }
 
   moduleData.dates = moduleData.dates.filter((item) => item.id !== id);
@@ -114,7 +114,7 @@ const saveMetadata = (e: MouseEvent) => {
 
         throw new Error("Network response was not ok");
       } else {
-        push.success("Creators saved successfully.");
+        push.success("Dates saved successfully.");
 
         // refresh page
         router.go(0);
