@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { faker } from "@faker-js/faker";
 import type { FormInst, FormRules } from "naive-ui";
-import { useMessage } from "naive-ui";
 import { nanoid } from "nanoid";
 import { onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -10,14 +9,13 @@ import { useAuthStore } from "@/stores/auth";
 import { baseURL } from "@/utils/constants";
 
 const router = useRouter();
-const { error } = useMessage();
-const message = useMessage();
+const push = usePush();
 
 const authStore = useAuthStore();
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
+    push.error("You are not logged in.");
     router.push({ name: "home" });
   }
 });
@@ -73,12 +71,12 @@ const createStudy = (e: MouseEvent) => {
       });
 
       if (!response.ok) {
-        message.error("Something went wrong. Please try again later.");
+        push.error("Something went wrong. Please try again later.");
 
         throw new Error(response.statusText);
       }
 
-      message.success("Study created successfully.");
+      push.success("Study created successfully.");
 
       /**
        * TODO: Redirect to the newly created study

@@ -166,7 +166,6 @@ const sendInvitation = (e: MouseEvent) => {
       }
 
       push.success("Invitation sent!");
-
       router.go(0);
     } else {
       console.log(errors);
