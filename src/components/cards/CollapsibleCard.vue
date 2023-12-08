@@ -32,23 +32,29 @@ const toggleCollapse = () => {
 </script>
 
 <template>
-  <n-card :title="title" class="mb-6" :bordered="bordered">
+  <div class="n-card n-card--bordered border-[#efeff5] px-[24px] pt-[19px] shadow-md">
+    <div class="mb-6 flex justify-between">
+      <div class="text-[18px] font-medium leading-[38px]">{{ title }}</div>
+
+      <div>
+        <slot name="header-extra"></slot>
+
+        <n-button text class="top-[20%] pl-5 text-3xl" type="info" @click="toggleCollapse">
+          <f-icon icon="fluent:arrow-minimize-vertical-24-filled" />
+        </n-button>
+      </div>
+    </div>
+
     <n-collapse-transition :show="collapseContent">
-      <slot></slot>
+      <n-divider class="!m-0" />
+
+      <div class="py-4" :bordered="bordered">
+        <slot></slot>
+      </div>
     </n-collapse-transition>
 
-    <template #header-extra>
-      <slot name="header-extra"></slot>
-
-      <n-divider vertical v-if="hasHeaderExtra" class="!mx-3" />
-
-      <n-button text class="text-3xl" type="info" @click="toggleCollapse">
-        <f-icon icon="fluent:arrow-minimize-vertical-24-filled" />
-      </n-button>
-    </template>
-
-    <template #action>
+    <div>
       <slot name="action"></slot>
-    </template>
-  </n-card>
+    </div>
+  </div>
 </template>
