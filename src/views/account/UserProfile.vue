@@ -9,6 +9,7 @@ const loading = ref(false);
 const push = usePush();
 
 const userFormRef = ref<FormInst | null>(null);
+const passwordFormRef = ref<FormInst | null>(null);
 
 const userProfile = ref<UserProfile>({
   username: "",
@@ -21,6 +22,30 @@ const userProfile = ref<UserProfile>({
   profile_image: "",
   timezone: "",
 });
+
+const passwordForm = ref({
+  confirm_password: "",
+  new_password: "",
+  old_password: "",
+});
+
+const passwordRules: FormRules = {
+  confirm_password: {
+    message: "Please confirm your new password",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+  new_password: {
+    message: "Please enter a new password",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+  old_password: {
+    message: "Please enter your current password",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+};
 
 const rules: FormRules = {
   username: {
@@ -96,98 +121,99 @@ const handleUpdateValue = (value: string[]) => {
 
 <template>
   <main class="flex h-full w-full flex-col">
-    <h1>Your Profile</h1>
+    <CollapsibleCard class="m-5" :title="`Your Profile`">
+      <!-- <h1>Your Profile</h1> -->
 
-    <n-divider />
+      <!-- <n-divider /> -->
 
-    <div class="flex w-full space-x-10">
-      <div class="w-full pl-2 pr-4">
-        <n-form
-          ref="userFormRef"
-          size="large"
-          label-placement="top"
-          :rules="rules"
-          :model="userProfile"
-        >
-          <n-form-item label="Username" path="username">
-            <n-input
-              v-model:value="userProfile.username"
-              placeholder="loid.forger"
-              type="text"
-              disabled
-            />
-          </n-form-item>
+      <div class="flex w-full space-x-10">
+        <div class="w-full pl-2 pr-4">
+          <n-form
+            ref="userFormRef"
+            size="large"
+            label-placement="top"
+            :rules="rules"
+            :model="userProfile"
+          >
+            <n-form-item label="Username" path="username">
+              <n-input
+                v-model:value="userProfile.username"
+                placeholder="loid.forger"
+                type="text"
+                disabled
+              />
+            </n-form-item>
 
-          <n-form-item label="Email Address" path="email_address">
-            <n-input
-              v-model:value="userProfile.email_address"
-              placeholder="loid.forger@ucsd.edu"
-              clearable
-              disabled
-              typeof="email"
-            />
-          </n-form-item>
+            <n-form-item label="Email Address" path="email_address">
+              <n-input
+                v-model:value="userProfile.email_address"
+                placeholder="loid.forger@ucsd.edu"
+                clearable
+                disabled
+                typeof="email"
+              />
+            </n-form-item>
 
-          <n-form-item label="Given Name" path="first_name">
-            <n-input
-              v-model:value="userProfile.first_name"
-              type="text"
-              placeholder="Loid"
-              clearable
-            />
-          </n-form-item>
+            <n-form-item label="Given Name" path="first_name">
+              <n-input
+                v-model:value="userProfile.first_name"
+                type="text"
+                placeholder="Loid"
+                clearable
+              />
+            </n-form-item>
 
-          <n-form-item label="Family Name" path="last_name">
-            <n-input
-              v-model:value="userProfile.last_name"
-              type="text"
-              placeholder="Forger"
-              clearable
-            />
-          </n-form-item>
+            <n-form-item label="Family Name" path="last_name">
+              <n-input
+                v-model:value="userProfile.last_name"
+                type="text"
+                placeholder="Forger"
+                clearable
+              />
+            </n-form-item>
 
-          <n-form-item label="Institution" path="institution">
-            <n-input
-              v-model:value="userProfile.institution"
-              placeholder="University of California, San Diego"
-              type="text"
-              clearable
-            />
-          </n-form-item>
+            <n-form-item label="Institution" path="institution">
+              <n-input
+                v-model:value="userProfile.institution"
+                placeholder="University of California, San Diego"
+                type="text"
+                clearable
+              />
+            </n-form-item>
 
-          <n-form-item label="Location" path="location">
-            <n-input
-              v-model:value="userProfile.location"
-              placeholder="San Diego, CA"
-              type="text"
-              clearable
-            />
-          </n-form-item>
+            <n-form-item label="Location" path="location">
+              <n-input
+                v-model:value="userProfile.location"
+                placeholder="San Diego, CA"
+                type="text"
+                clearable
+              />
+            </n-form-item>
 
-          <n-form-item label="Timezone" path="timezone">
-            <n-select
-              filterable
-              clearable
-              placeholder="America/Los_Angeles"
-              :options="timezones"
-              @update:value="handleUpdateValue"
-              v-model:value="userProfile.timezone"
-            />
-          </n-form-item>
+            <n-form-item label="Timezone" path="timezone">
+              <n-select
+                filterable
+                clearable
+                placeholder="America/Los_Angeles"
+                :options="timezones"
+                @update:value="handleUpdateValue"
+                v-model:value="userProfile.timezone"
+              />
+            </n-form-item>
 
-          <div class="flex justify-start">
-            <n-button type="primary" size="large" @click="updateProfile" :loading="loading">
-              <template #icon>
-                <f-icon icon="material-symbols:save" />
-              </template>
+            <div class="flex justify-start">
+              <n-button type="primary" size="large" @click="updateProfile" :loading="loading">
+                <template #icon>
+                  <f-icon icon="material-symbols:save" />
+                </template>
 
-              Update Profile
-            </n-button>
-          </div>
-        </n-form>
-      </div>
+                Update Profile
+              </n-button>
+            </div>
+          </n-form>
+        </div>
 
-      <!-- <div class="flex flex-col space-y-5 px-2">
+        <!-- <div class="flex flex-col space-y-5 px-2">
         <n-image width="300" :src="userProfile.image" />
 
         <n-upload accept=".jpeg,.png" directory-dnd @change="onChange" class="mx-auto w-max">
@@ -199,6 +225,49 @@ const handleUpdateValue = (value: string[]) => {
           </n-button>
         </n-upload>
       </div> -->
-    </div>
+      </div>
+    </CollapsibleCard>
+
+    <CollapsibleCard class="m-5" :title="`Change Your Password`">
+      <div class="flex w-full space-x-10">
+        <div class="w-full pl-2 pr-4">
+          <n-form
+            ref="passwordFormRef"
+            size="Large"
+            label-placement="top"
+            :rules="passwordRules"
+            :model="passwordForm"
+          >
+            <n-form-item label="Current Password" path="old_password">
+              <n-input
+                type="password"
+                show-password-on="mousedown"
+                placeholder="Enter current password"
+                v-model:value="passwordForm.old_password"
+              />
+            </n-form-item>
+
+            <n-form-item label="New Password" path="new_password">
+              <n-input
+                type="password"
+                clearable
+                show-password-on="mousedown"
+                placeholder="Enter your new password"
+                v-model:value="passwordForm.new_password"
+              />
+            </n-form-item>
+
+            <n-form-item
+              label="Confirm New Password"
+              path="confirm_password"
+              placeholder="Enter your new password again"
+              v-model:value="passwordForm.confirm_password"
+            >
+              <n-input type="password" clearable show-password-on="mousedown" />
+            </n-form-item>
+          </n-form>
+        </div>
+      </div>
+    </CollapsibleCard>
   </main>
 </template>
