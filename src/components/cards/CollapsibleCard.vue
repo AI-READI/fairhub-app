@@ -32,9 +32,9 @@ const toggleCollapse = () => {
 </script>
 
 <template>
-  <div class="n-card n-card--bordered border-[#efeff5] px-[24px] pb-[.1rem] pt-[19px] shadow-md">
+  <div class="border border-[#efeff5] px-6 pb-1 pt-6 shadow-md">
     <div class="mb-6 flex justify-between">
-      <div class="text-[18px] font-medium leading-[38px]">{{ title }}</div>
+      <div class="text-lg font-medium leading-9">{{ title }}</div>
 
       <div>
         <slot name="header-extra"></slot>
