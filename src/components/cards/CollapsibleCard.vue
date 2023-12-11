@@ -32,14 +32,14 @@ const toggleCollapse = () => {
 </script>
 
 <template>
-  <div class="border border-[#efeff5] px-6 pb-1 pt-6 shadow-md">
+  <div class="border border-slate-100 px-6 pb-1 pt-6 shadow-md">
     <div class="mb-6 flex justify-between">
       <div class="text-lg font-medium leading-9">{{ title }}</div>
 
-      <div>
+      <div class="flex items-center">
         <slot name="header-extra"></slot>
 
-        <n-button text class="top-[20%] pl-5 text-3xl" type="info" @click="toggleCollapse">
+        <n-button text class="pl-5 text-3xl" type="info" @click="toggleCollapse">
           <f-icon icon="fluent:arrow-minimize-vertical-24-filled" />
         </n-button>
       </div>
