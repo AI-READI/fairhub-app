@@ -33,7 +33,7 @@ const isDevelopment = process.env.NODE_ENV === "development";
 const formValue = ref({
   acceptTerms: false,
   emailAddress: isDevelopment ? "test@fairhub.io" : "",
-  password: isDevelopment ? "asdkj45@ksdSA" : "",
+  password: isDevelopment ? "Testingyeshello11!" : "",
 });
 
 const invalidEmailAddress = computed(() => !formValue.value.emailAddress.includes("@")); //add email validation

@@ -26,7 +26,7 @@ const rules: FormRules = {
 const formValue = ref({
   acceptTerms: false,
   emailAddress: process.env.NODE_ENV === "development" ? "test@fairhub.io" : "",
-  password: process.env.NODE_ENV === "development" ? "asdkj45@ksdSA" : "",
+  password: process.env.NODE_ENV === "development" ? "Testingyeshello11!" : "",
 });
 
 const invalidEmailAddress = computed(() => !formValue.value.emailAddress.includes("@")); //add email validation
