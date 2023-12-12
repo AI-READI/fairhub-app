@@ -33,7 +33,6 @@ const passwordRules: FormRules = {
     required: true,
     trigger: ["blur", "input"],
     validator: (rule, value) => {
-      console.log(value, passwordForm.value.new_password);
       if (value !== passwordForm.value.new_password) {
         return new Error("Passwords do not match");
       }
