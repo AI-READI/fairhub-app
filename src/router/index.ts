@@ -80,16 +80,6 @@ const router = createRouter({
       path: "/",
       component: HomePage,
     },
-    // {
-    //   name: "verify",
-    //   path: "/verify/:userId/:token",
-    //   component: HomePage,
-    // },
-    // {
-    //   name: "email-verification",
-    //   path: "/email-verification",
-    //   component: HomePage,
-    // },
     {
       path: "/auth",
       children: [
