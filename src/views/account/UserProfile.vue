@@ -18,7 +18,6 @@ const userProfile = ref<UserProfile>({
   institution: "",
   last_name: "",
   location: "",
-  password: "",
   profile_image: "",
   timezone: "",
 });
@@ -33,33 +32,48 @@ const passwordRules: FormRules = {
   confirm_password: {
     required: true,
     trigger: ["blur", "input"],
-    validator: (rule, value, callback) => {
-      console.log(value);
-      console.log(passwordForm.value.new_password);
+    validator: (rule, value) => {
+      console.log(value, passwordForm.value.new_password);
       if (value !== passwordForm.value.new_password) {
-        callback(new Error("Passwords do not match"));
-      } else {
-        return true;
+        return new Error("Passwords do not match");
       }
+      return true;
     },
   },
   new_password: {
-    message: "Please enter a new password",
     required: true,
     trigger: ["blur", "input"],
+    validator: (rule, value) => {
+      if (!value) {
+        return new Error("Please enter a new password");
+      }
+      // Validate value has 8 characters
+      if (value.length < 8) {
+        return new Error("Password must be at least 8 characters");
+      }
+      // Validate value has at least 1 uppercase character
+      if (!/[A-Z]/.test(value)) {
+        return new Error("Password must contain at least 1 uppercase character");
+      }
+      // Validate value has at least 1 lowercase character
+      if (!/[a-z]/.test(value)) {
+        return new Error("Password must contain at least 1 lowercase character");
+      }
+      // Validate value has at least 1 number
+      if (!/[0-9]/.test(value)) {
+        return new Error("Password must contain at least 1 number");
+      }
+      // Validate value has at least 1 special character
+      if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value)) {
+        return new Error("Password must contain at least 1 special character");
+      }
+      return true;
+    },
   },
   old_password: {
+    message: "Please enter your current password",
     required: true,
     trigger: ["blur", "input"],
-    validator: (rule, value, callback) => {
-      console.log(value);
-      console.log(userProfile.value.password);
-      if (value !== userProfile.value.password) {
-        callback(new Error("Incorrect password"));
-      } else {
-        return true;
-      }
-    },
   },
 };
 
@@ -299,16 +313,17 @@ const handleUpdateValue = (value: string[]) => {
               />
             </n-form-item>
 
-            <n-form-item
-              label="Confirm New Password"
-              path="confirm_password"
-              placeholder="Enter your new password again"
-              v-model:value="passwordForm.confirm_password"
-            >
-              <n-input type="password" clearable show-password-on="mousedown" />
+            <n-form-item label="Confirm New Password" path="confirm_password">
+              <n-input
+                type="password"
+                placeholder="Re-enter new password"
+                v-model:value="passwordForm.confirm_password"
+                clearable
+                show-password-on="mousedown"
+              />
             </n-form-item>
 
-            <div class="flex justify-start">
+            <div class="mt-4 flex justify-start">
               <n-button type="primary" size="large" @click="updatePassword" :loading="loading">
                 <template #icon>
                   <f-icon icon="material-symbols:save" />
