@@ -31,9 +31,17 @@ const passwordForm = ref({
 
 const passwordRules: FormRules = {
   confirm_password: {
-    message: "Please confirm your new password",
     required: true,
     trigger: ["blur", "input"],
+    validator: (rule, value, callback) => {
+      console.log(value);
+      console.log(passwordForm.value.new_password);
+      if (value !== passwordForm.value.new_password) {
+        callback(new Error("Passwords do not match"));
+      } else {
+        return true;
+      }
+    },
   },
   new_password: {
     message: "Please enter a new password",
@@ -41,9 +49,17 @@ const passwordRules: FormRules = {
     trigger: ["blur", "input"],
   },
   old_password: {
-    message: "Please enter your current password",
     required: true,
     trigger: ["blur", "input"],
+    validator: (rule, value, callback) => {
+      console.log(value);
+      console.log(userProfile.value.password);
+      if (value !== userProfile.value.password) {
+        callback(new Error("Incorrect password"));
+      } else {
+        return true;
+      }
+    },
   },
 };
 
@@ -93,6 +109,32 @@ const updateProfile = (e: MouseEvent) => {
         throw new Error("User not found");
       }
       push.success("User Profile Updated");
+    } else {
+      console.log("There was an error");
+      console.log(errors);
+    }
+  });
+};
+
+const updatePassword = (e: MouseEvent) => {
+  e.preventDefault();
+
+  passwordFormRef.value?.validate(async (errors) => {
+    if (!errors) {
+      loading.value = true;
+
+      // const response = await fetch(`${baseURL}/user/password`, {
+      //   body: JSON.stringify(passwordForm.value),
+      //   method: "PUT",
+      // });
+      const response = true;
+
+      loading.value = false;
+      if (!response) {
+        push.error("Something went wrong");
+        throw new Error("User not found");
+      }
+      push.success("Password Updated");
     } else {
       console.log("There was an error");
       console.log(errors);
@@ -265,6 +307,16 @@ const handleUpdateValue = (value: string[]) => {
             >
               <n-input type="password" clearable show-password-on="mousedown" />
             </n-form-item>
+
+            <div class="flex justify-start">
+              <n-button type="primary" size="large" @click="updatePassword" :loading="loading">
+                <template #icon>
+                  <f-icon icon="material-symbols:save" />
+                </template>
+
+                Update Password
+              </n-button>
+            </div>
           </n-form>
         </div>
       </div>
