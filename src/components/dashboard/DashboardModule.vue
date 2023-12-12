@@ -42,7 +42,13 @@ export default {
       xmlns="http://www.w3.org/2000/svg"
     />
 
-    <n-grid :cols="3" :x-gap="20" :id="`${visualization.setID}_interface`" class="interface">
+    <n-grid
+      :cols="3"
+      :x-gap="20"
+      :y-gap="20"
+      :id="`${visualization.setID}_interface`"
+      class="interface"
+    >
       <n-grid-item v-if="visualization.legend">
         <n-card :id="`${visualization.setID}_legend`" :segmented="true" :bordered="false"></n-card>
       </n-grid-item>
@@ -59,7 +65,9 @@ export default {
           placement="right-start"
           :id="`${visualization.setID}_filters`"
         >
-          <n-button>{{ `Sites > ${visualization.selectedFilter}` }}</n-button>
+          <n-button>{{
+            `${visualization.accessors.filterby.name} > ${visualization.selectedFilter}`
+          }}</n-button>
         </n-dropdown>
       </n-grid-item>
     </n-grid>
@@ -146,14 +154,9 @@ Visualization Interface
   flex-wrap: nowrap;
   width: 100%;
   min-height: 80px;
+  margin-bottom: 12px;
 }
 .visualization-container .interface-element {
-  display: inline-flex;
-  flex-direction: column;
-  align-content: flex-start;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin-right: 5%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

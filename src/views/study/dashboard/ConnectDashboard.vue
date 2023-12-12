@@ -35,7 +35,7 @@ const reportDashboardModules = (report: RedcapReport) => {
   let dashboard_modules = [];
   for (let j = 0; j < dashboardConnector.value.dashboard_modules.length; j++) {
     const dashboard_module = dashboardConnector.value.dashboard_modules[j];
-    if (dashboard_module.report_key === report.report_key) {
+    if (dashboard_module.report_key === report.report_key && dashboard_module.available) {
       dashboard_modules.push(dashboard_module);
     }
   }

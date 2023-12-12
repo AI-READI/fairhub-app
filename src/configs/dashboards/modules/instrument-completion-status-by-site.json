@@ -1,14 +1,14 @@
 {
-  "name": "Race & Ethnicity",
-  "id": "race-ethnicity",
-  "title": "AI-READI Pilot Participant Race & Ethnicity by Data Generation Site",
-  "subtitle": "Participant Counts Aggregated by Race & Ethnicity",
+  "name": "Instrument Completion Status by Site",
+  "id": "instrument-completion-status-by-site",
+  "title": "AI-READI Pilot REDCap Instrument Completion Status by Data Generation Site",
+  "subtitle": "Instrument Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
   "width": 1280,
   "height": 720,
   "visualizations": [{
     "type": "StackedBar",
     "config": {
-      "id": "#race-ethnicity_stacked-bar",
+      "id": "#instrument-completion-status-by-site_stacked-bar",
       "rotate": true,
       "width": 1080,
       "height": 420,
@@ -27,7 +27,7 @@
       "padding": {
         "top": 20,
         "left": 0,
-        "right": 420,
+        "right": 240,
         "bottom": 0
       },
       "transitions": {
@@ -53,7 +53,8 @@
         }
       },
       "legend": {
-        "title": "",
+        "title": "Instrument Status",
+        "accessor": "subgroup",
         "width": 200,
         "height": 140,
         "itemsize": 20,
@@ -68,7 +69,7 @@
         }
       },
       "tooltip": {
-        "title": "",
+        "title": "Data Point Details",
         "width": 720,
         "height": 140,
         "itemsize": 20,
@@ -113,17 +114,17 @@
           "type": "String"
         },
         "group": {
-          "name": "Race",
+          "name": "Instrument",
           "key": "group",
           "type": "String"
         },
         "subgroup": {
-          "name": "Ethnicity",
+          "name": "Status",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Ethnicity",
+          "name": "Status",
           "key": "subgroup",
           "type": "String"
         },

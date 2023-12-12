@@ -1,15 +1,14 @@
 {
-  "name": "Phenotypes",
-  "id": "phenotypes",
-  "title": "AI-READI Pilot Participant Counts by Data Generation Site",
-  "subtitle": "Participant Counts Aggregated by Phenotype (Prediabetes, Type I Diabetes, and Type II Diabetes)",
+  "name": "Phenotypes & Sex by Site",
+  "id": "phenotype-sex-by-site",
+  "title": "AI-READI Pilot Participant Phenotype and Sex by Site",
+  "subtitle": "Participant Counts Aggregated by Phenotype & Sex",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "Doughnut",
+    "type": "GroupedStackedBar",
     "config": {
-      "id": "#phenotypes_doughnut",
-      "rotate": true,
+      "id": "#phenotype-sex-by-site_grouped-stacked-bar",
       "width": 1080,
       "height": 420,
       "position": {
@@ -52,9 +51,9 @@
           "easing": "expOut"
         }
       },
-      "labeling": false,
       "legend": {
-        "title": "Phenotype",
+        "title": "Phenotypes",
+        "accessor": "subgroup",
         "width": 200,
         "height": 140,
         "itemsize": 20,
@@ -114,13 +113,18 @@
           "type": "String"
         },
         "group": {
-          "name": "Phenotype",
+          "name": "Sex",
           "key": "group",
+          "type": "String"
+        },
+        "subgroup": {
+          "name": "Phenotype",
+          "key": "subgroup",
           "type": "String"
         },
         "color": {
           "name": "Phenotype",
-          "key": "group",
+          "key": "subgroup",
           "type": "String"
         },
         "value": {

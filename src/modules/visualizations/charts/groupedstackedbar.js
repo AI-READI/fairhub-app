@@ -14,7 +14,7 @@ import Tooltip from "../interfaces/tooltip.js";
 Stacked Bar Chart Class
 */
 
-class BarChart extends Chart {
+class GroupedStackedBarChart extends Chart {
   constructor(config) {
     // Configure Parent
     super(config);
@@ -22,22 +22,31 @@ class BarChart extends Chart {
     const self = this;
 
     // Configure Stacked Bar Chart
-    self.rotate = config.rotate;
     self.transitions = config.transitions;
     self.animations = config.animations;
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
     self.filters = Object.hasOwn(config, "filters") ? config.filters : undefined;
+    self.ordering = {
+      appearance: D3.stackOrderAppearance,
+      ascending: D3.stackOrderAscending,
+      descending: D3.stackOrderDescending,
+      insideout: D3.stackOrderInsideOut,
+      none: D3.stackOrderNone,
+      reverse: D3.stackOrderReverse,
+    }[config.ordering];
 
     /*
     Setup
     */
 
-    // Set Unique Filters, Groups, and Subgroups
+    // Set Unique Filters, Groups, Subgroups, ColorScale
     self.filterby = super.getUniqueValuesByKey(self.data, self.accessors.filterby.key);
     self.groups = super.getUniqueValuesByKey(self.data, self.accessors.group.key);
-    // Set Color Scale
-    self.colorscale = D3.scaleOrdinal().domain(self.filterby).range(self.palette);
+    self.subgroups = super.getUniqueValuesByKey(self.data, self.accessors.subgroup.key);
+    self.colorscale = D3.scaleOrdinal()
+      .domain(super.getUniqueValuesByKey(self.data, self.accessors.color.key))
+      .range(self.palette);
 
     // Set Filters
     if (self.filters !== undefined) {
@@ -63,10 +72,10 @@ class BarChart extends Chart {
     // Visualization Parent
     self.svg = self.rotate
       ? D3.select(`${self.getID}_visualization`)
-          .classed("bar-chart isrotated", true)
+          .classed("grouped-bar-chart isrotated", true)
           .attr("id", `${self.setID}_visualization`)
       : D3.select(`${self.getID}_visualization`)
-          .classed("bar-chart unrotated", true)
+          .classed("grouped-bar-chart unrotated", true)
           .attr("id", `${self.setID}_visualization`);
 
     // Interface Parent
@@ -95,6 +104,10 @@ class BarChart extends Chart {
       : D3.scaleLinear()
           .domain([self.mapping.min, self.mapping.max])
           .range([self.dataframe.height, 0]);
+
+    self.subgroupAxis = self.rotate
+      ? D3.scaleBand().domain(self.subgroups).range([0, self.y.bandwidth()]).padding([0.05])
+      : D3.scaleBand().domain(self.subgroups).range([0, self.x.bandwidth()]).padding([0.05]);
 
     self.xAxis = self.rotate
       ? self.svg
@@ -132,9 +145,7 @@ class BarChart extends Chart {
           .attr("transform", (d) => `translate(${self.x(d)}, 0)`)
           .selectAll("text")
           .classed("label interactable", true)
-          .attr("id", (d) => `${self.setID}_label_${self.tokenize(d)}`)
-          .on("mouseover", (e, d) => self.mouseOverGroupAxis(e, d))
-          .on("mouseout", (e, d) => self.mouseOutGroupAxis(e, d));
+          .attr("id", (d) => `${self.setID}_label_${self.tokenize(d)}`);
 
     self.yLabels = self.rotate
       ? self.yAxis
@@ -144,8 +155,6 @@ class BarChart extends Chart {
           .selectAll("text")
           .classed("label interactable", true)
           .attr("id", (d) => `${self.setID}_label_${self.tokenize(d)}`)
-          .on("mouseover", (e, d) => self.mouseOverGroupAxis(e, d))
-          .on("mouseout", (e, d) => self.mouseOutGroupAxis(e, d))
       : self.yAxis.selectAll("text").classed("label", true);
 
     /*
@@ -158,35 +167,50 @@ class BarChart extends Chart {
       .attr("id", `${self.setID}_bars`)
       .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`);
 
-    self.bar = self.rotate
+    self.bargroups = self.rotate
       ? self.bars
+          .selectAll(".bar-group")
+          .data(self.mapping.groups)
+          .join("g")
+          .classed("bar-group data-element", true)
+          .attr("id", (group) => `${self.setID}_bar-group_${self.tokenize(group)}`)
+          .attr("transform", (group) => `translate(0, ${self.y(group)})`)
+          .attr("opacity", self.transitions.opacity.from)
           .selectAll("rect")
-          .data(self.mapping.data)
+          .data((group) => self.mapping.groupedstacks[group])
           .enter()
           .append("rect")
           .classed("bar interactable", true)
-          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.group)}`)
+          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.subgroup)}`)
           .attr("data-group", (d) => d.group)
-          .attr("x", (d) => self.x(d.value))
-          .attr("y", (d) => self.y(d.group))
-          .attr("width", (d) => self.dataframe.width - self.x(d.value))
-          .attr("height", self.y.bandwidth())
+          .attr("x", (d) => self.x(d.from))
+          .attr("y", (d) => self.subgroupAxis(d.subgroup))
+          .attr("width", (d) => self.x(d.to) - self.x(d.from))
+          .attr("height", self.subgroupAxis.bandwidth())
           .attr("fill", (d) => d.color)
           .attr("opacity", self.transitions.opacity.from)
           .text((d) => d.group)
           .on("mouseover", (e, d) => self.mouseOverBar(e, d))
           .on("mouseout", (e, d) => self.mouseOutBar(e, d))
       : self.bars
+          .selectAll(".bar-group")
+          .data(self.mapping.groups)
+          .join("g")
+          .classed("bar-group data-element", true)
+          .attr("id", (group) => `${self.setID}_bar-group_${self.tokenize(group)}`)
+          .attr("transform", (group) => `translate(${self.x(group)}, 0)`)
+          .attr("opacity", self.transitions.opacity.from)
           .selectAll("rect")
-          .data(self.mapping.data)
+          .data((group) => self.mapping.groupedstacks[group])
           .enter()
           .append("rect")
           .classed("bar interactable", true)
-          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.group)}`)
-          .attr("x", (d) => self.x(d.group))
-          .attr("y", (d) => self.y(self.dataframe.height - d.value))
-          .attr("width", self.x.bandwidth())
-          .attr("height", (d) => self.dataframe.height - self.y(d.value))
+          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.subgroup)}`)
+          .attr("data-group", (d) => d.group)
+          .attr("x", (d) => self.subgroupAxis(d.subgroup))
+          .attr("y", (d) => self.y(d.to))
+          .attr("width", self.subgroupAxis.bandwidth())
+          .attr("height", (d) => self.y(d.from) - self.y(d.to))
           .attr("fill", (d) => d.color)
           .attr("opacity", self.transitions.opacity.from)
           .text((d) => d.group)
@@ -202,7 +226,7 @@ class BarChart extends Chart {
         ? new Legend({
             title: self.legend.title,
             accessor: self.legend.accessor,
-            animations: self.animations,
+            animation: ["opacity", self.animations["opacity"]],
             color: self.colors,
             container: self.viewframe,
             data: self.mapping.legend,
@@ -215,7 +239,7 @@ class BarChart extends Chart {
             margin: self.margin,
             padding: self.legend.padding,
             setID: self.setID,
-            transitions: self.transitions,
+            transition: ["opacity", self.transitions["opacity"]],
             uid: self.uid,
             vposition: self.legend.vposition,
             width: self.legend.width,
@@ -230,7 +254,12 @@ class BarChart extends Chart {
       self.tooltip !== undefined
         ? new Tooltip({
             title: self.tooltip.title,
-            accessors: [self.accessors.filterby, self.accessors.group, self.accessors.value],
+            accessors: [
+              self.accessors.filterby,
+              self.accessors.group,
+              self.accessors.subgroup,
+              self.accessors.value,
+            ],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,
@@ -253,7 +282,6 @@ class BarChart extends Chart {
     self.Filters =
       self.filters !== undefined
         ? new Filters({
-            accessor: self.filters.accessor,
             accessors: self.accessors,
             container: self.viewframe,
             default: "All",
@@ -298,10 +326,10 @@ class BarChart extends Chart {
     // Grab SVG Generated From Vue Template
     self.svg = self.rotate
       ? D3.select(`${self.getID}_visualization`)
-          .classed("bar-chart isrotated", true)
+          .classed("grouped-bar-chart isrotated", true)
           .attr("id", `${self.setID}_visualization`)
       : D3.select(`${self.getID}_visualization`)
-          .classed("bar-chart unrotated", true)
+          .classed("grouped-bar-chart unrotated", true)
           .attr("id", `${self.setID}_visualization`);
 
     // Interface Parent
@@ -367,9 +395,7 @@ class BarChart extends Chart {
           .attr("transform", (d) => `translate(${self.x(d) + 1}, 0)`)
           .selectAll("text")
           .classed("label interactable", true)
-          .attr("id", (d) => `${self.setID}_label_${self.tokenize(d)}`)
-          .on("mouseover", (e, d) => self.mouseOverGroupAxis(e, d))
-          .on("mouseout", (e, d) => self.mouseOutGroupAxis(e, d));
+          .attr("id", (d) => `${self.setID}_label_${self.tokenize(d)}`);
 
     self.yLabels = self.rotate
       ? self.yAxis
@@ -379,8 +405,6 @@ class BarChart extends Chart {
           .selectAll("text")
           .classed("label interactable", true)
           .attr("id", (d) => `${self.setID}_label_${self.tokenize(d)}`)
-          .on("mouseover", (e, d) => self.mouseOverGroupAxis(e, d))
-          .on("mouseout", (e, d) => self.mouseOutGroupAxis(e, d))
       : self.yAxis.selectAll("text").classed("label", true);
 
     /*
@@ -393,37 +417,50 @@ class BarChart extends Chart {
       .attr("id", `${self.setID}_bars`)
       .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`);
 
-    self.bar = self.rotate
+    self.bargroups = self.rotate
       ? self.bars
+          .selectAll(".bar-group")
+          .data(self.mapping.groups)
+          .join("g")
+          .classed("bar-group data-element", true)
+          .attr("id", (group) => `${self.setID}_bar-group_${self.tokenize(group)}`)
+          .attr("transform", (group) => `translate(0, ${self.y(group)})`)
+          .attr("opacity", self.transitions.opacity.from)
           .selectAll("rect")
-          .data(self.mapping.data)
+          .data((group) => self.mapping.groupedstacks[group])
           .enter()
           .append("rect")
-          .merge(self.bar)
           .classed("bar interactable", true)
-          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.group)}`)
+          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.subgroup)}`)
           .attr("data-group", (d) => d.group)
-          .attr("x", (d) => self.x(d.value))
-          .attr("y", (d) => self.y(d.group))
-          .attr("width", (d) => self.dataframe.width - self.x(d.value))
-          .attr("height", self.y.bandwidth())
+          .attr("x", (d) => self.x(d.from))
+          .attr("y", (d) => self.subgroupAxis(d.subgroup))
+          .attr("width", (d) => self.x(d.to) - self.x(d.from))
+          .attr("height", self.subgroupAxis.bandwidth())
           .attr("fill", (d) => d.color)
           .attr("opacity", self.transitions.opacity.from)
           .text((d) => d.group)
           .on("mouseover", (e, d) => self.mouseOverBar(e, d))
           .on("mouseout", (e, d) => self.mouseOutBar(e, d))
       : self.bars
+          .selectAll(".bar-group")
+          .data(self.mapping.groups)
+          .join("g")
+          .classed("bar-group data-element", true)
+          .attr("id", (group) => `${self.setID}_bar-group_${self.tokenize(group)}`)
+          .attr("transform", (group) => `translate(${self.x(group)}, 0)`)
+          .attr("opacity", self.transitions.opacity.from)
           .selectAll("rect")
-          .data(self.mapping.data)
+          .data((group) => self.mapping.groupedstacks[group])
           .enter()
           .append("rect")
-          .merge(self.bar)
           .classed("bar interactable", true)
-          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.group)}`)
-          .attr("x", (d) => self.x(d.group))
-          .attr("y", (d) => self.y(d.value))
-          .attr("width", self.x.bandwidth())
-          .attr("height", (d) => self.dataframe.height - self.y(d.value))
+          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.subgroup)}`)
+          .attr("data-group", (d) => d.group)
+          .attr("x", (d) => self.subgroupAxis(d.subgroup))
+          .attr("y", (d) => self.y(d.to))
+          .attr("width", self.subgroupAxis.bandwidth())
+          .attr("height", (d) => self.y(d.from) - self.y(d.to))
           .attr("fill", (d) => d.color)
           .attr("opacity", self.transitions.opacity.from)
           .text((d) => d.group)
@@ -439,7 +476,7 @@ class BarChart extends Chart {
         ? new Legend({
             title: self.legend.title,
             accessor: self.legend.accessor,
-            animations: self.animations,
+            animation: ["opacity", self.animations["opacity"]],
             container: self.viewframe,
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
@@ -451,7 +488,7 @@ class BarChart extends Chart {
             margin: self.margin,
             padding: self.legend.padding,
             setID: self.setID,
-            transitions: self.transitions,
+            transition: ["opacity", self.transitions["opacity"]],
             uid: self.uid,
             vposition: self.legend.vposition,
             width: self.legend.width,
@@ -466,7 +503,12 @@ class BarChart extends Chart {
       self.tooltip !== undefined
         ? new Tooltip({
             title: self.tooltip.title,
-            accessors: [self.accessors.filterby, self.accessors.group, self.accessors.value],
+            accessors: [
+              self.accessors.filterby,
+              self.accessors.group,
+              self.accessors.subgroup,
+              self.accessors.value,
+            ],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,
@@ -520,7 +562,7 @@ class BarChart extends Chart {
     self.yLabels.remove();
     self.xAxis.remove();
     self.yAxis.remove();
-    self.bar.remove();
+    self.bargroups.remove();
     self.bars.remove();
     // Clear Interface Components
     if (self.Legend !== null) self.Legend.clear();
@@ -534,11 +576,11 @@ class BarChart extends Chart {
   Event Handlers
   */
 
-  mouseOverGroupAxis(e, group) {
+  mouseOverSubgroupAxis(e, subgroup) {
     const self = this;
 
     // Highlight Selected Axis Group
-    D3.select(`${self.setID}_bar_${self.tokenize(group)}`)
+    D3.select(`${self.setID}_bar_${self.tokenize(subgroup)}`)
       .transition()
       .ease(Easing[self.animations.opacity.easing])
       .duration(self.animations.opacity.duration)
@@ -547,7 +589,7 @@ class BarChart extends Chart {
     return self;
   }
 
-  mouseOutGroupAxis() {
+  mouseOutSubgroupAxis() {
     const self = this;
 
     // Return All Bars to Unhighlighted State
@@ -605,85 +647,97 @@ class BarChart extends Chart {
     // Remap Data By Accessors to Class Data Schema
     data = data.map((datum) => {
       return {
+        // uuid: datum.uuid,
         color: self.colorscale(datum[self.accessors.color.key]),
         filterby: datum[self.accessors.filterby.key],
-        from: 0,
         group: datum[self.accessors.group.key],
-        to: 0,
-        uuid: datum.uuid,
+        subgroup: datum[self.accessors.subgroup.key],
         value: datum[self.accessors.value.key],
       };
     });
 
-    // Get Unique Filters, Groups, Subgroups, and Colors
+    data = super.groupThenSumObjectsByKeys(
+      data,
+      ["filterby", "group", "subgroup", "color"],
+      ["value"]
+    );
+
+    // Get Unique Filters, Groups, Subgroups, Colors, and Grouped Data
     const filteroptions = [...super.getUniqueValuesByKey(data, "filterby")];
     const groups = [...super.getUniqueValuesByKey(data, "group")];
+    const subgroups = [...super.getUniqueValuesByKey(data, "subgroup")];
     const colors = [...super.getUniqueValuesByKey(data, "color")];
+    const grouped = super.groupObjectsByKey(data, "group");
+
+    // Generate Stacks
+    let groupedstacks = {};
+    for (const groupkey in grouped) {
+      const grouping = grouped[groupkey];
+      groupedstacks[groupkey] = [];
+      let from = [];
+      for (const f in filteroptions) {
+        const filter = filteroptions[f];
+        let stack = [];
+        for (const s in subgroups) {
+          const subgroup = subgroups[s];
+          for (const d in grouping) {
+            const datum = grouping[d];
+            if (datum.subgroup === subgroup && datum.filterby === filter) {
+              if (typeof from[s] === "undefined") {
+                from[s] = 0;
+              }
+              datum.from = from[s];
+              datum.to = from[s] + datum.value;
+              from[s] = datum.to;
+              stack.push(datum);
+            }
+          }
+        }
+        groupedstacks[groupkey].push(...stack);
+      }
+    }
 
     // Compute Group-wise Value Range (Max and Min)
     let maxs = [];
     let mins = [];
-    for (const i in groups) {
-      const group = groups[i];
+    for (const group in groupedstacks) {
+      const grouped = groupedstacks[group];
       let max = 0;
       let min = 0;
-      for (const j in data) {
-        const datum = data[j];
-        if (datum.group === group) {
-          max += datum.value;
-          min = datum.value < min ? datum.value : min;
+      for (const s in subgroups) {
+        const subgroup = subgroups[s];
+        for (const j in grouped) {
+          const datum = grouped[j];
+          if (datum.group === group && datum.subgroup === subgroup) {
+            max = datum.to > max ? datum.to : max;
+            min = datum.from < min ? datum.from : min;
+          }
         }
+        maxs.push(max);
+        mins.push(min);
       }
-      maxs.push(max);
-      mins.push(min);
     }
     const max = Math.ceil(Math.max(...maxs));
     const min = Math.floor(Math.min(...mins));
 
-    // // Generate Bars
-    // let bars = [];
-    // let from = [];
-    // for (const i in subgroups) {
-    //   const subgroup = subgroups[i];
-    //   let stack = [];
-    //   for (const j in groups) {
-    //     const group = groups[j];
-    //     for (const d in data) {
-    //       const datum = data[d];
-    //       if (datum.subgroup === subgroup && datum.group === group) {
-    //         if (typeof from[j] === "undefined") {
-    //           from[j] = 0;
-    //         }
-    //         datum.from = from[j];
-    //         datum.to = from[j] + datum.value;
-    //         from[j] = datum.to;
-    //         stack.push(datum);
-    //       }
-    //     }
-    //   }
-    //   stack.subgroup = subgroup;
-    //   stacks.push(stack);
-    // }
-
     // Generate Legend
-    const legend = D3.zip(colors, filteroptions).map(([color, filterby]) => {
+    const legend = D3.zip(colors, subgroups).map(([color, subgroup]) => {
       return {
         color: color,
-        filterby: filterby,
+        subgroup: subgroup,
       };
     });
-    console.log(data);
 
     return {
       colors: colors,
       data: data,
       filters: filteroptions,
+      groupedstacks: groupedstacks,
       groups: groups,
       legend: legend,
       max: max,
       min: min,
-      // stacks: stacks,
-      // subgroups: subgroups,
+      subgroups: subgroups,
     };
   }
 }
@@ -692,4 +746,4 @@ class BarChart extends Chart {
 Exports
 */
 
-export default BarChart;
+export default GroupedStackedBarChart;

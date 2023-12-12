@@ -229,7 +229,7 @@ class StackedBarChart extends Chart {
       self.legend !== undefined
         ? new Legend({
             title: self.legend.title,
-            accessor: "subgroup",
+            accessor: self.legend.accessor,
             animation: ["opacity", self.animations["opacity"]],
             container: self.viewframe,
             data: self.mapping.legend,
@@ -489,7 +489,7 @@ class StackedBarChart extends Chart {
       self.legend !== undefined
         ? new Legend({
             title: self.legend.title,
-            accessor: "subgroup",
+            accessor: self.legend.accessor,
             animation: ["opacity", self.animations["opacity"]],
             container: self.viewframe,
             data: self.mapping.legend,
@@ -668,11 +668,13 @@ class StackedBarChart extends Chart {
         group: datum[self.accessors.group.key],
         subgroup: datum[self.accessors.subgroup.key],
         to: 0,
+        uuid: datum.uuid,
         value: datum[self.accessors.value.key],
       };
     });
 
     // Get Unique Filters, Groups, Subgroups, and Colors
+    const uuids = [...super.getUniqueValuesByKey(data, "uuid")];
     const filteroptions = [...super.getUniqueValuesByKey(data, "filterby")];
     const groups = [...super.getUniqueValuesByKey(data, "group")];
     const subgroups = [...super.getUniqueValuesByKey(data, "subgroup")];
@@ -741,6 +743,7 @@ class StackedBarChart extends Chart {
       min: min,
       stacks: stacks,
       subgroups: subgroups,
+      uuids: uuids,
     };
   }
 }

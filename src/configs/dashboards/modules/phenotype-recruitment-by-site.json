@@ -1,17 +1,17 @@
 {
-  "name": "Sex & Gender",
-  "id": "sex-gender",
-  "title": "AI-READI Pilot Participant Sex & Gender by Data Generation Site",
-  "subtitle": "Participant Counts Aggregated by Sex & Gender",
+  "name": "Phenotype Recruitment by Site",
+  "id": "phenotype-recruitment-by-site",
+  "title": "AI-READI Pilot Participant Phenotype Recruitment Over Time by Site",
+  "subtitle": "Participant Phenotype Recruitment Counts by Data Generation Site",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "StackedBar",
+    "type": "Line",
     "config": {
-      "id": "#sex-gender_stacked-bar",
-      "rotate": false,
+      "id": "#phenotype-recruitment-by-site_line",
+      "rotate": true,
       "width": 1080,
-      "height": 420,
+      "height": 500,
       "position": {
         "top": 0,
         "left": 0,
@@ -25,9 +25,9 @@
         "bottom": 20
       },
       "padding": {
-        "top": 20,
+        "top": 0,
         "left": 0,
-        "right": 80,
+        "right": 200,
         "bottom": 0
       },
       "transitions": {
@@ -38,6 +38,10 @@
         "translate": {
           "from": "left",
           "to": "left"
+        },
+        "radius": {
+          "from": 8,
+          "to": 16
         }
       },
       "animations": {
@@ -50,14 +54,19 @@
           "delay": 0,
           "duration": 600,
           "easing": "expOut"
+        },
+        "radius": {
+          "delay": 0,
+          "duration": 600,
+          "easing": "expOut"
         }
       },
       "legend": {
-        "title": "Survey Status",
-        "width": 200,
+        "title": "Phenotype",
+        "width": 120,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 10,
+        "fontsize": 12,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -112,24 +121,24 @@
           "key": "filterby",
           "type": "String"
         },
-        "group": {
-          "name": "Gender",
-          "key": "group",
-          "type": "String"
-        },
         "subgroup": {
-          "name": "Sex",
+          "name": "Phenotype",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Sex",
-          "key": "subgroup",
+          "name": "Phenotype",
+          "key": "color",
           "type": "String"
         },
-        "value": {
-          "name": "Count (n)",
-          "key": "value",
+        "x": {
+          "name": "Week of the Year",
+          "key": "x",
+          "type": "Number"
+        },
+        "y": {
+          "name": "Cumulative Count (n)",
+          "key": "y",
           "type": "Number"
         }
       },

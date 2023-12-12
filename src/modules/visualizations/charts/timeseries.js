@@ -150,7 +150,7 @@ class TimeSeriesChart extends Chart {
       self.legend !== undefined
         ? new Legend({
             title: self.legend.title,
-            accessor: "subgroup",
+            accessor: self.legend.accessor,
             animation: ["radius", self.animations["radius"]],
             container: self.viewframe,
             data: self.mapping.legend,
@@ -336,7 +336,7 @@ class TimeSeriesChart extends Chart {
       self.legend !== undefined
         ? new Legend({
             title: self.legend.title,
-            accessor: "subgroup",
+            accessor: self.legend.accessor,
             animation: ["radius", self.animations["radius"]],
             container: self.viewframe,
             data: self.mapping.legend,
@@ -483,6 +483,7 @@ Map Data and Set Value Types
           datetime: datum[self.accessors.datetime.key],
           filterby: datum[self.accessors.filterby.key],
           subgroup: datum[self.accessors.subgroup.key],
+          uuid: datum.uuid,
           y: datum[self.accessors.y.key],
         };
       })
@@ -508,6 +509,7 @@ Map Data and Set Value Types
             datetime: datum.datetime,
             filterby: self.selectedFilter,
             subgroup: datum.subgroup,
+            uuid: datum.uuid,
             y: yAccumulator[datum.subgroup],
           };
         })
@@ -520,6 +522,7 @@ Map Data and Set Value Types
     ];
 
     // Get Unique Colors
+    const uuids = [...super.getUniqueValuesByKey(data, "uuid")];
     const filteroptions = [...super.getUniqueValuesByKey(data, "filterby")];
     const subgroups = [...super.getUniqueValuesByKey(data, "subgroup")];
     const colors = [...super.getUniqueValuesByKey(data, "color")];
@@ -571,6 +574,7 @@ Map Data and Set Value Types
       min: min,
       series: series,
       subgroups: subgroups,
+      uuids: uuids,
     };
   }
 }

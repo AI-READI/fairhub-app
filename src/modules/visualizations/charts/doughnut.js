@@ -151,7 +151,7 @@ class DoughnutChart extends Chart {
       self.legend !== undefined
         ? new Legend({
             title: self.legend.title,
-            accessor: "group",
+            accessor: self.legend.accessor,
             animations: self.animations,
             color: self.color,
             container: self.viewframe,
@@ -340,7 +340,7 @@ class DoughnutChart extends Chart {
       self.legend !== undefined
         ? new Legend({
             title: self.legend.title,
-            accessor: "group",
+            accessor: self.legend.accessor,
             animations: self.animations,
             container: self.viewframe,
             data: self.mapping.legend,
@@ -510,6 +510,7 @@ class DoughnutChart extends Chart {
           index: d.index,
           padAngle: d.padAngle,
           startAngle: d.startAngle,
+          uuid: d.data.uuid,
           value: d.data.value,
         };
       });

@@ -1,17 +1,17 @@
 {
-  "name": "Overview",
-  "id": "overview",
-  "title": "AI-READI Pilot REDCap Instrument Status by Data Generation Site",
-  "subtitle": "Instrument Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
+  "name": "Current Medication Counts by Site",
+  "id": "current-medications-by-site",
+  "title": "AI-READI Pilot Count of Current Medications by Data Generation Site",
+  "subtitle": "Distribution of Current Medications Count",
   "width": 1280,
   "height": 720,
   "visualizations": [{
     "type": "StackedBar",
     "config": {
-      "id": "#overview_stacked-bar",
-      "rotate": true,
+      "id": "#current-medications-by-site_stacked-bar",
+      "rotate": false,
       "width": 1080,
-      "height": 420,
+      "height": 500,
       "position": {
         "top": 0,
         "left": 0,
@@ -19,15 +19,15 @@
         "bottom": 0
       },
       "margin": {
-        "top": 0,
-        "left": 0,
-        "right": 0,
+        "top": 20,
+        "left": 20,
+        "right": 20,
         "bottom": 20
       },
       "padding": {
-        "top": 20,
+        "top": 0,
         "left": 0,
-        "right": 240,
+        "right": 200,
         "bottom": 0
       },
       "transitions": {
@@ -53,11 +53,12 @@
         }
       },
       "legend": {
-        "title": "Instrument Status",
-        "width": 200,
+        "title": "",
+        "accessor": "",
+        "width": 120,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 10,
+        "fontsize": 12,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -68,11 +69,11 @@
         }
       },
       "tooltip": {
-        "title": "Data Point Details",
+        "title": "",
         "width": 720,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 10,
+        "fontsize": 12,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -86,7 +87,7 @@
         "width": 720,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 10,
+        "fontsize": 12,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -109,26 +110,26 @@
       "accessors": {
         "filterby": {
           "name": "Site",
-          "key": "filterby",
+          "key": "group",
           "type": "String"
         },
         "group": {
-          "name": "Survey",
+          "name": "Current Medications Status",
           "key": "group",
           "type": "String"
         },
         "subgroup": {
-          "name": "Status",
+          "name": "Site",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Status",
-          "key": "subgroup",
+          "name": "Site",
+          "key": "filterby",
           "type": "String"
         },
         "value": {
-          "name": "Count (n)",
+          "name": "Current Medications (N)",
           "key": "value",
           "type": "Number"
         }

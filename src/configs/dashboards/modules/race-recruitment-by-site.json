@@ -1,0 +1,148 @@
+{
+  "name": "Race Recruitment by Site",
+  "id": "race-recruitment-by-site",
+  "title": "AI-READI Pilot Participant Race Recruitment Over Time by Site",
+  "subtitle": "Participant Race Recruitment Counts by Data Generation Site",
+  "width": 1280,
+  "height": 720,
+  "visualizations": [{
+    "type": "Line",
+    "config": {
+      "id": "#race-recruitment-by-site_line",
+      "rotate": true,
+      "width": 1080,
+      "height": 500,
+      "position": {
+        "top": 0,
+        "left": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "margin": {
+        "top": 0,
+        "left": 0,
+        "right": 0,
+        "bottom": 20
+      },
+      "padding": {
+        "top": 0,
+        "left": 0,
+        "right": 200,
+        "bottom": 0
+      },
+      "transitions": {
+        "opacity": {
+          "from": 0.8,
+          "to": 1.0
+        },
+        "translate": {
+          "from": "left",
+          "to": "left"
+        },
+        "radius": {
+          "from": 8,
+          "to": 16
+        }
+      },
+      "animations": {
+        "opacity": {
+          "delay": 0,
+          "duration": 200,
+          "easing": "expOut"
+        },
+        "translate": {
+          "delay": 0,
+          "duration": 600,
+          "easing": "expOut"
+        },
+        "radius": {
+          "delay": 0,
+          "duration": 600,
+          "easing": "expOut"
+        }
+      },
+      "legend": {
+        "title": "Race",
+        "width": 120,
+        "height": 140,
+        "itemsize": 20,
+        "fontsize": 12,
+        "vposition": "bottom",
+        "hposition": "left",
+        "padding": {
+          "top": 0,
+          "left": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      },
+      "tooltip": {
+        "title": "",
+        "width": 720,
+        "height": 140,
+        "itemsize": 20,
+        "fontsize": 10,
+        "vposition": "bottom",
+        "hposition": "left",
+        "padding": {
+          "top": 0,
+          "left": 320,
+          "right": 0,
+          "bottom": 0
+        }
+      },
+      "filters": {
+        "width": 720,
+        "height": 140,
+        "itemsize": 20,
+        "fontsize": 10,
+        "vposition": "bottom",
+        "hposition": "left",
+        "padding": {
+          "top": 0,
+          "left": 320,
+          "right": 0,
+          "bottom": 0
+        }
+      },
+      "palette": [
+        "#5DD462",
+        "#FE7E6D",
+        "#C79F38",
+        "#82C5E6",
+        "#999EEB",
+        "#7F8C9F",
+        "#727272"
+      ],
+      "ordering": "descending",
+      "accessors": {
+        "filterby": {
+          "name": "Site",
+          "key": "filterby",
+          "type": "String"
+        },
+        "subgroup": {
+          "name": "Race",
+          "key": "subgroup",
+          "type": "String"
+        },
+        "color": {
+          "name": "Race",
+          "key": "color",
+          "type": "String"
+        },
+        "x": {
+          "name": "Week of the Year",
+          "key": "x",
+          "type": "Number"
+        },
+        "y": {
+          "name": "Cumulative Count (n)",
+          "key": "y",
+          "type": "Number"
+        }
+      },
+      "data": []
+    }
+  }]
+}

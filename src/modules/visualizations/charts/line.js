@@ -150,7 +150,7 @@ class LineChart extends Chart {
       self.legend !== undefined
         ? new Legend({
             title: self.legend.title,
-            accessor: "subgroup",
+            accessor: self.legend.accessor,
             animation: ["radius", self.animations["radius"]],
             container: self.viewframe,
             data: self.mapping.legend,
@@ -341,7 +341,7 @@ class LineChart extends Chart {
       self.legend !== undefined
         ? new Legend({
             title: self.legend.title,
-            accessor: "subgroup",
+            accessor: self.legend.accessor,
             animation: ["radius", self.animations["radius"]],
             container: self.viewframe,
             data: self.mapping.legend,
@@ -473,6 +473,7 @@ Map Data and Set Value Types
 */
 
   mapData(data, filter) {
+    console.log(data);
     let self = this;
 
     self.selectedFilter = filter === undefined ? "All" : filter;
@@ -488,6 +489,7 @@ Map Data and Set Value Types
           color: self.colorscale(datum[self.accessors.color.key]),
           filterby: datum[self.accessors.filterby.key],
           subgroup: datum[self.accessors.subgroup.key],
+          uuid: datum.uuid,
           x: datum[self.accessors.x.key],
           y: datum[self.accessors.y.key],
         };
@@ -548,9 +550,9 @@ Map Data and Set Value Types
       }
     }
     data = merged;
-    console.log(merged);
 
     // Get Unique Colors
+    const uuids = [...super.getUniqueValuesByKey(data, "uuid")];
     const filteroptions = [...super.getUniqueValuesByKey(data, "filterby")];
     const subgroups = [...super.getUniqueValuesByKey(data, "subgroup")];
     const colors = [...super.getUniqueValuesByKey(data, "color")];
@@ -602,6 +604,7 @@ Map Data and Set Value Types
       min: min,
       series: series,
       subgroups: subgroups,
+      uuids: uuids,
     };
   }
 }
