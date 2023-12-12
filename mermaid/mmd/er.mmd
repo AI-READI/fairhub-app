@@ -46,6 +46,7 @@ erDiagram
 
     INVITE {
         string id PK "UUIDv4"
+        string user_id FK "USER.id"
         string email_address
         string study_id FK "STUDY.id or nullable"
         string permission "owner|admin|editor|viewer or nullable" 
