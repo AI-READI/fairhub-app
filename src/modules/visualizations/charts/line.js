@@ -31,15 +31,15 @@ class LineChart extends Chart {
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
     self.filters = Object.hasOwn(config, "filters") ? config.filters : undefined;
+    self.linewidth = 3;
+    self.linesmoother = "curveCatmullRom";
 
     /*
     Setup
     */
 
-    // Set Unique Filters, Subgroups, Color Scale
+    // Set Unique Filters, Groups, Color Scale
     self.filterby = super.getUniqueValuesByKey(self.data, self.accessors.filterby.key);
-    self.subgroups = super.getUniqueValuesByKey(self.data, self.accessors.subgroup.key);
-    self.xvalues = super.getUniqueValuesByKey(self.data, self.accessors.x.key);
     self.colorscale = D3.scaleOrdinal()
       .domain(super.getUniqueValuesByKey(self.data, self.accessors.color.key))
       .range(self.palette);
@@ -85,7 +85,7 @@ class LineChart extends Chart {
       .classed("x-axis", true)
       .attr("id", `${self.setID}_x-axis`)
       .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.bottom})`)
-      .call(D3.axisBottom(self.x).tickSizeOuter(5).tickPadding(10));
+      .call(D3.axisBottom(self.x).tickSizeOuter(0));
 
     self.yAxis = self.svg
       .append("g")
@@ -99,6 +99,7 @@ class LineChart extends Chart {
     */
 
     self.line = D3.line()
+      .curve(D3[self.linesmoother])
       .x((d) => self.x(d.x))
       .y((d) => self.y(d.y));
 
@@ -112,13 +113,17 @@ class LineChart extends Chart {
       .selectAll(".line-series")
       .data(self.mapping.series)
       .join("path")
-      .classed("line-series interactable", true)
-      .attr("id", (d) => `${self.setID}_line-series_${self.tokenize(d.subgroup)}`)
+      .classed("line-series", true)
+      .attr(
+        "id",
+        ([group, , filter]) =>
+          `${self.setID}_line-series_${self.tokenize(group)}_${self.tokenize(filter)}`
+      )
       .attr("fill", "none")
-      .attr("stroke", (d) => d.color)
+      .attr("stroke", ([, color, ,]) => color)
       .attr("stroke-width", self.linewidth)
       .attr("opacity", self.transitions.opacity.from)
-      .attr("d", (d) => self.line(d));
+      .attr("d", ([, , , subseries]) => self.line(subseries));
 
     self.points = self.svg
       .append("g")
@@ -131,16 +136,22 @@ class LineChart extends Chart {
       .data(self.mapping.series)
       .join("g")
       .classed("point-series", true)
-      .attr("id", (d) => `${self.setID}_point-series_${self.tokenize(d.subgroup)}`)
-      .attr("fill", (d) => d.color)
-      .attr("stroke", (d) => d.color)
+      .attr(
+        "id",
+        ([group, , filter]) =>
+          `${self.setID}_point-series_${self.tokenize(group)}_${self.tokenize(filter)}`
+      )
+      .attr("fill", ([, color, ,]) => color)
+      .attr("stroke", ([, color, ,]) => color)
       .selectAll(".point")
-      .data((d) => d)
+      .data(([, , , subseries]) => subseries)
       .join("circle")
       .classed("point interactable", true)
       .attr("cx", (d) => self.x(d.x))
       .attr("cy", (d) => self.y(d.y))
-      .attr("r", self.transitions.radius.from);
+      .attr("r", self.transitions.radius.from)
+      .on("mouseover", (e, d) => self.mouseOverPoint(e, d))
+      .on("mouseout", (e, d) => self.mouseOutPoint(e, d));
 
     /*
     Legend
@@ -180,7 +191,7 @@ class LineChart extends Chart {
             title: self.tooltip.title,
             accessors: [
               self.accessors.filterby,
-              self.accessors.subgroup,
+              self.accessors.group,
               self.accessors.x,
               self.accessors.y,
             ],
@@ -274,7 +285,7 @@ class LineChart extends Chart {
       .classed("x-axis", true)
       .attr("id", `${self.setID}_x-axis`)
       .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.bottom})`)
-      .call(D3.axisBottom(self.x).tickSizeOuter(5).tickPadding(10));
+      .call(D3.axisBottom(self.x).tickSizeOuter(0));
 
     self.yAxis = self.svg
       .append("g")
@@ -288,6 +299,7 @@ class LineChart extends Chart {
     */
 
     self.line = D3.line()
+      .curve(D3[self.linesmoother])
       .x((d) => self.x(d.x))
       .y((d) => self.y(d.y));
 
@@ -302,12 +314,16 @@ class LineChart extends Chart {
       .data(self.mapping.series)
       .join("path")
       .classed("line-series", true)
-      .attr("id", (d) => `${self.setID}_line-series_${self.tokenize(d.subgroup)}`)
+      .attr(
+        "id",
+        ([group, , filter]) =>
+          `${self.setID}_line-series_${self.tokenize(group)}_${self.tokenize(filter)}`
+      )
       .attr("fill", "none")
-      .attr("stroke", (d) => d.color)
+      .attr("stroke", ([, color, ,]) => color)
       .attr("stroke-width", self.linewidth)
       .attr("opacity", self.transitions.opacity.from)
-      .attr("d", (d) => self.line(d));
+      .attr("d", ([, , , subseries]) => self.line(subseries));
 
     self.points = self.svg
       .append("g")
@@ -320,11 +336,15 @@ class LineChart extends Chart {
       .data(self.mapping.series)
       .join("g")
       .classed("point-series", true)
-      .attr("id", (d) => `${self.setID}_point-series_${self.tokenize(d.subgroup)}`)
-      .attr("fill", (d) => d.color)
-      .attr("stroke", (d) => d.color)
+      .attr(
+        "id",
+        ([group, , filter]) =>
+          `${self.setID}_point-series_${self.tokenize(group)}_${self.tokenize(filter)}`
+      )
+      .attr("fill", ([, color, ,]) => color)
+      .attr("stroke", ([, color, ,]) => color)
       .selectAll(".point")
-      .data((d) => d)
+      .data(([, , , subseries]) => subseries)
       .join("circle")
       .classed("point interactable", true)
       .attr("cx", (d) => self.x(d.x))
@@ -371,7 +391,7 @@ class LineChart extends Chart {
             title: self.tooltip.title,
             accessors: [
               self.accessors.filterby,
-              self.accessors.subgroup,
+              self.accessors.group,
               self.accessors.x,
               self.accessors.y,
             ],
@@ -473,7 +493,6 @@ Map Data and Set Value Types
 */
 
   mapData(data, filter) {
-    console.log(data);
     let self = this;
 
     self.selectedFilter = filter === undefined ? "All" : filter;
@@ -483,115 +502,61 @@ Map Data and Set Value Types
     }
 
     // Remap Values from Accessor Keys to Fixed Keys
-    data = data
-      .map((datum) => {
-        return {
-          color: self.colorscale(datum[self.accessors.color.key]),
-          filterby: datum[self.accessors.filterby.key],
-          subgroup: datum[self.accessors.subgroup.key],
-          uuid: datum.uuid,
-          x: datum[self.accessors.x.key],
-          y: datum[self.accessors.y.key],
-        };
-      })
-      .sort(function (x, y) {
-        return D3.ascending(x.x, y.x);
-      });
+    data = data.map((datum) => {
+      return {
+        color: self.colorscale(datum[self.accessors.group.key]),
+        filterby: datum[self.accessors.filterby.key],
+        group: datum[self.accessors.group.key],
+        x: datum[self.accessors.x.key],
+        y: datum[self.accessors.y.key],
+      };
+    });
 
-    // // Cumulative Sum Y-Axis by Site and Subgroup
-    // let subgrouped = Object.groupBy(data, ({ subgroup }) => subgroup);
-    // let accumulateSubgroup = [];
-    // for (const [subgroup, subgroupdata] of Object.entries(subgrouped)) {
-    //   let yAccumulator = Object.assign({}, ...Object.entries({...self.subgroups}).map(([key, value]) => ({
-    //     [value]: 0
-    //   })));
-    //   accumulateSubgroup.push(...subgroupdata.map((datum) => {
-    //     yAccumulator[datum.subgroup] += datum.y;
-    //     return {
-    //       color: datum.color,
-    //       x: datum.x,
-    //       filterby: self.selectedFilter ,
-    //       subgroup: datum.subgroup,
-    //       y: yAccumulator[datum.subgroup]
-    //     }
-    //   }));
-    // }
-
-    // Sort by Week
-    data = [
-      data.sort(function (x, y) {
-        return D3.ascending(x.x, y.x);
-      }),
-    ];
-
-    let merged = [];
-    for (const i in self.filterby) {
-      const filterby = self.filterby[i];
-      for (const j in self.subgroups) {
-        const subgroup = self.subgroups[j];
-        for (const k in self.xvalues) {
-          const xvalue = self.xvalues[k];
-          // console.log(filter, subgroup, xvalue);
-          const filtered = data.filter(
-            (datum) => datum.filterby == filterby && datum.subgroup == subgroup && datum.x == xvalue
-          );
-          if (filtered.length > 0) {
-            merged.push(
-              filtered.reduce((a, b) => ({
-                color: b.color,
-                filterby: filterby,
-                subgroup: subgroup,
-                x: xvalue,
-                y: a.y + b.y,
-              }))
-            );
-          }
-        }
-      }
-    }
-    data = merged;
+    // Remove Value Unavailable on X
+    data = data.filter((datum) => datum.x !== "Value Unavailable");
+    // Group by x date
+    data = super.groupThenSumObjectsByKeys(data, ["filterby", "group", "color", "x"], ["y"]);
 
     // Get Unique Colors
-    const uuids = [...super.getUniqueValuesByKey(data, "uuid")];
     const filteroptions = [...super.getUniqueValuesByKey(data, "filterby")];
-    const subgroups = [...super.getUniqueValuesByKey(data, "subgroup")];
+    const groups = [...super.getUniqueValuesByKey(data, "group")];
     const colors = [...super.getUniqueValuesByKey(data, "color")];
+    const flatseries = D3.flatGroup(
+      data,
+      (d) => d.group,
+      (d) => d.color,
+      (d) => d.filterby
+    );
+
+    let series = [];
+    for (const s in flatseries) {
+      const [group, color, filter, subseries] = flatseries[s];
+      const sub = super.cumulativeSumOfObjectByKey(
+        subseries.sort((a, b) => a.x - b.x),
+        "y"
+      );
+      series.push([group, color, filter, sub]);
+    }
 
     // Compute Series-wise Max and Min Values
     let maxs = [];
     let mins = [];
-    for (const i in subgroups) {
-      const subgroup = subgroups[i];
-      let max = 0;
-      let min = Infinity;
-      for (const j in data) {
-        const datum = data[j];
-        if (datum.subgroup === subgroup) {
-          max = datum.y > max ? datum.y : max;
-          min = datum.y < min ? datum.y : min;
-        }
+    for (const s in series) {
+      const [, , , subseries] = series[s];
+      if (subseries !== undefined && subseries.length > 0) {
+        const yvalues = subseries.map((d) => d.y);
+        maxs.push(Math.max.apply(null, yvalues));
+        mins.push(Math.min.apply(null, yvalues));
       }
-      maxs.push(max);
-      mins.push(min);
     }
     const max = Math.ceil(Math.max(...maxs));
     const min = Math.floor(Math.min(...mins));
 
-    // Generate Series
-    const series = D3.zip(subgroups, colors).map(([subgroup, color]) => {
-      let subseries = data.filter((datum) => {
-        return datum.subgroup === subgroup;
-      });
-      subseries.subgroup = subgroup;
-      subseries.color = color;
-      return subseries;
-    });
-
     // Generate Legend
-    const legend = D3.zip(subgroups, colors).map(([subgroup, color]) => {
+    const legend = D3.zip(groups, colors).map(([group, color]) => {
       return {
         color: color,
-        subgroup: subgroup,
+        group: group,
       };
     });
 
@@ -599,12 +564,11 @@ Map Data and Set Value Types
       colors: colors,
       data: data,
       filters: filteroptions,
+      groups: groups,
       legend: legend,
       max: max,
       min: min,
       series: series,
-      subgroups: subgroups,
-      uuids: uuids,
     };
   }
 }

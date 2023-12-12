@@ -227,7 +227,15 @@ async function deleteDashboard(studyId: string, dashboardId: string | undefined)
         <LottieLoader v-if="isLoading" />
 
         <div name="fade" tag="div" class="dashboard-choices" v-else>
-          <n-table :bordered="true" :single-line="true">
+          <n-empty
+            v-if="dashboardConnectors.length === 0"
+            description="No Dashboard Found"
+            size="huge"
+            class="my-10"
+          >
+          </n-empty>
+
+          <n-table :bordered="true" :single-line="true" v-else>
             <thead>
               <tr class="p-0">
                 <th v-for="(item, index) in columns" :key="index">{{ item }}</th>
@@ -314,14 +322,6 @@ async function deleteDashboard(studyId: string, dashboardId: string | undefined)
           </n-table>
         </div>
       </FadeTransition>
-
-      <n-empty
-        v-if="dashboardConnectors.length === 0"
-        description="No Dashboard Found"
-        size="huge"
-        class="my-10"
-      >
-      </n-empty>
     </div>
   </main>
 </template>

@@ -93,9 +93,11 @@ class Chart {
   getUniqueValuesByKey(obj, key) {
     return [...new Set(obj.map((d) => d[key]))];
   }
+
   getUniqueValues(array) {
     return [...new Set(array)];
   }
+
   getUniqueObjectsByProperties(objects) {
     const uniqueArray = objects.filter((value, index) => {
       const _value = JSON.stringify(value);
@@ -108,6 +110,7 @@ class Chart {
     });
     return uniqueArray;
   }
+
   groupObjectsByKey(objects, key = "uuid") {
     return objects.reduce((acc, obj) => {
       if (acc[obj[key]]) {
@@ -118,6 +121,7 @@ class Chart {
       return acc;
     }, {});
   }
+
   ungroupObjects(grouped) {
     let merged = [];
     for (const key in grouped) {
@@ -125,6 +129,7 @@ class Chart {
     }
     return merged;
   }
+
   groupThenSumObjectsByKeys(objects, on, sum) {
     /*
     From an array of `objects`, an array of keys to
@@ -149,6 +154,16 @@ class Chart {
         }, new Map())
         .values(),
     ];
+  }
+
+  cumulativeSumOfObjectByKey(objects, key) {
+    const result = objects.map((obj, idx, self) => {
+      if (idx == 0) return obj;
+      const prev = self[idx - 1];
+      obj[key] += prev[key];
+      return obj;
+    });
+    return result;
   }
 
   /*

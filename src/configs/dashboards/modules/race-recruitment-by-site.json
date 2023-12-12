@@ -63,6 +63,7 @@
       },
       "legend": {
         "title": "Race",
+        "accessor": "group",
         "width": 120,
         "height": 140,
         "itemsize": 20,
@@ -121,9 +122,9 @@
           "key": "filterby",
           "type": "String"
         },
-        "subgroup": {
+        "group": {
           "name": "Race",
-          "key": "subgroup",
+          "key": "group",
           "type": "String"
         },
         "color": {

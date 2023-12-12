@@ -728,6 +728,7 @@ class GroupedStackedBarChart extends Chart {
       };
     });
 
+    console.log(groupedstacks);
     return {
       colors: colors,
       data: data,
