@@ -95,7 +95,7 @@ onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
     push.error("You are not logged in. Please log in to continue");
 
-    router.push({ name: "login" });
+    router.push({ name: "auth:login" });
 
     return;
   }

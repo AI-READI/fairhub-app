@@ -3,9 +3,11 @@ import { createRouter, createWebHistory } from "vue-router";
 import log from "@/middleware/log";
 import NotFound from "@/views/404/NotFound.vue";
 import UserProfile from "@/views/account/UserProfile.vue";
+import ConfirmEmail from "@/views/auth/ConfirmEmail.vue";
 import LoginPage from "@/views/auth/LoginPage.vue";
 import LogOut from "@/views/auth/LogOut.vue";
 import SignUp from "@/views/auth/SignUp.vue";
+import VerifyEmail from "@/views/auth/VerifyEmail.vue";
 import Changelog from "@/views/help/ChangeLog.vue";
 import Documentation from "@/views/help/DocumentationPage.vue";
 import HelpPage from "@/views/help/HelpPage.vue";
@@ -83,17 +85,27 @@ const router = createRouter({
       path: "/auth",
       children: [
         {
-          name: "login",
+          name: "auth:login",
           path: "login",
           component: LoginPage,
         },
         {
-          name: "signup",
+          name: "auth:signup",
           path: "signup",
           component: SignUp,
         },
         {
-          name: "logout",
+          name: "auth:confirm-email",
+          path: "confirm-email",
+          component: ConfirmEmail,
+        },
+        {
+          name: "auth:verify-email",
+          path: "verify-email",
+          component: VerifyEmail,
+        },
+        {
+          name: "auth:logout",
           path: "logout",
           component: LogOut,
         },
@@ -488,7 +500,9 @@ function nextFactory(context: any, middleware: any, index: any) {
   const subsequentMiddleware = middleware[index];
   // If no subsequent Middleware exists,
   // the default `next()` callback is returned.
-  if (!subsequentMiddleware) return context.next;
+  if (!subsequentMiddleware) {
+    return context.next;
+  }
 
   return (...parameters: any) => {
     // Run the default Vue Router `next()` callback first.
