@@ -137,16 +137,15 @@ const updatePassword = (e: MouseEvent) => {
     if (!errors) {
       loading.value = true;
 
-      // const response = await fetch(`${baseURL}/user/password`, {
-      //   body: JSON.stringify(passwordForm.value),
-      //   method: "PUT",
-      // });
-      const response = true;
+      const response = await fetch(`${baseURL}/user/password`, {
+        body: JSON.stringify(passwordForm.value),
+        method: "PUT",
+      });
 
       loading.value = false;
-      if (!response) {
-        push.error("Something went wrong");
-        throw new Error("User not found");
+      if (!response.ok) {
+        push.error("Something went wrong, please try again later");
+        throw new Error("Password error");
       }
       push.success("Password Updated");
     } else {
