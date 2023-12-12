@@ -35,7 +35,7 @@ const hideMenuOptions = computed(() => {
     "/help/report-issue",
     "/help/documentation",
     "/help/changelog",
-    "/help/invite-users",
+    "/help/invite-user",
     "/profile",
     "/integrations",
   ];
@@ -405,7 +405,7 @@ const selectAndExpand = (key: string) => {
   menuInstRef.value?.showOption(key);
 };
 
-router.beforeEach((to, from) => {
+router.beforeEach((to) => {
   if (typeof to.name !== "string") return;
   const name: string = to.meta && to.meta.menuItem ? (to.meta.menuItem as string) : to.name;
   selectAndExpand(name);
