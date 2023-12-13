@@ -504,8 +504,8 @@ Map Data and Set Value Types
     // Remap Values from Accessor Keys to Fixed Keys
     data = data.map((datum) => {
       return {
-        color: self.colorscale(datum[self.accessors.group.key]),
-        filterby: datum[self.accessors.filterby.key],
+        color: self.colorscale(datum[self.accessors.color.key]),
+        filterby: self.selectedFilter !== "All" ? datum[self.accessors.filterby.key] : "All",
         group: datum[self.accessors.group.key],
         x: datum[self.accessors.x.key],
         y: datum[self.accessors.y.key],

@@ -166,7 +166,7 @@ class StackedBarChart extends Chart {
       .append("g")
       .classed(`bars data-elements`, true)
       .attr("id", `${self.setID}_bars`)
-      .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`);
+      .attr("transform", `translate(${self.dataframe.left - 1}, ${self.dataframe.top - 1})`);
 
     self.bargroups = self.bars
       .selectAll(".bar-group")
@@ -235,7 +235,7 @@ class StackedBarChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_bar-group`,
+            getPrefix: `${self.setID}_bar-group`,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
@@ -423,7 +423,7 @@ class StackedBarChart extends Chart {
       .append("g")
       .classed(`bars data-elements`, true)
       .attr("id", `${self.setID}_bars`)
-      .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`);
+      .attr("transform", `translate(${self.dataframe.left - 1}, ${self.dataframe.top - 1})`);
 
     self.bargroups = self.bars
       .selectAll(".bar-group")
@@ -495,7 +495,7 @@ class StackedBarChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_bar-group`,
+            getPrefix: `${self.setID}_bar-group`,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,

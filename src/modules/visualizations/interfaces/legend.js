@@ -160,8 +160,7 @@ class Legend extends Interface {
 
     const [, animation] = self.animation;
     const [transitionkey, transition] = self.transition;
-
-    D3.select(`${self.getPrefix}_${self.tokenize(d[self.accessor])}`)
+    D3.selectAll(`[id^="${self.getPrefix}_${self.tokenize(d[self.accessor])}"]`)
       .transition()
       .ease(Easing[animation.easing])
       .duration(animation.duration)
@@ -176,7 +175,7 @@ class Legend extends Interface {
     const [, animation] = self.animation;
     const [transitionkey, transition] = self.transition;
 
-    D3.select(`${self.getPrefix}_${self.tokenize(d[self.accessor])}`)
+    D3.selectAll(`[id^="${self.getPrefix}_${self.tokenize(d[self.accessor])}"]`)
       .transition()
       .ease(Easing[animation.easing])
       .duration(animation.duration)

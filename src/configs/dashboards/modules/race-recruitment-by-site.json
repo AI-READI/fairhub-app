@@ -11,7 +11,7 @@
       "id": "#race-recruitment-by-site_line",
       "rotate": true,
       "width": 1080,
-      "height": 500,
+      "height": 420,
       "position": {
         "top": 0,
         "left": 0,
@@ -25,9 +25,9 @@
         "bottom": 20
       },
       "padding": {
-        "top": 0,
+        "top": 20,
         "left": 0,
-        "right": 200,
+        "right": 240,
         "bottom": 0
       },
       "transitions": {
@@ -78,7 +78,7 @@
         }
       },
       "tooltip": {
-        "title": "",
+        "title": "Data Point Details",
         "width": 720,
         "height": 140,
         "itemsize": 20,

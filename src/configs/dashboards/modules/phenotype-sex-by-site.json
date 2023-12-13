@@ -9,6 +9,7 @@
     "type": "GroupedStackedBar",
     "config": {
       "id": "#phenotype-sex-by-site_grouped-stacked-bar",
+      "rotate": true,
       "width": 1080,
       "height": 420,
       "position": {

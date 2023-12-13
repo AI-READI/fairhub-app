@@ -70,13 +70,9 @@ class GroupedStackedBarChart extends Chart {
     */
 
     // Visualization Parent
-    self.svg = self.rotate
-      ? D3.select(`${self.getID}_visualization`)
-          .classed("grouped-bar-chart isrotated", true)
-          .attr("id", `${self.setID}_visualization`)
-      : D3.select(`${self.getID}_visualization`)
-          .classed("grouped-bar-chart unrotated", true)
-          .attr("id", `${self.setID}_visualization`);
+    self.svg = D3.select(`${self.getID}_visualization`)
+      .classed("grouped-bar-chart unrotated", true)
+      .attr("id", `${self.setID}_visualization`);
 
     // Interface Parent
     self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
@@ -85,77 +81,61 @@ class GroupedStackedBarChart extends Chart {
     Generate Axes
     */
 
-    self.x = self.rotate
-      ? D3.scaleLinear()
-          .domain([self.mapping.min, self.mapping.max])
-          .range([0, self.dataframe.width])
-      : D3.scaleBand()
-          .domain(self.groups)
-          .range([0, self.dataframe.width])
-          .round(D3.enableRounding)
-          .paddingInner(0.05);
+    self.x = D3.scaleBand()
+      .domain(self.groups)
+      .range([0, self.dataframe.width])
+      .round(D3.enableRounding)
+      .paddingInner(0.05);
 
-    self.y = self.rotate
-      ? D3.scaleBand()
-          .domain(self.groups)
-          .range([self.dataframe.height, 0])
-          .round(D3.enableRounding)
-          .paddingInner(0.05)
-      : D3.scaleLinear()
-          .domain([self.mapping.min, self.mapping.max])
-          .range([self.dataframe.height, 0]);
+    self.y = D3.scaleLinear()
+      .domain([self.mapping.min, self.mapping.max])
+      .range([self.dataframe.height, 0]);
 
-    self.subgroupAxis = self.rotate
-      ? D3.scaleBand().domain(self.subgroups).range([0, self.y.bandwidth()]).padding([0.05])
-      : D3.scaleBand().domain(self.subgroups).range([0, self.x.bandwidth()]).padding([0.05]);
+    self.subgroupAxis = D3.scaleBand()
+      .domain(self.subgroups)
+      .range([0, self.x.bandwidth()])
+      .padding([0.05]);
 
-    self.xAxis = self.rotate
-      ? self.svg
-          .append("g")
-          .classed("x-axis", true)
-          .attr("id", `${self.setID}_x-axis`)
-          .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.bottom})`)
-          .call(D3.axisBottom(self.x).tickSizeOuter(0).tickPadding(8))
-      : self.svg
-          .append("g")
-          .classed("x-axis", true)
-          .attr("id", `${self.setID}_x-axis`)
-          .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.bottom})`)
-          .call(D3.axisBottom(self.x).tickSizeOuter(0).tickPadding(8));
+    self.axisGrid = self.svg
+      .append("g")
+      .classed("grid-lines", true)
+      .selectAll("line")
+      .data(self.y.ticks())
+      .join("line")
+      .classed("grid-line", true)
+      .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`)
+      .attr("x1", self.dataframe.left)
+      .attr("x2", self.dataframe.right)
+      .attr("y1", (d) => self.y(d))
+      .attr("y2", (d) => self.y(d))
+      .attr("stroke", "#DCDCDC")
+      .attr("stroke-width", 1);
 
-    self.yAxis = self.rotate
-      ? self.svg
-          .append("g")
-          .classed("y-axis", true)
-          .attr("id", `${self.setID}_y-axis_`)
-          .attr("transform", `translate(${self.dataframe.right}, ${self.dataframe.top})`)
-          .call(D3.axisRight(self.y).tickSizeOuter(0).tickPadding(4))
-      : self.svg
-          .append("g")
-          .classed("y-axis", true)
-          .attr("id", `${self.setID}_y-axis`)
-          .attr("transform", `translate(${self.dataframe.right}, ${self.dataframe.top})`)
-          .call(D3.axisRight(self.y).tickSizeOuter(0));
+    self.xAxis = self.svg
+      .append("g")
+      .classed("x-axis", true)
+      .attr("id", `${self.setID}_x-axis`)
+      .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.bottom})`)
+      .call(D3.axisBottom(self.x).tickSizeOuter(0));
 
-    self.xLabels = self.rotate
-      ? self.xAxis.selectAll("text").classed("label", true).attr("text-anchor", "start")
-      : self.xAxis
-          .selectAll(".tick")
-          .data(self.groups)
-          .attr("transform", (d) => `translate(${self.x(d)}, 0)`)
-          .selectAll("text")
-          .classed("label interactable", true)
-          .attr("id", (d) => `${self.setID}_label_${self.tokenize(d)}`);
+    self.yAxis = self.svg
+      .append("g")
+      .classed("y-axis", true)
+      .attr("id", `${self.setID}_y-axis`)
+      .attr("transform", `translate(${self.dataframe.right}, ${self.dataframe.top})`)
+      .call(D3.axisRight(self.y).tickSizeOuter(0));
 
-    self.yLabels = self.rotate
-      ? self.yAxis
-          .selectAll(".tick")
-          .data(self.groups)
-          .attr("transform", (d) => `translate(0, ${self.y(d) + self.y.bandwidth() / 2})`)
-          .selectAll("text")
-          .classed("label interactable", true)
-          .attr("id", (d) => `${self.setID}_label_${self.tokenize(d)}`)
-      : self.yAxis.selectAll("text").classed("label", true);
+    self.xLabels = self.xAxis
+      .selectAll(".tick")
+      .data(self.groups)
+      .attr("transform", (d) => `translate(${self.x(d)}, 0)`)
+      .selectAll("text")
+      .classed("label interactable", true)
+      .attr("id", (d) => `${self.setID}_label_${self.tokenize(d)}`)
+      .on("mouseover", (e, d) => self.mouseOverGroupAxis(e, d))
+      .on("mouseout", (e, d) => self.mouseOutGroupAxis(e, d));
+
+    self.yLabels = self.yAxis.selectAll("text").classed("label", true);
 
     /*
     Generate Data Elements
@@ -165,57 +145,33 @@ class GroupedStackedBarChart extends Chart {
       .append("g")
       .classed(`bars data-elements`, true)
       .attr("id", `${self.setID}_bars`)
-      .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`);
+      .attr("transform", `translate(${self.dataframe.left - 1}, ${self.dataframe.top - 1})`);
 
-    self.bargroups = self.rotate
-      ? self.bars
-          .selectAll(".bar-group")
-          .data(self.mapping.groups)
-          .join("g")
-          .classed("bar-group data-element", true)
-          .attr("id", (group) => `${self.setID}_bar-group_${self.tokenize(group)}`)
-          .attr("transform", (group) => `translate(0, ${self.y(group)})`)
-          .attr("opacity", self.transitions.opacity.from)
-          .selectAll("rect")
-          .data((group) => self.mapping.groupedstacks[group])
-          .enter()
-          .append("rect")
-          .classed("bar interactable", true)
-          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.subgroup)}`)
-          .attr("data-group", (d) => d.group)
-          .attr("x", (d) => self.x(d.from))
-          .attr("y", (d) => self.subgroupAxis(d.subgroup))
-          .attr("width", (d) => self.x(d.to) - self.x(d.from))
-          .attr("height", self.subgroupAxis.bandwidth())
-          .attr("fill", (d) => d.color)
-          .attr("opacity", self.transitions.opacity.from)
-          .text((d) => d.group)
-          .on("mouseover", (e, d) => self.mouseOverBar(e, d))
-          .on("mouseout", (e, d) => self.mouseOutBar(e, d))
-      : self.bars
-          .selectAll(".bar-group")
-          .data(self.mapping.groups)
-          .join("g")
-          .classed("bar-group data-element", true)
-          .attr("id", (group) => `${self.setID}_bar-group_${self.tokenize(group)}`)
-          .attr("transform", (group) => `translate(${self.x(group)}, 0)`)
-          .attr("opacity", self.transitions.opacity.from)
-          .selectAll("rect")
-          .data((group) => self.mapping.groupedstacks[group])
-          .enter()
-          .append("rect")
-          .classed("bar interactable", true)
-          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.subgroup)}`)
-          .attr("data-group", (d) => d.group)
-          .attr("x", (d) => self.subgroupAxis(d.subgroup))
-          .attr("y", (d) => self.y(d.to))
-          .attr("width", self.subgroupAxis.bandwidth())
-          .attr("height", (d) => self.y(d.from) - self.y(d.to))
-          .attr("fill", (d) => d.color)
-          .attr("opacity", self.transitions.opacity.from)
-          .text((d) => d.group)
-          .on("mouseover", (e, d) => self.mouseOverBar(e, d))
-          .on("mouseout", (e, d) => self.mouseOutBar(e, d));
+    self.bargroups = self.bars
+      .selectAll(".bar-group")
+      .data(self.mapping.groups)
+      .join("g")
+      .classed("bar-group data-element", true)
+      .attr("id", (group) => `${self.setID}_bar-group_${self.tokenize(group)}`)
+      .attr("transform", (group) => `translate(${self.x(group)}, 0)`)
+      .attr("opacity", self.transitions.opacity.from)
+      .selectAll("rect")
+      .data((group) => self.mapping.groupedstacks[group])
+      .enter()
+      .append("rect")
+      .classed("bar interactable", true)
+      .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.subgroup)}`)
+      .attr("data-group", (d) => d.group)
+      .attr("x", (d) => self.subgroupAxis(d.subgroup))
+      .attr("y", (d) => self.y(d.to))
+      .attr("width", self.subgroupAxis.bandwidth())
+      .attr("height", (d) => self.y(d.from) - self.y(d.to))
+      .attr("fill", (d) => d.color)
+      .attr("stroke-width", "1")
+      .attr("stroke", "white")
+      .attr("opacity", self.transitions.opacity.from)
+      .on("mouseover", (e, d) => self.mouseOverBar(e, d))
+      .on("mouseout", (e, d) => self.mouseOutBar(e, d));
 
     /*
     Legend
@@ -232,7 +188,7 @@ class GroupedStackedBarChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_bars`,
+            getPrefix: `${self.setID}_bar`,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
@@ -324,13 +280,9 @@ class GroupedStackedBarChart extends Chart {
     */
 
     // Grab SVG Generated From Vue Template
-    self.svg = self.rotate
-      ? D3.select(`${self.getID}_visualization`)
-          .classed("grouped-bar-chart isrotated", true)
-          .attr("id", `${self.setID}_visualization`)
-      : D3.select(`${self.getID}_visualization`)
-          .classed("grouped-bar-chart unrotated", true)
-          .attr("id", `${self.setID}_visualization`);
+    self.svg = D3.select(`${self.getID}_visualization`)
+      .classed("grouped-bar-chart unrotated", true)
+      .attr("id", `${self.setID}_visualization`);
 
     // Interface Parent
     self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
@@ -339,73 +291,56 @@ class GroupedStackedBarChart extends Chart {
     Generate Axes
     */
 
-    self.x = self.rotate
-      ? D3.scaleLinear()
-          .domain([self.mapping.min, self.mapping.max])
-          .range([0, self.dataframe.width])
-      : D3.scaleBand()
-          .domain(self.groups)
-          .range([0, self.dataframe.width])
-          .round(D3.enableRounding)
-          .paddingInner(0.05);
+    self.x = D3.scaleBand()
+      .domain(self.groups)
+      .range([0, self.dataframe.width])
+      .round(D3.enableRounding)
+      .paddingInner(0.05);
 
-    self.y = self.rotate
-      ? D3.scaleBand()
-          .domain(self.groups)
-          .range([self.dataframe.height, 0])
-          .round(D3.enableRounding)
-          .paddingInner(0.05)
-      : D3.scaleLinear()
-          .domain([self.mapping.min, self.mapping.max])
-          .range([self.dataframe.height, 0]);
+    self.y = D3.scaleLinear()
+      .domain([self.mapping.min, self.mapping.max])
+      .range([self.dataframe.height, 0]);
 
-    self.xAxis = self.rotate
-      ? self.svg
-          .append("g")
-          .classed("axis x-axis", true)
-          .attr("id", `${self.setID}_x-axis`)
-          .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.bottom})`)
-          .call(D3.axisBottom(self.x).tickSizeOuter(0))
-      : self.svg
-          .append("g")
-          .classed("axis x-axis", true)
-          .attr("id", `${self.setID}_x-axis`)
-          .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.bottom})`)
-          .call(D3.axisBottom(self.x).tickSizeOuter(0));
+    self.axisGrid = self.svg
+      .append("g")
+      .classed("grid-lines", true)
+      .selectAll("line")
+      .data(self.y.ticks())
+      .join("line")
+      .classed("grid-line", true)
+      .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`)
+      .attr("x1", self.dataframe.left)
+      .attr("x2", self.dataframe.right)
+      .attr("y1", (d) => self.y(d))
+      .attr("y2", (d) => self.y(d))
+      .attr("stroke", "#DCDCDC")
+      .attr("stroke-width", 1);
 
-    self.yAxis = self.rotate
-      ? self.svg
-          .append("g")
-          .classed("axis y-axis", true)
-          .attr("id", `${self.setID}_y-axis_`)
-          .attr("transform", `translate(${self.dataframe.right}, ${self.dataframe.top})`)
-          .call(D3.axisRight(self.y).tickSizeOuter(0))
-      : self.svg
-          .append("g")
-          .classed("axis y-axis", true)
-          .attr("id", `${self.setID}_y-axis`)
-          .attr("transform", `translate(${self.dataframe.right}, ${self.dataframe.top})`)
-          .call(D3.axisRight(self.y).tickSizeOuter(0));
+    self.xAxis = self.svg
+      .append("g")
+      .classed("axis x-axis", true)
+      .attr("id", `${self.setID}_x-axis`)
+      .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.bottom})`)
+      .call(D3.axisBottom(self.x).tickSizeOuter(0));
 
-    self.xLabels = self.rotate
-      ? self.xAxis.selectAll("text").classed("label", true).attr("text-anchor", "start")
-      : self.xAxis
-          .selectAll(".tick")
-          .data(self.groups)
-          .attr("transform", (d) => `translate(${self.x(d) + 1}, 0)`)
-          .selectAll("text")
-          .classed("label interactable", true)
-          .attr("id", (d) => `${self.setID}_label_${self.tokenize(d)}`);
+    self.yAxis = self.svg
+      .append("g")
+      .classed("axis y-axis", true)
+      .attr("id", `${self.setID}_y-axis`)
+      .attr("transform", `translate(${self.dataframe.right}, ${self.dataframe.top})`)
+      .call(D3.axisRight(self.y).tickSizeOuter(0));
 
-    self.yLabels = self.rotate
-      ? self.yAxis
-          .selectAll(".tick")
-          .data(self.groups)
-          .attr("transform", (d) => `translate(0, ${self.y(d) + self.y.bandwidth() / 2})`)
-          .selectAll("text")
-          .classed("label interactable", true)
-          .attr("id", (d) => `${self.setID}_label_${self.tokenize(d)}`)
-      : self.yAxis.selectAll("text").classed("label", true);
+    self.xLabels = self.xAxis
+      .selectAll(".tick")
+      .data(self.groups)
+      .attr("transform", (d) => `translate(${self.x(d) + 1}, 0)`)
+      .selectAll("text")
+      .classed("label interactable", true)
+      .attr("id", (d) => `${self.setID}_label_${self.tokenize(d)}`)
+      .on("mouseover", (e, d) => self.mouseOverGroupAxis(e, d))
+      .on("mouseout", (e, d) => self.mouseOutGroupAxis(e, d));
+
+    self.yLabels = self.yAxis.selectAll("text").classed("label", true);
 
     /*
     Generate Data Elements
@@ -415,57 +350,33 @@ class GroupedStackedBarChart extends Chart {
       .append("g")
       .classed(`bars data-elements`, true)
       .attr("id", `${self.setID}_bars`)
-      .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`);
+      .attr("transform", `translate(${self.dataframe.left - 1}, ${self.dataframe.top - 1})`);
 
-    self.bargroups = self.rotate
-      ? self.bars
-          .selectAll(".bar-group")
-          .data(self.mapping.groups)
-          .join("g")
-          .classed("bar-group data-element", true)
-          .attr("id", (group) => `${self.setID}_bar-group_${self.tokenize(group)}`)
-          .attr("transform", (group) => `translate(0, ${self.y(group)})`)
-          .attr("opacity", self.transitions.opacity.from)
-          .selectAll("rect")
-          .data((group) => self.mapping.groupedstacks[group])
-          .enter()
-          .append("rect")
-          .classed("bar interactable", true)
-          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.subgroup)}`)
-          .attr("data-group", (d) => d.group)
-          .attr("x", (d) => self.x(d.from))
-          .attr("y", (d) => self.subgroupAxis(d.subgroup))
-          .attr("width", (d) => self.x(d.to) - self.x(d.from))
-          .attr("height", self.subgroupAxis.bandwidth())
-          .attr("fill", (d) => d.color)
-          .attr("opacity", self.transitions.opacity.from)
-          .text((d) => d.group)
-          .on("mouseover", (e, d) => self.mouseOverBar(e, d))
-          .on("mouseout", (e, d) => self.mouseOutBar(e, d))
-      : self.bars
-          .selectAll(".bar-group")
-          .data(self.mapping.groups)
-          .join("g")
-          .classed("bar-group data-element", true)
-          .attr("id", (group) => `${self.setID}_bar-group_${self.tokenize(group)}`)
-          .attr("transform", (group) => `translate(${self.x(group)}, 0)`)
-          .attr("opacity", self.transitions.opacity.from)
-          .selectAll("rect")
-          .data((group) => self.mapping.groupedstacks[group])
-          .enter()
-          .append("rect")
-          .classed("bar interactable", true)
-          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.subgroup)}`)
-          .attr("data-group", (d) => d.group)
-          .attr("x", (d) => self.subgroupAxis(d.subgroup))
-          .attr("y", (d) => self.y(d.to))
-          .attr("width", self.subgroupAxis.bandwidth())
-          .attr("height", (d) => self.y(d.from) - self.y(d.to))
-          .attr("fill", (d) => d.color)
-          .attr("opacity", self.transitions.opacity.from)
-          .text((d) => d.group)
-          .on("mouseover", (e, d) => self.mouseOverBar(e, d))
-          .on("mouseout", (e, d) => self.mouseOutBar(e, d));
+    self.bargroups = self.bars
+      .selectAll(".bar-group")
+      .data(self.mapping.groups)
+      .join("g")
+      .classed("bar-group data-element", true)
+      .attr("id", (group) => `${self.setID}_bar-group_${self.tokenize(group)}`)
+      .attr("transform", (group) => `translate(${self.x(group)}, 0)`)
+      .attr("opacity", self.transitions.opacity.from)
+      .selectAll("rect")
+      .data((group) => self.mapping.groupedstacks[group])
+      .enter()
+      .append("rect")
+      .classed("bar interactable", true)
+      .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.subgroup)}`)
+      .attr("data-group", (d) => d.group)
+      .attr("x", (d) => self.subgroupAxis(d.subgroup))
+      .attr("y", (d) => self.y(d.to))
+      .attr("width", self.subgroupAxis.bandwidth())
+      .attr("height", (d) => self.y(d.from) - self.y(d.to))
+      .attr("fill", (d) => d.color)
+      .attr("stroke-width", "1")
+      .attr("stroke", "white")
+      .attr("opacity", self.transitions.opacity.from)
+      .on("mouseover", (e, d) => self.mouseOverBar(e, d))
+      .on("mouseout", (e, d) => self.mouseOutBar(e, d));
 
     /*
     Legend
@@ -481,7 +392,7 @@ class GroupedStackedBarChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_bars`,
+            getPrefix: `${self.setID}_bar`,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
@@ -560,6 +471,7 @@ class GroupedStackedBarChart extends Chart {
     // Clear Visualization Components
     self.xLabels.remove();
     self.yLabels.remove();
+    self.axisGrid.remove();
     self.xAxis.remove();
     self.yAxis.remove();
     self.bargroups.remove();
@@ -576,11 +488,11 @@ class GroupedStackedBarChart extends Chart {
   Event Handlers
   */
 
-  mouseOverSubgroupAxis(e, subgroup) {
+  mouseOverGroupAxis(e, group) {
     const self = this;
 
     // Highlight Selected Axis Group
-    D3.select(`${self.setID}_bar_${self.tokenize(subgroup)}`)
+    D3.selectAll(`${self.getID}_bar-group_${self.tokenize(group)} .bar`)
       .transition()
       .ease(Easing[self.animations.opacity.easing])
       .duration(self.animations.opacity.duration)
@@ -589,11 +501,11 @@ class GroupedStackedBarChart extends Chart {
     return self;
   }
 
-  mouseOutSubgroupAxis() {
+  mouseOutGroupAxis() {
     const self = this;
 
     // Return All Bars to Unhighlighted State
-    D3.selectAll(`${self.getID}_visualization .bars .bar`)
+    D3.selectAll(`${self.getID}_visualization .bar-group .bar`)
       .transition()
       .ease(Easing[self.animations.opacity.easing])
       .duration(self.animations.opacity.duration)
@@ -728,7 +640,6 @@ class GroupedStackedBarChart extends Chart {
       };
     });
 
-    console.log(groupedstacks);
     return {
       colors: colors,
       data: data,
