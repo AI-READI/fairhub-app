@@ -26,6 +26,7 @@ onBeforeMount(() => {
 });
 
 onBeforeUnmount(() => {
+  // Even though this is not necessary, it's good practice to clear intervals when the component is unmounted.
   clearInterval(interval.value);
 });
 

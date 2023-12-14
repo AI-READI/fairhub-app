@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth";
+import { User } from "@/types/User";
 import { baseURL } from "@/utils/constants";
 
 const push = usePush();
@@ -81,7 +82,7 @@ const signIn = (e: MouseEvent) => {
         }
       }
 
-      const data = await response.json();
+      const data: User = await response.json();
 
       if (!data) {
         console.log("error");
@@ -97,7 +98,7 @@ const signIn = (e: MouseEvent) => {
       authStore.saveUserInformation(data);
       authStore.setIsAuthenticated(true);
 
-      const email_verified = data.user.email_verified || false;
+      const email_verified = data.email_verified || false;
 
       if (!email_verified) {
         push.error({
