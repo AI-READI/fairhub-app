@@ -69,25 +69,39 @@ const sendInvitation = (e: MouseEvent) => {
 
 <template>
   <main>
-    <h1 class="flex items-center">Invite a new contributor</h1>
+    <h1 class="mb-8 flex justify-center">Invite a new contributor</h1>
 
-    <n-form ref="formRef" inline :model="formValue" :rules="rules" size="large">
-      <n-form-item label="Email Address" path="email" class="mt-5">
-        <n-input
-          v-model:value="formValue.email"
-          placeholder="someone@email.org"
-          class="!w-[350px]"
-        />
-      </n-form-item>
+    <n-card>
+      <n-form
+        ref="formRef"
+        inline
+        :model="formValue"
+        class="align-center flex justify-center"
+        :rules="rules"
+        size="large"
+      >
+        <n-form-item label="Email Address" path="email" class="mt-5">
+          <n-input
+            v-model:value="formValue.email"
+            placeholder="someone@email.org"
+            class="!w-[350px]"
+          />
+        </n-form-item>
 
-      <n-form-item class="mt-5">
-        <n-button size="large" type="primary" @click="sendInvitation" :loading="invitationLoading">
-          <template #icon>
-            <f-icon icon="mingcute:invite-fill" />
-          </template>
-          Send Invitation
-        </n-button>
-      </n-form-item>
-    </n-form>
+        <n-form-item class="mt-5">
+          <n-button
+            size="large"
+            type="primary"
+            @click="sendInvitation"
+            :loading="invitationLoading"
+          >
+            <template #icon>
+              <f-icon icon="mingcute:invite-fill" />
+            </template>
+            Send Invitation
+          </n-button>
+        </n-form-item>
+      </n-form>
+    </n-card>
   </main>
 </template>
