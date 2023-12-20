@@ -7,6 +7,7 @@ import { timezones } from "@/utils/constants";
 
 const loading = ref(false);
 const push = usePush();
+const router = useRouter();
 
 const userFormRef = ref<FormInst | null>(null);
 const passwordFormRef = ref<FormInst | null>(null);
@@ -65,6 +66,10 @@ const passwordRules: FormRules = {
       // Validate value has at least 1 special character
       if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value)) {
         return new Error("Password must contain at least 1 special character");
+      }
+      // Validate value does not match old password
+      if (value === passwordForm.value.old_password) {
+        return new Error("New password cannot match old password");
       }
       return true;
     },
@@ -146,7 +151,14 @@ const updatePassword = (e: MouseEvent) => {
         push.error("Something went wrong, please try again later");
         throw new Error("Password error");
       }
-      push.success("Password Updated");
+      push.success({
+        title: "Password Updated",
+        message: "Taking you to the login page",
+      });
+
+      setTimeout(() => {
+        router.push("/auth/logout");
+      }, 1500);
     } else {
       console.log("There was an error");
       console.log(errors);
