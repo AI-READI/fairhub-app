@@ -138,7 +138,7 @@ const updatePassword = (e: MouseEvent) => {
 
       const response = await fetch(`${baseURL}/auth/password/change`, {
         body: JSON.stringify(passwordForm.value),
-        method: "PUT",
+        method: "POST",
       });
 
       loading.value = false;
