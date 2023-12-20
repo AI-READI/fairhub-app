@@ -143,7 +143,7 @@ const saveMetadata = (e: MouseEvent) => {
         of `Diabetes` yields `Diabetes dataset`.
       </p>
 
-      <n-form-item label="Name" path="resource_type" show-require-mark>
+      <n-form-item label="Name" path="resource_type">
         <n-input v-model:value="moduleData.resource_type" placeholder="Diabetes" clearable />
       </n-form-item>
 
