@@ -79,7 +79,7 @@ const saveMetadata = (e: MouseEvent) => {
       const data = {
         acknowledgement: moduleData.value.acknowledgement || "",
         language: moduleData.value.language || "",
-        resource_type: moduleData.value.resource_type || "",
+        resource_type: moduleData.value.resource_type,
         size: uniqueSizes,
         standards_followed: moduleData.value.standards_followed,
       };
@@ -125,12 +125,6 @@ const saveMetadata = (e: MouseEvent) => {
       }"
     />
 
-    <n-divider />
-
-    <h3>Language</h3>
-
-    <p class="pb-8 pt-2">The primary language used in the dataset.</p>
-
     <n-form
       ref="formRef"
       :model="moduleData"
@@ -139,16 +133,6 @@ const saveMetadata = (e: MouseEvent) => {
       label-placement="top"
       class="pr-4"
     >
-      <n-form-item label="Publisher" path="publisher">
-        <n-select
-          v-model:value="moduleData.language"
-          placeholder="Not Known"
-          clearable
-          filterable
-          :options="languageOptions"
-        />
-      </n-form-item>
-
       <n-divider />
 
       <h3>Resource Type</h3>
@@ -159,12 +143,28 @@ const saveMetadata = (e: MouseEvent) => {
         of `Diabetes` yields `Diabetes dataset`.
       </p>
 
-      <n-form-item label="Name" path="managing_organization_name">
+      <n-form-item label="Name" path="resource_type">
         <n-input v-model:value="moduleData.resource_type" placeholder="Diabetes" clearable />
       </n-form-item>
 
       <n-form-item label="Type">
         <n-input value="Dataset" disabled clearable />
+      </n-form-item>
+
+      <n-divider />
+
+      <h3>Language</h3>
+
+      <p class="pb-8 pt-2">The primary language used in the dataset.</p>
+
+      <n-form-item label="Publisher" path="publisher">
+        <n-select
+          v-model:value="moduleData.language"
+          placeholder="Not Known"
+          clearable
+          filterable
+          :options="languageOptions"
+        />
       </n-form-item>
 
       <n-divider />
@@ -206,7 +206,7 @@ const saveMetadata = (e: MouseEvent) => {
         documentation.
       </p>
 
-      <n-form-item label="Name" path="managing_organization_name">
+      <n-form-item label="Name" path="standards_followed">
         <n-input
           v-model:value="moduleData.standards_followed"
           placeholder="Lorem "
@@ -224,9 +224,9 @@ const saveMetadata = (e: MouseEvent) => {
         ACKNOWLEDGEMENT.txt file for additional details).
       </p>
 
-      <n-form-item label="Name" path="managing_organization_name">
+      <n-form-item label="Name" path="acknowledgement">
         <n-input
-          v-model:value="moduleData.standards_followed"
+          v-model:value="moduleData.acknowledgement"
           placeholder="Lorem "
           clearable
           type="textarea"

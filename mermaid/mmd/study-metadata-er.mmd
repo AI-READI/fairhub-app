@@ -98,8 +98,7 @@ erDiagram
     STUDY_CONTACT {
         string id PK "UUIDv4"
         string study_id FK "STUDY.id"
-        string first_name
-        string last_name
+        string name
         string affiliation
         string phone
         string phone_ext
@@ -112,8 +111,7 @@ erDiagram
     STUDY_OVERALL_OFFICIAL {
         string id PK "UUIDv4"
         string study_id FK "STUDY.id"
-        string first_name
-        string last_name
+        string name
         string affiliation
         string role "NULLABLE"
         timestamp created_at
@@ -145,7 +143,6 @@ erDiagram
         string id PK "UUIDv4"
         string study_id FK "STUDY.id"
         string identifier 
-        string title 
         string type "NULLABLE"
         string citation
         timestamp created_at
