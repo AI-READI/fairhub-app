@@ -2,12 +2,14 @@
 import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
+import licensesJSON from "@/assets/data/licenses.json";
 import type { DatasetRights } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const push = usePush();
+console.log(licensesJSON);
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
@@ -142,6 +144,14 @@ const saveMetadata = (e: MouseEvent) => {
     <n-divider />
 
     <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
+      <n-form-item label="Rights" path="rights">
+        <n-select
+          v-model:value="moduleData.rights"
+          placeholder="MIT License Modern Variant."
+          clearable
+          :options="licensesJSON"
+        />
+      </n-form-item>
       <!-- <CollapsibleCard
         v-for="(item, index) in moduleData.rights"
         :key="item.id"
