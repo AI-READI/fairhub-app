@@ -14,11 +14,11 @@ const props = defineProps({
   },
 });
 
-const slots = useSlots();
+// const slots = useSlots();
 
-const hasHeaderExtra = computed(() => {
-  return !!slots["header-extra"];
-});
+// const hasHeaderExtra = computed(() => {
+//   return !!slots["header-extra"];
+// });
 
 const collapseContent = ref(false);
 
