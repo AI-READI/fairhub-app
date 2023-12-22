@@ -87,7 +87,7 @@ const saveMetadata = (e: MouseEvent) => {
       />
 
       <n-form-item v-for="(keyword, index) in moduleData" :key="index" label="Name" path="keywords">
-        <n-input v-model:value="moduleData[index]" placeholder="Diabetes" />
+        <n-input v-model:value="moduleData[index]" placeholder="Biomedical science" />
 
         <n-popconfirm @positive-click="removeKeyword(index)">
           <template #trigger>
