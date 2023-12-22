@@ -142,7 +142,7 @@ const saveMetadata = (e: MouseEvent) => {
     <n-divider />
 
     <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
-      <CollapsibleCard
+      <!-- <CollapsibleCard
         v-for="(item, index) in moduleData.rights"
         :key="item.id"
         class="mb-5 shadow-md"
@@ -204,7 +204,7 @@ const saveMetadata = (e: MouseEvent) => {
         </template>
 
         Add a new right
-      </n-button>
+      </n-button> -->
 
       <n-divider />
 
