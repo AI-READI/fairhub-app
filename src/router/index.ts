@@ -57,6 +57,7 @@ import StudyLocations from "@/views/study/metadata/enrollment/locations/StudyLoc
 import StudyOfficials from "@/views/study/metadata/enrollment/officials/StudyOfficials.vue";
 import StudyIdentification from "@/views/study/metadata/identification/StudyIdentification.vue";
 import StudyIPDSharing from "@/views/study/metadata/ipdsharing/StudyIPDSharing.vue";
+import StudyKeywords from "@/views/study/metadata/keywords/StudyKeywords.vue";
 import StudyOversight from "@/views/study/metadata/oversight/StudyOversight.vue";
 import StudyAvailableIPD from "@/views/study/metadata/references/availableipd/StudyAvailableIPD.vue";
 import StudyLinks from "@/views/study/metadata/references/links/StudyLinks.vue";
@@ -375,6 +376,11 @@ const router = createRouter({
               name: "study:metadata:conditions",
               path: "conditions",
               component: StudyConditions,
+            },
+            {
+              name: "study:metadata:keywords",
+              path: "keywords",
+              component: StudyKeywords,
             },
             {
               name: "study:metadata:design",

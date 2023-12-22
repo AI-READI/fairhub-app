@@ -95,6 +95,11 @@ const UpperMenuOptions = computed(() => [
         label: "Conditions",
       },
       {
+        icon: renderIcon("codicon:symbol-keyword"),
+        key: "study:metadata:keywords",
+        label: "Keywords",
+      },
+      {
         icon: renderIcon("iconoir:design-pencil"),
         key: "study:metadata:design",
         label: "Design",
