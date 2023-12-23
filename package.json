@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.15",
+    "@kangc/v-md-editor": "^2.3.18",
     "@vavt/md-editor-extension": "^3.0.0",
     "@vueuse/core": "^10.4.1",
     "axios": "^1.5.1",

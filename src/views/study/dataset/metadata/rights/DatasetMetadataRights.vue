@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
+import loading from "naive-ui/es/_internal/loading";
 import { nanoid } from "nanoid";
 
 import licensesJSON from "@/assets/data/licenses.json";
@@ -9,7 +10,8 @@ import { baseURL } from "@/utils/constants";
 const route = useRoute();
 const router = useRouter();
 const push = usePush();
-console.log(licensesJSON);
+const displayLicenseEditor = ref(false);
+const draftLicense = ref("");
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
@@ -75,6 +77,7 @@ const addSubject = () => {
     id: nanoid(),
     identifier: "",
     identifier_scheme: "",
+    license_text: "",
     origin: "local",
     rights: "",
     uri: "",
@@ -89,6 +92,7 @@ const saveMetadata = (e: MouseEvent) => {
         const entry = {
           identifier: item.identifier || "",
           identifier_scheme: item.identifier_scheme || "",
+          license_text: item.license_text || "",
           rights: item.rights,
           uri: item.uri || "",
         };
@@ -130,6 +134,48 @@ const saveMetadata = (e: MouseEvent) => {
     }
   });
 };
+
+const updateLicense = async (value: string) => {
+  console.log("updateLicense");
+  loading.value = true;
+  const license = licensesJSON.find((item) => item.name === value);
+
+  if (license) {
+    // if (moduleData.rights.length === 0) {
+    //   moduleData.rights.push({
+    //     id: nanoid(),
+    //     identifier: license.licenseId,
+    //     identifier_scheme: "SPDX",
+    //     rights: license.name,
+    //     uri: license.reference,
+    //   });
+    // }
+    // moduleData.rights[0].rights = license.name;
+    // moduleData.rights[0].uri = license.reference;
+    // moduleData.rights[0].identifier = license.licenseId;
+    // moduleData.rights[0].identifier_scheme = "SPDX";
+
+    const response = await fetch(
+      `${baseURL}/utils/requestjson?url=${encodeURIComponent(license.detailsUrl)}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "GET",
+      }
+    );
+
+    if (response.ok) {
+      const response_data = await response.json();
+      // console.log(response_data);
+      draftLicense.value = response_data.licenseText;
+      displayLicenseEditor.value = true;
+      loading.value = false;
+    } else {
+      console.error("Failed to fetch license details:", response.status, response.statusText);
+    }
+  }
+};
 </script>
 
 <template>
@@ -149,9 +195,19 @@ const saveMetadata = (e: MouseEvent) => {
           v-model:value="moduleData.rights"
           placeholder="MIT License Modern Variant."
           clearable
-          :options="licensesJSON"
+          :options="licensesJSON.map((option) => ({ label: option.name, value: option.name }))"
+          @update:value="updateLicense"
         />
       </n-form-item>
+
+      <div v-if="displayLicenseEditor" class="pb-5">
+        <v-md-editor
+          v-model="draftLicense"
+          height="400px"
+          left-toolbar="undo redo clear | h bold italic strikethrough | ul ol table hr | link"
+          right-toolbar="sync-scroll preview fullscreen"
+        ></v-md-editor>
+      </div>
       <!-- <CollapsibleCard
         v-for="(item, index) in moduleData.rights"
         :key="item.id"
