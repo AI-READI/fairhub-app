@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { config, MdEditor } from "md-editor-v3";
 import type { FormInst } from "naive-ui";
 import loading from "naive-ui/es/_internal/loading";
 import { nanoid } from "nanoid";
@@ -6,6 +7,24 @@ import { nanoid } from "nanoid";
 import licensesJSON from "@/assets/data/licenses.json";
 import type { DatasetRights } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
+import { sanitize } from "@/utils/helpers";
+import TargetBlankExtension from "@/utils/TargetBlankExtension";
+
+config({
+  editorConfig: {
+    languageUserDefined: {
+      "en-US": {
+        footer: {
+          markdownTotal: "Character Count",
+          scrollAuto: "Scroll Auto",
+        },
+      },
+    },
+  },
+  markdownItConfig(md) {
+    md.use(TargetBlankExtension);
+  },
+});
 
 const route = useRoute();
 const router = useRouter();
@@ -225,12 +244,19 @@ const updateLicense = async (value: string) => {
       </n-form-item>
 
       <div v-if="displayLicenseEditor" class="pb-5">
-        <v-md-editor
+        <MdEditor
+          v-model="draftLicense"
+          language="en-US"
+          preview-theme="github"
+          :show-code-row-number="true"
+          :sanitize="sanitize"
+        />
+        <!-- <v-md-editor
           v-model="draftLicense"
           height="800px"
           left-toolbar="undo redo clear | h bold italic strikethrough | ul ol table hr | link"
           right-toolbar="sync-scroll preview fullscreen"
-        ></v-md-editor>
+        ></v-md-editor> -->
       </div>
       <!-- <CollapsibleCard
         v-for="(item, index) in moduleData.rights"
