@@ -95,6 +95,11 @@ const UpperMenuOptions = computed(() => [
         label: "Conditions",
       },
       {
+        icon: renderIcon("codicon:symbol-keyword"),
+        key: "study:metadata:keywords",
+        label: "Keywords",
+      },
+      {
         icon: renderIcon("iconoir:design-pencil"),
         key: "study:metadata:design",
         label: "Design",
@@ -390,7 +395,7 @@ const selectAndExpand = (key: string) => {
   menuInstRef.value?.showOption(key);
 };
 
-router.beforeEach((to, from) => {
+router.beforeEach((to) => {
   if (typeof to.name !== "string") return;
   const name: string = to.meta && to.meta.menuItem ? (to.meta.menuItem as string) : to.name;
   selectAndExpand(name);
