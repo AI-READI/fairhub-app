@@ -12,6 +12,7 @@ export const useAuthStore = defineStore(
       id: "",
       username: "",
       email_address: "",
+      email_verified: false,
       first_name: "",
       last_name: "",
     });
@@ -61,6 +62,7 @@ export const useAuthStore = defineStore(
           id: "",
           username: "",
           email_address: "",
+          email_verified: false,
           first_name: "",
           last_name: "",
         };
@@ -80,6 +82,7 @@ export const useAuthStore = defineStore(
         id: "",
         username: "",
         email_address: "",
+        email_verified: false,
         first_name: "",
         last_name: "",
       };

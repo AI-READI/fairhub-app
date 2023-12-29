@@ -13,6 +13,7 @@ export interface User {
   id: string;
   username: string;
   email_address: string;
+  email_verified: boolean;
   first_name: string;
   last_name: string;
 }
