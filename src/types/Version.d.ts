@@ -13,13 +13,14 @@ export interface VersionStudyMetadata {
   arms: VersionStudyArm[];
   available_ipd: VersionStudyIPD[];
   collaborators: VersionStudyCollaborator[];
-  conditions: string;
+  conditions: string[];
   contacts: VersionStudyContact[];
   description: VersionStudyDescription;
   design: VersionDesign;
   eligibility: VersionStudyEligibility;
   interventions: VersionStudyIntervention[];
   ipd_sharing: VersionStudyIPDSharing;
+  keywords: string[];
   links: VersionStudyLink[];
   locations: VersionStudyLocation[];
   overall_officials: VersionStudyOverallOfficial[];
