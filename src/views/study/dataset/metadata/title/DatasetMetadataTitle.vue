@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 import FORM_JSON from "@/assets/data/form.json";
 import LottieLoader from "@/components/loader/LottieLoader.vue";
 import FadeTransition from "@/components/transitions/FadeTransition.vue";
+import { getBackParams, getBackRoute } from "@/stores/nav";
 import type { DatasetTitles } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
@@ -146,8 +147,8 @@ const saveMetadata = (e: MouseEvent) => {
     <PageBackNavigationHeader
       title="Titles"
       description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-      linkName="dataset:overview"
-      :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
+      :linkName="getBackRoute()"
+      :linkParams="getBackParams()"
     />
 
     <n-divider />

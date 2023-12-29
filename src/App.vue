@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import type { GlobalThemeOverrides } from "naive-ui";
 import { materialTheme, Notifications, Notivue } from "notivue";
+import { useRouter } from "vue-router";
 
+import { current_route, prev_route } from "@/stores/nav";
 import { theme } from "@/stores/settings";
 
+const router = useRouter();
 const themeOverrides: GlobalThemeOverrides = {
   Button: {},
   Form: {
@@ -11,6 +14,12 @@ const themeOverrides: GlobalThemeOverrides = {
     labelFontWeight: "600",
   },
 };
+
+router.beforeEach((to, from) => {
+  if (typeof from.name !== "string") return;
+  prev_route.value = !to.query?._clear ? from : null;
+  current_route.value = to;
+});
 </script>
 
 <template>

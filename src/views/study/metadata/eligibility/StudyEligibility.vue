@@ -2,6 +2,7 @@
 import type { FormInst, FormRules } from "naive-ui";
 
 import FORM_JSON from "@/assets/data/form.json";
+import { getBackParams, getBackRoute } from "@/stores/nav";
 import type { StudyEligiblityModule } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
@@ -173,10 +174,8 @@ const saveMetadata = (e: MouseEvent) => {
     <PageBackNavigationHeader
       title="Eligibility"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
-      linkName="study:overview"
-      :linkParams="{
-        studyId: route.params.studyId,
-      }"
+      :linkName="getBackRoute()"
+      :linkParams="getBackParams()"
     />
 
     <n-divider />

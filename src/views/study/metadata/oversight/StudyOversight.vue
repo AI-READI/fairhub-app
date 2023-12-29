@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getBackParams, getBackRoute } from "@/stores/nav";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
@@ -51,10 +52,8 @@ const saveMetadata = async (value: boolean) => {
     <PageBackNavigationHeader
       title="Oversight"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
-      linkName="study:overview"
-      :linkParams="{
-        studyId: route.params.studyId,
-      }"
+      :linkName="getBackRoute()"
+      :linkParams="getBackParams()"
     />
 
     <n-divider />

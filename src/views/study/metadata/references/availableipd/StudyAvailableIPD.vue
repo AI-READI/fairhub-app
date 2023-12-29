@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
 import CollapsibleCard from "@/components/cards/CollapsibleCard.vue";
+import { getBackParams, getBackRoute } from "@/stores/nav";
 import type { StudyIPDs } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
@@ -127,10 +128,8 @@ const saveMetadata = (e: MouseEvent) => {
     <PageBackNavigationHeader
       title="Available IPD"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
-      linkName="study:overview"
-      :linkParams="{
-        studyId: route.params.studyId,
-      }"
+      :linkName="getBackRoute()"
+      :linkParams="getBackParams()"
     />
 
     <n-divider />
