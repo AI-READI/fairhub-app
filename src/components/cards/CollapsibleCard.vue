@@ -14,11 +14,11 @@ const props = defineProps({
   },
 });
 
-// const slots = useSlots();
+const slots = useSlots();
 
-// const hasHeaderExtra = computed(() => {
-//   return !!slots["header-extra"];
-// });
+const hasHeaderExtra = computed(() => {
+  return !!slots["header-extra"];
+});
 
 const collapseContent = ref(false);
 
@@ -40,7 +40,6 @@ const toggleCollapse = () => {
         <slot name="header-extra"></slot>
 
         <n-divider vertical v-if="hasHeaderExtra" class="!mx-3" />
-
 
         <n-button text class="pl-5 text-3xl" type="info" @click="toggleCollapse">
           <f-icon icon="fluent:arrow-minimize-vertical-24-filled" />
