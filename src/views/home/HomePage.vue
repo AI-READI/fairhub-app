@@ -77,20 +77,14 @@ const statistics = ref([
             Share Data
           </n-button>
 
-          <n-popover trigger="hover" :keep-alive-on-hover="false" placement="bottom">
-            <template #trigger>
-              <a href="https://access.fairhub.io">
-                <n-button type="info" @click="navigateToStudies" size="large" disabled>
-                  <template #icon>
-                    <f-icon icon="material-symbols:public" />
-                  </template>
-                  View Published Datasets
-                </n-button>
-              </a>
-            </template>
-
-            <span>Coming soon...</span>
-          </n-popover>
+          <a href="https://staging.data.fairhub.io">
+            <n-button type="info" size="large">
+              <template #icon>
+                <f-icon icon="material-symbols:public" />
+              </template>
+              View Published Datasets
+            </n-button>
+          </a>
         </div>
       </div>
 
@@ -169,20 +163,14 @@ const statistics = ref([
         </p>
 
         <div class="flex w-max space-x-4 pt-4">
-          <n-popover trigger="hover" :keep-alive-on-hover="false" placement="bottom">
-            <template #trigger>
-              <a href="https://access.fairhub.io">
-                <n-button type="info" @click="navigateToStudies" size="large" disabled>
-                  <template #icon>
-                    <f-icon icon="material-symbols:public" />
-                  </template>
-                  View Published Datasets
-                </n-button>
-              </a>
-            </template>
-
-            <span>Coming soon...</span>
-          </n-popover>
+          <a href="https://staging.data.fairhub.io">
+            <n-button type="info" size="large">
+              <template #icon>
+                <f-icon icon="material-symbols:public" />
+              </template>
+              View Published Datasets
+            </n-button>
+          </a>
         </div>
       </div>
     </section>
