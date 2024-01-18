@@ -1,4 +1,4 @@
-name: Build frontend and deploy to staging environment (yellow-field-0808cd610)
+name: Build frontend and deploy to staging environment (witty-mushroom-03791f510)
 
 on:
   push:
@@ -19,12 +19,11 @@ jobs:
         with:
           submodules: true
           lfs: false
-
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_YELLOW_FIELD_0808CD610 }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WITTY_MUSHROOM_03791F510 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
@@ -34,7 +33,7 @@ jobs:
           output_location: "dist" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
         env:
-          VITE_FAIRHUB_API_URL: 'https://staging.api.fairhub.io'
+          VITE_FAIRHUB_API_URL: "https://staging.api.fairhub.io"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -45,6 +44,6 @@ jobs:
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_YELLOW_FIELD_0808CD610 }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WITTY_MUSHROOM_03791F510 }}
           action: "close"
           app_location: "/" # App source code path
