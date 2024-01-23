@@ -7,7 +7,7 @@ import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
-const message = useMessage();
+const push = usePush();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -49,11 +49,11 @@ const removeLink = async (id: string) => {
     });
 
     if (!response.ok) {
-      message.error("Failed to delete link");
+      push.error("Failed to delete link");
       throw new Error("Network response was not ok");
     }
 
-    message.success("Link deleted successfully");
+    push.success("Link deleted successfully");
   }
 
   moduleData.link_list = moduleData.link_list.filter((item) => item.id !== id);
@@ -94,10 +94,10 @@ const saveMetadata = (e: MouseEvent) => {
       });
 
       if (!response.ok) {
-        message.error("Something went wrong.");
+        push.error("Something went wrong.");
         return;
       } else {
-        message.success("Study updated successfully.");
+        push.success("Study updated successfully.");
 
         // refresh page
         router.go(0);

@@ -7,7 +7,7 @@ import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
-const message = useMessage();
+const push = usePush();
 
 const apiLoading = ref(false);
 
@@ -32,7 +32,7 @@ const moduleData = reactive<StudyEligiblityModule>({
   },
   sampling_method: null,
   study_population: "",
-  study_type: "observational",
+  study_type: "Observational",
 });
 
 const rules: FormRules = {
@@ -151,11 +151,11 @@ const saveMetadata = (e: MouseEvent) => {
       );
 
       if (!response.ok) {
-        message.error("Something went wrong. Please try again later.");
+        push.error("Something went wrong. Please try again later.");
 
         throw new Error("Network response was not ok");
       } else {
-        message.success("Study updated successfully.");
+        push.success("Study updated successfully.");
 
         // refresh page
         router.go(0);
@@ -416,7 +416,7 @@ const saveMetadata = (e: MouseEvent) => {
             </n-dynamic-input>
           </n-form-item>
 
-          <div v-if="moduleData.study_type === 'observational'">
+          <div v-if="moduleData.study_type === 'Observational'">
             <n-divider />
 
             <h3>Observational Studies</h3>
@@ -431,7 +431,7 @@ const saveMetadata = (e: MouseEvent) => {
               path="study_population"
               :rule="{
                 message: 'Please add the study population',
-                required: moduleData.study_type === 'observational' ? true : false,
+                required: moduleData.study_type === 'Observational' ? true : false,
                 trigger: ['blur', 'input'],
               }"
             >
@@ -447,7 +447,7 @@ const saveMetadata = (e: MouseEvent) => {
               path="sampling_method"
               :rule="{
                 message: 'Please add the sampling method',
-                required: moduleData.study_type === 'observational' ? true : false,
+                required: moduleData.study_type === 'Observational' ? true : false,
                 trigger: ['blur', 'input'],
               }"
             >

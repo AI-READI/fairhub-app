@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { faker } from "@faker-js/faker";
 import type { FormInst, FormRules } from "naive-ui";
-import { useMessage } from "naive-ui";
 import { nanoid } from "nanoid";
 import { onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -10,14 +9,13 @@ import { useAuthStore } from "@/stores/auth";
 import { baseURL } from "@/utils/constants";
 
 const router = useRouter();
-const { error } = useMessage();
-const message = useMessage();
+const push = usePush();
 
 const authStore = useAuthStore();
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
+    push.error("You are not logged in.");
     router.push({ name: "home" });
   }
 });
@@ -73,12 +71,12 @@ const createStudy = (e: MouseEvent) => {
       });
 
       if (!response.ok) {
-        message.error("Something went wrong. Please try again later.");
+        push.error("Something went wrong. Please try again later.");
 
         throw new Error(response.statusText);
       }
 
-      message.success("Study created successfully.");
+      push.success("Study created successfully.");
 
       /**
        * TODO: Redirect to the newly created study
@@ -97,7 +95,7 @@ const createStudy = (e: MouseEvent) => {
   <main class="flex h-full w-full flex-col space-y-8 pr-6">
     <PageBackNavigationHeader
       title="Create a new study"
-      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+      description=""
       linkName="studies:all-studies"
     />
 
@@ -128,7 +126,10 @@ const createStudy = (e: MouseEvent) => {
       </n-form-item> -->
 
       <n-form-item label="Image" path="Image">
-        <n-input v-model:value="study.image" placeholder="Add an image" />
+        <n-input
+          v-model:value="study.image"
+          placeholder="Add a representative image to easily differentiate your study"
+        />
 
         <n-button @click="generateImageURL" class="ml-4">
           <template #icon>

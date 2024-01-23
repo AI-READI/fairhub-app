@@ -8,7 +8,7 @@ import { baseURL } from "@/utils/constants";
 
 const router = useRouter();
 const route = useRoute();
-const message = useMessage();
+const push = usePush();
 
 const authStore = useAuthStore();
 const studyStore = useStudyStore();
@@ -19,7 +19,7 @@ const routeParams = {
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
-    message.error("You are not logged in.");
+    push.error("You are not logged in.");
     router.push({ name: "home" });
   }
 
@@ -67,11 +67,10 @@ const saveChanges = (e: MouseEvent) => {
       });
 
       if (!response.ok) {
-        message.error("Something went wrong.");
+        push.error("Something went wrong.");
         return;
       } else {
-        message.success("Study updated successfully.");
-
+        push.success("Study updated successfully.");
         router.push({ name: "study:overview", params: { studyId: route.params.studyId } });
       }
 

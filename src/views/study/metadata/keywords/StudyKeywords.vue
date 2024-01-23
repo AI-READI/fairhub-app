@@ -8,14 +8,16 @@ const push = usePush();
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData = ref<string[]>([]);
+const moduleData = ref<string[]>(["Diabetes"]);
 
 onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
-  const response = await fetch(`${baseURL}/study/${studyId}/metadata/collaborators`, {
+  const response = await fetch(`${baseURL}/study/${studyId}/metadata/keywords`, {
     method: "GET",
   });
+
+  console.log(response);
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -26,11 +28,11 @@ onBeforeMount(async () => {
   moduleData.value = data;
 });
 
-const addCollaborator = () => {
+const addKeyword = () => {
   moduleData.value.push("");
 };
 
-const removeCollaborator = (index: number) => {
+const removeKeyword = (index: number) => {
   moduleData.value.splice(index, 1);
 };
 
@@ -38,19 +40,16 @@ const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
     if (!errors) {
-      // remove empty collaborators
-      const collaborators = moduleData.value.filter((collaborator) => collaborator !== "");
+      // remove empty Keyword
+      const keywords = moduleData.value.filter((Keyword) => Keyword !== "");
 
-      // remove collaborators with duplicate names
-      const uniqueCollaborators = [...new Set(collaborators)];
+      // remove Keywords with duplicate names
+      const uniqueKeywords = [...new Set(keywords)];
 
-      const response = await fetch(
-        `${baseURL}/study/${route.params.studyId}/metadata/collaborators`,
-        {
-          body: JSON.stringify(uniqueCollaborators),
-          method: "PUT",
-        }
-      );
+      const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/keywords`, {
+        body: JSON.stringify(uniqueKeywords),
+        method: "PUT",
+      });
 
       if (!response.ok) {
         push.error("Something went wrong.");
@@ -71,7 +70,7 @@ const saveMetadata = (e: MouseEvent) => {
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
-      title="Collaborators"
+      title="Keywords"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
       linkName="study:overview"
       :linkParams="{
@@ -81,38 +80,32 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <p class="pb-8 pt-2">
-      Other organizations (if any) providing support. Support may include funding, design,
-      implementation, data analysis or reporting. The responsible party is responsible for
-      confirming all collaborators before listing them.
-    </p>
-
     <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
-      <n-form-item
-        v-for="(collaborator, index) in moduleData"
-        :key="index"
-        label="Full Name"
-        path="collaborator"
-      >
-        <n-input v-model:value="moduleData[index]" placeholder="Historia Reiss" />
+      <SubHeadingText
+        title=""
+        description="Words or phrases that best describe the study. Keywords help users find studies in the database. Use NLM's Medical Subject Heading (MeSH)-controlled vocabulary terms where appropriate. Be as specific and precise as possible. Avoid acronyms and abbreviations."
+      />
 
-        <n-popconfirm @positive-click="removeCollaborator(index)">
+      <n-form-item v-for="(keyword, index) in moduleData" :key="index" label="Name" path="keywords">
+        <n-input v-model:value="moduleData[index]" placeholder="Biomedical science" />
+
+        <n-popconfirm @positive-click="removeKeyword(index)">
           <template #trigger>
             <n-button class="ml-5">
               <f-icon icon="gridicons:trash" />
             </n-button>
           </template>
 
-          Are you sure you want to remove this collaborator?
+          Are you sure you want to remove this keyword?
         </n-popconfirm>
       </n-form-item>
 
-      <n-button class="mb-10 w-full" dashed type="success" @click="addCollaborator">
+      <n-button class="mb-10 w-full" dashed type="success" @click="addKeyword">
         <template #icon>
           <f-icon icon="gridicons:create" />
         </template>
 
-        Add a Collaborator
+        Add a Keyword
       </n-button>
 
       <n-divider />

@@ -8,7 +8,7 @@ import { displayHumanFriendlyDateAndTime } from "@/utils/date";
 
 const router = useRouter();
 const route = useRoute();
-const { error } = useMessage();
+const push = usePush();
 
 const authStore = useAuthStore();
 const studyStore = useStudyStore();
@@ -21,7 +21,7 @@ const routeParams = {
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
+    push.error("You are not logged in.");
     router.push({ name: "home" });
   }
 

@@ -15,14 +15,12 @@ import Integrations from "@/views/integrations/IntegrationPage.vue";
 import AllSettings from "@/views/settings/AllSettings.vue";
 import AllStudies from "@/views/studies/AllStudies.vue";
 import StudyContributors from "@/views/study/contributors/StudyContributors.vue";
-import AllDashboards from "@/views/study/dashboard/AllDashboards.vue";
-import ConnectDashboard from "@/views/study/dashboard/ConnectDashboard.vue";
-import EditDashboard from "@/views/study/dashboard/EditDashboard.vue";
-import ViewDashboard from "@/views/study/dashboard/ViewDashboard.vue";
+import DashBoard from "@/views/study/dashboard/DashBoard.vue";
 import DatasetMetadataOther from "@/views/study/dataset/metadata/about/DatasetMetadataOther.vue";
 import DatasetMetadataAccess from "@/views/study/dataset/metadata/access/DatasetMetadataAccess.vue";
 import DatasetMetadataConsent from "@/views/study/dataset/metadata/consent/DatasetMetadataConsent.vue";
 import DatasetMetadataContributors from "@/views/study/dataset/metadata/contributors/DatasetMetadataContributors.vue";
+import DatasetMetadataCreator from "@/views/study/dataset/metadata/creators/DatasetMetadataCreator.vue";
 import DatasetMetadataDates from "@/views/study/dataset/metadata/dates/DatasetMetadataDates.vue";
 import DatasetMetadataDeIdentification from "@/views/study/dataset/metadata/deidentification/DatasetMetadataDeIdentification.vue";
 import DatasetMetadataDescriptions from "@/views/study/dataset/metadata/descriptions/DatasetMetadataDescriptions.vue";
@@ -39,6 +37,7 @@ import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue"
 import PublishChangelog from "@/views/study/dataset/publish/changelog/PublishChangelog.vue";
 import PublishDatasetMetadata from "@/views/study/dataset/publish/metadata/PublishDatasetMetadata.vue";
 import PublishStudyMetadata from "@/views/study/dataset/publish/metadata/PublishStudyMetadata.vue";
+import NewVersion from "@/views/study/dataset/publish/new/NewVersion.vue";
 import PublishSelectParticipants from "@/views/study/dataset/publish/participants/PublishSelectParticipants.vue";
 import PublishReadme from "@/views/study/dataset/publish/readme/PublishReadme.vue";
 import PublishRouterView from "@/views/study/dataset/publish/root/PublishRouterView.vue";
@@ -58,6 +57,7 @@ import StudyLocations from "@/views/study/metadata/enrollment/locations/StudyLoc
 import StudyOfficials from "@/views/study/metadata/enrollment/officials/StudyOfficials.vue";
 import StudyIdentification from "@/views/study/metadata/identification/StudyIdentification.vue";
 import StudyIPDSharing from "@/views/study/metadata/ipdsharing/StudyIPDSharing.vue";
+import StudyKeywords from "@/views/study/metadata/keywords/StudyKeywords.vue";
 import StudyOversight from "@/views/study/metadata/oversight/StudyOversight.vue";
 import StudyAvailableIPD from "@/views/study/metadata/references/availableipd/StudyAvailableIPD.vue";
 import StudyLinks from "@/views/study/metadata/references/links/StudyLinks.vue";
@@ -70,9 +70,6 @@ import NewStudy from "@/views/study/new/NewStudy.vue";
 import StudyOverview from "@/views/study/overview/StudyOverview.vue";
 import AddParticipant from "@/views/study/participants/AddParticipant.vue";
 import StudyParticipants from "@/views/study/participants/StudyParticipants.vue";
-import AddRedcap from "@/views/study/redcap/AddRedcap.vue";
-import AllRedcap from "@/views/study/redcap/AllRedcap.vue";
-import EditRedcap from "@/views/study/redcap/EditRedcap.vue";
 import StudyRouterView from "@/views/study/root/StudyRouterView.vue";
 
 const router = createRouter({
@@ -115,6 +112,7 @@ const router = createRouter({
           name: "studies:new-study",
           path: "new",
           component: NewStudy,
+          meta: { menuItem: "studies:all-studies" },
         },
       ],
     },
@@ -144,6 +142,7 @@ const router = createRouter({
               name: "study:add-participant",
               path: "add",
               component: AddParticipant,
+              meta: { menuItem: "study:participants" },
             },
           ],
         },
@@ -153,49 +152,9 @@ const router = createRouter({
           component: StudyFiles,
         },
         {
-          path: "redcap",
-          children: [
-            {
-              name: "study:redcap:all-redcap-project-apis",
-              path: "all",
-              component: AllRedcap,
-            },
-            {
-              name: "study:redcap:add-redcap-project-api",
-              path: "",
-              component: AddRedcap,
-            },
-            {
-              name: "study:redcap:edit-redcap-project-api",
-              path: ":projectId",
-              component: EditRedcap,
-            },
-            {
-              name: "study:redcap:connect-redcap-project-dashboard",
-              path: ":projectId/connect-dashboard",
-              component: ConnectDashboard,
-            },
-          ],
-        },
-        {
+          name: "study:dashboard",
           path: "dashboard",
-          children: [
-            {
-              name: "study:dashboard:all-dashboards",
-              path: "all",
-              component: AllDashboards,
-            },
-            {
-              name: "study:dashboard:view-dashboard",
-              path: ":dashboardId",
-              component: ViewDashboard,
-            },
-            {
-              name: "study:dashboard:edit-dashboard",
-              path: ":dashboardId",
-              component: EditDashboard,
-            },
-          ],
+          component: DashBoard,
         },
         {
           name: "study:contributors",
@@ -203,19 +162,25 @@ const router = createRouter({
           component: StudyContributors,
         },
         {
-          name: "study:all-datasets",
           path: "datasets",
-          component: AllDatasets,
+          children: [
+            {
+              name: "study:all-datasets",
+              path: "",
+              component: AllDatasets,
+            },
+            {
+              name: "dataset:new",
+              path: "new",
+              component: NewDataset,
+              meta: { menuItem: "study:all-datasets" },
+            },
+          ],
         },
         {
           name: "dataset:root",
           path: "dataset",
           children: [
-            {
-              name: "dataset:new",
-              path: "new",
-              component: NewDataset,
-            },
             {
               path: ":datasetId",
               children: [
@@ -246,6 +211,11 @@ const router = createRouter({
                       name: "dataset:metadata:contributors",
                       path: "contributors",
                       component: DatasetMetadataContributors,
+                    },
+                    {
+                      name: "dataset:metadata:creators",
+                      path: "creators",
+                      component: DatasetMetadataCreator,
                     },
                     {
                       name: "dataset:metadata:dates",
@@ -314,37 +284,49 @@ const router = createRouter({
                       component: PublishAllVersions,
                     },
                     {
+                      name: "dataset:publish:versions:new",
+                      path: "new",
+                      component: NewVersion,
+                      meta: { menuItem: "dataset:publish:versions" },
+                    },
+                    {
                       path: ":versionId",
                       children: [
                         {
                           name: "dataset:publish:version:participants",
                           path: "participants",
                           component: PublishSelectParticipants,
+                          meta: { menuItem: "dataset:publish:versions" },
                         },
                         {
                           name: "dataset:publish:version:study-metadata",
                           path: "study-metadata",
                           component: PublishStudyMetadata,
+                          meta: { menuItem: "dataset:publish:versions" },
                         },
                         {
                           name: "dataset:publish:version:dataset-metadata",
                           path: "dataset-metadata",
                           component: PublishDatasetMetadata,
+                          meta: { menuItem: "dataset:publish:versions" },
                         },
                         {
                           name: "dataset:publish:version:changelog",
                           path: "changelog",
                           component: PublishChangelog,
+                          meta: { menuItem: "dataset:publish:versions" },
                         },
                         {
                           name: "dataset:publish:version:readme",
                           path: "additional-readme",
                           component: PublishReadme,
+                          meta: { menuItem: "dataset:publish:versions" },
                         },
                         {
                           name: "dataset:publish:version:summary",
                           path: "summary",
                           component: PublishSummary,
+                          meta: { menuItem: "dataset:publish:versions" },
                         },
                       ],
                     },
@@ -394,6 +376,11 @@ const router = createRouter({
               name: "study:metadata:conditions",
               path: "conditions",
               component: StudyConditions,
+            },
+            {
+              name: "study:metadata:keywords",
+              path: "keywords",
+              component: StudyKeywords,
             },
             {
               name: "study:metadata:design",
@@ -462,6 +449,7 @@ const router = createRouter({
       name: "all-settings",
       path: "/settings",
       component: AllSettings,
+      meta: { menuItem: "settings" },
     },
     {
       name: "help",

@@ -336,6 +336,32 @@ function handleNextButton() {
       </template>
     </CollapsibleCard>
 
+    <CollapsibleCard title="Keywords" bordered>
+      <n-space>
+        <n-tag type="info" v-for="item in study_metadata.keywords" :key="item">{{ item }} </n-tag>
+      </n-space>
+
+      <div v-if="!study_metadata.keywords.length" class="italic text-gray-500">No Keywords</div>
+
+      <template #action>
+        <RouterLink
+          :to="{
+            name: 'study:metadata:keywords',
+            params: {
+              studyId: routeParams.studyId,
+            },
+          }"
+        >
+          <n-button type="info" secondary>
+            <template #icon>
+              <f-icon icon="material-symbols:edit" />
+            </template>
+            Edit Keywords
+          </n-button>
+        </RouterLink>
+      </template>
+    </CollapsibleCard>
+
     <CollapsibleCard title="Design" bordered>
       <n-table
         :bordered="true"

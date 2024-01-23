@@ -8,7 +8,7 @@ import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
-const message = useMessage();
+const push = usePush();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -73,11 +73,11 @@ const removeSecondaryIdentifier = async (id: string) => {
     );
 
     if (!response.ok) {
-      message.error("Something went wrong. Please try again.");
+      push.error("Something went wrong. Please try again.");
       throw new Error("Network response was not ok");
     }
 
-    message.success("Identifier removed successfully.");
+    push.success("Identifier removed successfully.");
   }
 
   moduleData.secondary = moduleData.secondary.filter((item) => item.id !== id);
@@ -136,10 +136,10 @@ const saveMetadata = (e: MouseEvent) => {
       );
 
       if (!response.ok) {
-        message.error("Something went wrong.");
+        push.error("Something went wrong.");
         return;
       } else {
-        message.success("Study updated successfully.");
+        push.success("Study updated successfully.");
 
         // refresh page
         router.go(0);

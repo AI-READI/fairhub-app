@@ -1,6 +1,5 @@
 <script lang="ts">
 import { NButton, NDropdown } from "naive-ui";
-import { useMessage } from "naive-ui";
 import type { PropType } from "vue";
 import { defineComponent } from "vue";
 
@@ -22,10 +21,11 @@ export default defineComponent({
     size: { type: String as PropType<"small" | "medium" | "large"> },
   },
   setup() {
-    const message = useMessage();
+    const push = usePush();
     return {
       handleSelect(key: string | number) {
-        message.info(String(key));
+        console.log("here");
+        push.info(String(key));
       },
       options: [
         {

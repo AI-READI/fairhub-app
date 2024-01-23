@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useMessage } from "naive-ui";
 import { computed, onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -12,7 +11,7 @@ import { useParticipantStore } from "@/stores/participant";
 
 const route = useRoute();
 const router = useRouter();
-const { error, info } = useMessage();
+const push = usePush();
 
 const authStore = useAuthStore();
 const participantStore = useParticipantStore();
@@ -25,7 +24,7 @@ const routeParams = {
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
+    push.error("You are not logged in.");
     router.push({ name: "home" });
 
     return;
@@ -43,7 +42,7 @@ function onEdit() {
    * TODO: Implement edit participant
    */
 
-  info("Edit participant");
+  push.info("Edit participant");
 }
 
 function deleteParticipants(clickedParticipant: number) {

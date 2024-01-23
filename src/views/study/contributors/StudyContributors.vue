@@ -166,7 +166,6 @@ const sendInvitation = (e: MouseEvent) => {
       }
 
       push.success("Invitation sent!");
-
       router.go(0);
     } else {
       console.log(errors);
@@ -242,6 +241,14 @@ const removeContributor = async (id: string) => {
   if (!response.ok) {
     push.error("Something went wrong.");
     throw new Error("Network response was not ok");
+  }
+
+  if (id === authStore.user.id) {
+    push.success("You have left the study!");
+
+    router.push({ name: "studies:all-studies" });
+
+    return;
   }
 
   push.success("Contributor removed!");
