@@ -53,7 +53,7 @@ class GroupedBarChart extends Chart {
 
     // Ordering by Rotation
     if (self.rotate) {
-      self.groups = self.groups.reverse();
+      self.mapping.groups = self.mapping.groups.reverse();
     }
 
     /*
@@ -73,7 +73,7 @@ class GroupedBarChart extends Chart {
     */
 
     self.x = D3.scaleBand()
-      .domain(self.groups)
+      .domain(self.mapping.groups)
       .range([0, self.dataframe.width])
       .round(D3.enableRounding)
       .paddingInner(0.05);
@@ -118,7 +118,7 @@ class GroupedBarChart extends Chart {
 
     self.xLabels = self.xAxis
       .selectAll(".tick")
-      .data(self.groups)
+      .data(self.mapping.groups)
       .attr("transform", (d) => `translate(${self.x(d)}, 0)`)
       .selectAll("text")
       .classed("label interactable", true)
@@ -283,7 +283,7 @@ class GroupedBarChart extends Chart {
     */
 
     self.x = D3.scaleBand()
-      .domain(self.groups)
+      .domain(self.mapping.groups)
       .range([0, self.dataframe.width])
       .round(D3.enableRounding)
       .paddingInner(0.05);
@@ -328,7 +328,7 @@ class GroupedBarChart extends Chart {
 
     self.xLabels = self.xAxis
       .selectAll(".tick")
-      .data(self.groups)
+      .data(self.mapping.groups)
       .attr("transform", (d) => `translate(${self.x(d) + 1}, 0)`)
       .selectAll("text")
       .classed("label interactable", true)
@@ -605,13 +605,13 @@ class GroupedBarChart extends Chart {
     return {
       colors: colors,
       data: data,
-      filters: filteroptions,
+      filters: filteroptions.sort(self.naturalSort),
       grouped: grouped,
-      groups: groups,
+      groups: groups.sort(self.naturalSort),
       legend: legend,
       max: max,
       min: min,
-      subgroups: subgroups,
+      subgroups: subgroups.sort(self.naturalSort),
     };
   }
 }

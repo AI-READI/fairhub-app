@@ -23,6 +23,7 @@ class StackedBarChart extends Chart {
 
     // Configure Stacked Bar Chart
     self.rotate = config.rotate;
+    self.bin = config.bin;
     self.transitions = config.transitions;
     self.animations = config.animations;
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
@@ -43,8 +44,6 @@ class StackedBarChart extends Chart {
 
     // Set Unique Filters, Groups, Subgroups, ColorScale
     self.filterby = super.getUniqueValuesByKey(self.data, self.accessors.filterby.key);
-    self.groups = super.getUniqueValuesByKey(self.data, self.accessors.group.key);
-    self.subgroups = super.getUniqueValuesByKey(self.data, self.accessors.subgroup.key);
     self.colorscale = D3.scaleOrdinal()
       .domain(super.getUniqueValuesByKey(self.data, self.accessors.color.key))
       .range(self.palette);
@@ -63,7 +62,7 @@ class StackedBarChart extends Chart {
 
     // Ordering by Rotation
     if (self.rotate) {
-      self.groups = self.groups.reverse();
+      self.mapping.groups = self.mapping.groups.reverse();
     }
 
     /*
@@ -91,14 +90,14 @@ class StackedBarChart extends Chart {
           .domain([self.mapping.min, self.mapping.max])
           .range([0, self.dataframe.width])
       : D3.scaleBand()
-          .domain(self.groups)
+          .domain(self.mapping.groups)
           .range([0, self.dataframe.width])
           .round(D3.enableRounding)
           .paddingInner(0.05);
 
     self.y = self.rotate
       ? D3.scaleBand()
-          .domain(self.groups)
+          .domain(self.mapping.groups)
           .range([self.dataframe.height, 0])
           .round(D3.enableRounding)
           .paddingInner(0.05)
@@ -138,7 +137,7 @@ class StackedBarChart extends Chart {
       ? self.xAxis.selectAll("text").classed("label", true).attr("text-anchor", "start")
       : self.xAxis
           .selectAll(".tick")
-          .data(self.groups)
+          .data(self.mapping.groups)
           .attr("transform", (d) => `translate(${self.x(d)}, 0)`)
           .selectAll("text")
           .classed("label interactable", true)
@@ -149,7 +148,7 @@ class StackedBarChart extends Chart {
     self.yLabels = self.rotate
       ? self.yAxis
           .selectAll(".tick")
-          .data(self.groups)
+          .data(self.mapping.groups)
           .attr("transform", (d) => `translate(0, ${self.y(d) + self.y.bandwidth() / 2})`)
           .selectAll("text")
           .classed("label interactable", true)
@@ -348,14 +347,14 @@ class StackedBarChart extends Chart {
           .domain([self.mapping.min, self.mapping.max])
           .range([0, self.dataframe.width])
       : D3.scaleBand()
-          .domain(self.groups)
+          .domain(self.mapping.groups)
           .range([0, self.dataframe.width])
           .round(D3.enableRounding)
           .paddingInner(0.05);
 
     self.y = self.rotate
       ? D3.scaleBand()
-          .domain(self.groups)
+          .domain(self.mapping.groups)
           .range([self.dataframe.height, 0])
           .round(D3.enableRounding)
           .paddingInner(0.05)
@@ -395,7 +394,7 @@ class StackedBarChart extends Chart {
       ? self.xAxis.selectAll("text").classed("label", true).attr("text-anchor", "start")
       : self.xAxis
           .selectAll(".tick")
-          .data(self.groups)
+          .data(self.mapping.groups)
           .attr("transform", (d) => `translate(${self.x(d) + 1}, 0)`)
           .selectAll("text")
           .classed("label interactable", true)
@@ -406,7 +405,7 @@ class StackedBarChart extends Chart {
     self.yLabels = self.rotate
       ? self.yAxis
           .selectAll(".tick")
-          .data(self.groups)
+          .data(self.mapping.groups)
           .attr("transform", (d) => `translate(0, ${self.y(d) + self.y.bandwidth() / 2})`)
           .selectAll("text")
           .classed("label interactable", true)
@@ -736,13 +735,13 @@ class StackedBarChart extends Chart {
     return {
       colors: colors,
       data: data,
-      filters: filteroptions,
-      groups: groups,
+      filters: filteroptions.sort(self.naturalSort),
+      groups: groups.sort(self.naturalSort),
       legend: legend,
       max: max,
       min: min,
       stacks: stacks,
-      subgroups: subgroups,
+      subgroups: subgroups.sort(self.naturalSort),
       uuids: uuids,
     };
   }

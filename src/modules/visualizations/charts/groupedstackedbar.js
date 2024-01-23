@@ -643,13 +643,13 @@ class GroupedStackedBarChart extends Chart {
     return {
       colors: colors,
       data: data,
-      filters: filteroptions,
+      filters: filteroptions.sort(self.naturalSort),
       groupedstacks: groupedstacks,
-      groups: groups,
+      groups: groups.sort(self.naturalSort),
       legend: legend,
       max: max,
       min: min,
-      subgroups: subgroups,
+      subgroups: subgroups.sort(self.naturalSort),
     };
   }
 }

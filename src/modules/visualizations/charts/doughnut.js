@@ -527,8 +527,8 @@ class DoughnutChart extends Chart {
       colors: colors,
       data: data,
       doughnut: doughnut,
-      filters: filteroptions,
-      groups: groups,
+      filters: filteroptions.sort(self.naturalSort),
+      groups: groups.sort(self.naturalSort),
       legend: legend,
     };
   }

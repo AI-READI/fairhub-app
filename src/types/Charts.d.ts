@@ -69,6 +69,22 @@ export interface Accessors {
 }
 
 /*
+Projection Model
+*/
+
+export interface ProjectionModel {
+  args: object;
+  data: object[];
+  type: string;
+}
+
+export interface Projection {
+  model?: ProjectionModel;
+  xDomain: number[] | string[];
+  yDomain: number[] | string[];
+}
+
+/*
 Interface Elements
 */
 
@@ -117,6 +133,7 @@ export interface ChartConfig {
   padding?: Padding;
   palette?: string[];
   position?: Position;
+  projection?: Projection;
   rotate?: boolean;
   tooltip?: Tooltip;
   transitions?: Transitions;

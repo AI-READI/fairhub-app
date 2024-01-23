@@ -30,6 +30,9 @@
         "right": 200,
         "bottom": 0
       },
+      "binning": {
+
+      },
       "transitions": {
         "opacity": {
           "from": 0.8,
@@ -53,8 +56,8 @@
         }
       },
       "legend": {
-        "title": "",
-        "accessor": "",
+        "title": "Sex",
+        "accessor": "subgroup",
         "width": 120,
         "height": 140,
         "itemsize": 20,
@@ -69,7 +72,7 @@
         }
       },
       "tooltip": {
-        "title": "",
+        "title": "Data Point Details",
         "width": 720,
         "height": 140,
         "itemsize": 20,
@@ -110,26 +113,26 @@
       "accessors": {
         "filterby": {
           "name": "Site",
-          "key": "group",
+          "key": "filterby",
           "type": "String"
         },
         "group": {
-          "name": "Current Medications Status",
+          "name": "Current Medications Count",
           "key": "group",
-          "type": "String"
+          "type": "Number"
         },
         "subgroup": {
-          "name": "Site",
+          "name": "Sex",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Site",
-          "key": "filterby",
+          "name": "Sex",
+          "key": "color",
           "type": "String"
         },
         "value": {
-          "name": "Current Medications (N)",
+          "name": "Participants (N)",
           "key": "value",
           "type": "Number"
         }

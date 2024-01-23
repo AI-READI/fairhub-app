@@ -28,11 +28,15 @@ class LineChart extends Chart {
     self.accessors = config.accessors;
     self.transitions = config.transitions;
     self.animations = config.animations;
+    console.log(config, Object.hasOwn(config, "projection"));
+    self.projection = Object.hasOwn(config, "projection") ? config.projection : undefined;
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
     self.filters = Object.hasOwn(config, "filters") ? config.filters : undefined;
     self.linewidth = 3;
     self.linesmoother = "curveCatmullRom";
+
+    console.log("projection", self.projection);
 
     /*
     Setup
@@ -72,13 +76,19 @@ class LineChart extends Chart {
     Generate Axes
     */
 
-    self.x = D3.scaleLinear()
-      .domain(D3.extent(self.mapping.data, (d) => d.x))
-      .range([0, self.dataframe.width]);
+    self.x =
+      self.projection !== undefined
+        ? D3.scaleLinear().domain(self.projection.xDomain).range([0, self.dataframe.width])
+        : D3.scaleLinear()
+            .domain(D3.extent(self.mapping.data, (d) => d.x))
+            .range([0, self.dataframe.width]);
 
-    self.y = D3.scaleLinear()
-      .domain([self.mapping.min, self.mapping.max])
-      .range([self.dataframe.height, 0]);
+    self.y =
+      self.projection !== undefined
+        ? D3.scaleLinear().domain(self.projection.yDomain).range([self.dataframe.height, 0])
+        : D3.scaleLinear()
+            .domain([self.mapping.min, self.mapping.max])
+            .range([self.dataframe.height, 0]);
 
     self.xAxis = self.svg
       .append("g")
@@ -108,6 +118,21 @@ class LineChart extends Chart {
       .classed("lines", true)
       .attr("id", () => `${self.setID}_lines`)
       .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`);
+
+    self.projectionline =
+      self.projection !== undefined
+        ? self.svg
+            .append("g")
+            .classed("projection", true)
+            .select(".model-projection")
+            .data(self.projection.model.data)
+            .join(self.projection.model.args.element)
+            .classed("model-projection", true)
+            .attr("id", `${self.setID}_model-projection`)
+            .attr("stroke", "gray")
+            .attr("stroke-width", "2")
+            .attr("stroke-dasharray", "0 1")
+        : undefined;
 
     self.lineseries = self.lines
       .selectAll(".line-series")
@@ -272,13 +297,19 @@ class LineChart extends Chart {
     Generate Axes
     */
 
-    self.x = D3.scaleLinear()
-      .domain(D3.extent(self.mapping.data, (d) => d.x))
-      .range([0, self.dataframe.width]);
+    self.x =
+      self.projection !== undefined
+        ? D3.scaleLinear().domain(self.projection.xDomain).range([0, self.dataframe.width])
+        : D3.scaleLinear()
+            .domain(D3.extent(self.mapping.data, (d) => d.x))
+            .range([0, self.dataframe.width]);
 
-    self.y = D3.scaleLinear()
-      .domain([self.mapping.min, self.mapping.max])
-      .range([self.dataframe.height, 0]);
+    self.y =
+      self.projection !== undefined
+        ? D3.scaleLinear().domain(self.projection.yDomain).range([self.dataframe.height, 0])
+        : D3.scaleLinear()
+            .domain([self.mapping.min, self.mapping.max])
+            .range([self.dataframe.height, 0]);
 
     self.xAxis = self.svg
       .append("g")
@@ -308,6 +339,21 @@ class LineChart extends Chart {
       .classed("lines", true)
       .attr("id", () => `${self.setID}_lines`)
       .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`);
+
+    self.projectionline =
+      self.projection !== undefined
+        ? self.svg
+            .append("g")
+            .classed("projection", true)
+            .select(".model-projection")
+            .data(self.projection.model.data)
+            .join(self.projection.model.args.element)
+            .classed("model-projection", true)
+            .attr("id", `${self.setID}_model-projection`)
+            .attr("stroke", "gray")
+            .attr("stroke-width", "2")
+            .attr("stroke-dasharray", "0 1")
+        : undefined;
 
     self.lineseries = self.lines
       .selectAll(".line-series")
@@ -449,6 +495,7 @@ class LineChart extends Chart {
     self.pointseries.remove();
     self.lines.remove();
     self.points.remove();
+    if (self.projectionline !== undefined) self.projectionline.remove();
     if (self.Legend !== undefined && self.Legend !== null) self.Legend.clear();
     if (self.Tooltip !== undefined && self.Tooltip !== null) self.Tooltip.clear();
     if (self.Filters !== undefined && self.Filters !== null) self.Filters.clear();
@@ -516,7 +563,6 @@ Map Data and Set Value Types
     data = data.filter((datum) => datum.x !== "Value Unavailable");
     // Group by x date
     data = super.groupThenSumObjectsByKeys(data, ["filterby", "group", "color", "x"], ["y"]);
-
     // Get Unique Colors
     const filteroptions = [...super.getUniqueValuesByKey(data, "filterby")];
     const groups = [...super.getUniqueValuesByKey(data, "group")];
@@ -527,7 +573,7 @@ Map Data and Set Value Types
       (d) => d.color,
       (d) => d.filterby
     );
-
+    console.log(flatseries);
     let series = [];
     for (const s in flatseries) {
       const [group, color, filter, subseries] = flatseries[s];
@@ -563,8 +609,8 @@ Map Data and Set Value Types
     return {
       colors: colors,
       data: data,
-      filters: filteroptions,
-      groups: groups,
+      filters: filteroptions.sort(self.naturalSort),
+      groups: groups.sort(self.naturalSort),
       legend: legend,
       max: max,
       min: min,

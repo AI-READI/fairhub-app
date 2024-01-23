@@ -6,4 +6,4 @@ export const timezones = timezonesJSON;
 // export const baseURL = "http://localhost:5000";
 
 export const baseURL =
-  process.env.NODE_ENV === "production" ? "https://dev.api.fairhub.io" : "http://localhost:3001";
+  process.env.NODE_ENV === "production" ? "https://dev.api.fairhub.io" : "http://127.0.0.1:5000";

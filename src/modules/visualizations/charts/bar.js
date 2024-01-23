@@ -677,8 +677,8 @@ class BarChart extends Chart {
     return {
       colors: colors,
       data: data,
-      filters: filteroptions,
-      groups: groups,
+      filters: filteroptions.sort(self.naturalSort),
+      groups: groups.sort(self.naturalSort),
       legend: legend,
       max: max,
       min: min,

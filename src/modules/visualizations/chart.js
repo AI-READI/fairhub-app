@@ -16,6 +16,11 @@ class Chart {
   palette = undefined;
   data = undefined;
   mapping = undefined;
+  dtypes = {
+    Datetime: Date,
+    Number: Number,
+    String: String,
+  };
 
   constructor(config) {
     let self = this;
@@ -194,7 +199,7 @@ class Chart {
     correct atomic group-wise counts (e.g. if you group the values
     on 'phenotype') – rather than listing each phenotype combination
     as it's own phenotype, it allows for counts to be made for each
-    specific phenotype. It's idempotent-ish – if you pass data without
+    specific phenotype. It's also idempotent – if you pass data without
     pipe delimited string subvalues, it'll just return the same data
     as before.
 
@@ -210,6 +215,10 @@ class Chart {
       }
     }
     return self.getUniqueObjectsByProperties(split);
+  }
+
+  naturalSort(a, b) {
+    return a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" });
   }
 
   /*

@@ -144,6 +144,7 @@ export const useDashboardStore = defineStore("dashboard", () => {
               }
             }
             dashboard_module.visualizations = visualizations;
+            console.log(dashboard_module);
             dashboard_modules.push(dashboard_module);
           }
         }
