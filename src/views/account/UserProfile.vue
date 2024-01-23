@@ -7,8 +7,10 @@ import { timezones } from "@/utils/constants";
 
 const loading = ref(false);
 const push = usePush();
+const router = useRouter();
 
 const userFormRef = ref<FormInst | null>(null);
+const passwordFormRef = ref<FormInst | null>(null);
 
 const userProfile = ref<UserProfile>({
   username: "",
@@ -17,10 +19,67 @@ const userProfile = ref<UserProfile>({
   institution: "",
   last_name: "",
   location: "",
-  password: "",
   profile_image: "",
   timezone: "",
 });
+
+const passwordForm = ref({
+  confirm_password: "",
+  new_password: "",
+  old_password: "",
+});
+
+const passwordRules: FormRules = {
+  confirm_password: {
+    required: true,
+    trigger: ["blur", "input"],
+    validator: (rule, value) => {
+      if (value !== passwordForm.value.new_password) {
+        return new Error("Passwords do not match");
+      }
+      return true;
+    },
+  },
+  new_password: {
+    required: true,
+    trigger: ["blur", "input"],
+    validator: (rule, value) => {
+      if (!value) {
+        return new Error("Please enter a new password");
+      }
+      // Validate value has 8 characters
+      if (value.length < 8) {
+        return new Error("Password must be at least 8 characters");
+      }
+      // Validate value has at least 1 uppercase character
+      if (!/[A-Z]/.test(value)) {
+        return new Error("Password must contain at least 1 uppercase character");
+      }
+      // Validate value has at least 1 lowercase character
+      if (!/[a-z]/.test(value)) {
+        return new Error("Password must contain at least 1 lowercase character");
+      }
+      // Validate value has at least 1 number
+      if (!/[0-9]/.test(value)) {
+        return new Error("Password must contain at least 1 number");
+      }
+      // Validate value has at least 1 special character
+      if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(value)) {
+        return new Error("Password must contain at least 1 special character");
+      }
+      // Validate value does not match old password
+      if (value === passwordForm.value.old_password) {
+        return new Error("New password cannot match old password");
+      }
+      return true;
+    },
+  },
+  old_password: {
+    message: "Please enter your current password",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+};
 
 const rules: FormRules = {
   username: {
@@ -75,6 +134,38 @@ const updateProfile = (e: MouseEvent) => {
   });
 };
 
+const updatePassword = (e: MouseEvent) => {
+  e.preventDefault();
+
+  passwordFormRef.value?.validate(async (errors) => {
+    if (!errors) {
+      loading.value = true;
+
+      const response = await fetch(`${baseURL}/auth/password/change`, {
+        body: JSON.stringify(passwordForm.value),
+        method: "POST",
+      });
+
+      loading.value = false;
+      if (!response.ok) {
+        push.error("Something went wrong, please try again later");
+        throw new Error("Password error");
+      }
+      push.success({
+        title: "Password Updated",
+        message: "Taking you to the login page",
+      });
+
+      setTimeout(() => {
+        router.push("/auth/logout");
+      }, 1500);
+    } else {
+      console.log("There was an error");
+      console.log(errors);
+    }
+  });
+};
+
 const handleUpdateValue = (value: string[]) => {
   console.log(value);
 };
@@ -96,98 +187,99 @@ const handleUpdateValue = (value: string[]) => {
 
 <template>
   <main class="flex h-full w-full flex-col">
-    <h1>Your Profile</h1>
+    <CollapsibleCard class="m-5" :title="`Your Profile`">
+      <!-- <h1>Your Profile</h1> -->
 
-    <n-divider />
+      <!-- <n-divider /> -->
 
-    <div class="flex w-full space-x-10">
-      <div class="w-full pl-2 pr-4">
-        <n-form
-          ref="userFormRef"
-          size="large"
-          label-placement="top"
-          :rules="rules"
-          :model="userProfile"
-        >
-          <n-form-item label="Username" path="username">
-            <n-input
-              v-model:value="userProfile.username"
-              placeholder="loid.forger"
-              type="text"
-              disabled
-            />
-          </n-form-item>
+      <div class="flex w-full space-x-10">
+        <div class="w-full pl-2 pr-4">
+          <n-form
+            ref="userFormRef"
+            size="large"
+            label-placement="top"
+            :rules="rules"
+            :model="userProfile"
+          >
+            <n-form-item label="Username" path="username">
+              <n-input
+                v-model:value="userProfile.username"
+                placeholder="loid.forger"
+                type="text"
+                disabled
+              />
+            </n-form-item>
 
-          <n-form-item label="Email Address" path="email_address">
-            <n-input
-              v-model:value="userProfile.email_address"
-              placeholder="loid.forger@ucsd.edu"
-              clearable
-              disabled
-              typeof="email"
-            />
-          </n-form-item>
+            <n-form-item label="Email Address" path="email_address">
+              <n-input
+                v-model:value="userProfile.email_address"
+                placeholder="loid.forger@ucsd.edu"
+                clearable
+                disabled
+                typeof="email"
+              />
+            </n-form-item>
 
-          <n-form-item label="Given Name" path="first_name">
-            <n-input
-              v-model:value="userProfile.first_name"
-              type="text"
-              placeholder="Loid"
-              clearable
-            />
-          </n-form-item>
+            <n-form-item label="Given Name" path="first_name">
+              <n-input
+                v-model:value="userProfile.first_name"
+                type="text"
+                placeholder="Loid"
+                clearable
+              />
+            </n-form-item>
 
-          <n-form-item label="Family Name" path="last_name">
-            <n-input
-              v-model:value="userProfile.last_name"
-              type="text"
-              placeholder="Forger"
-              clearable
-            />
-          </n-form-item>
+            <n-form-item label="Family Name" path="last_name">
+              <n-input
+                v-model:value="userProfile.last_name"
+                type="text"
+                placeholder="Forger"
+                clearable
+              />
+            </n-form-item>
 
-          <n-form-item label="Institution" path="institution">
-            <n-input
-              v-model:value="userProfile.institution"
-              placeholder="University of California, San Diego"
-              type="text"
-              clearable
-            />
-          </n-form-item>
+            <n-form-item label="Institution" path="institution">
+              <n-input
+                v-model:value="userProfile.institution"
+                placeholder="University of California, San Diego"
+                type="text"
+                clearable
+              />
+            </n-form-item>
 
-          <n-form-item label="Location" path="location">
-            <n-input
-              v-model:value="userProfile.location"
-              placeholder="San Diego, CA"
-              type="text"
-              clearable
-            />
-          </n-form-item>
+            <n-form-item label="Location" path="location">
+              <n-input
+                v-model:value="userProfile.location"
+                placeholder="San Diego, CA"
+                type="text"
+                clearable
+              />
+            </n-form-item>
 
-          <n-form-item label="Timezone" path="timezone">
-            <n-select
-              filterable
-              clearable
-              placeholder="America/Los_Angeles"
-              :options="timezones"
-              @update:value="handleUpdateValue"
-              v-model:value="userProfile.timezone"
-            />
-          </n-form-item>
+            <n-form-item label="Timezone" path="timezone">
+              <n-select
+                filterable
+                clearable
+                placeholder="America/Los_Angeles"
+                :options="timezones"
+                @update:value="handleUpdateValue"
+                v-model:value="userProfile.timezone"
+              />
+            </n-form-item>
 
-          <div class="flex justify-start">
-            <n-button type="primary" size="large" @click="updateProfile" :loading="loading">
-              <template #icon>
-                <f-icon icon="material-symbols:save" />
-              </template>
+            <div class="flex justify-start">
+              <n-button type="primary" size="large" @click="updateProfile" :loading="loading">
+                <template #icon>
+                  <f-icon icon="material-symbols:save" />
+                </template>
 
-              Update Profile
-            </n-button>
-          </div>
-        </n-form>
-      </div>
+                Update Profile
+              </n-button>
+            </div>
+          </n-form>
+        </div>
 
-      <!-- <div class="flex flex-col space-y-5 px-2">
+        <!-- <div class="flex flex-col space-y-5 px-2">
         <n-image width="300" :src="userProfile.image" />
 
         <n-upload accept=".jpeg,.png" directory-dnd @change="onChange" class="mx-auto w-max">
@@ -199,6 +291,60 @@ const handleUpdateValue = (value: string[]) => {
           </n-button>
         </n-upload>
       </div> -->
-    </div>
+      </div>
+    </CollapsibleCard>
+
+    <CollapsibleCard class="m-5" :title="`Change Your Password`">
+      <div class="flex w-full space-x-10">
+        <div class="w-full pl-2 pr-4">
+          <n-form
+            ref="passwordFormRef"
+            size="Large"
+            label-placement="top"
+            :rules="passwordRules"
+            :model="passwordForm"
+          >
+            <n-form-item label="Current Password" path="old_password">
+              <n-input
+                type="password"
+                show-password-on="mousedown"
+                placeholder="Enter current password"
+                v-model:value="passwordForm.old_password"
+              />
+            </n-form-item>
+
+            <n-form-item label="New Password" path="new_password">
+              <n-input
+                type="password"
+                clearable
+                show-password-on="mousedown"
+                placeholder="Enter your new password"
+                v-model:value="passwordForm.new_password"
+              />
+            </n-form-item>
+
+            <n-form-item label="Confirm New Password" path="confirm_password">
+              <n-input
+                type="password"
+                placeholder="Re-enter new password"
+                v-model:value="passwordForm.confirm_password"
+                clearable
+                show-password-on="mousedown"
+              />
+            </n-form-item>
+
+            <div class="mt-4 flex justify-start">
+              <n-button type="primary" size="large" @click="updatePassword" :loading="loading">
+                <template #icon>
+                  <f-icon icon="material-symbols:save" />
+                </template>
+
+                Update Password
+              </n-button>
+            </div>
+          </n-form>
+        </div>
+      </div>
+    </CollapsibleCard>
   </main>
 </template>

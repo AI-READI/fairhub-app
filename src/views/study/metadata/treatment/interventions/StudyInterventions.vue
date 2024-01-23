@@ -8,7 +8,7 @@ import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
-const message = useMessage();
+const push = usePush();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -69,11 +69,11 @@ const removeIntervention = async (id: string) => {
     );
 
     if (!response.ok) {
-      message.error("Failed to delete intervention");
+      push.error("Failed to delete intervention");
       throw new Error("Network response was not ok");
     }
 
-    message.success("Intervention deleted successfully");
+    push.success("Intervention deleted successfully");
   }
 
   moduleData.interventions = moduleData.interventions.filter((item) => item.id !== id);
@@ -124,11 +124,11 @@ const saveMetadata = (e: MouseEvent) => {
       );
 
       if (!response.ok) {
-        message.error("Something went wrong. Please try again later.");
+        push.error("Something went wrong. Please try again later.");
 
         throw new Error("Network response was not ok");
       } else {
-        message.success("Study updated successfully.");
+        push.success("Study updated successfully.");
 
         // refresh page
         router.go(0);

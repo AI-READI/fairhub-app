@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import type { MenuOption } from "naive-ui";
+import type { MenuInst, MenuOption } from "naive-ui";
 import { NLayoutSider, NMenu, NSpace } from "naive-ui";
 import { computed, h } from "vue";
+// import {ref} from "vue/dist/vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 
 import { useSidebarStore } from "@/stores/sidebar";
@@ -48,7 +49,7 @@ const UpperMenuOptions = computed(() => [
   {
     icon: renderIcon("tabler:home-2"),
     key: "studies:all-studies",
-    label: "All Studies",
+    label: "My Studies",
   },
   {
     icon: renderIcon("material-symbols:overview-key-rounded"),
@@ -92,6 +93,11 @@ const UpperMenuOptions = computed(() => [
         icon: renderIcon("material-symbols:conditions-rounded"),
         key: "study:metadata:conditions",
         label: "Conditions",
+      },
+      {
+        icon: renderIcon("codicon:symbol-keyword"),
+        key: "study:metadata:keywords",
+        label: "Keywords",
       },
       {
         icon: renderIcon("iconoir:design-pencil"),
@@ -384,6 +390,20 @@ const defaultExpandedKeys = computed(() => {
   }
   return [];
 });
+
+const selectedKeyRef = ref("1");
+const menuInstRef = ref<MenuInst | null>(null);
+
+const selectAndExpand = (key: string) => {
+  selectedKeyRef.value = key;
+  menuInstRef.value?.showOption(key);
+};
+
+router.beforeEach((to) => {
+  if (typeof to.name !== "string") return;
+  const name: string = to.meta && to.meta.menuItem ? (to.meta.menuItem as string) : to.name;
+  selectAndExpand(name);
+});
 </script>
 
 <template>
@@ -401,6 +421,8 @@ const defaultExpandedKeys = computed(() => {
     <n-space vertical justify="space-between" class="h-full">
       <div class="flex flex-col justify-start divide-y">
         <n-menu
+          ref="menuInstRef"
+          v-model:value="selectedKeyRef"
           :collapsed-width="64"
           :collapsed-icon-size="22"
           :default-expanded-keys="defaultExpandedKeys"
@@ -411,6 +433,8 @@ const defaultExpandedKeys = computed(() => {
       </div>
 
       <n-menu
+        ref="menuInstRef"
+        v-model:value="selectedKeyRef"
         :collapsed-width="64"
         :collapsed-icon-size="22"
         :collapsed="sidebarCollapsed"

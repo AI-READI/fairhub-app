@@ -173,6 +173,7 @@ export interface DatasetRight {
   id: string;
   identifier: string;
   identifier_scheme: string;
+  license_text: string;
   origin: string;
   rights: string;
   uri: string;

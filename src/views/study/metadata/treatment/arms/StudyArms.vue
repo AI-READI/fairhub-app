@@ -8,7 +8,7 @@ import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
-const message = useMessage();
+const push = usePush();
 
 const apiLoading = ref(false);
 
@@ -59,11 +59,11 @@ const removeArmGroup = async (id: string) => {
     });
 
     if (!response.ok) {
-      message.error("Failed to delete arm group");
+      push.error("Failed to delete arm group");
       throw new Error("Network response was not ok");
     }
 
-    message.success("Arm group deleted successfully");
+    push.success("Arm group deleted successfully");
   }
 
   moduleData.arms = moduleData.arms.filter((item) => item.id !== id);
@@ -109,10 +109,10 @@ const saveMetadata = (e: MouseEvent) => {
       });
 
       if (!response.ok) {
-        message.error("Something went wrong. Please try again later.");
+        push.error("Something went wrong. Please try again later.");
         throw new Error("Network response was not ok");
       } else {
-        message.success("Study updated successfully.");
+        push.success("Study updated successfully.");
 
         // refresh page
         router.go(0);

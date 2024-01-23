@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { faker } from "@faker-js/faker";
 import type { FormInst, FormRules } from "naive-ui";
-import { useMessage } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import { useAuthStore } from "@/stores/auth";
@@ -10,7 +9,7 @@ import { baseURL } from "@/utils/constants";
 
 const router = useRouter();
 const route = useRoute();
-const { error, success } = useMessage();
+const push = usePush();
 
 const authStore = useAuthStore();
 
@@ -20,7 +19,7 @@ const routeParams = {
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
-    error("You are not logged in.");
+    push.error("You are not logged in.");
     router.push({ name: "home" });
   }
 });
@@ -92,17 +91,17 @@ const addParticipant = (e: MouseEvent) => {
         });
 
         if (!response.ok) {
-          error("Something went wrong.");
+          push.error("Something went wrong.");
           return;
         }
 
-        success("Participant added to study.");
+        push.success("Participant added to study.");
 
         router.push({ name: "study-participants", params: { studyId } });
       } catch (err) {
         console.log(err);
 
-        error("Something went wrong.");
+        push.error("Something went wrong.");
       }
     } else {
       console.log("error");

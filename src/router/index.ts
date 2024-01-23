@@ -23,6 +23,7 @@ import DatasetMetadataOther from "@/views/study/dataset/metadata/about/DatasetMe
 import DatasetMetadataAccess from "@/views/study/dataset/metadata/access/DatasetMetadataAccess.vue";
 import DatasetMetadataConsent from "@/views/study/dataset/metadata/consent/DatasetMetadataConsent.vue";
 import DatasetMetadataContributors from "@/views/study/dataset/metadata/contributors/DatasetMetadataContributors.vue";
+import DatasetMetadataCreator from "@/views/study/dataset/metadata/creators/DatasetMetadataCreator.vue";
 import DatasetMetadataDates from "@/views/study/dataset/metadata/dates/DatasetMetadataDates.vue";
 import DatasetMetadataDeIdentification from "@/views/study/dataset/metadata/deidentification/DatasetMetadataDeIdentification.vue";
 import DatasetMetadataDescriptions from "@/views/study/dataset/metadata/descriptions/DatasetMetadataDescriptions.vue";
@@ -39,6 +40,7 @@ import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue"
 import PublishChangelog from "@/views/study/dataset/publish/changelog/PublishChangelog.vue";
 import PublishDatasetMetadata from "@/views/study/dataset/publish/metadata/PublishDatasetMetadata.vue";
 import PublishStudyMetadata from "@/views/study/dataset/publish/metadata/PublishStudyMetadata.vue";
+import NewVersion from "@/views/study/dataset/publish/new/NewVersion.vue";
 import PublishSelectParticipants from "@/views/study/dataset/publish/participants/PublishSelectParticipants.vue";
 import PublishReadme from "@/views/study/dataset/publish/readme/PublishReadme.vue";
 import PublishRouterView from "@/views/study/dataset/publish/root/PublishRouterView.vue";
@@ -58,6 +60,7 @@ import StudyLocations from "@/views/study/metadata/enrollment/locations/StudyLoc
 import StudyOfficials from "@/views/study/metadata/enrollment/officials/StudyOfficials.vue";
 import StudyIdentification from "@/views/study/metadata/identification/StudyIdentification.vue";
 import StudyIPDSharing from "@/views/study/metadata/ipdsharing/StudyIPDSharing.vue";
+import StudyKeywords from "@/views/study/metadata/keywords/StudyKeywords.vue";
 import StudyOversight from "@/views/study/metadata/oversight/StudyOversight.vue";
 import StudyAvailableIPD from "@/views/study/metadata/references/availableipd/StudyAvailableIPD.vue";
 import StudyLinks from "@/views/study/metadata/references/links/StudyLinks.vue";
@@ -115,6 +118,7 @@ const router = createRouter({
           name: "studies:new-study",
           path: "new",
           component: NewStudy,
+          meta: { menuItem: "studies:all-studies" },
         },
       ],
     },
@@ -144,6 +148,7 @@ const router = createRouter({
               name: "study:add-participant",
               path: "add",
               component: AddParticipant,
+              meta: { menuItem: "study:participants" },
             },
           ],
         },
@@ -203,19 +208,25 @@ const router = createRouter({
           component: StudyContributors,
         },
         {
-          name: "study:all-datasets",
           path: "datasets",
-          component: AllDatasets,
+          children: [
+            {
+              name: "study:all-datasets",
+              path: "",
+              component: AllDatasets,
+            },
+            {
+              name: "dataset:new",
+              path: "new",
+              component: NewDataset,
+              meta: { menuItem: "study:all-datasets" },
+            },
+          ],
         },
         {
           name: "dataset:root",
           path: "dataset",
           children: [
-            {
-              name: "dataset:new",
-              path: "new",
-              component: NewDataset,
-            },
             {
               path: ":datasetId",
               children: [
@@ -246,6 +257,11 @@ const router = createRouter({
                       name: "dataset:metadata:contributors",
                       path: "contributors",
                       component: DatasetMetadataContributors,
+                    },
+                    {
+                      name: "dataset:metadata:creators",
+                      path: "creators",
+                      component: DatasetMetadataCreator,
                     },
                     {
                       name: "dataset:metadata:dates",
@@ -314,37 +330,49 @@ const router = createRouter({
                       component: PublishAllVersions,
                     },
                     {
+                      name: "dataset:publish:versions:new",
+                      path: "new",
+                      component: NewVersion,
+                      meta: { menuItem: "dataset:publish:versions" },
+                    },
+                    {
                       path: ":versionId",
                       children: [
                         {
                           name: "dataset:publish:version:participants",
                           path: "participants",
                           component: PublishSelectParticipants,
+                          meta: { menuItem: "dataset:publish:versions" },
                         },
                         {
                           name: "dataset:publish:version:study-metadata",
                           path: "study-metadata",
                           component: PublishStudyMetadata,
+                          meta: { menuItem: "dataset:publish:versions" },
                         },
                         {
                           name: "dataset:publish:version:dataset-metadata",
                           path: "dataset-metadata",
                           component: PublishDatasetMetadata,
+                          meta: { menuItem: "dataset:publish:versions" },
                         },
                         {
                           name: "dataset:publish:version:changelog",
                           path: "changelog",
                           component: PublishChangelog,
+                          meta: { menuItem: "dataset:publish:versions" },
                         },
                         {
                           name: "dataset:publish:version:readme",
                           path: "additional-readme",
                           component: PublishReadme,
+                          meta: { menuItem: "dataset:publish:versions" },
                         },
                         {
                           name: "dataset:publish:version:summary",
                           path: "summary",
                           component: PublishSummary,
+                          meta: { menuItem: "dataset:publish:versions" },
                         },
                       ],
                     },
@@ -394,6 +422,11 @@ const router = createRouter({
               name: "study:metadata:conditions",
               path: "conditions",
               component: StudyConditions,
+            },
+            {
+              name: "study:metadata:keywords",
+              path: "keywords",
+              component: StudyKeywords,
             },
             {
               name: "study:metadata:design",
@@ -462,6 +495,7 @@ const router = createRouter({
       name: "all-settings",
       path: "/settings",
       component: AllSettings,
+      meta: { menuItem: "settings" },
     },
     {
       name: "help",

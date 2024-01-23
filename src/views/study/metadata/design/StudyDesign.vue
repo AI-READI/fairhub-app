@@ -7,7 +7,7 @@ import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
-const message = useMessage();
+const push = usePush();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -170,7 +170,7 @@ const saveMetadata = (e: MouseEvent) => {
          * TODO: create a custom rule for this
          */
         if (moduleData.number_arms && moduleData.number_arms <= 0) {
-          message.error("Number of arms must be greater than 0.");
+          push.error("Number of arms must be greater than 0.");
           return;
         }
       }
@@ -226,10 +226,10 @@ const saveMetadata = (e: MouseEvent) => {
       });
 
       if (!response.ok) {
-        message.error("Something went wrong.");
+        push.error("Something went wrong.");
         return;
       } else {
-        message.success("Study updated successfully.");
+        push.success("Study updated successfully.");
 
         // refresh page
         router.go(0);

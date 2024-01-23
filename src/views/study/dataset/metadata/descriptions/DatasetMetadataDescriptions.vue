@@ -68,6 +68,7 @@ const removeDescription = async (item_id: string) => {
 
       throw new Error("Something went wrong.");
     }
+    push.success("Dataset description removed successfully");
   }
 
   moduleData.descriptions = moduleData.descriptions.filter((item) => item.id !== item_id);

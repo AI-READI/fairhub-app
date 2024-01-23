@@ -36,3 +36,4 @@ coverage
 # auto-imports.d.ts is needed for vue-tsc to work. Other solution is to flip build and tsc in package.json `"build": "run-s build-only type-check",`
 !auto-imports.d.ts
 components.d.ts
+.env

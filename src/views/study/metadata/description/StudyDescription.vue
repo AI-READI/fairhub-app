@@ -5,7 +5,7 @@ import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
-const message = useMessage();
+const push = usePush();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -68,10 +68,10 @@ const saveMetadata = (e: MouseEvent) => {
       );
 
       if (!response.ok) {
-        message.error("Something went wrong.");
+        push.error("Something went wrong.");
         return;
       } else {
-        message.success("Study updated successfully.");
+        push.success("Study updated successfully.");
 
         // refresh page
         router.go(0);
