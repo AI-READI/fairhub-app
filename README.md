@@ -1,8 +1,10 @@
+# Readme
+
 <div align="center">
 <br />
 
 <a>
-  <img src="https://github.com/AI-READI/fairhub.io-logo/blob/main/logo-with-text.png?raw=true"
+  <img src="https://github.com/AI-READI/fairhub.io-logo/blob/main/logo-with-text.png?raw=true" alt="FAIRhub Logo"
 height="80" width="250"/>
 </a>
 
@@ -104,21 +106,23 @@ yarn lint
 
 ### fairhub.io
 
-This repository is automatically deployed to [Azure](https://azure.microsoft.com/en-us/products/app-service/static/) on every push to the repository. If you need to reference a specific branch or pull request, you can do so by using the following URL pattern:
+This repository is automatically deployed to [Azure](https://azure.microsoft.com/en-us/products/app-service/static/) on every push to the repository. If you need to reference a specific pull request, you can do so by using the following URL pattern:
 
-- <https://brave-ground-07b6bfb10->`BRANCH_NAME`.centralus.2.azurestaticapps.net
-- <https://brave-ground-07b6bfb10->`GITHUB_PR_NUMBER`.centralus.2.azurestaticapps.net
+- <https://orange-sky-0323eca10->`GITHUB_PR_NUMBER`.4.azurestaticapps.net
 
-The `production` branch is automatically deployed to the following URL: [fairhub.io](https://fairhub.io).
+The `main` branch is automatically deployed to the following URL: [app.fairhub.io](https://app.fairhub.io).
+
+- <https://witty-mushroom-03791f510->`GITHUB_PR_NUMBER`.4.azurestaticapps.net
+
+The `staging` branch is automatically deployed to the following URL: [staging.app.fairhub.io](https://staging.app.fairhub.io).
 
 ### style.fairhub.io
 
-The storybook for the FAIRhub UI library is automatically deployed to [Azure](https://azure.microsoft.com/en-us/products/app-service/static) on every push to the repository. If you need to reference a specific branch or pull request, you can do so by using the following URL pattern:
+The storybook for the FAIRhub UI library is automatically deployed to [Azure](https://azure.microsoft.com/en-us/products/app-service/static) on every push to the repository. If you need to reference a specific pull request, you can do so by using the following URL pattern:
 
-- <https://white-ocean-00e852610-->`BRANCH_NAME`.centralus.2.azurestaticapps.net
-- <https://white-ocean-00e852610-->`GITHUB_PR_NUMBER`.centralus.2.azurestaticapps.net
+- <https://white-ocean-00e852610-->`GITHUB_PR_NUMBER`.4.azurestaticapps.net
 
-The `production` branch is automatically deployed to the following URL: [style.fairhub.io](https://style.fairhub.io).
+The `main` branch is automatically deployed to the following URL: [style.fairhub.io](https://style.fairhub.io).
 
 ## Documentation
 
@@ -156,8 +160,8 @@ The typical inputs of FAIRhub will be clinical and biomedical research related d
 
 ## Contributing
 
-<a href="https://github.com/AI-READI/aireadi.org/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=AI-READI/aireadi.org" />
+<a href="https://github.com/AI-READI/fairhub-app/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=AI-READI/aireadi.org" alt="fairhub contributors" />
 </a>
 
 Contributions are always welcome!
@@ -175,9 +179,7 @@ If you have any questions or suggestions, please contact us using [GitHub issues
 This work is licensed under
 [MIT](https://opensource.org/licenses/mit). See [LICENSE](https://github.com/AI-READI/fairhub.io/blob/main/LICENSE) for more information.
 
-<a href="https://aireadi.org" >
-  <img src="https://www.channelfutures.com/files/2017/04/3_0.png" height="30" />
-</a>
+<img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/License_icon-mit.svg" height="30" alt='MIT License Logo' />
 
 ## How to cite
 
@@ -194,6 +196,6 @@ This project is supported by the NIH-funded Bridge2AI program (1OT2OD032644). Th
 <div align="center">
 
 <a href="https://aireadi.org">
-  <img src="https://github.com/AI-READI/AI-READI-logo/raw/main/logo/png/option2.png" height="200" />
+  <img src="https://github.com/AI-READI/AI-READI-logo/raw/main/logo/png/option2.png" height="200" alt="AI-READI logo" />
 </a>
 </div>
