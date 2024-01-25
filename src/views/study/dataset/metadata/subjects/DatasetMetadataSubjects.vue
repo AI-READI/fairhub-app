@@ -23,13 +23,20 @@ const moduleData = reactive<DatasetSubjects>({
   subjects: [],
 });
 
+const responseLoading = ref(false);
+const submitLoading = ref(false);
+
 onBeforeMount(async () => {
+  responseLoading.value = true;
+
   const response = await fetch(
     `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/subject`,
     {
       method: "GET",
     }
   );
+
+  responseLoading.value = false;
 
   if (!response.ok) {
     push.error("Something went wrong.");
@@ -38,8 +45,6 @@ onBeforeMount(async () => {
   }
 
   const data = await response.json();
-
-  console.log(data);
 
   moduleData.subjects = data.map((item: any) => {
     return {
@@ -106,6 +111,8 @@ const saveMetadata = (e: MouseEvent) => {
         }
       });
 
+      submitLoading.value = true;
+
       const response = await fetch(
         `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/subject`,
         {
@@ -114,6 +121,8 @@ const saveMetadata = (e: MouseEvent) => {
           method: "POST",
         }
       );
+
+      submitLoading.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong.");
@@ -146,94 +155,109 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
-      <CollapsibleCard
-        v-for="(item, index) in moduleData.subjects"
-        :key="item.id"
-        class="mb-5 shadow-md"
-        :title="item.subject || `Subject ${index + 1}`"
-        bordered
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
+
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
       >
-        <template #header-extra>
-          <n-popconfirm @positive-click="removeDate(item.id)">
-            <template #trigger>
-              <n-button type="error" secondary>
-                <template #icon>
-                  <f-icon icon="ep:delete" />
-                </template>
-
-                Remove subject
-              </n-button>
-            </template>
-
-            Are you sure you want to remove this subject?
-          </n-popconfirm>
-        </template>
-
-        <n-form-item
-          label="Subject"
-          :path="`subjects[${index}].subject`"
-          :rule="{
-            message: 'Please add the subject',
-            required: true,
-            trigger: ['blur', 'input'],
-          }"
+        <CollapsibleCard
+          v-for="(item, index) in moduleData.subjects"
+          :key="item.id"
+          class="mb-5 shadow-md"
+          :title="item.subject || `Subject ${index + 1}`"
+          bordered
         >
-          <n-input
-            v-model:value="item.subject"
-            placeholder="The subject, keyword, classification code, or key phrase that describes the resource."
-            clearable
-          />
-        </n-form-item>
+          <template #header-extra>
+            <n-popconfirm @positive-click="removeDate(item.id)">
+              <template #trigger>
+                <n-button type="error" secondary>
+                  <template #icon>
+                    <f-icon icon="ep:delete" />
+                  </template>
 
-        <n-form-item label="Scheme" :path="`subjects[${index}].scheme`">
-          <n-input v-model:value="item.scheme" placeholder="ANZSRC Fields of Research" clearable />
-        </n-form-item>
+                  Remove subject
+                </n-button>
+              </template>
 
-        <n-form-item label="Scheme URI" :path="`subjects[${index}].scheme_uri`">
-          <n-input
-            v-model:value="item.scheme_uri"
-            placeholder="https://id.loc.gov/authorities/subjects.html"
-            clearable
-          />
-        </n-form-item>
-
-        <n-form-item label="Value URI" :path="`subjects[${index}].value_uri`">
-          <n-input
-            v-model:value="item.value_uri"
-            placeholder="https://id.loc.gov/authorities/subjects/sh85118622.html"
-            clearable
-          />
-        </n-form-item>
-
-        <n-form-item label="Classification Code" :path="`subjects[${index}].classification_code`">
-          <n-input
-            v-model:value="item.classification_code"
-            placeholder="https://id.loc.gov/authorities/subjects/sh85118622.html"
-            clearable
-          />
-        </n-form-item>
-      </CollapsibleCard>
-
-      <n-button class="my-10 w-full" dashed type="success" @click="addSubject">
-        <template #icon>
-          <f-icon icon="gridicons:create" />
-        </template>
-
-        Add a new subject
-      </n-button>
-
-      <n-divider />
-
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata">
-          <template #icon>
-            <f-icon icon="material-symbols:save" />
+              Are you sure you want to remove this subject?
+            </n-popconfirm>
           </template>
 
-          Save Metadata
+          <n-form-item
+            label="Subject"
+            :path="`subjects[${index}].subject`"
+            :rule="{
+              message: 'Please add the subject',
+              required: true,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-input
+              v-model:value="item.subject"
+              placeholder="The subject, keyword, classification code, or key phrase that describes the resource."
+              clearable
+            />
+          </n-form-item>
+
+          <n-form-item label="Scheme" :path="`subjects[${index}].scheme`">
+            <n-input
+              v-model:value="item.scheme"
+              placeholder="ANZSRC Fields of Research"
+              clearable
+            />
+          </n-form-item>
+
+          <n-form-item label="Scheme URI" :path="`subjects[${index}].scheme_uri`">
+            <n-input
+              v-model:value="item.scheme_uri"
+              placeholder="https://id.loc.gov/authorities/subjects.html"
+              clearable
+            />
+          </n-form-item>
+
+          <n-form-item label="Value URI" :path="`subjects[${index}].value_uri`">
+            <n-input
+              v-model:value="item.value_uri"
+              placeholder="https://id.loc.gov/authorities/subjects/sh85118622.html"
+              clearable
+            />
+          </n-form-item>
+
+          <n-form-item label="Classification Code" :path="`subjects[${index}].classification_code`">
+            <n-input
+              v-model:value="item.classification_code"
+              placeholder="https://id.loc.gov/authorities/subjects/sh85118622.html"
+              clearable
+            />
+          </n-form-item>
+        </CollapsibleCard>
+
+        <n-button class="my-10 w-full" dashed type="success" @click="addSubject">
+          <template #icon>
+            <f-icon icon="gridicons:create" />
+          </template>
+
+          Add a new subject
         </n-button>
-      </div>
-    </n-form>
+
+        <n-divider />
+
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="submitLoading">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>

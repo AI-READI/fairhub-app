@@ -38,12 +38,17 @@ const rules: FormRules = {
   },
 };
 
-const loading = ref(false);
+const responseLoading = ref(false);
+const submitLoading = ref(false);
 
 onBeforeMount(async () => {
+  responseLoading.value = true;
+
   const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/access`, {
     method: "GET",
   });
+
+  responseLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -58,7 +63,7 @@ const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
     if (!errors) {
-      loading.value = true;
+      submitLoading.value = true;
 
       const data = {
         description: moduleData.value.description,
@@ -75,7 +80,7 @@ const saveMetadata = (e: MouseEvent) => {
         }
       );
 
-      loading.value = false;
+      submitLoading.value = false;
 
       if (!response.ok) {
         push.error({
@@ -110,55 +115,60 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <n-form
-      ref="formRef"
-      :model="moduleData"
-      :rules="rules"
-      size="large"
-      label-placement="top"
-      class="pr-4"
-    >
-      <n-form-item label="Type" path="type">
-        <n-select
-          v-model:value="moduleData.type"
-          placeholder="Public On Screen Access and Download"
-          clearable
-          :options="FORM_JSON.datasetAccessTypeOptions"
-        />
-      </n-form-item>
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
 
-      <n-form-item label="Description" path="description">
-        <n-input
-          v-model:value="moduleData.description"
-          placeholder="A textual description of the access being offered, for example identifying the groups to which access is granted, the criteria on which a case-by-case decision would be based, any further restrictions on on-screen access, etc."
-          type="textarea"
-          clearable
-        />
-      </n-form-item>
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        :rules="rules"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
+      >
+        <n-form-item label="Type" path="type">
+          <n-select
+            v-model:value="moduleData.type"
+            placeholder="Public On Screen Access and Download"
+            clearable
+            :options="FORM_JSON.datasetAccessTypeOptions"
+          />
+        </n-form-item>
 
-      <n-form-item label="URL" path="url">
-        <n-input
-          v-model:value="moduleData.url"
-          placeholder="A url of a web page that provides details of the accesss available, possibly including the practical details required or a form to use to apply for access."
-          clearable
-        />
-      </n-form-item>
+        <n-form-item label="Description" path="description">
+          <n-input
+            v-model:value="moduleData.description"
+            placeholder="A textual description of the access being offered, for example identifying the groups to which access is granted, the criteria on which a case-by-case decision would be based, any further restrictions on on-screen access, etc."
+            type="textarea"
+            clearable
+          />
+        </n-form-item>
 
-      <n-form-item label="URL Last Checked" path="url_last_checked">
-        <n-date-picker v-model:value="moduleData.url_last_checked" type="date" clearable />
-      </n-form-item>
+        <n-form-item label="URL" path="url">
+          <n-input
+            v-model:value="moduleData.url"
+            placeholder="A url of a web page that provides details of the accesss available, possibly including the practical details required or a form to use to apply for access."
+            clearable
+          />
+        </n-form-item>
 
-      <n-divider />
+        <n-form-item label="URL Last Checked" path="url_last_checked">
+          <n-date-picker v-model:value="moduleData.url_last_checked" type="date" clearable />
+        </n-form-item>
 
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
-          <template #icon>
-            <f-icon icon="material-symbols:save" />
-          </template>
+        <n-divider />
 
-          Save Metadata
-        </n-button>
-      </div>
-    </n-form>
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="submitLoading">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>

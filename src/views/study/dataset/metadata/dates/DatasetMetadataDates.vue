@@ -24,10 +24,17 @@ const moduleData = reactive<DatasetDates>({
   dates: [],
 });
 
+const responseLoading = ref(false);
+const submitLoading = ref(false);
+
 onBeforeMount(async () => {
+  responseLoading.value = true;
+
   const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/date`, {
     method: "GET",
   });
+
+  responseLoading.value = false;
 
   if (!response.ok) {
     push.error("Something went wrong.");
@@ -100,6 +107,8 @@ const saveMetadata = (e: MouseEvent) => {
         }
       });
 
+      submitLoading.value = true;
+
       const response = await fetch(
         `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/date`,
         {
@@ -108,6 +117,8 @@ const saveMetadata = (e: MouseEvent) => {
           method: "POST",
         }
       );
+
+      submitLoading.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong.");
@@ -140,89 +151,100 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
-      <CollapsibleCard
-        v-for="(item, index) in moduleData.dates"
-        :key="item.id"
-        class="mb-5 shadow-md"
-        :title="item.type || `Date ${index + 1}`"
-        bordered
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
+
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
       >
-        <template #header-extra>
-          <n-popconfirm @positive-click="removeDate(item.id)">
-            <template #trigger>
-              <n-button type="error" secondary>
-                <template #icon>
-                  <f-icon icon="ep:delete" />
-                </template>
-
-                Remove date
-              </n-button>
-            </template>
-
-            Are you sure you want to remove this date?
-          </n-popconfirm>
-        </template>
-
-        <n-form-item
-          label="Date Value"
-          :path="`dates[${index}].date`"
-          :rule="{
-            message: 'Please select a date',
-            required: true,
-            type: 'number',
-            trigger: ['blur', 'input'],
-          }"
+        <CollapsibleCard
+          v-for="(item, index) in moduleData.dates"
+          :key="item.id"
+          class="mb-5 shadow-md"
+          :title="item.type || `Date ${index + 1}`"
+          bordered
         >
-          <n-date-picker v-model:value="item.date" type="date" clearable />
-        </n-form-item>
+          <template #header-extra>
+            <n-popconfirm @positive-click="removeDate(item.id)">
+              <template #trigger>
+                <n-button type="error" secondary>
+                  <template #icon>
+                    <f-icon icon="ep:delete" />
+                  </template>
 
-        <n-form-item
-          label="Type"
-          :path="`dates[${index}].type`"
-          :rule="{
-            message: 'Please select the ',
-            required: true,
-            trigger: ['blur', 'change'],
-          }"
-        >
-          <n-select
-            v-model:value="item.type"
-            placeholder="Accepted"
-            clearable
-            :options="FORM_JSON.datasetDateTypeOptions"
-          />
-        </n-form-item>
+                  Remove date
+                </n-button>
+              </template>
 
-        <n-form-item label="Information" :path="`dates[${index}].information`">
-          <n-input
-            v-model:value="item.information"
-            placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-            type="textarea"
-            clearable
-          />
-        </n-form-item>
-      </CollapsibleCard>
-
-      <n-button class="my-10 w-full" dashed type="success" @click="addDate">
-        <template #icon>
-          <f-icon icon="gridicons:create" />
-        </template>
-
-        Add a new date
-      </n-button>
-
-      <n-divider />
-
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata">
-          <template #icon>
-            <f-icon icon="material-symbols:save" />
+              Are you sure you want to remove this date?
+            </n-popconfirm>
           </template>
 
-          Save Metadata
+          <n-form-item
+            label="Date Value"
+            :path="`dates[${index}].date`"
+            :rule="{
+              message: 'Please select a date',
+              required: true,
+              type: 'number',
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-date-picker v-model:value="item.date" type="date" clearable />
+          </n-form-item>
+
+          <n-form-item
+            label="Type"
+            :path="`dates[${index}].type`"
+            :rule="{
+              message: 'Please select the ',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-select
+              v-model:value="item.type"
+              placeholder="Accepted"
+              clearable
+              :options="FORM_JSON.datasetDateTypeOptions"
+            />
+          </n-form-item>
+
+          <n-form-item label="Information" :path="`dates[${index}].information`">
+            <n-input
+              v-model:value="item.information"
+              placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+              type="textarea"
+              clearable
+            />
+          </n-form-item>
+        </CollapsibleCard>
+
+        <n-button class="my-10 w-full" dashed type="success" @click="addDate">
+          <template #icon>
+            <f-icon icon="gridicons:create" />
+          </template>
+
+          Add a new date
         </n-button>
-      </div>
-    </n-form>
+
+        <n-divider />
+
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="submitLoading">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>
