@@ -5,7 +5,7 @@ import { baseURL } from "@/utils/constants";
 const route = useRoute();
 const router = useRouter();
 // const baseURL = "http://localhost:5000";
-const study_metadata: Ref<VersionStudyMetadata | null> = ref(null);
+const study_metadata: Ref<VersionStudyMetadata> = ref({} as VersionStudyMetadata);
 
 const routeParams = {
   datasetId: route.params.datasetId,

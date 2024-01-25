@@ -6,7 +6,7 @@ import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
-const dataset_metadata: Ref<VersionDatasetMetadata | null> = ref(null);
+const dataset_metadata: Ref<VersionDatasetMetadata> = ref({} as VersionDatasetMetadata);
 
 const routeParams = {
   datasetId: route.params.datasetId,
