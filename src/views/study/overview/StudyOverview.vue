@@ -71,47 +71,10 @@ const editStudyDetails = () => {
 
             <span>{{ displayHumanFriendlyDateAndTime(study.updated_on) }}</span>
           </p>
-
-          <!-- <p>
-            <span class="font-bold">Latest published version: </span>
-            <span v-if="study.last_published">
-              {{ study.last_published.version }}
-              ({{ study.last_published.date }})
-            </span>
-            <span v-else>Study not published yet</span>
-          </p>
-
-          <p v-if="study.last_published">
-            <span class="font-bold">Study DOI: </span>
-            <span v-if="study.last_published">
-              {{ study.last_published.doi }}
-            </span>
-            <span v-else>Not published yet</span>
-          </p> -->
         </div>
 
         <n-image :src="study.image" width="200" height="200" />
       </div>
-
-      <n-divider />
-
-      <h2>Files</h2>
-
-      <n-space vertical>
-        <n-skeleton height="40px" width="33%" />
-
-        <n-skeleton height="40px" width="66%" :sharp="false" />
-
-        <n-skeleton height="40px" width="66%" :sharp="false" />
-
-        <n-skeleton height="40px" width="33%" />
-
-        <n-skeleton height="40px" width="66%" :sharp="false" />
-
-        <n-skeleton height="40px" width="33%" />
-
-        <n-skeleton height="40px" width="66%" :sharp="false" />
-      </n-space>
     </main>
   </FadeTransition>
 </template>

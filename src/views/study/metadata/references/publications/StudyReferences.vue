@@ -16,12 +16,19 @@ const moduleData = reactive<StudyReferences>({
   reference_list: [],
 });
 
+const loading = ref(false);
+const responseLoading = ref(false);
+
 onBeforeMount(async () => {
   const studyId = route.params.studyId;
+
+  responseLoading.value = true;
 
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/reference`, {
     method: "GET",
   });
+
+  responseLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -92,10 +99,14 @@ const saveMetadata = (e: MouseEvent) => {
         }
       });
 
+      loading.value = true;
+
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/reference`, {
         body: JSON.stringify(data),
         method: "POST",
       });
+
+      loading.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong.");
@@ -129,82 +140,96 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
-      <CollapsibleCard
-        v-for="(item, index) in moduleData.reference_list"
-        :key="item.id"
-        class="mb-5 shadow-md"
-        :title="`Reference ${index + 1}`"
-        bordered
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
+
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
       >
-        <template #header-extra>
-          <n-popconfirm @positive-click="removePublication(item.id)">
-            <template #trigger>
-              <n-button type="error" secondary>
-                <template #icon>
-                  <f-icon icon="ep:delete" />
-                </template>
-
-                Remove Reference
-              </n-button>
-            </template>
-
-            Are you sure you want to remove this reference?
-          </n-popconfirm>
-        </template>
-
-        <n-form-item
-          label="Citation (in NLM MEDLINE format)"
-          :path="`reference_list[${index}].citation`"
-          :rule="{
-            message: 'Please enter a citation',
-            required: true,
-            trigger: ['blur', 'change'],
-          }"
+        <CollapsibleCard
+          v-for="(item, index) in moduleData.reference_list"
+          :key="item.id"
+          class="mb-5 shadow-md"
+          :title="`Reference ${index + 1}`"
+          bordered
         >
-          <n-input v-model:value="item.citation" placeholder="Lorem Ipsum" clearable />
-        </n-form-item>
+          <template #header-extra>
+            <n-popconfirm @positive-click="removePublication(item.id)">
+              <template #trigger>
+                <n-button type="error" secondary>
+                  <template #icon>
+                    <f-icon icon="ep:delete" />
+                  </template>
 
-        <n-form-item label="Identifier (PMID or DOI)" :path="`reference_list[${index}].identifier`">
-          <n-input
-            v-model:value="item.identifier"
-            placeholder="10.1038/s41597-023-02463-x"
-            clearable
-          />
-        </n-form-item>
+                  Remove Reference
+                </n-button>
+              </template>
 
-        <n-form-item
-          label="Does this reference provide reports from this study?"
-          :path="`reference_list[${index}].type`"
-        >
-          <n-select
-            v-model:value="item.type"
-            placeholder="Yes"
-            clearable
-            :options="FORM_JSON.studyMetadataReferencesGenericOptions"
-          />
-        </n-form-item>
-      </CollapsibleCard>
-
-      <n-button class="my-10 w-full" dashed type="success" @click="addPublication">
-        <template #icon>
-          <f-icon icon="gridicons:create" />
-        </template>
-
-        Add a Publication
-      </n-button>
-
-      <n-divider />
-
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata">
-          <template #icon>
-            <f-icon icon="material-symbols:save" />
+              Are you sure you want to remove this reference?
+            </n-popconfirm>
           </template>
 
-          Save Metadata
+          <n-form-item
+            label="Citation (in NLM MEDLINE format)"
+            :path="`reference_list[${index}].citation`"
+            :rule="{
+              message: 'Please enter a citation',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-input v-model:value="item.citation" placeholder="Lorem Ipsum" clearable />
+          </n-form-item>
+
+          <n-form-item
+            label="Identifier (PMID or DOI)"
+            :path="`reference_list[${index}].identifier`"
+          >
+            <n-input
+              v-model:value="item.identifier"
+              placeholder="10.1038/s41597-023-02463-x"
+              clearable
+            />
+          </n-form-item>
+
+          <n-form-item
+            label="Does this reference provide reports from this study?"
+            :path="`reference_list[${index}].type`"
+          >
+            <n-select
+              v-model:value="item.type"
+              placeholder="Yes"
+              clearable
+              :options="FORM_JSON.studyMetadataReferencesGenericOptions"
+            />
+          </n-form-item>
+        </CollapsibleCard>
+
+        <n-button class="my-10 w-full" dashed type="success" @click="addPublication">
+          <template #icon>
+            <f-icon icon="gridicons:create" />
+          </template>
+
+          Add a Publication
         </n-button>
-      </div>
-    </n-form>
+
+        <n-divider />
+
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>
