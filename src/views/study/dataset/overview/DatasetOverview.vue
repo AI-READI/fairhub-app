@@ -25,12 +25,18 @@ const routeParams = {
 const studyId = routeParams.studyId;
 const datasetId = routeParams.datasetId;
 
+const loading = ref(false);
+
 onBeforeMount(async () => {
   sidebarStore.setAppSidebarCollapsed(true);
+
+  loading.value = true;
 
   const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}`, {
     method: "GET",
   });
+
+  loading.value = false;
 
   if (!response.ok) {
     push.error("Something went wrong.");
@@ -55,12 +61,16 @@ onBeforeMount(async () => {
 
     <n-divider />
 
-    <div class="flex w-full justify-between">
-      <div class="pr-8">
-        <h2>{{ dataset.title || "Untitled Dataset" }}</h2>
+    <FadeTransition>
+      <LottieLoader v-if="loading" />
 
-        <p class="py-4">{{ dataset.description || "No description provided" }}</p>
+      <div class="flex w-full justify-between" v-else>
+        <div class="pr-8">
+          <h2>{{ dataset.title || "Untitled Dataset" }}</h2>
+
+          <p class="py-4">{{ dataset.description || "No description provided" }}</p>
+        </div>
       </div>
-    </div>
+    </FadeTransition>
   </main>
 </template>

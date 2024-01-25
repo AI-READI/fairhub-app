@@ -10,12 +10,17 @@ const formRef = ref<FormInst | null>(null);
 
 const moduleData = ref<string[]>([]);
 
+const loading = ref(false);
+const responseLoading = ref(false);
+
 onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
+  responseLoading.value = true;
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/collaborators`, {
     method: "GET",
   });
+  responseLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -44,6 +49,7 @@ const saveMetadata = (e: MouseEvent) => {
       // remove collaborators with duplicate names
       const uniqueCollaborators = [...new Set(collaborators)];
 
+      loading.value = true;
       const response = await fetch(
         `${baseURL}/study/${route.params.studyId}/metadata/collaborators`,
         {
@@ -51,6 +57,7 @@ const saveMetadata = (e: MouseEvent) => {
           method: "PUT",
         }
       );
+      loading.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong.");
@@ -87,44 +94,55 @@ const saveMetadata = (e: MouseEvent) => {
       confirming all collaborators before listing them.
     </p>
 
-    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
-      <n-form-item
-        v-for="(collaborator, index) in moduleData"
-        :key="index"
-        label="Full Name"
-        path="collaborator"
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
+
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
       >
-        <n-input v-model:value="moduleData[index]" placeholder="Historia Reiss" />
+        <n-form-item
+          v-for="(collaborator, index) in moduleData"
+          :key="index"
+          label="Full Name"
+          path="collaborator"
+        >
+          <n-input v-model:value="moduleData[index]" placeholder="Historia Reiss" />
 
-        <n-popconfirm @positive-click="removeCollaborator(index)">
-          <template #trigger>
-            <n-button class="ml-5">
-              <f-icon icon="gridicons:trash" />
-            </n-button>
-          </template>
+          <n-popconfirm @positive-click="removeCollaborator(index)">
+            <template #trigger>
+              <n-button class="ml-5">
+                <f-icon icon="gridicons:trash" />
+              </n-button>
+            </template>
 
-          Are you sure you want to remove this collaborator?
-        </n-popconfirm>
-      </n-form-item>
+            Are you sure you want to remove this collaborator?
+          </n-popconfirm>
+        </n-form-item>
 
-      <n-button class="mb-10 w-full" dashed type="success" @click="addCollaborator">
-        <template #icon>
-          <f-icon icon="gridicons:create" />
-        </template>
-
-        Add a Collaborator
-      </n-button>
-
-      <n-divider />
-
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata">
+        <n-button class="mb-10 w-full" dashed type="success" @click="addCollaborator">
           <template #icon>
-            <f-icon icon="material-symbols:save" />
+            <f-icon icon="gridicons:create" />
           </template>
-          Save Metadata
+
+          Add a Collaborator
         </n-button>
-      </div>
-    </n-form>
+
+        <n-divider />
+
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>

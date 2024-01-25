@@ -10,11 +10,11 @@ const showLoader = ref(false);
 onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
+  showLoader.value = true;
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/oversight`, {
     method: "GET",
   });
-
-  console.log(response);
+  showLoader.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -87,17 +87,6 @@ const saveMetadata = async (value: boolean) => {
           </FadeTransition>
         </div>
       </div>
-
-      <!-- <template #action>
-        <div class="flex justify-start">
-          <n-button size="large" type="primary" @click="saveMetadata" disabled>
-            <template #icon>
-              <f-icon icon="material-symbols:save" />
-            </template>
-            Save changes
-          </n-button>
-        </div>
-      </template> -->
     </n-card>
   </main>
 </template>

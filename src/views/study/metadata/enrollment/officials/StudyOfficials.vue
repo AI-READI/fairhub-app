@@ -16,12 +16,19 @@ const moduleData: StudyOverallOfficials = reactive({
   overall_official_list: [],
 });
 
+const loading = ref(false);
+const responseLoading = ref(false);
+
 onBeforeMount(async () => {
   const studyId = route.params.studyId;
+
+  responseLoading.value = true;
 
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/overall-official`, {
     method: "GET",
   });
+
+  responseLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -92,6 +99,8 @@ const saveMetadata = (e: MouseEvent) => {
         }
       });
 
+      loading.value = true;
+
       const response = await fetch(
         `${baseURL}/study/${route.params.studyId}/metadata/overall-official`,
         {
@@ -100,6 +109,8 @@ const saveMetadata = (e: MouseEvent) => {
           method: "POST",
         }
       );
+
+      loading.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong. Please try again later.");
@@ -133,91 +144,102 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
-      <CollapsibleCard
-        v-for="(item, index) in moduleData.overall_official_list"
-        :key="item.id"
-        class="mb-5 shadow-md"
-        :title="item.name || `Overall Official ${index + 1}`"
-        bordered
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
+
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
       >
-        <template #header-extra>
-          <n-popconfirm @positive-click="removeOverallOfficial(item.id)">
-            <template #trigger>
-              <n-button type="error" secondary>
-                <template #icon>
-                  <f-icon icon="ep:delete" />
-                </template>
-
-                Remove Overall Official
-              </n-button>
-            </template>
-
-            Are you sure you want to remove this person?
-          </n-popconfirm>
-        </template>
-
-        <n-form-item
-          label="Name"
-          :path="`overall_official_list[${index}].name`"
-          :rule="{
-            message: 'Please enter a name',
-            required: true,
-            trigger: ['blur', 'input'],
-          }"
+        <CollapsibleCard
+          v-for="(item, index) in moduleData.overall_official_list"
+          :key="item.id"
+          class="mb-5 shadow-md"
+          :title="item.name || `Overall Official ${index + 1}`"
+          bordered
         >
-          <n-input v-model:value="item.name" placeholder="Erwin Smith" clearable />
-        </n-form-item>
+          <template #header-extra>
+            <n-popconfirm @positive-click="removeOverallOfficial(item.id)">
+              <template #trigger>
+                <n-button type="error" secondary>
+                  <template #icon>
+                    <f-icon icon="ep:delete" />
+                  </template>
 
-        <n-form-item
-          label="Affiliation"
-          :path="`overall_official_list[${index}].affiliation`"
-          :rule="{
-            message: 'Please enter an affiliation',
-            required: true,
-            trigger: ['blur', 'input'],
-          }"
-        >
-          <n-input v-model:value="item.affiliation" placeholder="Scout Regiment" clearable />
-        </n-form-item>
+                  Remove Overall Official
+                </n-button>
+              </template>
 
-        <n-form-item
-          label="Role"
-          :path="`overall_official_list[${index}].role`"
-          :rule="{
-            message: 'Please select a role',
-            required: true,
-            trigger: ['blur', 'change'],
-          }"
-        >
-          <n-select
-            v-model:value="item.role"
-            placeholder="Study Chair"
-            clearable
-            :options="FORM_JSON.studyMetadataContactsOverallOfficialRole"
-          />
-        </n-form-item>
-      </CollapsibleCard>
-
-      <n-button class="my-10 w-full" dashed type="success" @click="addOverallOfficial">
-        <template #icon>
-          <f-icon icon="gridicons:create" />
-        </template>
-
-        Add an Overall Official Contact
-      </n-button>
-
-      <n-divider />
-
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata">
-          <template #icon>
-            <f-icon icon="material-symbols:save" />
+              Are you sure you want to remove this person?
+            </n-popconfirm>
           </template>
 
-          Save Metadata
+          <n-form-item
+            label="Name"
+            :path="`overall_official_list[${index}].name`"
+            :rule="{
+              message: 'Please enter a name',
+              required: true,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-input v-model:value="item.name" placeholder="Erwin Smith" clearable />
+          </n-form-item>
+
+          <n-form-item
+            label="Affiliation"
+            :path="`overall_official_list[${index}].affiliation`"
+            :rule="{
+              message: 'Please enter an affiliation',
+              required: true,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-input v-model:value="item.affiliation" placeholder="Scout Regiment" clearable />
+          </n-form-item>
+
+          <n-form-item
+            label="Role"
+            :path="`overall_official_list[${index}].role`"
+            :rule="{
+              message: 'Please select a role',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-select
+              v-model:value="item.role"
+              placeholder="Study Chair"
+              clearable
+              :options="FORM_JSON.studyMetadataContactsOverallOfficialRole"
+            />
+          </n-form-item>
+        </CollapsibleCard>
+
+        <n-button class="my-10 w-full" dashed type="success" @click="addOverallOfficial">
+          <template #icon>
+            <f-icon icon="gridicons:create" />
+          </template>
+
+          Add an Overall Official Contact
         </n-button>
-      </div>
-    </n-form>
+
+        <n-divider />
+
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>

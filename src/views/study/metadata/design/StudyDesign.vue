@@ -110,14 +110,17 @@ const whoMaskedOptions = [
   },
 ];
 
+const loading = ref(false);
+const responseLoading = ref(false);
+
 onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
+  responseLoading.value = true;
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/design`, {
     method: "GET",
   });
-
-  console.log(response);
+  responseLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -220,10 +223,12 @@ const saveMetadata = (e: MouseEvent) => {
         target_duration: isObservationalStudy ? moduleData.target_duration : "",
       };
 
+      loading.value = true;
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/design`, {
         body: JSON.stringify(data),
         method: "PUT",
       });
+      loading.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong.");
@@ -257,178 +262,86 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <n-form
-      ref="formRef"
-      :model="moduleData"
-      :rules="rules"
-      size="large"
-      label-placement="top"
-      class="pr-4"
-    >
-      <h3>Study Type</h3>
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
 
-      <p class="pb-8 pt-2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
-        voluptatem, quibusdam, quos voluptas quae quas voluptatum
-      </p>
-
-      <n-form-item label="Type" path="study_type">
-        <n-select
-          v-model:value="moduleData.study_type"
-          placeholder="Interventional"
-          clearable
-          :options="FORM_JSON.studyMetadataStudyTypeOptions"
-        />
-      </n-form-item>
-
-      <n-divider v-if="moduleData.study_type" />
-
-      <h3 v-if="moduleData.study_type">Design Info</h3>
-
-      <p v-if="moduleData.study_type" class="pb-8 pt-2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
-        voluptatem, quibusdam, quos voluptas quae quas voluptatum
-      </p>
-
-      <n-form-item
-        v-if="isInterventionalStudy"
-        label="Allocation"
-        path="design_info.allocation"
-        :rule="{
-          message: 'Please select the method of assigning participants to treatment groups',
-          required: isInterventionalStudy,
-          trigger: ['blur', 'input'],
-        }"
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        :rules="rules"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
       >
-        <n-select
-          v-model:value="moduleData.design_info.allocation"
-          placeholder="Randomized"
-          clearable
-          :options="FORM_JSON.studyMetadataAllocationOptions"
-        />
-      </n-form-item>
-
-      <n-form-item
-        v-if="isInterventionalStudy"
-        label="Intervention Model"
-        path="design_info.intervention_model"
-        :rule="{
-          message: 'Please select the strategy for assigning interventions to participants',
-          required: isInterventionalStudy,
-          trigger: ['blur', 'input'],
-        }"
-      >
-        <n-select
-          v-model:value="moduleData.design_info.intervention_model"
-          placeholder="Treatment"
-          clearable
-          :options="FORM_JSON.studyMetadataInterventionModelOptions"
-        />
-      </n-form-item>
-
-      <n-form-item
-        v-if="isInterventionalStudy"
-        label="Intervention Model Description"
-        path="design_info.intervention_model_description"
-      >
-        <n-input
-          v-model:value="moduleData.design_info.intervention_model_description"
-          type="textarea"
-          :rows="2"
-          placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
-          clearable
-        />
-      </n-form-item>
-
-      <n-form-item
-        v-if="isInterventionalStudy"
-        label="Primary Purpose"
-        path="design_info.primary_purpose"
-        :rule="{
-          message: 'Please select the main purpose of the study',
-          required: isInterventionalStudy,
-          trigger: ['blur', 'input'],
-        }"
-      >
-        <n-select
-          v-model:value="moduleData.design_info.primary_purpose"
-          placeholder="Single Group Assignment"
-          clearable
-          :options="FORM_JSON.studyMetadataPrimaryPurposeOptions"
-        />
-      </n-form-item>
-
-      <n-form-item
-        v-if="isObservationalStudy"
-        label="Observational Models"
-        path="design_info.observational_model_list"
-        :rule="{
-          message:
-            'Please select the primary strategy for participant identification and follow-up',
-          required: isObservationalStudy,
-          type: 'array',
-          trigger: ['blur', 'input'],
-        }"
-      >
-        <n-select
-          v-model:value="moduleData.design_info.observational_model_list"
-          placeholder="Cohort"
-          clearable
-          multiple
-          :options="FORM_JSON.studyMetadataObservationalModelsOptions"
-        />
-      </n-form-item>
-
-      <n-form-item
-        v-if="isObservationalStudy"
-        label="Time Perspective"
-        path="design_info.time_perspective_list"
-        :rule="{
-          message: 'Please select the approach to classifying the timing of observations',
-          required: isObservationalStudy,
-          type: 'array',
-          trigger: ['blur', 'input'],
-        }"
-      >
-        <n-select
-          v-model:value="moduleData.design_info.time_perspective_list"
-          placeholder="Retrospective"
-          clearable
-          multiple
-          :options="FORM_JSON.studyMetadataTimePerspectiveOptions"
-        />
-      </n-form-item>
-
-      <n-divider />
-
-      <div v-if="isInterventionalStudy">
-        <h3>Masking</h3>
+        <h3>Study Type</h3>
 
         <p class="pb-8 pt-2">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
           voluptatem, quibusdam, quos voluptas quae quas voluptatum
         </p>
 
+        <n-form-item label="Type" path="study_type">
+          <n-select
+            v-model:value="moduleData.study_type"
+            placeholder="Interventional"
+            clearable
+            :options="FORM_JSON.studyMetadataStudyTypeOptions"
+          />
+        </n-form-item>
+
+        <n-divider v-if="moduleData.study_type" />
+
+        <h3 v-if="moduleData.study_type">Design Info</h3>
+
+        <p v-if="moduleData.study_type" class="pb-8 pt-2">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+          voluptatem, quibusdam, quos voluptas quae quas voluptatum
+        </p>
+
         <n-form-item
-          label="Masking"
-          path="design_info.masking"
+          v-if="isInterventionalStudy"
+          label="Allocation"
+          path="design_info.allocation"
           :rule="{
-            message: 'Please select the masking type',
+            message: 'Please select the method of assigning participants to treatment groups',
             required: isInterventionalStudy,
             trigger: ['blur', 'input'],
           }"
         >
           <n-select
-            v-model:value="moduleData.design_info.masking"
-            placeholder="Single"
+            v-model:value="moduleData.design_info.allocation"
+            placeholder="Randomized"
             clearable
-            :options="maskingOptions"
+            :options="FORM_JSON.studyMetadataAllocationOptions"
           />
         </n-form-item>
 
-        <n-form-item label="Description" path="design_info.masking_description">
+        <n-form-item
+          v-if="isInterventionalStudy"
+          label="Intervention Model"
+          path="design_info.intervention_model"
+          :rule="{
+            message: 'Please select the strategy for assigning interventions to participants',
+            required: isInterventionalStudy,
+            trigger: ['blur', 'input'],
+          }"
+        >
+          <n-select
+            v-model:value="moduleData.design_info.intervention_model"
+            placeholder="Treatment"
+            clearable
+            :options="FORM_JSON.studyMetadataInterventionModelOptions"
+          />
+        </n-form-item>
+
+        <n-form-item
+          v-if="isInterventionalStudy"
+          label="Intervention Model Description"
+          path="design_info.intervention_model_description"
+        >
           <n-input
-            v-model:value="moduleData.design_info.masking_description"
+            v-model:value="moduleData.design_info.intervention_model_description"
             type="textarea"
             :rows="2"
             placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
@@ -437,181 +350,283 @@ const saveMetadata = (e: MouseEvent) => {
         </n-form-item>
 
         <n-form-item
-          label="Who Masked?"
-          path="design_info.who_masked_list"
+          v-if="isInterventionalStudy"
+          label="Primary Purpose"
+          path="design_info.primary_purpose"
           :rule="{
-            message: 'Please select who was masked',
-            type: 'array',
+            message: 'Please select the main purpose of the study',
             required: isInterventionalStudy,
             trigger: ['blur', 'input'],
           }"
         >
           <n-select
-            v-model:value="moduleData.design_info.who_masked_list"
-            placeholder="Care Provider"
+            v-model:value="moduleData.design_info.primary_purpose"
+            placeholder="Single Group Assignment"
             clearable
-            multiple
-            :options="whoMaskedOptions"
+            :options="FORM_JSON.studyMetadataPrimaryPurposeOptions"
           />
         </n-form-item>
 
-        <n-divider />
-      </div>
-
-      <div v-if="isInterventionalStudy">
-        <h3>Phase</h3>
-
-        <p class="pb-8 pt-2">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
-          voluptatem, quibusdam, quos voluptas quae quas voluptatum
-        </p>
-
         <n-form-item
-          label="Phase"
-          path="phase_list"
-          :rule="{
-            message: 'Please select the phase',
-            type: 'array',
-            required: isInterventionalStudy,
-            trigger: ['blur', 'input'],
-          }"
-        >
-          <n-select
-            v-model:value="moduleData.phase_list"
-            placeholder="Phase 1"
-            clearable
-            multiple
-            :options="FORM_JSON.studyMetadataPhaseOptions"
-          />
-        </n-form-item>
-
-        <n-divider />
-      </div>
-
-      <div v-if="isObservationalStudy">
-        <h3>Bio Specification</h3>
-
-        <p class="pb-8 pt-2">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
-          voluptatem, quibusdam, quos voluptas quae quas voluptatum
-        </p>
-
-        <n-form-item
-          label="Retention"
-          path="bio_spec_retention"
+          v-if="isObservationalStudy"
+          label="Observational Models"
+          path="design_info.observational_model_list"
           :rule="{
             message:
-              'Please indicate if samples of material from research participants are retained in a biorepository',
+              'Please select the primary strategy for participant identification and follow-up',
+            required: isObservationalStudy,
+            type: 'array',
+            trigger: ['blur', 'input'],
+          }"
+        >
+          <n-select
+            v-model:value="moduleData.design_info.observational_model_list"
+            placeholder="Cohort"
+            clearable
+            multiple
+            :options="FORM_JSON.studyMetadataObservationalModelsOptions"
+          />
+        </n-form-item>
+
+        <n-form-item
+          v-if="isObservationalStudy"
+          label="Time Perspective"
+          path="design_info.time_perspective_list"
+          :rule="{
+            message: 'Please select the approach to classifying the timing of observations',
+            required: isObservationalStudy,
+            type: 'array',
+            trigger: ['blur', 'input'],
+          }"
+        >
+          <n-select
+            v-model:value="moduleData.design_info.time_perspective_list"
+            placeholder="Retrospective"
+            clearable
+            multiple
+            :options="FORM_JSON.studyMetadataTimePerspectiveOptions"
+          />
+        </n-form-item>
+
+        <n-divider />
+
+        <div v-if="isInterventionalStudy">
+          <h3>Masking</h3>
+
+          <p class="pb-8 pt-2">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
+            voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum
+          </p>
+
+          <n-form-item
+            label="Masking"
+            path="design_info.masking"
+            :rule="{
+              message: 'Please select the masking type',
+              required: isInterventionalStudy,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-select
+              v-model:value="moduleData.design_info.masking"
+              placeholder="Single"
+              clearable
+              :options="maskingOptions"
+            />
+          </n-form-item>
+
+          <n-form-item label="Description" path="design_info.masking_description">
+            <n-input
+              v-model:value="moduleData.design_info.masking_description"
+              type="textarea"
+              :rows="2"
+              placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+              clearable
+            />
+          </n-form-item>
+
+          <n-form-item
+            label="Who Masked?"
+            path="design_info.who_masked_list"
+            :rule="{
+              message: 'Please select who was masked',
+              type: 'array',
+              required: isInterventionalStudy,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-select
+              v-model:value="moduleData.design_info.who_masked_list"
+              placeholder="Care Provider"
+              clearable
+              multiple
+              :options="whoMaskedOptions"
+            />
+          </n-form-item>
+
+          <n-divider />
+        </div>
+
+        <div v-if="isInterventionalStudy">
+          <h3>Phase</h3>
+
+          <p class="pb-8 pt-2">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
+            voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum
+          </p>
+
+          <n-form-item
+            label="Phase"
+            path="phase_list"
+            :rule="{
+              message: 'Please select the phase',
+              type: 'array',
+              required: isInterventionalStudy,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-select
+              v-model:value="moduleData.phase_list"
+              placeholder="Phase 1"
+              clearable
+              multiple
+              :options="FORM_JSON.studyMetadataPhaseOptions"
+            />
+          </n-form-item>
+
+          <n-divider />
+        </div>
+
+        <div v-if="isObservationalStudy">
+          <h3>Bio Specification</h3>
+
+          <p class="pb-8 pt-2">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
+            voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum
+          </p>
+
+          <n-form-item
+            label="Retention"
+            path="bio_spec_retention"
+            :rule="{
+              message:
+                'Please indicate if samples of material from research participants are retained in a biorepository',
+              required: isObservationalStudy,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-select
+              v-model:value="moduleData.bio_spec_retention"
+              placeholder="Samples With DNA"
+              clearable
+              :options="FORM_JSON.studyMetadataBioSpecRetentionOptions"
+            />
+          </n-form-item>
+
+          <n-form-item label="Description" path="bio_spec_description">
+            <n-input
+              v-model:value="moduleData.bio_spec_description"
+              type="textarea"
+              :rows="2"
+              placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+              clearable
+            />
+          </n-form-item>
+
+          <n-divider />
+        </div>
+
+        <h3>Enrollment Information</h3>
+
+        <p class="pb-8 pt-2">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+          voluptatem, quibusdam, quos voluptas quae quas voluptatum
+        </p>
+
+        <n-form-item
+          label="Total number of participants to be enrolled"
+          path="enrollment_info.enrollment_count"
+        >
+          <n-input-number
+            v-model:value="moduleData.enrollment_info.enrollment_count"
+            clearable
+            class="w-full"
+          />
+        </n-form-item>
+
+        <n-form-item label="Type" path="enrollment_info.enrollment_type">
+          <n-select
+            v-model:value="moduleData.enrollment_info.enrollment_type"
+            placeholder="Actual"
+            clearable
+            :options="FORM_JSON.studyMetadataEnrollmentTypeOptions"
+          />
+        </n-form-item>
+
+        <n-form-item
+          v-if="isInterventionalStudy"
+          label="Number of Arms"
+          path="number_arms"
+          :rule="{
+            message: 'Please enter the number of arms in the clinical trial',
+            required: isInterventionalStudy,
+            trigger: ['blur', 'input'],
+            type: 'number',
+          }"
+        >
+          <n-input-number
+            v-model:value="moduleData.number_arms"
+            :min="1"
+            clearable
+            class="w-full"
+          />
+        </n-form-item>
+
+        <n-form-item
+          v-if="isObservationalStudy"
+          label="Target Duration"
+          path="target_duration"
+          :rule="{
+            message:
+              'Please enter the anticipated time period over which each participant is to be followed.',
             required: isObservationalStudy,
             trigger: ['blur', 'input'],
           }"
         >
-          <n-select
-            v-model:value="moduleData.bio_spec_retention"
-            placeholder="Samples With DNA"
-            clearable
-            :options="FORM_JSON.studyMetadataBioSpecRetentionOptions"
-          />
+          <n-input v-model:value="moduleData.target_duration" placeholder="5 Days" clearable />
         </n-form-item>
 
-        <n-form-item label="Description" path="bio_spec_description">
-          <n-input
-            v-model:value="moduleData.bio_spec_description"
-            type="textarea"
-            :rows="2"
-            placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+        <n-form-item
+          v-if="isObservationalStudy"
+          label="Number of study groups/cohorts"
+          path="number_groups_cohorts"
+          :rule="{
+            type: 'number',
+            message: 'Please enter the number of study groups/cohorts',
+            required: isObservationalStudy,
+            trigger: ['blur', 'input'],
+          }"
+        >
+          <n-input-number
+            v-model:value="moduleData.number_groups_cohorts"
             clearable
+            class="w-full"
+            :min="1"
           />
         </n-form-item>
 
         <n-divider />
-      </div>
 
-      <h3>Enrollment Information</h3>
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
 
-      <p class="pb-8 pt-2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
-        voluptatem, quibusdam, quos voluptas quae quas voluptatum
-      </p>
-
-      <n-form-item
-        label="Total number of participants to be enrolled"
-        path="enrollment_info.enrollment_count"
-      >
-        <n-input-number
-          v-model:value="moduleData.enrollment_info.enrollment_count"
-          clearable
-          class="w-full"
-        />
-      </n-form-item>
-
-      <n-form-item label="Type" path="enrollment_info.enrollment_type">
-        <n-select
-          v-model:value="moduleData.enrollment_info.enrollment_type"
-          placeholder="Actual"
-          clearable
-          :options="FORM_JSON.studyMetadataEnrollmentTypeOptions"
-        />
-      </n-form-item>
-
-      <n-form-item
-        v-if="isInterventionalStudy"
-        label="Number of Arms"
-        path="number_arms"
-        :rule="{
-          message: 'Please enter the number of arms in the clinical trial',
-          required: isInterventionalStudy,
-          trigger: ['blur', 'input'],
-          type: 'number',
-        }"
-      >
-        <n-input-number v-model:value="moduleData.number_arms" :min="1" clearable class="w-full" />
-      </n-form-item>
-
-      <n-form-item
-        v-if="isObservationalStudy"
-        label="Target Duration"
-        path="target_duration"
-        :rule="{
-          message:
-            'Please enter the anticipated time period over which each participant is to be followed.',
-          required: isObservationalStudy,
-          trigger: ['blur', 'input'],
-        }"
-      >
-        <n-input v-model:value="moduleData.target_duration" placeholder="5 Days" clearable />
-      </n-form-item>
-
-      <n-form-item
-        v-if="isObservationalStudy"
-        label="Number of study groups/cohorts"
-        path="number_groups_cohorts"
-        :rule="{
-          type: 'number',
-          message: 'Please enter the number of study groups/cohorts',
-          required: isObservationalStudy,
-          trigger: ['blur', 'input'],
-        }"
-      >
-        <n-input-number
-          v-model:value="moduleData.number_groups_cohorts"
-          clearable
-          class="w-full"
-          :min="1"
-        />
-      </n-form-item>
-
-      <n-divider />
-
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata">
-          <template #icon>
-            <f-icon icon="material-symbols:save" />
-          </template>
-
-          Save Metadata
-        </n-button>
-      </div>
-    </n-form>
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>

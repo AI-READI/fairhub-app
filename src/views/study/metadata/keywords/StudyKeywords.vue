@@ -10,14 +10,17 @@ const formRef = ref<FormInst | null>(null);
 
 const moduleData = ref<string[]>(["Diabetes"]);
 
+const loading = ref(false);
+const responseLoading = ref(false);
+
 onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
+  responseLoading.value = true;
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/keywords`, {
     method: "GET",
   });
-
-  console.log(response);
+  responseLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -46,10 +49,12 @@ const saveMetadata = (e: MouseEvent) => {
       // remove Keywords with duplicate names
       const uniqueKeywords = [...new Set(keywords)];
 
+      loading.value = true;
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/keywords`, {
         body: JSON.stringify(uniqueKeywords),
         method: "PUT",
       });
+      loading.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong.");
@@ -80,44 +85,66 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
-      <SubHeadingText
-        title=""
-        description="Words or phrases that best describe the study. Keywords help users find studies in the database. Use NLM's Medical Subject Heading (MeSH)-controlled vocabulary terms where appropriate. Be as specific and precise as possible. Avoid acronyms and abbreviations."
-      />
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
 
-      <n-form-item v-for="(keyword, index) in moduleData" :key="index" label="Name" path="keywords">
-        <n-input v-model:value="moduleData[index]" placeholder="Biomedical science" />
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
+      >
+        <SubHeadingText
+          title=""
+          description="Words or phrases that best describe the study. Keywords help users find studies in the database. Use NLM's Medical Subject Heading (MeSH)-controlled vocabulary terms where appropriate. Be as specific and precise as possible. Avoid acronyms and abbreviations."
+        />
 
-        <n-popconfirm @positive-click="removeKeyword(index)">
-          <template #trigger>
-            <n-button class="ml-5">
-              <f-icon icon="gridicons:trash" />
-            </n-button>
-          </template>
+        <n-form-item
+          v-for="(keyword, index) in moduleData"
+          :key="index"
+          label="Name"
+          path="keywords"
+        >
+          <n-input v-model:value="moduleData[index]" placeholder="Biomedical science" />
 
-          Are you sure you want to remove this keyword?
-        </n-popconfirm>
-      </n-form-item>
+          <n-popconfirm @positive-click="removeKeyword(index)">
+            <template #trigger>
+              <n-button class="ml-5">
+                <f-icon icon="gridicons:trash" />
+              </n-button>
+            </template>
 
-      <n-button class="mb-10 w-full" dashed type="success" @click="addKeyword">
-        <template #icon>
-          <f-icon icon="gridicons:create" />
-        </template>
+            Are you sure you want to remove this keyword?
+          </n-popconfirm>
+        </n-form-item>
 
-        Add a Keyword
-      </n-button>
-
-      <n-divider />
-
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata">
+        <n-button class="mb-10 w-full" dashed type="success" @click="addKeyword">
           <template #icon>
-            <f-icon icon="material-symbols:save" />
+            <f-icon icon="gridicons:create" />
           </template>
-          Save Metadata
+
+          Add a Keyword
         </n-button>
-      </div>
-    </n-form>
+
+        <n-divider />
+
+        <div class="flex justify-start">
+          <n-button
+            size="large"
+            type="primary"
+            :loading="loading"
+            @click="saveMetadata"
+            :disabled="moduleData.length === 0"
+          >
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>
