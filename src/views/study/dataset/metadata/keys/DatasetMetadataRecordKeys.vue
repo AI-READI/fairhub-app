@@ -32,14 +32,19 @@ const rules: FormRules = {
 };
 
 const loading = ref(false);
+const responseLoading = ref(false);
 
 onBeforeMount(async () => {
+  responseLoading.value = true;
+
   const response = await fetch(
     `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/record-keys`,
     {
       method: "GET",
     }
   );
+
+  responseLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -104,43 +109,48 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <n-form
-      ref="formRef"
-      :model="moduleData"
-      :rules="rules"
-      size="large"
-      label-placement="top"
-      class="pr-4"
-    >
-      <n-form-item label="Type" path="type">
-        <n-select
-          v-model:value="moduleData.type"
-          placeholder="Not Known"
-          clearable
-          :options="FORM_JSON.datasetRecordKeysTypeOptions"
-        />
-      </n-form-item>
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
 
-      <n-form-item label="Details" path="details">
-        <n-input
-          v-model:value="moduleData.details"
-          type="textarea"
-          placeholder="Provide further details of the record key types, perhaps referring to dataset preparation, if available."
-          clearable
-        />
-      </n-form-item>
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        :rules="rules"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
+      >
+        <n-form-item label="Type" path="type">
+          <n-select
+            v-model:value="moduleData.type"
+            placeholder="Not Known"
+            clearable
+            :options="FORM_JSON.datasetRecordKeysTypeOptions"
+          />
+        </n-form-item>
 
-      <n-divider />
+        <n-form-item label="Details" path="details">
+          <n-input
+            v-model:value="moduleData.details"
+            type="textarea"
+            placeholder="Provide further details of the record key types, perhaps referring to dataset preparation, if available."
+            clearable
+          />
+        </n-form-item>
 
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
-          <template #icon>
-            <f-icon icon="material-symbols:save" />
-          </template>
+        <n-divider />
 
-          Save Metadata
-        </n-button>
-      </div>
-    </n-form>
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>

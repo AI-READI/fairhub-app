@@ -24,13 +24,20 @@ const moduleData = reactive<DatasetContributors>({
   contributors: [],
 });
 
+const responseLoading = ref(false);
+const submitLoading = ref(false);
+
 onBeforeMount(async () => {
+  responseLoading.value = true;
+
   const response = await fetch(
     `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/contributor`,
     {
       method: "GET",
     }
   );
+
+  responseLoading.value = false;
 
   if (!response.ok) {
     push.error("Something went wrong.");
@@ -130,6 +137,8 @@ const saveMetadata = (e: MouseEvent) => {
         }
       });
 
+      submitLoading.value = true;
+
       const response = await fetch(
         `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/contributor`,
         {
@@ -138,6 +147,8 @@ const saveMetadata = (e: MouseEvent) => {
           method: "POST",
         }
       );
+
+      submitLoading.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong.");
@@ -170,233 +181,244 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
-      <CollapsibleCard
-        v-for="(item, index) in moduleData.contributors"
-        :key="item.id"
-        class="mb-5 shadow-md"
-        :title="item.name || `Contributor ${index + 1}`"
-        bordered
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
+
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
       >
-        <template #header-extra>
-          <n-popconfirm @positive-click="removeContributor(item.id)">
-            <template #trigger>
-              <n-button type="error" secondary>
-                <template #icon>
-                  <f-icon icon="ep:delete" />
-                </template>
-
-                Remove contributor
-              </n-button>
-            </template>
-
-            Are you sure you want to remove this contributor?
-          </n-popconfirm>
-        </template>
-
-        <n-form-item
-          label="Contributor Type"
-          :path="`contributors[${index}].contributor_type`"
-          :rule="{
-            message: 'Please select an intervention type',
-            required: true,
-            trigger: ['blur', 'change'],
-          }"
+        <CollapsibleCard
+          v-for="(item, index) in moduleData.contributors"
+          :key="item.id"
+          class="mb-5 shadow-md"
+          :title="item.name || `Contributor ${index + 1}`"
+          bordered
         >
-          <n-select
-            v-model:value="item.contributor_type"
-            placeholder="ContactPerson"
-            clearable
-            :options="FORM_JSON.datasetContributorTypeOptions"
-          />
-        </n-form-item>
+          <template #header-extra>
+            <n-popconfirm @positive-click="removeContributor(item.id)">
+              <template #trigger>
+                <n-button type="error" secondary>
+                  <template #icon>
+                    <f-icon icon="ep:delete" />
+                  </template>
 
-        <n-form-item
-          label="Name"
-          :path="`contributors[${index}].name`"
-          :rule="{
-            message: 'Please enter a name',
-            required: true,
-            trigger: ['blur', 'input'],
-          }"
-        >
-          <n-input v-model:value="item.name" placeholder="Bertolt Hoover" clearable />
-        </n-form-item>
+                  Remove contributor
+                </n-button>
+              </template>
 
-        <n-form-item
-          label="Name Type"
-          :path="`contributors[${index}].name_type`"
-          :rule="{
-            message: 'Please select an intervention type',
-            required: true,
-            trigger: ['blur', 'change'],
-          }"
-        >
-          <n-select
-            v-model:value="item.name_type"
-            placeholder="Personal"
-            clearable
-            :options="FORM_JSON.datasetNameTypeOptions"
-          />
-        </n-form-item>
-
-        <n-form-item
-          label="Name Identifier"
-          :path="`contributors[${index}].name_identifier`"
-          :rule="{
-            message: 'Please enter a name identifier',
-            required: true,
-            trigger: ['blur', 'input'],
-          }"
-        >
-          <n-input
-            v-model:value="item.name_identifier"
-            placeholder="0000-0001-5109-3700"
-            clearable
-          />
-        </n-form-item>
-
-        <n-form-item
-          label="Name Identifier Scheme"
-          :path="`contributors[${index}].name_identifier_scheme`"
-          :rule="{
-            message: 'Please enter a name identifier scheme',
-            required: true,
-            trigger: ['blur', 'input'],
-          }"
-        >
-          <n-input v-model:value="item.name_identifier_scheme" placeholder="ORCID" clearable />
-        </n-form-item>
-
-        <n-form-item
-          label="Name Identifier Scheme URI"
-          :path="`contributors[${index}].name_identifier_scheme_uri`"
-        >
-          <n-input
-            v-model:value="item.name_identifier_scheme_uri"
-            placeholder="https://orcid.org/"
-            clearable
-          />
-        </n-form-item>
-
-        <n-form-item
-          label="Affiliations"
-          :path="`contributors[${index}].affiliations`"
-          ignore-path-change
-          :rule="{
-            message: 'Please add at least one affiliation',
-            required: item.name_type === 'Personal',
-            type: 'array',
-            trigger: ['blur', 'input'],
-          }"
-        >
-          <!-- outer form item is only used to diplay the label and the required mark -->
-
-          <n-dynamic-input
-            v-model:value="item.affiliations"
-            #="{ index: idx, value }"
-            :on-create="addEntryToAffiliationsList"
-            :disabled="item.name_type === 'Organizational'"
-            class="[&>div>*]:!self-center"
-          >
-            <div class="flex w-full flex-col space-y-4">
-              <n-form-item
-                ignore-path-change
-                :show-feedback="true"
-                label="Name"
-                :path="`contributors[${index}].affiliations[${idx}].name`"
-                class="w-full"
-                :rule="{
-                  message: 'Affiliation name is required if identifier is empty',
-                  required: !item.affiliations[idx].identifier && item.name_type === 'Personal',
-                  trigger: ['blur', 'input'],
-                }"
-              >
-                <n-input
-                  v-model:value="item.affiliations[idx].name"
-                  placeholder="University of Marley"
-                  :disabled="item.name_type === 'Organizational'"
-                  @keydown.enter.prevent
-                />
-              </n-form-item>
-
-              <div class="flex">
-                <n-form-item
-                  ignore-path-change
-                  label="Identifier"
-                  :path="`contributors[${index}].affiliations[${idx}].identifier`"
-                  class="w-full"
-                  :rule="{
-                    message: 'Identifier is required if name of affiliation is empty',
-                    required: !item.affiliations[idx].name && item.name_type === 'Personal',
-                    trigger: ['blur', 'input'],
-                  }"
-                >
-                  <n-input
-                    v-model:value="item.affiliations[idx].identifier"
-                    placeholder="0156zyn36"
-                    :disabled="item.name_type === 'Organizational'"
-                    @keydown.enter.prevent
-                  />
-                </n-form-item>
-
-                <n-form-item
-                  ignore-path-change
-                  label="Scheme"
-                  :path="`contributors[${index}].affiliations[${idx}].scheme`"
-                  class="ml-3 w-full"
-                  :rule="{
-                    message: 'Scheme is required if identifier is present',
-                    required: item.affiliations[idx].identifier && item.name_type === 'Personal',
-                    trigger: ['blur', 'input'],
-                  }"
-                >
-                  <n-input
-                    v-model:value="item.affiliations[idx].scheme"
-                    :disabled="item.name_type === 'Organizational'"
-                    placeholder="ROR"
-                    @keydown.enter.prevent
-                  />
-                </n-form-item>
-
-                <n-form-item
-                  ignore-path-change
-                  label="Scheme URI"
-                  :path="`contributors[${index}].affiliations[${idx}]`"
-                  class="ml-3 w-full"
-                >
-                  <n-input
-                    v-model:value="item.affiliations[idx].scheme_uri"
-                    placeholder="https://ror.org/"
-                    :disabled="item.name_type === 'Organizational'"
-                    @keydown.enter.prevent
-                  />
-                </n-form-item>
-              </div>
-            </div>
-          </n-dynamic-input>
-        </n-form-item>
-      </CollapsibleCard>
-
-      <n-button class="my-10 w-full" dashed type="success" @click="addContributor">
-        <template #icon>
-          <f-icon icon="gridicons:create" />
-        </template>
-
-        Add a new contributor
-      </n-button>
-
-      <n-divider />
-
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata">
-          <template #icon>
-            <f-icon icon="material-symbols:save" />
+              Are you sure you want to remove this contributor?
+            </n-popconfirm>
           </template>
 
-          Save Metadata
+          <n-form-item
+            label="Contributor Type"
+            :path="`contributors[${index}].contributor_type`"
+            :rule="{
+              message: 'Please select an intervention type',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-select
+              v-model:value="item.contributor_type"
+              placeholder="ContactPerson"
+              clearable
+              :options="FORM_JSON.datasetContributorTypeOptions"
+            />
+          </n-form-item>
+
+          <n-form-item
+            label="Name"
+            :path="`contributors[${index}].name`"
+            :rule="{
+              message: 'Please enter a name',
+              required: true,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-input v-model:value="item.name" placeholder="Bertolt Hoover" clearable />
+          </n-form-item>
+
+          <n-form-item
+            label="Name Type"
+            :path="`contributors[${index}].name_type`"
+            :rule="{
+              message: 'Please select an intervention type',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-select
+              v-model:value="item.name_type"
+              placeholder="Personal"
+              clearable
+              :options="FORM_JSON.datasetNameTypeOptions"
+            />
+          </n-form-item>
+
+          <n-form-item
+            label="Name Identifier"
+            :path="`contributors[${index}].name_identifier`"
+            :rule="{
+              message: 'Please enter a name identifier',
+              required: true,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-input
+              v-model:value="item.name_identifier"
+              placeholder="0000-0001-5109-3700"
+              clearable
+            />
+          </n-form-item>
+
+          <n-form-item
+            label="Name Identifier Scheme"
+            :path="`contributors[${index}].name_identifier_scheme`"
+            :rule="{
+              message: 'Please enter a name identifier scheme',
+              required: true,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-input v-model:value="item.name_identifier_scheme" placeholder="ORCID" clearable />
+          </n-form-item>
+
+          <n-form-item
+            label="Name Identifier Scheme URI"
+            :path="`contributors[${index}].name_identifier_scheme_uri`"
+          >
+            <n-input
+              v-model:value="item.name_identifier_scheme_uri"
+              placeholder="https://orcid.org/"
+              clearable
+            />
+          </n-form-item>
+
+          <n-form-item
+            label="Affiliations"
+            :path="`contributors[${index}].affiliations`"
+            ignore-path-change
+            :rule="{
+              message: 'Please add at least one affiliation',
+              required: item.name_type === 'Personal',
+              type: 'array',
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <!-- outer form item is only used to diplay the label and the required mark -->
+
+            <n-dynamic-input
+              v-model:value="item.affiliations"
+              #="{ index: idx, value }"
+              :on-create="addEntryToAffiliationsList"
+              :disabled="item.name_type === 'Organizational'"
+              class="[&>div>*]:!self-center"
+            >
+              <div class="flex w-full flex-col space-y-4">
+                <n-form-item
+                  ignore-path-change
+                  :show-feedback="true"
+                  label="Name"
+                  :path="`contributors[${index}].affiliations[${idx}].name`"
+                  class="w-full"
+                  :rule="{
+                    message: 'Affiliation name is required if identifier is empty',
+                    required: !item.affiliations[idx].identifier && item.name_type === 'Personal',
+                    trigger: ['blur', 'input'],
+                  }"
+                >
+                  <n-input
+                    v-model:value="item.affiliations[idx].name"
+                    placeholder="University of Marley"
+                    :disabled="item.name_type === 'Organizational'"
+                    @keydown.enter.prevent
+                  />
+                </n-form-item>
+
+                <div class="flex">
+                  <n-form-item
+                    ignore-path-change
+                    label="Identifier"
+                    :path="`contributors[${index}].affiliations[${idx}].identifier`"
+                    class="w-full"
+                    :rule="{
+                      message: 'Identifier is required if name of affiliation is empty',
+                      required: !item.affiliations[idx].name && item.name_type === 'Personal',
+                      trigger: ['blur', 'input'],
+                    }"
+                  >
+                    <n-input
+                      v-model:value="item.affiliations[idx].identifier"
+                      placeholder="0156zyn36"
+                      :disabled="item.name_type === 'Organizational'"
+                      @keydown.enter.prevent
+                    />
+                  </n-form-item>
+
+                  <n-form-item
+                    ignore-path-change
+                    label="Scheme"
+                    :path="`contributors[${index}].affiliations[${idx}].scheme`"
+                    class="ml-3 w-full"
+                    :rule="{
+                      message: 'Scheme is required if identifier is present',
+                      required: item.affiliations[idx].identifier && item.name_type === 'Personal',
+                      trigger: ['blur', 'input'],
+                    }"
+                  >
+                    <n-input
+                      v-model:value="item.affiliations[idx].scheme"
+                      :disabled="item.name_type === 'Organizational'"
+                      placeholder="ROR"
+                      @keydown.enter.prevent
+                    />
+                  </n-form-item>
+
+                  <n-form-item
+                    ignore-path-change
+                    label="Scheme URI"
+                    :path="`contributors[${index}].affiliations[${idx}]`"
+                    class="ml-3 w-full"
+                  >
+                    <n-input
+                      v-model:value="item.affiliations[idx].scheme_uri"
+                      placeholder="https://ror.org/"
+                      :disabled="item.name_type === 'Organizational'"
+                      @keydown.enter.prevent
+                    />
+                  </n-form-item>
+                </div>
+              </div>
+            </n-dynamic-input>
+          </n-form-item>
+        </CollapsibleCard>
+
+        <n-button class="my-10 w-full" dashed type="success" @click="addContributor">
+          <template #icon>
+            <f-icon icon="gridicons:create" />
+          </template>
+
+          Add a new contributor
         </n-button>
-      </div>
-    </n-form>
+
+        <n-divider />
+
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="submitLoading">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>

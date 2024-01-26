@@ -23,6 +23,7 @@ const moduleData = reactive<DatasetIdentifiers>({
 });
 
 const getLoading = ref(false);
+const submitLoading = ref(false);
 
 onBeforeMount(async () => {
   getLoading.value = true;
@@ -116,7 +117,8 @@ const saveMetadata = (e: MouseEvent) => {
         }
       });
 
-      // call the API to update the dataset
+      submitLoading.value = true;
+
       const response = await fetch(
         `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/alternative-identifier`,
         {
@@ -124,6 +126,8 @@ const saveMetadata = (e: MouseEvent) => {
           method: "POST",
         }
       );
+
+      submitLoading.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong.");
@@ -258,7 +262,7 @@ const saveMetadata = (e: MouseEvent) => {
     <n-divider />
 
     <div class="flex justify-start">
-      <n-button size="large" type="primary" @click="saveMetadata">
+      <n-button size="large" type="primary" @click="saveMetadata" :loading="submitLoading">
         <template #icon>
           <f-icon icon="material-symbols:save" />
         </template>
