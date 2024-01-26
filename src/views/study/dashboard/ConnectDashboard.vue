@@ -74,12 +74,16 @@ const rules: FormRules = {
       message: "Please input the Dashboard Name",
       required: true,
       trigger: ["blur", "input"],
+      validator() {
+        return dashboardConnector.value.dashboard_name.length > 0;
+      },
     },
   ],
   report_id: [
     {
       message:
-        "At least one REDCap Report ID must be populated with an integer that has a length between 1 and 12 digits",
+        // This should get changed once the ETL can accomodate each report and associated modules independently
+        "All REDCap Report IDs must be populated with an integer that has a length between 1 and 12 digits",
       required: false,
       trigger: ["blur", "input"],
       validator() {
@@ -97,7 +101,7 @@ const rules: FormRules = {
             noReportId.push(report);
           }
         }
-        if (noReportId.length === nReports) {
+        if (noReportId.length > 0) {
           invalid = true;
         }
         return !invalid;
