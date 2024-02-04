@@ -70,6 +70,7 @@ class Chart {
       datum.uuid = crypto.randomUUID();
       return datum;
     });
+
     self.data = self.explodeDatumStringDelimitedValues(self.data);
 
     return self;
@@ -186,6 +187,7 @@ class Chart {
       .map(([, values]) => values)
       .reduce(cartesian)
       .map((a) => Object.assign(...a.map((v, i) => ({ [keys[i]]: v }))));
+
     return result;
   }
 

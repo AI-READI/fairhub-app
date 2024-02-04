@@ -128,7 +128,7 @@
         },
         "color": {
           "name": "Sex",
-          "key": "color",
+          "key": "subgroup",
           "type": "String"
         },
         "value": {

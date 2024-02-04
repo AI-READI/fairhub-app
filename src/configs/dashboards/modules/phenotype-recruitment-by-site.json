@@ -129,7 +129,7 @@
         },
         "color": {
           "name": "Phenotype",
-          "key": "color",
+          "key": "group",
           "type": "String"
         },
         "x": {

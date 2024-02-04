@@ -28,7 +28,7 @@ class LineChart extends Chart {
     self.accessors = config.accessors;
     self.transitions = config.transitions;
     self.animations = config.animations;
-    console.log(config, Object.hasOwn(config, "projection"));
+    // console.log(config, Object.hasOwn(config, "projection"));
     self.projection = Object.hasOwn(config, "projection") ? config.projection : undefined;
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
@@ -36,7 +36,7 @@ class LineChart extends Chart {
     self.linewidth = 3;
     self.linesmoother = "curveCatmullRom";
 
-    console.log("projection", self.projection);
+    // console.log("projection", self.projection);
 
     /*
     Setup
@@ -89,6 +89,21 @@ class LineChart extends Chart {
         : D3.scaleLinear()
             .domain([self.mapping.min, self.mapping.max])
             .range([self.dataframe.height, 0]);
+
+    self.axisGrid = self.svg
+      .append("g")
+      .classed("grid-lines", true)
+      .selectAll("line")
+      .data(self.y.ticks())
+      .join("line")
+      .classed("grid-line", true)
+      .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`)
+      .attr("x1", self.dataframe.left)
+      .attr("x2", self.dataframe.right)
+      .attr("y1", (d) => self.y(d))
+      .attr("y2", (d) => self.y(d))
+      .attr("stroke", "#DCDCDC")
+      .attr("stroke-width", 1);
 
     self.xAxis = self.svg
       .append("g")
@@ -311,6 +326,21 @@ class LineChart extends Chart {
             .domain([self.mapping.min, self.mapping.max])
             .range([self.dataframe.height, 0]);
 
+    self.axisGrid = self.svg
+      .append("g")
+      .classed("grid-lines", true)
+      .selectAll("line")
+      .data(self.y.ticks())
+      .join("line")
+      .classed("grid-line", true)
+      .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`)
+      .attr("x1", self.dataframe.left)
+      .attr("x2", self.dataframe.right)
+      .attr("y1", (d) => self.y(d))
+      .attr("y2", (d) => self.y(d))
+      .attr("stroke", "#DCDCDC")
+      .attr("stroke-width", 1);
+
     self.xAxis = self.svg
       .append("g")
       .classed("x-axis", true)
@@ -491,6 +521,7 @@ class LineChart extends Chart {
 
     self.xAxis.remove();
     self.yAxis.remove();
+    self.axisGrid.remove();
     self.lineseries.remove();
     self.pointseries.remove();
     self.lines.remove();
@@ -548,6 +579,9 @@ Map Data and Set Value Types
       data = data.filter((datum) => datum[self.accessors.filterby.key] == filter);
     }
 
+    // Remove Value Unavailable on X
+    data = data.filter((datum) => datum[self.accessors.x.key] !== "Value Unavailable");
+
     // Remap Values from Accessor Keys to Fixed Keys
     data = data.map((datum) => {
       return {
@@ -559,10 +593,9 @@ Map Data and Set Value Types
       };
     });
 
-    // Remove Value Unavailable on X
-    data = data.filter((datum) => datum.x !== "Value Unavailable");
     // Group by x date
     data = super.groupThenSumObjectsByKeys(data, ["filterby", "group", "color", "x"], ["y"]);
+
     // Get Unique Colors
     const filteroptions = [...super.getUniqueValuesByKey(data, "filterby")];
     const groups = [...super.getUniqueValuesByKey(data, "group")];
@@ -573,7 +606,7 @@ Map Data and Set Value Types
       (d) => d.color,
       (d) => d.filterby
     );
-    console.log(flatseries);
+
     let series = [];
     for (const s in flatseries) {
       const [group, color, filter, subseries] = flatseries[s];

@@ -144,7 +144,6 @@ export const useDashboardStore = defineStore("dashboard", () => {
               }
             }
             dashboard_module.visualizations = visualizations;
-            console.log(dashboard_module);
             dashboard_modules.push(dashboard_module);
           }
         }
@@ -152,8 +151,6 @@ export const useDashboardStore = defineStore("dashboard", () => {
     }
 
     dashboardView.value.dashboard_modules = reactive(dashboard_modules as DashboardModuleView[]);
-
-    console.log("dashboard view", dashboardView.value);
 
     loading.value = false;
 
