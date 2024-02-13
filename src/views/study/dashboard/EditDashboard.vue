@@ -28,6 +28,7 @@ const routeParams = {
   studyId: route.params.studyId as string,
 };
 
+// Load Default (Prior) Dashboard Module Selection
 const checkboxGroupDefault = (report: RedcapReport) => {
   let ids: string[] = [];
   for (let j = 0; j < dashboardConnector.value.dashboard_modules.length; j++) {
@@ -39,6 +40,7 @@ const checkboxGroupDefault = (report: RedcapReport) => {
   return ids;
 };
 
+// Render Dashboard Module for each Report
 const reportDashboardModules = (report: RedcapReport) => {
   let report_dashboard_modules = [];
   for (let j = 0; j < dashboardConnector.value.dashboard_modules.length; j++) {
@@ -50,6 +52,7 @@ const reportDashboardModules = (report: RedcapReport) => {
   return report_dashboard_modules;
 };
 
+// Handle Dashboard Module Selection
 const selectDashboardModules = (ids: string[], report: RedcapReport) => {
   let report_dashboard_modules = reportDashboardModules(report);
   let selected_dashboard_modules = [];
@@ -70,7 +73,6 @@ const selectDashboardModules = (ids: string[], report: RedcapReport) => {
     selected_dashboard_modules.push(connector_dashboard_module);
   }
   dashboardConnector.value.dashboard_modules = selected_dashboard_modules;
-  return dashboardConnector.value.dashboard_modules;
 };
 
 const formRef = ref<FormInst | null>(null);
