@@ -172,12 +172,12 @@ const router = createRouter({
             },
             {
               name: "study:redcap:edit-redcap-project-api",
-              path: ":projectId/edit",
+              path: ":redcapId/edit",
               component: EditRedcap,
             },
             {
               name: "study:redcap:connect-redcap-project-dashboard",
-              path: ":projectId/connect-dashboard",
+              path: ":redcapId/connect-dashboard",
               component: ConnectDashboard,
             },
           ],

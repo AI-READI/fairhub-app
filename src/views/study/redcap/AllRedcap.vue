@@ -57,14 +57,14 @@ const redcapProjectViews: Ref<RedcapProjectView[]> = computed(() => {
   }
 
   filteredRedcapProjectViews.sort((a: RedcapProjectView, b: RedcapProjectView) => {
-    if (sortOption.value === "project_title") {
-      return b.project_title.localeCompare(a.project_title);
-    } else if (sortOption.value === "project_id") {
-      return Number(b.project_id) - Number(a.project_id);
-    } else if (sortOption.value === "project_api_url") {
-      return b.project_api_url.localeCompare(a.project_api_url);
-    } else if (sortOption.value === "project_api_active") {
-      return Number(a.project_api_active) - Number(b.project_api_active);
+    if (sortOption.value === "title") {
+      return b.title.localeCompare(a.title);
+    } else if (sortOption.value === "api_pid") {
+      return Number(b.api_pid) - Number(a.api_pid);
+    } else if (sortOption.value === "api_url") {
+      return b.api_url.localeCompare(a.api_url);
+    } else if (sortOption.value === "api_active") {
+      return Number(a.api_active) - Number(b.api_active);
     } else {
       return 0;
     }
@@ -73,7 +73,6 @@ const redcapProjectViews: Ref<RedcapProjectView[]> = computed(() => {
   if (sortOrder.value === "desc") {
     filteredRedcapProjectViews.reverse();
   }
-
   return filteredRedcapProjectViews;
 });
 
@@ -89,10 +88,10 @@ const toggleSortOrder = () => {
 };
 
 const sortOptions = [
-  { key: "project_title", label: "Title" },
-  { key: "project_id", label: "REDCap PID" },
-  { key: "project_api_url", label: "API URL" },
-  { key: "project_api_active", label: "Active" },
+  { key: "title", label: "Title" },
+  { key: "api_pid", label: "REDCap PID" },
+  { key: "api_url", label: "API URL" },
+  { key: "api_active", label: "Active" },
 ];
 
 const redcapRouteParams = {
@@ -125,12 +124,12 @@ const columns: string[] = [
   "Dashboard Actions",
 ];
 
-async function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
-  if (!projectId) {
+async function deleteRedcapProjectApiLink(studyId: string, redcapId: string) {
+  if (!redcapId) {
     return;
   }
 
-  const success = await redcapStore.deleteRedcapProjectAPI(studyId, projectId);
+  const success = await redcapStore.deleteRedcapProjectAPI(studyId, redcapId);
 
   if (success) {
     info("Project deleted.");
@@ -243,103 +242,99 @@ async function deleteRedcapProjectApiLink(studyId: string, projectId: string) {
 
     <n-divider />
 
-    <div class="redcap-choices">
-      <n-table :bordered="true" :single-line="false">
-        <thead>
-          <FadeTransition>
-            <LottieLoader v-if="isLoading" />
 
-            <TransitionGroup name="fade" tag="tr" class="p-0" v-else>
-              <th v-for="(item, index) in columns" :key="index">{{ item }}</th>
-            </TransitionGroup>
-          </FadeTransition>
-        </thead>
+    <FadeTransition>
+      <LottieLoader v-if="isLoading" />
+      <TransitionGroup name="fade" tag="div" class="redcap-choices" v-else>
+        <div v-if="redcapProjectViews === undefined || redcapProjectViews.length === 0">
+          <n-empty
+            description="No REDCap API links found"
+            size="huge"
+            class="my-10"
+          >
+          </n-empty>
+        </div>
+        <div v-else>
+          <n-table :bordered="true" :single-line="false">
+            <thead>
+              <tr class="p-0">
+                <th v-for="(item, index) in columns" :key="index">{{ item }}</th>
+              </tr>
+            </thead>
+            <tbody class="p-0">
+              <tr v-for="(redcapProjectView, index) in redcapProjectViews" :key="index">
+                <td>{{ redcapProjectView.title }}</td>
 
-        <FadeTransition>
-          <LottieLoader v-if="isLoading" />
+                <td>{{ redcapProjectView.api_pid }}</td>
 
-          <TransitionGroup name="fade" tag="tbody" class="p-0" v-else>
-            <tr v-for="(item, index) in redcapProjectViews" :key="index">
-              <td>{{ item.project_title }}</td>
+                <td>{{ redcapProjectView.api_url }}</td>
 
-              <td>{{ item.project_id }}</td>
+                <td style="text-transform: Capitalize; text-align: center">
+                  {{ redcapProjectView.api_active }}
+                </td>
 
-              <td>{{ item.project_api_url }}</td>
-
-              <td style="text-transform: Capitalize; text-align: center">
-                {{ item.project_api_active }}
-              </td>
-
-              <td>
-                <div class="flex items-center space-x-2">
-                  <RouterLink
-                    :to="{
-                      name: 'study:redcap:edit-redcap-project-api',
-                      params: {
-                        studyId: redcapRouteParams.studyId,
-                        projectId: item.project_id,
-                      },
-                    }"
-                  >
-                    <n-button size="small" type="primary">
-                      <template #icon>
-                        <f-icon icon="material-symbols:edit" />
-                      </template>
-                      Edit API Link
-                    </n-button>
-                  </RouterLink>
-
-                  <n-popconfirm
-                    @positive-click="
-                      deleteRedcapProjectApiLink(redcapRouteParams.studyId, item.project_id)
-                    "
-                  >
-                    <template #trigger>
-                      <n-button strong secondary type="error" size="small">
+                <td>
+                  <div class="flex items-center space-x-2">
+                    <RouterLink
+                      :to="{
+                        name: 'study:redcap:edit-redcap-project-api',
+                        params: {
+                          studyId: redcapRouteParams.studyId,
+                          redcapId: redcapProjectView.id,
+                        },
+                      }"
+                    >
+                      <n-button size="small" type="primary">
                         <template #icon>
-                          <f-icon icon="ph:trash-fill" />
+                          <f-icon icon="material-symbols:edit" />
                         </template>
-                        Delete API Link
+                        Edit API Link
                       </n-button>
-                    </template>
-                    This will remove the API Link and delete all its associated Dashboards. Are you
-                    sure you want to do this?
-                  </n-popconfirm>
-                </div>
-              </td>
+                    </RouterLink>
 
-              <td>
-                <div class="flex items-center space-x-2">
-                  <RouterLink
-                    :to="{
-                      name: 'study:redcap:connect-redcap-project-dashboard',
-                      params: {
-                        studyId: redcapRouteParams.studyId,
-                        projectId: item.project_id,
-                      },
-                    }"
-                  >
-                    <n-button size="small" type="primary">
-                      <template #icon>
-                        <f-icon icon="material-symbols:add-link" />
+                    <n-popconfirm
+                      @positive-click="
+                        deleteRedcapProjectApiLink(redcapRouteParams.studyId, redcapProjectView.id)
+                      "
+                    >
+                      <template #trigger>
+                        <n-button strong secondary type="error" size="small">
+                          <template #icon>
+                            <f-icon icon="ph:trash-fill" />
+                          </template>
+                          Delete API Link
+                        </n-button>
                       </template>
-                      Connect Dashboard
-                    </n-button>
-                  </RouterLink>
-                </div>
-              </td>
-            </tr>
-          </TransitionGroup>
-        </FadeTransition>
-      </n-table>
-    </div>
-
-    <n-empty
-      v-if="redcapProjectViews.length === 0"
-      description="No REDCap API links found"
-      size="huge"
-      class="my-10"
-    >
-    </n-empty>
+                      This will remove the API Link and delete all its associated Dashboards. Are you
+                      sure you want to do this?
+                    </n-popconfirm>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex items-center space-x-2">
+                    <RouterLink
+                      :to="{
+                        name: 'study:redcap:connect-redcap-project-dashboard',
+                        params: {
+                          studyId: redcapRouteParams.studyId,
+                          redcapId: redcapProjectView.id,
+                        },
+                      }"
+                    >
+                      <n-button size="small" type="primary">
+                        <template #icon>
+                          <f-icon icon="material-symbols:add-link" />
+                        </template>
+                        Connect Dashboard
+                      </n-button>
+                    </RouterLink>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </n-table>
+        </div>
+      </TransitionGroup>
+    </FadeTransition>
   </main>
 </template>

@@ -22,36 +22,36 @@ const routeParams = {
 const formRef = ref<FormInst | null>(null);
 
 const redcapProjectAPI: Ref<RedcapProjectAPI> = ref({
-  project_api_active: false,
-  project_api_key: "",
-  project_api_url: "",
-  project_id: "",
-  project_title: "",
+  api_active: false,
+  api_key: "",
+  api_url: "",
+  api_pid: "",
+  title: "",
 });
 
 const rules: FormRules = {
-  project_api_key: [
+  api_key: [
     {
       message: "Please input the REDCap Project API Key",
       required: true,
       trigger: ["blur", "input"],
     },
   ],
-  project_api_url: [
+  api_url: [
     {
       message: "Please input the REDCap Project API URL",
       required: true,
       trigger: ["blur", "input"],
     },
   ],
-  project_id: [
+  api_pid: [
     {
       message: "Please input the REDCap Project ID",
       required: true,
       trigger: ["blur", "input"],
     },
   ],
-  project_title: [
+  title: [
     {
       message: "Please input the REDCap Project title",
       required: true,
@@ -68,23 +68,23 @@ const addRedcapProjectAPI = (e: MouseEvent) => {
       console.log("valid form");
 
       const data = {
-        project_api_active: redcapProjectAPI.value.project_api_active,
-        project_api_key: redcapProjectAPI.value.project_api_key,
-        project_api_url: redcapProjectAPI.value.project_api_url,
-        project_id: redcapProjectAPI.value.project_id,
-        project_title: redcapProjectAPI.value.project_title,
+        api_active: redcapProjectAPI.value.api_active,
+        api_key: redcapProjectAPI.value.api_key,
+        api_url: redcapProjectAPI.value.api_url,
+        api_pid: redcapProjectAPI.value.api_pid,
+        title: redcapProjectAPI.value.title,
       };
 
       const studyId = routeParams.studyId;
 
       try {
-        const response = await fetch(`${baseURL}/study/${studyId}/redcap/add`, {
+        const response = await fetch(`${baseURL}/study/${studyId}/redcap`, {
           body: JSON.stringify(data),
           method: "POST",
         });
-
+        console.log(response);
         if (!response.ok) {
-          throw new Error("AddRedcapProjectDashboard POST not found");
+          throw new Error("AddRedcapProjectAPI POST not found");
         } else {
           success("REDCap Project Added to Study");
         }
@@ -123,17 +123,17 @@ onBeforeMount(() => {
       label-placement="top"
       class="pr-4"
     >
-      <n-form-item label="REDCap Project Title" path="project_title">
-        <n-input v-model:value="redcapProjectAPI.project_title" placeholder="My REDCap Project" />
+      <n-form-item label="REDCap Project Title" path="title">
+        <n-input v-model:value="redcapProjectAPI.title" placeholder="My REDCap Project" />
       </n-form-item>
 
-      <n-form-item label="REDCap Project ID" path="project_id">
-        <n-input v-model:value="redcapProjectAPI.project_id" placeholder="12345" />
+      <n-form-item label="REDCap Project ID" path="api_pid">
+        <n-input v-model:value="redcapProjectAPI.api_pid" placeholder="12345" />
       </n-form-item>
 
-      <n-form-item label="REDCap Project API Key" path="project_api_key">
+      <n-form-item label="REDCap Project API Key" path="api_key">
         <n-input
-          v-model:value="redcapProjectAPI.project_api_key"
+          v-model:value="redcapProjectAPI.api_key"
           placeholder="BF021AA2776011EEB9620242AC120002"
           type="password"
           autocomplete="off"
@@ -141,15 +141,15 @@ onBeforeMount(() => {
         />
       </n-form-item>
 
-      <n-form-item label="REDCap Project API URL" path="project_api_url">
+      <n-form-item label="REDCap Project API URL" path="api_url">
         <n-input
-          v-model:value="redcapProjectAPI.project_api_url"
+          v-model:value="redcapProjectAPI.api_url"
           placeholder="https://redcap.my-university.edu"
         />
       </n-form-item>
 
-      <n-form-item label="REDCap Project API Active" path="project_api_active">
-        <n-checkbox v-model:checked="redcapProjectAPI.project_api_active" size="large">
+      <n-form-item label="REDCap Project API Active" path="api_active">
+        <n-checkbox v-model:checked="redcapProjectAPI.api_active" size="large">
         </n-checkbox>
       </n-form-item>
 
