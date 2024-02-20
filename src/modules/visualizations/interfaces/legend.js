@@ -20,10 +20,11 @@ class Legend extends Interface {
 
     // Configure Chart Legend
     self.getPrefix = config.getPrefix;
-    self.accessors = config.accessors;
+    self.title = config.title;
+    self.accessor = config.accessor;
     self.container = config.container;
-    self.transitions = config.transitions;
-    self.animations = config.animations;
+    self.transition = config.transition;
+    self.animation = config.animation;
     self.itemsize = config.itemsize;
     self.fontsize = config.fontsize;
     self.vposition = config.vposition;
@@ -44,13 +45,20 @@ class Legend extends Interface {
     self.legend = D3.select(`${self.getID}_legend`)
       .classed("interface-element legend", true)
       .attr("id", `${self.setID}_legend`)
-      .style("margin-left", `${self.margin.left}px`)
+      .style("margin-left", `${self.margin.left}px`);
+
+    self.title = D3.select(`${self.getID}_legend`)
+      .append("span")
+      .text(self.title)
+      .style("text-transform", "capitalize")
+      .style("font-weight", "700")
+      .style("padding-bottom", "8px");
+
+    self.items = D3.select(`${self.getID}_legend`)
       .append("ul")
       .classed("legend-items", true)
       .style("list-style", "none")
-      .style("padding-left", "0px");
-
-    self.items = self.legend
+      .style("padding-left", "0px")
       .selectAll(".legend-item")
       .data(self.data)
       .enter()
@@ -60,7 +68,7 @@ class Legend extends Interface {
     self.colors = self.items
       .append("div")
       .classed("legend-color", true)
-      .attr("id", (d) => `${self.setID}_legend-color_${self.tokenize(d.subgroup)}`)
+      .attr("id", (d) => `${self.setID}_legend-color_${self.tokenize(d[self.accessor])}`)
       .attr("top", self.position[self.hposition])
       .attr("left", (d, i) => self.position[self.vposition] + i * (self.itemsize + 7) - 5)
       .style("width", `${self.itemsize}px`)
@@ -70,13 +78,13 @@ class Legend extends Interface {
     self.labels = self.items
       .append("span")
       .classed("legend-label", true)
-      .attr("id", (d) => `${self.setID}_legend-label_${self.tokenize(d.subgroup)}`)
+      .attr("id", (d) => `${self.setID}_legend-label_${self.tokenize(d[self.accessor])}`)
       .style("text-transform", "capitalize")
-      .text((d) => d.subgroup);
+      .text((d) => d[self.accessor]);
 
     // Legend Events
-    self.items.on("mouseover", (e, d) => self.#mouseOverLegend(e, d));
-    self.items.on("mouseout", (e, d) => self.#mouseOutLegend(e, d));
+    self.items.on("mouseover", (e, d) => self.mouseOverLegend(e, d));
+    self.items.on("mouseout", (e, d) => self.mouseOutLegend(e, d));
 
     return;
   }
@@ -95,21 +103,30 @@ class Legend extends Interface {
     self.legend = D3.select(`${self.getID}_legend`)
       .classed("interface-element legend", true)
       .attr("id", `${self.setID}_legend`)
-      .style("margin-left", `${self.margin.left}px`)
-      .append("ul")
-      .classed("legend-items", true);
+      .style("margin-left", `${self.margin.left}px`);
 
-    self.items = self.legend
+    self.title = self.legend
+      .append("span")
+      .text(self.title)
+      .style("text-transform", "capitalize")
+      .style("font-weight", "700")
+      .style("padding-bottom", "8px");
+
+    self.items = D3.select(`${self.getID}_legend`)
+      .append("ul")
+      .classed("legend-items", true)
+      .style("list-style", "none")
+      .style("padding-left", "0px")
       .selectAll(".legend-item")
       .data(self.data)
       .enter()
-      .append("div")
+      .append("li")
       .classed("legend-item interactable", true);
 
     self.colors = self.items
       .append("div")
       .classed("legend-color", true)
-      .attr("id", (d) => `${self.setID}_legend-color_${self.tokenize(d.subgroup)}`)
+      .attr("id", (d) => `${self.setID}_legend-color_${self.tokenize(d[self.accessor])}`)
       .attr("top", self.position[self.hposition])
       .attr("left", (d, i) => self.position[self.vposition] + i * (self.itemsize + 7) - 5)
       .style("width", `${self.itemsize}px`)
@@ -119,8 +136,8 @@ class Legend extends Interface {
     self.labels = self.items
       .append("div")
       .classed("legend-label", true)
-      .attr("id", (d) => `${self.setID}_legend-label_${self.tokenize(d.subgroup)}`)
-      .text((d) => d.subgroup);
+      .attr("id", (d) => `${self.setID}_legend-label_${self.tokenize(d[self.accessor])}`)
+      .text((d) => d[self.accessor]);
 
     self.clear();
 
@@ -133,31 +150,36 @@ class Legend extends Interface {
     self.labels.remove();
     self.colors.remove();
     self.items.remove();
-    self.legend.remove();
+    self.title.remove();
 
     return self;
   }
 
-  #mouseOverLegend(e, d) {
+  mouseOverLegend(e, d) {
     let self = this;
 
-    D3.select(`${self.getPrefix}_${self.tokenize(d.subgroup)}`)
+    const [, animation] = self.animation;
+    const [transitionkey, transition] = self.transition;
+    D3.selectAll(`[id^="${self.getPrefix}_${self.tokenize(d[self.accessor])}"]`)
       .transition()
-      .ease(Easing[self.animations.opacity.easing])
-      .duration(self.animations.opacity.duration)
-      .attr("opacity", self.transitions.opacity.to);
+      .ease(Easing[animation.easing])
+      .duration(animation.duration)
+      .attr(transitionkey, transition.to);
 
     return self;
   }
 
-  #mouseOutLegend(e, d) {
+  mouseOutLegend(e, d) {
     let self = this;
 
-    D3.select(`${self.getPrefix}_${self.tokenize(d.subgroup)}`)
+    const [, animation] = self.animation;
+    const [transitionkey, transition] = self.transition;
+
+    D3.selectAll(`[id^="${self.getPrefix}_${self.tokenize(d[self.accessor])}"]`)
       .transition()
-      .ease(Easing[self.animations.opacity.easing])
-      .duration(self.animations.opacity.duration)
-      .attr("opacity", self.transitions.opacity.from);
+      .ease(Easing[animation.easing])
+      .duration(animation.duration)
+      .attr(transitionkey, transition.from);
 
     return self;
   }

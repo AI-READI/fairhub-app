@@ -3,33 +3,27 @@ import type { VisualizationRenderer } from "@/types/DashboardModule";
 
 export default {
   name: "DashboardModule",
-  methods: {
-    setFilter(value) {
-      console.log(value);
-    },
-  },
-  props: {
-    vconfigs: [],
-  },
-  setup(props) {
-    const visualizations = reactive([]);
+  props: ["vrenderers"],
+  setup(props: any) {
+    const visualizations: any[] = reactive([]);
+    // const vrenderers: VisualizationRenderer[] = [];
     onMounted(() => {
-      const vconfigs = props.vconfigs as VisualizationRenderer[];
-      for (let i = 0; i < vconfigs.length; i++) {
-        let config = vconfigs[i];
-        let cls = config.class;
-        let cfg = config.config;
-        let obj = new cls(cfg).update();
-        console.log(obj);
-        visualizations.push(obj);
+      const vrenderers = props.vrenderers as VisualizationRenderer[];
+      for (let i = 0; i < vrenderers.length; i++) {
+        let vrenderer = vrenderers[i];
+        let cls = vrenderer.class;
+        let cfg = vrenderer.config;
+        let instance = new cls(cfg).update();
+        visualizations.push(instance);
       }
     });
     onUpdated(() => {
       for (let i = 0; i < visualizations.length; i++) {
-        toRaw(visualizations[i]).update();
+        const visualization = toRaw(visualizations[i]) as any;
+        visualization.update();
       }
     });
-    return { visualizations };
+    return { visualizations: visualizations };
   },
 };
 </script>
@@ -48,7 +42,13 @@ export default {
       xmlns="http://www.w3.org/2000/svg"
     />
 
-    <n-grid :cols="3" :x-gap="20" :id="`${visualization.setID}_interface`" class="interface">
+    <n-grid
+      :cols="3"
+      :x-gap="20"
+      :y-gap="20"
+      :id="`${visualization.setID}_interface`"
+      class="interface"
+    >
       <n-grid-item v-if="visualization.legend">
         <n-card :id="`${visualization.setID}_legend`" :segmented="true" :bordered="false"></n-card>
       </n-grid-item>
@@ -65,7 +65,9 @@ export default {
           placement="right-start"
           :id="`${visualization.setID}_filters`"
         >
-          <n-button>{{ "Sites" }}</n-button>
+          <n-button>{{
+            `${visualization.accessors.filterby.name} > ${visualization.selectedFilter}`
+          }}</n-button>
         </n-dropdown>
       </n-grid-item>
     </n-grid>
@@ -152,14 +154,9 @@ Visualization Interface
   flex-wrap: nowrap;
   width: 100%;
   min-height: 80px;
+  margin-bottom: 12px;
 }
 .visualization-container .interface-element {
-  display: inline-flex;
-  flex-direction: column;
-  align-content: flex-start;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin-right: 5%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

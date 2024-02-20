@@ -1,25 +1,23 @@
-import type { DashboardModuleRenderer } from "./DashboardModule";
+import type { RedcapReportConnector, RedcapReportView } from "@/types/Redcap";
 
-export type DashboardConnectorModule = {
-  id: string;
+import type { DashboardModuleConnector, DashboardModuleView } from "./DashboardModule";
+
+export interface DashboardConnector {
+  id?: string;
   name: string;
-  reportId: string;
-  selected: boolean;
-};
-
-export interface DashboardConnectorConstructor {
-  dashboard_modules: DashboardConnectorModule[];
-  dashboard_name: string;
-  project_id: string;
-}
-
-export interface DashboardConnector extends DashboardConnectorConstructor {
-  dashboard_id: string;
+  modules: DashboardModuleConnector[];
+  redcap_id: string;
+  redcap_pid: string | number;
+  reports: RedcapReportConnector[];
 }
 
 export interface DashboardView {
-  dashboard_id: string;
-  dashboard_modules: DashboardModuleRenderer[];
-  dashboard_name: string;
-  project_id: string;
+  id: string;
+  name: string;
+  modules: DashboardModuleView[];
+  redcap_id: string;
+  redcap_pid: string | number;
+  reports: RedcapReportView[];
 }
+
+export type DashboardConnectorEditable = typeof DashboardConnector;

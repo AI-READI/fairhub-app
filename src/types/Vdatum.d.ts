@@ -27,7 +27,7 @@ export interface SingleNumeric extends Vdatum {
   color: string;
   filterby: string;
   group: string;
-  x: number;
+  x: number | string;
 }
 // Scatter Plots, Line Charts, etc. with Numbers on X-Axis
 export interface DoubleNumeric extends SingleNumeric {
@@ -50,7 +50,7 @@ Timeseries
 // Timelines, etc. with Dates on X-Axis
 export interface SingleTimeseries extends Vdatum {
   color: string;
-  datetime: string | Date;
+  datetime: string | number | Date;
   filterby: string;
   group: string;
 }
@@ -82,7 +82,7 @@ export interface VdatumGeneric {
   color: string;
   datetime?: string | Date;
   filterby: string;
-  group: string;
+  group?: string;
   subgroup?: string;
   value?: number;
   x?: number;

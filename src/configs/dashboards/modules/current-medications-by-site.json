@@ -1,15 +1,15 @@
 {
-  "name": "Devices",
-  "id": "devices",
-  "title": "Devices",
-  "subtitle": "Devices subtitle",
+  "name": "Current Medication Counts by Site",
+  "id": "current-medications-by-site",
+  "title": "AI-READI Pilot Count of Current Medications by Data Generation Site",
+  "subtitle": "Distribution of Current Medications Count",
   "width": 1280,
   "height": 720,
   "visualizations": [{
     "type": "StackedBar",
     "config": {
-      "id": "#devices_stacked-bar",
-      "rotate": true,
+      "id": "#current-medications-by-site_stacked-bar",
+      "rotate": false,
       "width": 1080,
       "height": 500,
       "position": {
@@ -29,6 +29,9 @@
         "left": 0,
         "right": 200,
         "bottom": 0
+      },
+      "binning": {
+
       },
       "transitions": {
         "opacity": {
@@ -53,6 +56,8 @@
         }
       },
       "legend": {
+        "title": "Sex",
+        "accessor": "subgroup",
         "width": 120,
         "height": 140,
         "itemsize": 20,
@@ -67,6 +72,7 @@
         }
       },
       "tooltip": {
+        "title": "Data Point Details",
         "width": 720,
         "height": 140,
         "itemsize": 20,
@@ -107,26 +113,26 @@
       "accessors": {
         "filterby": {
           "name": "Site",
-          "key": "group",
+          "key": "filterby",
           "type": "String"
         },
         "group": {
-          "name": "Survey",
+          "name": "Current Medications Count",
           "key": "group",
-          "type": "String"
+          "type": "Number"
         },
         "subgroup": {
-          "name": "Status",
+          "name": "Sex",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Status",
+          "name": "Sex",
           "key": "subgroup",
           "type": "String"
         },
         "value": {
-          "name": "Count (n)",
+          "name": "Participants (N)",
           "key": "value",
           "type": "Number"
         }

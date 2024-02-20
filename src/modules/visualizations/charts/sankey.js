@@ -185,10 +185,12 @@ class SankeyChart extends Chart {
         color: self.colorscale(datum[self.accessors.color.key]),
         source: datum[self.accessors.source.key],
         target: datum[self.accessors.target.key],
+        uuid: datum.uuid,
         value: datum[self.accessors.value.key],
       };
     });
 
+    const uuids = [...super.getUniqueValuesByKey(links, "uuid")];
     const sources = [...super.getUniqueValuesByKey(links, "source")];
     const targets = [...super.getUniqueValuesByKey(links, "target")];
     const nodes = [...Array.from(new Set(targets.concat(sources)))];
@@ -200,7 +202,7 @@ class SankeyChart extends Chart {
       }),
     };
 
-    return [mapping, sources, targets, nodes, links];
+    return [mapping, uuids, sources, targets, nodes, links];
   }
 }
 

@@ -1,14 +1,14 @@
 {
-  "name": "Phenotypes",
-  "id": "phenotypes",
-  "title": "Phenotypes",
-  "subtitle": "Participant Phenotypes",
+  "name": "Instrument Completion Status by Site",
+  "id": "instrument-completion-status-by-site",
+  "title": "AI-READI Pilot REDCap Instrument Completion Status by Data Generation Site",
+  "subtitle": "Instrument Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "Doughnut",
+    "type": "StackedBar",
     "config": {
-      "id": "#phenotypes_doughnut",
+      "id": "#instrument-completion-status-by-site_stacked-bar",
       "rotate": true,
       "width": 1080,
       "height": 420,
@@ -53,6 +53,8 @@
         }
       },
       "legend": {
+        "title": "Instrument Status",
+        "accessor": "subgroup",
         "width": 200,
         "height": 140,
         "itemsize": 20,
@@ -67,6 +69,7 @@
         }
       },
       "tooltip": {
+        "title": "Data Point Details",
         "width": 720,
         "height": 140,
         "itemsize": 20,
@@ -111,7 +114,7 @@
           "type": "String"
         },
         "group": {
-          "name": "Survey",
+          "name": "Instrument",
           "key": "group",
           "type": "String"
         },

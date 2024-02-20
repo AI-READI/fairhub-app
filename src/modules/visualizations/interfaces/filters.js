@@ -80,7 +80,7 @@ class Filters extends Interface {
     self.clear();
 
     self.data = [
-      { key: data.data[self.accessors.group.key], label: self.accessors.group.name },
+      { key: data[self.accessors.group.key], label: self.accessors.group.name },
       { key: data[self.accessors.subgroup.key], label: self.accessors.subgroup.name },
       { key: data[self.accessors.color.key], label: self.accessors.color.name },
       { key: data[self.accessors.value.key], label: self.accessors.value.name },

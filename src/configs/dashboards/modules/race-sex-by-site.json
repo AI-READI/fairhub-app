@@ -1,17 +1,16 @@
 {
-  "name": "Recruitment",
-  "id": "recruitment",
-  "title": "Recruitment",
-  "subtitle": "Recruitment subtitle",
+  "name": "Race & Sex by Site",
+  "id": "race-sex-by-site",
+  "title": "AI-READI Pilot Participant Race and Sex by Site",
+  "subtitle": "Participant Counts Aggregated by Race & Sex",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "StackedBar",
+    "type": "GroupedStackedBar",
     "config": {
-      "id": "#recruitment_stacked-bar",
-      "rotate": true,
+      "id": "#race-sex-by-site_grouped-stacked-bar",
       "width": 1080,
-      "height": 500,
+      "height": 420,
       "position": {
         "top": 0,
         "left": 0,
@@ -19,15 +18,15 @@
         "bottom": 0
       },
       "margin": {
-        "top": 20,
-        "left": 20,
-        "right": 20,
+        "top": 0,
+        "left": 0,
+        "right": 0,
         "bottom": 20
       },
       "padding": {
-        "top": 0,
+        "top": 20,
         "left": 0,
-        "right": 200,
+        "right": 240,
         "bottom": 0
       },
       "transitions": {
@@ -53,10 +52,12 @@
         }
       },
       "legend": {
-        "width": 120,
+        "title": "Race",
+        "accessor": "subgroup",
+        "width": 200,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 12,
+        "fontsize": 10,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -67,10 +68,11 @@
         }
       },
       "tooltip": {
+        "title": "Data Point Details",
         "width": 720,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 12,
+        "fontsize": 10,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -84,7 +86,7 @@
         "width": 720,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 12,
+        "fontsize": 10,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -107,21 +109,21 @@
       "accessors": {
         "filterby": {
           "name": "Site",
-          "key": "group",
+          "key": "filterby",
           "type": "String"
         },
         "group": {
-          "name": "Survey",
+          "name": "Sex",
           "key": "group",
           "type": "String"
         },
         "subgroup": {
-          "name": "Status",
+          "name": "Race",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Status",
+          "name": "Race",
           "key": "subgroup",
           "type": "String"
         },

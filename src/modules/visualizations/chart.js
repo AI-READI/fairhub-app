@@ -16,6 +16,11 @@ class Chart {
   palette = undefined;
   data = undefined;
   mapping = undefined;
+  dtypes = {
+    Datetime: Date,
+    Number: Number,
+    String: String,
+  };
 
   constructor(config) {
     let self = this;
@@ -61,6 +66,13 @@ class Chart {
       width: self.axisframe.width - self.padding.left - self.padding.right,
     };
 
+    self.data = self.data.map((datum) => {
+      datum.uuid = crypto.randomUUID();
+      return datum;
+    });
+
+    self.data = self.explodeDatumStringDelimitedValues(self.data);
+
     return self;
   }
 
@@ -87,8 +99,128 @@ class Chart {
   getUniqueValuesByKey(obj, key) {
     return [...new Set(obj.map((d) => d[key]))];
   }
+
   getUniqueValues(array) {
     return [...new Set(array)];
+  }
+
+  getUniqueObjectsByProperties(objects) {
+    const uniqueArray = objects.filter((value, index) => {
+      const _value = JSON.stringify(value);
+      return (
+        index ===
+        objects.findIndex((obj) => {
+          return JSON.stringify(obj) === _value;
+        })
+      );
+    });
+    return uniqueArray;
+  }
+
+  groupObjectsByKey(objects, key = "uuid") {
+    return objects.reduce((acc, obj) => {
+      if (acc[obj[key]]) {
+        acc[obj[key]].push(obj);
+      } else {
+        acc[obj[key]] = [obj];
+      }
+      return acc;
+    }, {});
+  }
+
+  ungroupObjects(grouped) {
+    let merged = [];
+    for (const key in grouped) {
+      merged.push(...grouped[key]);
+    }
+    return merged;
+  }
+
+  groupThenSumObjectsByKeys(objects, on, sum) {
+    /*
+    From an array of `objects`, an array of keys to
+    group `on`, we sum the values for the `sum` keys
+    */
+    return [
+      ...objects
+        .reduce((acc, obj) => {
+          const keyArray = on.map((key) => obj[key]);
+          const key = keyArray.join("-");
+          const groupedSum =
+            acc.get(key) ||
+            Object.assign(
+              {},
+              Object.fromEntries(on.map((key) => [key, obj[key]])),
+              Object.fromEntries(sum.map((key) => [key, 0]))
+            );
+          for (let key of sum) {
+            groupedSum[key] += obj[key];
+          }
+          return acc.set(key, groupedSum);
+        }, new Map())
+        .values(),
+    ];
+  }
+
+  cumulativeSumOfObjectByKey(objects, key) {
+    const result = objects.map((obj, idx, self) => {
+      if (idx == 0) return obj;
+      const prev = self[idx - 1];
+      obj[key] += prev[key];
+      return obj;
+    });
+    return result;
+  }
+
+  /*
+  Data Munging Methods
+  */
+
+  splitObjectStringValuesByCartesian(obj, delimiter = "|") {
+    const cartesian = (a, b) =>
+      a.reduce((r, v) => r.concat([b].flat().map((w) => [].concat(v, w))), []);
+    const parts = Object.entries(obj)
+      .map(([k, v]) => (typeof v === "string" ? [k, v.split(delimiter)] : [k, v]))
+      .filter(([, value]) => value !== null);
+    const keys = parts.map(([key]) => key);
+    const result = parts
+      .map(([, values]) => values)
+      .reduce(cartesian)
+      .map((a) => Object.assign(...a.map((v, i) => ({ [keys[i]]: v }))));
+
+    return result;
+  }
+
+  explodeDatumStringDelimitedValues(data) {
+    /*
+    This is a weird one:
+
+    Some of the data is being passed as a pipe delimited string
+    where multiple values exist (e.g. say a participant has multiple
+    phenotypes). This method (and its subroutines) allow for the
+    correct atomic group-wise counts (e.g. if you group the values
+    on 'phenotype') – rather than listing each phenotype combination
+    as it's own phenotype, it allows for counts to be made for each
+    specific phenotype. It's also idempotent – if you pass data without
+    pipe delimited string subvalues, it'll just return the same data
+    as before.
+
+    Todo: Obviate this on the back-end with some NumPy fun.
+    */
+
+    let self = this;
+    let split = [];
+    for (let i = 0; i < data.length; i++) {
+      const datum = { ...data[i] }; // Remove proxy
+      for (const _ in datum) {
+        split.push(...self.splitObjectStringValuesByCartesian(datum));
+      }
+    }
+    return self.getUniqueObjectsByProperties(split);
+  }
+
+  naturalSort(a, b) {
+    return a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" });
   }
 
   /*
@@ -97,7 +229,7 @@ class Chart {
 
   tokenize(token) {
     return typeof token === "string"
-      ? token.replace(/\s/g, "-").toLowerCase()
+      ? token.replace(/\s/g, "-").replace(/\|/g, "-").replace(/--/g, "-").toLowerCase()
       : `${Math.random().toString(16).slice(2, 6)}`.toLowerCase();
   }
 

@@ -1,14 +1,14 @@
 {
-  "name": "Overview",
-  "id": "overview",
-  "title": "Overview",
-  "subtitle": "REDCap Survey Completion Status",
+  "name": "Race Recruitment by Site",
+  "id": "race-recruitment-by-site",
+  "title": "AI-READI Pilot Participant Race Recruitment Over Time by Site",
+  "subtitle": "Participant Race Recruitment Counts by Data Generation Site",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "StackedBar",
+    "type": "Line",
     "config": {
-      "id": "#overview_stacked-bar",
+      "id": "#race-recruitment-by-site_line",
       "rotate": true,
       "width": 1080,
       "height": 420,
@@ -32,12 +32,16 @@
       },
       "transitions": {
         "opacity": {
-          "from": 0.8,
+          "from": 0.6,
           "to": 1.0
         },
         "translate": {
           "from": "left",
           "to": "left"
+        },
+        "radius": {
+          "from": 4,
+          "to": 8
         }
       },
       "animations": {
@@ -50,13 +54,20 @@
           "delay": 0,
           "duration": 600,
           "easing": "expOut"
+        },
+        "radius": {
+          "delay": 0,
+          "duration": 600,
+          "easing": "expOut"
         }
       },
       "legend": {
-        "width": 200,
+        "title": "Race",
+        "accessor": "group",
+        "width": 120,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 10,
+        "fontsize": 12,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -67,6 +78,7 @@
         }
       },
       "tooltip": {
+        "title": "Data Point Details",
         "width": 720,
         "height": 140,
         "itemsize": 20,
@@ -111,23 +123,23 @@
           "type": "String"
         },
         "group": {
-          "name": "Survey",
+          "name": "Race",
           "key": "group",
           "type": "String"
         },
-        "subgroup": {
-          "name": "Status",
-          "key": "subgroup",
-          "type": "String"
-        },
         "color": {
-          "name": "Status",
-          "key": "subgroup",
+          "name": "Race",
+          "key": "group",
           "type": "String"
         },
-        "value": {
-          "name": "Count (n)",
-          "key": "value",
+        "x": {
+          "name": "Week of the Year",
+          "key": "x",
+          "type": "Number"
+        },
+        "y": {
+          "name": "Cumulative Count (n)",
+          "key": "y",
           "type": "Number"
         }
       },

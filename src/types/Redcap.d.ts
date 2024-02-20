@@ -1,11 +1,23 @@
 export interface RedcapProject {
-  project_id: string;
-  project_title: string;
+  id: string;
+  title: string;
 }
-export interface RedcapProjectView {
-  project_api_active: boolean;
-  project_api_url: string;
+export interface RedcapProjectView extends RedcapProject {
+  api_active: boolean;
+  api_pid: string | number;
+  api_url: string;
 }
-export interface RedcapProjectAPI extends RedcapProjectView {
-  project_api_key: string;
+export interface RedcapReport {
+  report_id: string | number;
+  report_key: string;
+  report_name: string;
+}
+export type RedcapReportConnector = typeof RedcapReportView;
+
+export interface RedcapProjectAPI {
+  title: string;
+  api_active: boolean;
+  api_key: string;
+  api_pid: string | number;
+  api_url: string;
 }

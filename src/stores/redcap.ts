@@ -8,42 +8,42 @@ export const useRedcapStore = defineStore("redcap", () => {
 
   const allRedcapProjectViews = ref<RedcapProjectView[]>([]);
   const redcapProjectView = ref<RedcapProjectView>({
-    project_api_active: false,
-    project_api_url: "",
-    project_id: "",
-    project_title: "",
+    id: "",
+    title: "",
+    api_active: false,
+    api_pid: "",
+    api_url: "",
   });
 
   const fetchAllRedcapProjectViews = async (studyId: string) => {
     loading.value = true;
 
-    const response = await fetch(`${baseURL}/study/${studyId}/redcap/all`, {
+    const response = await fetch(`${baseURL}/study/${studyId}/redcap`, {
       method: "GET",
     });
 
     if (!response.ok) {
       throw new Error("RedcapProjectViews not found");
+    } else {
+      const allRedcapProjectViewsResponse = await response.json();
+
+      console.log("response redcap projects views", allRedcapProjectViewsResponse);
+
+      allRedcapProjectViews.value = allRedcapProjectViewsResponse as RedcapProjectView[];
+
+      console.log("redcap projects views", allRedcapProjectViews.value);
+
+      /** Sort by title for now */
+      allRedcapProjectViews.value.sort((a, b) => b.title.localeCompare(a.title));
     }
-
-    const allRedcapProjectViewsResponse = await response.json();
-
-    console.log("response redcap projects views", allRedcapProjectViewsResponse);
-
-    allRedcapProjectViews.value = allRedcapProjectViewsResponse as RedcapProjectView[];
-
-    console.log("redcap projects views", allRedcapProjectViews.value);
-
-    /** Sort by title for now */
-    allRedcapProjectViews.value.sort((a, b) => b.project_title.localeCompare(a.project_title));
 
     loading.value = false;
   };
 
-  const getRedcapProjectView = async (studyId: string, projectId: string) => {
+  const getRedcapProjectView = async (studyId: string, redcapId: string) => {
     loading.value = true;
 
-    const query = new URLSearchParams({ project_id: projectId });
-    const response = await fetch(`${baseURL}/study/${studyId}/redcap?${query}`, {
+    const response = await fetch(`${baseURL}/study/${studyId}/redcap/${redcapId}`, {
       method: "GET",
     });
 
@@ -64,12 +64,11 @@ export const useRedcapStore = defineStore("redcap", () => {
     return redcapProjectView.value;
   };
 
-  const deleteRedcapProjectAPI = async (studyId: string, projectId: string) => {
+  const deleteRedcapProjectAPI = async (studyId: string, redcapId: string) => {
     loading.value = true;
 
-    const response = await fetch(`${baseURL}/study/${studyId}/redcap/delete`, {
-      body: JSON.stringify({ project_id: projectId }),
-      method: "POST",
+    const response = await fetch(`${baseURL}/study/${studyId}/redcap/${redcapId}`, {
+      method: "DELETE",
     });
 
     if (!response.ok) {

@@ -129,7 +129,7 @@ class RidgelineChart extends Chart {
     */
 
     self.annotation = new Legend({
-      accessor: self.accessors.color.key,
+      accessor: self.legend.accessor,
       color: self.color,
       container: self.inner,
       data: self.density,
