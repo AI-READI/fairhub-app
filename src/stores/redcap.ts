@@ -8,10 +8,11 @@ export const useRedcapStore = defineStore("redcap", () => {
 
   const allRedcapProjectViews = ref<RedcapProjectView[]>([]);
   const redcapProjectView = ref<RedcapProjectView>({
-    api_active: false,
-    api_url: "",
-    api_pid: "",
+    id: "",
     title: "",
+    api_active: false,
+    api_pid: "",
+    api_url: "",
   });
 
   const fetchAllRedcapProjectViews = async (studyId: string) => {
@@ -22,11 +23,8 @@ export const useRedcapStore = defineStore("redcap", () => {
     });
 
     if (!response.ok) {
-
       throw new Error("RedcapProjectViews not found");
-
     } else {
-
       const allRedcapProjectViewsResponse = await response.json();
 
       console.log("response redcap projects views", allRedcapProjectViewsResponse);
@@ -37,7 +35,6 @@ export const useRedcapStore = defineStore("redcap", () => {
 
       /** Sort by title for now */
       allRedcapProjectViews.value.sort((a, b) => b.title.localeCompare(a.title));
-
     }
 
     loading.value = false;

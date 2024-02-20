@@ -177,7 +177,7 @@ const router = createRouter({
             },
             {
               name: "study:redcap:connect-redcap-project-dashboard",
-              path: ":redcapId/connect-dashboard",
+              path: ":redcapId/dashboard",
               component: ConnectDashboard,
             },
           ],

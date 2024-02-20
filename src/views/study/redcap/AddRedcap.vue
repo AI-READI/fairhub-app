@@ -22,24 +22,24 @@ const routeParams = {
 const formRef = ref<FormInst | null>(null);
 
 const redcapProjectAPI: Ref<RedcapProjectAPI> = ref({
+  title: "",
   api_active: false,
   api_key: "",
-  api_url: "",
   api_pid: "",
-  title: "",
+  api_url: "",
 });
 
 const rules: FormRules = {
-  api_key: [
+  title: [
     {
-      message: "Please input the REDCap Project API Key",
+      message: "Please input the REDCap Project title",
       required: true,
       trigger: ["blur", "input"],
     },
   ],
-  api_url: [
+  api_key: [
     {
-      message: "Please input the REDCap Project API URL",
+      message: "Please input the REDCap Project API Key",
       required: true,
       trigger: ["blur", "input"],
     },
@@ -51,9 +51,9 @@ const rules: FormRules = {
       trigger: ["blur", "input"],
     },
   ],
-  title: [
+  api_url: [
     {
-      message: "Please input the REDCap Project title",
+      message: "Please input the REDCap Project API URL",
       required: true,
       trigger: ["blur", "input"],
     },
@@ -68,11 +68,11 @@ const addRedcapProjectAPI = (e: MouseEvent) => {
       console.log("valid form");
 
       const data = {
+        title: redcapProjectAPI.value.title,
         api_active: redcapProjectAPI.value.api_active,
         api_key: redcapProjectAPI.value.api_key,
-        api_url: redcapProjectAPI.value.api_url,
         api_pid: redcapProjectAPI.value.api_pid,
-        title: redcapProjectAPI.value.title,
+        api_url: redcapProjectAPI.value.api_url,
       };
 
       const studyId = routeParams.studyId;
@@ -149,8 +149,7 @@ onBeforeMount(() => {
       </n-form-item>
 
       <n-form-item label="REDCap Project API Active" path="api_active">
-        <n-checkbox v-model:checked="redcapProjectAPI.api_active" size="large">
-        </n-checkbox>
+        <n-checkbox v-model:checked="redcapProjectAPI.api_active" size="large"> </n-checkbox>
       </n-form-item>
 
       <n-divider />

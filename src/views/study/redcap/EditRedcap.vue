@@ -28,16 +28,16 @@ const routeParams = {
 const formRef = ref<FormInst | null>(null);
 
 const rules: FormRules = {
-  api_url: [
+  title: [
     {
-      message: "Please input the REDCap Project View URL",
+      message: "Please input the REDCap Project title",
       required: true,
       trigger: ["blur", "input"],
     },
   ],
-  title: [
+  api_url: [
     {
-      message: "Please input the REDCap Project title",
+      message: "Please input the REDCap Project View URL",
       required: true,
       trigger: ["blur", "input"],
     },
@@ -54,10 +54,10 @@ const editRedcapProjectView = (e: MouseEvent) => {
       const studyId = routeParams.studyId;
       const redcapId = routeParams.redcapId;
       const data = {
-        api_active: redcapProjectView.value.api_active,
-        api_pid:redcapProjectView.value.api_pid,
-        api_url: redcapProjectView.value.api_url,
         title: redcapProjectView.value.title,
+        api_active: redcapProjectView.value.api_active,
+        api_pid: redcapProjectView.value.api_pid,
+        api_url: redcapProjectView.value.api_url,
       };
 
       try {

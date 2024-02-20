@@ -44,8 +44,8 @@ onBeforeMount(() => {
     <HeadingText v-if="isLoading" title="Loading Dashboard" description="Please wait..." />
 
     <HeadingText
-      :title="`${dashboardView.dashboard_name}`"
-      :description="`${study.title} / REDCap PID: ${dashboardView.project_id}`"
+      :title="`${dashboardView.name}`"
+      :description="`${study.title} / REDCap PID: ${dashboardView.redcap_pid}`"
       v-else
     />
 
@@ -56,7 +56,7 @@ onBeforeMount(() => {
 
       <TransitionGroup name="fade" tag="div" class="p-0" v-else>
         <div
-          v-for="(module, module_index) in dashboardView.dashboard_modules.filter(
+          v-for="(module, module_index) in dashboardView.modules.filter(
             (module: DashboardModuleView) => module.selected
           )"
           :key="module_index"

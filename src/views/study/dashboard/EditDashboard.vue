@@ -31,10 +31,10 @@ const routeParams = {
 // Load Default (Prior) Dashboard Module Selection
 const checkboxGroupDefault = (report: RedcapReport) => {
   let ids: string[] = [];
-  for (let j = 0; j < dashboardConnector.value.dashboard_modules.length; j++) {
-    const dashboard_module = dashboardConnector.value.dashboard_modules[j];
-    if (dashboard_module.report_key === report.report_key && dashboard_module.selected) {
-      ids.push(dashboard_module.id);
+  for (let j = 0; j < dashboardConnector.value.modules.length; j++) {
+    const module = dashboardConnector.value.modules[j];
+    if (module.report_key === report.report_key && module.selected) {
+      ids.push(module.id);
     }
   }
   return ids;
@@ -42,49 +42,49 @@ const checkboxGroupDefault = (report: RedcapReport) => {
 
 // Render Dashboard Module for each Report
 const reportDashboardModules = (report: RedcapReport) => {
-  let report_dashboard_modules = [];
-  for (let j = 0; j < dashboardConnector.value.dashboard_modules.length; j++) {
-    const dashboard_module = dashboardConnector.value.dashboard_modules[j];
-    if (dashboard_module.report_key === report.report_key) {
-      report_dashboard_modules.push(dashboard_module);
+  let report_modules = [];
+  for (let j = 0; j < dashboardConnector.value.modules.length; j++) {
+    const module = dashboardConnector.value.modules[j];
+    if (module.report_key === report.report_key) {
+      report_modules.push(module);
     }
   }
-  return report_dashboard_modules;
+  return report_modules;
 };
 
 // Handle Dashboard Module Selection
 const selectDashboardModules = (ids: string[], report: RedcapReport) => {
-  let report_dashboard_modules = reportDashboardModules(report);
-  let selected_dashboard_modules = [];
-  for (let i = 0; i < dashboardConnector.value.dashboard_modules.length; i++) {
-    const connector_dashboard_module = dashboardConnector.value.dashboard_modules[i];
-    for (let j = 0; j < report_dashboard_modules.length; j++) {
-      const report_dashboard_module = report_dashboard_modules[j];
-      if (connector_dashboard_module.id === report_dashboard_module.id) {
-        connector_dashboard_module.selected = false;
+  let report_modules = reportDashboardModules(report);
+  let selected_modules = [];
+  for (let i = 0; i < dashboardConnector.value.modules.length; i++) {
+    const connector_module = dashboardConnector.value.modules[i];
+    for (let j = 0; j < report_modules.length; j++) {
+      const report_module = report_modules[j];
+      if (connector_module.id === report_module.id) {
+        connector_module.selected = false;
         for (let k = 0; k < ids.length; k++) {
           const id = ids[k];
-          if (connector_dashboard_module.id === id) {
-            connector_dashboard_module.selected = true;
+          if (connector_module.id === id) {
+            connector_module.selected = true;
           }
         }
       }
     }
-    selected_dashboard_modules.push(connector_dashboard_module);
+    selected_modules.push(connector_module);
   }
-  dashboardConnector.value.dashboard_modules = selected_dashboard_modules;
+  dashboardConnector.value.modules = selected_modules;
 };
 
 const formRef = ref<FormInst | null>(null);
 
 const rules: FormRules = {
-  dashboard_name: [
+  name: [
     {
       message: "Please input the Dashboard Name",
       required: true,
       trigger: ["blur", "input"],
       validator() {
-        return dashboardConnector.value.dashboard_name.length > 0;
+        return dashboardConnector.value.name.length > 0;
       },
     },
   ],
@@ -130,10 +130,10 @@ const rules: FormRules = {
           let report = dashboardConnector.value.reports[i];
           if (report.report_id.length > 1) {
             let moduleIsSelected = false;
-            for (var j = 0; j < dashboardConnector.value.dashboard_modules.length; j++) {
-              let dashboard_module = dashboardConnector.value.dashboard_modules[j];
-              if (dashboard_module.report_key === report.report_key) {
-                if (dashboard_module.selected) {
+            for (var j = 0; j < dashboardConnector.value.modules.length; j++) {
+              let module = dashboardConnector.value.modules[j];
+              if (module.report_key === report.report_key) {
+                if (module.selected) {
                   moduleIsSelected = true;
                 }
               }
@@ -156,16 +156,18 @@ const editDashboard = (e: MouseEvent) => {
       console.log("valid form");
 
       const studyId = routeParams.studyId;
+      const dashboardId = routeParams.dashboardId;
       const data = {
-        dashboard_id: routeParams.dashboardId,
-        dashboard_modules: dashboardConnector.value.dashboard_modules,
-        dashboard_name: dashboardConnector.value.dashboard_name,
-        project_id: dashboardConnector.value.project_id,
+        name: dashboardConnector.value.name,
+        dashboard_id: dashboardId,
+        modules: dashboardConnector.value.modules,
+        redcap_id: dashboardConnector.value.redcap_id,
+        redcap_pid: dashboardConnector.value.redcap_pid,
         reports: dashboardConnector.value.reports,
       };
 
       try {
-        const response = await fetch(`${baseURL}/study/${studyId}/dashboard/edit`, {
+        const response = await fetch(`${baseURL}/study/${studyId}/dashboard/${dashboardId}`, {
           body: JSON.stringify(data),
           method: "PUT",
         });
@@ -205,7 +207,7 @@ onBeforeMount(() => {
   <main class="flex w-full flex-col pr-6">
     <HeadingText
       title="Edit Dashboard"
-      :description="`REDCap Project ID (pid): ${dashboardConnector.project_id}`"
+      :description="`REDCap Project ID (pid): ${dashboardConnector.redcap_pid}`"
     />
 
     <n-divider />
@@ -220,8 +222,8 @@ onBeforeMount(() => {
     >
       <n-form-item label="Dashboard Name" path="dashboardName">
         <n-input
-          v-model:value="dashboardConnector.dashboard_name"
-          :placeholder="dashboardConnector.dashboard_name"
+          v-model:value="dashboardConnector.name"
+          :placeholder="dashboardConnector.name"
           :loading="isLoading"
           clearable
         />
@@ -244,7 +246,7 @@ onBeforeMount(() => {
               clearable
               :label="`REDCap Report ID for ${report.report_name} Report`"
               style="text-align: left"
-              :disabled="dashboardConnector.dashboard_name.length == 0"
+              :disabled="dashboardConnector.name.length == 0"
               :loading="isLoading"
               @keydown.enter.prevent
             />
@@ -291,14 +293,12 @@ onBeforeMount(() => {
               <n-grid :cols="12" :x-gap="60" :y-gap="40">
                 <n-grid-item
                   :span="4"
-                  v-for="(
-                    report_dashboard_module, report_dashboard_module_index
-                  ) in reportDashboardModules(report)"
-                  :key="report_dashboard_module_index"
+                  v-for="(report_module, report_module_index) in reportDashboardModules(report)"
+                  :key="report_module_index"
                 >
                   <n-checkbox
-                    :label="report_dashboard_module.name"
-                    :value="report_dashboard_module.id"
+                    :label="report_module.name"
+                    :value="report_module.id"
                     :disabled="report.report_id.length == 0"
                     :indeterminate="report.report_id.length == 0"
                     size="large"

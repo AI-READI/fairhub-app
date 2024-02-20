@@ -22,6 +22,26 @@ const dashboardStore = useDashboardStore();
 
 const isLoading = computed(() => dashboardStore.loading);
 const study: Ref<Study> = computed(() => studyStore.study);
+
+const sortOption = computed(() => filterStore.sort);
+const sortOrder = computed(() => filterStore.sortOrder);
+const sortOptions = [
+  { key: "redcap_id", label: "REDCap PID" },
+  { key: "name", label: "Dashboard Name" },
+  { key: "id", label: "Dashboard ID" },
+];
+
+const updateSort = (sort: string) => {
+  filterStore.updateSort(sort);
+};
+const toggleSortOrder = () => {
+  filterStore.toggleSortOrder();
+};
+
+const routeParams = {
+  studyId: route.params.studyId as string,
+};
+
 const dashboardConnectors: Ref<DashboardConnector[]> = computed(() => {
   const allDashboardConnectors = dashboardStore.allDashboardConnectors;
 
@@ -57,10 +77,10 @@ const dashboardConnectors: Ref<DashboardConnector[]> = computed(() => {
   }
 
   filteredDashboardConnectors.sort((a: DashboardConnector, b: DashboardConnector) => {
-    if (sortOption.value === "project_id") {
-      return Number(b.project_id) - Number(a.project_id);
-    } else if (sortOption.value === "dashboard_name") {
-      return b.dashboard_name.localeCompare(a.dashboard_name);
+    if (sortOption.value === "redcap_id") {
+      return Number(b.redcap_id) - Number(a.redcap_id);
+    } else if (sortOption.value === "name") {
+      return b.name.localeCompare(a.name);
     } else {
       return 0;
     }
@@ -69,30 +89,10 @@ const dashboardConnectors: Ref<DashboardConnector[]> = computed(() => {
   if (sortOrder.value === "desc") {
     filteredDashboardConnectors.reverse();
   }
+
   console.log("filteredDashboardConnectors", filteredDashboardConnectors);
   return filteredDashboardConnectors;
 });
-
-const sortOption = computed(() => filterStore.sort);
-const sortOrder = computed(() => filterStore.sortOrder);
-
-const updateSort = (sort: string) => {
-  filterStore.updateSort(sort);
-};
-
-const toggleSortOrder = () => {
-  filterStore.toggleSortOrder();
-};
-
-const sortOptions = [
-  { key: "project_id", label: "REDCap PID" },
-  { key: "dashboard_name", label: "Name" },
-  { key: "dashboard_id", label: "Dashboard ID" },
-];
-
-const dashboardRouteParams = {
-  studyId: route.params.studyId as string,
-};
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
@@ -101,7 +101,7 @@ onBeforeMount(() => {
   }
 
   const x = push.info("Available dashboards are being loaded. Please wait...");
-  const studyId = dashboardRouteParams.studyId;
+  const studyId = routeParams.studyId;
   studyStore.getStudy(studyId).then(() => {
     dashboardStore.fetchAllDashboardConnectors(studyId).then(() => {
       setTimeout(() => {
@@ -247,19 +247,19 @@ async function deleteDashboard(studyId: string, dashboardId: string | undefined)
                 v-for="(dashboard, dashboard_index) in dashboardConnectors"
                 :key="dashboard_index"
               >
-                <td>{{ dashboard.project_id }}</td>
+                <td>{{ dashboard.redcap_pid }}</td>
 
-                <td>{{ dashboard.dashboard_name }}</td>
+                <td>{{ dashboard.name }}</td>
 
                 <td>
                   <n-space>
                     <n-tag
-                      v-for="(
-                        dashboard_module, dashboard_module_index
-                      ) in dashboard.dashboard_modules.filter((module) => module.selected)"
-                      :key="dashboard_module_index"
+                      v-for="(module, module_index) in dashboard.modules.filter(
+                        (module) => module.selected
+                      )"
+                      :key="module_index"
                     >
-                      {{ dashboard_module.name }}
+                      {{ module.name }}
                     </n-tag>
                   </n-space>
                 </td>
@@ -270,8 +270,8 @@ async function deleteDashboard(studyId: string, dashboardId: string | undefined)
                       :to="{
                         name: 'study:dashboard:view-dashboard',
                         params: {
-                          studyId: dashboardRouteParams.studyId,
-                          dashboardId: dashboard.dashboard_id,
+                          studyId: routeParams.studyId,
+                          dashboardId: dashboard.id,
                         },
                       }"
                     >
@@ -287,8 +287,8 @@ async function deleteDashboard(studyId: string, dashboardId: string | undefined)
                       :to="{
                         name: 'study:dashboard:edit-dashboard',
                         params: {
-                          studyId: dashboardRouteParams.studyId,
-                          dashboardId: dashboard.dashboard_id,
+                          studyId: routeParams.studyId,
+                          dashboardId: dashboard.id,
                         },
                       }"
                     >
@@ -301,9 +301,7 @@ async function deleteDashboard(studyId: string, dashboardId: string | undefined)
                     </RouterLink>
 
                     <n-popconfirm
-                      @positive-click="
-                        deleteDashboard(dashboardRouteParams.studyId, dashboard.dashboard_id)
-                      "
+                      @positive-click="deleteDashboard(routeParams.studyId, dashboard.id)"
                     >
                       <template #trigger>
                         <n-button strong secondary type="error" size="small">

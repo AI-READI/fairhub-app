@@ -3,18 +3,20 @@ import type { RedcapReportConnector, RedcapReportView } from "@/types/Redcap";
 import type { DashboardModuleConnector, DashboardModuleView } from "./DashboardModule";
 
 export interface DashboardConnector {
-  dashboard_id?: string;
-  dashboard_modules: DashboardModuleConnector[];
-  dashboard_name: string;
-  project_id: string;
+  id?: string;
+  name: string;
+  modules: DashboardModuleConnector[];
+  redcap_id: string;
+  redcap_pid: string | number;
   reports: RedcapReportConnector[];
 }
 
 export interface DashboardView {
-  dashboard_id: string;
-  dashboard_modules: DashboardModuleView[];
-  dashboard_name: string;
-  project_id: string;
+  id: string;
+  name: string;
+  modules: DashboardModuleView[];
+  redcap_id: string;
+  redcap_pid: string | number;
   reports: RedcapReportView[];
 }
 

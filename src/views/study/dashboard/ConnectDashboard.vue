@@ -8,8 +8,9 @@ import { useRoute, useRouter } from "vue-router";
 import { DashboardModulesManifest } from "@/configs/dashboards/modules-manifest";
 import { RedcapReportsManifest } from "@/configs/dashboards/reports-manifest";
 import { useAuthStore } from "@/stores/auth";
+import { useRedcapStore } from "@/stores/redcap";
 import type { DashboardConnector } from "@/types/Dashboard";
-import type { RedcapReport } from "@/types/Redcap";
+import type { RedcapProjectView, RedcapReport } from "@/types/Redcap";
 import { baseURL } from "@/utils/constants";
 
 const router = useRouter();
@@ -17,44 +18,48 @@ const route = useRoute();
 const { error, success } = useMessage();
 
 const authStore = useAuthStore();
+const redcapStore = useRedcapStore();
 
 const routeParams = {
-  projectId: route.params.projectId as string,
+  redcapId: route.params.redcapId as string,
   studyId: route.params.studyId as string,
 };
 
+const redcapProjectView: Ref<RedcapProjectView> = computed(() => redcapStore.redcapProjectView);
+const isLoading = computed(() => redcapStore.loading);
+
 const dashboardConnector: Ref<DashboardConnector> = ref({
-  dashboard_modules: DashboardModulesManifest,
-  dashboard_name: "",
-  project_id: routeParams.projectId,
+  name: "",
+  modules: DashboardModulesManifest,
+  redcap_id: routeParams.redcapId,
+  redcap_pid: redcapProjectView.value.api_pid,
   reports: RedcapReportsManifest,
 });
 
-// const reportDashboardModules: Ref<>
 const reportDashboardModules = (report: RedcapReport) => {
-  let dashboard_modules = [];
-  for (let j = 0; j < dashboardConnector.value.dashboard_modules.length; j++) {
-    const dashboard_module = dashboardConnector.value.dashboard_modules[j];
-    if (dashboard_module.report_key === report.report_key && dashboard_module.available) {
-      dashboard_modules.push(dashboard_module);
+  let modules = [];
+  for (let j = 0; j < dashboardConnector.value.modules.length; j++) {
+    const module = dashboardConnector.value.modules[j];
+    if (module.report_key === report.report_key && module.available) {
+      modules.push(module);
     }
   }
-  return dashboard_modules;
+  return modules;
 };
 
 const selectDashboardModules = (ids: string[]) => {
-  let dashboard_modules = [];
+  let modules = [];
   for (let i = 0; i < ids.length; i++) {
     const id = ids[i];
-    for (let j = 0; j < dashboardConnector.value.dashboard_modules.length; j++) {
-      const dashboard_module = dashboardConnector.value.dashboard_modules[j];
-      if (dashboard_module.id === id) {
-        dashboard_module.selected = true;
-        dashboard_modules.push(dashboard_module);
+    for (let j = 0; j < dashboardConnector.value.modules.length; j++) {
+      const module = dashboardConnector.value.modules[j];
+      if (module.id === id) {
+        module.selected = true;
+        modules.push(module);
       }
     }
   }
-  return dashboard_modules;
+  return modules;
 };
 
 const formRef = ref<FormInst | null>(null);
@@ -69,13 +74,13 @@ ation will return true (valid), which it shouldn't!
 */
 
 const rules: FormRules = {
-  dashboard_name: [
+  name: [
     {
       message: "Please input the Dashboard Name",
       required: true,
       trigger: ["blur", "input"],
       validator() {
-        return dashboardConnector.value.dashboard_name.length > 0;
+        return dashboardConnector.value.name.length > 0;
       },
     },
   ],
@@ -121,10 +126,10 @@ const rules: FormRules = {
           let report = dashboardConnector.value.reports[i];
           if (report.report_id.length > 1) {
             let moduleIsSelected = false;
-            for (var j = 0; j < dashboardConnector.value.dashboard_modules.length; j++) {
-              let dashboard_module = dashboardConnector.value.dashboard_modules[j];
-              if (dashboard_module.report_key === report.report_key) {
-                if (dashboard_module.selected) {
+            for (var j = 0; j < dashboardConnector.value.modules.length; j++) {
+              let module = dashboardConnector.value.modules[j];
+              if (module.report_key === report.report_key) {
+                if (module.selected) {
                   moduleIsSelected = true;
                 }
               }
@@ -147,15 +152,17 @@ const connectDashboard = (e: MouseEvent) => {
       console.log("valid form");
 
       const studyId = routeParams.studyId;
+      const redcapId = routeParams.redcapId;
       const data = {
-        dashboard_modules: dashboardConnector.value.dashboard_modules,
-        dashboard_name: dashboardConnector.value.dashboard_name,
-        project_id: routeParams.projectId,
+        name: dashboardConnector.value.name,
+        modules: dashboardConnector.value.modules,
+        redcap_id: redcapId,
+        redcap_pid: redcapProjectView.value.api_pid,
         reports: dashboardConnector.value.reports,
       };
 
       try {
-        const response = await fetch(`${baseURL}/study/${studyId}/dashboard/add`, {
+        const response = await fetch(`${baseURL}/study/${studyId}/dashboard`, {
           body: JSON.stringify(data),
           method: "POST",
         });
@@ -184,6 +191,10 @@ onBeforeMount(() => {
     error("You are not logged in.");
     router.push({ name: "home" });
   }
+
+  const studyId = routeParams.studyId;
+  const redcapId = routeParams.redcapId;
+  redcapStore.getRedcapProjectView(studyId, redcapId);
 });
 </script>
 
@@ -191,7 +202,7 @@ onBeforeMount(() => {
   <main class="flex w-full flex-col pr-6">
     <HeadingText
       title="Connect Dashboard to REDCap"
-      :description="`REDCap Project ID (pid): ${routeParams.projectId}`"
+      :description="`REDCap Project ID (pid): ${redcapProjectView.api_pid}`"
     />
 
     <n-divider />
@@ -206,8 +217,8 @@ onBeforeMount(() => {
     >
       <n-form-item label="Dashboard Name" path="dashboardName">
         <n-input
-          v-model:value="dashboardConnector.dashboard_name"
-          :placeholder="dashboardConnector.dashboard_name"
+          v-model:value="dashboardConnector.name"
+          :placeholder="dashboardConnector.name"
           clearable
         />
       </n-form-item>
@@ -229,7 +240,7 @@ onBeforeMount(() => {
               clearable
               :label="`REDCap Report ID for ${report.report_name} Report`"
               style="text-align: left"
-              :disabled="dashboardConnector.dashboard_name.length == 0"
+              :disabled="dashboardConnector.name.length == 0"
               @keydown.enter.prevent
             />
           </n-form-item>
@@ -246,7 +257,7 @@ onBeforeMount(() => {
             <RouterLink
               :to="{
                 path: '/help/documentation',
-                // path: '/help/documentation/dashboards/modules/' + dashboardModule.id
+                // path: '/help/documentation/dashboards/modules/' + module.id
               }"
             >
               <n-button size="large">
@@ -268,15 +279,13 @@ onBeforeMount(() => {
               <n-grid :cols="12" :x-gap="60" :y-gap="40">
                 <n-grid-item
                   :span="4"
-                  v-for="(dashboardModule, dashboard_module_index) in reportDashboardModules(
-                    report
-                  )"
-                  :key="dashboard_module_index"
+                  v-for="(module, module_index) in reportDashboardModules(report)"
+                  :key="module_index"
                 >
                   <n-checkbox
-                    v-if="dashboardModule.report_key === report.report_key"
-                    :label="dashboardModule.name"
-                    :value="dashboardModule.id"
+                    v-if="module.report_key === report.report_key"
+                    :label="module.name"
+                    :value="module.id"
                     :disabled="report.report_id.length == 0"
                     :indeterminate="report.report_id.length == 0"
                     size="large"
@@ -294,7 +303,7 @@ onBeforeMount(() => {
       </n-grid>
 
       <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="connectDashboard">
+        <n-button size="large" type="primary" @click="connectDashboard" :disabled="isLoading">
           <template #icon>
             <f-icon icon="material-symbols:add-link" />
           </template>

@@ -242,18 +242,14 @@ async function deleteRedcapProjectApiLink(studyId: string, redcapId: string) {
 
     <n-divider />
 
-
     <FadeTransition>
       <LottieLoader v-if="isLoading" />
+
       <TransitionGroup name="fade" tag="div" class="redcap-choices" v-else>
         <div v-if="redcapProjectViews === undefined || redcapProjectViews.length === 0">
-          <n-empty
-            description="No REDCap API links found"
-            size="huge"
-            class="my-10"
-          >
-          </n-empty>
+          <n-empty description="No REDCap API links found" size="huge" class="my-10"> </n-empty>
         </div>
+
         <div v-else>
           <n-table :bordered="true" :single-line="false">
             <thead>
@@ -261,6 +257,7 @@ async function deleteRedcapProjectApiLink(studyId: string, redcapId: string) {
                 <th v-for="(item, index) in columns" :key="index">{{ item }}</th>
               </tr>
             </thead>
+
             <tbody class="p-0">
               <tr v-for="(redcapProjectView, index) in redcapProjectViews" :key="index">
                 <td>{{ redcapProjectView.title }}</td>
@@ -305,11 +302,12 @@ async function deleteRedcapProjectApiLink(studyId: string, redcapId: string) {
                           Delete API Link
                         </n-button>
                       </template>
-                      This will remove the API Link and delete all its associated Dashboards. Are you
-                      sure you want to do this?
+                      This will remove the API Link and delete all its associated Dashboards. Are
+                      you sure you want to do this?
                     </n-popconfirm>
                   </div>
                 </td>
+
                 <td>
                   <div class="flex items-center space-x-2">
                     <RouterLink
