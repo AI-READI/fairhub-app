@@ -174,6 +174,30 @@ erDiagram
         number size "size of the files in the data lake"
     }
 
+    STUDY_DASHBOARD {
+        string id PK
+        string study_id FK "STUDY.id"
+        string redcap_id FK "STUDY_REDCAP.id"
+        string name "NULLABLE"
+        json modules
+        int redcap_pid
+        json reports
+        timestamp created_at
+        timestamp updated_on
+    }
+
+    STUDY_REDCAP {
+        string id PK
+        string study_id FK "STUDY.id"
+        string title "NULLABLE"
+        int api_pid
+        string api_url
+        string api_key
+        boolean api_active
+        timestamp created_at
+        timestamp updated_on
+    }
+
     
     STUDY_STATUS ||--|| STUDY : "is described by"
     STUDY_SPONSORS_COLLOBORATORS ||--|| STUDY : "sponsors"
@@ -195,5 +219,8 @@ erDiagram
     STUDY ||--o{ STUDY_REFERENCE : "references"
     STUDY ||--o{ STUDY_LINK : "links to"
     STUDY ||--o{ STUDY_AVAILABLE_IPD : "links to"
+
+    STUDY ||--o{ STUDY_DASHBOARD : "has dashboard"
+    STUDY ||--o{ STUDY_REDCAP : "has redcap API"
 
     STUDY ||--|| STUDY_OTHER : "has other information"
