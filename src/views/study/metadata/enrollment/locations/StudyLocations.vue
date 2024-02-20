@@ -26,12 +26,19 @@ const countryOptions = computed(() => {
   });
 });
 
+const loading = ref(false);
+const responseLoading = ref(false);
+
 onBeforeMount(async () => {
   const studyId = route.params.studyId;
+
+  responseLoading.value = true;
 
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/location`, {
     method: "GET",
   });
+
+  responseLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -108,11 +115,15 @@ const saveMetadata = (e: MouseEvent) => {
         }
       });
 
+      loading.value = true;
+
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/location`, {
         body: JSON.stringify(data),
 
         method: "POST",
       });
+
+      loading.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong. Please try again later.");
@@ -146,117 +157,128 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
-      <CollapsibleCard
-        v-for="(item, index) in moduleData.location_list"
-        :key="item.id"
-        class="mb-5 shadow-md"
-        :title="item.facility || `City ${index + 1}`"
-        bordered
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
+
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
       >
-        <template #header-extra>
-          <n-popconfirm @positive-click="removeLocation(item.id)">
-            <template #trigger>
-              <n-button type="error" secondary>
-                <template #icon>
-                  <f-icon icon="ep:delete" />
-                </template>
-
-                Remove Location
-              </n-button>
-            </template>
-
-            Are you sure you want to remove this Location?
-          </n-popconfirm>
-        </template>
-
-        <n-form-item
-          label="Name of Facility"
-          :path="`location_list[${index}].facility`"
-          :rule="{
-            message: 'Please enter a name for the facility',
-            required: true,
-            trigger: ['blur', 'change'],
-          }"
+        <CollapsibleCard
+          v-for="(item, index) in moduleData.location_list"
+          :key="item.id"
+          class="mb-5 shadow-md"
+          :title="item.facility || `City ${index + 1}`"
+          bordered
         >
-          <n-input v-model:value="item.facility" placeholder="Wall Rose" clearable />
-        </n-form-item>
+          <template #header-extra>
+            <n-popconfirm @positive-click="removeLocation(item.id)">
+              <template #trigger>
+                <n-button type="error" secondary>
+                  <template #icon>
+                    <f-icon icon="ep:delete" />
+                  </template>
 
-        <n-form-item
-          label="Status of Facility"
-          :path="`location_list[${index}].status`"
-          :rule="{
-            message: 'Please select a status for the facility',
-            required: true,
-            trigger: ['blur', 'change'],
-          }"
-        >
-          <n-select
-            v-model:value="item.status"
-            placeholder="Recruiting"
-            clearable
-            :options="FORM_JSON.studyMetadataStatusOptions"
-          />
-        </n-form-item>
+                  Remove Location
+                </n-button>
+              </template>
 
-        <n-form-item
-          label="City"
-          :path="`location_list[${index}].city`"
-          :rule="{
-            message: 'Please enter a city',
-            required: true,
-            trigger: ['blur', 'change'],
-          }"
-        >
-          <n-input v-model:value="item.city" placeholder="Paradis" clearable />
-        </n-form-item>
-
-        <n-form-item label="State" :path="`location_list[${index}].state`">
-          <n-input v-model:value="item.state" placeholder="Ohio" clearable />
-        </n-form-item>
-
-        <n-form-item label="Zip Code" :path="`location_list[${index}].zip`">
-          <n-input v-model:value="item.zip" placeholder="12345" clearable />
-        </n-form-item>
-
-        <n-form-item
-          label="Country"
-          :path="`location_list[${index}].country`"
-          :rule="{
-            message: 'Please enter a country',
-            required: true,
-            trigger: ['blur', 'change'],
-          }"
-        >
-          <n-select
-            v-model:value="item.country"
-            placeholder="United States of America"
-            clearable
-            filterable
-            :options="countryOptions"
-          />
-        </n-form-item>
-      </CollapsibleCard>
-
-      <n-button class="my-10 w-full" dashed type="success" @click="addLocation">
-        <template #icon>
-          <f-icon icon="gridicons:create" />
-        </template>
-
-        Add a Location
-      </n-button>
-
-      <n-divider />
-
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata">
-          <template #icon>
-            <f-icon icon="material-symbols:save" />
+              Are you sure you want to remove this Location?
+            </n-popconfirm>
           </template>
 
-          Save Metadata
+          <n-form-item
+            label="Name of Facility"
+            :path="`location_list[${index}].facility`"
+            :rule="{
+              message: 'Please enter a name for the facility',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-input v-model:value="item.facility" placeholder="Wall Rose" clearable />
+          </n-form-item>
+
+          <n-form-item
+            label="Status of Facility"
+            :path="`location_list[${index}].status`"
+            :rule="{
+              message: 'Please select a status for the facility',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-select
+              v-model:value="item.status"
+              placeholder="Recruiting"
+              clearable
+              :options="FORM_JSON.studyMetadataStatusOptions"
+            />
+          </n-form-item>
+
+          <n-form-item
+            label="City"
+            :path="`location_list[${index}].city`"
+            :rule="{
+              message: 'Please enter a city',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-input v-model:value="item.city" placeholder="Paradis" clearable />
+          </n-form-item>
+
+          <n-form-item label="State" :path="`location_list[${index}].state`">
+            <n-input v-model:value="item.state" placeholder="Ohio" clearable />
+          </n-form-item>
+
+          <n-form-item label="Zip Code" :path="`location_list[${index}].zip`">
+            <n-input v-model:value="item.zip" placeholder="12345" clearable />
+          </n-form-item>
+
+          <n-form-item
+            label="Country"
+            :path="`location_list[${index}].country`"
+            :rule="{
+              message: 'Please enter a country',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-select
+              v-model:value="item.country"
+              placeholder="United States of America"
+              clearable
+              filterable
+              :options="countryOptions"
+            />
+          </n-form-item>
+        </CollapsibleCard>
+
+        <n-button class="my-10 w-full" dashed type="success" @click="addLocation">
+          <template #icon>
+            <f-icon icon="gridicons:create" />
+          </template>
+
+          Add a Location
         </n-button>
-      </div>
-    </n-form>
+
+        <n-divider />
+
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>

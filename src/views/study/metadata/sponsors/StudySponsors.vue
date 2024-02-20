@@ -36,12 +36,15 @@ const rules: FormRules = {
   },
 };
 
+const loading = ref(false);
+const responseLoading = ref(false);
+
 onBeforeMount(async () => {
+  responseLoading.value = true;
   const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/sponsors`, {
     method: "GET",
   });
-
-  console.log(response);
+  responseLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -70,10 +73,12 @@ const saveMetadata = (e: MouseEvent) => {
         responsible_party_type: moduleData.responsible_party.type,
       };
 
+      loading.value = true;
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/sponsors`, {
         body: JSON.stringify(data),
         method: "PUT",
       });
+      loading.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong.");
@@ -107,114 +112,123 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <n-form
-      ref="formRef"
-      :model="moduleData"
-      :rules="rules"
-      size="large"
-      label-placement="top"
-      class="pr-4"
-    >
-      <h3>Responsible Party</h3>
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
 
-      <p class="pb-8 pt-2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
-        voluptatem, quibusdam, quos voluptas quae quas voluptatum
-      </p>
-
-      <n-form-item label="Type" path="responsible_party.type">
-        <n-select
-          v-model:value="moduleData.responsible_party.type"
-          placeholder="Principal Investigator"
-          clearable
-          :options="FORM_JSON.studyMetadataSponsorsResponsiblePartyTypeOptions"
-        />
-      </n-form-item>
-
-      <n-form-item
-        label="Investigator Name"
-        path="responsible_party.name"
-        :rule="{
-          message: 'Please input an investigator name',
-          required:
-            moduleData.responsible_party.type === 'Principal Investigator' ||
-            moduleData.responsible_party.type === 'Sponsor-Investigator'
-              ? true
-              : false,
-          trigger: ['blur', 'input'],
-        }"
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        :rules="rules"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
       >
-        <n-input
-          v-model:value="moduleData.responsible_party.name"
-          placeholder="Annie Leonhart"
-          clearable
-        />
-      </n-form-item>
+        <h3>Responsible Party</h3>
 
-      <n-form-item
-        label="Investigator Title"
-        path="responsible_party.title"
-        :rule="{
-          message: 'Please add an investigator title',
-          required:
-            moduleData.responsible_party.type === 'Principal Investigator' ||
-            moduleData.responsible_party.type === 'Sponsor-Investigator'
-              ? true
-              : false,
-          trigger: ['blur', 'input'],
-        }"
-      >
-        <n-input
-          v-model:value="moduleData.responsible_party.title"
-          placeholder="Warrior Candidate"
-          clearable
-        />
-      </n-form-item>
+        <p class="pb-8 pt-2">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+          voluptatem, quibusdam, quos voluptas quae quas voluptatum
+        </p>
 
-      <n-form-item
-        label="Investigator Affiliation"
-        path="responsible_party.affiliation"
-        :rule="{
-          message: 'Please add the investigator\'s affiliation',
-          required:
-            moduleData.responsible_party.type === 'Principal Investigator' ||
-            moduleData.responsible_party.type === 'Sponsor-Investigator'
-              ? true
-              : false,
-          trigger: ['blur', 'input'],
-        }"
-      >
-        <n-input
-          v-model:value="moduleData.responsible_party.affiliation"
-          placeholder="Marleyan Military"
-          clearable
-        />
-      </n-form-item>
+        <n-form-item label="Type" path="responsible_party.type">
+          <n-select
+            v-model:value="moduleData.responsible_party.type"
+            placeholder="Principal Investigator"
+            clearable
+            :options="FORM_JSON.studyMetadataSponsorsResponsiblePartyTypeOptions"
+          />
+        </n-form-item>
 
-      <n-divider />
+        <n-form-item
+          label="Investigator Name"
+          path="responsible_party.name"
+          :rule="{
+            message: 'Please input an investigator name',
+            required:
+              moduleData.responsible_party.type === 'Principal Investigator' ||
+              moduleData.responsible_party.type === 'Sponsor-Investigator'
+                ? true
+                : false,
+            trigger: ['blur', 'input'],
+          }"
+        >
+          <n-input
+            v-model:value="moduleData.responsible_party.name"
+            placeholder="Annie Leonhart"
+            clearable
+          />
+        </n-form-item>
 
-      <h3>Lead Sponsor</h3>
+        <n-form-item
+          label="Investigator Title"
+          path="responsible_party.title"
+          :rule="{
+            message: 'Please add an investigator title',
+            required:
+              moduleData.responsible_party.type === 'Principal Investigator' ||
+              moduleData.responsible_party.type === 'Sponsor-Investigator'
+                ? true
+                : false,
+            trigger: ['blur', 'input'],
+          }"
+        >
+          <n-input
+            v-model:value="moduleData.responsible_party.title"
+            placeholder="Warrior Candidate"
+            clearable
+          />
+        </n-form-item>
 
-      <p class="pb-8 pt-2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
-        voluptatem, quibusdam, quos voluptas quae quas voluptatum
-      </p>
+        <n-form-item
+          label="Investigator Affiliation"
+          path="responsible_party.affiliation"
+          :rule="{
+            message: 'Please add the investigator\'s affiliation',
+            required:
+              moduleData.responsible_party.type === 'Principal Investigator' ||
+              moduleData.responsible_party.type === 'Sponsor-Investigator'
+                ? true
+                : false,
+            trigger: ['blur', 'input'],
+          }"
+        >
+          <n-input
+            v-model:value="moduleData.responsible_party.affiliation"
+            placeholder="Marleyan Military"
+            clearable
+          />
+        </n-form-item>
 
-      <n-form-item label="Name" path="lead_sponsor_name">
-        <n-input v-model:value="moduleData.lead_sponsor_name" placeholder="Willy Tybur" clearable />
-      </n-form-item>
+        <n-divider />
 
-      <n-divider />
+        <h3>Lead Sponsor</h3>
 
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata">
-          <template #icon>
-            <f-icon icon="material-symbols:save" />
-          </template>
+        <p class="pb-8 pt-2">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+          voluptatem, quibusdam, quos voluptas quae quas voluptatum
+        </p>
 
-          Save Metadata
-        </n-button>
-      </div>
-    </n-form>
+        <n-form-item label="Name" path="lead_sponsor_name">
+          <n-input
+            v-model:value="moduleData.lead_sponsor_name"
+            placeholder="Willy Tybur"
+            clearable
+          />
+        </n-form-item>
+
+        <n-divider />
+
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>

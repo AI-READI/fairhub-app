@@ -9,7 +9,8 @@ const route = useRoute();
 const router = useRouter();
 const push = usePush();
 
-const apiLoading = ref(false);
+const loading = ref(false);
+const responseLoading = ref(false);
 
 const formRef = ref<FormInst | null>(null);
 
@@ -77,13 +78,13 @@ const rules: FormRules = {
 onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
-  apiLoading.value = true;
+  responseLoading.value = true;
 
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/eligibility`, {
     method: "GET",
   });
 
-  apiLoading.value = false;
+  responseLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -140,7 +141,7 @@ const saveMetadata = (e: MouseEvent) => {
         study_population: moduleData.study_population || "",
       };
 
-      console.log("data", data);
+      loading.value = true;
 
       const response = await fetch(
         `${baseURL}/study/${route.params.studyId}/metadata/eligibility`,
@@ -149,6 +150,8 @@ const saveMetadata = (e: MouseEvent) => {
           method: "PUT",
         }
       );
+
+      loading.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong. Please try again later.");
@@ -182,7 +185,7 @@ const saveMetadata = (e: MouseEvent) => {
     <n-divider />
 
     <FadeTransition>
-      <LottieLoader v-if="apiLoading" />
+      <LottieLoader v-if="responseLoading" />
 
       <div v-else>
         <div v-if="!moduleData.study_type">
@@ -463,7 +466,7 @@ const saveMetadata = (e: MouseEvent) => {
           <n-divider />
 
           <div class="flex justify-start">
-            <n-button size="large" type="primary" @click="saveMetadata">
+            <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
               <template #icon>
                 <f-icon icon="material-symbols:save" />
               </template>

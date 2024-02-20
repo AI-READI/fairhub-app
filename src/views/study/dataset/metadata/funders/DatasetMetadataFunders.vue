@@ -24,10 +24,17 @@ const moduleData = reactive<DatasetFunders>({
   funders: [],
 });
 
+const responseLoading = ref(false);
+const submitLoading = ref(false);
+
 onBeforeMount(async () => {
+  responseLoading.value = true;
+
   const response = await fetch(`${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/funder`, {
     method: "GET",
   });
+
+  responseLoading.value = false;
 
   if (!response.ok) {
     push.error("Something went wrong.");
@@ -108,6 +115,8 @@ const saveMetadata = (e: MouseEvent) => {
         }
       });
 
+      submitLoading.value = true;
+
       const response = await fetch(
         `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/funder`,
         {
@@ -116,6 +125,8 @@ const saveMetadata = (e: MouseEvent) => {
           method: "POST",
         }
       );
+
+      submitLoading.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong.");
@@ -148,126 +159,137 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
-      <CollapsibleCard
-        v-for="(item, index) in moduleData.funders"
-        :key="item.id"
-        class="mb-5 shadow-md"
-        :title="item.name || `Funder ${index + 1}`"
-        bordered
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
+
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
       >
-        <template #header-extra>
-          <n-popconfirm @positive-click="removeFunder(item.id)">
-            <template #trigger>
-              <n-button type="error" secondary>
-                <template #icon>
-                  <f-icon icon="ep:delete" />
-                </template>
-
-                Remove Funder
-              </n-button>
-            </template>
-
-            Are you sure you want to remove this date?
-          </n-popconfirm>
-        </template>
-
-        <n-form-item
-          label="Name"
-          :path="`funders[${index}].name`"
-          :rule="{
-            message: 'Please enter a name',
-            required: true,
-            trigger: ['blur', 'input'],
-          }"
+        <CollapsibleCard
+          v-for="(item, index) in moduleData.funders"
+          :key="item.id"
+          class="mb-5 shadow-md"
+          :title="item.name || `Funder ${index + 1}`"
+          bordered
         >
-          <n-input
-            v-model:value="item.name"
-            placeholder="National Institutes of Health (NIH)"
-            clearable
-          />
-        </n-form-item>
+          <template #header-extra>
+            <n-popconfirm @positive-click="removeFunder(item.id)">
+              <template #trigger>
+                <n-button type="error" secondary>
+                  <template #icon>
+                    <f-icon icon="ep:delete" />
+                  </template>
 
-        <n-form-item
-          label="Identifier"
-          :path="`funders[${index}].identifier`"
-          :rule="{
-            message: 'Please enter an identifier',
-            required: true,
-            trigger: ['blur', 'input'],
-          }"
-        >
-          <n-input v-model:value="item.identifier" placeholder="123456789" clearable />
-        </n-form-item>
+                  Remove Funder
+                </n-button>
+              </template>
 
-        <n-form-item
-          label="Identifier Scheme URI"
-          :path="`funders[${index}].identifier_scheme_uri`"
-        >
-          <n-input
-            v-model:value="item.identifier_scheme_uri"
-            placeholder="https://ror.org"
-            clearable
-          />
-        </n-form-item>
-
-        <n-form-item label="Identifier Type" :path="`funders[${index}].identifier_type`">
-          <n-select
-            v-model:value="item.identifier_type"
-            placeholder="ROR"
-            clearable
-            :options="FORM_JSON.datasetFunderIdentifierTypeOptions"
-          />
-        </n-form-item>
-
-        <n-form-item
-          label="Award Number"
-          :path="`funders[${index}].award_number`"
-          :rule="{
-            message: 'Please enter an award number',
-            required: true,
-            trigger: ['blur', 'input'],
-          }"
-        >
-          <n-input v-model:value="item.award_number" placeholder="GBMF3859.01" clearable />
-        </n-form-item>
-
-        <n-form-item label="Award Title" :path="`funders[${index}].award_title`">
-          <n-input
-            v-model:value="item.award_title"
-            placeholder="The Moore-Sloan Data Science Environments"
-            clearable
-          />
-        </n-form-item>
-
-        <n-form-item label="Award URI" :path="`funders[${index}].award_uri`">
-          <n-input
-            v-model:value="item.award_uri"
-            placeholder="https://doi.org/10.35802/221400"
-            clearable
-          />
-        </n-form-item>
-      </CollapsibleCard>
-
-      <n-button class="my-10 w-full" dashed type="success" @click="addFunder">
-        <template #icon>
-          <f-icon icon="gridicons:create" />
-        </template>
-
-        Add a new funder
-      </n-button>
-
-      <n-divider />
-
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata">
-          <template #icon>
-            <f-icon icon="material-symbols:save" />
+              Are you sure you want to remove this date?
+            </n-popconfirm>
           </template>
 
-          Save Metadata
+          <n-form-item
+            label="Name"
+            :path="`funders[${index}].name`"
+            :rule="{
+              message: 'Please enter a name',
+              required: true,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-input
+              v-model:value="item.name"
+              placeholder="National Institutes of Health (NIH)"
+              clearable
+            />
+          </n-form-item>
+
+          <n-form-item
+            label="Identifier"
+            :path="`funders[${index}].identifier`"
+            :rule="{
+              message: 'Please enter an identifier',
+              required: true,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-input v-model:value="item.identifier" placeholder="123456789" clearable />
+          </n-form-item>
+
+          <n-form-item
+            label="Identifier Scheme URI"
+            :path="`funders[${index}].identifier_scheme_uri`"
+          >
+            <n-input
+              v-model:value="item.identifier_scheme_uri"
+              placeholder="https://ror.org"
+              clearable
+            />
+          </n-form-item>
+
+          <n-form-item label="Identifier Type" :path="`funders[${index}].identifier_type`">
+            <n-select
+              v-model:value="item.identifier_type"
+              placeholder="ROR"
+              clearable
+              :options="FORM_JSON.datasetFunderIdentifierTypeOptions"
+            />
+          </n-form-item>
+
+          <n-form-item
+            label="Award Number"
+            :path="`funders[${index}].award_number`"
+            :rule="{
+              message: 'Please enter an award number',
+              required: true,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-input v-model:value="item.award_number" placeholder="GBMF3859.01" clearable />
+          </n-form-item>
+
+          <n-form-item label="Award Title" :path="`funders[${index}].award_title`">
+            <n-input
+              v-model:value="item.award_title"
+              placeholder="The Moore-Sloan Data Science Environments"
+              clearable
+            />
+          </n-form-item>
+
+          <n-form-item label="Award URI" :path="`funders[${index}].award_uri`">
+            <n-input
+              v-model:value="item.award_uri"
+              placeholder="https://doi.org/10.35802/221400"
+              clearable
+            />
+          </n-form-item>
+        </CollapsibleCard>
+
+        <n-button class="my-10 w-full" dashed type="success" @click="addFunder">
+          <template #icon>
+            <f-icon icon="gridicons:create" />
+          </template>
+
+          Add a new funder
         </n-button>
-      </div>
-    </n-form>
+
+        <n-divider />
+
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="submitLoading">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>

@@ -37,14 +37,18 @@ const rules: FormRules = {
 };
 
 const loading = ref(false);
+const responseLoading = ref(false);
 
 onBeforeMount(async () => {
+  responseLoading.value = true;
   const response = await fetch(
     `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/publisher`,
     {
       method: "GET",
     }
   );
+
+  responseLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -110,58 +114,63 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <n-form
-      ref="formRef"
-      :model="moduleData"
-      :rules="rules"
-      size="large"
-      label-placement="top"
-      class="pr-4"
-    >
-      <n-form-item label="Publisher" path="publisher">
-        <n-input
-          v-model:value="moduleData.publisher"
-          placeholder="World Data Center for Climate (WDCC)"
-          clearable
-        />
-      </n-form-item>
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
 
-      <n-divider />
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        :rules="rules"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
+      >
+        <n-form-item label="Publisher" path="publisher">
+          <n-input
+            v-model:value="moduleData.publisher"
+            placeholder="World Data Center for Climate (WDCC)"
+            clearable
+          />
+        </n-form-item>
 
-      <h3>Managing Organization</h3>
+        <n-divider />
 
-      <p class="pb-8 pt-2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
-        voluptatem, quibusdam, quos voluptas quae quas voluptatum
-      </p>
+        <h3>Managing Organization</h3>
 
-      <n-form-item label="Name" path="managing_organization_name">
-        <n-input
-          v-model:value="moduleData.managing_organization_name"
-          placeholder="World Data Center for Climate (WDCC)"
-          clearable
-        />
-      </n-form-item>
+        <p class="pb-8 pt-2">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+          voluptatem, quibusdam, quos voluptas quae quas voluptatum
+        </p>
 
-      <n-form-item label="ROR ID" path="managing_organization_ror_id">
-        <n-input
-          v-model:value="moduleData.managing_organization_ror_id"
-          placeholder="World Data Center for Climate (WDCC)"
-          clearable
-        />
-      </n-form-item>
+        <n-form-item label="Name" path="managing_organization_name">
+          <n-input
+            v-model:value="moduleData.managing_organization_name"
+            placeholder="World Data Center for Climate (WDCC)"
+            clearable
+          />
+        </n-form-item>
 
-      <n-divider />
+        <n-form-item label="ROR ID" path="managing_organization_ror_id">
+          <n-input
+            v-model:value="moduleData.managing_organization_ror_id"
+            placeholder="World Data Center for Climate (WDCC)"
+            clearable
+          />
+        </n-form-item>
 
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
-          <template #icon>
-            <f-icon icon="material-symbols:save" />
-          </template>
+        <n-divider />
 
-          Save Metadata
-        </n-button>
-      </div>
-    </n-form>
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>
