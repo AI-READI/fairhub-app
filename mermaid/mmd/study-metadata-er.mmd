@@ -179,9 +179,9 @@ erDiagram
         string study_id FK "STUDY.id"
         string redcap_id FK "STUDY_REDCAP.id"
         string name "NULLABLE"
-        json modules
-        int redcap_pid
-        json reports
+        json modules "NULLABLE"
+        int redcap_pid "NULLABLE"
+        json reports "NULLABLE"
         timestamp created_at
         timestamp updated_on
     }
