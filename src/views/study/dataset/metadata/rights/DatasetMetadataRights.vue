@@ -84,6 +84,40 @@ onBeforeMount(async () => {
   }
 });
 
+// const removeRight = async (id: string) => {
+//   const item = moduleData.rights.find((item) => item.id === id);
+
+//   if (item && item.origin === "remote") {
+//     const response = await fetch(
+//       `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/rights/${id}`,
+//       {
+//         method: "DELETE",
+//       }
+//     );
+
+//     if (!response.ok) {
+//       push.error("Something went wrong.");
+//       throw new Error("Network response was not ok");
+//     }
+
+//     push.success("Subject removed successfully.");
+//   }
+
+//   moduleData.rights = moduleData.rights.filter((item) => item.id !== id);
+// };
+
+// const addSubject = () => {
+//   moduleData.rights.push({
+//     id: nanoid(),
+//     identifier: "",
+//     identifier_scheme: "",
+//     license_text: "",
+//     origin: "local",
+//     rights: "",
+//     uri: "",
+//   });
+// };
+
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { filesize } from "filesize";
+import { useRouter } from "vue-router";
 
 import { push } from "@/main";
 import { useAuthStore } from "@/stores/auth";

@@ -201,9 +201,15 @@ const UpperMenuOptions = computed(() => [
     show: hideMenuOptions.value,
   },
   {
+    icon: renderIcon("material-symbols:api"),
+    key: "study:redcap:all-redcap-project-apis",
+    label: "REDCap",
+    show: hideMenuOptions.value,
+  },
+  {
     icon: renderIcon("material-symbols:dashboard-rounded"),
-    key: "study:dashboard",
-    label: "Dashboard",
+    key: "study:dashboard:all-dashboards",
+    label: "Dashboards",
     show: hideMenuOptions.value,
   },
   {
@@ -377,8 +383,6 @@ const defaultExpandedKeys = computed(() => {
 
   if (currentRoute.name) {
     const name = currentRoute.name as string;
-
-    console.log("appsidebar-name", name, name.startsWith("study:metadata"));
 
     if (name.startsWith("study:metadata")) {
       return ["study:metadata"];

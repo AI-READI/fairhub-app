@@ -1,0 +1,140 @@
+{
+  "name": "Instrument Completion Status by Site",
+  "id": "instrument-completion-status-by-site",
+  "title": "AI-READI Pilot REDCap Instrument Completion Status by Data Generation Site",
+  "subtitle": "Instrument Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
+  "width": 1280,
+  "height": 720,
+  "visualizations": [{
+    "type": "StackedBar",
+    "config": {
+      "id": "#instrument-completion-status-by-site_stacked-bar",
+      "rotate": true,
+      "width": 1080,
+      "height": 420,
+      "position": {
+        "top": 0,
+        "left": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "margin": {
+        "top": 0,
+        "left": 0,
+        "right": 0,
+        "bottom": 20
+      },
+      "padding": {
+        "top": 20,
+        "left": 0,
+        "right": 240,
+        "bottom": 0
+      },
+      "transitions": {
+        "opacity": {
+          "from": 0.8,
+          "to": 1.0
+        },
+        "translate": {
+          "from": "left",
+          "to": "left"
+        }
+      },
+      "animations": {
+        "opacity": {
+          "delay": 0,
+          "duration": 200,
+          "easing": "expOut"
+        },
+        "translate": {
+          "delay": 0,
+          "duration": 600,
+          "easing": "expOut"
+        }
+      },
+      "legend": {
+        "title": "Instrument Status",
+        "accessor": "subgroup",
+        "width": 200,
+        "height": 140,
+        "itemsize": 20,
+        "fontsize": 10,
+        "vposition": "bottom",
+        "hposition": "left",
+        "padding": {
+          "top": 0,
+          "left": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      },
+      "tooltip": {
+        "title": "Data Point Details",
+        "width": 720,
+        "height": 140,
+        "itemsize": 20,
+        "fontsize": 10,
+        "vposition": "bottom",
+        "hposition": "left",
+        "padding": {
+          "top": 0,
+          "left": 320,
+          "right": 0,
+          "bottom": 0
+        }
+      },
+      "filters": {
+        "width": 720,
+        "height": 140,
+        "itemsize": 20,
+        "fontsize": 10,
+        "vposition": "bottom",
+        "hposition": "left",
+        "padding": {
+          "top": 0,
+          "left": 320,
+          "right": 0,
+          "bottom": 0
+        }
+      },
+      "palette": [
+        "#5DD462",
+        "#FE7E6D",
+        "#C79F38",
+        "#82C5E6",
+        "#999EEB",
+        "#7F8C9F",
+        "#727272"
+      ],
+      "ordering": "descending",
+      "accessors": {
+        "filterby": {
+          "name": "Site",
+          "key": "filterby",
+          "type": "String"
+        },
+        "group": {
+          "name": "Instrument",
+          "key": "group",
+          "type": "String"
+        },
+        "subgroup": {
+          "name": "Status",
+          "key": "subgroup",
+          "type": "String"
+        },
+        "color": {
+          "name": "Status",
+          "key": "subgroup",
+          "type": "String"
+        },
+        "value": {
+          "name": "Count (n)",
+          "key": "value",
+          "type": "Number"
+        }
+      },
+      "data": []
+    }
+  }]
+}
