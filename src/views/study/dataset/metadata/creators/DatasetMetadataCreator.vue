@@ -90,8 +90,9 @@ const removeCreator = async (id: string) => {
 const addCreator = () => {
   moduleData.creators.push({
     id: nanoid(),
-    name: "",
     affiliations: [],
+    family_name: "",
+    given_name: "",
     name_identifier: "",
     name_identifier_scheme: "",
     name_identifier_scheme_uri: "",
@@ -106,7 +107,6 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data: any = moduleData.creators.map((item) => {
         const entry = {
-          name: item.name,
           affiliations: item.affiliations.map((affiliation) => {
             return {
               name: affiliation.name || "",
@@ -115,6 +115,8 @@ const saveMetadata = (e: MouseEvent) => {
               scheme_uri: affiliation.scheme_uri || "",
             };
           }),
+          family_name: item.family_name || "",
+          given_name: item.given_name,
           name_identifier: item.name_identifier,
           name_identifier_scheme: item.name_identifier_scheme,
           name_identifier_scheme_uri: item.name_identifier_scheme_uri || "",
@@ -194,7 +196,9 @@ const saveMetadata = (e: MouseEvent) => {
           v-for="(item, index) in moduleData.creators"
           :key="item.id"
           class="mb-5 shadow-md"
-          :title="item.name || `Creator ${index + 1}`"
+          :title="
+            item.given_name ? `${item.given_name} ${item.family_name}` : `Creator ${index + 1}`
+          "
           bordered
         >
           <template #header-extra>
@@ -214,22 +218,10 @@ const saveMetadata = (e: MouseEvent) => {
           </template>
 
           <n-form-item
-            label="Name"
-            :path="`creators[${index}].name`"
-            :rule="{
-              message: 'Please enter a name',
-              required: true,
-              trigger: ['blur', 'input'],
-            }"
-          >
-            <n-input v-model:value="item.name" placeholder="Bertolt Hoover" clearable />
-          </n-form-item>
-
-          <n-form-item
             label="Name Type"
             :path="`creators[${index}].name_type`"
             :rule="{
-              message: 'Please select an intervention type',
+              message: 'Please select a name type',
               required: true,
               trigger: ['blur', 'change'],
             }"
@@ -239,6 +231,35 @@ const saveMetadata = (e: MouseEvent) => {
               placeholder="Personal"
               clearable
               :options="FORM_JSON.datasetNameTypeOptions"
+            />
+          </n-form-item>
+
+          <n-form-item
+            label="Given Name"
+            :path="`creators[${index}].given_name`"
+            :rule="{
+              message: 'Please enter a name',
+              required: true,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-input v-model:value="item.given_name" placeholder="Bertolt" clearable />
+          </n-form-item>
+
+          <n-form-item
+            label="Family Name"
+            :path="`creators[${index}].family_name`"
+            :rule="{
+              message: 'Please enter a value',
+              required: item.name_type === 'Personal',
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-input
+              v-model:value="item.family_name"
+              :placeholder="item.name_type === 'Organizational' ? 'N/A' : 'Hoover'"
+              clearable
+              :disabled="item.name_type === 'Organizational'"
             />
           </n-form-item>
 
