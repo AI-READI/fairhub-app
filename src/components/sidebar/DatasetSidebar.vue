@@ -125,6 +125,48 @@ const dynamicUpperMenuOptions: MenuOption[] = [
     label: "Metadata",
   },
   {
+    children: [
+      {
+        icon: renderIcon("mdi:file-document-edit-outline"),
+        key: "dataset:healthsheet:motivation",
+        label: "Motivation",
+      },
+      {
+        icon: renderIcon("mdi:file-document-edit-outline"),
+        key: "dataset:healthsheet:composition",
+        label: "Composition",
+      },
+      {
+        icon: renderIcon("mdi:file-document-edit-outline"),
+        key: "dataset:healthsheet:collection",
+        label: "Collection",
+      },
+      {
+        icon: renderIcon("mdi:file-document-edit-outline"),
+        key: "dataset:healthsheet:preprocessing ",
+        label: "Preprocessing ",
+      },
+      {
+        icon: renderIcon("mdi:file-document-edit-outline"),
+        key: "dataset:healthsheet:uses",
+        label: "Uses",
+      },
+      {
+        icon: renderIcon("mdi:file-document-edit-outline"),
+        key: "dataset:healthsheet:distribution",
+        label: "Distribution",
+      },
+      {
+        icon: renderIcon("mdi:file-document-edit-outline"),
+        key: "dataset:healthsheet:maintenance",
+        label: "Maintenance",
+      },
+    ],
+    icon: renderIcon("mdi:file-document-edit-outline"),
+    key: "dataset:healthsheet",
+    label: "Healthsheet",
+  },
+  {
     icon: renderIcon("entypo:publish"),
     key: "dataset:publish:versions",
     label: "Publish",

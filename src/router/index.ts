@@ -19,6 +19,13 @@ import AllDashboards from "@/views/study/dashboard/AllDashboards.vue";
 import ConnectDashboard from "@/views/study/dashboard/ConnectDashboard.vue";
 import EditDashboard from "@/views/study/dashboard/EditDashboard.vue";
 import ViewDashboard from "@/views/study/dashboard/ViewDashboard.vue";
+import DatasetHealthsheetCollection from "@/views/study/dataset/healthsheet/collection/DatasetHealthsheetCollection.vue";
+import DatasetHealthsheetComposition from "@/views/study/dataset/healthsheet/composition/DatasetHealthsheetComposition.vue";
+import DatasetHealthsheetDistribution from "@/views/study/dataset/healthsheet/distribution/DatasetHealthsheetDistribution.vue";
+import DatasetHealthsheetMaintenance from "@/views/study/dataset/healthsheet/maintenance/DatasetHealthsheetMaintenance.vue";
+import DatasetHealthsheetMotivation from "@/views/study/dataset/healthsheet/motivation/DatasetHealthsheetMotivation.vue";
+import DatasetHealthsheetPreprocessing from "@/views/study/dataset/healthsheet/preprocessing/DatasetHealthsheetPreprocessing.vue";
+import DatasetHealthsheetUses from "@/views/study/dataset/healthsheet/uses/DatasetHealthsheetUses.vue";
 import DatasetMetadataOther from "@/views/study/dataset/metadata/about/DatasetMetadataOther.vue";
 import DatasetMetadataAccess from "@/views/study/dataset/metadata/access/DatasetMetadataAccess.vue";
 import DatasetMetadataConsent from "@/views/study/dataset/metadata/consent/DatasetMetadataConsent.vue";
@@ -317,6 +324,46 @@ const router = createRouter({
                       name: "dataset:metadata:about",
                       path: "about",
                       component: DatasetMetadataOther,
+                    },
+                  ],
+                },
+                {
+                  path: "healthsheet",
+                  children: [
+                    {
+                      name: "dataset:metadata:collection",
+                      path: "collection",
+                      component: DatasetHealthsheetCollection,
+                    },
+                    {
+                      name: "dataset:metadata:composition",
+                      path: "composition",
+                      component: DatasetHealthsheetComposition,
+                    },
+                    {
+                      name: "dataset:metadata:motivation",
+                      path: "motivation",
+                      component: DatasetHealthsheetMotivation,
+                    },
+                    {
+                      name: "dataset:metadata:preprocessing",
+                      path: "preprocessing",
+                      component: DatasetHealthsheetPreprocessing,
+                    },
+                    {
+                      name: "dataset:metadata:uses",
+                      path: "uses",
+                      component: DatasetHealthsheetUses,
+                    },
+                    {
+                      name: "dataset:metadata:distribution",
+                      path: "distribution",
+                      component: DatasetHealthsheetDistribution,
+                    },
+                    {
+                      name: "dataset:metadata:maintenance",
+                      path: "maintenance",
+                      component: DatasetHealthsheetMaintenance,
                     },
                   ],
                 },
