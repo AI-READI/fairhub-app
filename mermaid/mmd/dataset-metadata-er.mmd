@@ -18,8 +18,8 @@ erDiagram
     DATASET_CONTRIBUTOR {
         string id PK "UUIDv4"
         string dataset_id FK "DATASET.id"
-        string givenName
-        string familyName "NULLABLE"
+        string given_name
+        string family_name "NULLABLE"
         string name_type "NULLABLE"
         string name_identifier
         string name_identifier_scheme
@@ -181,6 +181,18 @@ erDiagram
         string edition
     }
 
+    DATASET_HEALTHSHEET {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        json motivation
+        json composition
+        json collection
+        json preprocessing
+        json uses
+        json distribution
+        json maintenance
+    }
+
     DATASET_ALTERNATIVE_IDENTIFIER }o--|| DATASET : "is identified by"
     DATASET_TITLE }o--|| DATASET : "has title"
     DATASET_DESCRIPTION }o--|| DATASET : "has description"
@@ -197,6 +209,7 @@ erDiagram
     DATASET ||--|| DATASET_OTHER : "has other details"
     DATASET ||--o{ DATASET_RELATED_ITEM : "has related item"
 
+    DATASET_HEALTHSHEET ||--|| DATASET : "has healthsheet"
 
     DATASET_RELATED_ITEM ||--o{ DATASET_RELATED_ITEM_IDENTIFIER : "has identifier"
     DATASET_RELATED_ITEM ||--o{ DATASET_RELATED_ITEM_CONTRIBUTOR : "has contributor"
