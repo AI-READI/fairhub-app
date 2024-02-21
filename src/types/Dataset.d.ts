@@ -76,8 +76,9 @@ export interface DatasetPersonAffiliation {
 
 export interface DatasetCreator {
   id: string;
-  name: string;
   affiliations: DatasetPersonAffiliation[];
+  family_name: string;
+  given_name: string;
   name_identifier: string;
   name_identifier_scheme: string;
   name_identifier_scheme_uri: string;
@@ -91,9 +92,10 @@ export interface DatasetCreators {
 
 export interface DatasetContributor {
   id: string;
-  name: string;
   affiliations: DatasetPersonAffiliation[];
   contributor_type: string | null;
+  family_name: string;
+  given_name: string;
   name_identifier: string;
   name_identifier_scheme: string;
   name_identifier_scheme_uri: string;
