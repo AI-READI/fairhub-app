@@ -90,9 +90,10 @@ const removeContributor = async (id: string) => {
 const addContributor = () => {
   moduleData.contributors.push({
     id: nanoid(),
-    name: "",
     affiliations: [],
     contributor_type: null,
+    family_name: "",
+    given_name: "",
     name_identifier: "",
     name_identifier_scheme: "",
     name_identifier_scheme_uri: "",
@@ -107,7 +108,6 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data: any = moduleData.contributors.map((item) => {
         const entry = {
-          name: item.name,
           affiliations: item.affiliations.map((affiliation) => {
             return {
               name: affiliation.name || "",
@@ -117,6 +117,8 @@ const saveMetadata = (e: MouseEvent) => {
             };
           }),
           contributor_type: item.contributor_type,
+          family_name: item.family_name || "",
+          given_name: item.given_name,
           name_identifier: item.name_identifier,
           name_identifier_scheme: item.name_identifier_scheme,
           name_identifier_scheme_uri: item.name_identifier_scheme_uri || "",
@@ -196,7 +198,9 @@ const saveMetadata = (e: MouseEvent) => {
           v-for="(item, index) in moduleData.contributors"
           :key="item.id"
           class="mb-5 shadow-md"
-          :title="item.name || `Contributor ${index + 1}`"
+          :title="
+            item.given_name ? `${item.given_name} ${item.family_name}` : `Contributor ${index + 1}`
+          "
           bordered
         >
           <template #header-extra>
@@ -233,18 +237,6 @@ const saveMetadata = (e: MouseEvent) => {
           </n-form-item>
 
           <n-form-item
-            label="Name"
-            :path="`contributors[${index}].name`"
-            :rule="{
-              message: 'Please enter a name',
-              required: true,
-              trigger: ['blur', 'input'],
-            }"
-          >
-            <n-input v-model:value="item.name" placeholder="Bertolt Hoover" clearable />
-          </n-form-item>
-
-          <n-form-item
             label="Name Type"
             :path="`contributors[${index}].name_type`"
             :rule="{
@@ -258,6 +250,35 @@ const saveMetadata = (e: MouseEvent) => {
               placeholder="Personal"
               clearable
               :options="FORM_JSON.datasetNameTypeOptions"
+            />
+          </n-form-item>
+
+          <n-form-item
+            label="Given Name"
+            :path="`contributors[${index}].given_name`"
+            :rule="{
+              message: 'Please enter a name',
+              required: true,
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-input v-model:value="item.given_name" placeholder="Bertolt" clearable />
+          </n-form-item>
+
+          <n-form-item
+            label="Family Name"
+            :path="`contributors[${index}].family_name`"
+            :rule="{
+              message: 'Please enter a value',
+              required: item.name_type === 'Personal',
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-input
+              v-model:value="item.family_name"
+              :placeholder="item.name_type === 'Organizational' ? 'N/A' : 'Hoover'"
+              clearable
+              :disabled="item.name_type === 'Organizational'"
             />
           </n-form-item>
 
