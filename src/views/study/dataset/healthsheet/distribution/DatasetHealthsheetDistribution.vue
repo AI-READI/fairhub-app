@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
 
-import FORM_JSON from "@/assets/data/form.json";
-import type { DatasetRecordKeys } from "@/types/Dataset";
+import QUESTIONS_JSON from "@/assets/data/healthsheet/distribution.json";
+import type { DatasetHealthsheetDistribution } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
@@ -16,20 +16,11 @@ const routeParams = {
 const studyId = routeParams.studyId;
 const datasetId = routeParams.datasetId;
 
-const moduleData = ref<DatasetRecordKeys>({
-  details: "",
-  type: null,
+const moduleData = ref<DatasetHealthsheetDistribution>({
+  distribution: [],
 });
 
 const formRef = ref<FormInst | null>(null);
-
-const rules: FormRules = {
-  type: {
-    message: "Please select a type",
-    required: true,
-    trigger: ["blur", "input"],
-  },
-};
 
 const loading = ref(false);
 const responseLoading = ref(false);
@@ -38,7 +29,7 @@ onBeforeMount(async () => {
   responseLoading.value = true;
 
   const response = await fetch(
-    `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/record-keys`,
+    `${baseURL}/study/${studyId}/dataset/${datasetId}/healthsheet/distribution`,
     {
       method: "GET",
     }
@@ -47,12 +38,22 @@ onBeforeMount(async () => {
   responseLoading.value = false;
 
   if (!response.ok) {
+    push.error({
+      title: "Failed to fetch data",
+      message: "Something went wrong. Please try again later.",
+    });
+
     throw new Error("Network response was not ok");
   }
 
   const data = await response.json();
+  const records = JSON.parse(data.distribution);
 
-  moduleData.value = data;
+  if (records.length > 0) {
+    moduleData.value.distribution = records;
+  } else {
+    moduleData.value.distribution = QUESTIONS_JSON;
+  }
 });
 
 const saveMetadata = (e: MouseEvent) => {
@@ -62,14 +63,24 @@ const saveMetadata = (e: MouseEvent) => {
       loading.value = true;
 
       const data = {
-        details: moduleData.value.details || "",
-        type: moduleData.value.type,
+        distribution: JSON.stringify(
+          moduleData.value.distribution.map((record) => ({
+            id: record.id,
+            question: record.question,
+            response: record.response ? record.response.trim() : "",
+          }))
+        ),
       };
 
+      console.log(data);
+
       const response = await fetch(
-        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/record-keys`,
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/healthsheet/distribution`,
         {
           body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
           method: "PUT",
         }
       );
@@ -99,8 +110,8 @@ const saveMetadata = (e: MouseEvent) => {
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
-      title="Record Keys"
-      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+      title="Distribution"
+      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
       linkName="dataset:overview"
       :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
     />
@@ -113,26 +124,21 @@ const saveMetadata = (e: MouseEvent) => {
       <n-form
         ref="formRef"
         :model="moduleData"
-        :rules="rules"
         size="large"
         label-placement="top"
         class="pr-4"
         v-else
       >
-        <n-form-item label="Type" path="type">
-          <n-select
-            v-model:value="moduleData.type"
-            placeholder="Not Known"
-            clearable
-            :options="FORM_JSON.datasetRecordKeysTypeOptions"
-          />
-        </n-form-item>
-
-        <n-form-item label="Details" path="details">
+        <n-form-item
+          v-for="record in moduleData.distribution"
+          :key="record.id"
+          :label="record.question"
+          path="details"
+        >
           <n-input
-            v-model:value="moduleData.details"
+            v-model:value="record.response"
             type="textarea"
-            placeholder="Provide further details of the record key types, perhaps referring to dataset preparation, if available."
+            placeholder="Enter your response..."
             clearable
           />
         </n-form-item>
