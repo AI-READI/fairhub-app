@@ -4,8 +4,7 @@ import type { FormInst } from "naive-ui";
 
 import QUESTIONS_JSON from "@/assets/data/healthsheet/uses.json";
 import type { DatasetHealthsheetUses } from "@/types/Dataset";
-const baseURL = "http://localhost:3001/api";
-// import { baseURL } from "@/utils/constants";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const push = usePush();
@@ -126,7 +125,6 @@ const saveMetadata = (e: MouseEvent) => {
       <n-form
         ref="formRef"
         :model="moduleData"
-        :rules="rules"
         size="large"
         label-placement="top"
         class="pr-4"

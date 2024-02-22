@@ -4,8 +4,7 @@ import type { FormInst } from "naive-ui";
 
 import QUESTIONS_JSON from "@/assets/data/healthsheet/motivation.json";
 import type { DatasetHealthsheetMotivation } from "@/types/Dataset";
-const baseURL = "http://localhost:3001/api";
-// import { baseURL } from "@/utils/constants";
+import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const push = usePush();
