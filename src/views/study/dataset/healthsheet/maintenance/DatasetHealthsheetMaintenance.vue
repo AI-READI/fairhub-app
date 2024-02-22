@@ -125,7 +125,6 @@ const saveMetadata = (e: MouseEvent) => {
       <n-form
         ref="formRef"
         :model="moduleData"
-        :rules="rules"
         size="large"
         label-placement="top"
         class="pr-4"

@@ -587,7 +587,9 @@ function nextFactory(context: any, middleware: any, index: any) {
   const subsequentMiddleware = middleware[index];
   // If no subsequent Middleware exists,
   // the default `next()` callback is returned.
-  if (!subsequentMiddleware) return context.next;
+  if (!subsequentMiddleware) {
+    return context.next;
+  }
 
   return (...parameters: any) => {
     // Run the default Vue Router `next()` callback first.

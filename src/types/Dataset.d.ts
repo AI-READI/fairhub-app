@@ -274,3 +274,26 @@ export interface DatasetHealthsheetRecord {
 export interface DatasetHealthsheetMotivation {
   motivation: DatasetHealthsheetRecord[];
 }
+
+export interface DatasetHealthsheetComposition {
+  composition: DatasetHealthsheetRecord[];
+}
+
+export interface DatasetHealthsheetCollection {
+  collection: DatasetHealthsheetRecord[];
+}
+
+export interface DatasetHealthsheetPreprocessing {
+  preprocessing: DatasetHealthsheetRecord[];
+}
+
+export interface DatasetHealthsheetUses {
+  uses: DatasetHealthsheetRecord[];
+}
+export interface DatasetHealthsheetDistribution {
+  distribution: DatasetHealthsheetRecord[];
+}
+
+export interface DatasetHealthsheetMaintenance {
+  maintenance: DatasetHealthsheetRecord[];
+}

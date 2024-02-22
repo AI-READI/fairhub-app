@@ -127,37 +127,37 @@ const dynamicUpperMenuOptions: MenuOption[] = [
   {
     children: [
       {
-        icon: renderIcon("mdi:file-document-edit-outline"),
+        icon: renderIcon("material-symbols-light:motion-photos-on-rounded"),
         key: "dataset:healthsheet:motivation",
         label: "Motivation",
       },
       {
-        icon: renderIcon("mdi:file-document-edit-outline"),
+        icon: renderIcon("ph:compass-tool-duotone"),
         key: "dataset:healthsheet:composition",
         label: "Composition",
       },
       {
-        icon: renderIcon("mdi:file-document-edit-outline"),
+        icon: renderIcon("fluent:collections-add-24-filled"),
         key: "dataset:healthsheet:collection",
         label: "Collection",
       },
       {
-        icon: renderIcon("mdi:file-document-edit-outline"),
-        key: "dataset:healthsheet:preprocessing ",
-        label: "Preprocessing ",
+        icon: renderIcon("carbon:process"),
+        key: "dataset:healthsheet:preprocessing",
+        label: "Preprocessing",
       },
       {
-        icon: renderIcon("mdi:file-document-edit-outline"),
+        icon: renderIcon("icon-park-twotone:data-user"),
         key: "dataset:healthsheet:uses",
         label: "Uses",
       },
       {
-        icon: renderIcon("mdi:file-document-edit-outline"),
+        icon: renderIcon("fluent-mdl2:distribute-down"),
         key: "dataset:healthsheet:distribution",
         label: "Distribution",
       },
       {
-        icon: renderIcon("mdi:file-document-edit-outline"),
+        icon: renderIcon("pajamas:issue-type-maintenance"),
         key: "dataset:healthsheet:maintenance",
         label: "Maintenance",
       },
