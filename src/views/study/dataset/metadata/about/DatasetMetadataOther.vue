@@ -123,10 +123,8 @@ const saveMetadata = (e: MouseEvent) => {
     <PageBackNavigationHeader
       title="Additional Metadata"
       description="Some metadata that didn't really fit in other sections."
-      linkName="study:overview"
-      :linkParams="{
-        studyId: route.params.studyId,
-      }"
+      linkName="dataset:overview"
+      :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
     />
 
     <FadeTransition>

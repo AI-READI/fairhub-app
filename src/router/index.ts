@@ -19,6 +19,13 @@ import AllDashboards from "@/views/study/dashboard/AllDashboards.vue";
 import ConnectDashboard from "@/views/study/dashboard/ConnectDashboard.vue";
 import EditDashboard from "@/views/study/dashboard/EditDashboard.vue";
 import ViewDashboard from "@/views/study/dashboard/ViewDashboard.vue";
+import DatasetHealthsheetCollection from "@/views/study/dataset/healthsheet/collection/DatasetHealthsheetCollection.vue";
+import DatasetHealthsheetComposition from "@/views/study/dataset/healthsheet/composition/DatasetHealthsheetComposition.vue";
+import DatasetHealthsheetDistribution from "@/views/study/dataset/healthsheet/distribution/DatasetHealthsheetDistribution.vue";
+import DatasetHealthsheetMaintenance from "@/views/study/dataset/healthsheet/maintenance/DatasetHealthsheetMaintenance.vue";
+import DatasetHealthsheetMotivation from "@/views/study/dataset/healthsheet/motivation/DatasetHealthsheetMotivation.vue";
+import DatasetHealthsheetPreprocessing from "@/views/study/dataset/healthsheet/preprocessing/DatasetHealthsheetPreprocessing.vue";
+import DatasetHealthsheetUses from "@/views/study/dataset/healthsheet/uses/DatasetHealthsheetUses.vue";
 import DatasetMetadataOther from "@/views/study/dataset/metadata/about/DatasetMetadataOther.vue";
 import DatasetMetadataAccess from "@/views/study/dataset/metadata/access/DatasetMetadataAccess.vue";
 import DatasetMetadataConsent from "@/views/study/dataset/metadata/consent/DatasetMetadataConsent.vue";
@@ -321,6 +328,46 @@ const router = createRouter({
                   ],
                 },
                 {
+                  path: "healthsheet",
+                  children: [
+                    {
+                      name: "dataset:healthsheet:collection",
+                      path: "collection",
+                      component: DatasetHealthsheetCollection,
+                    },
+                    {
+                      name: "dataset:healthsheet:composition",
+                      path: "composition",
+                      component: DatasetHealthsheetComposition,
+                    },
+                    {
+                      name: "dataset:healthsheet:motivation",
+                      path: "motivation",
+                      component: DatasetHealthsheetMotivation,
+                    },
+                    {
+                      name: "dataset:healthsheet:preprocessing",
+                      path: "preprocessing",
+                      component: DatasetHealthsheetPreprocessing,
+                    },
+                    {
+                      name: "dataset:healthsheet:uses",
+                      path: "uses",
+                      component: DatasetHealthsheetUses,
+                    },
+                    {
+                      name: "dataset:healthsheet:distribution",
+                      path: "distribution",
+                      component: DatasetHealthsheetDistribution,
+                    },
+                    {
+                      name: "dataset:healthsheet:maintenance",
+                      path: "maintenance",
+                      component: DatasetHealthsheetMaintenance,
+                    },
+                  ],
+                },
+                {
                   name: "dataset:publish",
                   path: "publish",
                   children: [
@@ -540,7 +587,9 @@ function nextFactory(context: any, middleware: any, index: any) {
   const subsequentMiddleware = middleware[index];
   // If no subsequent Middleware exists,
   // the default `next()` callback is returned.
-  if (!subsequentMiddleware) return context.next;
+  if (!subsequentMiddleware) {
+    return context.next;
+  }
 
   return (...parameters: any) => {
     // Run the default Vue Router `next()` callback first.

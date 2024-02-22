@@ -76,8 +76,9 @@ export interface DatasetPersonAffiliation {
 
 export interface DatasetCreator {
   id: string;
-  name: string;
   affiliations: DatasetPersonAffiliation[];
+  family_name: string;
+  given_name: string;
   name_identifier: string;
   name_identifier_scheme: string;
   name_identifier_scheme_uri: string;
@@ -91,9 +92,10 @@ export interface DatasetCreators {
 
 export interface DatasetContributor {
   id: string;
-  name: string;
   affiliations: DatasetPersonAffiliation[];
   contributor_type: string | null;
+  family_name: string;
+  given_name: string;
   name_identifier: string;
   name_identifier_scheme: string;
   name_identifier_scheme_uri: string;
@@ -261,4 +263,37 @@ export interface DatasetRelatedItem {
 
 export interface DatasetRelatedItems {
   related_items: DatasetRelatedItem[];
+}
+
+export interface DatasetHealthsheetRecord {
+  id: number;
+  question: string;
+  response: string;
+}
+
+export interface DatasetHealthsheetMotivation {
+  motivation: DatasetHealthsheetRecord[];
+}
+
+export interface DatasetHealthsheetComposition {
+  composition: DatasetHealthsheetRecord[];
+}
+
+export interface DatasetHealthsheetCollection {
+  collection: DatasetHealthsheetRecord[];
+}
+
+export interface DatasetHealthsheetPreprocessing {
+  preprocessing: DatasetHealthsheetRecord[];
+}
+
+export interface DatasetHealthsheetUses {
+  uses: DatasetHealthsheetRecord[];
+}
+export interface DatasetHealthsheetDistribution {
+  distribution: DatasetHealthsheetRecord[];
+}
+
+export interface DatasetHealthsheetMaintenance {
+  maintenance: DatasetHealthsheetRecord[];
 }

@@ -42,6 +42,20 @@ const version_readme = [
   },
 ];
 
+const dataset_healthsheet = [
+  {
+    id: nanoid(),
+    collection: "[]",
+    composition: "[]",
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    distribution: "[]",
+    maintenance: "[]",
+    motivation: "[]",
+    preprocessing: "[]",
+    uses: "[]",
+  },
+];
+
 const generateMarkdown = async () => {
   const response = await fetch("https://jaspervdj.be/lorem-markdownum/markdown.txt");
 
@@ -208,6 +222,244 @@ const init = async () => {
       return h.response({ readme: text }).code(200);
     },
     method: "POST",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/motivation",
+    handler: (request, h) => {
+      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
+
+      const healthsheet = dataset_healthsheet.find(
+        (healthsheet) => healthsheet.dataset_id === datasetid
+      );
+
+      if (!healthsheet) {
+        return h.response({ motivation: "[]" }).code(200);
+      } else {
+        return h.response({ motivation: healthsheet.motivation }).code(200);
+      }
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/motivation",
+    handler: (request, h) => {
+      const { motivation } = request.payload;
+
+      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
+
+      const healthsheet = dataset_healthsheet.find((hs) => hs.dataset_id === datasetid);
+
+      healthsheet.motivation = motivation;
+
+      return h.response({ message: "motivation updated" }).code(200);
+    },
+    method: "PUT",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/maintenance",
+    handler: (request, h) => {
+      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
+
+      const healthsheet = dataset_healthsheet.find(
+        (healthsheet) => healthsheet.dataset_id === datasetid
+      );
+
+      if (!healthsheet) {
+        return h.response({ maintenance: "[]" }).code(200);
+      } else {
+        return h.response({ maintenance: healthsheet.maintenance }).code(200);
+      }
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/maintenance",
+    handler: (request, h) => {
+      const { maintenance } = request.payload;
+
+      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
+
+      const healthsheet = dataset_healthsheet.find((hs) => hs.dataset_id === datasetid);
+
+      healthsheet.maintenance = maintenance;
+
+      return h.response({ message: "maintenance updated" }).code(200);
+    },
+    method: "PUT",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/preprocessing",
+    handler: (request, h) => {
+      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
+
+      const healthsheet = dataset_healthsheet.find(
+        (healthsheet) => healthsheet.dataset_id === datasetid
+      );
+
+      if (!healthsheet) {
+        return h.response({ preprocessing: "[]" }).code(200);
+      } else {
+        return h.response({ preprocessing: healthsheet.preprocessing }).code(200);
+      }
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/preprocessing",
+    handler: (request, h) => {
+      const { preprocessing } = request.payload;
+
+      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
+
+      const healthsheet = dataset_healthsheet.find((hs) => hs.dataset_id === datasetid);
+
+      healthsheet.preprocessing = preprocessing;
+
+      return h.response({ message: "preprocessing updated" }).code(200);
+    },
+    method: "PUT",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/uses",
+    handler: (request, h) => {
+      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
+
+      const healthsheet = dataset_healthsheet.find(
+        (healthsheet) => healthsheet.dataset_id === datasetid
+      );
+
+      if (!healthsheet) {
+        return h.response({ uses: "[]" }).code(200);
+      } else {
+        return h.response({ uses: healthsheet.uses }).code(200);
+      }
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/uses",
+    handler: (request, h) => {
+      const { uses } = request.payload;
+
+      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
+
+      const healthsheet = dataset_healthsheet.find((hs) => hs.dataset_id === datasetid);
+
+      healthsheet.uses = uses;
+
+      return h.response({ message: "uses updated" }).code(200);
+    },
+    method: "PUT",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/distribution",
+    handler: (request, h) => {
+      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
+
+      const healthsheet = dataset_healthsheet.find(
+        (healthsheet) => healthsheet.dataset_id === datasetid
+      );
+
+      if (!healthsheet) {
+        return h.response({ distribution: "[]" }).code(200);
+      } else {
+        return h.response({ distribution: healthsheet.distribution }).code(200);
+      }
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/distribution",
+    handler: (request, h) => {
+      const { distribution } = request.payload;
+
+      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
+
+      const healthsheet = dataset_healthsheet.find((hs) => hs.dataset_id === datasetid);
+
+      healthsheet.distribution = distribution;
+
+      return h.response({ message: "distribution updated" }).code(200);
+    },
+    method: "PUT",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/collection",
+    handler: (request, h) => {
+      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
+
+      const healthsheet = dataset_healthsheet.find(
+        (healthsheet) => healthsheet.dataset_id === datasetid
+      );
+
+      if (!healthsheet) {
+        return h.response({ collection: "[]" }).code(200);
+      } else {
+        return h.response({ collection: healthsheet.collection }).code(200);
+      }
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/collection",
+    handler: (request, h) => {
+      const { collection } = request.payload;
+
+      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
+
+      const healthsheet = dataset_healthsheet.find((hs) => hs.dataset_id === datasetid);
+
+      healthsheet.collection = collection;
+
+      return h.response({ message: "collection updated" }).code(200);
+    },
+    method: "PUT",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/composition",
+    handler: (request, h) => {
+      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
+
+      const healthsheet = dataset_healthsheet.find(
+        (healthsheet) => healthsheet.dataset_id === datasetid
+      );
+
+      if (!healthsheet) {
+        return h.response({ composition: "[]" }).code(200);
+      } else {
+        return h.response({ composition: healthsheet.composition }).code(200);
+      }
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/composition",
+    handler: (request, h) => {
+      const { composition } = request.payload;
+
+      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
+
+      const healthsheet = dataset_healthsheet.find((hs) => hs.dataset_id === datasetid);
+
+      healthsheet.composition = composition;
+
+      return h.response({ message: "composition updated" }).code(200);
+    },
+    method: "PUT",
   });
 
   await server.start();
