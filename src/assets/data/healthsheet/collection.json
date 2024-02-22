@@ -1,0 +1,67 @@
+[
+  {
+    "id": 1,
+    "question": "How was the data associated with each instance acquired?",
+    "response": ""
+  },
+  {
+    "id": 2,
+    "question": "What mechanisms or procedures were used to collect the data (e.g. hardware apparatus or sensor, manual human curation, software program, software API)?",
+    "response": ""
+  },
+  {
+    "id": 3,
+    "question": "If the dataset is a sample from a larger set, what was the sampling strategy (e.g. deterministic, probabilistic with specific sampling probabilities)?",
+    "response": ""
+  },
+  {
+    "id": 4,
+    "question": "Who was involved in the data collection process (e.g. students, crowdworkers, contractors) and how were they compensated (e.g. how much were crowdworkers paid)?",
+    "response": ""
+  },
+  {
+    "id": 5,
+    "question": "Over what timeframe was the data collected?",
+    "response": ""
+  },
+  {
+    "id": 6,
+    "question": "Were any ethical review processes conducted (e.g. by an institutional review board)?",
+    "response": ""
+  },
+  {
+    "id": 7,
+    "question": "Does the dataset relate to people?",
+    "response": ""
+  },
+  {
+    "id": 8,
+    "question": "Did you collect the data from the individuals in question directly, or obtain it via third parties or other sources (e.g. websites)?",
+    "response": ""
+  },
+  {
+    "id": 9,
+    "question": "Were the individuals in question notified about the data collection?",
+    "response": ""
+  },
+  {
+    "id": 10,
+    "question": "Did the individuals in question consent to the collection and use of their data?",
+    "response": ""
+  },
+  {
+    "id": 11,
+    "question": "If consent was obtained, were the consenting individuals provided with a mechanism to revoke their consent in the future or for certain uses?",
+    "response": ""
+  },
+  {
+    "id": 12,
+    "question": "Has an analysis of the potential impact of the dataset and its use on data subjects (e.g. a data protection impact analysis) been conducted?",
+    "response": ""
+  },
+  {
+    "id": 13,
+    "question": "Any other comments?",
+    "response": ""
+  }
+]

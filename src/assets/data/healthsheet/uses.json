@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "question": "Has the dataset been used for any tasks already?",
+    "response": ""
+  },
+  {
+    "id": 2,
+    "question": "Is there a repository that links to any or all papers or systems that use the dataset?",
+    "response": ""
+  },
+  {
+    "id": 3,
+    "question": "What (other) tasks could the dataset be used for?",
+    "response": ""
+  },
+  {
+    "id": 4,
+    "question": "Is there anything about the composition of the dataset or the way it was collected and preprocessed/cleaned/labeled that might impact future uses?",
+    "response": ""
+  },
+  {
+    "id": 5,
+    "question": "Are there tasks for which the dataset should not be used?",
+    "response": ""
+  },
+  {
+    "id": 6,
+    "question": "Any other comments?",
+    "response": ""
+  }
+]

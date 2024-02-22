@@ -101,10 +101,8 @@ const saveMetadata = (e: MouseEvent) => {
     <PageBackNavigationHeader
       title="Record Keys"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
-      linkName="study:overview"
-      :linkParams="{
-        studyId: route.params.studyId,
-      }"
+      linkName="dataset:overview"
+      :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
     />
 
     <n-divider />

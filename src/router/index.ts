@@ -331,37 +331,37 @@ const router = createRouter({
                   path: "healthsheet",
                   children: [
                     {
-                      name: "dataset:metadata:collection",
+                      name: "dataset:healthsheet:collection",
                       path: "collection",
                       component: DatasetHealthsheetCollection,
                     },
                     {
-                      name: "dataset:metadata:composition",
+                      name: "dataset:healthsheet:composition",
                       path: "composition",
                       component: DatasetHealthsheetComposition,
                     },
                     {
-                      name: "dataset:metadata:motivation",
+                      name: "dataset:healthsheet:motivation",
                       path: "motivation",
                       component: DatasetHealthsheetMotivation,
                     },
                     {
-                      name: "dataset:metadata:preprocessing",
+                      name: "dataset:healthsheet:preprocessing",
                       path: "preprocessing",
                       component: DatasetHealthsheetPreprocessing,
                     },
                     {
-                      name: "dataset:metadata:uses",
+                      name: "dataset:healthsheet:uses",
                       path: "uses",
                       component: DatasetHealthsheetUses,
                     },
                     {
-                      name: "dataset:metadata:distribution",
+                      name: "dataset:healthsheet:distribution",
                       path: "distribution",
                       component: DatasetHealthsheetDistribution,
                     },
                     {
-                      name: "dataset:metadata:maintenance",
+                      name: "dataset:healthsheet:maintenance",
                       path: "maintenance",
                       component: DatasetHealthsheetMaintenance,
                     },

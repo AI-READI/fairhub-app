@@ -264,3 +264,13 @@ export interface DatasetRelatedItem {
 export interface DatasetRelatedItems {
   related_items: DatasetRelatedItem[];
 }
+
+export interface DatasetHealthsheetRecord {
+  id: number;
+  question: string;
+  response: string;
+}
+
+export interface DatasetHealthsheetMotivation {
+  motivation: DatasetHealthsheetRecord[];
+}
