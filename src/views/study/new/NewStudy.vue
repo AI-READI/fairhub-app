@@ -11,6 +11,8 @@ import { baseURL } from "@/utils/constants";
 const router = useRouter();
 const push = usePush();
 
+const loader = ref(false);
+
 const authStore = useAuthStore();
 
 onBeforeMount(() => {
@@ -65,10 +67,14 @@ const createStudy = (e: MouseEvent) => {
         image: study.image || `https://api.dicebear.com/6.x/shapes/svg?seed=${nanoid()}`,
       };
 
+      loader.value = true;
+
       const response = await fetch(`${baseURL}/study`, {
         body: JSON.stringify(data),
         method: "POST",
       });
+
+      loader.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong. Please try again later.");
@@ -147,7 +153,7 @@ const createStudy = (e: MouseEvent) => {
       <n-divider />
 
       <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="createStudy">
+        <n-button size="large" type="primary" @click="createStudy" :loading="loader">
           <template #icon>
             <f-icon icon="material-symbols:add" />
           </template>
