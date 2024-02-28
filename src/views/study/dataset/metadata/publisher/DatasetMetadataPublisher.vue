@@ -18,7 +18,10 @@ const datasetId = routeParams.datasetId;
 const moduleData = ref<DatasetPublisher>({
   managing_organization_name: "",
   managing_organization_ror_id: "",
-  publisher: "",
+  publisher_identifier: "",
+  publisher_identifier_scheme: "",
+  publisher_identifier_scheme_uri: "",
+  publisher_name: "",
 });
 
 const formRef = ref<FormInst | null>(null);
@@ -29,7 +32,7 @@ const rules: FormRules = {
     required: true,
     trigger: ["blur", "input"],
   },
-  publisher: {
+  publisher_name: {
     message: "Please enter a publisher.",
     required: true,
     trigger: ["blur", "input"],
@@ -68,7 +71,10 @@ const saveMetadata = (e: MouseEvent) => {
       const data = {
         managing_organization_name: moduleData.value.managing_organization_name,
         managing_organization_ror_id: moduleData.value.managing_organization_ror_id || "",
-        publisher: moduleData.value.publisher,
+        publisher_identifier: moduleData.value.publisher_identifier || "",
+        publisher_identifier_scheme: moduleData.value.publisher_identifier_scheme || "",
+        publisher_identifier_scheme_uri: moduleData.value.publisher_identifier_scheme_uri || "",
+        publisher_name: moduleData.value.publisher_name,
       };
 
       const response = await fetch(
@@ -124,10 +130,34 @@ const saveMetadata = (e: MouseEvent) => {
         class="pr-4"
         v-else
       >
-        <n-form-item label="Publisher" path="publisher">
+        <n-form-item label="Name" path="publisher_name">
           <n-input
-            v-model:value="moduleData.publisher"
+            v-model:value="moduleData.publisher_name"
             placeholder="World Data Center for Climate (WDCC)"
+            clearable
+          />
+        </n-form-item>
+
+        <n-form-item label="Identifier" path="publisher_identifier">
+          <n-input
+            v-model:value="moduleData.publisher_identifier"
+            placeholder="0156zyn36"
+            clearable
+          />
+        </n-form-item>
+
+        <n-form-item label="Identifier Scheme" path="publisher_identifier_scheme">
+          <n-input
+            v-model:value="moduleData.publisher_identifier_scheme"
+            placeholder="ROR"
+            clearable
+          />
+        </n-form-item>
+
+        <n-form-item label="Identifier Scheme URI" path="publisher_identifier_scheme_uri">
+          <n-input
+            v-model:value="moduleData.publisher_identifier_scheme_uri"
+            placeholder="https://ror.org"
             clearable
           />
         </n-form-item>

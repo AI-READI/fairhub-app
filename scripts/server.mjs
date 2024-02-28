@@ -42,17 +42,18 @@ const version_readme = [
   },
 ];
 
-const dataset_healthsheet = [
+const dataset_related_identifier = [
   {
-    id: nanoid(),
-    collection: "[]",
-    composition: "[]",
+    id: "42dec85c-22f2-4f4e-a5ad-f0121067f507",
+    created_at: 1697762742,
     dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
-    distribution: "[]",
-    maintenance: "[]",
-    motivation: "[]",
-    preprocessing: "[]",
-    uses: "[]",
+    identifier: "10.1038/s41597-023-02463-x",
+    identifier_type: "DOI",
+    related_metadata_scheme: "DataCite",
+    relation_type: "IsCitedBy",
+    resource_type: "Dataset",
+    scheme_type: "DOI",
+    scheme_uri: "https://doi.org",
   },
 ];
 
@@ -225,241 +226,59 @@ const init = async () => {
   });
 
   server.route({
-    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/motivation",
+    path: "/api/study/{studyid}/dataset/{datasetid}/metadata/related-identifier",
     handler: (request, h) => {
       const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
 
-      const healthsheet = dataset_healthsheet.find(
-        (healthsheet) => healthsheet.dataset_id === datasetid
+      const relatedIdentifiers = dataset_related_identifier.filter(
+        (ri) => ri.dataset_id === datasetid
       );
 
-      if (!healthsheet) {
-        return h.response({ motivation: "[]" }).code(200);
-      } else {
-        return h.response({ motivation: healthsheet.motivation }).code(200);
-      }
+      return h.response(relatedIdentifiers).code(200);
     },
     method: "GET",
   });
 
   server.route({
-    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/motivation",
+    path: "/api/study/{studyid}/dataset/{datasetid}/metadata/related-identifier",
     handler: (request, h) => {
-      const { motivation } = request.payload;
+      const payload = JSON.parse(request.payload);
 
-      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
+      console.log(payload);
 
-      const healthsheet = dataset_healthsheet.find((hs) => hs.dataset_id === datasetid);
+      for (const ri of payload) {
+        if (ri.id) {
+          const relatedIdentifier = dataset_related_identifier.find((r) => r.id === ri.id);
 
-      healthsheet.motivation = motivation;
+          if (!relatedIdentifier) {
+            return h.response({ message: "related identifier not found" }).code(404);
+          }
 
-      return h.response({ message: "motivation updated" }).code(200);
-    },
-    method: "PUT",
-  });
-
-  server.route({
-    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/maintenance",
-    handler: (request, h) => {
-      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
-
-      const healthsheet = dataset_healthsheet.find(
-        (healthsheet) => healthsheet.dataset_id === datasetid
-      );
-
-      if (!healthsheet) {
-        return h.response({ maintenance: "[]" }).code(200);
-      } else {
-        return h.response({ maintenance: healthsheet.maintenance }).code(200);
+          relatedIdentifier.identifier = ri.identifier;
+          relatedIdentifier.identifier_type = ri.identifier_type;
+          relatedIdentifier.related_metadata_scheme = ri.related_metadata_scheme;
+          relatedIdentifier.relation_type = ri.relation_type;
+          relatedIdentifier.resource_type = ri.resource_type;
+          relatedIdentifier.scheme_type = ri.scheme_type;
+          relatedIdentifier.scheme_uri = ri.scheme_uri;
+        } else {
+          dataset_related_identifier.push({
+            id: nanoid(),
+            created_at: Date.now() / 1000,
+            dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+            identifier: ri.identifier,
+            identifier_type: ri.identifier_type,
+            related_metadata_scheme: ri.related_metadata_scheme,
+            relation_type: ri.relation_type,
+            resource_type: ri.resource_type,
+            scheme_type: ri.scheme_type,
+            scheme_uri: ri.scheme_uri,
+          });
+        }
       }
+      return h.response({ message: "related identifier updated" }).code(200);
     },
-    method: "GET",
-  });
-
-  server.route({
-    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/maintenance",
-    handler: (request, h) => {
-      const { maintenance } = request.payload;
-
-      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
-
-      const healthsheet = dataset_healthsheet.find((hs) => hs.dataset_id === datasetid);
-
-      healthsheet.maintenance = maintenance;
-
-      return h.response({ message: "maintenance updated" }).code(200);
-    },
-    method: "PUT",
-  });
-
-  server.route({
-    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/preprocessing",
-    handler: (request, h) => {
-      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
-
-      const healthsheet = dataset_healthsheet.find(
-        (healthsheet) => healthsheet.dataset_id === datasetid
-      );
-
-      if (!healthsheet) {
-        return h.response({ preprocessing: "[]" }).code(200);
-      } else {
-        return h.response({ preprocessing: healthsheet.preprocessing }).code(200);
-      }
-    },
-    method: "GET",
-  });
-
-  server.route({
-    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/preprocessing",
-    handler: (request, h) => {
-      const { preprocessing } = request.payload;
-
-      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
-
-      const healthsheet = dataset_healthsheet.find((hs) => hs.dataset_id === datasetid);
-
-      healthsheet.preprocessing = preprocessing;
-
-      return h.response({ message: "preprocessing updated" }).code(200);
-    },
-    method: "PUT",
-  });
-
-  server.route({
-    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/uses",
-    handler: (request, h) => {
-      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
-
-      const healthsheet = dataset_healthsheet.find(
-        (healthsheet) => healthsheet.dataset_id === datasetid
-      );
-
-      if (!healthsheet) {
-        return h.response({ uses: "[]" }).code(200);
-      } else {
-        return h.response({ uses: healthsheet.uses }).code(200);
-      }
-    },
-    method: "GET",
-  });
-
-  server.route({
-    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/uses",
-    handler: (request, h) => {
-      const { uses } = request.payload;
-
-      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
-
-      const healthsheet = dataset_healthsheet.find((hs) => hs.dataset_id === datasetid);
-
-      healthsheet.uses = uses;
-
-      return h.response({ message: "uses updated" }).code(200);
-    },
-    method: "PUT",
-  });
-
-  server.route({
-    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/distribution",
-    handler: (request, h) => {
-      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
-
-      const healthsheet = dataset_healthsheet.find(
-        (healthsheet) => healthsheet.dataset_id === datasetid
-      );
-
-      if (!healthsheet) {
-        return h.response({ distribution: "[]" }).code(200);
-      } else {
-        return h.response({ distribution: healthsheet.distribution }).code(200);
-      }
-    },
-    method: "GET",
-  });
-
-  server.route({
-    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/distribution",
-    handler: (request, h) => {
-      const { distribution } = request.payload;
-
-      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
-
-      const healthsheet = dataset_healthsheet.find((hs) => hs.dataset_id === datasetid);
-
-      healthsheet.distribution = distribution;
-
-      return h.response({ message: "distribution updated" }).code(200);
-    },
-    method: "PUT",
-  });
-
-  server.route({
-    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/collection",
-    handler: (request, h) => {
-      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
-
-      const healthsheet = dataset_healthsheet.find(
-        (healthsheet) => healthsheet.dataset_id === datasetid
-      );
-
-      if (!healthsheet) {
-        return h.response({ collection: "[]" }).code(200);
-      } else {
-        return h.response({ collection: healthsheet.collection }).code(200);
-      }
-    },
-    method: "GET",
-  });
-
-  server.route({
-    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/collection",
-    handler: (request, h) => {
-      const { collection } = request.payload;
-
-      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
-
-      const healthsheet = dataset_healthsheet.find((hs) => hs.dataset_id === datasetid);
-
-      healthsheet.collection = collection;
-
-      return h.response({ message: "collection updated" }).code(200);
-    },
-    method: "PUT",
-  });
-
-  server.route({
-    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/composition",
-    handler: (request, h) => {
-      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
-
-      const healthsheet = dataset_healthsheet.find(
-        (healthsheet) => healthsheet.dataset_id === datasetid
-      );
-
-      if (!healthsheet) {
-        return h.response({ composition: "[]" }).code(200);
-      } else {
-        return h.response({ composition: healthsheet.composition }).code(200);
-      }
-    },
-    method: "GET",
-  });
-
-  server.route({
-    path: "/api/study/{studyid}/dataset/{datasetid}/healthsheet/composition",
-    handler: (request, h) => {
-      const { composition } = request.payload;
-
-      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
-
-      const healthsheet = dataset_healthsheet.find((hs) => hs.dataset_id === datasetid);
-
-      healthsheet.composition = composition;
-
-      return h.response({ message: "composition updated" }).code(200);
-    },
-    method: "PUT",
+    method: "POST",
   });
 
   await server.start();

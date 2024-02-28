@@ -122,7 +122,10 @@ export interface DatasetDates {
 export interface DatasetPublisher {
   managing_organization_name: string;
   managing_organization_ror_id: string;
-  publisher: string;
+  publisher_identifier: string;
+  publisher_identifier_scheme: string;
+  publisher_identifier_scheme_uri: string;
+  publisher_name: string;
 }
 
 export interface DatasetRecordKeys {
@@ -203,66 +206,27 @@ export interface DatasetFunders {
 
 export interface DatasetOther {
   acknowledgement: string;
+  format: string[];
   language: string | null;
   resource_type: string;
   size: string[];
   standards_followed: string;
 }
 
-export interface DatasetRelatedItemIdentifier {
+export interface DatasetRelatedIdentifier {
   id: string;
   identifier: string;
-  metadata_scheme: string;
+  identifier_type: string | null;
   origin: string;
+  related_metadata_scheme: string;
+  relation_type: string | null;
+  resource_type: string | null;
   scheme_type: string;
   scheme_uri: string;
-  type: string | null;
 }
 
-export interface DatasetRelatedItemCreator {
-  id: string;
-  name: string;
-  name_type: string | null;
-  origin: string;
-}
-
-export interface DatasetRelatedItemContributor {
-  id: string;
-  name: string;
-  contributor_type: string | null;
-  name_type: string | null;
-  origin: string;
-}
-
-export interface DatasetRelatedItemTitle {
-  id: string;
-  title: string;
-  origin: string;
-  type: string | null;
-}
-
-export interface DatasetRelatedItem {
-  id: string;
-  contributors: DatasetRelatedItemContributor[];
-  creators: DatasetRelatedItemCreator[];
-  edition: string;
-  first_page: string;
-  identifiers: DatasetRelatedItemIdentifier[];
-  issue: string;
-  last_page: string;
-  number_type: string | null;
-  number_value: string;
-  origin: string;
-  publication_year: number | null;
-  publisher: string;
-  relation_type: string | null;
-  titles: DatasetRelatedItemTitle[];
-  type: string | null;
-  volume: string;
-}
-
-export interface DatasetRelatedItems {
-  related_items: DatasetRelatedItem[];
+export interface DatasetRelatedIdentifiers {
+  related_identifiers: DatasetRelatedIdentifier[];
 }
 
 export interface DatasetHealthsheetRecord {

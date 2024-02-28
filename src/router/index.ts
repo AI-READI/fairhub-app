@@ -36,9 +36,8 @@ import DatasetMetadataDeIdentification from "@/views/study/dataset/metadata/deid
 import DatasetMetadataDescriptions from "@/views/study/dataset/metadata/descriptions/DatasetMetadataDescriptions.vue";
 import DatasetMetadataFunders from "@/views/study/dataset/metadata/funders/DatasetMetadataFunders.vue";
 import DatasetMetadataIdentifiers from "@/views/study/dataset/metadata/identifiers/DatasetMetadataIdentifiers.vue";
-import DatasetMetadataRecordKeys from "@/views/study/dataset/metadata/keys/DatasetMetadataRecordKeys.vue";
 import DatasetMetadataPublisher from "@/views/study/dataset/metadata/publisher/DatasetMetadataPublisher.vue";
-import DatasetMetadataRelatedItems from "@/views/study/dataset/metadata/related/DatasetMetadataRelatedItems.vue";
+import DatasetMetadataRelatedIdentifiers from "@/views/study/dataset/metadata/related/DatasetMetadataRelatedIdentifiers.vue";
 import DatasetMetadataRights from "@/views/study/dataset/metadata/rights/DatasetMetadataRights.vue";
 import DatasetMetadataSubjects from "@/views/study/dataset/metadata/subjects/DatasetMetadataSubjects.vue";
 import DatasetMetadataTitle from "@/views/study/dataset/metadata/title/DatasetMetadataTitle.vue";
@@ -281,11 +280,6 @@ const router = createRouter({
                       component: DatasetMetadataPublisher,
                     },
                     {
-                      name: "dataset:metadata:record-keys",
-                      path: "record-keys",
-                      component: DatasetMetadataRecordKeys,
-                    },
-                    {
                       name: "dataset:metadata:de-identification",
                       path: "de-identification",
                       component: DatasetMetadataDeIdentification,
@@ -316,9 +310,9 @@ const router = createRouter({
                       component: DatasetMetadataFunders,
                     },
                     {
-                      name: "dataset:metadata:related-items",
-                      path: "related-items",
-                      component: DatasetMetadataRelatedItems,
+                      name: "dataset:metadata:related-identifiers",
+                      path: "related-identifiers",
+                      component: DatasetMetadataRelatedIdentifiers,
                     },
                     {
                       name: "dataset:metadata:about",

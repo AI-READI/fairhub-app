@@ -74,11 +74,6 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         label: "Publisher",
       },
       {
-        icon: renderIcon("solar:key-bold-duotone"),
-        key: "dataset:metadata:record-keys",
-        label: "Record Keys",
-      },
-      {
         icon: renderIcon("tabler:id-badge-off"),
         key: "dataset:metadata:de-identification",
         label: "De-identification",
@@ -110,8 +105,8 @@ const dynamicUpperMenuOptions: MenuOption[] = [
       },
       {
         icon: renderIcon("fluent-mdl2:relationship"),
-        key: "dataset:metadata:related-items",
-        label: "Related Items",
+        key: "dataset:metadata:related-identifiers",
+        label: "Related Identifiers",
       },
       {
         // language, managing organization, size goes in here

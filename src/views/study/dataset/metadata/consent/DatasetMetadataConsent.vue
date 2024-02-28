@@ -132,7 +132,7 @@ const saveMetadata = (e: MouseEvent) => {
         <n-form-item label="Type" path="type">
           <n-select
             v-model:value="moduleData.type"
-            placeholder="Not Known"
+            placeholder="No Restriction"
             clearable
             :options="FORM_JSON.datasetConsentTypeOptions"
           />
