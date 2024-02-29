@@ -146,16 +146,6 @@
       "disabled": false
     },
     {
-      "label": "Series Information",
-      "value": "SeriesInformation",
-      "disabled": false
-    },
-    {
-      "label": "Table of Contents",
-      "value": "TableOfContents",
-      "disabled": false
-    },
-    {
       "label": "Technical Info",
       "value": "TechnicalInfo",
       "disabled": false
@@ -455,34 +445,7 @@
       "description": "From PubMed, an 'investigator' is an individual (e.g., collaborator or investigator) who is not an author of a paper but is listed as a member of a collective/corporate group that is an author of the paper."
     }
   ],
-  "datasetRecordKeysTypeOptions": [
-    {
-      "label": "Not Known",
-      "value": "NotKnown",
-      "description": "No clear information available about the record keys in use."
-    },
-    {
-      "label": "Anonymised",
-      "value": "Anonymised",
-      "description": "Data controller or manager describes dataset as `anonymised`, in their interpretation of the term."
-    },
-    {
-      "label": "Pseudonymised",
-      "value": "Pseudonymised",
-      "description": "Data controller or manager describes dataset as `pseudonymised`, in their interpretation of the term."
-    },
-    {
-      "label": "Identifiable",
-      "value": "Identifiable",
-      "description": "Data controller or manager describes dataset as `identifiable`, in their interpretation of the term."
-    }
-  ],
   "datasetDeIdentTypeOptions": [
-    {
-      "label": "Not Known",
-      "value": "NotKnown",
-      "description": "No clear information available about the de-identification, if any, applied to the data."
-    },
     {
       "label": "No De-identification",
       "value": "NoDeIdentification",
@@ -500,11 +463,6 @@
     }
   ],
   "datasetConsentTypeOptions": [
-    {
-      "label": "Not Known",
-      "value": "NotKnown",
-      "description": "No clear information available about consent for secondary use, or if any exists."
-    },
     {
       "label": "No Explicit Consent",
       "value": "NoExplicitConsent",
@@ -747,7 +705,7 @@
       "description": "If selected, supply a value for ResourceType."
     }
   ],
-  "datasetRelatedItemRelationTypeOptions": [
+  "datasetRelatedIdentifierRelationTypeOptions": [
     {
       "label": "IsCitedBy",
       "value": "IsCitedBy",
@@ -917,24 +875,16 @@
       "label": "IsObsoletedBy",
       "value": "IsObsoletedBy",
       "description": "Indicates A is replaced by B"
-    }
-  ],
-  "datasetRelatedItemNumberTypeOptions": [
-    {
-      "label": "Article",
-      "value": "Article"
     },
     {
-      "label": "Chapter",
-      "value": "Chapter"
+      "const": "IsCollectedBy",
+      "value": "IsCollectedBy",
+      "description": "Indicates A is collected by B"
     },
     {
-      "label": "Report",
-      "value": "Report"
-    },
-    {
-      "label": "Other",
-      "value": "Other"
+      "const": "Collects",
+      "value": "Collects",
+      "description": "Indicates A collects B"
     }
   ],
   "studyMetadataIdentificationPrimaryIdentifierTypeOptions": [
