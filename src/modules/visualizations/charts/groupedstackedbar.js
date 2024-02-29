@@ -9,12 +9,17 @@ import Chart from "../chart.js";
 import Filters from "../interfaces/filters.js";
 import Legend from "../interfaces/legend.js";
 import Tooltip from "../interfaces/tooltip.js";
+// Utilities
+import grouping from "../utilities/grouping.js";
+import sorting from "../utilities/sorting.js";
+import unique from "../utilities/unique.js";
 
 /*
 Stacked Bar Chart Class
 */
 
 class GroupedStackedBarChart extends Chart {
+  // Initialization
   constructor(config) {
     // Configure Parent
     super(config);
@@ -27,25 +32,25 @@ class GroupedStackedBarChart extends Chart {
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
     self.filters = Object.hasOwn(config, "filters") ? config.filters : undefined;
-    self.ordering = {
-      appearance: D3.stackOrderAppearance,
-      ascending: D3.stackOrderAscending,
-      descending: D3.stackOrderDescending,
-      insideout: D3.stackOrderInsideOut,
-      none: D3.stackOrderNone,
-      reverse: D3.stackOrderReverse,
-    }[config.ordering];
+    self.sort = Object.hasOwn(config, "sorting")
+      ? config.sorting
+      : {
+          by: "group",
+          key: null,
+          on: "subgroup",
+          ordering: "descending",
+        };
 
     /*
     Setup
     */
 
     // Set Unique Filters, Groups, Subgroups, ColorScale
-    self.filterby = super.getUniqueValuesByKey(self.data, self.accessors.filterby.key);
-    self.groups = super.getUniqueValuesByKey(self.data, self.accessors.group.key);
-    self.subgroups = super.getUniqueValuesByKey(self.data, self.accessors.subgroup.key);
+    self.filterby = unique.object.values(self.data, self.accessors.filterby.key);
+    self.groups = unique.object.values(self.data, self.accessors.group.key);
+    self.subgroups = unique.object.values(self.data, self.accessors.subgroup.key);
     self.colorscale = D3.scaleOrdinal()
-      .domain(super.getUniqueValuesByKey(self.data, self.accessors.color.key))
+      .domain(unique.object.values(self.data, self.accessors.color.key))
       .range(self.palette);
 
     // Set Filters
@@ -568,18 +573,14 @@ class GroupedStackedBarChart extends Chart {
       };
     });
 
-    data = super.groupThenSumObjectsByKeys(
-      data,
-      ["filterby", "group", "subgroup", "color"],
-      ["value"]
-    );
+    data = super.groupByKeysThenSum(data, ["filterby", "group", "subgroup", "color"], ["value"]);
 
     // Get Unique Filters, Groups, Subgroups, Colors, and Grouped Data
-    const filteroptions = [...super.getUniqueValuesByKey(data, "filterby")];
-    const groups = [...super.getUniqueValuesByKey(data, "group")];
-    const subgroups = [...super.getUniqueValuesByKey(data, "subgroup")];
-    const colors = [...super.getUniqueValuesByKey(data, "color")];
-    const grouped = super.groupObjectsByKey(data, "group");
+    const filteroptions = [...unique.object.values(data, "filterby")];
+    const groups = [...unique.object.values(data, "group")];
+    const subgroups = [...unique.object.values(data, "subgroup")];
+    const colors = [...unique.object.values(data, "color")];
+    const grouped = grouping.group.objects(data, "group");
 
     // Generate Stacks
     let groupedstacks = {};
@@ -643,13 +644,13 @@ class GroupedStackedBarChart extends Chart {
     return {
       colors: colors,
       data: data,
-      filters: filteroptions.sort(self.naturalSort),
+      filters: filteroptions.sort(sorting.strings.natural),
       groupedstacks: groupedstacks,
-      groups: groups.sort(self.naturalSort),
+      groups: groups.sort(sorting.strings.natural),
       legend: legend,
       max: max,
       min: min,
-      subgroups: subgroups.sort(self.naturalSort),
+      subgroups: subgroups.sort(sorting.strings.natural),
     };
   }
 }

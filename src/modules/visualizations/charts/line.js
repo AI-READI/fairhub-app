@@ -9,7 +9,9 @@ import Chart from "../chart.js";
 import Filters from "../interfaces/filters.js";
 import Legend from "../interfaces/legend.js";
 import Tooltip from "../interfaces/tooltip.js";
-
+// Utilities
+import sorting from "../utilities/sorting.js";
+import unique from "../utilities/unique.js";
 /*
 Line Chart Class
 */
@@ -35,7 +37,14 @@ class LineChart extends Chart {
     self.filters = Object.hasOwn(config, "filters") ? config.filters : undefined;
     self.linewidth = 3;
     self.linesmoother = "curveCatmullRom";
-
+    self.sort = Object.hasOwn(config, "sorting")
+      ? config.sorting
+      : {
+          by: "group",
+          key: null,
+          on: "subgroup",
+          ordering: "descending",
+        };
     // console.log("projection", self.projection);
 
     /*
@@ -43,9 +52,9 @@ class LineChart extends Chart {
     */
 
     // Set Unique Filters, Groups, Color Scale
-    self.filterby = super.getUniqueValuesByKey(self.data, self.accessors.filterby.key);
+    self.filterby = unique.object.values(self.data, self.accessors.filterby.key);
     self.colorscale = D3.scaleOrdinal()
-      .domain(super.getUniqueValuesByKey(self.data, self.accessors.color.key))
+      .domain(unique.object.values(self.data, self.accessors.color.key))
       .range(self.palette);
 
     // Filters
@@ -594,12 +603,12 @@ Map Data and Set Value Types
     });
 
     // Group by x date
-    data = super.groupThenSumObjectsByKeys(data, ["filterby", "group", "color", "x"], ["y"]);
+    data = super.groupByKeysThenSum(data, ["filterby", "group", "color", "x"], ["y"]);
 
     // Get Unique Colors
-    const filteroptions = [...super.getUniqueValuesByKey(data, "filterby")];
-    const groups = [...super.getUniqueValuesByKey(data, "group")];
-    const colors = [...super.getUniqueValuesByKey(data, "color")];
+    const filteroptions = [...unique.object.values(data, "filterby")];
+    const groups = [...unique.object.values(data, "group")];
+    const colors = [...unique.object.values(data, "color")];
     const flatseries = D3.flatGroup(
       data,
       (d) => d.group,
@@ -610,7 +619,7 @@ Map Data and Set Value Types
     let series = [];
     for (const s in flatseries) {
       const [group, color, filter, subseries] = flatseries[s];
-      const sub = super.cumulativeSumOfObjectByKey(
+      const sub = super.reduceByKeyCumulativeSum(
         subseries.sort((a, b) => a.x - b.x),
         "y"
       );
@@ -642,8 +651,8 @@ Map Data and Set Value Types
     return {
       colors: colors,
       data: data,
-      filters: filteroptions.sort(self.naturalSort),
-      groups: groups.sort(self.naturalSort),
+      filters: filteroptions.sort(sorting.strings.natural),
+      groups: groups.sort(sorting.strings.natural),
       legend: legend,
       max: max,
       min: min,

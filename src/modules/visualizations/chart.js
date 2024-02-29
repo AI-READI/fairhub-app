@@ -2,6 +2,8 @@
 Imports
 */
 
+import unique from "./utilities/unique.js";
+
 /*
 Base Chart Class
 */
@@ -23,7 +25,7 @@ class Chart {
   };
 
   constructor(config) {
-    let self = this;
+    const self = this;
 
     // Configurable Parameters
     self.id = config.id;
@@ -96,73 +98,34 @@ class Chart {
     return `${self.id}_${self.uid}`;
   }
 
-  getUniqueValuesByKey(obj, key) {
-    return [...new Set(obj.map((d) => d[key]))];
+  /*
+  Convenience
+  */
+
+  selectKeys(object, keys) {
+    return keys.filter((key) => key in object).reduce((o, k) => ((o[k] = object[k]), o), {});
   }
 
-  getUniqueValues(array) {
-    return [...new Set(array)];
+  groupByKeysThenSum(objects, by, sum) {
+    by = Array.isArray(by) ? by : [by];
+    sum = Array.isArray(sum) ? sum : [sum];
+    return Object.values(
+      objects.reduce((accumulator, object) => {
+        const group = by.map((k) => object[k]).join("-");
+        accumulator[group] =
+          accumulator[group] ||
+          Object.fromEntries(by.map((k) => [k, object[k]]).concat(sum.map((k) => [k, 0])));
+        sum.forEach((k) => (accumulator[group][k] += object[k]));
+        const missing = Object.keys(object).filter(
+          (k) => !Object.keys(accumulator[group]).includes(k)
+        );
+        accumulator[group] = { ...accumulator[group], ...this.selectKeys(object, missing) };
+        return accumulator;
+      }, new Map())
+    );
   }
 
-  getUniqueObjectsByProperties(objects) {
-    const uniqueArray = objects.filter((value, index) => {
-      const _value = JSON.stringify(value);
-      return (
-        index ===
-        objects.findIndex((obj) => {
-          return JSON.stringify(obj) === _value;
-        })
-      );
-    });
-    return uniqueArray;
-  }
-
-  groupObjectsByKey(objects, key = "uuid") {
-    return objects.reduce((acc, obj) => {
-      if (acc[obj[key]]) {
-        acc[obj[key]].push(obj);
-      } else {
-        acc[obj[key]] = [obj];
-      }
-      return acc;
-    }, {});
-  }
-
-  ungroupObjects(grouped) {
-    let merged = [];
-    for (const key in grouped) {
-      merged.push(...grouped[key]);
-    }
-    return merged;
-  }
-
-  groupThenSumObjectsByKeys(objects, on, sum) {
-    /*
-    From an array of `objects`, an array of keys to
-    group `on`, we sum the values for the `sum` keys
-    */
-    return [
-      ...objects
-        .reduce((acc, obj) => {
-          const keyArray = on.map((key) => obj[key]);
-          const key = keyArray.join("-");
-          const groupedSum =
-            acc.get(key) ||
-            Object.assign(
-              {},
-              Object.fromEntries(on.map((key) => [key, obj[key]])),
-              Object.fromEntries(sum.map((key) => [key, 0]))
-            );
-          for (let key of sum) {
-            groupedSum[key] += obj[key];
-          }
-          return acc.set(key, groupedSum);
-        }, new Map())
-        .values(),
-    ];
-  }
-
-  cumulativeSumOfObjectByKey(objects, key) {
+  reduceByKeyCumulativeSum(objects, key) {
     const result = objects.map((obj, idx, self) => {
       if (idx == 0) return obj;
       const prev = self[idx - 1];
@@ -205,7 +168,7 @@ class Chart {
     pipe delimited string subvalues, it'll just return the same data
     as before.
 
-    Todo: Obviate this on the back-end with some NumPy fun.
+    Todo: Obviate this on the back-end API with some NumPy fun.
     */
 
     let self = this;
@@ -216,11 +179,7 @@ class Chart {
         split.push(...self.splitObjectStringValuesByCartesian(datum));
       }
     }
-    return self.getUniqueObjectsByProperties(split);
-  }
-
-  naturalSort(a, b) {
-    return a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" });
+    return unique.object.objects(split);
   }
 
   /*

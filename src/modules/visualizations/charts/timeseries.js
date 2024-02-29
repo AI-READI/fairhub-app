@@ -4,11 +4,16 @@ Imports
 
 import * as D3 from "d3";
 
+// Viz Library
 import Easing from "../animations/easing.js";
 import Chart from "../chart.js";
 import Filters from "../interfaces/filters.js";
 import Legend from "../interfaces/legend.js";
 import Tooltip from "../interfaces/tooltip.js";
+// Utilities
+import grouping from "../utilities/grouping.js";
+import sorting from "../utilities/sorting.js";
+import unique from "../utilities/unique.js";
 
 /*
 Time Series Chart Class
@@ -28,25 +33,44 @@ class TimeSeriesChart extends Chart {
     self.accessors = config.accessors;
     self.transitions = config.transitions;
     self.animations = config.animations;
+    self.datefstr = Object.hasOwn(config, "datefstr") ? config.datefstr : "%X";
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
     self.filters = Object.hasOwn(config, "filters") ? config.filters : undefined;
+    self.sort = Object.hasOwn(config, "sorting")
+      ? config.sorting
+      : {
+          by: "group",
+          key: null,
+          on: "subgroup",
+          ordering: "descending",
+        };
 
     /*
     Setup
     */
 
     // Unique Filters, Groups, and Colorscale
-    self.filterby = super.getUniqueValuesByKey(self.data, self.accessors.filterby.key);
-    self.subgroups = super.getUniqueValuesByKey(self.data, self.accessors.subgroup.key);
+    self.filterby = unique.object.values(self.data, self.accessors.filterby.key);
+    self.groups = unique.object.values(self.data, self.accessors.group.key);
+    self.dates = [
+      ...new Set(
+        self.data.map((datum) =>
+          D3.timeSunday.ceil(new Date(datum[self.accessors.x.key])).toDateString()
+        )
+      ),
+    ].filter((d) => d !== "Invalid Date");
+    self.dates = self.dates.toSorted(sorting.datestrings.descending);
     self.colorscale = D3.scaleOrdinal()
-      .domain(super.getUniqueValuesByKey(self.data, self.accessors.color.key))
+      .domain(unique.object.values(self.data, self.accessors.color.key))
       .range(self.palette);
+
+    // Set Date Format
+    self.dateformat = D3.timeFormat(self.datefstr);
 
     // Filters
     if (self.filters !== undefined) {
-      self.filters.keys = ["All"];
-      self.filters.keys.push(...self.filterby);
+      self.filters.keys = ["All"].concat(self.filterby);
     }
 
     // Mapping
@@ -72,20 +96,22 @@ class TimeSeriesChart extends Chart {
     */
 
     self.datetime = D3.scaleTime()
-      .domain(D3.extent(self.mapping.data, (d) => new Date(d.datetime)))
-      .range([0, self.dataframe.width])
-      .nice();
+      .domain(D3.extent(self.mapping.data, (d) => new Date(d.x)))
+      .range([0, self.dataframe.width]);
 
     self.y = D3.scaleLinear()
       .domain([self.mapping.min, self.mapping.max])
       .range([self.dataframe.height, 0]);
 
-    self.datetimeAxis = self.svg
+    self.xAxis = self.svg
       .append("g")
       .classed("x-axis", true)
-      .attr("id", `${self.setID}_x-axis`)
+      .attr("id", `${self.setID}_week_x-axis`)
       .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.bottom})`)
-      .call(D3.axisBottom(self.datetime).tickSizeOuter(0).tickPadding(10));
+      .call(
+        D3.axisBottom(self.datetime).tickFormat(self.dateformat).tickSizeOuter(0).tickPadding(4)
+      );
+    // .call(D3.axisBottom(self.datebinning).tickFormat(self.dateformat).tickSizeOuter(0).tickPadding(4));
 
     self.yAxis = self.svg
       .append("g")
@@ -94,12 +120,14 @@ class TimeSeriesChart extends Chart {
       .attr("transform", `translate(${self.dataframe.right}, ${self.dataframe.top})`)
       .call(D3.axisRight(self.y).tickSizeOuter(0));
 
+    self.xLabels = self.xAxis.selectAll("text").classed("label", true).attr("text-anchor", "start");
+
     /*
     Generate Data Elements
     */
 
     self.line = D3.line()
-      .x((d) => self.datetime(new Date(d.datetime)))
+      .x((d) => self.datetime(new Date(d.x)))
       .y((d) => self.y(d.y));
 
     self.lines = self.svg
@@ -113,7 +141,7 @@ class TimeSeriesChart extends Chart {
       .data(self.mapping.series)
       .join("path")
       .classed("line-series interactable", true)
-      .attr("id", (d) => `${self.setID}_line-series_${self.tokenize(d.subgroup)}`)
+      .attr("id", (d) => `${self.setID}_line-series_${self.tokenize(d.group)}`)
       .attr("fill", "none")
       .attr("stroke", (d) => d.color)
       .attr("stroke-width", self.linewidth)
@@ -131,14 +159,14 @@ class TimeSeriesChart extends Chart {
       .data(self.mapping.series)
       .join("g")
       .classed("point-series", true)
-      .attr("id", (d) => `${self.setID}_point-series_${self.tokenize(d.subgroup)}`)
+      .attr("id", (d) => `${self.setID}_point-series_${self.tokenize(d.group)}`)
       .attr("fill", (d) => d.color)
       .attr("stroke", (d) => d.color)
       .selectAll(".point")
       .data((d) => d)
       .join("circle")
       .classed("point interactable", true)
-      .attr("cx", (d) => self.datetime(new Date(d.datetime)))
+      .attr("cx", (d) => self.datetime(new Date(d.x)))
       .attr("cy", (d) => self.y(d.y))
       .attr("r", self.transitions.radius.from);
 
@@ -178,7 +206,12 @@ class TimeSeriesChart extends Chart {
       self.tooltip !== undefined
         ? new Tooltip({
             title: self.tooltip.title,
-            accessors: [self.accessors.subgroup, self.accessors.datetime, self.accessors.y],
+            accessors: [
+              self.accessors.filterby,
+              self.accessors.group,
+              self.accessors.x,
+              self.accessors.y,
+            ],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,
@@ -257,19 +290,26 @@ class TimeSeriesChart extends Chart {
     */
 
     self.datetime = D3.scaleTime()
-      .domain(D3.extent(self.mapping.data, (d) => new Date(d.datetime)))
+      .domain(D3.extent(self.mapping.data, (d) => new Date(d.x)))
       .range([0, self.dataframe.width]);
+
+    self.datebinning = D3.bin()
+      .value((d) => d.x)
+      .thresholds(self.datetime.ticks(52))(self.mapping.data);
 
     self.y = D3.scaleLinear()
       .domain([self.mapping.min, self.mapping.max])
       .range([self.dataframe.height, 0]);
 
-    self.datetimeAxis = self.svg
+    self.xAxis = self.svg
       .append("g")
       .classed("x-axis", true)
-      .attr("id", `${self.setID}_x-axis`)
+      .attr("id", `${self.setID}_week_x-axis`)
       .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.bottom})`)
-      .call(D3.axisBottom(self.datetime).tickSizeOuter(5).tickPadding(10));
+      .call(
+        D3.axisBottom(self.datetime).tickFormat(self.dateformat).tickSizeOuter(0).tickPadding(4)
+      );
+    // .call(D3.axisBottom(self.datebinning).tickFormat(self.dateformat).tickSizeOuter(0).tickPadding(4));
 
     self.yAxis = self.svg
       .append("g")
@@ -283,7 +323,7 @@ class TimeSeriesChart extends Chart {
     */
 
     self.line = D3.line()
-      .x((d) => self.datetime(new Date(d.datetime)))
+      .x((d) => self.datetime(new Date(d.x)))
       .y((d) => self.y(d.y));
 
     self.lines = self.svg
@@ -297,7 +337,7 @@ class TimeSeriesChart extends Chart {
       .data(self.mapping.series)
       .join("path")
       .classed("line-series", true)
-      .attr("id", (d) => `${self.setID}_line-series_${self.tokenize(d.subgroup)}`)
+      .attr("id", (d) => `${self.setID}_line-series_${self.tokenize(d.group)}`)
       .attr("fill", "none")
       .attr("stroke", (d) => d.color)
       .attr("stroke-width", self.linewidth)
@@ -315,14 +355,14 @@ class TimeSeriesChart extends Chart {
       .data(self.mapping.series)
       .join("g")
       .classed("point-series", true)
-      .attr("id", (d) => `${self.setID}_point-series_${self.tokenize(d.subgroup)}`)
+      .attr("id", (d) => `${self.setID}_point-series_${self.tokenize(d.group)}`)
       .attr("fill", (d) => d.color)
       .attr("stroke", (d) => d.color)
       .selectAll(".point")
       .data((d) => d)
       .join("circle")
       .classed("point interactable", true)
-      .attr("cx", (d) => self.datetime(new Date(d.datetime)))
+      .attr("cx", (d) => self.datetime(new Date(d.x)))
       .attr("cy", (d) => self.y(d.y))
       .attr("r", self.transitions.radius.from)
       .on("mouseover", (e, d) => self.mouseOverPoint(e, d))
@@ -366,8 +406,8 @@ class TimeSeriesChart extends Chart {
             title: self.tooltip.title,
             accessors: [
               self.accessors.filterby,
-              self.accessors.subgroup,
-              self.accessors.datetime,
+              self.accessors.group,
+              self.accessors.x,
               self.accessors.y,
             ],
             container: self.viewframe,
@@ -418,7 +458,7 @@ class TimeSeriesChart extends Chart {
   clear() {
     let self = this;
 
-    self.datetimeAxis.remove();
+    self.xAxis.remove();
     self.yAxis.remove();
     self.lineseries.remove();
     self.pointseries.remove();
@@ -468,75 +508,61 @@ Map Data and Set Value Types
 */
 
   mapData(data, filter) {
+    // console.log(data);
     let self = this;
 
     self.selectedFilter = filter === undefined ? "All" : filter;
 
     if (self.selectedFilter !== "All") {
-      data = data.filter((datum) => datum[self.accessors.filterby.key] == filter);
+      data = data.filter((datum) => datum[self.accessors.filterby.key] === filter);
     }
 
     data = data
       .map((datum) => {
         return {
           color: self.colorscale(datum[self.accessors.color.key]),
-          datetime: datum[self.accessors.datetime.key],
           filterby: datum[self.accessors.filterby.key],
-          subgroup: datum[self.accessors.subgroup.key],
+          group: datum[self.accessors.group.key],
           uuid: datum.uuid,
+          x: D3.timeSunday.ceil(new Date(datum[self.accessors.x.key])).toDateString(),
           y: datum[self.accessors.y.key],
         };
       })
-      .sort(function (x, y) {
-        return D3.ascending(x.datetime, y.datetime);
-      });
+      .filter((datum) => datum.x !== "Invalid Date");
 
-    // Cumulative Sum Y-Axis by Site and Subgroup
-    let subgrouped = Object.groupBy(data, ({ subgroup }) => subgroup);
+    data = self.groupByKeysThenSum(data, ["x", "group"], "y");
+    // Cumulative Sum Y-Axis by Group & Date Interval
     let accumulated = [];
-    for (const [, subgroupdata] of Object.entries(subgrouped)) {
-      let yAccumulator = Object.assign(
-        {},
-        ...Object.entries({ ...self.subgroups }).map(([, value]) => ({
-          [value]: 0,
-        }))
-      );
-      accumulated.push(
-        ...subgroupdata.map((datum) => {
-          yAccumulator[datum.subgroup] += datum.y;
-          return {
-            color: datum.color,
-            datetime: datum.datetime,
-            filterby: self.selectedFilter,
-            subgroup: datum.subgroup,
-            uuid: datum.uuid,
-            y: yAccumulator[datum.subgroup],
-          };
-        })
-      );
+    let accumulator = Object.fromEntries(self.groups.map((group) => [group, 0]));
+    let dategrouped = grouping.group.objects(
+      data.toSorted(sorting.objects.datestrings.ascending("x")),
+      "x"
+    );
+    for (let [, dategroup] of Object.entries(dategrouped)) {
+      dategroup.forEach((datum) => {
+        accumulator[datum.group] += datum.y;
+        datum.y = accumulator[datum.group];
+        accumulated.push(datum);
+      });
     }
-    data = [
-      ...accumulated.sort(function (x, y) {
-        return D3.ascending(x.datetime, y.datetime);
-      }),
-    ];
+    data = accumulated.toSorted(sorting.objects.datestrings.ascending("x"));
 
     // Get Unique Colors
-    const uuids = [...super.getUniqueValuesByKey(data, "uuid")];
-    const filteroptions = [...super.getUniqueValuesByKey(data, "filterby")];
-    const subgroups = [...super.getUniqueValuesByKey(data, "subgroup")];
-    const colors = [...super.getUniqueValuesByKey(data, "color")];
+    const uuids = unique.object.values(data, "uuid");
+    const filteroptions = unique.object.values(data, "filterby").toSorted(sorting.strings.natural);
+    const groups = unique.object.values(data, "group").toSorted(sorting.strings.natural);
+    const colors = unique.object.values(data, "color").toSorted(sorting.strings.natural);
 
     // Compute Series-wise Max and Min Values
     let maxs = [];
     let mins = [];
-    for (const i in subgroups) {
-      const subgroup = subgroups[i];
+    for (const i in groups) {
+      const group = groups[i];
       let max = 0;
       let min = Infinity;
       for (const j in data) {
         const datum = data[j];
-        if (datum.subgroup === subgroup) {
+        if (datum.group === group) {
           max = datum.y > max ? datum.y : max;
           min = datum.y < min ? datum.y : min;
         }
@@ -548,32 +574,32 @@ Map Data and Set Value Types
     const min = Math.floor(Math.min(...mins));
 
     // Generate Series
-    const series = D3.zip(subgroups, colors).map(([subgroup, color]) => {
+    const series = D3.zip(groups, colors).map(([group, color]) => {
       let subseries = data.filter((datum) => {
-        return datum.subgroup === subgroup;
+        return datum.group === group;
       });
-      subseries.subgroup = subgroup;
+      subseries.group = group;
       subseries.color = color;
       return subseries;
     });
 
     // Generate Legend
-    const legend = D3.zip(subgroups, colors).map(([subgroup, color]) => {
+    const legend = D3.zip(groups, colors).map(([group, color]) => {
       return {
         color: color,
-        subgroup: subgroup,
+        group: group,
       };
     });
 
     return {
       colors: colors,
       data: data,
-      filters: filteroptions,
+      filteroptions: filteroptions,
+      groups: groups,
       legend: legend,
       max: max,
       min: min,
       series: series,
-      subgroups: subgroups,
       uuids: uuids,
     };
   }

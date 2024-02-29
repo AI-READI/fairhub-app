@@ -9,12 +9,16 @@ import Chart from "../chart.js";
 import Filters from "../interfaces/filters.js";
 import Legend from "../interfaces/legend.js";
 import Tooltip from "../interfaces/tooltip.js";
+// Utilities
+import sorting from "../utilities/sorting.js";
+import unique from "../utilities/unique.js";
 
 /*
 Stacked Bar Chart Class
 */
 
 class BarChart extends Chart {
+  // Initialization
   constructor(config) {
     // Configure Parent
     super(config);
@@ -28,14 +32,21 @@ class BarChart extends Chart {
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
     self.filters = Object.hasOwn(config, "filters") ? config.filters : undefined;
-
+    self.sort = Object.hasOwn(config, "sorting")
+      ? config.sorting
+      : {
+          by: "group",
+          key: null,
+          on: "subgroup",
+          ordering: "descending",
+        };
     /*
     Setup
     */
 
     // Set Unique Filters, Groups, and Subgroups
-    self.filterby = super.getUniqueValuesByKey(self.data, self.accessors.filterby.key);
-    self.groups = super.getUniqueValuesByKey(self.data, self.accessors.group.key);
+    self.filterby = unique.object.values(self.data, self.accessors.filterby.key);
+    self.groups = unique.object.values(self.data, self.accessors.group.key);
     // Set Color Scale
     self.colorscale = D3.scaleOrdinal().domain(self.filterby).range(self.palette);
 
@@ -616,9 +627,9 @@ class BarChart extends Chart {
     });
 
     // Get Unique Filters, Groups, Subgroups, and Colors
-    const filteroptions = [...super.getUniqueValuesByKey(data, "filterby")];
-    const groups = [...super.getUniqueValuesByKey(data, "group")];
-    const colors = [...super.getUniqueValuesByKey(data, "color")];
+    const filteroptions = [...unique.object.values(data, "filterby")];
+    const groups = [...unique.object.values(data, "group")];
+    const colors = [...unique.object.values(data, "color")];
 
     // Compute Group-wise Value Range (Max and Min)
     let maxs = [];
@@ -677,8 +688,8 @@ class BarChart extends Chart {
     return {
       colors: colors,
       data: data,
-      filters: filteroptions.sort(self.naturalSort),
-      groups: groups.sort(self.naturalSort),
+      filters: filteroptions.sort(sorting.strings.natural),
+      groups: groups.sort(sorting.strings.natural),
       legend: legend,
       max: max,
       min: min,
