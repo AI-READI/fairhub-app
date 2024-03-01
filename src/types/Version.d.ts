@@ -151,9 +151,9 @@ export interface VersionDatasetMetadata {
   descriptions: VersionDatasetDescriptions[];
   funders: VersionDatasetFunders[];
   identifiers: VersionDatasetIdentifier[];
-  publisher: VersionDatasetPublisher;
+  managing_organization: VersionDatasetManagingOrganization;
   record_keys: VersionDatasetRecordKeys;
-  related_items: VersionDatasetRelatedItem[];
+  related_identifier: VersionDatasetRelatedIdentifier[];
   rights: VersionDatasetRights[];
   subjects: VersionDatasetSubjects[];
   titles: VersionDatasetTitles[];
@@ -203,9 +203,8 @@ export interface VersionDatasetDate {
   type: string | null;
 }
 
-export interface VersionDatasetPublisher {
+export interface VersionDatasetManagingOrganization {
   managing_organization_name: string;
-  publisher: string;
 }
 
 export interface VersionDatasetRecordKeys {
@@ -251,44 +250,16 @@ export interface VersionDatasetFunders {
   identifier: string;
 }
 
-export interface VersionDatasetOther {
-  acknowledgement: string;
-  language: string | null;
-  size: string[];
-}
+//
+// export interface VersionDatasetOther {
+//   acknowledgement: string;
+//   language: string | null;
+//   size: string[];
+// }
 
-export interface VersionDatasetRelatedItemIdentifier {
+export interface VersionDatasetRelatedIdentifier {
   id: string;
   identifier: string;
-  type: string | null;
-}
-
-export interface VersionDatasetRelatedItemCreator {
-  id: string;
-  name: string;
-  name_type: string | null;
-}
-
-export interface VersionDatasetRelatedItemContributor {
-  id: string;
-  name: string;
-  contributor_type: string | null;
-  name_type: string | null;
-}
-
-export interface VersionDatasetRelatedItemTitle {
-  id: string;
-  title: string;
-  type: string | null;
-}
-
-export interface VersionDatasetRelatedItem {
-  id: string;
-  contributors: VersionDatasetRelatedItemContributor[];
-  creators: VersionDatasetRelatedItemCreator[];
-  identifiers: VersionDatasetRelatedItemIdentifier[];
-  publication_year: number | null;
-  publisher: string;
-  titles: VersionDatasetRelatedItemTitle[];
-  type: string | null;
+  relation_type: string;
+  resource_type: string;
 }
