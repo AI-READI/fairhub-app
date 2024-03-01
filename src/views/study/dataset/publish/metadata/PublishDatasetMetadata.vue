@@ -333,35 +333,26 @@ function handleNextButton() {
           </template>
         </CollapsibleCard>
 
-        <CollapsibleCard title="Publisher" bordered>
+        <CollapsibleCard title="Managing Organization" bordered>
           <n-table :bordered="true" striped :single-line="false">
             <thead>
               <tr>
-                <th>Publisher</th>
-
                 <th>Organization name</th>
               </tr>
             </thead>
 
             <tbody>
               <tr>
-                <td v-if="dataset_metadata.publisher.publisher">
-                  {{ dataset_metadata.publisher.managing_organization_name }}
-                </td>
-
-                <td v-if="dataset_metadata.publisher.managing_organization_name">
-                  {{ dataset_metadata.publisher.publisher }}
+                <td v-if="dataset_metadata.managing_organization.managing_organization_name">
+                  {{ dataset_metadata.managing_organization.managing_organization_name }}
                 </td>
 
                 <td
-                  v-if="
-                    !dataset_metadata.publisher.publisher &&
-                    !dataset_metadata.publisher.managing_organization_name
-                  "
+                  v-if="!dataset_metadata.managing_organization.managing_organization_name"
                   colspan="2"
                   class="text-center italic text-gray-500"
                 >
-                  No Publisher
+                  No Managing Organization
                 </td>
               </tr>
             </tbody>
@@ -370,7 +361,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'dataset:metadata:publisher',
+                name: 'dataset:metadata:managing-organization',
                 params: {
                   studyId: routeParams.studyId,
                   datasetId: routeParams.datasetId,
@@ -381,36 +372,7 @@ function handleNextButton() {
                 <template #icon>
                   <f-icon icon="material-symbols:edit" />
                 </template>
-                Edit Publisher Details
-              </n-button>
-            </RouterLink>
-          </template>
-        </CollapsibleCard>
-
-        <CollapsibleCard title="Record Keys" bordered>
-          <n-tag type="info" v-if="dataset_metadata.record_keys.key_type">
-            {{ dataset_metadata.record_keys.key_type }}
-          </n-tag>
-
-          <div v-if="!dataset_metadata.record_keys.key_type" class="italic text-gray-500">
-            No Record Keys
-          </div>
-
-          <template #action>
-            <RouterLink
-              :to="{
-                name: 'dataset:metadata:record-keys',
-                params: {
-                  studyId: routeParams.studyId,
-                  datasetId: routeParams.datasetId,
-                },
-              }"
-            >
-              <n-button type="info" secondary>
-                <template #icon>
-                  <f-icon icon="material-symbols:edit" />
-                </template>
-                Edit Record Keys
+                Edit Managing Organization
               </n-button>
             </RouterLink>
           </template>
@@ -643,199 +605,37 @@ function handleNextButton() {
           </template>
         </CollapsibleCard>
 
-        <CollapsibleCard title="Related Items" bordered>
-          <div v-for="(item, index) in dataset_metadata.related_items" :key="item.id">
-            <div v-if="item">
-              <div class="mt-5" v-for="i in item.titles" :key="i.id">
-                <n-h3 v-if="i.type === 'MainTitle'">{{ i.title }}</n-h3>
-              </div>
-            </div>
+        <CollapsibleCard title="Related Identifiers" bordered>
+          <n-table :bordered="true" striped :single-line="false">
+            <thead>
+              <tr>
+                <th>Identifier</th>
 
-            <n-table :bordered="true" striped :single-line="false">
-              <thead>
-                <tr>
-                  <th>Type</th>
+                <th>Relation Type</th>
 
-                  <th>Publisher</th>
+                <th>Resource Type</th>
+              </tr>
+            </thead>
 
-                  <th>Publication_year</th>
-                </tr>
-              </thead>
+            <tbody>
+              <tr v-for="item in dataset_metadata.related_identifier" :key="item.id">
+                <td>{{ item.identifier }}</td>
 
-              <tbody>
-                <tr>
-                  <td>{{ item.type }}</td>
+                <td>{{ item.relation_type }}</td>
 
-                  <td>{{ item.publisher }}</td>
+                <td>{{ item.resource_type }}</td>
+              </tr>
+            </tbody>
+          </n-table>
 
-                  <td>{{ item.publication_year }}</td>
-                </tr>
-              </tbody>
-            </n-table>
-
-            <n-h4>Titles</n-h4>
-
-            <n-table :bordered="true" striped :single-line="false">
-              <thead>
-                <tr>
-                  <th>Title</th>
-
-                  <th>Type</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr v-for="i in item.titles" :key="i.id">
-                  <td class="p-0">
-                    <ul class="m-0 list-none p-0 even:bg-gray-50">
-                      <li class="p-0">{{ i.title }}</li>
-                    </ul>
-                  </td>
-
-                  <td class="p-0">
-                    <ul class="m-0 list-none p-0 even:bg-gray-50">
-                      <li class="p-0">
-                        <div v-if="i.type">{{ i.type?.replace(/([a-z])([A-Z])/g, "$1 $2") }}</div>
-                      </li>
-                    </ul>
-                  </td>
-                </tr>
-
-                <tr v-if="!item.titles.length">
-                  <td colspan="3" class="text-center italic text-gray-500">No Titles</td>
-                </tr>
-              </tbody>
-            </n-table>
-
-            <n-h4>Identifiers</n-h4>
-
-            <n-table :bordered="true" striped :single-line="false">
-              <thead>
-                <tr>
-                  <th>Identifier</th>
-
-                  <th>Type</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr v-for="i in item.identifiers" :key="i.id">
-                  <td class="p-0">
-                    <ul class="m-0 list-none p-0 even:bg-gray-50">
-                      <li class="p-0">
-                        {{ i.identifier }}
-                      </li>
-                    </ul>
-                  </td>
-
-                  <td class="p-0">
-                    <ul class="m-0 list-none p-0 even:bg-gray-50">
-                      <li class="p-0">
-                        {{ i.type }}
-                      </li>
-                    </ul>
-                  </td>
-                </tr>
-
-                <tr v-if="!item.identifiers.length">
-                  <td colspan="3" class="text-center italic text-gray-500">No Identifiers</td>
-                </tr>
-              </tbody>
-            </n-table>
-
-            <n-h4>Creators</n-h4>
-
-            <n-table :bordered="true" striped :single-line="false">
-              <thead>
-                <tr>
-                  <th>Name(s)</th>
-
-                  <th>Name Type</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr v-for="i in item.creators" :key="i.id">
-                  <td class="p-0">
-                    <ul class="m-0 list-none p-0 even:bg-gray-50">
-                      <li class="p-0">
-                        {{ i.name }}
-                      </li>
-                    </ul>
-                  </td>
-
-                  <td class="p-0">
-                    <ul class="m-0 list-none p-0 even:bg-gray-50">
-                      <li class="p-0">
-                        {{ i.name_type || "-" }}
-                      </li>
-                    </ul>
-                  </td>
-                </tr>
-
-                <tr v-if="!item.creators.length">
-                  <td colspan="3" class="text-center italic text-gray-500">No Creators</td>
-                </tr>
-              </tbody>
-            </n-table>
-
-            <n-h4>Contributors</n-h4>
-
-            <n-table :bordered="true" striped :single-line="false">
-              <thead>
-                <tr>
-                  <th>Name(s)</th>
-
-                  <th>Name Type</th>
-
-                  <th>Contributor Type</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr v-for="i in item.contributors" :key="i.id">
-                  <td class="p-0">
-                    <ul class="m-0 list-none p-0 even:bg-gray-50">
-                      <li class="p-0">
-                        {{ i.name || "-" }}
-                      </li>
-                    </ul>
-                  </td>
-
-                  <td class="p-0">
-                    <ul class="m-0 list-none p-0 even:bg-gray-50">
-                      <li class="p-0">
-                        {{ i.name_type || "-" }}
-                      </li>
-                    </ul>
-                  </td>
-
-                  <td class="p-0">
-                    <ul class="m-0 list-none p-0 even:bg-gray-50">
-                      <li class="p-0">
-                        {{ i.contributor_type || "-" }}
-                      </li>
-                    </ul>
-                  </td>
-                </tr>
-
-                <tr v-if="!item.contributors.length">
-                  <td colspan="3" class="text-center italic text-gray-500">No Contributors</td>
-                </tr>
-              </tbody>
-            </n-table>
-
-            <n-divider v-if="index !== dataset_metadata.related_items.length - 1" />
-          </div>
-
-          <div class="italic text-gray-500" v-if="!dataset_metadata.related_items.length">
-            No Related Items
+          <div class="italic text-gray-500" v-if="!dataset_metadata.related_identifier.length">
+            No Related Identifiers
           </div>
 
           <template #action>
             <RouterLink
               :to="{
-                name: 'dataset:metadata:related-items',
+                name: 'dataset:metadata:related-identifiers',
                 params: {
                   studyId: routeParams.studyId,
                   datasetId: routeParams.datasetId,
@@ -846,7 +646,7 @@ function handleNextButton() {
                 <template #icon>
                   <f-icon icon="material-symbols:edit" />
                 </template>
-                Edit Related Items
+                Edit Related Identifiers
               </n-button>
             </RouterLink>
           </template>

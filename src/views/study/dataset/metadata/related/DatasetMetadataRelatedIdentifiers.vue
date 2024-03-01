@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type FormInst } from "naive-ui";
+import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
