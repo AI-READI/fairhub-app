@@ -41,7 +41,6 @@ export interface DatasetIdentifier {
     | "url"
     | "urn"
     | "w3id"
-    | "other"
     | null;
 }
 
