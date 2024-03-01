@@ -111,13 +111,9 @@ export interface DatasetDates {
   dates: DatasetDate[];
 }
 
-export interface DatasetPublisher {
+export interface DatasetManagingOrganization {
   managing_organization_name: string;
   managing_organization_ror_id: string;
-  publisher_identifier: string;
-  publisher_identifier_scheme: string;
-  publisher_identifier_scheme_uri: string;
-  publisher_name: string;
 }
 
 export interface DatasetRecordKeys {

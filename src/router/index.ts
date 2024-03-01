@@ -36,7 +36,7 @@ import DatasetMetadataDeIdentification from "@/views/study/dataset/metadata/deid
 import DatasetMetadataDescriptions from "@/views/study/dataset/metadata/descriptions/DatasetMetadataDescriptions.vue";
 import DatasetMetadataFunders from "@/views/study/dataset/metadata/funders/DatasetMetadataFunders.vue";
 import DatasetMetadataIdentifiers from "@/views/study/dataset/metadata/identifiers/DatasetMetadataIdentifiers.vue";
-import DatasetMetadataPublisher from "@/views/study/dataset/metadata/publisher/DatasetMetadataPublisher.vue";
+import DatasetMetadataManagingOrganization from "@/views/study/dataset/metadata/managingorganization/DatasetMetadataManagingOrganization.vue";
 import DatasetMetadataRelatedIdentifiers from "@/views/study/dataset/metadata/related/DatasetMetadataRelatedIdentifiers.vue";
 import DatasetMetadataRights from "@/views/study/dataset/metadata/rights/DatasetMetadataRights.vue";
 import DatasetMetadataSubjects from "@/views/study/dataset/metadata/subjects/DatasetMetadataSubjects.vue";
@@ -275,9 +275,9 @@ const router = createRouter({
                       component: DatasetMetadataDates,
                     },
                     {
-                      name: "dataset:metadata:publisher",
-                      path: "publisher",
-                      component: DatasetMetadataPublisher,
+                      name: "dataset:metadata:managing-organization",
+                      path: "managing-organization",
+                      component: DatasetMetadataManagingOrganization,
                     },
                     {
                       name: "dataset:metadata:de-identification",

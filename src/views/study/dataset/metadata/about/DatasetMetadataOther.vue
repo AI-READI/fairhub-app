@@ -29,12 +29,12 @@ const formRef = ref<FormInst | null>(null);
 
 const rules: FormRules = {
   language: {
-    message: "Please enter a publisher.",
+    message: "Please enter a language.",
     required: true,
     trigger: ["blur", "input"],
   },
   resource_type: {
-    message: "Please enter a publisher.",
+    message: "Please enter a resource type.",
     required: true,
     trigger: ["blur", "input"],
   },
@@ -119,7 +119,7 @@ const saveMetadata = (e: MouseEvent) => {
         throw new Error("Network response was not ok");
       }
 
-      push.success("Publisher saved successfully");
+      push.success("Metadata saved successfully");
 
       console.log("success");
     } else {
@@ -180,7 +180,7 @@ const saveMetadata = (e: MouseEvent) => {
 
         <p class="pb-8 pt-2">The primary language used in the dataset.</p>
 
-        <n-form-item label="Publisher" path="publisher">
+        <n-form-item label="Language" path="Language">
           <n-select
             v-model:value="moduleData.language"
             placeholder="Not Known"

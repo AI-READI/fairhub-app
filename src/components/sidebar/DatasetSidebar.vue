@@ -68,10 +68,9 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         label: "Dates",
       },
       {
-        // also contains publication year
         icon: renderIcon("octicon:organization-16"),
-        key: "dataset:metadata:publisher",
-        label: "Publisher",
+        key: "dataset:metadata:managing-organization",
+        label: "Managing Organization",
       },
       {
         icon: renderIcon("tabler:id-badge-off"),
