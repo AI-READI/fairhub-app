@@ -41,7 +41,6 @@ export interface DatasetIdentifier {
     | "url"
     | "urn"
     | "w3id"
-    | "other"
     | null;
 }
 
@@ -53,14 +52,7 @@ export interface DatasetDescription {
   id: string;
   description: string;
   origin: string;
-  type:
-    | "Abstract"
-    | "Methods"
-    | "SeriesInformation"
-    | "TableOfContents"
-    | "TechnicalInfo"
-    | "Other"
-    | null;
+  type: "Abstract" | "Methods" | "TechnicalInfo" | "Other" | null;
 }
 
 export interface DatasetDescriptions {
@@ -174,6 +166,7 @@ export interface DatasetRight {
   id: string;
   identifier: string;
   identifier_scheme: string;
+  identifier_scheme_uri: string;
   license_text: string;
   origin: string;
   rights: string;

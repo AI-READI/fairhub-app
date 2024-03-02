@@ -128,10 +128,6 @@
     {
       "label": "W3ID",
       "value": "w3id"
-    },
-    {
-      "label": "Other",
-      "value": "Other"
     }
   ],
   "datasetDescriptionTypeOptions": [
@@ -549,11 +545,6 @@
       "label": "Other",
       "value": "Other",
       "description": "None of the listed options."
-    },
-    {
-      "label": "Not Yet Known",
-      "value": "NotYetKnown",
-      "description": "Dummy value supplied by default on entity creation."
     }
   ],
   "datasetFunderIdentifierTypeOptions": [

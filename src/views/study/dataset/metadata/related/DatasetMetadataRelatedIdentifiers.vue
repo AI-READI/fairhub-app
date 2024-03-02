@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type FormInst } from "naive-ui";
+import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
@@ -268,6 +268,9 @@ const saveMetadata = (e: MouseEvent) => {
           >
             <n-input
               v-model:value="item.related_metadata_scheme"
+              :disabled="
+                item.relation_type !== 'IsMetadataFor' && item.relation_type !== 'HasMetadata'
+              "
               placeholder="DataCite"
               clearable
             />
@@ -283,7 +286,14 @@ const saveMetadata = (e: MouseEvent) => {
               trigger: ['blur', 'input'],
             }"
           >
-            <n-input v-model:value="item.scheme_type" placeholder="DataCite" clearable />
+            <n-input
+              v-model:value="item.scheme_type"
+              placeholder="DataCite"
+              clearable
+              :disabled="
+                item.relation_type !== 'IsMetadataFor' && item.relation_type !== 'HasMetadata'
+              "
+            />
           </n-form-item>
 
           <n-form-item
@@ -298,6 +308,9 @@ const saveMetadata = (e: MouseEvent) => {
           >
             <n-input
               v-model:value="item.scheme_uri"
+              :disabled="
+                item.relation_type !== 'IsMetadataFor' && item.relation_type !== 'HasMetadata'
+              "
               placeholder="https://datacite.org/schema/datacite-metadata-v4.3.xsd"
               clearable
             />
