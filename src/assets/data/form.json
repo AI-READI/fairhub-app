@@ -929,12 +929,6 @@
       "value": "Observational"
     },
     {
-      "description": "An observational study that is also considered to be a Patient Registry. Note: The Agency for Healthcare Research and Quality (AHRQ) defines a Patient Registry as including an organized system that uses observational methods to collect uniform data (clinical and other) prospectively for a population defined by a particular disorder/disease, condition (including susceptibility to a disorder), or exposure (including products, healthcare services, and/or procedures) and that serves a predetermined scientific, clinical, or policy purpose. Patient registries may be single purpose or on-going data collection programs that address one or more questions.",
-      "disabled": true,
-      "label": "Observational Patient Registry",
-      "value": "Observational Patient Registry"
-    },
-    {
       "description": "An investigational drug product (including biological product) available through expanded access for patients who do not qualify for enrollment in a clinical trial. Expanded Access includes all expanded access types under section 561 of the Federal Food, Drug, and Cosmetic Act: (1) for individual patients, including emergency use; (2) for intermediate-size patient populations; and (3) under a treatment IND or treatment protocol. (For more information on data requirements for this Study Type, see Expanded Access Data Element $defs).",
       "disabled": true,
       "label": "Expanded Access",

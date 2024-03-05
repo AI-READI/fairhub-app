@@ -65,12 +65,8 @@ import StudyContacts from "@/views/study/metadata/enrollment/contacts/StudyConta
 import StudyLocations from "@/views/study/metadata/enrollment/locations/StudyLocations.vue";
 import StudyOfficials from "@/views/study/metadata/enrollment/officials/StudyOfficials.vue";
 import StudyIdentification from "@/views/study/metadata/identification/StudyIdentification.vue";
-import StudyIPDSharing from "@/views/study/metadata/ipdsharing/StudyIPDSharing.vue";
 import StudyKeywords from "@/views/study/metadata/keywords/StudyKeywords.vue";
 import StudyOversight from "@/views/study/metadata/oversight/StudyOversight.vue";
-import StudyAvailableIPD from "@/views/study/metadata/references/availableipd/StudyAvailableIPD.vue";
-import StudyLinks from "@/views/study/metadata/references/links/StudyLinks.vue";
-import StudyReferences from "@/views/study/metadata/references/publications/StudyReferences.vue";
 import StudySponsors from "@/views/study/metadata/sponsors/StudySponsors.vue";
 import StudyStatus from "@/views/study/metadata/status/StudyStatus.vue";
 import StudyArms from "@/views/study/metadata/treatment/arms/StudyArms.vue";
@@ -503,26 +499,6 @@ const router = createRouter({
               name: "study:metadata:locations",
               path: "locations",
               component: StudyLocations,
-            },
-            {
-              name: "study:metadata:ipd-sharing",
-              path: "ipd-sharing",
-              component: StudyIPDSharing,
-            },
-            {
-              name: "study:metadata:references",
-              path: "references",
-              component: StudyReferences,
-            },
-            {
-              name: "study:metadata:links",
-              path: "links",
-              component: StudyLinks,
-            },
-            {
-              name: "study:metadata:available-ipd",
-              path: "available-ipd",
-              component: StudyAvailableIPD,
             },
           ],
         },

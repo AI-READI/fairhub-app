@@ -184,7 +184,6 @@ export interface StudyDesignModule
 export interface StudyIntervention {
   id: string;
   name: string;
-  arm_group_label_list: string[];
   description: string;
   origin: string;
   other_name_list: string[];
@@ -214,7 +213,6 @@ export interface StudyEligiblityModule {
     exclusion_criteria: string[];
     inclusion_criteria: string[];
   };
-  gender: string | null;
   gender_based: string | null;
   gender_description: string;
   healthy_volunteers: string | null;
@@ -227,6 +225,7 @@ export interface StudyEligiblityModule {
     unit: string | null;
   };
   sampling_method: string | null;
+  sex: string | null;
   study_population: string;
   study_type: string;
 }
