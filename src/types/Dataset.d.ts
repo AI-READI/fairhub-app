@@ -116,11 +116,6 @@ export interface DatasetManagingOrganization {
   managing_organization_ror_id: string;
 }
 
-export interface DatasetRecordKeys {
-  details: string;
-  type: string | null;
-}
-
 export interface DatasetDeIdentLevel {
   dates: boolean;
   details: string;

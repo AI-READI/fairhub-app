@@ -13,6 +13,7 @@ export interface StudyPublishedVersion {
 export interface Study {
   id: string;
   title: string;
+  acronym: string;
   description: string;
   image: string;
   keywords: string[];
@@ -61,16 +62,73 @@ export interface StudyStatusModule {
   why_stopped: string;
 }
 
-export interface StudyResponsibleParty {
-  name: string;
-  title: string;
-  affiliation: string;
-  type: string | null;
+export interface StudySponsors {
+  lead_sponsor: {
+    name: string;
+    identifier: string;
+    identifier_scheme: string;
+    identifier_scheme_uri: string;
+  };
+  responsible_party: {
+    title: string;
+    affiliation: {
+      name: string;
+      identifier: string;
+      identifier_scheme: string;
+      scheme_uri: string;
+    };
+    first_name: string;
+    identifier: {
+      scheme: string;
+      scheme_uri: string;
+      value: string;
+    };
+    last_name: string;
+    type: string | null;
+  };
 }
 
-export interface StudySponsorCollaboratorsModule {
-  lead_sponsor_name: string;
-  responsible_party: StudyResponsibleParty;
+export interface StudyCollaborator {
+  id: string;
+  name: string;
+  identifier: string;
+  identifier_scheme: string;
+  identifier_scheme_uri: string;
+  origin: string;
+}
+export interface StudyCollaborators {
+  collaborators: StudyCollaborator[];
+}
+
+export interface StudyOversightModule {
+  fda_regulated_device: string | null;
+  fda_regulated_drug: string | null;
+  has_dmc: string | null;
+  human_subject_review_status: string | null;
+}
+
+export interface StudyCondition {
+  id: string;
+  name: string;
+  classification_code: string;
+  condition_uri: string;
+  origin: string;
+  scheme: string;
+  scheme_uri: string;
+}
+
+export interface StudyConditions {
+  conditions: StudyCondition[];
+}
+
+export interface StudyKeyword {
+  id: string;
+  name: string;
+  classification_code: string;
+  keyword_uri: string;
+  origin: string;
+  scheme: string;
+  scheme_uri: string;
 }
 
 export interface StudyDesignModuleEnrollmentInfo {

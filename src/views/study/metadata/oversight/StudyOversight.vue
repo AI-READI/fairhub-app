@@ -1,20 +1,53 @@
 <script setup lang="ts">
+import type { FormInst, FormRules } from "naive-ui";
+
+import type { StudyOversightModule } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const push = usePush();
 
-const oversight_has_dmc = ref(false);
-const showLoader = ref(false);
+const formRef = ref<FormInst | null>(null);
+
+// date type: dayjs().format("YYYY-MM-DD HH:mm:ss")
+
+const moduleData = ref<StudyOversightModule>({
+  fda_regulated_device: null,
+  fda_regulated_drug: null,
+  has_dmc: null,
+  human_subject_review_status: null,
+});
+
+const rules: FormRules = {
+  human_subject_review_status: {
+    message: "Please select a value",
+    required: true,
+    trigger: ["blur", "change"],
+  },
+};
+
+const selectOptions = [
+  {
+    label: "Yes",
+    value: "Yes",
+  },
+  {
+    label: "No",
+    value: "No",
+  },
+];
+
+const loading = ref(false);
+const responseLoading = ref(false);
 
 onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
-  showLoader.value = true;
+  responseLoading.value = true;
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/oversight`, {
     method: "GET",
   });
-  showLoader.value = false;
+  responseLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -22,27 +55,46 @@ onBeforeMount(async () => {
 
   const data = await response.json();
 
-  oversight_has_dmc.value = data.oversight_has_dmc;
+  moduleData.value = data;
 });
 
-const saveMetadata = async (value: boolean) => {
-  showLoader.value = true;
+const saveMetadata = (e: MouseEvent) => {
+  e.preventDefault();
+  formRef.value?.validate(async (errors) => {
+    if (!errors) {
+      loading.value = true;
 
-  const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/oversight`, {
-    body: JSON.stringify({
-      oversight_has_dmc: value,
-    }),
-    method: "PUT",
+      const data = {
+        fda_regulated_device: moduleData.value.fda_regulated_device || null,
+        fda_regulated_drug: moduleData.value.fda_regulated_drug || null,
+        has_dmc: moduleData.value.has_dmc || null,
+        human_subject_review_status: moduleData.value.human_subject_review_status,
+      };
+
+      const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/oversight`, {
+        body: JSON.stringify(data),
+        method: "PUT",
+      });
+
+      loading.value = false;
+
+      if (!response.ok) {
+        push.error({
+          title: "Failed to save status",
+          message: "Something went wrong. Please try again later.",
+        });
+
+        throw new Error("Network response was not ok");
+      }
+
+      push.success("Status saved successfully");
+
+      console.log("success");
+    } else {
+      console.log("error");
+      console.log(errors);
+    }
   });
-
-  if (!response.ok) {
-    push.error("Something went wrong.");
-    return;
-  } else {
-    push.success("Study updated successfully.");
-  }
-
-  showLoader.value = false;
 };
 </script>
 
@@ -59,34 +111,71 @@ const saveMetadata = async (value: boolean) => {
 
     <n-divider />
 
-    <n-card title="Does this study have a Data Monitoring Committee (DMC)?">
-      <p class="mb-4 text-sm">
-        The data monitoring committee (board) is a group of independent scientists who are appointed
-        to monitor the safety and scientific integrity of a human research intervention, and to make
-        recommendations to the sponsor regarding the stopping of the trial for efficacy, for harms
-        or for futility. The composition of the committee is dependent upon the scientific skills
-        and knowledge required for monitoring the particular study.
-      </p>
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
 
-      <div class="flex items-center space-x-2">
-        <n-switch
-          v-model:value="oversight_has_dmc"
-          :round="true"
-          :disabled="showLoader"
-          size="large"
-          @update:value="saveMetadata"
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        :rules="rules"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
+      >
+        <n-form-item label="Human Subject Review Status" path="human_subject_review_status">
+          <n-select
+            v-model:value="moduleData.human_subject_review_status"
+            placeholder="Select a value"
+            :options="selectOptions"
+          />
+        </n-form-item>
+
+        <n-form-item
+          label="Is this clinical study studying a drug product?"
+          path="fda_regulated_drug"
         >
-          <template #checked> Yes </template>
+          <n-select
+            v-model:value="moduleData.fda_regulated_drug"
+            placeholder="No"
+            clearable
+            :options="selectOptions"
+          />
+        </n-form-item>
 
-          <template #unchecked> No </template>
-        </n-switch>
+        <n-form-item
+          label="Is this clinical study studying a medical device?"
+          path="fda_regulated_device"
+        >
+          <n-select
+            v-model:value="moduleData.fda_regulated_device"
+            placeholder="No"
+            clearable
+            :options="selectOptions"
+          />
+        </n-form-item>
 
-        <div class="h-[40px] w-[40px]">
-          <FadeTransition>
-            <LottieLoader v-show="showLoader" :width="40" :height="40" />
-          </FadeTransition>
+        <n-form-item label="Does this study have a Data Monitoring Committee (DMC)?" path="has_dmc">
+          <n-select
+            v-model:value="moduleData.has_dmc"
+            placeholder="No"
+            clearable
+            :options="selectOptions"
+          />
+        </n-form-item>
+
+        <n-divider />
+
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+
+            Save Metadata
+          </n-button>
         </div>
-      </div>
-    </n-card>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>

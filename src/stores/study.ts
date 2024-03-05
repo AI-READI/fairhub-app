@@ -10,6 +10,7 @@ export const useStudyStore = defineStore("study", () => {
   const study = ref<Study>({
     id: "",
     title: "",
+    acronym: "",
     description: "",
     image: "",
     keywords: [],
