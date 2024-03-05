@@ -9,6 +9,9 @@ import Chart from "../chart.js";
 import Filters from "../interfaces/filters.js";
 import Legend from "../interfaces/legend.js";
 import Tooltip from "../interfaces/tooltip.js";
+// Utilities
+import sorting from "../utilities/sorting.js";
+import unique from "../utilities/unique.js";
 
 /*
 Stacked Bar Chart Class
@@ -29,23 +32,23 @@ class StackedBarChart extends Chart {
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
     self.filters = Object.hasOwn(config, "filters") ? config.filters : undefined;
-    self.ordering = {
-      appearance: D3.stackOrderAppearance,
-      ascending: D3.stackOrderAscending,
-      descending: D3.stackOrderDescending,
-      insideout: D3.stackOrderInsideOut,
-      none: D3.stackOrderNone,
-      reverse: D3.stackOrderReverse,
-    }[config.ordering];
+    self.sort = Object.hasOwn(config, "sorting")
+      ? config.sorting
+      : {
+          by: "group",
+          key: null,
+          on: "subgroup",
+          ordering: "descending",
+        };
 
     /*
     Setup
     */
 
     // Set Unique Filters, Groups, Subgroups, ColorScale
-    self.filterby = super.getUniqueValuesByKey(self.data, self.accessors.filterby.key);
+    self.filterby = unique.object.values(self.data, self.accessors.filterby.key);
     self.colorscale = D3.scaleOrdinal()
-      .domain(super.getUniqueValuesByKey(self.data, self.accessors.color.key))
+      .domain(unique.object.values(self.data, self.accessors.color.key))
       .range(self.palette);
 
     // Set Filters
@@ -673,11 +676,11 @@ class StackedBarChart extends Chart {
     });
 
     // Get Unique Filters, Groups, Subgroups, and Colors
-    const uuids = [...super.getUniqueValuesByKey(data, "uuid")];
-    const filteroptions = [...super.getUniqueValuesByKey(data, "filterby")];
-    const groups = [...super.getUniqueValuesByKey(data, "group")];
-    const subgroups = [...super.getUniqueValuesByKey(data, "subgroup")];
-    const colors = [...super.getUniqueValuesByKey(data, "color")];
+    const uuids = [...unique.object.values(data, "uuid")];
+    const filteroptions = [...unique.object.values(data, "filterby")];
+    const groups = [...unique.object.values(data, "group")];
+    const subgroups = [...unique.object.values(data, "subgroup")];
+    const colors = [...unique.object.values(data, "color")];
 
     // Compute Group-wise Value Range (Max and Min)
     let maxs = [];
@@ -735,13 +738,13 @@ class StackedBarChart extends Chart {
     return {
       colors: colors,
       data: data,
-      filters: filteroptions.sort(self.naturalSort),
-      groups: groups.sort(self.naturalSort),
+      filters: filteroptions.sort(sorting.strings.natural),
+      groups: groups.sort(sorting.strings.natural),
       legend: legend,
       max: max,
       min: min,
       stacks: stacks,
-      subgroups: subgroups.sort(self.naturalSort),
+      subgroups: subgroups.sort(sorting.strings.natural),
       uuids: uuids,
     };
   }

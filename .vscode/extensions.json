@@ -1,7 +1,6 @@
 {
   "recommendations": [
     "Vue.volar",
-    "Vue.vscode-typescript-vue-plugin",
     "aaron-bond.better-comments",
     "dbaeumer.vscode-eslint",
     "lottiefiles.vscode-lottie",

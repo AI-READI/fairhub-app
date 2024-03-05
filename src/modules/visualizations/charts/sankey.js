@@ -6,6 +6,7 @@ import * as D3 from "d3";
 import * as Sankey from "d3-sankey";
 
 import Chart from "../chart.js";
+import unique from "../utilities/unique.js";
 
 /*
 Sankey Chart Class
@@ -190,10 +191,10 @@ class SankeyChart extends Chart {
       };
     });
 
-    const uuids = [...super.getUniqueValuesByKey(links, "uuid")];
-    const sources = [...super.getUniqueValuesByKey(links, "source")];
-    const targets = [...super.getUniqueValuesByKey(links, "target")];
-    const nodes = [...Array.from(new Set(targets.concat(sources)))];
+    const uuids = unique.object.values(links, "uuid");
+    const sources = unique.object.values(links, "source");
+    const targets = unique.object.values(links, "target");
+    const nodes = unique.array(targets.concat(sources));
 
     const mapping = {
       links: links,

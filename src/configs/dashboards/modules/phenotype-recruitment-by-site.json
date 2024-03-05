@@ -6,7 +6,7 @@
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "Line",
+    "type": "Timeseries",
     "config": {
       "id": "#phenotype-recruitment-by-site_line",
       "rotate": true,
@@ -115,6 +115,7 @@
         "#7F8C9F",
         "#727272"
       ],
+      "datefstr": "Week %W, %Y",
       "ordering": "descending",
       "accessors": {
         "filterby": {

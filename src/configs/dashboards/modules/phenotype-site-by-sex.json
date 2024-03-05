@@ -1,14 +1,15 @@
 {
-  "name": "Race & Sex by Site",
-  "id": "race-sex-by-site",
-  "title": "AI-READI Pilot Participant Race and Sex by Site",
-  "subtitle": "Participant Counts Aggregated by Race & Sex",
+  "name": "Phenotypes & Site by Sex",
+  "id": "phenotype-site-by-sex",
+  "title": "AI-READI Pilot Participant Phenotype and Site by Sex",
+  "subtitle": "Participant Counts Aggregated by Phenotype & Site",
   "width": 1280,
   "height": 720,
   "visualizations": [{
     "type": "GroupedStackedBar",
     "config": {
-      "id": "#race-sex-by-site_grouped-stacked-bar",
+      "id": "#phenotype-site-by-sex_grouped-stacked-bar",
+      "rotate": true,
       "width": 1080,
       "height": 420,
       "position": {
@@ -52,7 +53,7 @@
         }
       },
       "legend": {
-        "title": "Race",
+        "title": "Phenotypes",
         "accessor": "subgroup",
         "width": 200,
         "height": 140,
@@ -106,29 +107,28 @@
         "#727272"
       ],
       "sorting": {
-        "on": "group",
-        "by": "subgroup",
-        "key": null,
-        "ordering": "descending"
+        "by": "group",
+        "on": "subgroup",
+        "ordering": "none"
       },
       "accessors": {
         "filterby": {
-          "name": "Site",
+          "name": "Sex",
           "key": "filterby",
           "type": "String"
         },
         "group": {
-          "name": "Sex",
+          "name": "Site",
           "key": "group",
           "type": "String"
         },
         "subgroup": {
-          "name": "Race",
+          "name": "Phenotype",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Race",
+          "name": "Phenotype",
           "key": "subgroup",
           "type": "String"
         },

@@ -48,8 +48,8 @@ class Interface {
   }
 
   /*
-    Type Casting
-    */
+  Type Casting
+  */
 
   asString(val) {
     return String(val);

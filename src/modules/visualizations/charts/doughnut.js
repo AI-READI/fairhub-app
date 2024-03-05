@@ -9,12 +9,16 @@ import Chart from "../chart.js";
 import Filters from "../interfaces/filters.js";
 import Legend from "../interfaces/legend.js";
 import Tooltip from "../interfaces/tooltip.js";
+// Utilities
+import sorting from "../utilities/sorting.js";
+import unique from "../utilities/unique.js";
 
 /*
 Doughnut Chart Class
 */
 
 class DoughnutChart extends Chart {
+  // Initialization
   constructor(config) {
     // Configure Parent
     super(config);
@@ -28,14 +32,23 @@ class DoughnutChart extends Chart {
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
     self.filters = Object.hasOwn(config, "filters") ? config.filters : undefined;
     self.labeling = Object.hasOwn(config, "labeling") ? config.labeling : undefined;
+    self.sort = Object.hasOwn(config, "sorting")
+      ? config.sorting
+      : {
+          by: "group",
+          key: null,
+          on: "subgroup",
+          ordering: "descending",
+        };
+    self.sort.ordering = self.sortorders[self.sort.ordering];
 
     /*
     Setup
     */
 
     // Set Unique Filters and Groups
-    self.filterby = super.getUniqueValuesByKey(self.data, self.accessors.filterby.key);
-    self.groups = super.getUniqueValuesByKey(self.data, self.accessors.group.key);
+    self.filterby = unique.object.values(self.data, self.accessors.filterby.key);
+    self.groups = unique.object.values(self.data, self.accessors.group.key);
 
     // Set Color Scale
     self.colorscale = D3.scaleOrdinal().domain(self.groups).range(self.palette);
@@ -494,9 +507,9 @@ class DoughnutChart extends Chart {
     });
 
     // Get Unique Filters, Groups, and Colors
-    const filteroptions = [...super.getUniqueValuesByKey(data, "filterby")];
-    const groups = [...super.getUniqueValuesByKey(data, "group")];
-    const colors = [...super.getUniqueValuesByKey(data, "color")];
+    const filteroptions = [...unique.object.values(data, "filterby")];
+    const groups = [...unique.object.values(data, "group")];
+    const colors = [...unique.object.values(data, "color")];
 
     // Generate Doughnut
     const doughnut = D3.pie()
@@ -527,8 +540,8 @@ class DoughnutChart extends Chart {
       colors: colors,
       data: data,
       doughnut: doughnut,
-      filters: filteroptions.sort(self.naturalSort),
-      groups: groups.sort(self.naturalSort),
+      filters: filteroptions.sort(sorting.strings.natural),
+      groups: groups.sort(sorting.strings.natural),
       legend: legend,
     };
   }

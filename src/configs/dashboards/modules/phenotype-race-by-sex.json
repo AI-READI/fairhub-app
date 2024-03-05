@@ -105,7 +105,11 @@
         "#7F8C9F",
         "#727272"
       ],
-      "ordering": "descending",
+      "sorting": {
+        "by": "group",
+        "on": "subgroup",
+        "ordering": "none"
+      },
       "accessors": {
         "filterby": {
           "name": "Sex",

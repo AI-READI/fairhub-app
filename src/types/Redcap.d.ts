@@ -8,6 +8,7 @@ export interface RedcapProjectView extends RedcapProject {
   api_url: string;
 }
 export interface RedcapReport {
+  report_has_modules: boolean;
   report_id: string | number;
   report_key: string;
   report_name: string;
