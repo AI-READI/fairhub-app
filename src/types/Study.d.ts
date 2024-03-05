@@ -131,6 +131,10 @@ export interface StudyKeyword {
   scheme_uri: string;
 }
 
+export interface StudyKeywords {
+  keywords: StudyKeyword[];
+}
+
 export interface StudyDesignModuleEnrollmentInfo {
   enrollment_count: number | null;
   enrollment_type: string | null;
@@ -162,8 +166,11 @@ export interface InterventionalStudyDesignModule {
 export interface ObservationalStudyDesignModule {
   bio_spec_description: string;
   bio_spec_retention: string | null;
-  number_groups_cohorts: number | null;
-  target_duration: string;
+  is_patient_registry: string | null;
+  target_duration: {
+    unit: string | null;
+    value: number | null;
+  };
 }
 
 export interface StudyDesignModule
