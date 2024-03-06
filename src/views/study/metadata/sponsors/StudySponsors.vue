@@ -57,7 +57,7 @@ const responseLoading = ref(false);
 
 onBeforeMount(async () => {
   responseLoading.value = true;
-  const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/sponsors`, {
+  const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/sponsor`, {
     method: "GET",
   });
   responseLoading.value = false;
@@ -123,7 +123,7 @@ const saveMetadata = (e: MouseEvent) => {
       };
 
       loading.value = true;
-      const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/sponsors`, {
+      const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/sponsor`, {
         body: JSON.stringify(data),
         method: "PUT",
       });
