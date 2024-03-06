@@ -118,7 +118,7 @@
       "textures": {
         "size": 11,
         "fill": "transparent",
-        "stroke": "#FFFFFF",
+        "stroke": "rgba(255, 255, 255, 0.8)",
         "patterns": [
           "woven",
           "waves",

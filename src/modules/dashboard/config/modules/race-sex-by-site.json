@@ -31,7 +31,7 @@
       },
       "transitions": {
         "opacity": {
-          "from": 0.8,
+          "from": 0.7,
           "to": 1.0
         },
         "translate": {
@@ -108,7 +108,7 @@
       "textures": {
         "size": 11,
         "fill": "transparent",
-        "stroke": "#FFFFFF",
+        "stroke": "rgba(255, 255, 255, 0.8)",
         "patterns": [
           "woven",
           "waves",
