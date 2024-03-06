@@ -1021,6 +1021,32 @@
       "value": "Sequential Assignment"
     }
   ],
+  "studyMetadataHumanSubjectReviewStatusOptions": [
+    {
+      "label": "Request not yet submitted",
+      "value": "Request not yet submitted"
+    },
+    {
+      "label": "Submitted, pending",
+      "value": "Submitted, pending"
+    },
+    {
+      "label": "Submitted, approved",
+      "value": "Submitted, approved"
+    },
+    {
+      "label": "Exempt",
+      "value": "Exempt"
+    },
+    {
+      "label": "Submitted, denied",
+      "value": "Submitted, denied"
+    },
+    {
+      "label": "Submission not required",
+      "value": "Submission not required"
+    }
+  ],
   "studyMetadataObservationalModelsOptions": [
     {
       "label": "Cohort",

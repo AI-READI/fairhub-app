@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { FormInst, FormRules } from "naive-ui";
 
+import FORM_JSON from "@/assets/data/form.json";
 import type { StudyOversightModule } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
@@ -126,8 +127,8 @@ const saveMetadata = (e: MouseEvent) => {
         <n-form-item label="Human Subject Review Status" path="human_subject_review_status">
           <n-select
             v-model:value="moduleData.human_subject_review_status"
-            placeholder="Select a value"
-            :options="selectOptions"
+            placeholder="Request not yet submitted"
+            :options="FORM_JSON.studyMetadataHumanSubjectReviewStatusOptions"
           />
         </n-form-item>
 
