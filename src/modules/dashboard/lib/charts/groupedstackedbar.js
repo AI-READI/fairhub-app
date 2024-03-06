@@ -109,11 +109,7 @@ class GroupedStackedBarChart extends Chart {
     Generate Axes
     */
 
-    self.x = D3.scaleBand()
-      .domain(self.groups)
-      .range([0, self.dataframe.width])
-      .round(D3.enableRounding)
-      .paddingInner(0.05);
+    self.x = D3.scaleBand().domain(self.groups).range([0, self.dataframe.width]).paddingInner(0.05);
 
     self.y = D3.scaleLinear()
       .domain([self.mapping.min, self.mapping.max])
@@ -325,11 +321,7 @@ class GroupedStackedBarChart extends Chart {
     Generate Axes
     */
 
-    self.x = D3.scaleBand()
-      .domain(self.groups)
-      .range([0, self.dataframe.width])
-      .round(D3.enableRounding)
-      .paddingInner(0.05);
+    self.x = D3.scaleBand().domain(self.groups).range([0, self.dataframe.width]).paddingInner(0.05);
 
     self.y = D3.scaleLinear()
       .domain([self.mapping.min, self.mapping.max])

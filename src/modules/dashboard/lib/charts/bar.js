@@ -114,18 +114,10 @@ class BarChart extends Chart {
       ? D3.scaleLinear()
           .domain([self.mapping.min, self.mapping.max])
           .range([0, self.dataframe.width])
-      : D3.scaleBand()
-          .domain(self.groups)
-          .range([0, self.dataframe.width])
-          .round(D3.enableRounding)
-          .paddingInner(0.05);
+      : D3.scaleBand().domain(self.groups).range([0, self.dataframe.width]).paddingInner(0.05);
 
     self.y = self.rotate
-      ? D3.scaleBand()
-          .domain(self.groups)
-          .range([self.dataframe.height, 0])
-          .round(D3.enableRounding)
-          .paddingInner(0.05)
+      ? D3.scaleBand().domain(self.groups).range([self.dataframe.height, 0]).paddingInner(0.05)
       : D3.scaleLinear()
           .domain([self.mapping.min, self.mapping.max])
           .range([self.dataframe.height, 0]);
@@ -361,18 +353,10 @@ class BarChart extends Chart {
       ? D3.scaleLinear()
           .domain([self.mapping.min, self.mapping.max])
           .range([0, self.dataframe.width])
-      : D3.scaleBand()
-          .domain(self.groups)
-          .range([0, self.dataframe.width])
-          .round(D3.enableRounding)
-          .paddingInner(0.05);
+      : D3.scaleBand().domain(self.groups).range([0, self.dataframe.width]).paddingInner(0.05);
 
     self.y = self.rotate
-      ? D3.scaleBand()
-          .domain(self.groups)
-          .range([self.dataframe.height, 0])
-          .round(D3.enableRounding)
-          .paddingInner(0.05)
+      ? D3.scaleBand().domain(self.groups).range([self.dataframe.height, 0]).paddingInner(0.05)
       : D3.scaleLinear()
           .domain([self.mapping.min, self.mapping.max])
           .range([self.dataframe.height, 0]);

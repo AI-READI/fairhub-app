@@ -113,7 +113,6 @@ class GroupedBarChart extends Chart {
     self.x = D3.scaleBand()
       .domain(self.mapping.groups)
       .range([0, self.dataframe.width])
-      .round(D3.enableRounding)
       .paddingInner(0.05);
 
     self.y = D3.scaleLinear()
@@ -328,7 +327,6 @@ class GroupedBarChart extends Chart {
     self.x = D3.scaleBand()
       .domain(self.mapping.groups)
       .range([0, self.dataframe.width])
-      .round(D3.enableRounding)
       .paddingInner(0.05);
 
     self.y = D3.scaleLinear()

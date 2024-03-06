@@ -118,14 +118,12 @@ class StackedBarChart extends Chart {
       : D3.scaleBand()
           .domain(self.mapping.groups)
           .range([0, self.dataframe.width])
-          .round(D3.enableRounding)
           .paddingInner(0.05);
 
     self.y = self.rotate
       ? D3.scaleBand()
           .domain(self.mapping.groups)
           .range([self.dataframe.height, 0])
-          .round(D3.enableRounding)
           .paddingInner(0.05)
       : D3.scaleLinear()
           .domain([self.mapping.min, self.mapping.max])
@@ -381,14 +379,12 @@ class StackedBarChart extends Chart {
       : D3.scaleBand()
           .domain(self.mapping.groups)
           .range([0, self.dataframe.width])
-          .round(D3.enableRounding)
           .paddingInner(0.05);
 
     self.y = self.rotate
       ? D3.scaleBand()
           .domain(self.mapping.groups)
           .range([self.dataframe.height, 0])
-          .round(D3.enableRounding)
           .paddingInner(0.05)
       : D3.scaleLinear()
           .domain([self.mapping.min, self.mapping.max])
