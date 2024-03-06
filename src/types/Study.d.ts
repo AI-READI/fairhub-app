@@ -13,6 +13,7 @@ export interface StudyPublishedVersion {
 export interface Study {
   id: string;
   title: string;
+  acronym: string;
   description: string;
   image: string;
   keywords: string[];
@@ -61,16 +62,77 @@ export interface StudyStatusModule {
   why_stopped: string;
 }
 
-export interface StudyResponsibleParty {
-  name: string;
-  title: string;
-  affiliation: string;
-  type: string | null;
+export interface StudySponsors {
+  lead_sponsor: {
+    name: string;
+    identifier: string;
+    identifier_scheme: string;
+    identifier_scheme_uri: string;
+  };
+  responsible_party: {
+    title: string;
+    affiliation: {
+      name: string;
+      identifier: string;
+      identifier_scheme: string;
+      scheme_uri: string;
+    };
+    first_name: string;
+    identifier: {
+      scheme: string;
+      scheme_uri: string;
+      value: string;
+    };
+    last_name: string;
+    type: string | null;
+  };
 }
 
-export interface StudySponsorCollaboratorsModule {
-  lead_sponsor_name: string;
-  responsible_party: StudyResponsibleParty;
+export interface StudyCollaborator {
+  id: string;
+  name: string;
+  identifier: string;
+  identifier_scheme: string;
+  identifier_scheme_uri: string;
+  origin: string;
+}
+export interface StudyCollaborators {
+  collaborators: StudyCollaborator[];
+}
+
+export interface StudyOversightModule {
+  fda_regulated_device: string | null;
+  fda_regulated_drug: string | null;
+  has_dmc: string | null;
+  human_subject_review_status: string | null;
+}
+
+export interface StudyCondition {
+  id: string;
+  name: string;
+  classification_code: string;
+  condition_uri: string;
+  origin: string;
+  scheme: string;
+  scheme_uri: string;
+}
+
+export interface StudyConditions {
+  conditions: StudyCondition[];
+}
+
+export interface StudyKeyword {
+  id: string;
+  name: string;
+  classification_code: string;
+  keyword_uri: string;
+  origin: string;
+  scheme: string;
+  scheme_uri: string;
+}
+
+export interface StudyKeywords {
+  keywords: StudyKeyword[];
 }
 
 export interface StudyDesignModuleEnrollmentInfo {
@@ -104,8 +166,11 @@ export interface InterventionalStudyDesignModule {
 export interface ObservationalStudyDesignModule {
   bio_spec_description: string;
   bio_spec_retention: string | null;
-  number_groups_cohorts: number | null;
-  target_duration: string;
+  is_patient_registry: string | null;
+  target_duration: {
+    unit: string | null;
+    value: number | null;
+  };
 }
 
 export interface StudyDesignModule
@@ -119,7 +184,6 @@ export interface StudyDesignModule
 export interface StudyIntervention {
   id: string;
   name: string;
-  arm_group_label_list: string[];
   description: string;
   origin: string;
   other_name_list: string[];
@@ -149,7 +213,6 @@ export interface StudyEligiblityModule {
     exclusion_criteria: string[];
     inclusion_criteria: string[];
   };
-  gender: string | null;
   gender_based: string | null;
   gender_description: string;
   healthy_volunteers: string | null;
@@ -162,28 +225,45 @@ export interface StudyEligiblityModule {
     unit: string | null;
   };
   sampling_method: string | null;
+  sex: string | null;
   study_population: string;
   study_type: string;
 }
 
-export interface StudyContact {
+export interface StudyCentralContact {
   id: string;
-  name: string;
   affiliation: string;
+  affiliation_identifier: string;
+  affiliation_identifier_scheme: string;
+  affiliation_identifier_scheme_uri: string;
+  degree: string;
   email_address: string;
+  first_name: string;
+  identifier: string;
+  identifier_scheme: string;
+  identifier_scheme_uri: string;
+  last_name: string;
   origin: string;
   phone: string;
   phone_ext: string;
 }
 
-export interface StudyContacts {
-  central_contact_list: StudyContact[];
+export interface StudyCentralContacts {
+  central_contact_list: StudyCentralContact[];
 }
 
 export interface StudyOverallOfficial {
   id: string;
-  name: string;
   affiliation: string;
+  affiliation_identifier: string;
+  affiliation_identifier_scheme: string;
+  affiliation_identifier_scheme_uri: string;
+  degree: string;
+  first_name: string;
+  identifier: string;
+  identifier_scheme: string;
+  identifier_scheme_uri: string;
+  last_name: string;
   origin: string;
   role: string | null;
 }
@@ -192,7 +272,17 @@ export interface StudyOverallOfficials {
   overall_official_list: StudyOverallOfficial[];
 }
 
-export interface StudyLocationContact extends Omit<StudyContact, "affiliation"> {}
+export interface StudyLocationContact {
+  email_address: string;
+  first_name: string;
+  identifier: string;
+  identifier_scheme: string;
+  identifier_scheme_uri: string;
+  last_name: string;
+  phone: string;
+  phone_ext: string;
+  role: string | null;
+}
 
 export interface StudyLocation {
   id: string;
@@ -200,6 +290,9 @@ export interface StudyLocation {
   contact_list: StudyLocationContact[];
   country: string | null;
   facility: string;
+  identifier: string;
+  identifier_scheme: string;
+  identifier_scheme_uri: string;
   origin: string;
   state: string;
   status: string | null;
@@ -208,63 +301,6 @@ export interface StudyLocation {
 
 export interface StudyLocations {
   location_list: StudyLocation[];
-}
-
-export interface StudyContactsLocationsModule {
-  central_contact_list: StudyContact[];
-  location_list: StudyLocation[];
-  overall_official_list: StudyOverallOfficial[];
-}
-
-export interface StudyIPDSharing {
-  access_criteria: string;
-  description: string;
-  info_type_list: string[];
-  ipd_sharing: string | null;
-  time_frame: string;
-  url: string;
-}
-
-export interface StudyReference {
-  id: string;
-  citation: string;
-  identifier: string;
-  origin: string;
-  type: string | null;
-}
-
-export interface StudyReferences {
-  reference_list: StudyReference[];
-}
-
-export interface StudyLink {
-  id: string;
-  label: string;
-  origin: string;
-  url: string;
-}
-
-export interface StudyLinks {
-  link_list: StudyLink[];
-}
-
-export interface StudyIPD {
-  id: string;
-  comment: string;
-  identifier: string;
-  origin: string;
-  type: string | null;
-  url: string;
-}
-
-export interface StudyIPDs {
-  ipd_list: StudyIPD[];
-}
-
-export interface StudyReferencesModule {
-  ipd_list: StudyIPD[];
-  link_list: StudyLink[];
-  reference_list: StudyReference[];
 }
 
 export interface StudyFile {

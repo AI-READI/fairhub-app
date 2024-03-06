@@ -30,7 +30,7 @@ erDiagram
         string study_id PK,FK "STUDY.id"
         string responsible_party_type "NULLABLE"
         string responsible_party_investigator_first_name
-        string responsible_party_investigator_middle_name
+        string responsible_party_investigator_last_name
         string responsible_party_investigator_title
         string responsible_party_investigator_identifier_value
         string responsible_party_investigator_identifier_scheme
@@ -41,8 +41,8 @@ erDiagram
         string responsible_party_investigator_affiliation_identifier_scheme_uri
         string lead_sponsor_name
         string lead_sponsor_identifier
-        string lead_sponsor_scheme
-        string lead_sponsor_scheme_uri
+        string lead_sponsor_identifier_scheme
+        string lead_sponsor_identifier_scheme_uri
     }
 
     STUDY_COLLABORATORS {
@@ -104,7 +104,6 @@ erDiagram
         string bio_spec_retention "NULLABLE"
         string bio_spec_description "NULLABLE"
         string target_duration "NULLABLE"
-        int number_groups_cohorts "NULLABLE"
         string is_patient_registry "NULLABLE"
     }
 
@@ -250,7 +249,7 @@ erDiagram
     STUDY_LOCATION }o--|| STUDY : "is done at"
     STUDY_CONDITIONS }o--|| STUDY : "is classified as"
 
-    STUDY }o--|| STUDY_KEYWORDS : "is classified as"
+    STUDY ||--o{ STUDY_KEYWORDS : "is classified as"
     STUDY ||--o{ STUDY_CENTRAL_CONTACT : "is contacted by"
     STUDY ||--o{ STUDY_OVERALL_OFFICIAL : "is lead by"
     STUDY ||--|| STUDY_DESCRIPTION : "describes"

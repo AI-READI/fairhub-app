@@ -26,6 +26,7 @@ const formRef = ref<FormInst | null>(null);
 
 const study = reactive({
   title: faker.commerce.productName(),
+  acronym: "",
   image: "",
 });
 
@@ -39,18 +40,6 @@ const rules: FormRules = {
       trigger: ["blur", "input"],
     },
   ],
-  // keywords: [
-  //   {
-  //     required: true,
-  //     trigger: ["blur", "change"],
-  //     validator: (_rule: FormItemRule, value) => {
-  //       if (value !== null && value.length > 0) {
-  //         return Promise.resolve();
-  //       }
-  //       return Promise.reject("Please select at least one keyword");
-  //     },
-  //   },
-  // ],
 };
 
 const generateImageURL = () => {
@@ -64,7 +53,8 @@ const createStudy = (e: MouseEvent) => {
     if (!errors) {
       const data = {
         title: study.title,
-        image: study.image || `https://api.dicebear.com/6.x/shapes/svg?seed=${nanoid()}`,
+        acronym: study.acronym,
+        image: study.image || generateImageURL(),
       };
 
       loader.value = true;
@@ -116,7 +106,11 @@ const createStudy = (e: MouseEvent) => {
       class="pr-4"
     >
       <n-form-item label="Title" path="title">
-        <n-input v-model:value="study.title" placeholder="Add a study title" />
+        <n-input v-model:value="study.title" placeholder="My study on the human body" clearable />
+      </n-form-item>
+
+      <n-form-item label="Acronym" path="acronym">
+        <n-input v-model:value="study.acronym" placeholder="AI-READI" clearable />
       </n-form-item>
 
       <!-- <n-form-item label="Keywords" path="keywords">
@@ -131,7 +125,7 @@ const createStudy = (e: MouseEvent) => {
         />
       </n-form-item> -->
 
-      <n-form-item label="Image" path="Image">
+      <!-- <n-form-item label="Image" path="Image">
         <n-input
           v-model:value="study.image"
           placeholder="Add a representative image to easily differentiate your study"
@@ -142,13 +136,13 @@ const createStudy = (e: MouseEvent) => {
             <f-icon icon="mdi:auto-fix" />
           </template>
         </n-button>
-      </n-form-item>
+      </n-form-item> -->
 
-      <n-image
+      <!-- <n-image
         :src="study.image || 'https://www.svgrepo.com/show/213127/image-warning.svg'"
         width="300"
         class="rounded-xl bg-slate-50 p-3 shadow-md"
-      />
+      /> -->
 
       <n-divider />
 

@@ -217,7 +217,15 @@ const saveMetadata = (e: MouseEvent) => {
               <n-input v-model:value="item.label" placeholder="Lorem Ipsum" clearable />
             </n-form-item>
 
-            <n-form-item label="Description" :path="`arms[${index}].description`">
+            <n-form-item
+              label="Description"
+              :path="`arms[${index}].description`"
+              :rule="{
+                message: 'Please enter an arm group description',
+                required: true,
+                trigger: ['blur', 'input'],
+              }"
+            >
               <n-input
                 v-model:value="item.description"
                 placeholder="Lorem Ipsum"

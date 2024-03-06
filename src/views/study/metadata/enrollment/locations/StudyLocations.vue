@@ -84,6 +84,9 @@ const addLocation = () => {
     contact_list: [],
     country: null,
     facility: "",
+    identifier: "",
+    identifier_scheme: "",
+    identifier_scheme_uri: "",
     origin: "local",
     state: "",
     status: null,
@@ -100,6 +103,9 @@ const saveMetadata = (e: MouseEvent) => {
           city: item.city,
           country: item.country,
           facility: item.facility,
+          identifier: item.identifier || "",
+          identifier_scheme: item.identifier_scheme || "",
+          identifier_scheme_uri: item.identifier_scheme_uri || "",
           state: item.state || "",
           status: item.status,
           zip: item.zip || "",
@@ -237,7 +243,7 @@ const saveMetadata = (e: MouseEvent) => {
           </n-form-item>
 
           <n-form-item label="Zip Code" :path="`location_list[${index}].zip`">
-            <n-input v-model:value="item.zip" placeholder="12345" clearable />
+            <n-input v-model:value="item.zip" placeholder="43215" clearable />
           </n-form-item>
 
           <n-form-item
@@ -257,6 +263,46 @@ const saveMetadata = (e: MouseEvent) => {
               :options="countryOptions"
             />
           </n-form-item>
+
+          <div class="flex items-center space-x-4">
+            <n-form-item
+              label="Name Identifier"
+              :path="`location_list[${index}].identifier`"
+              :rule="{
+                message: 'Please enter an identifier',
+                required: item.identifier_scheme,
+                trigger: ['blur', 'change'],
+              }"
+              class="w-full"
+            >
+              <n-input v-model:value="item.identifier" placeholder="0156zyn36" clearable />
+            </n-form-item>
+
+            <n-form-item
+              label="Name Identifier Scheme"
+              :path="`location_list[${index}].identifier_scheme`"
+              :rule="{
+                message: 'Please enter an identifier scheme',
+                required: item.identifier,
+                trigger: ['blur', 'change'],
+              }"
+              class="w-full"
+            >
+              <n-input v-model:value="item.identifier_scheme" placeholder="ROR" clearable />
+            </n-form-item>
+
+            <n-form-item
+              label="Name Identifier Scheme URI"
+              :path="`location_list[${index}].identifier_scheme_uri`"
+              class="w-full"
+            >
+              <n-input
+                v-model:value="item.identifier_scheme_uri"
+                placeholder="https://ror.org"
+                clearable
+              />
+            </n-form-item>
+          </div>
         </CollapsibleCard>
 
         <n-button class="my-10 w-full" dashed type="success" @click="addLocation">

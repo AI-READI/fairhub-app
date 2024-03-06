@@ -1,14 +1,19 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
+import { nanoid } from "nanoid";
 
+import type { StudyKeywords } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
+const router = useRouter();
 const push = usePush();
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData = ref<string[]>(["Diabetes"]);
+const moduleData = reactive<StudyKeywords>({
+  keywords: [],
+});
 
 const loading = ref(false);
 const responseLoading = ref(false);
@@ -17,9 +22,11 @@ onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
   responseLoading.value = true;
+
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/keywords`, {
     method: "GET",
   });
+
   responseLoading.value = false;
 
   if (!response.ok) {
@@ -28,39 +35,88 @@ onBeforeMount(async () => {
 
   const data = await response.json();
 
-  moduleData.value = data;
+  moduleData.keywords = data.map((item: any) => {
+    return {
+      ...item,
+      origin: "remote",
+    };
+  });
 });
 
-const addKeyword = () => {
-  moduleData.value.push("");
+const removeKeyword = async (id: string) => {
+  const item = moduleData.keywords.find((item) => item.id === id);
+
+  if (item && item.origin === "remote") {
+    const response = await fetch(
+      `${baseURL}/study/${route.params.studyId}/metadata/keywords/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok) {
+      push.error("Failed to delete central contact");
+      throw new Error("Network response was not ok");
+    }
+  }
+
+  moduleData.keywords = moduleData.keywords.filter((item) => item.id !== id);
+
+  push.success("Keyword deleted successfully");
 };
 
-const removeKeyword = (index: number) => {
-  moduleData.value.splice(index, 1);
+const addKeyword = () => {
+  moduleData.keywords.push({
+    id: nanoid(),
+    name: "",
+    classification_code: "",
+    keyword_uri: "",
+    origin: "local",
+    scheme: "",
+    scheme_uri: "",
+  });
 };
 
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
     if (!errors) {
-      // remove empty Keyword
-      const keywords = moduleData.value.filter((Keyword) => Keyword !== "");
+      const data: any = moduleData.keywords.map((item) => {
+        const entry = {
+          name: item.name,
+          classification_code: item.classification_code,
+          keyword_uri: item.keyword_uri,
+          scheme: item.scheme,
+          scheme_uri: item.scheme_uri,
+        };
 
-      // remove Keywords with duplicate names
-      const uniqueKeywords = [...new Set(keywords)];
+        if (item.origin === "local") {
+          return entry;
+        } else {
+          return {
+            ...entry,
+            id: item.id,
+          };
+        }
+      });
 
       loading.value = true;
+
       const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/keywords`, {
-        body: JSON.stringify(uniqueKeywords),
-        method: "PUT",
+        body: JSON.stringify(data),
+        method: "POST",
       });
+
       loading.value = false;
 
       if (!response.ok) {
-        push.error("Something went wrong.");
-        return;
+        push.error("Something went wrong. Please try again later.");
+        throw new Error("Network response was not ok");
       } else {
         push.success("Study updated successfully.");
+
+        // refresh page
+        router.go(0);
       }
 
       console.log("success");
@@ -96,31 +152,83 @@ const saveMetadata = (e: MouseEvent) => {
         class="pr-4"
         v-else
       >
-        <SubHeadingText
-          title=""
-          description="Words or phrases that best describe the study. Keywords help users find studies in the database. Use NLM's Medical Subject Heading (MeSH)-controlled vocabulary terms where appropriate. Be as specific and precise as possible. Avoid acronyms and abbreviations."
-        />
-
-        <n-form-item
-          v-for="(keyword, index) in moduleData"
-          :key="index"
-          label="Name"
-          path="keywords"
+        <CollapsibleCard
+          v-for="(item, index) in moduleData.keywords"
+          :key="item.id"
+          class="mb-5 shadow-md"
+          :title="item.name || `Keyword ${index + 1}`"
+          bordered
         >
-          <n-input v-model:value="moduleData[index]" placeholder="Biomedical science" />
+          <template #header-extra>
+            <n-popconfirm @positive-click="removeKeyword(item.id)">
+              <template #trigger>
+                <n-button type="error" secondary>
+                  <template #icon>
+                    <f-icon icon="ep:delete" />
+                  </template>
 
-          <n-popconfirm @positive-click="removeKeyword(index)">
-            <template #trigger>
-              <n-button class="ml-5">
-                <f-icon icon="gridicons:trash" />
-              </n-button>
-            </template>
+                  Remove Keyword
+                </n-button>
+              </template>
 
-            Are you sure you want to remove this keyword?
-          </n-popconfirm>
-        </n-form-item>
+              Are you sure you want to remove this Keyword?
+            </n-popconfirm>
+          </template>
 
-        <n-button class="mb-10 w-full" dashed type="success" @click="addKeyword">
+          <n-form-item
+            label="Name"
+            :path="`keywords[${index}].name`"
+            :rule="{
+              message: 'Please enter a name',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-input v-model:value="item.name" placeholder="Artificial intelligence" clearable />
+          </n-form-item>
+
+          <n-form-item
+            label="Identifier"
+            :path="`keywords[${index}].classification_code`"
+            :rule="{
+              message: 'Please enter an identifier',
+              required: item.scheme,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-input v-model:value="item.classification_code" placeholder="D001185" clearable />
+          </n-form-item>
+
+          <n-form-item
+            label="Identifier Scheme"
+            :path="`keywords[${index}].scheme`"
+            :rule="{
+              message: 'Please enter a scheme',
+              required: item.classification_code,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-input v-model:value="item.scheme" placeholder="MeSH" clearable />
+          </n-form-item>
+
+          <n-form-item label="Scheme URI" :path="`keywords[${index}].scheme_uri`">
+            <n-input
+              v-model:value="item.scheme_uri"
+              placeholder="ttps://meshb.nlm.nih.gov/"
+              clearable
+            />
+          </n-form-item>
+
+          <n-form-item label="Keyword URI" :path="`keywords[${index}].keyword_uri`">
+            <n-input
+              v-model:value="item.keyword_uri"
+              placeholder="https://meshb.nlm.nih.gov/record/ui?ui=D001185"
+              clearable
+            />
+          </n-form-item>
+        </CollapsibleCard>
+
+        <n-button class="my-10 w-full" dashed type="success" @click="addKeyword">
           <template #icon>
             <f-icon icon="gridicons:create" />
           </template>
@@ -131,16 +239,11 @@ const saveMetadata = (e: MouseEvent) => {
         <n-divider />
 
         <div class="flex justify-start">
-          <n-button
-            size="large"
-            type="primary"
-            :loading="loading"
-            @click="saveMetadata"
-            :disabled="moduleData.length === 0"
-          >
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
             <template #icon>
               <f-icon icon="material-symbols:save" />
             </template>
+
             Save Metadata
           </n-button>
         </div>

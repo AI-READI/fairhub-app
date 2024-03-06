@@ -29,11 +29,14 @@ const moduleData: StudyDesignModule = reactive({
     enrollment_count: null,
     enrollment_type: null,
   },
+  is_patient_registry: null,
   number_arms: null,
-  number_groups_cohorts: null,
   phase_list: [],
   study_type: null,
-  target_duration: "",
+  target_duration: {
+    unit: null,
+    value: null,
+  },
 });
 
 const rules: FormRules = {
@@ -110,6 +113,40 @@ const whoMaskedOptions = [
   },
 ];
 
+const selectOptions = [
+  {
+    label: "Yes",
+    value: "Yes",
+  },
+  {
+    label: "No",
+    value: "No",
+  },
+];
+
+const targetDurationUnitOptions = [
+  {
+    label: "Hours",
+    value: "Hours",
+  },
+  {
+    label: "Days",
+    value: "Days",
+  },
+  {
+    label: "Weeks",
+    value: "Weeks",
+  },
+  {
+    label: "Months",
+    value: "Months",
+  },
+  {
+    label: "Years",
+    value: "Years",
+  },
+];
+
 const loading = ref(false);
 const responseLoading = ref(false);
 
@@ -152,13 +189,23 @@ onBeforeMount(async () => {
 
   moduleData.bio_spec_description = data.bio_spec_description;
 
-  moduleData.target_duration = data.target_duration;
+  moduleData.target_duration = {
+    unit: null,
+    value: null,
+  };
 
-  moduleData.number_groups_cohorts = data.number_groups_cohorts;
+  const targetDuration = data.target_duration;
+
+  if (targetDuration && targetDuration.split(" ").length === 2) {
+    moduleData.target_duration.unit = targetDuration.split(" ")[1];
+    moduleData.target_duration.value = targetDuration.split(" ")[0];
+  }
 
   moduleData.enrollment_info.enrollment_count = data.enrollment_count;
 
   moduleData.enrollment_info.enrollment_type = data.enrollment_type;
+
+  moduleData.is_patient_registry = data.is_patient_registry;
 
   console.log("moduleData", moduleData);
 });
@@ -213,14 +260,17 @@ const saveMetadata = (e: MouseEvent) => {
         enrollment_count: moduleData.enrollment_info.enrollment_count,
         enrollment_type: moduleData.enrollment_info.enrollment_type,
 
+        is_patient_registry: isObservationalStudy ? moduleData.is_patient_registry : null,
+
         number_arms: moduleData.study_type === "Interventional" ? moduleData.number_arms : null,
-        number_groups_cohorts: isObservationalStudy ? moduleData.number_groups_cohorts : null,
 
         phase_list: moduleData.study_type === "Interventional" ? moduleData.phase_list : [],
 
         study_type: moduleData.study_type,
 
-        target_duration: isObservationalStudy ? moduleData.target_duration : "",
+        target_duration: isObservationalStudy
+          ? `${moduleData.target_duration.value} ${moduleData.target_duration.unit}`
+          : "",
       };
 
       loading.value = true;
@@ -285,8 +335,26 @@ const saveMetadata = (e: MouseEvent) => {
           <n-select
             v-model:value="moduleData.study_type"
             placeholder="Interventional"
-            clearable
             :options="FORM_JSON.studyMetadataStudyTypeOptions"
+          />
+        </n-form-item>
+
+        <n-form-item
+          v-if="isObservationalStudy"
+          label="Is this study a Patient Registry?"
+          path="is_patient_registry"
+          :rule="{
+            message: 'Please select a value',
+            required: isObservationalStudy,
+
+            trigger: ['blur', 'input'],
+          }"
+        >
+          <n-select
+            v-model:value="moduleData.is_patient_registry"
+            placeholder="No"
+            clearable
+            :options="selectOptions"
           />
         </n-form-item>
 
@@ -523,7 +591,15 @@ const saveMetadata = (e: MouseEvent) => {
             />
           </n-form-item>
 
-          <n-form-item label="Description" path="bio_spec_description">
+          <n-form-item
+            label="Description"
+            path="bio_spec_description"
+            :rule="{
+              message: 'Please specify all types of biospecimens to be retained',
+              required: isObservationalStudy,
+              trigger: ['blur', 'input'],
+            }"
+          >
             <n-input
               v-model:value="moduleData.bio_spec_description"
               type="textarea"
@@ -582,38 +658,46 @@ const saveMetadata = (e: MouseEvent) => {
           />
         </n-form-item>
 
-        <n-form-item
-          v-if="isObservationalStudy"
-          label="Target Duration"
-          path="target_duration"
-          :rule="{
-            message:
-              'Please enter the anticipated time period over which each participant is to be followed.',
-            required: isObservationalStudy,
-            trigger: ['blur', 'input'],
-          }"
-        >
-          <n-input v-model:value="moduleData.target_duration" placeholder="5 Days" clearable />
-        </n-form-item>
-
-        <n-form-item
-          v-if="isObservationalStudy"
-          label="Number of study groups/cohorts"
-          path="number_groups_cohorts"
-          :rule="{
-            type: 'number',
-            message: 'Please enter the number of study groups/cohorts',
-            required: isObservationalStudy,
-            trigger: ['blur', 'input'],
-          }"
-        >
-          <n-input-number
-            v-model:value="moduleData.number_groups_cohorts"
-            clearable
+        <div class="flex w-full items-start space-x-5" v-if="isObservationalStudy">
+          <n-form-item
+            label="Target duration value"
+            path="target_duration.value"
             class="w-full"
-            :min="1"
-          />
-        </n-form-item>
+            :rule="{
+              type: 'number',
+              message:
+                'Please enter the anticipated time period over which each participant is to be followed',
+              required: isObservationalStudy && moduleData.is_patient_registry === 'Yes',
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-input-number
+              v-model:value="moduleData.target_duration.value"
+              :min="1"
+              clearable
+              class="w-full"
+            />
+          </n-form-item>
+
+          <n-form-item
+            label="Target Duration Unit"
+            path="target_duration.unit"
+            class="w-full min-w-[290px]"
+            :rule="{
+              message:
+                'Please enter the anticipated time period over which each participant is to be followed',
+              required: isObservationalStudy && moduleData.is_patient_registry === 'Yes',
+              trigger: ['blur', 'input'],
+            }"
+          >
+            <n-select
+              v-model:value="moduleData.target_duration.unit"
+              placeholder="Months"
+              clearable
+              :options="targetDurationUnitOptions"
+            />
+          </n-form-item>
+        </div>
 
         <n-divider />
 
