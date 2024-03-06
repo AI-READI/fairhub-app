@@ -364,7 +364,15 @@ const saveMetadata = (e: MouseEvent) => {
 
         <p class="pb-8 pt-2">The entity or individual who is the sponsor of the clinical study</p>
 
-        <n-form-item label="Name" path="lead_sponsor_name">
+        <n-form-item
+          label="Name"
+          path="lead_sponsor.name"
+          :rule="{
+            message: 'Please enter a lead sponsor name',
+            required: true,
+            trigger: ['blur', 'input'],
+          }"
+        >
           <n-input
             v-model:value="moduleData.lead_sponsor.name"
             placeholder="Willy Tybur"
@@ -372,7 +380,15 @@ const saveMetadata = (e: MouseEvent) => {
           />
         </n-form-item>
 
-        <n-form-item label="Identifier" path="lead_sponsor_identifier">
+        <n-form-item
+          label="Identifier"
+          path="lead_sponsor.identifier"
+          :rule="{
+            message: 'Please enter a lead sponsor identifier',
+            required: moduleData.lead_sponsor.identifier_scheme,
+            trigger: ['blur', 'input'],
+          }"
+        >
           <n-input
             v-model:value="moduleData.lead_sponsor.identifier"
             placeholder="04aj4c18"
@@ -380,7 +396,15 @@ const saveMetadata = (e: MouseEvent) => {
           />
         </n-form-item>
 
-        <n-form-item label="Identifier Scheme" path="lead_sponsor_identifier_scheme">
+        <n-form-item
+          label="Identifier Scheme"
+          path="lead_sponsor.identifier_scheme"
+          :rule="{
+            message: 'Please enter a lead sponsor identifier scheme',
+            required: moduleData.lead_sponsor.identifier,
+            trigger: ['blur', 'input'],
+          }"
+        >
           <n-input
             v-model:value="moduleData.lead_sponsor.identifier_scheme"
             placeholder="ROR"
@@ -388,7 +412,7 @@ const saveMetadata = (e: MouseEvent) => {
           />
         </n-form-item>
 
-        <n-form-item label="Identifier Scheme URI" path="lead_sponsor_identifier_scheme_uri">
+        <n-form-item label="Identifier Scheme URI" path="lead_sponsor.identifier_scheme_uri">
           <n-input
             v-model:value="moduleData.lead_sponsor.identifier_scheme_uri"
             placeholder="https://ror.org"

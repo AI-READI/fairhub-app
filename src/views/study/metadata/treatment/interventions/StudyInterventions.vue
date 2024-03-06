@@ -222,7 +222,7 @@ const saveMetadata = (e: MouseEvent) => {
 
           <n-form-item
             label="Description"
-            :path="`intervention_list[${index}].description`"
+            :path="`interventions[${index}].description`"
             :rule="{
               message: 'Please enter an intervention description',
               required: true,
