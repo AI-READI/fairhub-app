@@ -32,7 +32,6 @@ class LineChart extends Chart {
     self.accessors = config.accessors;
     self.transitions = config.transitions;
     self.animations = config.animations;
-    // console.log(config, Object.hasOwn(config, "projection"));
     self.projection = Object.hasOwn(config, "projection") ? config.projection : undefined;
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
@@ -82,7 +81,7 @@ class LineChart extends Chart {
             .fill(self.textures.fill)
             .stroke(self.textures.stroke)
             .size(self.textures.size)
-            // .thicker()
+            .thicker()
             .lighter(),
         ])
       )

@@ -133,7 +133,6 @@ class TimeSeriesChart extends Chart {
       .call(
         D3.axisBottom(self.datetime).tickFormat(self.dateformat).tickSizeOuter(0).tickPadding(4)
       );
-    // .call(D3.axisBottom(self.datebinning).tickFormat(self.dateformat).tickSizeOuter(0).tickPadding(4));
 
     self.yAxis = self.svg
       .append("g")
@@ -335,7 +334,6 @@ class TimeSeriesChart extends Chart {
       .call(
         D3.axisBottom(self.datetime).tickFormat(self.dateformat).tickSizeOuter(0).tickPadding(4)
       );
-    // .call(D3.axisBottom(self.datebinning).tickFormat(self.dateformat).tickSizeOuter(0).tickPadding(4));
 
     self.yAxis = self.svg
       .append("g")

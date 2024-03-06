@@ -185,7 +185,13 @@ class GroupedBarChart extends Chart {
       .data((group) => self.mapping.grouped[group])
       .enter()
       .append("rect")
-      .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.subgroup)}`)
+      .attr(
+        "id",
+        (d) =>
+          `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_${self.tokenize(
+            d.subgroup
+          )}_color`
+      )
       .attr("class", "bar interactable")
       .attr("data-group", (d) => d.group)
       .attr("x", (d) => self.subgroupAxis(d.subgroup))
@@ -197,6 +203,13 @@ class GroupedBarChart extends Chart {
       .attr("stroke-width", 2)
       .attr("stroke", "#FFFFFF")
       .clone(true)
+      .attr(
+        "id",
+        (d) =>
+          `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_${self.tokenize(
+            d.subgroup
+          )}`
+      )
       .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
       .on("mouseover", (e, d) => self.mouseOverBar(e, d))
       .on("mouseout", (e, d) => self.mouseOutBar(e, d));
@@ -401,7 +414,13 @@ class GroupedBarChart extends Chart {
       .data((group) => self.mapping.grouped[group])
       .enter()
       .append("rect")
-      .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.subgroup)}`)
+      .attr(
+        "id",
+        (d) =>
+          `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_${self.tokenize(
+            d.subgroup
+          )}_color`
+      )
       .attr("class", "bar interactable")
       .attr("data-group", (d) => d.group)
       .attr("x", (d) => self.subgroupAxis(d.subgroup))
@@ -413,6 +432,13 @@ class GroupedBarChart extends Chart {
       .attr("stroke-width", 2)
       .attr("stroke", "#FFFFFF")
       .clone(true)
+      .attr(
+        "id",
+        (d) =>
+          `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_${self.tokenize(
+            d.subgroup
+          )}`
+      )
       .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
       .on("mouseover", (e, d) => self.mouseOverBar(e, d))
       .on("mouseout", (e, d) => self.mouseOutBar(e, d));
@@ -556,7 +582,7 @@ class GroupedBarChart extends Chart {
     const self = this;
 
     // Highlight Bar & Update Tooltip
-    D3.select(e.target)
+    D3.selectAll(`[id^="${e.target.id}"]`)
       .transition()
       .ease(Easing[self.animations.opacity.easing])
       .delay(self.animations.opacity.delay)

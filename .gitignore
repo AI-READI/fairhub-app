@@ -6,7 +6,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-package-lock.json
 node_modules
 .DS_Store
 .yarn/*
@@ -32,7 +31,10 @@ coverage
 # API Platform specific files
 *.pyc
 
-# Auto generate typescript files
+# Auto generated package manager files
+package-lock.json
+
+# Auto generated typescript files
 # auto-imports.d.ts is needed for vue-tsc to work. Other solution is to flip build and tsc in package.json `"build": "run-s build-only type-check",`
 !auto-imports.d.ts
 components.d.ts

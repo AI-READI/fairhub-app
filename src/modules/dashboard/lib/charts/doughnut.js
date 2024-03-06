@@ -128,7 +128,6 @@ class DoughnutChart extends Chart {
       .attr("stroke", "#FFFFFF")
       .clone(true)
       .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
-      .attr("opacity", self.transitions.opacity.from)
       .on("mouseover", (e, d) => self.mouseOverArc(e, d))
       .on("mouseout", (e, d) => self.mouseOutArc(e, d));
 
@@ -315,7 +314,13 @@ class DoughnutChart extends Chart {
       .selectAll(".data-arc")
       .data(self.mapping.doughnut)
       .join("path")
-      .attr("id", (d) => `${self.setID}_data-arc_${self.tokenize(d.group)}`)
+      .attr(
+        "id",
+        (d) =>
+          `${self.setID}_data-arc_${self.tokenize(d.group)}_${self.tokenize(
+            d.filterby
+          )}_${self.tokenize(d.subgroup)}`
+      )
       .attr("class", "data-arc interactable")
       .attr("d", (d) => self.dataArc(d))
       .attr("fill", (d) => d.color)
@@ -324,7 +329,6 @@ class DoughnutChart extends Chart {
       .attr("stroke", "#FFFFFF")
       .clone(true)
       .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
-      .attr("opacity", self.transitions.opacity.from)
       .on("mouseover", (e, d) => self.mouseOverArc(e, d))
       .on("mouseout", (e, d) => self.mouseOutArc(e, d));
 
@@ -499,7 +503,7 @@ class DoughnutChart extends Chart {
   mouseOverArc(e, d) {
     let self = this;
 
-    D3.select(e.target)
+    D3.selectAll(`[id^="${e.target.id}"]`)
       .transition()
       .ease(Easing[self.animations.opacity.easing])
       .delay(self.animations.opacity.delay)

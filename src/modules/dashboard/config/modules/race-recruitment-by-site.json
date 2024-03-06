@@ -128,7 +128,8 @@
           "squares"
         ]
       },
-      "datefstr": "Week %W, %Y",
+      "linewidth": 3,
+      "datefstr": "Week %W, '%y",
       "ordering": "descending",
       "accessors": {
         "filterby": {
@@ -147,7 +148,7 @@
           "type": "String"
         },
         "x": {
-          "name": "Week of the Year",
+          "name": "Date",
           "key": "x",
           "type": "Number"
         },

@@ -190,7 +190,10 @@ class BarChart extends Chart {
           .data(self.mapping.data)
           .enter()
           .append("rect")
-          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.group)}`)
+          .attr(
+            "id",
+            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_color`
+          )
           .attr("class", "bar interactable")
           .attr("data-group", (d) => d.group)
           .attr("x", (d) => self.x(d.value))
@@ -202,8 +205,11 @@ class BarChart extends Chart {
           .attr("stroke-width", 2)
           .attr("stroke", "#FFFFFF")
           .clone(true)
+          .attr(
+            "id",
+            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}`
+          )
           .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
-          .attr("opacity", self.transitions.opacity.from)
           .on("mouseover", (e, d) => self.mouseOverBar(e, d))
           .on("mouseout", (e, d) => self.mouseOutBar(e, d))
       : self.bars
@@ -211,7 +217,10 @@ class BarChart extends Chart {
           .data(self.mapping.data)
           .enter()
           .append("rect")
-          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.group)}`)
+          .attr(
+            "id",
+            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_color`
+          )
           .attr("class", "bar interactable")
           .attr("x", (d) => self.x(d.group))
           .attr("y", (d) => self.y(self.dataframe.height - d.value))
@@ -222,8 +231,11 @@ class BarChart extends Chart {
           .attr("stroke-width", 2)
           .attr("stroke", "#FFFFFF")
           .clone(true)
+          .attr(
+            "id",
+            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}`
+          )
           .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
-          .attr("opacity", self.transitions.opacity.from)
           .on("mouseover", (e, d) => self.mouseOverBar(e, d))
           .on("mouseout", (e, d) => self.mouseOutBar(e, d));
 
@@ -430,7 +442,10 @@ class BarChart extends Chart {
           .enter()
           .append("rect")
           .merge(self.bar)
-          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.group)}`)
+          .attr(
+            "id",
+            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_color`
+          )
           .attr("class", "bar interactable")
           .attr("data-group", (d) => d.group)
           .attr("x", (d) => self.x(d.value))
@@ -442,8 +457,11 @@ class BarChart extends Chart {
           .attr("stroke-width", 2)
           .attr("stroke", "#FFFFFF")
           .clone(true)
+          .attr(
+            "id",
+            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}`
+          )
           .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
-          .attr("opacity", self.transitions.opacity.from)
           .on("mouseover", (e, d) => self.mouseOverBar(e, d))
           .on("mouseout", (e, d) => self.mouseOutBar(e, d))
       : self.bars
@@ -452,7 +470,10 @@ class BarChart extends Chart {
           .enter()
           .append("rect")
           .merge(self.bar)
-          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.group)}`)
+          .attr(
+            "id",
+            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_color`
+          )
           .attr("class", "bar interactable")
           .attr("x", (d) => self.x(d.group))
           .attr("y", (d) => self.y(d.value))
@@ -463,8 +484,11 @@ class BarChart extends Chart {
           .attr("stroke-width", "1")
           .attr("stroke", "transparent")
           .clone(true)
+          .attr(
+            "id",
+            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}`
+          )
           .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
-          .attr("opacity", self.transitions.opacity.from)
           .on("mouseover", (e, d) => self.mouseOverBar(e, d))
           .on("mouseout", (e, d) => self.mouseOutBar(e, d));
 
@@ -602,7 +626,7 @@ class BarChart extends Chart {
     const self = this;
 
     // Highlight Bar & Update Tooltip
-    D3.select(e.target)
+    D3.selectAll(`[id^="${e.target.id}"]`)
       .transition()
       .ease(Easing[self.animations.opacity.easing])
       .delay(self.animations.opacity.delay)
@@ -678,31 +702,6 @@ class BarChart extends Chart {
     const max = Math.ceil(Math.max(...maxs));
     const min = Math.floor(Math.min(...mins));
 
-    // // Generate Bars
-    // let bars = [];
-    // let from = [];
-    // for (const i in subgroups) {
-    //   const subgroup = subgroups[i];
-    //   let stack = [];
-    //   for (const j in groups) {
-    //     const group = groups[j];
-    //     for (const d in data) {
-    //       const datum = data[d];
-    //       if (datum.subgroup === subgroup && datum.group === group) {
-    //         if (typeof from[j] === "undefined") {
-    //           from[j] = 0;
-    //         }
-    //         datum.from = from[j];
-    //         datum.to = from[j] + datum.value;
-    //         from[j] = datum.to;
-    //         stack.push(datum);
-    //       }
-    //     }
-    //   }
-    //   stack.subgroup = subgroup;
-    //   stacks.push(stack);
-    // }
-
     // Generate Legend
     const legend = D3.zip(colors, filteroptions).map(([color, filterby]) => {
       return {
@@ -710,7 +709,6 @@ class BarChart extends Chart {
         filterby: filterby,
       };
     });
-    console.log(data);
 
     return {
       colors: colors,
