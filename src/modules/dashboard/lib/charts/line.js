@@ -3,7 +3,9 @@ Imports
 */
 
 import * as D3 from "d3";
+import textures from "textures";
 
+// Viz Library
 import Easing from "../animations/easing.js";
 import Chart from "../chart.js";
 import Filters from "../interfaces/filters.js";
@@ -53,9 +55,9 @@ class LineChart extends Chart {
 
     // Set Unique Filters, Groups, Color Scale
     self.filterby = unique.object.values(self.data, self.accessors.filterby.key);
-    self.colorscale = D3.scaleOrdinal()
-      .domain(unique.object.values(self.data, self.accessors.color.key))
-      .range(self.palette);
+    self.colors = unique.object.values(self.data, self.accessors.color.key);
+    self.colorscale = D3.scaleOrdinal().domain(self.colors).range(self.palette);
+    self.texturescale = D3.scaleOrdinal().domain(self.filterby).range(self.textures.patterns);
 
     // Filters
     if (self.filters !== undefined) {
@@ -69,6 +71,23 @@ class LineChart extends Chart {
     // Unique Colors
     self.colors = self.mapping.colors;
 
+    // Set Textures
+    self.texturesMap = Object.fromEntries(
+      new Map(
+        self.textures.patterns.map((texture) => [
+          texture,
+          textures
+            .paths()
+            .d(texture)
+            .fill(self.textures.fill)
+            .stroke(self.textures.stroke)
+            .size(self.textures.size)
+            // .thicker()
+            .lighter(),
+        ])
+      )
+    );
+
     /*
     Get Visualization and Interface Elements
     */
@@ -77,6 +96,10 @@ class LineChart extends Chart {
     self.svg = D3.select(`${self.getID}_visualization`)
       .classed("line-chart unrotated", true)
       .attr("id", `${self.setID}_visualization`);
+
+    for (const texture in self.texturesMap) {
+      self.svg.call(self.texturesMap[texture]);
+    }
 
     // Interface Parent
     self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
@@ -313,6 +336,10 @@ class LineChart extends Chart {
     self.svg = D3.select(`${self.getID}_visualization`)
       .classed("line-chart unrotated", true)
       .attr("id", `${self.setID}_visualization`);
+
+    for (const texture in self.texturesMap) {
+      self.svg.call(self.texturesMap[texture]);
+    }
 
     // Interface Parent
     self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);

@@ -1,14 +1,14 @@
 {
-  "name": "Phenotypes & Sex by Site",
-  "id": "phenotype-sex-by-site",
-  "title": "AI-READI Pilot Participant Phenotype and Sex by Site",
-  "subtitle": "Participant Counts Aggregated by Phenotype & Sex",
+  "name": "Survey Completion Status by Site",
+  "id": "survey-completion-status-by-site",
+  "title": "Participant Surveys: REDCap Instrument Completion Status by Data Generation Site",
+  "subtitle": "Survey Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "GroupedStackedBar",
+    "type": "StackedBar",
     "config": {
-      "id": "#phenotype-sex-by-site_grouped-stacked-bar",
+      "id": "#survey-completion-status-by-site_stacked-bar",
       "rotate": true,
       "width": 1080,
       "height": 420,
@@ -53,7 +53,7 @@
         }
       },
       "legend": {
-        "title": "Phenotypes",
+        "title": "Survey Status",
         "accessor": "subgroup",
         "width": 200,
         "height": 140,
@@ -106,6 +106,19 @@
         "#7F8C9F",
         "#727272"
       ],
+      "textures": {
+        "size": 11,
+        "fill": "transparent",
+        "stroke": "#FFFFFF",
+        "patterns": [
+          "woven",
+          "waves",
+          "nylon",
+          "crosses",
+          "caps",
+          "squares"
+        ]
+      },
       "sorting": {
         "by": "group",
         "on": "subgroup",
@@ -118,17 +131,17 @@
           "type": "String"
         },
         "group": {
-          "name": "Sex",
+          "name": "Survey",
           "key": "group",
           "type": "String"
         },
         "subgroup": {
-          "name": "Phenotype",
+          "name": "Status",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Phenotype",
+          "name": "Status",
           "key": "subgroup",
           "type": "String"
         },

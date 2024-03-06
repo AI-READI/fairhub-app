@@ -1,0 +1,156 @@
+{
+  "name": "Current Medication Count Frequencies by Site",
+  "id": "current-medications-by-site",
+  "title": "Current Medications Count Frequency by Data Generation Site",
+  "subtitle": "Distribution of Current Medications Count",
+  "width": 1280,
+  "height": 720,
+  "visualizations": [{
+    "type": "StackedBar",
+    "config": {
+      "id": "#current-medications-by-site_stacked-bar",
+      "rotate": false,
+      "width": 1080,
+      "height": 500,
+      "position": {
+        "top": 0,
+        "left": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "margin": {
+        "top": 20,
+        "left": 20,
+        "right": 20,
+        "bottom": 20
+      },
+      "padding": {
+        "top": 0,
+        "left": 0,
+        "right": 200,
+        "bottom": 0
+      },
+      "binning": {
+
+      },
+      "transitions": {
+        "opacity": {
+          "from": 0.8,
+          "to": 1.0
+        },
+        "translate": {
+          "from": "left",
+          "to": "left"
+        }
+      },
+      "animations": {
+        "opacity": {
+          "delay": 0,
+          "duration": 200,
+          "easing": "expOut"
+        },
+        "translate": {
+          "delay": 0,
+          "duration": 600,
+          "easing": "expOut"
+        }
+      },
+      "legend": {
+        "title": "Sex",
+        "accessor": "subgroup",
+        "width": 120,
+        "height": 140,
+        "itemsize": 20,
+        "fontsize": 12,
+        "vposition": "bottom",
+        "hposition": "left",
+        "padding": {
+          "top": 0,
+          "left": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      },
+      "tooltip": {
+        "title": "Data Point Details",
+        "width": 720,
+        "height": 140,
+        "itemsize": 20,
+        "fontsize": 12,
+        "vposition": "bottom",
+        "hposition": "left",
+        "padding": {
+          "top": 0,
+          "left": 320,
+          "right": 0,
+          "bottom": 0
+        }
+      },
+      "filters": {
+        "width": 720,
+        "height": 140,
+        "itemsize": 20,
+        "fontsize": 12,
+        "vposition": "bottom",
+        "hposition": "left",
+        "padding": {
+          "top": 0,
+          "left": 320,
+          "right": 0,
+          "bottom": 0
+        }
+      },
+      "palette": [
+        "#5DD462",
+        "#FE7E6D",
+        "#C79F38",
+        "#82C5E6",
+        "#999EEB",
+        "#7F8C9F",
+        "#727272"
+      ],
+      "textures": {
+        "size": 11,
+        "fill": "transparent",
+        "stroke": "#FFFFFF",
+        "patterns": [
+          "woven",
+          "waves",
+          "nylon",
+          "crosses",
+          "caps",
+          "squares"
+        ]
+      },
+      "ordering": "descending",
+      "accessors": {
+        "filterby": {
+          "name": "Site",
+          "key": "filterby",
+          "type": "String"
+        },
+        "group": {
+          "name": "Current Medications Count",
+          "key": "group",
+          "type": "Number"
+        },
+        "subgroup": {
+          "name": "Sex",
+          "key": "subgroup",
+          "type": "String"
+        },
+        "color": {
+          "name": "Sex",
+          "key": "subgroup",
+          "type": "String"
+        },
+        "value": {
+          "name": "Participants (N)",
+          "key": "value",
+          "type": "Number"
+        }
+      },
+      "data": []
+    }
+  }]
+}

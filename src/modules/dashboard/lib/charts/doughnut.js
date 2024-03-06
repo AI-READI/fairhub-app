@@ -3,7 +3,9 @@ Imports
 */
 
 import * as D3 from "d3";
+import textures from "textures";
 
+// Viz Library
 import Easing from "../animations/easing.js";
 import Chart from "../chart.js";
 import Filters from "../interfaces/filters.js";
@@ -52,6 +54,7 @@ class DoughnutChart extends Chart {
 
     // Set Color Scale
     self.colorscale = D3.scaleOrdinal().domain(self.groups).range(self.palette);
+    self.texturescale = D3.scaleOrdinal().domain(self.filterby).range(self.textures.patterns);
 
     // Filters
     if (self.filters !== undefined) {
@@ -65,6 +68,23 @@ class DoughnutChart extends Chart {
     // Set Colors
     self.colors = self.mapping.colors;
 
+    // Set Textures
+    self.texturesMap = Object.fromEntries(
+      new Map(
+        self.textures.patterns.map((texture) => [
+          texture,
+          textures
+            .paths()
+            .d(texture)
+            .fill(self.textures.fill)
+            .stroke(self.textures.stroke)
+            .size(self.textures.size)
+            .thicker()
+            .lighter(),
+        ])
+      )
+    );
+
     /*
     Get Visualization and Interface Elements
     */
@@ -73,6 +93,10 @@ class DoughnutChart extends Chart {
     self.svg = D3.select(`${self.getID}_visualization`)
       .classed("doughnut-chart", true)
       .attr("id", `${self.setID}_visualization`);
+
+    for (const texture in self.texturesMap) {
+      self.svg.call(self.texturesMap[texture]);
+    }
 
     // Interface Parent
     self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
@@ -95,11 +119,15 @@ class DoughnutChart extends Chart {
       .selectAll(".data-arc")
       .data(self.mapping.doughnut)
       .join("path")
-      .classed("data-arc interactable", true)
       .attr("id", (d) => `${self.setID}_data-arc_${self.tokenize(d.group)}`)
+      .attr("class", "data-arc interactable")
       .attr("d", (d) => self.dataArc(d))
       .attr("fill", (d) => d.color)
-      .attr("stroke-width", "2px")
+      .attr("opacity", self.transitions.opacity.from)
+      .attr("stroke-width", "1")
+      .attr("stroke", "transparent")
+      .clone(true)
+      .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
       .attr("opacity", self.transitions.opacity.from)
       .on("mouseover", (e, d) => self.mouseOverArc(e, d))
       .on("mouseout", (e, d) => self.mouseOutArc(e, d));
@@ -262,6 +290,10 @@ class DoughnutChart extends Chart {
       .classed("doughnut-chart", true)
       .attr("id", `${self.setID}_visualization`);
 
+    for (const texture in self.texturesMap) {
+      self.svg.call(self.texturesMap[texture]);
+    }
+
     // Interface Parent
     self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
 
@@ -283,11 +315,15 @@ class DoughnutChart extends Chart {
       .selectAll(".data-arc")
       .data(self.mapping.doughnut)
       .join("path")
-      .classed("data-arc interactable", true)
       .attr("id", (d) => `${self.setID}_data-arc_${self.tokenize(d.group)}`)
+      .attr("class", "data-arc interactable")
       .attr("d", (d) => self.dataArc(d))
       .attr("fill", (d) => d.color)
-      .attr("stroke-width", "2px")
+      .attr("opacity", self.transitions.opacity.from)
+      .attr("stroke-width", "1")
+      .attr("stroke", "transparent")
+      .clone(true)
+      .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
       .attr("opacity", self.transitions.opacity.from)
       .on("mouseover", (e, d) => self.mouseOverArc(e, d))
       .on("mouseout", (e, d) => self.mouseOutArc(e, d));

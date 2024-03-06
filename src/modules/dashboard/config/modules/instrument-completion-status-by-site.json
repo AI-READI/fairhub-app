@@ -1,14 +1,15 @@
 {
-  "name": "Race & Sex by Site",
-  "id": "race-sex-by-site",
-  "title": "AI-READI Pilot Participant Race and Sex by Site",
-  "subtitle": "Participant Counts Aggregated by Race & Sex",
+  "name": "Instrument Completion Status by Site",
+  "id": "instrument-completion-status-by-site",
+  "title": "All Surveys: REDCap Instrument Completion Status by Data Generation Site",
+  "subtitle": "Instrument Completion Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "GroupedStackedBar",
+    "type": "StackedBar",
     "config": {
-      "id": "#race-sex-by-site_grouped-stacked-bar",
+      "id": "#instrument-completion-status-by-site_stacked-bar",
+      "rotate": true,
       "width": 1080,
       "height": 420,
       "position": {
@@ -52,7 +53,7 @@
         }
       },
       "legend": {
-        "title": "Race",
+        "title": "Data Status",
         "accessor": "subgroup",
         "width": 200,
         "height": 140,
@@ -105,11 +106,23 @@
         "#7F8C9F",
         "#727272"
       ],
+      "textures": {
+        "size": 11,
+        "fill": "transparent",
+        "stroke": "#FFFFFF",
+        "patterns": [
+          "woven",
+          "waves",
+          "nylon",
+          "crosses",
+          "caps",
+          "squares"
+        ]
+      },
       "sorting": {
-        "on": "group",
-        "by": "subgroup",
-        "key": null,
-        "ordering": "descending"
+        "by": "group",
+        "on": "subgroup",
+        "ordering": "none"
       },
       "accessors": {
         "filterby": {
@@ -118,17 +131,17 @@
           "type": "String"
         },
         "group": {
-          "name": "Sex",
+          "name": "Survey",
           "key": "group",
           "type": "String"
         },
         "subgroup": {
-          "name": "Race",
+          "name": "Status",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Race",
+          "name": "Status",
           "key": "subgroup",
           "type": "String"
         },

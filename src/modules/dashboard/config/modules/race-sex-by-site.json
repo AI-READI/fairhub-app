@@ -1,17 +1,16 @@
 {
-  "name": "Current Medication Counts by Site",
-  "id": "current-medications-by-site",
-  "title": "AI-READI Pilot Count of Current Medications by Data Generation Site",
-  "subtitle": "Distribution of Current Medications Count",
+  "name": "Race & Sex by Site",
+  "id": "race-sex-by-site",
+  "title": "Participant Race and Sex by Site",
+  "subtitle": "Participant Counts Aggregated by Race & Sex",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "StackedBar",
+    "type": "GroupedStackedBar",
     "config": {
-      "id": "#current-medications-by-site_stacked-bar",
-      "rotate": false,
+      "id": "#race-sex-by-site_grouped-stacked-bar",
       "width": 1080,
-      "height": 500,
+      "height": 420,
       "position": {
         "top": 0,
         "left": 0,
@@ -19,19 +18,16 @@
         "bottom": 0
       },
       "margin": {
-        "top": 20,
-        "left": 20,
-        "right": 20,
+        "top": 0,
+        "left": 0,
+        "right": 0,
         "bottom": 20
       },
       "padding": {
-        "top": 0,
+        "top": 20,
         "left": 0,
-        "right": 200,
+        "right": 240,
         "bottom": 0
-      },
-      "binning": {
-
       },
       "transitions": {
         "opacity": {
@@ -56,12 +52,12 @@
         }
       },
       "legend": {
-        "title": "Sex",
+        "title": "Race",
         "accessor": "subgroup",
-        "width": 120,
+        "width": 200,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 12,
+        "fontsize": 10,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -76,7 +72,7 @@
         "width": 720,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 12,
+        "fontsize": 10,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -90,7 +86,7 @@
         "width": 720,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 12,
+        "fontsize": 10,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -109,7 +105,25 @@
         "#7F8C9F",
         "#727272"
       ],
-      "ordering": "descending",
+      "textures": {
+        "size": 11,
+        "fill": "transparent",
+        "stroke": "#FFFFFF",
+        "patterns": [
+          "woven",
+          "waves",
+          "nylon",
+          "crosses",
+          "caps",
+          "squares"
+        ]
+      },
+      "sorting": {
+        "on": "group",
+        "by": "subgroup",
+        "key": null,
+        "ordering": "descending"
+      },
       "accessors": {
         "filterby": {
           "name": "Site",
@@ -117,22 +131,22 @@
           "type": "String"
         },
         "group": {
-          "name": "Current Medications Count",
+          "name": "Sex",
           "key": "group",
-          "type": "Number"
+          "type": "String"
         },
         "subgroup": {
-          "name": "Sex",
+          "name": "Race",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Sex",
+          "name": "Race",
           "key": "subgroup",
           "type": "String"
         },
         "value": {
-          "name": "Participants (N)",
+          "name": "Count (n)",
           "key": "value",
           "type": "Number"
         }

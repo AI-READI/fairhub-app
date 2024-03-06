@@ -1,14 +1,14 @@
 {
-  "name": "Phenotypes & Site by Sex",
-  "id": "phenotype-site-by-sex",
-  "title": "AI-READI Pilot Participant Phenotype and Site by Sex",
-  "subtitle": "Participant Counts Aggregated by Phenotype & Site",
+  "name": "Phenotype Recruitment by Site",
+  "id": "phenotype-recruitment-by-site",
+  "title": "Participant Phenotype Recruitment Over Time by Site",
+  "subtitle": "Participant Phenotype Recruitment Counts by Data Generation Site",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "GroupedStackedBar",
+    "type": "Timeseries",
     "config": {
-      "id": "#phenotype-site-by-sex_grouped-stacked-bar",
+      "id": "#phenotype-recruitment-by-site_line",
       "rotate": true,
       "width": 1080,
       "height": 420,
@@ -32,12 +32,16 @@
       },
       "transitions": {
         "opacity": {
-          "from": 0.8,
+          "from": 0.6,
           "to": 1.0
         },
         "translate": {
           "from": "left",
           "to": "left"
+        },
+        "radius": {
+          "from": 4,
+          "to": 8
         }
       },
       "animations": {
@@ -50,15 +54,20 @@
           "delay": 0,
           "duration": 600,
           "easing": "expOut"
+        },
+        "radius": {
+          "delay": 0,
+          "duration": 600,
+          "easing": "expOut"
         }
       },
       "legend": {
-        "title": "Phenotypes",
-        "accessor": "subgroup",
-        "width": 200,
+        "title": "Phenotype",
+        "accessor": "group",
+        "width": 120,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 10,
+        "fontsize": 12,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -106,35 +115,45 @@
         "#7F8C9F",
         "#727272"
       ],
-      "sorting": {
-        "by": "group",
-        "on": "subgroup",
-        "ordering": "none"
+      "textures": {
+        "size": 11,
+        "fill": "transparent",
+        "stroke": "#FFFFFF",
+        "patterns": [
+          "woven",
+          "waves",
+          "nylon",
+          "crosses",
+          "caps",
+          "squares"
+        ]
       },
+      "datefstr": "Week %W, %Y",
+      "ordering": "descending",
       "accessors": {
         "filterby": {
-          "name": "Sex",
+          "name": "Site",
           "key": "filterby",
           "type": "String"
         },
         "group": {
-          "name": "Site",
-          "key": "group",
-          "type": "String"
-        },
-        "subgroup": {
           "name": "Phenotype",
-          "key": "subgroup",
+          "key": "group",
           "type": "String"
         },
         "color": {
           "name": "Phenotype",
-          "key": "subgroup",
+          "key": "group",
           "type": "String"
         },
-        "value": {
-          "name": "Count (n)",
-          "key": "value",
+        "x": {
+          "name": "Week of the Year",
+          "key": "x",
+          "type": "Number"
+        },
+        "y": {
+          "name": "Cumulative Count (n)",
+          "key": "y",
           "type": "Number"
         }
       },

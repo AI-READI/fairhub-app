@@ -16,6 +16,7 @@ class Chart {
   margin = undefined;
   padding = undefined;
   palette = undefined;
+  textures = undefined;
   data = undefined;
   mapping = undefined;
   dtypes = {
@@ -35,6 +36,7 @@ class Chart {
     self.margin = config.margin;
     self.padding = config.padding;
     self.palette = config.palette;
+    self.textures = config.textures;
     self.data = config.data;
     self.accessors = config.accessors;
 

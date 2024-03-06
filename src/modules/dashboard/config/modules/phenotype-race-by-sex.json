@@ -1,15 +1,14 @@
 {
-  "name": "Instrument Completion Status by Site",
-  "id": "instrument-completion-status-by-site",
-  "title": "AI-READI Pilot REDCap Instrument Completion Status by Data Generation Site",
-  "subtitle": "Instrument Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
+  "name": "Phenotypes & Race by Sex",
+  "id": "phenotype-race-by-sex",
+  "title": "Participant Phenotype and Sex by Race",
+  "subtitle": "Participant Counts Aggregated by Phenotype & Sex",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "StackedBar",
+    "type": "GroupedStackedBar",
     "config": {
-      "id": "#instrument-completion-status-by-site_stacked-bar",
-      "rotate": true,
+      "id": "#phenotype-race-by-sex_grouped-stacked-bar",
       "width": 1080,
       "height": 420,
       "position": {
@@ -53,7 +52,7 @@
         }
       },
       "legend": {
-        "title": "Instrument Status",
+        "title": "Race",
         "accessor": "subgroup",
         "width": 200,
         "height": 140,
@@ -106,6 +105,19 @@
         "#7F8C9F",
         "#727272"
       ],
+      "textures": {
+        "size": 11,
+        "fill": "transparent",
+        "stroke": "#FFFFFF",
+        "patterns": [
+          "woven",
+          "waves",
+          "nylon",
+          "crosses",
+          "caps",
+          "squares"
+        ]
+      },
       "sorting": {
         "by": "group",
         "on": "subgroup",
@@ -113,22 +125,22 @@
       },
       "accessors": {
         "filterby": {
-          "name": "Site",
+          "name": "Sex",
           "key": "filterby",
           "type": "String"
         },
         "group": {
-          "name": "Instrument",
+          "name": "Phenotype",
           "key": "group",
           "type": "String"
         },
         "subgroup": {
-          "name": "Status",
+          "name": "Race",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Status",
+          "name": "Race",
           "key": "subgroup",
           "type": "String"
         },

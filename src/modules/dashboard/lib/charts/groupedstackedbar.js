@@ -3,7 +3,9 @@ Imports
 */
 
 import * as D3 from "d3";
+import textures from "textures";
 
+// Viz Library
 import Easing from "../animations/easing.js";
 import Chart from "../chart.js";
 import Filters from "../interfaces/filters.js";
@@ -18,7 +20,7 @@ import unique from "../utilities/unique.js";
 Stacked Bar Chart Class
 */
 
-class GroupedBarChart extends Chart {
+class GroupedStackedBarChart extends Chart {
   // Initialization
   constructor(config) {
     // Configure Parent
@@ -40,18 +42,18 @@ class GroupedBarChart extends Chart {
           on: "subgroup",
           ordering: "descending",
         };
-    // self.sort.ordering = sorting.objects[self.sort.ordering];
 
     /*
     Setup
     */
 
-    // Set Unique Filters, Groups, and Subgroups
+    // Set Unique Filters, Groups, Subgroups, ColorScale
     self.filterby = unique.object.values(self.data, self.accessors.filterby.key);
     self.groups = unique.object.values(self.data, self.accessors.group.key);
     self.subgroups = unique.object.values(self.data, self.accessors.subgroup.key);
-    // Set Color Scale
-    self.colorscale = D3.scaleOrdinal().domain(self.subgroups).range(self.palette);
+    self.colors = unique.object.values(self.data, self.accessors.color.key);
+    self.colorscale = D3.scaleOrdinal().domain(self.colors).range(self.palette);
+    self.texturescale = D3.scaleOrdinal().domain(self.filterby).range(self.textures.patterns);
 
     // Set Filters
     if (self.filters !== undefined) {
@@ -65,9 +67,26 @@ class GroupedBarChart extends Chart {
     // Set Colors
     self.colors = self.mapping.colors;
 
+    // Set Textures
+    self.texturesMap = Object.fromEntries(
+      new Map(
+        self.textures.patterns.map((texture) => [
+          texture,
+          textures
+            .paths()
+            .d(texture)
+            .fill(self.textures.fill)
+            .stroke(self.textures.stroke)
+            .size(self.textures.size)
+            .thicker()
+            .lighter(),
+        ])
+      )
+    );
+
     // Ordering by Rotation
     if (self.rotate) {
-      self.mapping.groups = self.mapping.groups.reverse();
+      self.groups = self.groups.reverse();
     }
 
     /*
@@ -79,6 +98,10 @@ class GroupedBarChart extends Chart {
       .classed("grouped-bar-chart unrotated", true)
       .attr("id", `${self.setID}_visualization`);
 
+    for (const texture in self.texturesMap) {
+      self.svg.call(self.texturesMap[texture]);
+    }
+
     // Interface Parent
     self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
 
@@ -87,7 +110,7 @@ class GroupedBarChart extends Chart {
     */
 
     self.x = D3.scaleBand()
-      .domain(self.mapping.groups)
+      .domain(self.groups)
       .range([0, self.dataframe.width])
       .round(D3.enableRounding)
       .paddingInner(0.05);
@@ -121,7 +144,7 @@ class GroupedBarChart extends Chart {
       .classed("x-axis", true)
       .attr("id", `${self.setID}_x-axis`)
       .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.bottom})`)
-      .call(D3.axisBottom(self.x).tickSizeOuter(0).tickPadding(8));
+      .call(D3.axisBottom(self.x).tickSizeOuter(0));
 
     self.yAxis = self.svg
       .append("g")
@@ -132,11 +155,13 @@ class GroupedBarChart extends Chart {
 
     self.xLabels = self.xAxis
       .selectAll(".tick")
-      .data(self.mapping.groups)
+      .data(self.groups)
       .attr("transform", (d) => `translate(${self.x(d)}, 0)`)
       .selectAll("text")
       .classed("label interactable", true)
-      .attr("id", (d) => `${self.setID}_label_${self.tokenize(d)}`);
+      .attr("id", (d) => `${self.setID}_label_${self.tokenize(d)}`)
+      .on("mouseover", (e, d) => self.mouseOverGroupAxis(e, d))
+      .on("mouseout", (e, d) => self.mouseOutGroupAxis(e, d));
 
     self.yLabels = self.yAxis.selectAll("text").classed("label", true);
 
@@ -159,21 +184,22 @@ class GroupedBarChart extends Chart {
       .attr("transform", (group) => `translate(${self.x(group)}, 0)`)
       .attr("opacity", self.transitions.opacity.from)
       .selectAll("rect")
-      .data((group) => self.mapping.grouped[group])
+      .data((group) => self.mapping.groupedstacks[group])
       .enter()
       .append("rect")
-      .classed("bar interactable", true)
       .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.subgroup)}`)
+      .attr("class", "bar interactable")
       .attr("data-group", (d) => d.group)
       .attr("x", (d) => self.subgroupAxis(d.subgroup))
-      .attr("y", (d) => self.y(d.value))
+      .attr("y", (d) => self.y(d.to))
       .attr("width", self.subgroupAxis.bandwidth())
-      .attr("height", (d) => self.dataframe.height - self.y(d.value))
+      .attr("height", (d) => self.y(d.from) - self.y(d.to))
       .attr("fill", (d) => d.color)
-      .attr("stroke-width", "1")
-      .attr("stroke", "white")
       .attr("opacity", self.transitions.opacity.from)
-      .text((d) => d.group)
+      .attr("stroke-width", "1")
+      .attr("stroke", "transparent")
+      .clone(true)
+      .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
       .on("mouseover", (e, d) => self.mouseOverBar(e, d))
       .on("mouseout", (e, d) => self.mouseOutBar(e, d));
 
@@ -242,8 +268,7 @@ class GroupedBarChart extends Chart {
     self.Filters =
       self.filters !== undefined
         ? new Filters({
-            accessor: self.filters.accessor,
-            accessors: [self.accessors.filterby, self.accessors.group, self.accessors.value],
+            accessors: self.accessors,
             container: self.viewframe,
             default: "All",
             fontsize: self.filters.fontsize,
@@ -289,6 +314,10 @@ class GroupedBarChart extends Chart {
       .classed("grouped-bar-chart unrotated", true)
       .attr("id", `${self.setID}_visualization`);
 
+    for (const texture in self.texturesMap) {
+      self.svg.call(self.texturesMap[texture]);
+    }
+
     // Interface Parent
     self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
 
@@ -297,7 +326,7 @@ class GroupedBarChart extends Chart {
     */
 
     self.x = D3.scaleBand()
-      .domain(self.mapping.groups)
+      .domain(self.groups)
       .range([0, self.dataframe.width])
       .round(D3.enableRounding)
       .paddingInner(0.05);
@@ -305,11 +334,6 @@ class GroupedBarChart extends Chart {
     self.y = D3.scaleLinear()
       .domain([self.mapping.min, self.mapping.max])
       .range([self.dataframe.height, 0]);
-
-    self.subgroupAxis = D3.scaleBand()
-      .domain(self.subgroups)
-      .range([0, self.x.bandwidth()])
-      .padding([0.05]);
 
     self.axisGrid = self.svg
       .append("g")
@@ -342,13 +366,13 @@ class GroupedBarChart extends Chart {
 
     self.xLabels = self.xAxis
       .selectAll(".tick")
-      .data(self.mapping.groups)
+      .data(self.groups)
       .attr("transform", (d) => `translate(${self.x(d) + 1}, 0)`)
       .selectAll("text")
       .classed("label interactable", true)
       .attr("id", (d) => `${self.setID}_label_${self.tokenize(d)}`)
-      .on("mouseover", (e, d) => self.mouseOverSubgroupAxis(e, d))
-      .on("mouseout", (e, d) => self.mouseOutSubgroupAxis(e, d));
+      .on("mouseover", (e, d) => self.mouseOverGroupAxis(e, d))
+      .on("mouseout", (e, d) => self.mouseOutGroupAxis(e, d));
 
     self.yLabels = self.yAxis.selectAll("text").classed("label", true);
 
@@ -371,23 +395,25 @@ class GroupedBarChart extends Chart {
       .attr("transform", (group) => `translate(${self.x(group)}, 0)`)
       .attr("opacity", self.transitions.opacity.from)
       .selectAll("rect")
-      .data((group) => self.mapping.grouped[group])
+      .data((group) => self.mapping.groupedstacks[group])
       .enter()
       .append("rect")
-      .classed("bar interactable", true)
       .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.subgroup)}`)
+      .attr("class", "bar interactable")
       .attr("data-group", (d) => d.group)
       .attr("x", (d) => self.subgroupAxis(d.subgroup))
-      .attr("y", (d) => self.y(d.value))
+      .attr("y", (d) => self.y(d.to))
       .attr("width", self.subgroupAxis.bandwidth())
-      .attr("height", (d) => self.dataframe.height - self.y(d.value))
+      .attr("height", (d) => self.y(d.from) - self.y(d.to))
       .attr("fill", (d) => d.color)
-      .attr("stroke-width", "1")
-      .attr("stroke", "white")
       .attr("opacity", self.transitions.opacity.from)
-      .text((d) => d.group)
+      .attr("stroke-width", "1")
+      .attr("stroke", "transparent")
+      .clone(true)
+      .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
       .on("mouseover", (e, d) => self.mouseOverBar(e, d))
       .on("mouseout", (e, d) => self.mouseOutBar(e, d));
+
     /*
     Legend
     */
@@ -481,6 +507,7 @@ class GroupedBarChart extends Chart {
     // Clear Visualization Components
     self.xLabels.remove();
     self.yLabels.remove();
+    self.axisGrid.remove();
     self.xAxis.remove();
     self.yAxis.remove();
     self.bargroups.remove();
@@ -497,11 +524,11 @@ class GroupedBarChart extends Chart {
   Event Handlers
   */
 
-  mouseOverSubgroupAxis(e, subgroup) {
+  mouseOverGroupAxis(e, group) {
     const self = this;
 
     // Highlight Selected Axis Group
-    D3.select(`${self.setID}_bar_${self.tokenize(subgroup)}`)
+    D3.selectAll(`${self.getID}_bar-group_${self.tokenize(group)} .bar`)
       .transition()
       .ease(Easing[self.animations.opacity.easing])
       .duration(self.animations.opacity.duration)
@@ -510,11 +537,11 @@ class GroupedBarChart extends Chart {
     return self;
   }
 
-  mouseOutSubgroupAxis() {
+  mouseOutGroupAxis() {
     const self = this;
 
     // Return All Bars to Unhighlighted State
-    D3.selectAll(`${self.getID}_visualization .bars .bar`)
+    D3.selectAll(`${self.getID}_visualization .bar-group .bar`)
       .transition()
       .ease(Easing[self.animations.opacity.easing])
       .duration(self.animations.opacity.duration)
@@ -577,11 +604,7 @@ class GroupedBarChart extends Chart {
       };
     });
 
-    data = super.groupThenSumObjectsByKeys(
-      data,
-      ["filterby", "group", "subgroup", "color"],
-      ["value"]
-    );
+    data = super.groupByKeysThenSum(data, ["filterby", "group", "subgroup", "color"], ["value"]);
 
     // Get Unique Filters, Groups, Subgroups, Colors, and Grouped Data
     const filteroptions = [...unique.object.values(data, "filterby")];
@@ -590,20 +613,53 @@ class GroupedBarChart extends Chart {
     const colors = [...unique.object.values(data, "color")];
     const grouped = grouping.group.objects(data, "group");
 
+    // Generate Stacks
+    let groupedstacks = {};
+    for (const groupkey in grouped) {
+      const grouping = grouped[groupkey];
+      groupedstacks[groupkey] = [];
+      let from = [];
+      for (const f in filteroptions) {
+        const filter = filteroptions[f];
+        let stack = [];
+        for (const s in subgroups) {
+          const subgroup = subgroups[s];
+          for (const d in grouping) {
+            const datum = grouping[d];
+            if (datum.subgroup === subgroup && datum.filterby === filter) {
+              if (typeof from[s] === "undefined") {
+                from[s] = 0;
+              }
+              datum.from = from[s];
+              datum.to = from[s] + datum.value;
+              from[s] = datum.to;
+              stack.push(datum);
+            }
+          }
+        }
+        groupedstacks[groupkey].push(...stack);
+      }
+    }
+
     // Compute Group-wise Value Range (Max and Min)
     let maxs = [];
     let mins = [];
-    for (const g in grouped) {
-      const group = grouped[g];
+    for (const group in groupedstacks) {
+      const grouped = groupedstacks[group];
       let max = 0;
       let min = 0;
-      for (const d in group) {
-        const datum = group[d];
-        max = datum.value > max ? datum.value : max;
-        min = datum.value < min ? datum.value : min;
+      for (const s in subgroups) {
+        const subgroup = subgroups[s];
+        for (const j in grouped) {
+          const datum = grouped[j];
+          if (datum.group === group && datum.subgroup === subgroup) {
+            max = datum.to > max ? datum.to : max;
+            min = datum.from < min ? datum.from : min;
+          }
+        }
+        maxs.push(max);
+        mins.push(min);
       }
-      maxs.push(max);
-      mins.push(min);
     }
     const max = Math.ceil(Math.max(...maxs));
     const min = Math.floor(Math.min(...mins));
@@ -620,7 +676,7 @@ class GroupedBarChart extends Chart {
       colors: colors,
       data: data,
       filters: filteroptions.sort(sorting.strings.natural),
-      grouped: grouped,
+      groupedstacks: groupedstacks,
       groups: groups.sort(sorting.strings.natural),
       legend: legend,
       max: max,
@@ -634,4 +690,4 @@ class GroupedBarChart extends Chart {
 Exports
 */
 
-export default GroupedBarChart;
+export default GroupedStackedBarChart;
