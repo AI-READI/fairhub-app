@@ -125,6 +125,21 @@ class TimeSeriesChart extends Chart {
       .domain([self.mapping.min, self.mapping.max])
       .range([self.dataframe.height, 0]);
 
+    self.axisGrid = self.svg
+      .append("g")
+      .classed("grid-lines", true)
+      .selectAll("line")
+      .data(self.y.ticks())
+      .join("line")
+      .classed("grid-line", true)
+      .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`)
+      .attr("x1", self.dataframe.left)
+      .attr("x2", self.dataframe.right)
+      .attr("y1", (d) => self.y(d))
+      .attr("y2", (d) => self.y(d))
+      .attr("stroke", "#DCDCDC")
+      .attr("stroke-width", 1);
+
     self.xAxis = self.svg
       .append("g")
       .classed("x-axis", true)
@@ -182,7 +197,8 @@ class TimeSeriesChart extends Chart {
       .classed("point-series", true)
       .attr("id", (d) => `${self.setID}_point-series_${self.tokenize(d.group)}`)
       .attr("fill", (d) => d.color)
-      .attr("stroke", (d) => d.color)
+      .attr("stroke-width", 2)
+      .attr("stroke", "#FFFFFF")
       .selectAll(".point")
       .data((d) => d)
       .join("circle")
@@ -190,7 +206,7 @@ class TimeSeriesChart extends Chart {
       .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("cx", (d) => self.datetime(new Date(d.x)))
       .attr("cy", (d) => self.y(d.y))
-      .attr("r", self.transitions.radius.from);
+      .attr("r", self.transitions.r.from);
 
     /*
     Legend
@@ -201,7 +217,7 @@ class TimeSeriesChart extends Chart {
         ? new Legend({
             title: self.legend.title,
             accessor: self.legend.accessor,
-            animation: ["radius", self.animations["radius"]],
+            animation: ["r", self.animations["r"]],
             container: self.viewframe,
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
@@ -213,7 +229,7 @@ class TimeSeriesChart extends Chart {
             margin: self.margin,
             padding: self.legend.padding,
             setID: self.setID,
-            transition: ["radius", self.transitions["radius"]],
+            transition: ["r", self.transitions["r"]],
             uid: self.uid,
             vposition: self.legend.vposition,
             width: self.legend.width,
@@ -327,6 +343,21 @@ class TimeSeriesChart extends Chart {
       .domain([self.mapping.min, self.mapping.max])
       .range([self.dataframe.height, 0]);
 
+    self.axisGrid = self.svg
+      .append("g")
+      .classed("grid-lines", true)
+      .selectAll("line")
+      .data(self.y.ticks())
+      .join("line")
+      .classed("grid-line", true)
+      .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`)
+      .attr("x1", self.dataframe.left)
+      .attr("x2", self.dataframe.right)
+      .attr("y1", (d) => self.y(d))
+      .attr("y2", (d) => self.y(d))
+      .attr("stroke", "#DCDCDC")
+      .attr("stroke-width", 1);
+
     self.xAxis = self.svg
       .append("g")
       .classed("x-axis", true)
@@ -382,7 +413,8 @@ class TimeSeriesChart extends Chart {
       .classed("point-series", true)
       .attr("id", (d) => `${self.setID}_point-series_${self.tokenize(d.group)}`)
       .attr("fill", (d) => d.color)
-      .attr("stroke", (d) => d.color)
+      .attr("stroke-width", 2)
+      .attr("stroke", "#FFFFFF")
       .selectAll(".point")
       .data((d) => d)
       .join("circle")
@@ -390,7 +422,7 @@ class TimeSeriesChart extends Chart {
       .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("cx", (d) => self.datetime(new Date(d.x)))
       .attr("cy", (d) => self.y(d.y))
-      .attr("r", self.transitions.radius.from)
+      .attr("r", self.transitions.r.from)
       .on("mouseover", (e, d) => self.mouseOverPoint(e, d))
       .on("mouseout", (e, d) => self.mouseOutPoint(e, d));
 
@@ -403,7 +435,7 @@ class TimeSeriesChart extends Chart {
         ? new Legend({
             title: self.legend.title,
             accessor: self.legend.accessor,
-            animation: ["radius", self.animations["radius"]],
+            animation: ["r", self.animations["r"]],
             container: self.viewframe,
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
@@ -415,7 +447,7 @@ class TimeSeriesChart extends Chart {
             margin: self.margin,
             padding: self.legend.padding,
             setID: self.setID,
-            transition: ["radius", self.transitions["radius"]],
+            transition: ["r", self.transitions["r"]],
             uid: self.uid,
             vposition: self.legend.vposition,
             width: self.legend.width,
@@ -506,9 +538,9 @@ Event Handlers
 
     D3.select(e.target)
       .transition()
-      .ease(Easing[self.animations.radius.easing])
-      .duration(self.animations.radius.duration)
-      .attr("r", self.transitions.radius.to);
+      .ease(Easing[self.animations.r.easing])
+      .duration(self.animations.r.duration)
+      .attr("r", self.transitions.r.to);
 
     this.Tooltip.update(e, d);
 
@@ -520,9 +552,9 @@ Event Handlers
 
     D3.select(e.target)
       .transition()
-      .ease(Easing[self.animations.radius.easing])
-      .duration(self.animations.radius.duration)
-      .attr("r", self.transitions.radius.from);
+      .ease(Easing[self.animations.r.easing])
+      .duration(self.animations.r.duration)
+      .attr("r", self.transitions.r.from);
 
     this.Tooltip.refresh(e, d);
 

@@ -221,7 +221,7 @@ class LineChart extends Chart {
       .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("cx", (d) => self.x(d.x))
       .attr("cy", (d) => self.y(d.y))
-      .attr("r", self.transitions.radius.from)
+      .attr("r", self.transitions.r.from)
       .on("mouseover", (e, d) => self.mouseOverPoint(e, d))
       .on("mouseout", (e, d) => self.mouseOutPoint(e, d));
 
@@ -234,7 +234,7 @@ class LineChart extends Chart {
         ? new Legend({
             title: self.legend.title,
             accessor: self.legend.accessor,
-            animation: ["radius", self.animations["radius"]],
+            animation: ["r", self.animations["r"]],
             container: self.viewframe,
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
@@ -246,7 +246,7 @@ class LineChart extends Chart {
             margin: self.margin,
             padding: self.legend.padding,
             setID: self.setID,
-            transition: ["radius", self.transitions["radius"]],
+            transition: ["r", self.transitions["r"]],
             uid: self.uid,
             vposition: self.legend.vposition,
             width: self.legend.width,
@@ -462,7 +462,7 @@ class LineChart extends Chart {
       .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("cx", (d) => self.x(d.x))
       .attr("cy", (d) => self.y(d.y))
-      .attr("r", self.transitions.radius.from)
+      .attr("r", self.transitions.r.from)
       .on("mouseover", (e, d) => self.mouseOverPoint(e, d))
       .on("mouseout", (e, d) => self.mouseOutPoint(e, d));
 
@@ -475,7 +475,7 @@ class LineChart extends Chart {
         ? new Legend({
             title: self.legend.title,
             accessor: self.legend.accessor,
-            animation: ["radius", self.animations["radius"]],
+            animation: ["r", self.animations["r"]],
             container: self.viewframe,
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
@@ -487,7 +487,7 @@ class LineChart extends Chart {
             margin: self.margin,
             padding: self.legend.padding,
             setID: self.setID,
-            transition: ["radius", self.transitions["radius"]],
+            transition: ["r", self.transitions["r"]],
             uid: self.uid,
             vposition: self.legend.vposition,
             width: self.legend.width,
@@ -580,9 +580,9 @@ Event Handlers
 
     D3.select(e.target)
       .transition()
-      .ease(Easing[self.animations.radius.easing])
-      .duration(self.animations.radius.duration)
-      .attr("r", self.transitions.radius.to);
+      .ease(Easing[self.animations.r.easing])
+      .duration(self.animations.r.duration)
+      .attr("r", self.transitions.r.to);
 
     this.Tooltip.update(e, d);
 
@@ -594,9 +594,9 @@ Event Handlers
 
     D3.select(e.target)
       .transition()
-      .ease(Easing[self.animations.radius.easing])
-      .duration(self.animations.radius.duration)
-      .attr("r", self.transitions.radius.from);
+      .ease(Easing[self.animations.r.easing])
+      .duration(self.animations.r.duration)
+      .attr("r", self.transitions.r.from);
 
     this.Tooltip.refresh(e, d);
 

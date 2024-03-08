@@ -39,7 +39,7 @@
           "from": "left",
           "to": "left"
         },
-        "radius": {
+        "r": {
           "from": 5,
           "to": 8
         }
@@ -55,7 +55,7 @@
           "duration": 600,
           "easing": "expOut"
         },
-        "radius": {
+        "r": {
           "delay": 0,
           "duration": 600,
           "easing": "expOut"
