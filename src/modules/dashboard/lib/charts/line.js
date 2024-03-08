@@ -261,12 +261,7 @@ class LineChart extends Chart {
       self.tooltip !== undefined
         ? new Tooltip({
             title: self.tooltip.title,
-            accessors: [
-              self.accessors.filterby,
-              self.accessors.group,
-              self.accessors.x,
-              self.accessors.y,
-            ],
+            accessors: [self.accessors.group, self.accessors.x, self.accessors.y],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,
@@ -502,12 +497,7 @@ class LineChart extends Chart {
       self.tooltip !== undefined
         ? new Tooltip({
             title: self.tooltip.title,
-            accessors: [
-              self.accessors.filterby,
-              self.accessors.group,
-              self.accessors.x,
-              self.accessors.y,
-            ],
+            accessors: [self.accessors.group, self.accessors.x, self.accessors.y],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,

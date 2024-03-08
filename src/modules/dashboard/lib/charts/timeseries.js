@@ -244,12 +244,7 @@ class TimeSeriesChart extends Chart {
       self.tooltip !== undefined
         ? new Tooltip({
             title: self.tooltip.title,
-            accessors: [
-              self.accessors.filterby,
-              self.accessors.group,
-              self.accessors.x,
-              self.accessors.y,
-            ],
+            accessors: [self.accessors.group, self.accessors.x, self.accessors.y],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,
@@ -462,12 +457,7 @@ class TimeSeriesChart extends Chart {
       self.tooltip !== undefined
         ? new Tooltip({
             title: self.tooltip.title,
-            accessors: [
-              self.accessors.filterby,
-              self.accessors.group,
-              self.accessors.x,
-              self.accessors.y,
-            ],
+            accessors: [self.accessors.group, self.accessors.x, self.accessors.y],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,
@@ -518,6 +508,7 @@ class TimeSeriesChart extends Chart {
 
     self.xAxis.remove();
     self.yAxis.remove();
+    self.axisGrid.remove();
     self.lineseries.remove();
     self.pointseries.remove();
     self.lines.remove();
