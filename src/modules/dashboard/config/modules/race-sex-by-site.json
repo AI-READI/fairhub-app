@@ -1,8 +1,8 @@
 {
-  "name": "Race & Sex by Site",
+  "name": "Self-Reported Race & Self-Reported Sex by Site",
   "id": "race-sex-by-site",
-  "title": "Participant Race and Sex by Site",
-  "subtitle": "Participant Counts Aggregated by Race & Sex",
+  "title": "Participant Self-Reported Race and Self-Reported Sex by Site",
+  "subtitle": "Participant Counts Aggregated by Self-Reported Race & Self-Reported Sex",
   "width": 1280,
   "height": 720,
   "visualizations": [{
@@ -52,7 +52,7 @@
         }
       },
       "legend": {
-        "title": "Race",
+        "title": "Self-Reported Race",
         "accessor": "subgroup",
         "width": 200,
         "height": 140,
@@ -131,17 +131,17 @@
           "type": "String"
         },
         "group": {
-          "name": "Sex",
+          "name": "Self-Reported Sex",
           "key": "group",
           "type": "String"
         },
         "subgroup": {
-          "name": "Race",
+          "name": "Self-Reported Race",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Race",
+          "name": "Self-Reported Race",
           "key": "subgroup",
           "type": "String"
         },

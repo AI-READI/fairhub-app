@@ -56,7 +56,7 @@
         }
       },
       "legend": {
-        "title": "Sex",
+        "title": "Self-Reported Sex",
         "accessor": "subgroup",
         "width": 120,
         "height": 140,
@@ -135,12 +135,12 @@
           "type": "Number"
         },
         "subgroup": {
-          "name": "Sex",
+          "name": "Self-Reported Sex",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Sex",
+          "name": "Self-Reported Sex",
           "key": "subgroup",
           "type": "String"
         },

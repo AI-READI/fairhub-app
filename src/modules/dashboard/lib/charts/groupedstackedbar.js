@@ -191,7 +191,7 @@ class GroupedStackedBarChart extends Chart {
           )}_color`
       )
       .attr("class", "bar interactable")
-      .attr("data-group", (d) => d.group)
+      .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("x", (d) => self.subgroupAxis(d.subgroup))
       .attr("y", (d) => self.y(d.to))
       .attr("width", self.subgroupAxis.bandwidth())
@@ -227,7 +227,7 @@ class GroupedStackedBarChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.setID}_bar`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
@@ -411,7 +411,7 @@ class GroupedStackedBarChart extends Chart {
           )}_color`
       )
       .attr("class", "bar interactable")
-      .attr("data-group", (d) => d.group)
+      .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("x", (d) => self.subgroupAxis(d.subgroup))
       .attr("y", (d) => self.y(d.to))
       .attr("width", self.subgroupAxis.bandwidth())
@@ -446,7 +446,7 @@ class GroupedStackedBarChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.setID}_bar`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,

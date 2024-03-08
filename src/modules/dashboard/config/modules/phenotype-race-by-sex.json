@@ -1,8 +1,8 @@
 {
-  "name": "Phenotypes & Race by Sex",
+  "name": "Phenotypes & Self-Reported Race by Self-Reported Sex",
   "id": "phenotype-race-by-sex",
-  "title": "Participant Phenotype and Sex by Race",
-  "subtitle": "Participant Counts Aggregated by Phenotype & Sex",
+  "title": "Participant Phenotype and Self-Reported Sex by Self-Reported Race",
+  "subtitle": "Participant Counts Aggregated by Phenotype & Self-Reported Sex",
   "width": 1280,
   "height": 720,
   "visualizations": [{
@@ -52,7 +52,7 @@
         }
       },
       "legend": {
-        "title": "Race",
+        "title": "Self-Reported Race",
         "accessor": "subgroup",
         "width": 200,
         "height": 140,
@@ -125,7 +125,7 @@
       },
       "accessors": {
         "filterby": {
-          "name": "Sex",
+          "name": "Self-Reported Sex",
           "key": "filterby",
           "type": "String"
         },
@@ -135,12 +135,12 @@
           "type": "String"
         },
         "subgroup": {
-          "name": "Race",
+          "name": "Self-Reported Race",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Race",
+          "name": "Self-Reported Race",
           "key": "subgroup",
           "type": "String"
         },

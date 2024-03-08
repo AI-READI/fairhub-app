@@ -218,6 +218,7 @@ class LineChart extends Chart {
       .data(([, , , subseries]) => subseries)
       .join("circle")
       .classed("point interactable", true)
+      .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("cx", (d) => self.x(d.x))
       .attr("cy", (d) => self.y(d.y))
       .attr("r", self.transitions.radius.from)
@@ -238,7 +239,7 @@ class LineChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_line-series`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
@@ -458,6 +459,7 @@ class LineChart extends Chart {
       .data(([, , , subseries]) => subseries)
       .join("circle")
       .classed("point interactable", true)
+      .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("cx", (d) => self.x(d.x))
       .attr("cy", (d) => self.y(d.y))
       .attr("r", self.transitions.radius.from)
@@ -478,7 +480,7 @@ class LineChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_line-series`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,

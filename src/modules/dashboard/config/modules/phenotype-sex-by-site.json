@@ -1,8 +1,8 @@
 {
-  "name": "Phenotypes & Sex by Site",
+  "name": "Phenotypes & Self-Reported Sex by Site",
   "id": "phenotype-sex-by-site",
-  "title": "Participant Phenotype and Sex by Site",
-  "subtitle": "Participant Counts Aggregated by Phenotype & Sex",
+  "title": "Participant Phenotype and Self-Reported Sex by Site",
+  "subtitle": "Participant Counts Aggregated by Phenotype & Self-Reported Sex",
   "width": 1280,
   "height": 720,
   "visualizations": [{
@@ -131,7 +131,7 @@
           "type": "String"
         },
         "group": {
-          "name": "Sex",
+          "name": "Self-Reported Sex",
           "key": "group",
           "type": "String"
         },

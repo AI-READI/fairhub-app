@@ -195,7 +195,7 @@ class BarChart extends Chart {
             (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_color`
           )
           .attr("class", "bar interactable")
-          .attr("data-group", (d) => d.group)
+          .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
           .attr("x", (d) => self.x(d.value))
           .attr("y", (d) => self.y(d.group))
           .attr("width", (d) => self.dataframe.width - self.x(d.value))
@@ -222,6 +222,7 @@ class BarChart extends Chart {
             (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_color`
           )
           .attr("class", "bar interactable")
+          .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
           .attr("x", (d) => self.x(d.group))
           .attr("y", (d) => self.y(self.dataframe.height - d.value))
           .attr("width", self.x.bandwidth())
@@ -254,7 +255,7 @@ class BarChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_bars`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
@@ -447,7 +448,7 @@ class BarChart extends Chart {
             (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_color`
           )
           .attr("class", "bar interactable")
-          .attr("data-group", (d) => d.group)
+          .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
           .attr("x", (d) => self.x(d.value))
           .attr("y", (d) => self.y(d.group))
           .attr("width", (d) => self.dataframe.width - self.x(d.value))
@@ -475,6 +476,7 @@ class BarChart extends Chart {
             (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_color`
           )
           .attr("class", "bar interactable")
+          .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
           .attr("x", (d) => self.x(d.group))
           .attr("y", (d) => self.y(d.value))
           .attr("width", self.x.bandwidth())
@@ -506,7 +508,7 @@ class BarChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_bars`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,

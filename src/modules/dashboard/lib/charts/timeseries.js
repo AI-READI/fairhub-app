@@ -187,6 +187,7 @@ class TimeSeriesChart extends Chart {
       .data((d) => d)
       .join("circle")
       .classed("point interactable", true)
+      .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("cx", (d) => self.datetime(new Date(d.x)))
       .attr("cy", (d) => self.y(d.y))
       .attr("r", self.transitions.radius.from);
@@ -205,7 +206,7 @@ class TimeSeriesChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_line-series`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
@@ -386,6 +387,7 @@ class TimeSeriesChart extends Chart {
       .data((d) => d)
       .join("circle")
       .classed("point interactable", true)
+      .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("cx", (d) => self.datetime(new Date(d.x)))
       .attr("cy", (d) => self.y(d.y))
       .attr("r", self.transitions.radius.from)
@@ -406,7 +408,7 @@ class TimeSeriesChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_point-series`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,

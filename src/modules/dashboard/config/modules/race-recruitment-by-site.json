@@ -1,8 +1,8 @@
 {
-  "name": "Race Recruitment by Site",
+  "name": "Self-Reported Race Recruitment by Site",
   "id": "race-recruitment-by-site",
-  "title": "Participant Race Recruitment Over Time by Site",
-  "subtitle": "Participant Race Recruitment Counts by Data Generation Site",
+  "title": "Participant Self-Reported Race Recruitment Over Time by Site",
+  "subtitle": "Participant Self-Reported Race Recruitment Counts by Data Generation Site",
   "width": 1280,
   "height": 720,
   "visualizations": [{
@@ -62,7 +62,7 @@
         }
       },
       "legend": {
-        "title": "Race",
+        "title": "Self-Reported Race",
         "accessor": "group",
         "width": 120,
         "height": 140,
@@ -138,12 +138,12 @@
           "type": "String"
         },
         "group": {
-          "name": "Race",
+          "name": "Self-Reported Race",
           "key": "group",
           "type": "String"
         },
         "color": {
-          "name": "Race",
+          "name": "Self-Reported Race",
           "key": "group",
           "type": "String"
         },

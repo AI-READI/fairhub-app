@@ -196,6 +196,7 @@ class StackedBarChart extends Chart {
       .data(self.mapping.stacks)
       .join("g")
       .classed("bar-group data-element", true)
+      .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("id", (d) => `${self.setID}_bar-group_${self.tokenize(d.subgroup)}`)
       .attr("opacity", self.transitions.opacity.from);
 
@@ -213,7 +214,6 @@ class StackedBarChart extends Chart {
               )}_${self.tokenize(d.subgroup)}_color`
           )
           .attr("class", "bar interactable")
-          .attr("data-group", (d) => d.group)
           .attr("x", (d) => self.x(d.from))
           .attr("y", (d) => self.y(d.group))
           .attr("width", (d) => self.x(d.to) - self.x(d.from))
@@ -280,7 +280,7 @@ class StackedBarChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.setID}_bar-group`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
@@ -477,8 +477,8 @@ class StackedBarChart extends Chart {
       .data(self.mapping.stacks)
       .join("g")
       .classed("bar-group data-element", true)
+      .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("id", (d) => `${self.setID}_bar-group_${self.tokenize(d.subgroup)}`)
-      .attr("fill", (d) => d.color)
       .attr("opacity", self.transitions.opacity.from);
 
     self.bar = self.rotate
@@ -496,7 +496,6 @@ class StackedBarChart extends Chart {
               )}_${self.tokenize(d.subgroup)}_color`
           )
           .attr("class", "bar interactable")
-          .attr("data-group", (d) => d.subgroup)
           .attr("x", (d) => self.x(d.from))
           .attr("y", (d) => self.y(d.group))
           .attr("width", (d) => self.x(d.to) - self.x(d.from))
@@ -553,30 +552,30 @@ class StackedBarChart extends Chart {
     /*
     Legend
     */
-
-    self.Legend =
-      self.legend !== undefined
-        ? new Legend({
-            title: self.legend.title,
-            accessor: self.legend.accessor,
-            animation: ["opacity", self.animations["opacity"]],
-            container: self.viewframe,
-            data: self.mapping.legend,
-            fontsize: self.legend.fontsize,
-            getID: self.getID,
-            getPrefix: `${self.setID}_bar-group`,
-            height: self.legend.height,
-            hposition: self.legend.hposition,
-            itemsize: self.legend.itemsize,
-            margin: self.margin,
-            padding: self.legend.padding,
-            setID: self.setID,
-            transition: ["opacity", self.transitions["opacity"]],
-            uid: self.uid,
-            vposition: self.legend.vposition,
-            width: self.legend.width,
-          })
-        : null;
+    self.setID,
+      (self.Legend =
+        self.legend !== undefined
+          ? new Legend({
+              title: self.legend.title,
+              accessor: self.legend.accessor,
+              animation: ["opacity", self.animations["opacity"]],
+              container: self.viewframe,
+              data: self.mapping.legend,
+              fontsize: self.legend.fontsize,
+              getID: self.getID,
+              getPrefix: self.setID,
+              height: self.legend.height,
+              hposition: self.legend.hposition,
+              itemsize: self.legend.itemsize,
+              margin: self.margin,
+              padding: self.legend.padding,
+              setID: self.setID,
+              transition: ["opacity", self.transitions["opacity"]],
+              uid: self.uid,
+              vposition: self.legend.vposition,
+              width: self.legend.width,
+            })
+          : null);
 
     /*
     Tooltip

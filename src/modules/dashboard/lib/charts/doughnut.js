@@ -121,6 +121,7 @@ class DoughnutChart extends Chart {
       .join("path")
       .attr("id", (d) => `${self.setID}_data-arc_${self.tokenize(d.group)}`)
       .attr("class", "data-arc interactable")
+      .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("d", (d) => self.dataArc(d))
       .attr("fill", (d) => d.color)
       .attr("opacity", self.transitions.opacity.from)
@@ -198,7 +199,7 @@ class DoughnutChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_data-arc`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
@@ -322,6 +323,7 @@ class DoughnutChart extends Chart {
           )}_${self.tokenize(d.subgroup)}`
       )
       .attr("class", "data-arc interactable")
+      .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("d", (d) => self.dataArc(d))
       .attr("fill", (d) => d.color)
       .attr("opacity", self.transitions.opacity.from)
@@ -399,7 +401,7 @@ class DoughnutChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_data-arc`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
