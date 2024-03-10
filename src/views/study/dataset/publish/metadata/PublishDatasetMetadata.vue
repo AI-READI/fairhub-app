@@ -628,7 +628,10 @@ function handleNextButton() {
             </tbody>
           </n-table>
 
-          <div class="italic text-gray-500" v-if="!dataset_metadata.related_identifier.length">
+          <div
+            class="text-center italic text-gray-500"
+            v-if="!dataset_metadata.related_identifier.length"
+          >
             No Related Identifiers
           </div>
 
