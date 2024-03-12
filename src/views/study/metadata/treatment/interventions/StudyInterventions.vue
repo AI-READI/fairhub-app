@@ -44,15 +44,15 @@ onBeforeMount(async () => {
   });
 });
 
-const dynamicInputRule = {
-  trigger: ["blur", "input"],
-  validator: (rule: unknown, value: string) => {
-    if (!value || value === "") {
-      return new Error("Please enter a value for this field");
-    }
-    return true;
-  },
-};
+// const dynamicInputRule = {
+//   trigger: ["blur", "input"],
+//   validator: (rule: unknown, value: string) => {
+//     if (!value || value === "") {
+//       return new Error("Please enter a value for this field");
+//     }
+//     return true;
+//   },
+// };
 
 const addEntryToOtherNameList = () => {
   return "";
