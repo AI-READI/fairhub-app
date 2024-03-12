@@ -23,6 +23,16 @@ const moduleData = ref<StudyStatusModule>({
 });
 
 const rules: FormRules = {
+  completion_date: {
+    message: "Please enter a completion date",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+  completion_date_type: {
+    message: "Please select a completion date type",
+    required: true,
+    trigger: ["blur", "change"],
+  },
   overall_status: {
     message: "Please enter an overall status",
     required: true,
@@ -190,15 +200,7 @@ const saveMetadata = (e: MouseEvent) => {
           />
         </n-form-item>
 
-        <n-form-item
-          label="Completion Date"
-          path="completion_date"
-          :rule="{
-            message: 'Please enter a completion date',
-            required: moduleData.completion_date_type ? true : false,
-            trigger: ['blur', 'input'],
-          }"
-        >
+        <n-form-item label="Completion Date" path="completion_date">
           <n-date-picker
             v-model:formatted-value="moduleData.completion_date"
             type="date"
@@ -207,15 +209,7 @@ const saveMetadata = (e: MouseEvent) => {
           />
         </n-form-item>
 
-        <n-form-item
-          label="Completion Date Type"
-          path="completion_date_type"
-          :rule="{
-            message: 'Please select a completion date type',
-            required: moduleData.completion_date ? true : false,
-            trigger: ['blur', 'input'],
-          }"
-        >
+        <n-form-item label="Completion Date Type" path="completion_date_type">
           <n-select
             v-model:value="moduleData.completion_date_type"
             placeholder="Anticipated"

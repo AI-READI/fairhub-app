@@ -222,6 +222,23 @@ const saveMetadata = (e: MouseEvent) => {
           </n-form-item>
 
           <n-form-item
+            label="Identifier Type"
+            :path="`funders[${index}].identifier_type`"
+            :rule="{
+              message: 'Please select an identifier type',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-select
+              v-model:value="item.identifier_type"
+              placeholder="ROR"
+              clearable
+              :options="FORM_JSON.datasetFunderIdentifierTypeOptions"
+            />
+          </n-form-item>
+
+          <n-form-item
             label="Identifier Scheme URI"
             :path="`funders[${index}].identifier_scheme_uri`"
           >
@@ -229,15 +246,6 @@ const saveMetadata = (e: MouseEvent) => {
               v-model:value="item.identifier_scheme_uri"
               placeholder="https://ror.org"
               clearable
-            />
-          </n-form-item>
-
-          <n-form-item label="Identifier Type" :path="`funders[${index}].identifier_type`">
-            <n-select
-              v-model:value="item.identifier_type"
-              placeholder="ROR"
-              clearable
-              :options="FORM_JSON.datasetFunderIdentifierTypeOptions"
             />
           </n-form-item>
 

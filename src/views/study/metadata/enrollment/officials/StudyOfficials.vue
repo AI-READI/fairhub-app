@@ -71,8 +71,16 @@ const removeOverallOfficial = async (id: string) => {
 const addOverallOfficial = () => {
   moduleData.overall_official_list.push({
     id: nanoid(),
-    name: "",
     affiliation: "",
+    affiliation_identifier: "",
+    affiliation_identifier_scheme: "",
+    affiliation_identifier_scheme_uri: "",
+    degree: "",
+    first_name: "",
+    identifier: "",
+    identifier_scheme: "",
+    identifier_scheme_uri: "",
+    last_name: "",
     origin: "local",
     role: null,
   });
@@ -84,8 +92,16 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data: any = moduleData.overall_official_list.map((item) => {
         const entry = {
-          name: item.name,
           affiliation: item.affiliation,
+          affiliation_identifier: item.affiliation_identifier || "",
+          affiliation_identifier_scheme: item.affiliation_identifier_scheme || "",
+          affiliation_identifier_scheme_uri: item.affiliation_identifier_scheme_uri || "",
+          degree: item.degree || "",
+          first_name: item.first_name || "",
+          identifier: item.identifier || "",
+          identifier_scheme: item.identifier_scheme || "",
+          identifier_scheme_uri: item.identifier_scheme_uri || "",
+          last_name: item.last_name || "",
           role: item.role,
         };
 
@@ -159,7 +175,11 @@ const saveMetadata = (e: MouseEvent) => {
           v-for="(item, index) in moduleData.overall_official_list"
           :key="item.id"
           class="mb-5 shadow-md"
-          :title="item.name || `Overall Official ${index + 1}`"
+          :title="
+            item.first_name
+              ? `${item.first_name} ${item.last_name}`
+              : `Overall Official ${index + 1}`
+          "
           bordered
         >
           <template #header-extra>
@@ -179,15 +199,31 @@ const saveMetadata = (e: MouseEvent) => {
           </template>
 
           <n-form-item
-            label="Name"
-            :path="`overall_official_list[${index}].name`"
+            label="Given Name"
+            :path="`overall_official_list[${index}].first_name`"
             :rule="{
               message: 'Please enter a name',
               required: true,
-              trigger: ['blur', 'input'],
+              trigger: ['blur', 'change'],
             }"
           >
-            <n-input v-model:value="item.name" placeholder="Erwin Smith" clearable />
+            <n-input v-model:value="item.first_name" placeholder="Erwin" clearable />
+          </n-form-item>
+
+          <n-form-item
+            label="Family Name"
+            :path="`overall_official_list[${index}].last_name`"
+            :rule="{
+              message: 'Please enter a name',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-input v-model:value="item.last_name" placeholder="Smith" clearable />
+          </n-form-item>
+
+          <n-form-item label="Degree" :path="`overall_official_list[${index}].degree`">
+            <n-input v-model:value="item.degree" placeholder="PhD" clearable />
           </n-form-item>
 
           <n-form-item
@@ -196,11 +232,59 @@ const saveMetadata = (e: MouseEvent) => {
             :rule="{
               message: 'Please enter an affiliation',
               required: true,
-              trigger: ['blur', 'input'],
+              trigger: ['blur', 'change'],
             }"
           >
             <n-input v-model:value="item.affiliation" placeholder="Scout Regiment" clearable />
           </n-form-item>
+
+          <div class="flex items-center space-x-4">
+            <n-form-item
+              label="Affiliation Identifier"
+              :path="`overall_official_list[${index}].affiliation_identifier`"
+              :rule="{
+                message: 'Please enter an affiliation identifier',
+                required: item.affiliation_identifier_scheme,
+                trigger: ['blur', 'change'],
+              }"
+              class="w-full"
+            >
+              <n-input
+                v-model:value="item.affiliation_identifier"
+                placeholder="0156zyn36"
+                clearable
+              />
+            </n-form-item>
+
+            <n-form-item
+              label="Affiliation Identifier Scheme"
+              :path="`overall_official_list[${index}].affiliation_identifier_scheme`"
+              :rule="{
+                message: 'Please enter an affiliation identifier scheme',
+                required: item.affiliation_identifier,
+                trigger: ['blur', 'change'],
+              }"
+              class="w-full"
+            >
+              <n-input
+                v-model:value="item.affiliation_identifier_scheme"
+                placeholder="ROR"
+                clearable
+              />
+            </n-form-item>
+
+            <n-form-item
+              label="Affiliation Identifier Scheme URI"
+              :path="`overall_official_list[${index}].affiliation_identifier_scheme_uri`"
+              class="w-full"
+            >
+              <n-input
+                v-model:value="item.affiliation_identifier_scheme_uri"
+                placeholder="https://ror.org"
+                clearable
+              />
+            </n-form-item>
+          </div>
 
           <n-form-item
             label="Role"
@@ -218,6 +302,50 @@ const saveMetadata = (e: MouseEvent) => {
               :options="FORM_JSON.studyMetadataContactsOverallOfficialRole"
             />
           </n-form-item>
+
+          <div class="flex items-center space-x-4">
+            <n-form-item
+              label="Name Identifier"
+              :path="`overall_official_list[${index}].identifier`"
+              :rule="{
+                message: 'Please enter an identifier',
+                required: item.identifier_scheme,
+                trigger: ['blur', 'change'],
+              }"
+              class="w-full"
+            >
+              <n-input
+                v-model:value="item.identifier"
+                placeholder="0000-0003-2829-8032"
+                clearable
+              />
+            </n-form-item>
+
+            <n-form-item
+              label="Name Identifier Scheme"
+              :path="`overall_official_list[${index}].identifier_scheme`"
+              :rule="{
+                message: 'Please enter an identifier scheme',
+                required: item.identifier,
+                trigger: ['blur', 'change'],
+              }"
+              class="w-full"
+            >
+              <n-input v-model:value="item.identifier_scheme" placeholder="ORCID" clearable />
+            </n-form-item>
+
+            <n-form-item
+              label="Name Identifier Scheme URI"
+              :path="`overall_official_list[${index}].identifier_scheme_uri`"
+              class="w-full"
+            >
+              <n-input
+                v-model:value="item.identifier_scheme_uri"
+                placeholder="https://orcid.org"
+                clearable
+              />
+            </n-form-item>
+          </div>
         </CollapsibleCard>
 
         <n-button class="my-10 w-full" dashed type="success" @click="addOverallOfficial">

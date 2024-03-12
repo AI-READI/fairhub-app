@@ -28,6 +28,7 @@ onBeforeMount(() => {
   studyStore.getStudy(studyId);
 
   study.title = studyStore.study.title;
+  study.acronym = studyStore.study.acronym;
   study.image = studyStore.study.image;
 });
 
@@ -35,6 +36,7 @@ const formRef = ref<FormInst | null>(null);
 
 const study = reactive({
   title: "",
+  acronym: "",
   image: "",
 });
 
@@ -58,7 +60,8 @@ const saveChanges = (e: MouseEvent) => {
     if (!errors) {
       const data = {
         title: study.title,
-        image: study.image,
+        acronym: study.acronym,
+        image: study.image || generateImageURL(),
       };
 
       const response = await fetch(`${baseURL}/study/${routeParams.studyId}`, {
@@ -100,10 +103,14 @@ const saveChanges = (e: MouseEvent) => {
       class="pr-4"
     >
       <n-form-item label="Title" path="title">
-        <n-input v-model:value="study.title" placeholder="Add a study title" />
+        <n-input v-model:value="study.title" placeholder="My study on the human body" clearable />
       </n-form-item>
 
-      <n-form-item label="Image" path="Image">
+      <n-form-item label="Acronym" path="acronym">
+        <n-input v-model:value="study.acronym" placeholder="AI-READI" clearable />
+      </n-form-item>
+
+      <!-- <n-form-item label="Image" path="Image">
         <n-input v-model:value="study.image" placeholder="Add an image" />
 
         <n-button @click="generateImageURL" class="ml-4">
@@ -117,7 +124,7 @@ const saveChanges = (e: MouseEvent) => {
         :src="study.image || 'https://www.svgrepo.com/show/213127/image-warning.svg'"
         width="300"
         class="rounded-xl bg-slate-50 p-3 shadow-md"
-      />
+      /> -->
 
       <n-divider />
 

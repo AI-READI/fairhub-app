@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
 
-import FORM_JSON from "@/assets/data/form.json";
-import type { DatasetRecordKeys } from "@/types/Dataset";
+import type { DatasetManagingOrganization } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
@@ -16,16 +15,16 @@ const routeParams = {
 const studyId = routeParams.studyId;
 const datasetId = routeParams.datasetId;
 
-const moduleData = ref<DatasetRecordKeys>({
-  details: "",
-  type: null,
+const moduleData = ref<DatasetManagingOrganization>({
+  managing_organization_name: "",
+  managing_organization_ror_id: "",
 });
 
 const formRef = ref<FormInst | null>(null);
 
 const rules: FormRules = {
-  type: {
-    message: "Please select a type",
+  managing_organization_name: {
+    message: "Please enter a name.",
     required: true,
     trigger: ["blur", "input"],
   },
@@ -36,9 +35,8 @@ const responseLoading = ref(false);
 
 onBeforeMount(async () => {
   responseLoading.value = true;
-
   const response = await fetch(
-    `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/record-keys`,
+    `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/managing-organization`,
     {
       method: "GET",
     }
@@ -62,12 +60,12 @@ const saveMetadata = (e: MouseEvent) => {
       loading.value = true;
 
       const data = {
-        details: moduleData.value.details || "",
-        type: moduleData.value.type,
+        managing_organization_name: moduleData.value.managing_organization_name,
+        managing_organization_ror_id: moduleData.value.managing_organization_ror_id || "",
       };
 
       const response = await fetch(
-        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/record-keys`,
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/managing-organization`,
         {
           body: JSON.stringify(data),
           method: "PUT",
@@ -85,7 +83,7 @@ const saveMetadata = (e: MouseEvent) => {
         throw new Error("Network response was not ok");
       }
 
-      push.success("Status saved successfully");
+      push.success("Managing organization saved successfully");
 
       console.log("success");
     } else {
@@ -99,7 +97,7 @@ const saveMetadata = (e: MouseEvent) => {
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
-      title="Record Keys"
+      title="Managing Organization"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
       linkName="dataset:overview"
       :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
@@ -119,20 +117,25 @@ const saveMetadata = (e: MouseEvent) => {
         class="pr-4"
         v-else
       >
-        <n-form-item label="Type" path="type">
-          <n-select
-            v-model:value="moduleData.type"
-            placeholder="Not Known"
+        <h3>Managing Organization</h3>
+
+        <p class="pb-8 pt-2">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+          voluptatem, quibusdam, quos voluptas quae quas voluptatum
+        </p>
+
+        <n-form-item label="Name" path="managing_organization_name">
+          <n-input
+            v-model:value="moduleData.managing_organization_name"
+            placeholder="World Data Center for Climate (WDCC)"
             clearable
-            :options="FORM_JSON.datasetRecordKeysTypeOptions"
           />
         </n-form-item>
 
-        <n-form-item label="Details" path="details">
+        <n-form-item label="ROR ID" path="managing_organization_ror_id">
           <n-input
-            v-model:value="moduleData.details"
-            type="textarea"
-            placeholder="Provide further details of the record key types, perhaps referring to dataset preparation, if available."
+            v-model:value="moduleData.managing_organization_ror_id"
+            placeholder="World Data Center for Climate (WDCC)"
             clearable
           />
         </n-form-item>

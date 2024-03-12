@@ -68,15 +68,9 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         label: "Dates",
       },
       {
-        // also contains publication year
         icon: renderIcon("octicon:organization-16"),
-        key: "dataset:metadata:publisher",
-        label: "Publisher",
-      },
-      {
-        icon: renderIcon("solar:key-bold-duotone"),
-        key: "dataset:metadata:record-keys",
-        label: "Record Keys",
+        key: "dataset:metadata:managing-organization",
+        label: "Managing Organization",
       },
       {
         icon: renderIcon("tabler:id-badge-off"),
@@ -110,8 +104,8 @@ const dynamicUpperMenuOptions: MenuOption[] = [
       },
       {
         icon: renderIcon("fluent-mdl2:relationship"),
-        key: "dataset:metadata:related-items",
-        label: "Related Items",
+        key: "dataset:metadata:related-identifiers",
+        label: "Related Identifiers",
       },
       {
         // language, managing organization, size goes in here

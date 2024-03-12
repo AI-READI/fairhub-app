@@ -18,6 +18,7 @@ const datasetId = routeParams.datasetId;
 
 const moduleData = ref<DatasetOther>({
   acknowledgement: "",
+  format: [],
   language: null,
   resource_type: "",
   size: [],
@@ -28,12 +29,12 @@ const formRef = ref<FormInst | null>(null);
 
 const rules: FormRules = {
   language: {
-    message: "Please enter a publisher.",
+    message: "Please enter a language.",
     required: true,
     trigger: ["blur", "input"],
   },
   resource_type: {
-    message: "Please enter a publisher.",
+    message: "Please enter a resource type.",
     required: true,
     trigger: ["blur", "input"],
   },
@@ -68,6 +69,10 @@ const addEntryToSize = () => {
   return "";
 };
 
+const addEntryToFormat = () => {
+  return "";
+};
+
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
@@ -80,8 +85,15 @@ const saveMetadata = (e: MouseEvent) => {
       // remove sizes with duplicate names
       const uniqueSizes = [...new Set(sizes)];
 
+      // remove empty formats
+      const formats = moduleData.value.format.filter((format) => format.trim() !== "");
+
+      // remove formats with duplicate names
+      const uniqueFormats = [...new Set(formats)];
+
       const data = {
         acknowledgement: moduleData.value.acknowledgement || "",
+        format: uniqueFormats,
         language: moduleData.value.language || "",
         resource_type: moduleData.value.resource_type,
         size: uniqueSizes,
@@ -107,7 +119,7 @@ const saveMetadata = (e: MouseEvent) => {
         throw new Error("Network response was not ok");
       }
 
-      push.success("Publisher saved successfully");
+      push.success("Metadata saved successfully");
 
       console.log("success");
     } else {
@@ -168,7 +180,7 @@ const saveMetadata = (e: MouseEvent) => {
 
         <p class="pb-8 pt-2">The primary language used in the dataset.</p>
 
-        <n-form-item label="Publisher" path="publisher">
+        <n-form-item label="Language" path="Language">
           <n-select
             v-model:value="moduleData.language"
             placeholder="Not Known"
@@ -202,6 +214,35 @@ const saveMetadata = (e: MouseEvent) => {
             <n-input
               v-model:value="moduleData.size[idx]"
               placeholder="45 minutes"
+              @keydown.enter.prevent
+            />
+          </n-form-item>
+        </n-dynamic-input>
+
+        <n-divider />
+
+        <h3>Format</h3>
+
+        <p class="pb-8 pt-2">
+          Technical format of the data files in the dataset. Use file extension or MIME type where
+          possible, e.g., PDF, XML, MPG or application/pdf, text/xml, video/mpeg.
+        </p>
+
+        <n-dynamic-input
+          v-model:value="moduleData.format"
+          #="{ index: idx, value }"
+          :on-create="addEntryToFormat"
+        >
+          <n-form-item
+            ignore-path-change
+            :show-feedback="false"
+            :show-label="false"
+            :path="`format[${idx}]`"
+            class="w-full"
+          >
+            <n-input
+              v-model:value="moduleData.format[idx]"
+              placeholder="CSV"
               @keydown.enter.prevent
             />
           </n-form-item>

@@ -96,6 +96,7 @@ erDiagram
         string uri
         string identifier
         string identifier_scheme
+        string identifier_scheme_uri
         string license_text
         timestamp created_at
     }
@@ -111,14 +112,6 @@ erDiagram
         string award_uri
         string award_title
         timestamp created_at
-    }
-
-    DATASET_PUBLISHER {
-        string dataset_id PK,FK "DATASET.id"
-        string publisher
-        string identifier
-        string identifier_scheme
-        string scheme_uri
     }
 
      DATASET_OTHER {
@@ -171,7 +164,6 @@ erDiagram
     DATASET ||--o{ DATASET_RIGHTS : "has rights"
     DATASET ||--o{ DATASET_FUNDER : "has funder"
     DATASET ||--o{ DATASET_RELATED_IDENTIFIER : "has related identifiers"
-    DATASET ||--|| DATASET_PUBLISHER : "has publisher"
     DATASET ||--|| DATASET_OTHER : "has other details"
 
     DATASET_HEALTHSHEET ||--|| DATASET : "has healthsheet"

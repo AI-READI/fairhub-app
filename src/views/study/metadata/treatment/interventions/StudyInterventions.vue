@@ -54,10 +54,6 @@ const dynamicInputRule = {
   },
 };
 
-const addEntryToArmGroupLabelList = () => {
-  return "";
-};
-
 const addEntryToOtherNameList = () => {
   return "";
 };
@@ -88,7 +84,6 @@ const addIntervention = () => {
   moduleData.interventions.push({
     id: nanoid(),
     name: "",
-    arm_group_label_list: [],
     description: "",
     origin: "local",
     other_name_list: [],
@@ -103,7 +98,6 @@ const saveMetadata = (e: MouseEvent) => {
       const data: any = moduleData.interventions.map((item) => {
         const entry = {
           name: item.name,
-          arm_group_label_list: item.arm_group_label_list,
           description: item.description || "",
           other_name_list: item.other_name_list || [],
           type: item.type,
@@ -226,7 +220,15 @@ const saveMetadata = (e: MouseEvent) => {
             <n-input v-model:value="item.name" placeholder="Lorem Ipsum" clearable />
           </n-form-item>
 
-          <n-form-item label="Description" :path="`intervention_list[${index}].description`">
+          <n-form-item
+            label="Description"
+            :path="`interventions[${index}].description`"
+            :rule="{
+              message: 'Please enter an intervention description',
+              required: true,
+              trigger: ['blur', 'input'],
+            }"
+          >
             <n-input
               v-model:value="item.description"
               placeholder="Lorem Ipsum"
@@ -234,40 +236,6 @@ const saveMetadata = (e: MouseEvent) => {
               type="textarea"
               :rows="3"
             />
-          </n-form-item>
-
-          <n-form-item
-            label="Arm Group Labels"
-            :path="`interventions[${index}].arm_group_label_list`"
-            ignore-path-change
-            :rule="{
-              message: 'Please add at least one arm group label',
-              required: true,
-              type: 'array',
-              trigger: ['blur', 'input'],
-            }"
-          >
-            <!-- outer form item is only used to diplay the label and the required mark -->
-
-            <n-dynamic-input
-              v-model:value="item.arm_group_label_list"
-              #="{ index: idx, value }"
-              :on-create="addEntryToArmGroupLabelList"
-            >
-              <n-form-item
-                ignore-path-change
-                :show-label="false"
-                :path="`interventions[${index}].arm_group_label_list[${idx}]`"
-                :rule="dynamicInputRule"
-                class="w-full"
-              >
-                <n-input
-                  v-model:value="item.arm_group_label_list[idx]"
-                  placeholder="Name"
-                  @keydown.enter.prevent
-                />
-              </n-form-item>
-            </n-dynamic-input>
           </n-form-item>
 
           <n-form-item label="Other Names">

@@ -19,7 +19,6 @@ const moduleData = reactive<StudyEligiblityModule>({
     exclusion_criteria: [],
     inclusion_criteria: [],
   },
-  gender: null,
   gender_based: null,
   gender_description: "",
   healthy_volunteers: null,
@@ -32,16 +31,12 @@ const moduleData = reactive<StudyEligiblityModule>({
     unit: null,
   },
   sampling_method: null,
+  sex: null,
   study_population: "",
   study_type: "Observational",
 });
 
 const rules: FormRules = {
-  gender: {
-    message: "Please select the gender of the study participants",
-    required: true,
-    trigger: ["blur", "input"],
-  },
   gender_based: {
     message: "Please select if the study was based on gender",
     required: true,
@@ -73,6 +68,11 @@ const rules: FormRules = {
       trigger: ["blur", "input"],
     },
   },
+  sex: {
+    message: "Please select the sex of the study participants",
+    required: true,
+    trigger: ["blur", "input"],
+  },
 };
 
 onBeforeMount(async () => {
@@ -97,7 +97,7 @@ onBeforeMount(async () => {
     inclusion_criteria: data.inclusion_criteria,
   };
 
-  moduleData.gender = data.gender;
+  moduleData.sex = data.sex;
   moduleData.gender_based = data.gender_based;
   moduleData.gender_description = data.gender_description;
   moduleData.healthy_volunteers = data.healthy_volunteers;
@@ -127,17 +127,16 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data = {
         exclusion_criteria: moduleData.criteria.exclusion_criteria,
-        gender: moduleData.gender,
         gender_based: moduleData.gender_based,
         gender_description: moduleData.gender_description || "",
-        healthy_volunteers:
-          moduleData.study_type === "Interventional" ? moduleData.healthy_volunteers : null,
+        healthy_volunteers: moduleData.healthy_volunteers,
         inclusion_criteria: moduleData.criteria.inclusion_criteria,
         maximum_age_unit: moduleData.maximum_age.unit,
         maximum_age_value: moduleData.maximum_age.age,
         minimum_age_unit: moduleData.minimum_age.unit,
         minimum_age_value: moduleData.minimum_age.age,
         sampling_method: moduleData.sampling_method || null,
+        sex: moduleData.sex,
         study_population: moduleData.study_population || "",
       };
 
@@ -231,9 +230,9 @@ const saveMetadata = (e: MouseEvent) => {
             voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum
           </p>
 
-          <n-form-item label="Gender" path="gender">
+          <n-form-item label="Sex" path="sex">
             <n-select
-              v-model:value="moduleData.gender"
+              v-model:value="moduleData.sex"
               placeholder="Female"
               clearable
               :options="FORM_JSON.studyMetadataEligibilityGenderOptions"
@@ -331,7 +330,7 @@ const saveMetadata = (e: MouseEvent) => {
               path="healthy_volunteers"
               :rule="{
                 message: 'Please select if the volunteers are healthy',
-                required: moduleData.study_type === 'Interventional' ? true : false,
+                required: true,
                 trigger: ['blur', 'input'],
               }"
             >

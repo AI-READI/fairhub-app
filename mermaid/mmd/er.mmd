@@ -1,7 +1,8 @@
 erDiagram
     STUDY {
         string id PK "UUIDv4"
-        string title
+        string title "300 characters"
+        string acronym "14 characters"
         string image
         timestamp updated_on
         timestamp created_at
@@ -117,7 +118,6 @@ erDiagram
         string doi
         string title "DATASET.title"
         string description "DATASET.description"
-        json creators "DATASET.creators"
         string version_title "VERSION.title"
         string study_title "STUDY.title"
         json metadata

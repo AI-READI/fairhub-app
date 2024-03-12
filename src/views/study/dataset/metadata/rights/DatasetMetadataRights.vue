@@ -201,6 +201,7 @@ const updateLicense = async (value: string) => {
           id: nanoid(),
           identifier: license.licenseId,
           identifier_scheme: "SPDX",
+          identifier_scheme_uri: "https://spdx.org/licenses/",
           license_text: draftLicense.value,
           origin: "local",
           rights: license.name,
@@ -211,6 +212,7 @@ const updateLicense = async (value: string) => {
           ...moduleData.rights[0],
           identifier: license.licenseId,
           identifier_scheme: "SPDX",
+          identifier_scheme_uri: "https://spdx.org/licenses/",
           rights: license.name,
           uri: license.reference,
         };

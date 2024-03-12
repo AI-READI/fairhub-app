@@ -36,9 +36,8 @@ import DatasetMetadataDeIdentification from "@/views/study/dataset/metadata/deid
 import DatasetMetadataDescriptions from "@/views/study/dataset/metadata/descriptions/DatasetMetadataDescriptions.vue";
 import DatasetMetadataFunders from "@/views/study/dataset/metadata/funders/DatasetMetadataFunders.vue";
 import DatasetMetadataIdentifiers from "@/views/study/dataset/metadata/identifiers/DatasetMetadataIdentifiers.vue";
-import DatasetMetadataRecordKeys from "@/views/study/dataset/metadata/keys/DatasetMetadataRecordKeys.vue";
-import DatasetMetadataPublisher from "@/views/study/dataset/metadata/publisher/DatasetMetadataPublisher.vue";
-import DatasetMetadataRelatedItems from "@/views/study/dataset/metadata/related/DatasetMetadataRelatedItems.vue";
+import DatasetMetadataManagingOrganization from "@/views/study/dataset/metadata/managingorganization/DatasetMetadataManagingOrganization.vue";
+import DatasetMetadataRelatedIdentifiers from "@/views/study/dataset/metadata/related/DatasetMetadataRelatedIdentifiers.vue";
 import DatasetMetadataRights from "@/views/study/dataset/metadata/rights/DatasetMetadataRights.vue";
 import DatasetMetadataSubjects from "@/views/study/dataset/metadata/subjects/DatasetMetadataSubjects.vue";
 import DatasetMetadataTitle from "@/views/study/dataset/metadata/title/DatasetMetadataTitle.vue";
@@ -66,12 +65,8 @@ import StudyContacts from "@/views/study/metadata/enrollment/contacts/StudyConta
 import StudyLocations from "@/views/study/metadata/enrollment/locations/StudyLocations.vue";
 import StudyOfficials from "@/views/study/metadata/enrollment/officials/StudyOfficials.vue";
 import StudyIdentification from "@/views/study/metadata/identification/StudyIdentification.vue";
-import StudyIPDSharing from "@/views/study/metadata/ipdsharing/StudyIPDSharing.vue";
 import StudyKeywords from "@/views/study/metadata/keywords/StudyKeywords.vue";
 import StudyOversight from "@/views/study/metadata/oversight/StudyOversight.vue";
-import StudyAvailableIPD from "@/views/study/metadata/references/availableipd/StudyAvailableIPD.vue";
-import StudyLinks from "@/views/study/metadata/references/links/StudyLinks.vue";
-import StudyReferences from "@/views/study/metadata/references/publications/StudyReferences.vue";
 import StudySponsors from "@/views/study/metadata/sponsors/StudySponsors.vue";
 import StudyStatus from "@/views/study/metadata/status/StudyStatus.vue";
 import StudyArms from "@/views/study/metadata/treatment/arms/StudyArms.vue";
@@ -276,14 +271,9 @@ const router = createRouter({
                       component: DatasetMetadataDates,
                     },
                     {
-                      name: "dataset:metadata:publisher",
-                      path: "publisher",
-                      component: DatasetMetadataPublisher,
-                    },
-                    {
-                      name: "dataset:metadata:record-keys",
-                      path: "record-keys",
-                      component: DatasetMetadataRecordKeys,
+                      name: "dataset:metadata:managing-organization",
+                      path: "managing-organization",
+                      component: DatasetMetadataManagingOrganization,
                     },
                     {
                       name: "dataset:metadata:de-identification",
@@ -316,9 +306,9 @@ const router = createRouter({
                       component: DatasetMetadataFunders,
                     },
                     {
-                      name: "dataset:metadata:related-items",
-                      path: "related-items",
-                      component: DatasetMetadataRelatedItems,
+                      name: "dataset:metadata:related-identifiers",
+                      path: "related-identifiers",
+                      component: DatasetMetadataRelatedIdentifiers,
                     },
                     {
                       name: "dataset:metadata:about",
@@ -509,26 +499,6 @@ const router = createRouter({
               name: "study:metadata:locations",
               path: "locations",
               component: StudyLocations,
-            },
-            {
-              name: "study:metadata:ipd-sharing",
-              path: "ipd-sharing",
-              component: StudyIPDSharing,
-            },
-            {
-              name: "study:metadata:references",
-              path: "references",
-              component: StudyReferences,
-            },
-            {
-              name: "study:metadata:links",
-              path: "links",
-              component: StudyLinks,
-            },
-            {
-              name: "study:metadata:available-ipd",
-              path: "available-ipd",
-              component: StudyAvailableIPD,
             },
           ],
         },

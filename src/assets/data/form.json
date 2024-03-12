@@ -131,10 +131,6 @@
     {
       "label": "W3ID",
       "value": "w3id"
-    },
-    {
-      "label": "Other",
-      "value": "Other"
     }
   ],
   "datasetDescriptionTypeOptions": [
@@ -552,11 +548,6 @@
       "label": "Other",
       "value": "Other",
       "description": "None of the listed options."
-    },
-    {
-      "label": "Not Yet Known",
-      "value": "NotYetKnown",
-      "description": "Dummy value supplied by default on entity creation."
     }
   ],
   "datasetFunderIdentifierTypeOptions": [
@@ -566,7 +557,7 @@
     { "value": "ROR", "label": "ROR" },
     { "value": "Other", "label": "Other" }
   ],
-  "datasetRelatedItemTypeOptions": [
+  "datasetRelatedIdentifierResourceTypeOptions": [
     {
       "label": "Audio-visual",
       "value": "Audiovisual",
@@ -710,7 +701,7 @@
   ],
   "datasetRelatedIdentifierRelationTypeOptions": [
     {
-      "label": "IsCitedBy",
+      "label": "Is Cited By",
       "value": "IsCitedBy",
       "description": "indicates that B includes A in a citation"
     },
@@ -720,17 +711,17 @@
       "description": "indicates that A includes B in a citation"
     },
     {
-      "label": "IsSupplementTo",
+      "label": "Is Supplement To",
       "value": "IsSupplementTo",
       "description": "indicates that A is a supplement to B"
     },
     {
-      "label": "IsSupplementedBy",
+      "label": "Is Supplemented By",
       "value": "IsSupplementedBy",
       "description": "indicates that B is a supplement to A"
     },
     {
-      "label": "IsContinuedBy",
+      "label": "Is Continued By",
       "value": "IsContinuedBy",
       "description": "indicates A is continued by the work B"
     },
@@ -745,57 +736,57 @@
       "description": "indicates A describes B"
     },
     {
-      "label": "IsDescribedBy",
+      "label": "Is Described By",
       "value": "IsDescribedBy",
       "description": "indicates A is described by B"
     },
     {
-      "label": "HasMetadata",
+      "label": "Has Metadata",
       "value": "HasMetadata",
       "description": "indicates resource A has additional metadata B"
     },
     {
-      "label": "IsMetadataFor",
+      "label": "Is Metadata For",
       "value": "IsMetadataFor",
       "description": "indicates additional metadata A for a resource B"
     },
     {
-      "label": "HasVersion",
+      "label": "Has Version",
       "value": "HasVersion",
       "description": "indicates A has a version (B)"
     },
     {
-      "label": "IsVersionOf",
+      "label": "Is Version Of",
       "value": "IsVersionOf",
       "description": "indicates A is a version of B"
     },
     {
-      "label": "IsNewVersionOf",
+      "label": "Is New Version Of",
       "value": "IsNewVersionOf",
       "description": "indicates A is a new edition of B, where the new edition has been modified or updated"
     },
     {
-      "label": "IsPreviousVersionOf",
+      "label": "Is Previous Version Of",
       "value": "IsPreviousVersionOf",
       "description": "indicates A is a previous edition of B"
     },
     {
-      "label": "IsPartOf",
+      "label": "Is Part Of",
       "value": "IsPartOf",
       "description": "indicates A is a portion of B; may be used for elements of a series"
     },
     {
-      "label": "HasPart",
+      "label": "Ha sPart",
       "value": "HasPart",
       "description": "indicates A includes the part B"
     },
     {
-      "label": "IsPublishedIn",
+      "label": "Is Published In",
       "value": "IsPublishedIn",
       "description": "indicates A is published inside B, but is independent of other things published inside of B"
     },
     {
-      "label": "IsReferencedBy",
+      "label": "Is Referenced By",
       "value": "IsReferencedBy",
       "description": "indicates A is used as a source of information by B"
     },
@@ -805,7 +796,7 @@
       "description": "indicates B is used as a source of information for A"
     },
     {
-      "label": "IsDocumentedBy",
+      "label": "Is Documented By",
       "value": "IsDocumentedBy",
       "description": "indicates B is documentation about/ explaining A; e.g. points to software documentation"
     },
@@ -815,7 +806,7 @@
       "description": "indicates A is documentation about B; e.g. points to software documentation"
     },
     {
-      "label": "IsCompiledBy",
+      "label": "Is Compiled By",
       "value": "IsCompiledBy",
       "description": "indicates B is used to compile or create A"
     },
@@ -825,22 +816,22 @@
       "description": "indicates B is the result of a compile or creation event using  A"
     },
     {
-      "label": "IsVariantFormOf",
+      "label": "Is Variant Form Of",
       "value": "IsVariantFormOf",
       "description": "indicates A is a variant or different form of B"
     },
     {
-      "label": "IsOriginalFormOf",
+      "label": "Is Original Form Of",
       "value": "IsOriginalFormOf",
       "description": "indicates A is the original form of B"
     },
     {
-      "label": "IsIdenticalTo",
+      "label": "Is Identical To",
       "value": "IsIdenticalTo",
       "description": "indicates that A is identical to B, for use when there is a need to register two separate instances of the same resource"
     },
     {
-      "label": "IsReviewedBy",
+      "label": "Is Reviewed By",
       "value": "IsReviewedBy",
       "description": "indicates that A is reviewed by B"
     },
@@ -850,17 +841,17 @@
       "description": "indicates that A is a review of B"
     },
     {
-      "label": "IsDerivedFrom",
+      "label": "Is Derived From",
       "value": "IsDerivedFrom",
       "description": "indicates B is a source upon which A is based"
     },
     {
-      "label": "IsSourceOf",
+      "label": "Is Source Of",
       "value": "IsSourceOf",
       "description": "indicates A is a source upon which B is based"
     },
     {
-      "label": "IsRequiredBy",
+      "label": "Is Required By",
       "value": "IsRequiredBy",
       "description": "Indicates A is required by B"
     },
@@ -875,17 +866,17 @@
       "description": "Indicates A replaces B"
     },
     {
-      "label": "IsObsoletedBy",
+      "label": "Is Obsoleted By",
       "value": "IsObsoletedBy",
       "description": "Indicates A is replaced by B"
     },
     {
-      "const": "IsCollectedBy",
+      "label": "Is Collected By",
       "value": "IsCollectedBy",
       "description": "Indicates A is collected by B"
     },
     {
-      "const": "Collects",
+      "label": "Collects",
       "value": "Collects",
       "description": "Indicates A collects B"
     }
@@ -939,12 +930,6 @@
       "description": "Studies in human beings in which biomedical and/or health outcomes are assessed in pre-defined groups of individuals. Participants in the study may receive diagnostic, therapeutic, or other interventions, but the investigator does not assign specific interventions to the study participants. This includes when participants receive interventions as part of routine medical care, and a researcher studies the effect of the intervention.",
       "label": "Observational",
       "value": "Observational"
-    },
-    {
-      "description": "An observational study that is also considered to be a Patient Registry. Note: The Agency for Healthcare Research and Quality (AHRQ) defines a Patient Registry as including an organized system that uses observational methods to collect uniform data (clinical and other) prospectively for a population defined by a particular disorder/disease, condition (including susceptibility to a disorder), or exposure (including products, healthcare services, and/or procedures) and that serves a predetermined scientific, clinical, or policy purpose. Patient registries may be single purpose or on-going data collection programs that address one or more questions.",
-      "disabled": true,
-      "label": "Observational Patient Registry",
-      "value": "Observational Patient Registry"
     },
     {
       "description": "An investigational drug product (including biological product) available through expanded access for patients who do not qualify for enrollment in a clinical trial. Expanded Access includes all expanded access types under section 561 of the Federal Food, Drug, and Cosmetic Act: (1) for individual patients, including emergency use; (2) for intermediate-size patient populations; and (3) under a treatment IND or treatment protocol. (For more information on data requirements for this Study Type, see Expanded Access Data Element $defs).",
@@ -1037,6 +1022,32 @@
       "description": "Groups of participants are assigned to receive interventions based on prior milestones being reached in the study, such as in some dose escalation and adaptive design studies.",
       "label": "Sequential Assignment",
       "value": "Sequential Assignment"
+    }
+  ],
+  "studyMetadataHumanSubjectReviewStatusOptions": [
+    {
+      "label": "Request not yet submitted",
+      "value": "Request not yet submitted"
+    },
+    {
+      "label": "Submitted, pending",
+      "value": "Submitted, pending"
+    },
+    {
+      "label": "Submitted, approved",
+      "value": "Submitted, approved"
+    },
+    {
+      "label": "Exempt",
+      "value": "Exempt"
+    },
+    {
+      "label": "Submitted, denied",
+      "value": "Submitted, denied"
+    },
+    {
+      "label": "Submission not required",
+      "value": "Submission not required"
     }
   ],
   "studyMetadataObservationalModelsOptions": [
