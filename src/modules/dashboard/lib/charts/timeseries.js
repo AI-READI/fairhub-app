@@ -3,6 +3,7 @@ Imports
 */
 
 import * as D3 from "d3";
+import textures from "textures";
 
 // Viz Library
 import Easing from "../animations/easing.js";
@@ -59,11 +60,11 @@ class TimeSeriesChart extends Chart {
           D3.timeSunday.ceil(new Date(datum[self.accessors.x.key])).toDateString()
         )
       ),
-    ].filter((d) => d !== "Invalid Date");
+    ].filter((d) => d !== "Invalid Date"); // Remove Invalid Dates
     self.dates = self.dates.toSorted(sorting.datestrings.descending);
-    self.colorscale = D3.scaleOrdinal()
-      .domain(unique.object.values(self.data, self.accessors.color.key))
-      .range(self.palette);
+    self.colors = unique.object.values(self.data, self.accessors.color.key);
+    self.colorscale = D3.scaleOrdinal().domain(self.colors).range(self.palette);
+    self.texturescale = D3.scaleOrdinal().domain(self.filterby).range(self.textures.patterns);
 
     // Set Date Format
     self.dateformat = D3.timeFormat(self.datefstr);
@@ -79,6 +80,23 @@ class TimeSeriesChart extends Chart {
     // Unique Colors
     self.colors = self.mapping.colors;
 
+    // Set Textures
+    self.texturesMap = Object.fromEntries(
+      new Map(
+        self.textures.patterns.map((texture) => [
+          texture,
+          textures
+            .paths()
+            .d(texture)
+            .fill(self.textures.fill)
+            .stroke(self.textures.stroke)
+            .size(self.textures.size)
+            .thicker()
+            .lighter(),
+        ])
+      )
+    );
+
     /*
     Get Visualization and Interface Elements
     */
@@ -87,6 +105,10 @@ class TimeSeriesChart extends Chart {
     self.svg = D3.select(`${self.getID}_visualization`)
       .classed("line-chart unrotated", true)
       .attr("id", `${self.setID}_visualization`);
+
+    for (const texture in self.texturesMap) {
+      self.svg.call(self.texturesMap[texture]);
+    }
 
     // Interface Parent
     self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
@@ -103,6 +125,21 @@ class TimeSeriesChart extends Chart {
       .domain([self.mapping.min, self.mapping.max])
       .range([self.dataframe.height, 0]);
 
+    self.axisGrid = self.svg
+      .append("g")
+      .classed("grid-lines", true)
+      .selectAll("line")
+      .data(self.y.ticks())
+      .join("line")
+      .classed("grid-line", true)
+      .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`)
+      .attr("x1", self.dataframe.left)
+      .attr("x2", self.dataframe.right)
+      .attr("y1", (d) => self.y(d))
+      .attr("y2", (d) => self.y(d))
+      .attr("stroke", "#DCDCDC")
+      .attr("stroke-width", 1);
+
     self.xAxis = self.svg
       .append("g")
       .classed("x-axis", true)
@@ -111,7 +148,6 @@ class TimeSeriesChart extends Chart {
       .call(
         D3.axisBottom(self.datetime).tickFormat(self.dateformat).tickSizeOuter(0).tickPadding(4)
       );
-    // .call(D3.axisBottom(self.datebinning).tickFormat(self.dateformat).tickSizeOuter(0).tickPadding(4));
 
     self.yAxis = self.svg
       .append("g")
@@ -161,14 +197,16 @@ class TimeSeriesChart extends Chart {
       .classed("point-series", true)
       .attr("id", (d) => `${self.setID}_point-series_${self.tokenize(d.group)}`)
       .attr("fill", (d) => d.color)
-      .attr("stroke", (d) => d.color)
+      .attr("stroke-width", 2)
+      .attr("stroke", "#FFFFFF")
       .selectAll(".point")
       .data((d) => d)
       .join("circle")
       .classed("point interactable", true)
+      .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("cx", (d) => self.datetime(new Date(d.x)))
       .attr("cy", (d) => self.y(d.y))
-      .attr("r", self.transitions.radius.from);
+      .attr("r", self.transitions.r.from);
 
     /*
     Legend
@@ -179,19 +217,19 @@ class TimeSeriesChart extends Chart {
         ? new Legend({
             title: self.legend.title,
             accessor: self.legend.accessor,
-            animation: ["radius", self.animations["radius"]],
+            animation: ["r", self.animations["r"]],
             container: self.viewframe,
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_line-series`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
             margin: self.margin,
             padding: self.legend.padding,
             setID: self.setID,
-            transition: ["radius", self.transitions["radius"]],
+            transition: ["r", self.transitions["r"]],
             uid: self.uid,
             vposition: self.legend.vposition,
             width: self.legend.width,
@@ -206,12 +244,7 @@ class TimeSeriesChart extends Chart {
       self.tooltip !== undefined
         ? new Tooltip({
             title: self.tooltip.title,
-            accessors: [
-              self.accessors.filterby,
-              self.accessors.group,
-              self.accessors.x,
-              self.accessors.y,
-            ],
+            accessors: [self.accessors.group, self.accessors.x, self.accessors.y],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,
@@ -282,6 +315,10 @@ class TimeSeriesChart extends Chart {
       .classed("line-chart unrotated", true)
       .attr("id", `${self.setID}_visualization`);
 
+    for (const texture in self.texturesMap) {
+      self.svg.call(self.texturesMap[texture]);
+    }
+
     // Interface Parent
     self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
 
@@ -301,6 +338,21 @@ class TimeSeriesChart extends Chart {
       .domain([self.mapping.min, self.mapping.max])
       .range([self.dataframe.height, 0]);
 
+    self.axisGrid = self.svg
+      .append("g")
+      .classed("grid-lines", true)
+      .selectAll("line")
+      .data(self.y.ticks())
+      .join("line")
+      .classed("grid-line", true)
+      .attr("transform", `translate(${self.dataframe.left}, ${self.dataframe.top})`)
+      .attr("x1", self.dataframe.left)
+      .attr("x2", self.dataframe.right)
+      .attr("y1", (d) => self.y(d))
+      .attr("y2", (d) => self.y(d))
+      .attr("stroke", "#DCDCDC")
+      .attr("stroke-width", 1);
+
     self.xAxis = self.svg
       .append("g")
       .classed("x-axis", true)
@@ -309,7 +361,6 @@ class TimeSeriesChart extends Chart {
       .call(
         D3.axisBottom(self.datetime).tickFormat(self.dateformat).tickSizeOuter(0).tickPadding(4)
       );
-    // .call(D3.axisBottom(self.datebinning).tickFormat(self.dateformat).tickSizeOuter(0).tickPadding(4));
 
     self.yAxis = self.svg
       .append("g")
@@ -357,14 +408,16 @@ class TimeSeriesChart extends Chart {
       .classed("point-series", true)
       .attr("id", (d) => `${self.setID}_point-series_${self.tokenize(d.group)}`)
       .attr("fill", (d) => d.color)
-      .attr("stroke", (d) => d.color)
+      .attr("stroke-width", 2)
+      .attr("stroke", "#FFFFFF")
       .selectAll(".point")
       .data((d) => d)
       .join("circle")
       .classed("point interactable", true)
+      .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("cx", (d) => self.datetime(new Date(d.x)))
       .attr("cy", (d) => self.y(d.y))
-      .attr("r", self.transitions.radius.from)
+      .attr("r", self.transitions.r.from)
       .on("mouseover", (e, d) => self.mouseOverPoint(e, d))
       .on("mouseout", (e, d) => self.mouseOutPoint(e, d));
 
@@ -377,19 +430,19 @@ class TimeSeriesChart extends Chart {
         ? new Legend({
             title: self.legend.title,
             accessor: self.legend.accessor,
-            animation: ["radius", self.animations["radius"]],
+            animation: ["r", self.animations["r"]],
             container: self.viewframe,
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_point-series`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
             margin: self.margin,
             padding: self.legend.padding,
             setID: self.setID,
-            transition: ["radius", self.transitions["radius"]],
+            transition: ["r", self.transitions["r"]],
             uid: self.uid,
             vposition: self.legend.vposition,
             width: self.legend.width,
@@ -404,12 +457,7 @@ class TimeSeriesChart extends Chart {
       self.tooltip !== undefined
         ? new Tooltip({
             title: self.tooltip.title,
-            accessors: [
-              self.accessors.filterby,
-              self.accessors.group,
-              self.accessors.x,
-              self.accessors.y,
-            ],
+            accessors: [self.accessors.group, self.accessors.x, self.accessors.y],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,
@@ -460,6 +508,7 @@ class TimeSeriesChart extends Chart {
 
     self.xAxis.remove();
     self.yAxis.remove();
+    self.axisGrid.remove();
     self.lineseries.remove();
     self.pointseries.remove();
     self.lines.remove();
@@ -480,9 +529,9 @@ Event Handlers
 
     D3.select(e.target)
       .transition()
-      .ease(Easing[self.animations.radius.easing])
-      .duration(self.animations.radius.duration)
-      .attr("r", self.transitions.radius.to);
+      .ease(Easing[self.animations.r.easing])
+      .duration(self.animations.r.duration)
+      .attr("r", self.transitions.r.to);
 
     this.Tooltip.update(e, d);
 
@@ -494,9 +543,9 @@ Event Handlers
 
     D3.select(e.target)
       .transition()
-      .ease(Easing[self.animations.radius.easing])
-      .duration(self.animations.radius.duration)
-      .attr("r", self.transitions.radius.from);
+      .ease(Easing[self.animations.r.easing])
+      .duration(self.animations.r.duration)
+      .attr("r", self.transitions.r.from);
 
     this.Tooltip.refresh(e, d);
 

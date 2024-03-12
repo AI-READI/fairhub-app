@@ -48,7 +48,7 @@ class Filters extends Interface {
       .classed("interface-element filters", true)
       .attr("id", `${self.setID}_filters`);
 
-    self.filterbank = self.filters.append("select").classed("filterbank interactable", true);
+    self.filterbank = self.filters.select("select").classed("filterbank interactable", true);
 
     self.items = self.filterbank
       .selectAll(".filter-option")
@@ -62,6 +62,11 @@ class Filters extends Interface {
       .append("span")
       .classed("filter-value", true)
       .text((d) => d.label);
+    self.patches = self.items
+      .append("div")
+      .classed("filter-patch", true)
+      .attr("width", 20)
+      .attr("height", 20);
 
     self.filterbank.property("key", self.default);
 
@@ -91,7 +96,7 @@ class Filters extends Interface {
       .classed("interface-element filters", true)
       .attr("id", `${self.setID}_filters`);
 
-    self.filterbank = self.filters.append("select").classed("filterbank interactable", true);
+    self.filterbank = self.filters.select("select").classed("filterbank interactable", true);
 
     self.items = self.filterbank
       .selectAll(".filter-option")
@@ -105,6 +110,12 @@ class Filters extends Interface {
       .append("span")
       .classed("filter-value", true)
       .text((d) => d.label);
+
+    self.patches = self.items
+      .append("div")
+      .classed("filter-patch", true)
+      .attr("width", 20)
+      .attr("height", 20);
 
     self.filters.on("change", (e, d) => self.changeOption(e, d));
 

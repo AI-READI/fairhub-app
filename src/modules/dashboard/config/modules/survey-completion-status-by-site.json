@@ -1,14 +1,14 @@
 {
-  "name": "Race Recruitment by Site",
-  "id": "race-recruitment-by-site",
-  "title": "AI-READI Pilot Participant Race Recruitment Over Time by Site",
-  "subtitle": "Participant Race Recruitment Counts by Data Generation Site",
+  "name": "Survey Completion Status by Site",
+  "id": "survey-completion-status-by-site",
+  "title": "Participant Surveys: REDCap Instrument Completion Status by Data Generation Site",
+  "subtitle": "Survey Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "Timeseries",
+    "type": "StackedBar",
     "config": {
-      "id": "#race-recruitment-by-site_line",
+      "id": "#survey-completion-status-by-site_stacked-bar",
       "rotate": true,
       "width": 1080,
       "height": 420,
@@ -32,16 +32,12 @@
       },
       "transitions": {
         "opacity": {
-          "from": 0.6,
+          "from": 0.7,
           "to": 1.0
         },
         "translate": {
           "from": "left",
           "to": "left"
-        },
-        "radius": {
-          "from": 4,
-          "to": 8
         }
       },
       "animations": {
@@ -54,20 +50,15 @@
           "delay": 0,
           "duration": 600,
           "easing": "expOut"
-        },
-        "radius": {
-          "delay": 0,
-          "duration": 600,
-          "easing": "expOut"
         }
       },
       "legend": {
-        "title": "Race",
-        "accessor": "group",
-        "width": 120,
+        "title": "Survey Status",
+        "accessor": "subgroup",
+        "width": 200,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 12,
+        "fontsize": 10,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -115,8 +106,24 @@
         "#7F8C9F",
         "#727272"
       ],
-      "datefstr": "Week %W, %Y",
-      "ordering": "descending",
+      "textures": {
+        "size": 11,
+        "fill": "transparent",
+        "stroke": "rgba(255, 255, 255, 0.8)",
+        "patterns": [
+          "woven",
+          "waves",
+          "nylon",
+          "crosses",
+          "caps",
+          "squares"
+        ]
+      },
+      "sorting": {
+        "by": "group",
+        "on": "subgroup",
+        "ordering": "none"
+      },
       "accessors": {
         "filterby": {
           "name": "Site",
@@ -124,23 +131,23 @@
           "type": "String"
         },
         "group": {
-          "name": "Race",
+          "name": "Survey",
           "key": "group",
+          "type": "String"
+        },
+        "subgroup": {
+          "name": "Status",
+          "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Race",
-          "key": "group",
+          "name": "Status",
+          "key": "subgroup",
           "type": "String"
         },
-        "x": {
-          "name": "Week of the Year",
-          "key": "x",
-          "type": "Number"
-        },
-        "y": {
-          "name": "Cumulative Count (n)",
-          "key": "y",
+        "value": {
+          "name": "Count (n)",
+          "key": "value",
           "type": "Number"
         }
       },

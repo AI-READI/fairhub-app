@@ -3,7 +3,9 @@ Imports
 */
 
 import * as D3 from "d3";
+import textures from "textures";
 
+// Viz Library
 import Easing from "../animations/easing.js";
 import Chart from "../chart.js";
 import Filters from "../interfaces/filters.js";
@@ -49,7 +51,7 @@ class BarChart extends Chart {
     self.groups = unique.object.values(self.data, self.accessors.group.key);
     // Set Color Scale
     self.colorscale = D3.scaleOrdinal().domain(self.filterby).range(self.palette);
-
+    self.texturescale = D3.scaleOrdinal().domain(self.filterby).range(self.textures.patterns);
     // Set Filters
     if (self.filters !== undefined) {
       self.filters.keys = ["All"];
@@ -61,6 +63,23 @@ class BarChart extends Chart {
 
     // Set Colors
     self.colors = self.mapping.colors;
+
+    // Set Textures
+    self.texturesMap = Object.fromEntries(
+      new Map(
+        self.textures.patterns.map((texture) => [
+          texture,
+          textures
+            .paths()
+            .d(texture)
+            .fill(self.textures.fill)
+            .stroke(self.textures.stroke)
+            .size(self.textures.size)
+            .thicker()
+            .lighter(),
+        ])
+      )
+    );
 
     // Ordering by Rotation
     if (self.rotate) {
@@ -80,6 +99,10 @@ class BarChart extends Chart {
           .classed("bar-chart unrotated", true)
           .attr("id", `${self.setID}_visualization`);
 
+    for (const texture in self.texturesMap) {
+      self.svg.call(self.texturesMap[texture]);
+    }
+
     // Interface Parent
     self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
 
@@ -91,18 +114,10 @@ class BarChart extends Chart {
       ? D3.scaleLinear()
           .domain([self.mapping.min, self.mapping.max])
           .range([0, self.dataframe.width])
-      : D3.scaleBand()
-          .domain(self.groups)
-          .range([0, self.dataframe.width])
-          .round(D3.enableRounding)
-          .paddingInner(0.05);
+      : D3.scaleBand().domain(self.groups).range([0, self.dataframe.width]).paddingInner(0.05);
 
     self.y = self.rotate
-      ? D3.scaleBand()
-          .domain(self.groups)
-          .range([self.dataframe.height, 0])
-          .round(D3.enableRounding)
-          .paddingInner(0.05)
+      ? D3.scaleBand().domain(self.groups).range([self.dataframe.height, 0]).paddingInner(0.05)
       : D3.scaleLinear()
           .domain([self.mapping.min, self.mapping.max])
           .range([self.dataframe.height, 0]);
@@ -175,16 +190,26 @@ class BarChart extends Chart {
           .data(self.mapping.data)
           .enter()
           .append("rect")
-          .classed("bar interactable", true)
-          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.group)}`)
-          .attr("data-group", (d) => d.group)
+          .attr(
+            "id",
+            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_color`
+          )
+          .attr("class", "bar interactable")
+          .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
           .attr("x", (d) => self.x(d.value))
           .attr("y", (d) => self.y(d.group))
           .attr("width", (d) => self.dataframe.width - self.x(d.value))
           .attr("height", self.y.bandwidth())
           .attr("fill", (d) => d.color)
           .attr("opacity", self.transitions.opacity.from)
-          .text((d) => d.group)
+          .attr("stroke-width", 2)
+          .attr("stroke", "#FFFFFF")
+          .clone(true)
+          .attr(
+            "id",
+            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}`
+          )
+          .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
           .on("mouseover", (e, d) => self.mouseOverBar(e, d))
           .on("mouseout", (e, d) => self.mouseOutBar(e, d))
       : self.bars
@@ -192,15 +217,26 @@ class BarChart extends Chart {
           .data(self.mapping.data)
           .enter()
           .append("rect")
-          .classed("bar interactable", true)
-          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.group)}`)
+          .attr(
+            "id",
+            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_color`
+          )
+          .attr("class", "bar interactable")
+          .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
           .attr("x", (d) => self.x(d.group))
           .attr("y", (d) => self.y(self.dataframe.height - d.value))
           .attr("width", self.x.bandwidth())
           .attr("height", (d) => self.dataframe.height - self.y(d.value))
           .attr("fill", (d) => d.color)
           .attr("opacity", self.transitions.opacity.from)
-          .text((d) => d.group)
+          .attr("stroke-width", 2)
+          .attr("stroke", "#FFFFFF")
+          .clone(true)
+          .attr(
+            "id",
+            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}`
+          )
+          .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
           .on("mouseover", (e, d) => self.mouseOverBar(e, d))
           .on("mouseout", (e, d) => self.mouseOutBar(e, d));
 
@@ -219,7 +255,7 @@ class BarChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_bars`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
@@ -315,6 +351,10 @@ class BarChart extends Chart {
           .classed("bar-chart unrotated", true)
           .attr("id", `${self.setID}_visualization`);
 
+    for (const texture in self.texturesMap) {
+      self.svg.call(self.texturesMap[texture]);
+    }
+
     // Interface Parent
     self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
 
@@ -326,18 +366,10 @@ class BarChart extends Chart {
       ? D3.scaleLinear()
           .domain([self.mapping.min, self.mapping.max])
           .range([0, self.dataframe.width])
-      : D3.scaleBand()
-          .domain(self.groups)
-          .range([0, self.dataframe.width])
-          .round(D3.enableRounding)
-          .paddingInner(0.05);
+      : D3.scaleBand().domain(self.groups).range([0, self.dataframe.width]).paddingInner(0.05);
 
     self.y = self.rotate
-      ? D3.scaleBand()
-          .domain(self.groups)
-          .range([self.dataframe.height, 0])
-          .round(D3.enableRounding)
-          .paddingInner(0.05)
+      ? D3.scaleBand().domain(self.groups).range([self.dataframe.height, 0]).paddingInner(0.05)
       : D3.scaleLinear()
           .domain([self.mapping.min, self.mapping.max])
           .range([self.dataframe.height, 0]);
@@ -411,16 +443,26 @@ class BarChart extends Chart {
           .enter()
           .append("rect")
           .merge(self.bar)
-          .classed("bar interactable", true)
-          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.group)}`)
-          .attr("data-group", (d) => d.group)
+          .attr(
+            "id",
+            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_color`
+          )
+          .attr("class", "bar interactable")
+          .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
           .attr("x", (d) => self.x(d.value))
           .attr("y", (d) => self.y(d.group))
           .attr("width", (d) => self.dataframe.width - self.x(d.value))
           .attr("height", self.y.bandwidth())
           .attr("fill", (d) => d.color)
           .attr("opacity", self.transitions.opacity.from)
-          .text((d) => d.group)
+          .attr("stroke-width", 2)
+          .attr("stroke", "#FFFFFF")
+          .clone(true)
+          .attr(
+            "id",
+            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}`
+          )
+          .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
           .on("mouseover", (e, d) => self.mouseOverBar(e, d))
           .on("mouseout", (e, d) => self.mouseOutBar(e, d))
       : self.bars
@@ -429,15 +471,26 @@ class BarChart extends Chart {
           .enter()
           .append("rect")
           .merge(self.bar)
-          .classed("bar interactable", true)
-          .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.group)}`)
+          .attr(
+            "id",
+            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_color`
+          )
+          .attr("class", "bar interactable")
+          .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
           .attr("x", (d) => self.x(d.group))
           .attr("y", (d) => self.y(d.value))
           .attr("width", self.x.bandwidth())
           .attr("height", (d) => self.dataframe.height - self.y(d.value))
           .attr("fill", (d) => d.color)
           .attr("opacity", self.transitions.opacity.from)
-          .text((d) => d.group)
+          .attr("stroke-width", "1")
+          .attr("stroke", "transparent")
+          .clone(true)
+          .attr(
+            "id",
+            (d) => `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}`
+          )
+          .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
           .on("mouseover", (e, d) => self.mouseOverBar(e, d))
           .on("mouseout", (e, d) => self.mouseOutBar(e, d));
 
@@ -455,7 +508,7 @@ class BarChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_bars`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
@@ -575,7 +628,7 @@ class BarChart extends Chart {
     const self = this;
 
     // Highlight Bar & Update Tooltip
-    D3.select(e.target)
+    D3.selectAll(`[id^="${e.target.id}"]`)
       .transition()
       .ease(Easing[self.animations.opacity.easing])
       .delay(self.animations.opacity.delay)
@@ -651,31 +704,6 @@ class BarChart extends Chart {
     const max = Math.ceil(Math.max(...maxs));
     const min = Math.floor(Math.min(...mins));
 
-    // // Generate Bars
-    // let bars = [];
-    // let from = [];
-    // for (const i in subgroups) {
-    //   const subgroup = subgroups[i];
-    //   let stack = [];
-    //   for (const j in groups) {
-    //     const group = groups[j];
-    //     for (const d in data) {
-    //       const datum = data[d];
-    //       if (datum.subgroup === subgroup && datum.group === group) {
-    //         if (typeof from[j] === "undefined") {
-    //           from[j] = 0;
-    //         }
-    //         datum.from = from[j];
-    //         datum.to = from[j] + datum.value;
-    //         from[j] = datum.to;
-    //         stack.push(datum);
-    //       }
-    //     }
-    //   }
-    //   stack.subgroup = subgroup;
-    //   stacks.push(stack);
-    // }
-
     // Generate Legend
     const legend = D3.zip(colors, filteroptions).map(([color, filterby]) => {
       return {
@@ -683,7 +711,6 @@ class BarChart extends Chart {
         filterby: filterby,
       };
     });
-    console.log(data);
 
     return {
       colors: colors,

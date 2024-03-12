@@ -1,14 +1,14 @@
 {
-  "name": "Phenotypes & Sex by Site",
-  "id": "phenotype-sex-by-site",
-  "title": "AI-READI Pilot Participant Phenotype and Sex by Site",
-  "subtitle": "Participant Counts Aggregated by Phenotype & Sex",
+  "name": "Self-Reported Race Recruitment by Site",
+  "id": "race-recruitment-by-site",
+  "title": "Participant Self-Reported Race Recruitment Over Time by Site",
+  "subtitle": "Participant Self-Reported Race Recruitment Counts by Data Generation Site",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "GroupedStackedBar",
+    "type": "Timeseries",
     "config": {
-      "id": "#phenotype-sex-by-site_grouped-stacked-bar",
+      "id": "#race-recruitment-by-site_line",
       "rotate": true,
       "width": 1080,
       "height": 420,
@@ -32,12 +32,16 @@
       },
       "transitions": {
         "opacity": {
-          "from": 0.8,
+          "from": 0.6,
           "to": 1.0
         },
         "translate": {
           "from": "left",
           "to": "left"
+        },
+        "r": {
+          "from": 4,
+          "to": 8
         }
       },
       "animations": {
@@ -50,15 +54,20 @@
           "delay": 0,
           "duration": 600,
           "easing": "expOut"
+        },
+        "r": {
+          "delay": 0,
+          "duration": 600,
+          "easing": "expOut"
         }
       },
       "legend": {
-        "title": "Phenotypes",
-        "accessor": "subgroup",
-        "width": 200,
+        "title": "Self-Reported Race",
+        "accessor": "group",
+        "width": 120,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 10,
+        "fontsize": 12,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -106,11 +115,22 @@
         "#7F8C9F",
         "#727272"
       ],
-      "sorting": {
-        "by": "group",
-        "on": "subgroup",
-        "ordering": "none"
+      "textures": {
+        "size": 11,
+        "fill": "transparent",
+        "stroke": "rgba(255, 255, 255, 0.8)",
+        "patterns": [
+          "woven",
+          "waves",
+          "nylon",
+          "crosses",
+          "caps",
+          "squares"
+        ]
       },
+      "linewidth": 3,
+      "datefstr": "Week %W, '%y",
+      "ordering": "descending",
       "accessors": {
         "filterby": {
           "name": "Site",
@@ -118,23 +138,23 @@
           "type": "String"
         },
         "group": {
-          "name": "Sex",
+          "name": "Self-Reported Race",
           "key": "group",
           "type": "String"
         },
-        "subgroup": {
-          "name": "Phenotype",
-          "key": "subgroup",
-          "type": "String"
-        },
         "color": {
-          "name": "Phenotype",
-          "key": "subgroup",
+          "name": "Self-Reported Race",
+          "key": "group",
           "type": "String"
         },
-        "value": {
-          "name": "Count (n)",
-          "key": "value",
+        "x": {
+          "name": "Date",
+          "key": "x",
+          "type": "Number"
+        },
+        "y": {
+          "name": "Cumulative Count (n)",
+          "key": "y",
           "type": "Number"
         }
       },

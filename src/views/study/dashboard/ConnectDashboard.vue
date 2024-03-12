@@ -5,8 +5,8 @@ import type { Ref } from "vue";
 import { onBeforeMount, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { DashboardModulesManifest } from "@/configs/dashboards/modules-manifest";
-import { RedcapReportsManifest } from "@/configs/dashboards/reports-manifest";
+import { DashboardModulesManifest } from "@/modules/dashboard/config/modules-manifest";
+import { RedcapReportsManifest } from "@/modules/dashboard/config/reports-manifest";
 import { useAuthStore } from "@/stores/auth";
 import { useRedcapStore } from "@/stores/redcap";
 import type { DashboardConnector } from "@/types/Dashboard";

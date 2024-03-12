@@ -3,7 +3,9 @@ Imports
 */
 
 import * as D3 from "d3";
+import textures from "textures";
 
+// Viz Library
 import Easing from "../animations/easing.js";
 import Chart from "../chart.js";
 import Filters from "../interfaces/filters.js";
@@ -52,6 +54,7 @@ class GroupedBarChart extends Chart {
     self.subgroups = unique.object.values(self.data, self.accessors.subgroup.key);
     // Set Color Scale
     self.colorscale = D3.scaleOrdinal().domain(self.subgroups).range(self.palette);
+    self.texturescale = D3.scaleOrdinal().domain(self.filterby).range(self.textures.patterns);
 
     // Set Filters
     if (self.filters !== undefined) {
@@ -64,6 +67,23 @@ class GroupedBarChart extends Chart {
 
     // Set Colors
     self.colors = self.mapping.colors;
+
+    // Set Textures
+    self.texturesMap = Object.fromEntries(
+      new Map(
+        self.textures.patterns.map((texture) => [
+          texture,
+          textures
+            .paths()
+            .d(texture)
+            .fill(self.textures.fill)
+            .stroke(self.textures.stroke)
+            .size(self.textures.size)
+            .thicker()
+            .lighter(),
+        ])
+      )
+    );
 
     // Ordering by Rotation
     if (self.rotate) {
@@ -79,6 +99,10 @@ class GroupedBarChart extends Chart {
       .classed("grouped-bar-chart unrotated", true)
       .attr("id", `${self.setID}_visualization`);
 
+    for (const texture in self.texturesMap) {
+      self.svg.call(self.texturesMap[texture]);
+    }
+
     // Interface Parent
     self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
 
@@ -89,7 +113,6 @@ class GroupedBarChart extends Chart {
     self.x = D3.scaleBand()
       .domain(self.mapping.groups)
       .range([0, self.dataframe.width])
-      .round(D3.enableRounding)
       .paddingInner(0.05);
 
     self.y = D3.scaleLinear()
@@ -162,18 +185,32 @@ class GroupedBarChart extends Chart {
       .data((group) => self.mapping.grouped[group])
       .enter()
       .append("rect")
-      .classed("bar interactable", true)
-      .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.subgroup)}`)
-      .attr("data-group", (d) => d.group)
+      .attr(
+        "id",
+        (d) =>
+          `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_${self.tokenize(
+            d.subgroup
+          )}_color`
+      )
+      .attr("class", "bar interactable")
+      .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("x", (d) => self.subgroupAxis(d.subgroup))
       .attr("y", (d) => self.y(d.value))
       .attr("width", self.subgroupAxis.bandwidth())
       .attr("height", (d) => self.dataframe.height - self.y(d.value))
       .attr("fill", (d) => d.color)
-      .attr("stroke-width", "1")
-      .attr("stroke", "white")
       .attr("opacity", self.transitions.opacity.from)
-      .text((d) => d.group)
+      .attr("stroke-width", 2)
+      .attr("stroke", "#FFFFFF")
+      .clone(true)
+      .attr(
+        "id",
+        (d) =>
+          `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_${self.tokenize(
+            d.subgroup
+          )}`
+      )
+      .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
       .on("mouseover", (e, d) => self.mouseOverBar(e, d))
       .on("mouseout", (e, d) => self.mouseOutBar(e, d));
 
@@ -192,7 +229,7 @@ class GroupedBarChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.setID}_bar`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
@@ -289,6 +326,10 @@ class GroupedBarChart extends Chart {
       .classed("grouped-bar-chart unrotated", true)
       .attr("id", `${self.setID}_visualization`);
 
+    for (const texture in self.texturesMap) {
+      self.svg.call(self.texturesMap[texture]);
+    }
+
     // Interface Parent
     self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
 
@@ -299,7 +340,6 @@ class GroupedBarChart extends Chart {
     self.x = D3.scaleBand()
       .domain(self.mapping.groups)
       .range([0, self.dataframe.width])
-      .round(D3.enableRounding)
       .paddingInner(0.05);
 
     self.y = D3.scaleLinear()
@@ -374,20 +414,35 @@ class GroupedBarChart extends Chart {
       .data((group) => self.mapping.grouped[group])
       .enter()
       .append("rect")
-      .classed("bar interactable", true)
-      .attr("id", (d) => `${self.setID}_bar_${self.tokenize(d.subgroup)}`)
-      .attr("data-group", (d) => d.group)
+      .attr(
+        "id",
+        (d) =>
+          `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_${self.tokenize(
+            d.subgroup
+          )}_color`
+      )
+      .attr("class", "bar interactable")
+      .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("x", (d) => self.subgroupAxis(d.subgroup))
       .attr("y", (d) => self.y(d.value))
       .attr("width", self.subgroupAxis.bandwidth())
       .attr("height", (d) => self.dataframe.height - self.y(d.value))
       .attr("fill", (d) => d.color)
-      .attr("stroke-width", "1")
-      .attr("stroke", "white")
       .attr("opacity", self.transitions.opacity.from)
-      .text((d) => d.group)
+      .attr("stroke-width", 2)
+      .attr("stroke", "#FFFFFF")
+      .clone(true)
+      .attr(
+        "id",
+        (d) =>
+          `${self.setID}_bar_${self.tokenize(d.group)}_${self.tokenize(d.filterby)}_${self.tokenize(
+            d.subgroup
+          )}`
+      )
+      .attr("fill", (d) => self.texturesMap[self.texturescale(d.filterby)].url())
       .on("mouseover", (e, d) => self.mouseOverBar(e, d))
       .on("mouseout", (e, d) => self.mouseOutBar(e, d));
+
     /*
     Legend
     */
@@ -402,7 +457,7 @@ class GroupedBarChart extends Chart {
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.setID}_bar`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
@@ -527,7 +582,7 @@ class GroupedBarChart extends Chart {
     const self = this;
 
     // Highlight Bar & Update Tooltip
-    D3.select(e.target)
+    D3.selectAll(`[id^="${e.target.id}"]`)
       .transition()
       .ease(Easing[self.animations.opacity.easing])
       .delay(self.animations.opacity.delay)

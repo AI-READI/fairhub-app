@@ -1,8 +1,8 @@
 {
   "name": "Instrument Completion Status by Site",
   "id": "instrument-completion-status-by-site",
-  "title": "AI-READI Pilot REDCap Instrument Completion Status by Data Generation Site",
-  "subtitle": "Instrument Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
+  "title": "All Surveys: REDCap Instrument Completion Status by Data Generation Site",
+  "subtitle": "Instrument Completion Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
   "width": 1280,
   "height": 720,
   "visualizations": [{
@@ -32,7 +32,7 @@
       },
       "transitions": {
         "opacity": {
-          "from": 0.8,
+          "from": 0.7,
           "to": 1.0
         },
         "translate": {
@@ -53,7 +53,7 @@
         }
       },
       "legend": {
-        "title": "Instrument Status",
+        "title": "Data Status",
         "accessor": "subgroup",
         "width": 200,
         "height": 140,
@@ -106,6 +106,19 @@
         "#7F8C9F",
         "#727272"
       ],
+      "textures": {
+        "size": 11,
+        "fill": "transparent",
+        "stroke": "rgba(255, 255, 255, 0.8)",
+        "patterns": [
+          "woven",
+          "waves",
+          "nylon",
+          "crosses",
+          "caps",
+          "squares"
+        ]
+      },
       "sorting": {
         "by": "group",
         "on": "subgroup",
@@ -118,7 +131,7 @@
           "type": "String"
         },
         "group": {
-          "name": "Instrument",
+          "name": "Survey",
           "key": "group",
           "type": "String"
         },

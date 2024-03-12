@@ -16,6 +16,7 @@ class Chart {
   margin = undefined;
   padding = undefined;
   palette = undefined;
+  textures = undefined;
   data = undefined;
   mapping = undefined;
   dtypes = {
@@ -35,6 +36,7 @@ class Chart {
     self.margin = config.margin;
     self.padding = config.padding;
     self.palette = config.palette;
+    self.textures = config.textures;
     self.data = config.data;
     self.accessors = config.accessors;
 
@@ -140,13 +142,28 @@ class Chart {
   */
 
   splitObjectStringValuesByCartesian(obj, delimiter = "|") {
+    /*
+    Did some performance profiling and we're taking a substantial hit
+    here that's hampering the rendering of the dashboard visualizations.
+    This method is called multiple times by the method below . Key todo
+    here is to either optimize this method or obviate it by implementing
+    its logic as part of the REDCap ETL. Latter is preferable. See comment
+    in method below for details on the purpose of this subroutine.
+
+    Todo: Obviate this on the back-end API with some NumPy fun.
+    */
+
+    // Reduce Function
     const cartesian = (a, b) =>
       a.reduce((r, v) => r.concat([b].flat().map((w) => [].concat(v, w))), []);
-    const parts = Object.entries(obj)
+
+    // Split Function
+    const splits = Object.entries(obj)
       .map(([k, v]) => (typeof v === "string" ? [k, v.split(delimiter)] : [k, v]))
       .filter(([, value]) => value !== null);
-    const keys = parts.map(([key]) => key);
-    const result = parts
+
+    const keys = splits.map(([key]) => key);
+    const result = splits
       .map(([, values]) => values)
       .reduce(cartesian)
       .map((a) => Object.assign(...a.map((v, i) => ({ [keys[i]]: v }))));
@@ -160,13 +177,19 @@ class Chart {
 
     Some of the data is being passed as a pipe delimited string
     where multiple values exist (e.g. say a participant has multiple
-    phenotypes). This method (and its subroutines) allow for the
+    phenotypes). This method (and its subroutine above) allow for the
     correct atomic group-wise counts (e.g. if you group the values
     on 'phenotype') – rather than listing each phenotype combination
     as it's own phenotype, it allows for counts to be made for each
-    specific phenotype. It's also idempotent – if you pass data without
-    pipe delimited string subvalues, it'll just return the same data
-    as before.
+    specific phenotype. That means while we could have 100 participants,
+    if 20 of them have 2 phenotypes then the sum of all individual
+    phenotypes will be 120. Importantly, this method is idempotent –
+    if you pass data where the values of each object aren't pipe
+    delimited strings of subvalues, it'll just return the same data as
+    before. One more note – key to this method is the appending of a
+    UUID to each data point prior to this method (this is done in the
+    constructor). That allows us to maintain our participant-level
+    counts when we call the uniqueness method at the end.
 
     Todo: Obviate this on the back-end API with some NumPy fun.
     */
@@ -176,7 +199,7 @@ class Chart {
     for (let i = 0; i < data.length; i++) {
       const datum = { ...data[i] }; // Remove proxy
       for (const _ in datum) {
-        split.push(...self.splitObjectStringValuesByCartesian(datum));
+        split.push(...self.splitObjectStringValuesByCartesian(datum)); // Call to method above
       }
     }
     return unique.object.objects(split);
@@ -188,7 +211,12 @@ class Chart {
 
   tokenize(token) {
     return typeof token === "string"
-      ? token.replace(/\s/g, "-").replace(/\|/g, "-").replace(/--/g, "-").toLowerCase()
+      ? token
+          .replace(/\s/g, "-")
+          .replace(/\|/g, "-")
+          .replace(/--/g, "-")
+          .replace(/,/g, "")
+          .toLowerCase()
       : `${Math.random().toString(16).slice(2, 6)}`.toLowerCase();
   }
 
