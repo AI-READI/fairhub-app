@@ -699,15 +699,15 @@ function handleNextButton() {
                 </dd>
               </div>
 
-              <!--              <div class="flex flex-row flex-wrap">-->
-              <!--                <dt class="grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium">-->
-              <!--                  Resource Type-->
-              <!--                </dt>-->
+              <div class="flex flex-row flex-wrap">
+                <dt class="grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium">
+                  Resource Type
+                </dt>
 
-              <!--                <dd class="grow basis-0 border border-gray-100 p-2.5">-->
-              <!--                  {{ dataset_metadata.about.resource_type }}-->
-              <!--                </dd>-->
-              <!--              </div>-->
+                <dd class="grow basis-0 border border-gray-100 p-2.5">
+                  {{ dataset_metadata.about.resource_type }}
+                </dd>
+              </div>
 
               <div class="flex flex-row flex-wrap">
                 <dt class="grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium">
