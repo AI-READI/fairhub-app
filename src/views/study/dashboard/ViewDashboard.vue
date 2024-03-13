@@ -27,15 +27,15 @@ const routeParams = {
   studyId: route.params.studyId as string,
 };
 
+const studyId = routeParams.studyId;
+const dashboardId = routeParams.dashboardId;
+dashboardStore.getDashboardView(studyId, dashboardId);
+
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
     error("You are not logged in.");
     router.push({ name: "home" });
   }
-
-  const studyId = routeParams.studyId;
-  const dashboardId = routeParams.dashboardId;
-  dashboardStore.getDashboardView(studyId, dashboardId);
 });
 </script>
 
@@ -64,7 +64,7 @@ onBeforeMount(() => {
           <div :id="module.id">
             <h3>{{ module.title }}</h3>
 
-            <p class="pb-8 pt-2">{{ module.subtitle }}<br /></p>
+            <p class="pt-2">{{ module.subtitle }}<br /></p>
 
             <DashboardModule :key="module.id" :vrenderers="module.visualizations" />
 

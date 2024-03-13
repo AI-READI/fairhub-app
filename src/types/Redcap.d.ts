@@ -13,7 +13,7 @@ export interface RedcapReport {
   report_key: string;
   report_name: string;
 }
-export type RedcapReportConnector = typeof RedcapReportView;
+export type RedcapReportConnector = typeof RedcapReport;
 
 export interface RedcapProjectAPI {
   title: string;

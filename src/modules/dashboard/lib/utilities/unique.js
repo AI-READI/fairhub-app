@@ -20,12 +20,4 @@ const object = {
   },
 };
 
-// const objects = (items) => {
-//   return items.filter((item, index) => (index === items.findIndex((o) => JSON.stringify(o) === JSON.stringify(item))));
-// };
-
-// const valuesByKey = (items, key) => {
-//   return [...new Set(items.map((item) => item[key]))];
-// };
-
 export default { array, object };

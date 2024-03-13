@@ -98,22 +98,16 @@ const rules: FormRules = {
       validator() {
         const validRgx = new RegExp("^[0-9]{1,12}$");
         const nReports = dashboardConnector.value.reports.length;
-        let invalid = false;
-        let noReportId = [];
+        let valid = true;
         for (let i = 0; i < nReports; i++) {
-          let report = dashboardConnector.value.reports[i];
-          if (report.report_id.length > 1) {
-            if (!validRgx.test(report.report_id)) {
-              invalid = true;
-            }
+          let report_id = dashboardConnector.value.reports[i].report_id;
+          if (typeof report_id === "string" && report_id.length > 0) {
+            valid = validRgx.test(report_id); // Type & Length true, Do Validation
           } else {
-            noReportId.push(report);
+            valid = false; // Type & Length false
           }
         }
-        if (noReportId.length > 0) {
-          invalid = true;
-        }
-        return !invalid;
+        return valid;
       },
     },
   ],
@@ -125,25 +119,30 @@ const rules: FormRules = {
       trigger: ["change"],
       type: "array",
       validator() {
-        let invalid = false;
+        let valid = true;
         for (let i = 0; i < dashboardConnector.value.reports.length; i++) {
           let report = dashboardConnector.value.reports[i];
-          if (report.report_id.length > 1) {
-            let moduleIsSelected = false;
-            for (var j = 0; j < dashboardConnector.value.modules.length; j++) {
-              let module = dashboardConnector.value.modules[j];
-              if (module.report_key === report.report_key) {
-                if (module.selected) {
-                  moduleIsSelected = true;
+          if (report.report_has_modules) {
+            let report_key = report.report_key;
+            // Type & Length true, Do Validation Logic
+            if (typeof report_key === "string" && report_key.length > 0) {
+              let moduleSelected = false;
+              for (var j = 0; j < dashboardConnector.value.modules.length; j++) {
+                let module = dashboardConnector.value.modules[j];
+                if (module.report_key === report_key && module.selected) {
+                  moduleSelected = true;
                 }
               }
-            }
-            if (!moduleIsSelected) {
-              invalid = true;
+              if (!moduleSelected) {
+                valid = false;
+              }
+              // Type & Length false
+            } else {
+              valid = false;
             }
           }
         }
-        return !invalid;
+        return valid;
       },
     },
   ],
@@ -276,7 +275,7 @@ onBeforeMount(() => {
           </n-card>
         </n-grid-item>
 
-        <n-grid-item :span="12">
+        <n-grid-item :span="12" v-if="reportDashboardModules(report).length > 0">
           <n-form-item
             label="Select Dashboard Modules"
             path="report_id_has_selection"

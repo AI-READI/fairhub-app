@@ -3,7 +3,9 @@ Imports
 */
 
 import * as D3 from "d3";
+import textures from "textures";
 
+// Viz Library
 import Easing from "../animations/easing.js";
 import Chart from "../chart.js";
 import Filters from "../interfaces/filters.js";
@@ -30,7 +32,6 @@ class LineChart extends Chart {
     self.accessors = config.accessors;
     self.transitions = config.transitions;
     self.animations = config.animations;
-    // console.log(config, Object.hasOwn(config, "projection"));
     self.projection = Object.hasOwn(config, "projection") ? config.projection : undefined;
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
@@ -53,9 +54,9 @@ class LineChart extends Chart {
 
     // Set Unique Filters, Groups, Color Scale
     self.filterby = unique.object.values(self.data, self.accessors.filterby.key);
-    self.colorscale = D3.scaleOrdinal()
-      .domain(unique.object.values(self.data, self.accessors.color.key))
-      .range(self.palette);
+    self.colors = unique.object.values(self.data, self.accessors.color.key);
+    self.colorscale = D3.scaleOrdinal().domain(self.colors).range(self.palette);
+    self.texturescale = D3.scaleOrdinal().domain(self.filterby).range(self.textures.patterns);
 
     // Filters
     if (self.filters !== undefined) {
@@ -69,6 +70,23 @@ class LineChart extends Chart {
     // Unique Colors
     self.colors = self.mapping.colors;
 
+    // Set Textures
+    self.texturesMap = Object.fromEntries(
+      new Map(
+        self.textures.patterns.map((texture) => [
+          texture,
+          textures
+            .paths()
+            .d(texture)
+            .fill(self.textures.fill)
+            .stroke(self.textures.stroke)
+            .size(self.textures.size)
+            .thicker()
+            .lighter(),
+        ])
+      )
+    );
+
     /*
     Get Visualization and Interface Elements
     */
@@ -77,6 +95,10 @@ class LineChart extends Chart {
     self.svg = D3.select(`${self.getID}_visualization`)
       .classed("line-chart unrotated", true)
       .attr("id", `${self.setID}_visualization`);
+
+    for (const texture in self.texturesMap) {
+      self.svg.call(self.texturesMap[texture]);
+    }
 
     // Interface Parent
     self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
@@ -196,9 +218,10 @@ class LineChart extends Chart {
       .data(([, , , subseries]) => subseries)
       .join("circle")
       .classed("point interactable", true)
+      .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("cx", (d) => self.x(d.x))
       .attr("cy", (d) => self.y(d.y))
-      .attr("r", self.transitions.radius.from)
+      .attr("r", self.transitions.r.from)
       .on("mouseover", (e, d) => self.mouseOverPoint(e, d))
       .on("mouseout", (e, d) => self.mouseOutPoint(e, d));
 
@@ -211,19 +234,19 @@ class LineChart extends Chart {
         ? new Legend({
             title: self.legend.title,
             accessor: self.legend.accessor,
-            animation: ["radius", self.animations["radius"]],
+            animation: ["r", self.animations["r"]],
             container: self.viewframe,
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_line-series`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
             margin: self.margin,
             padding: self.legend.padding,
             setID: self.setID,
-            transition: ["radius", self.transitions["radius"]],
+            transition: ["r", self.transitions["r"]],
             uid: self.uid,
             vposition: self.legend.vposition,
             width: self.legend.width,
@@ -238,12 +261,7 @@ class LineChart extends Chart {
       self.tooltip !== undefined
         ? new Tooltip({
             title: self.tooltip.title,
-            accessors: [
-              self.accessors.filterby,
-              self.accessors.group,
-              self.accessors.x,
-              self.accessors.y,
-            ],
+            accessors: [self.accessors.group, self.accessors.x, self.accessors.y],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,
@@ -314,6 +332,10 @@ class LineChart extends Chart {
       .classed("line-chart unrotated", true)
       .attr("id", `${self.setID}_visualization`);
 
+    for (const texture in self.texturesMap) {
+      self.svg.call(self.texturesMap[texture]);
+    }
+
     // Interface Parent
     self.interface = D3.select(`${self.getID}_interface`).attr("id", `${self.setID}_interface`);
 
@@ -432,9 +454,10 @@ class LineChart extends Chart {
       .data(([, , , subseries]) => subseries)
       .join("circle")
       .classed("point interactable", true)
+      .attr("data-legend", (d) => `${self.setID}_${self.tokenize(d[self.legend.accessor])}`)
       .attr("cx", (d) => self.x(d.x))
       .attr("cy", (d) => self.y(d.y))
-      .attr("r", self.transitions.radius.from)
+      .attr("r", self.transitions.r.from)
       .on("mouseover", (e, d) => self.mouseOverPoint(e, d))
       .on("mouseout", (e, d) => self.mouseOutPoint(e, d));
 
@@ -447,19 +470,19 @@ class LineChart extends Chart {
         ? new Legend({
             title: self.legend.title,
             accessor: self.legend.accessor,
-            animation: ["radius", self.animations["radius"]],
+            animation: ["r", self.animations["r"]],
             container: self.viewframe,
             data: self.mapping.legend,
             fontsize: self.legend.fontsize,
             getID: self.getID,
-            getPrefix: `${self.getID}_line-series`,
+            getPrefix: self.setID,
             height: self.legend.height,
             hposition: self.legend.hposition,
             itemsize: self.legend.itemsize,
             margin: self.margin,
             padding: self.legend.padding,
             setID: self.setID,
-            transition: ["radius", self.transitions["radius"]],
+            transition: ["r", self.transitions["r"]],
             uid: self.uid,
             vposition: self.legend.vposition,
             width: self.legend.width,
@@ -474,12 +497,7 @@ class LineChart extends Chart {
       self.tooltip !== undefined
         ? new Tooltip({
             title: self.tooltip.title,
-            accessors: [
-              self.accessors.filterby,
-              self.accessors.group,
-              self.accessors.x,
-              self.accessors.y,
-            ],
+            accessors: [self.accessors.group, self.accessors.x, self.accessors.y],
             container: self.viewframe,
             fontsize: self.tooltip.fontsize,
             getID: self.getID,
@@ -552,9 +570,9 @@ Event Handlers
 
     D3.select(e.target)
       .transition()
-      .ease(Easing[self.animations.radius.easing])
-      .duration(self.animations.radius.duration)
-      .attr("r", self.transitions.radius.to);
+      .ease(Easing[self.animations.r.easing])
+      .duration(self.animations.r.duration)
+      .attr("r", self.transitions.r.to);
 
     this.Tooltip.update(e, d);
 
@@ -566,9 +584,9 @@ Event Handlers
 
     D3.select(e.target)
       .transition()
-      .ease(Easing[self.animations.radius.easing])
-      .duration(self.animations.radius.duration)
-      .attr("r", self.transitions.radius.from);
+      .ease(Easing[self.animations.r.easing])
+      .duration(self.animations.r.duration)
+      .attr("r", self.transitions.r.from);
 
     this.Tooltip.refresh(e, d);
 

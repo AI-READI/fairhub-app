@@ -46,7 +46,7 @@ export type DashboardModuleConnector = {
 export interface DashboardModuleView extends DashboardModuleConnector {
   title: string;
   height: number;
-  report_id?: string;
+  report_id?: string | number;
   subtitle: string;
   visualizations: VisualizationRenderer[];
   width: number;

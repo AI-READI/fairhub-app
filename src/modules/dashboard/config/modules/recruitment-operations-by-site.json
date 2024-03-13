@@ -1,14 +1,14 @@
 {
-  "name": "Phenotypes & Site by Sex",
-  "id": "phenotype-site-by-sex",
-  "title": "AI-READI Pilot Participant Phenotype and Site by Sex",
-  "subtitle": "Participant Counts Aggregated by Phenotype & Site",
+  "name": "Recruitment Operations Status by Site",
+  "id": "recruitment-operations-status-by-site",
+  "title": "Recruitment Operations Surveys: REDCap Instrument Completion Status by Data Generation Site",
+  "subtitle": "Recruitment Operations Survey Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "GroupedStackedBar",
+    "type": "StackedBar",
     "config": {
-      "id": "#phenotype-site-by-sex_grouped-stacked-bar",
+      "id": "#recruitment-operations-status-by-site_stacked-bar",
       "rotate": true,
       "width": 1080,
       "height": 420,
@@ -32,7 +32,7 @@
       },
       "transitions": {
         "opacity": {
-          "from": 0.8,
+          "from": 0.7,
           "to": 1.0
         },
         "translate": {
@@ -53,7 +53,7 @@
         }
       },
       "legend": {
-        "title": "Phenotypes",
+        "title": "Survey Status",
         "accessor": "subgroup",
         "width": 200,
         "height": 140,
@@ -106,6 +106,19 @@
         "#7F8C9F",
         "#727272"
       ],
+      "textures": {
+        "size": 11,
+        "fill": "transparent",
+        "stroke": "rgba(255, 255, 255, 0.8)",
+        "patterns": [
+          "woven",
+          "waves",
+          "nylon",
+          "crosses",
+          "caps",
+          "squares"
+        ]
+      },
       "sorting": {
         "by": "group",
         "on": "subgroup",
@@ -113,22 +126,22 @@
       },
       "accessors": {
         "filterby": {
-          "name": "Sex",
+          "name": "Site",
           "key": "filterby",
           "type": "String"
         },
         "group": {
-          "name": "Site",
+          "name": "Survey",
           "key": "group",
           "type": "String"
         },
         "subgroup": {
-          "name": "Phenotype",
+          "name": "Status",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Phenotype",
+          "name": "Status",
           "key": "subgroup",
           "type": "String"
         },
