@@ -44,15 +44,15 @@ onBeforeMount(async () => {
   });
 });
 
-const dynamicInputRule = {
-  trigger: ["blur", "input"],
-  validator: (rule: unknown, value: string) => {
-    if (!value || value === "") {
-      return new Error("Please enter a value for this field");
-    }
-    return true;
-  },
-};
+// const dynamicInputRule = {
+//   trigger: ["blur", "input"],
+//   validator: (rule: unknown, value: string) => {
+//     if (!value || value === "") {
+//       return new Error("Please enter a value for this field");
+//     }
+//     return true;
+//   },
+// };
 
 const addEntryToOtherNameList = () => {
   return "";
@@ -220,15 +220,7 @@ const saveMetadata = (e: MouseEvent) => {
             <n-input v-model:value="item.name" placeholder="Lorem Ipsum" clearable />
           </n-form-item>
 
-          <n-form-item
-            label="Description"
-            :path="`interventions[${index}].description`"
-            :rule="{
-              message: 'Please enter an intervention description',
-              required: true,
-              trigger: ['blur', 'input'],
-            }"
-          >
+          <n-form-item label="Description" :path="`intervention_list[${index}].description`">
             <n-input
               v-model:value="item.description"
               placeholder="Lorem Ipsum"

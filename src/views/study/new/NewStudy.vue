@@ -44,6 +44,7 @@ const rules: FormRules = {
 
 const generateImageURL = () => {
   study.image = `https://api.dicebear.com/6.x/shapes/svg?seed=${nanoid()}`;
+  return study.image;
 };
 
 const createStudy = (e: MouseEvent) => {

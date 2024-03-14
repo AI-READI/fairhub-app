@@ -212,7 +212,13 @@ function handleNextButton() {
 
             <tbody>
               <tr v-for="item in dataset_metadata.creators" :key="item.id">
-                <td>{{ item.name }}</td>
+                <td>
+                  {{
+                    item.name_type === "Organizational"
+                      ? item.first_name
+                      : item.first_name + ", " + item.last_name
+                  }}
+                </td>
 
                 <td>{{ item.name_type }}</td>
               </tr>
@@ -237,7 +243,7 @@ function handleNextButton() {
                 <template #icon>
                   <f-icon icon="material-symbols:edit" />
                 </template>
-                Edit Contributors
+                Edit Creators
               </n-button>
             </RouterLink>
           </template>
@@ -257,7 +263,13 @@ function handleNextButton() {
 
             <tbody>
               <tr v-for="item in dataset_metadata.contributors" :key="item.id">
-                <td>{{ item.name || "" }}</td>
+                <td>
+                  {{
+                    item.name_type === "Organizational"
+                      ? item.first_name
+                      : item.first_name + ", " + item.last_name
+                  }}
+                </td>
 
                 <td>{{ item.name_type || "" }}</td>
 
@@ -334,29 +346,23 @@ function handleNextButton() {
         </CollapsibleCard>
 
         <CollapsibleCard title="Managing Organization" bordered>
-          <n-table :bordered="true" striped :single-line="false">
-            <thead>
-              <tr>
-                <th>Organization name</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr>
-                <td v-if="dataset_metadata.managing_organization.managing_organization_name">
-                  {{ dataset_metadata.managing_organization.managing_organization_name }}
-                </td>
-
-                <td
-                  v-if="!dataset_metadata.managing_organization.managing_organization_name"
-                  colspan="2"
-                  class="text-center italic text-gray-500"
+          <div v-if="dataset_metadata.managing_organization.managing_organization_name">
+            <dl>
+              <div class="flex flex-row flex-wrap">
+                <dt
+                  class="shrink-0 grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium"
                 >
-                  No Managing Organization
-                </td>
-              </tr>
-            </tbody>
-          </n-table>
+                  Name
+                </dt>
+
+                <dd class="grow basis-0 border border-gray-100 p-2.5">
+                  {{ dataset_metadata.managing_organization.managing_organization_name }}
+                </dd>
+              </div>
+            </dl>
+          </div>
+
+          <div class="italic text-gray-500" v-else>No Managing Organization</div>
 
           <template #action>
             <RouterLink
@@ -379,21 +385,33 @@ function handleNextButton() {
         </CollapsibleCard>
 
         <CollapsibleCard title="De-identification" bordered>
-          <n-descriptions label-placement="top" bordered>
-            <n-descriptions-item label="Were direct identifiers removed?">
-              {{
-                dataset_metadata.de_identification.direct === true
-                  ? "Yes"
-                  : dataset_metadata.de_identification.direct === false
-                  ? "No"
-                  : "-"
-              }}
-            </n-descriptions-item>
+          <dl>
+            <div class="flex flex-row flex-wrap">
+              <dt class="shrink-0 grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium">
+                Were direct identifiers removed?
+              </dt>
 
-            <n-descriptions-item label="Type">
-              {{ dataset_metadata.de_identification.type || "-" }}
-            </n-descriptions-item>
-          </n-descriptions>
+              <dd class="grow basis-0 border border-gray-100 p-2.5">
+                {{
+                  dataset_metadata.de_identification.direct === true
+                    ? "Yes"
+                    : dataset_metadata.de_identification.direct === false
+                    ? "No"
+                    : "-"
+                }}
+              </dd>
+            </div>
+
+            <div class="flex flex-row flex-wrap">
+              <dt class="shrink-0 grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium">
+                Type
+              </dt>
+
+              <dd class="grow basis-0 border border-gray-100 p-2.5">
+                {{ dataset_metadata.de_identification.type || "" }}
+              </dd>
+            </div>
+          </dl>
 
           <template #action>
             <RouterLink
@@ -416,19 +434,27 @@ function handleNextButton() {
         </CollapsibleCard>
 
         <CollapsibleCard title="Consent" bordered>
-          <n-table :bordered="true" striped :single-line="false">
-            <tr>
-              <th>Non-commercial</th>
+          <dl>
+            <div class="flex flex-row flex-wrap">
+              <dt class="shrink-0 grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium">
+                Non-commercial
+              </dt>
 
-              <td>{{ dataset_metadata.consent.noncommercial === true ? "Yes" : "No" }}</td>
-            </tr>
+              <dd class="grow basis-0 border border-gray-100 p-2.5">
+                {{ dataset_metadata.consent.noncommercial === true ? "Yes" : "No" }}
+              </dd>
+            </div>
 
-            <tr>
-              <th>Research type</th>
+            <div class="flex flex-row flex-wrap">
+              <dt class="shrink-0 grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium">
+                Research type
+              </dt>
 
-              <td>{{ dataset_metadata.consent.research_type === true ? "Yes" : "No" }}</td>
-            </tr>
-          </n-table>
+              <dd class="grow basis-0 border border-gray-100 p-2.5">
+                {{ dataset_metadata.consent.research_type === true ? "Yes" : "No" }}
+              </dd>
+            </div>
+          </dl>
 
           <template #action>
             <RouterLink
@@ -625,12 +651,12 @@ function handleNextButton() {
 
                 <td>{{ item.resource_type }}</td>
               </tr>
+
+              <tr v-if="!dataset_metadata.related_identifier.length">
+                <td colspan="3" class="text-center italic text-gray-500">No Related Identifiers</td>
+              </tr>
             </tbody>
           </n-table>
-
-          <div class="italic text-gray-500" v-if="!dataset_metadata.related_identifier.length">
-            No Related Identifiers
-          </div>
 
           <template #action>
             <RouterLink
@@ -653,47 +679,57 @@ function handleNextButton() {
         </CollapsibleCard>
 
         <CollapsibleCard title="Additional Details" bordered>
-          <n-table :bordered="true" striped :single-line="false">
-            <thead>
-              <tr>
-                <th>Language</th>
+          <div
+            v-if="
+              dataset_metadata.about.language ||
+              dataset_metadata.about.resource_type ||
+              (dataset_metadata.about.size && dataset_metadata.about.size.length)
+            "
+          >
+            <dl>
+              <div class="flex flex-row flex-wrap">
+                <dt
+                  class="shrink-0 grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium"
+                >
+                  Language
+                </dt>
 
-                <th>Resource Type</th>
-
-                <th>Size</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr
-                v-if="
-                  dataset_metadata.about.language ||
-                  dataset_metadata.about.resource_type ||
-                  (dataset_metadata.about.size && dataset_metadata.about.size.length)
-                "
-              >
-                <td>
+                <dd class="grow basis-0 border border-gray-100 p-2.5">
                   {{ dataset_metadata.about.language }}
-                </td>
+                </dd>
+              </div>
 
-                <td>
+              <div class="flex flex-row flex-wrap">
+                <dt class="grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium">
+                  Resource Type
+                </dt>
+
+                <dd class="grow basis-0 border border-gray-100 p-2.5">
                   {{ dataset_metadata.about.resource_type }}
-                </td>
+                </dd>
+              </div>
 
-                <td>
-                  <ul class="m-0 list-none p-0">
-                    <li v-for="item in dataset_metadata.about.size" :key="item">
+              <div class="flex flex-row flex-wrap">
+                <dt class="grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium">
+                  Size
+                </dt>
+
+                <dd class="grow basis-0 border border-gray-100 p-2.5">
+                  <ul
+                    class="m-0 list-none p-0"
+                    v-for="item in dataset_metadata.about.size"
+                    :key="item"
+                  >
+                    <li>
                       {{ item }}
                     </li>
                   </ul>
-                </td>
-              </tr>
+                </dd>
+              </div>
+            </dl>
+          </div>
 
-              <tr v-else>
-                <td colspan="3" class="text-center italic text-gray-500">No Additional Details</td>
-              </tr>
-            </tbody>
-          </n-table>
+          <div class="italic text-gray-500" v-else>No Additional Details</div>
 
           <template #action>
             <RouterLink

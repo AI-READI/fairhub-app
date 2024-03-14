@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { VersionStudyMetadata } from "@/types/Version";
 import { baseURL } from "@/utils/constants";
+import { displayDateTimeFormat } from "@/utils/date";
 
 const route = useRoute();
 const router = useRouter();
@@ -143,27 +144,41 @@ function handleNextButton() {
         </CollapsibleCard>
 
         <CollapsibleCard title="Status" bordered>
-          <n-table :bordered="true" striped :single-line="false">
-            <thead>
-              <tr>
-                <th>Overall Status</th>
+          <div v-if="study_metadata.status.overall_status && study_metadata.status.start_date">
+            <dl>
+              <div class="flex flex-row">
+                <dt
+                  class="shrink-0 grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium"
+                >
+                  Overall Status
+                </dt>
 
-                <th>Start Date</th>
-              </tr>
-            </thead>
+                <dd class="grow basis-0 border border-gray-100 p-2.5">
+                  {{ study_metadata.status.overall_status }}
+                </dd>
+              </div>
 
-            <tbody>
-              <tr v-if="study_metadata.status.overall_status && study_metadata.status.start_date">
-                <td>{{ study_metadata.status.overall_status }}</td>
+              <div class="flex flex-row">
+                <dt
+                  class="shrink-0 grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium"
+                >
+                  Start Date
+                </dt>
 
-                <td>{{ study_metadata.status.start_date }}</td>
-              </tr>
+                <dd class="grow basis-0 border border-gray-100 p-2.5">
+                  {{ displayDateTimeFormat(study_metadata.status.start_date) }}
+                </dd>
+              </div>
+            </dl>
+          </div>
 
-              <tr v-else>
-                <td colspan="2" class="text-center italic text-gray-500">No Overall Status</td>
-              </tr>
-            </tbody>
-          </n-table>
+          <div
+            v-if="!study_metadata.status.overall_status && !study_metadata.status.start_date"
+            colspan="2"
+            class="text-center italic text-gray-500"
+          >
+            No Overall Status
+          </div>
 
           <template #action>
             <RouterLink
@@ -185,32 +200,60 @@ function handleNextButton() {
         </CollapsibleCard>
 
         <CollapsibleCard title="Sponsors" bordered>
-          <n-table :bordered="true" striped :single-line="false">
-            <thead>
-              <tr>
-                <th>Investigator Name</th>
+          <div
+            v-if="
+              study_metadata.sponsors.responsible_party_investigator_last_name &&
+              study_metadata.sponsors.responsible_party_investigator_first_name &&
+              study_metadata.sponsors.responsible_party_type &&
+              study_metadata.sponsors.lead_sponsor_name
+            "
+          >
+            <dl>
+              <div class="flex flex-row flex-wrap">
+                <dt
+                  class="shrink-0 grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium"
+                >
+                  Investigator Name
+                </dt>
 
-                <th>Type</th>
-              </tr>
-            </thead>
+                <dd class="grow basis-0 border border-gray-100 p-2.5">
+                  {{ study_metadata.sponsors.responsible_party_investigator_last_name }},
+                  {{ study_metadata.sponsors.responsible_party_investigator_first_name }}
+                </dd>
+              </div>
 
-            <tbody>
-              <tr
-                v-if="
-                  study_metadata.sponsors.responsible_party_investigator_name &&
-                  study_metadata.sponsors.responsible_party_type
-                "
-              >
-                <td>{{ study_metadata.sponsors.responsible_party_investigator_name }}</td>
+              <div class="flex flex-row flex-wrap">
+                <dt
+                  class="shrink-0 grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium"
+                >
+                  Type
+                </dt>
 
-                <td>{{ study_metadata.sponsors.responsible_party_type }}</td>
-              </tr>
+                <dd class="grow basis-0 border border-gray-100 p-2.5">
+                  {{ study_metadata.sponsors.responsible_party_type }}
+                </dd>
+              </div>
+            </dl>
+          </div>
 
-              <tr v-else>
-                <td colspan="2" class="text-center italic text-gray-500">No Sponsors</td>
-              </tr>
-            </tbody>
-          </n-table>
+          <div v-if="study_metadata.sponsors.lead_sponsor_name">
+            <div class="my-4 font-bold">Lead Sponsor Name</div>
+
+            <div class="border border-gray-100 p-2.5">
+              {{ study_metadata.sponsors.lead_sponsor_name }}
+            </div>
+          </div>
+
+          <div
+            v-if="
+              !study_metadata.sponsors.responsible_party_investigator_last_name &&
+              !study_metadata.sponsors.responsible_party_investigator_first_name
+            "
+            colspan="2"
+            class="text-center italic text-gray-500"
+          >
+            No Sponsors
+          </div>
 
           <template #action>
             <RouterLink
@@ -235,14 +278,14 @@ function handleNextButton() {
           <n-table :bordered="true" striped :single-line="false">
             <thead>
               <tr>
-                <th>Full Name</th>
+                <th>Name</th>
               </tr>
             </thead>
 
             <tbody>
               <tr v-for="(item, index) in study_metadata.collaborators" :key="index">
                 <td>
-                  {{ item }}
+                  {{ item.name }}
                 </td>
               </tr>
 
@@ -272,7 +315,61 @@ function handleNextButton() {
         </CollapsibleCard>
 
         <CollapsibleCard title="Oversight" bordered>
-          <p>{{ study_metadata.oversight ? "Yes" : "No" }}</p>
+          <div
+            v-if="
+              study_metadata.oversight &&
+              study_metadata.oversight.human_subject_review_status &&
+              study_metadata.oversight.fda_regulated_drug &&
+              study_metadata.oversight.fda_regulated_device &&
+              study_metadata.oversight.has_dmc
+            "
+          >
+            <dl>
+              <div class="flex flex-row flex-wrap">
+                <dt
+                  class="shrink-0 grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium"
+                >
+                  Human Subject Review Status
+                </dt>
+
+                <dd class="grow basis-0 border border-gray-100 p-2.5">
+                  {{ study_metadata.oversight.human_subject_review_status }}
+                </dd>
+              </div>
+
+              <div class="flex flex-row flex-wrap">
+                <dt class="grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium">
+                  Is this clinical study studying a drug product?
+                </dt>
+
+                <dd class="grow basis-0 border border-gray-100 p-2.5">
+                  {{ study_metadata.oversight.fda_regulated_drug ? "Yes" : "No" }}
+                </dd>
+              </div>
+
+              <div class="flex flex-row flex-wrap">
+                <dt class="grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium">
+                  Is this clinical study studying a medical device?
+                </dt>
+
+                <dd class="grow basis-0 border border-gray-100 p-2.5">
+                  {{ study_metadata.oversight.fda_regulated_device ? "Yes" : "No" }}
+                </dd>
+              </div>
+
+              <div class="flex flex-row flex-wrap">
+                <dt class="grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium">
+                  Does this study have a Data Monitoring Committee (DMC)?
+                </dt>
+
+                <dd class="grow basis-0 border border-gray-100 p-2.5">
+                  {{ study_metadata.oversight.has_dmc ? "Yes" : "No" }}
+                </dd>
+              </div>
+            </dl>
+          </div>
+
+          <div v-else class="italic text-gray-500">No Oversight</div>
 
           <template #action>
             <RouterLink
@@ -324,7 +421,7 @@ function handleNextButton() {
         <CollapsibleCard title="Conditions" bordered>
           <n-space>
             <n-tag type="info" v-for="item in study_metadata.conditions" :key="item"
-              >{{ item }}
+              >{{ item.name }}
             </n-tag>
           </n-space>
 
@@ -354,7 +451,7 @@ function handleNextButton() {
         <CollapsibleCard title="Keywords" bordered>
           <n-space>
             <n-tag type="info" v-for="item in study_metadata.keywords" :key="item"
-              >{{ item }}
+              >{{ item.name }}
             </n-tag>
           </n-space>
 
@@ -679,31 +776,49 @@ function handleNextButton() {
         </CollapsibleCard>
 
         <CollapsibleCard title="Eligibility" bordered>
-          <n-table :bordered="true" :single-line="false" striped>
-            <thead>
-              <tr>
-                <th>Gender</th>
+          <div
+            v-if="study_metadata.eligibility.sex && study_metadata.eligibility.maximum_age_value"
+          >
+            <dl>
+              <div class="flex flex-row flex-wrap">
+                <dt
+                  class="shrink-0 grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium"
+                >
+                  Sex
+                </dt>
 
-                <th>Minimum Age</th>
-              </tr>
-            </thead>
+                <dd class="grow basis-0 border border-gray-100 p-2.5">
+                  {{ study_metadata.eligibility.sex }}
+                </dd>
+              </div>
 
-            <tbody>
-              <tr
-                v-if="
-                  study_metadata.eligibility.gender && study_metadata.eligibility.maximum_age_value
-                "
-              >
-                <td>{{ study_metadata.eligibility.gender }}</td>
+              <div class="flex flex-row flex-wrap">
+                <dt
+                  class="shrink-0 grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium"
+                >
+                  Maximum Age
+                </dt>
 
-                <td>{{ study_metadata.eligibility.maximum_age_value }}</td>
-              </tr>
+                <dd class="grow basis-0 border border-gray-100 p-2.5">
+                  {{ study_metadata.eligibility.maximum_age_value }}
+                </dd>
+              </div>
 
-              <tr v-else>
-                <td colspan="2" class="text-center italic text-gray-500">No Eligibility</td>
-              </tr>
-            </tbody>
-          </n-table>
+              <div class="flex flex-row flex-wrap">
+                <dt
+                  class="shrink-0 grow basis-0 border border-gray-100 bg-gray-50 p-2.5 font-medium"
+                >
+                  Gender based
+                </dt>
+
+                <dd class="grow basis-0 border border-gray-100 p-2.5">
+                  {{ study_metadata.eligibility.gender_based }}
+                </dd>
+              </div>
+            </dl>
+          </div>
+
+          <div v-else colspan="2" class="text-center italic text-gray-500">No Eligibility</div>
 
           <template #action>
             <RouterLink
@@ -724,25 +839,29 @@ function handleNextButton() {
           </template>
         </CollapsibleCard>
 
-        <CollapsibleCard title="Contacts" bordered>
+        <CollapsibleCard title="Central Contacts" bordered>
           <n-table :bordered="true" :single-line="false" striped>
             <thead>
               <tr>
+                <th>Name</th>
+
                 <th>Affiliation</th>
 
-                <th>Name</th>
+                <th>Phone</th>
               </tr>
             </thead>
 
             <tbody>
-              <tr v-for="item in study_metadata.contacts" :key="item.id">
+              <tr v-for="item in study_metadata.central_contacts" :key="item.id">
+                <td>{{ item.last_name }}, {{ item.first_name }}</td>
+
                 <td>{{ item.affiliation }}</td>
 
-                <td>{{ item.name }}</td>
+                <td>{{ item.phone }}</td>
               </tr>
 
-              <tr v-if="!study_metadata.contacts.length">
-                <td colspan="2" class="text-center italic text-gray-500">No Contacts</td>
+              <tr v-if="!study_metadata.central_contacts?.length">
+                <td colspan="3" class="text-center italic text-gray-500">No Central Contacts</td>
               </tr>
             </tbody>
           </n-table>
@@ -760,7 +879,7 @@ function handleNextButton() {
                 <template #icon>
                   <f-icon icon="material-symbols:edit" />
                 </template>
-                Edit Contacts
+                Edit Central Contacts
               </n-button>
             </RouterLink>
           </template>
@@ -780,7 +899,7 @@ function handleNextButton() {
               <tr v-for="item in study_metadata.overall_officials" :key="item.id">
                 <td>{{ item.affiliation }}</td>
 
-                <td>{{ item.name }}</td>
+                <td v-if="item.first_name">{{ item.first_name }}, {{ item.last_name }}</td>
               </tr>
 
               <tr v-if="!study_metadata.overall_officials.length">
@@ -802,7 +921,7 @@ function handleNextButton() {
                 <template #icon>
                   <f-icon icon="material-symbols:edit" />
                 </template>
-                Edit Contacts
+                Edit Overall Officials
               </n-button>
             </RouterLink>
           </template>
@@ -834,7 +953,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'study:metadata:contacts',
+                name: 'study:metadata:locations',
                 params: {
                   studyId: routeParams.studyId,
                 },
@@ -844,190 +963,7 @@ function handleNextButton() {
                 <template #icon>
                   <f-icon icon="material-symbols:edit" />
                 </template>
-                Edit Contacts
-              </n-button>
-            </RouterLink>
-          </template>
-        </CollapsibleCard>
-
-        <CollapsibleCard title="IPD Sharing" bordered>
-          <n-table :bordered="true" :single-line="false" striped>
-            <thead>
-              <tr>
-                <th>Is there a plan to share IPD?</th>
-
-                <th>Type</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr
-                v-if="
-                  study_metadata.ipd_sharing.ipd_sharing ||
-                  (study_metadata.ipd_sharing.ipd_sharing_info_type_list &&
-                    study_metadata.ipd_sharing.ipd_sharing_info_type_list.length)
-                "
-              >
-                <td>{{ study_metadata.ipd_sharing.ipd_sharing }}</td>
-
-                <td>
-                  <n-space>
-                    <n-tag
-                      type="info"
-                      :key="index"
-                      v-for="(item, index) in study_metadata.ipd_sharing.ipd_sharing_info_type_list"
-                      >{{ item }}
-                    </n-tag>
-                  </n-space>
-                </td>
-              </tr>
-
-              <tr v-else>
-                <td colspan="2" class="text-center italic text-gray-500">No IPD Sharing</td>
-              </tr>
-            </tbody>
-          </n-table>
-
-          <template #action>
-            <RouterLink
-              :to="{
-                name: 'study:metadata:ipd-sharing',
-                params: {
-                  studyId: routeParams.studyId,
-                },
-              }"
-            >
-              <n-button type="info" secondary>
-                <template #icon>
-                  <f-icon icon="material-symbols:edit" />
-                </template>
-                Edit IPD Sharing
-              </n-button>
-            </RouterLink>
-          </template>
-        </CollapsibleCard>
-
-        <CollapsibleCard title="References" bordered>
-          <n-table :bordered="true" :single-line="false" striped>
-            <thead>
-              <tr>
-                <th>Citation</th>
-
-                <th>Identifier</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr v-for="item in study_metadata.references" :key="item.id">
-                <td>{{ item.citation }}</td>
-
-                <td>{{ item.identifier }}</td>
-              </tr>
-
-              <tr v-if="!study_metadata.references.length">
-                <td colspan="2" class="text-center italic text-gray-500">No Reference</td>
-              </tr>
-            </tbody>
-          </n-table>
-
-          <template #action>
-            <RouterLink
-              :to="{
-                name: 'study:metadata:references',
-                params: {
-                  studyId: routeParams.studyId,
-                },
-              }"
-            >
-              <n-button type="info" secondary>
-                <template #icon>
-                  <f-icon icon="material-symbols:edit" />
-                </template>
-                Edit References
-              </n-button>
-            </RouterLink>
-          </template>
-        </CollapsibleCard>
-
-        <CollapsibleCard title="Links" bordered>
-          <n-table :bordered="true" :single-line="false" striped>
-            <thead>
-              <tr>
-                <th>Name of the Link</th>
-
-                <th>URL</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr v-for="item in study_metadata.links" :key="item.id">
-                <td>{{ item.title }}</td>
-
-                <td>{{ item.url }}</td>
-              </tr>
-
-              <tr v-if="!study_metadata.links.length">
-                <td colspan="2" class="text-center italic text-gray-500">No Link</td>
-              </tr>
-            </tbody>
-          </n-table>
-
-          <template #action>
-            <RouterLink
-              :to="{
-                name: 'study:metadata:links',
-                params: {
-                  studyId: routeParams.studyId,
-                },
-              }"
-            >
-              <n-button type="info" secondary>
-                <template #icon>
-                  <f-icon icon="material-symbols:edit" />
-                </template>
-                Edit References
-              </n-button>
-            </RouterLink>
-          </template>
-        </CollapsibleCard>
-
-        <CollapsibleCard title="Available IPD" bordered>
-          <n-table :bordered="true" :single-line="false" striped>
-            <thead>
-              <tr>
-                <th>Url</th>
-
-                <th>Identifier</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr v-for="item in study_metadata.available_ipd" :key="item.url">
-                <td>{{ item.url }}</td>
-
-                <td>{{ item.identifier }}</td>
-              </tr>
-
-              <tr v-if="!study_metadata.available_ipd.length">
-                <td colspan="2" class="text-center italic text-gray-500">No Available IPD</td>
-              </tr>
-            </tbody>
-          </n-table>
-
-          <template #action>
-            <RouterLink
-              :to="{
-                name: 'study:metadata:available-ipd',
-                params: {
-                  studyId: routeParams.studyId,
-                },
-              }"
-            >
-              <n-button type="info" secondary>
-                <template #icon>
-                  <f-icon icon="material-symbols:edit" />
-                </template>
-                Edit References
+                Edit Locations
               </n-button>
             </RouterLink>
           </template>

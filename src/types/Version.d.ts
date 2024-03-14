@@ -12,19 +12,19 @@ export interface Version {
 export interface VersionStudyMetadata {
   arms: VersionStudyArm[];
   available_ipd: VersionStudyIPD[];
-  collaborators: VersionStudyCollaborator[];
-  conditions: string[];
-  contacts: VersionStudyContact[];
+  central_contacts: VersionStudyCentralContact[];
+  collaborators: VersionStudyCollaborators[];
+  conditions: VersionStudyConditions[];
   description: VersionStudyDescription;
   design: VersionDesign;
   eligibility: VersionStudyEligibility;
   interventions: VersionStudyIntervention[];
   ipd_sharing: VersionStudyIPDSharing;
-  keywords: string[];
+  keywords: VersionStudyKeywords[];
   links: VersionStudyLink[];
   locations: VersionStudyLocation[];
   overall_officials: VersionStudyOverallOfficial[];
-  oversight: "";
+  oversight: VersionStudyOversight;
   primary_identifier: VersionStudyIdentifier | null;
   references: VersionStudyReference[];
   secondary_identifiers: VersionStudyIdentifier[];
@@ -40,8 +40,16 @@ export interface VersionStudyIPD {
 
 export interface VersionStudyOverallOfficial {
   id: string;
-  name: string;
   affiliation: string;
+  first_name: string;
+  last_name: string;
+}
+
+export interface VersionStudyOversight {
+  fda_regulated_device: string | null;
+  fda_regulated_drug: string | null;
+  has_dmc: string | null;
+  human_subject_review_status: string | null;
 }
 
 export interface VersionDesign {
@@ -104,12 +112,22 @@ export interface VersionStudyStatusModule {
 }
 
 export interface VersionStudySponsor {
-  responsible_party_investigator_name: string;
+  lead_sponsor_name: string;
+  responsible_party_investigator_first_name: string;
+  responsible_party_investigator_last_name: string;
   responsible_party_type: string;
 }
 
-export interface VersionStudyCollaborator {
-  collaborator_name: [] | null;
+export interface VersionStudyCollaborators {
+  name: string;
+}
+
+export interface VersionStudyKeywords {
+  name: string;
+}
+
+export interface VersionStudyConditions {
+  name: string;
 }
 
 export interface VersionStudyIntervention {
@@ -124,16 +142,18 @@ export interface VersionStudyArm {
 }
 
 export interface VersionStudyEligibility {
-  gender: string | null;
   gender_based: string | null;
   maximum_age_value: number | null;
-  minimum_age_value: number | null;
+  sex: string | null;
 }
 
-export interface VersionStudyContact {
+export interface VersionStudyCentralContact {
   id: string;
-  name: string;
   affiliation: string;
+  email_address: string;
+  first_name: string;
+  last_name: string;
+  phone: string;
 }
 
 export interface VersionStudyDescription {
@@ -186,14 +206,16 @@ export interface VersionDatasetDescriptions {
 
 export interface VersionDatasetCreator {
   id: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   name_type: "Personal" | "Organizational" | null;
 }
 
 export interface VersionDatasetContributor {
   id: string;
-  name: string;
   contributor_type: string;
+  first_name: string;
+  last_name: string;
   name_type: "Personal" | "Organizational" | null;
 }
 
