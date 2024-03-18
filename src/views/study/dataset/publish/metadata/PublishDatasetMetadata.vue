@@ -356,7 +356,7 @@ function handleNextButton() {
                 </dt>
 
                 <dd class="grow basis-0 border border-gray-100 p-2.5">
-                  {{ dataset_metadata.managing_organization.managing_organization_name }}
+                  {{ dataset_metadata.managing_organization.name }}
                 </dd>
               </div>
             </dl>
