@@ -226,7 +226,7 @@ export interface VersionDatasetDate {
 }
 
 export interface VersionDatasetManagingOrganization {
-  managing_organization_name: string;
+  name: string;
 }
 
 export interface VersionDatasetRecordKeys {
