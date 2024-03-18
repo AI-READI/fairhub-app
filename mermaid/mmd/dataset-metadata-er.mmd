@@ -30,7 +30,6 @@ erDiagram
         timestamp created_at
     }
 
-
     DATASET_DATE {
         string id PK "UUIDv4"
         string dataset_id FK "DATASET.id"
@@ -114,12 +113,18 @@ erDiagram
         timestamp created_at
     }
 
+    DATASET_MANAGING_ORGANIZATION {
+        string dataset_id PK,FK "DATASET.id"
+        string name
+        string identifier
+        string identifier_scheme
+        string identifier_scheme_uri
+    }
+
      DATASET_OTHER {
         string dataset_id PK,FK "DATASET.id"
         string resource_type
         string language "NULLABLE"
-        string managing_organization_name
-        string managing_organization_ror_id
         string standards_followed "Used for the README file"
         string acknowledgement "Used for the README file"
         string[] size
@@ -165,5 +170,6 @@ erDiagram
     DATASET ||--o{ DATASET_FUNDER : "has funder"
     DATASET ||--o{ DATASET_RELATED_IDENTIFIER : "has related identifiers"
     DATASET ||--|| DATASET_OTHER : "has other details"
+    DATASET ||--|| DATASET_MANAGING_ORGANIZATION : "has managing organization"
 
     DATASET_HEALTHSHEET ||--|| DATASET : "has healthsheet"
