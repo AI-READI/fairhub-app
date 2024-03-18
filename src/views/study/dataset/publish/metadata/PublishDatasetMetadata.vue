@@ -346,7 +346,7 @@ function handleNextButton() {
         </CollapsibleCard>
 
         <CollapsibleCard title="Managing Organization" bordered>
-          <div v-if="dataset_metadata.managing_organization.managing_organization_name">
+          <div v-if="dataset_metadata.managing_organization.name">
             <dl>
               <div class="flex flex-row flex-wrap">
                 <dt

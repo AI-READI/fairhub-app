@@ -16,14 +16,16 @@ const studyId = routeParams.studyId;
 const datasetId = routeParams.datasetId;
 
 const moduleData = ref<DatasetManagingOrganization>({
-  managing_organization_name: "",
-  managing_organization_ror_id: "",
+  name: "",
+  identifier: "",
+  identifier_scheme: "",
+  identifier_scheme_uri: "",
 });
 
 const formRef = ref<FormInst | null>(null);
 
 const rules: FormRules = {
-  managing_organization_name: {
+  name: {
     message: "Please enter a name.",
     required: true,
     trigger: ["blur", "input"],
@@ -60,8 +62,10 @@ const saveMetadata = (e: MouseEvent) => {
       loading.value = true;
 
       const data = {
-        managing_organization_name: moduleData.value.managing_organization_name,
-        managing_organization_ror_id: moduleData.value.managing_organization_ror_id || "",
+        name: moduleData.value.name,
+        identifier: moduleData.value.identifier || "",
+        identifier_scheme: moduleData.value.identifier_scheme || "",
+        identifier_scheme_uri: moduleData.value.identifier_scheme_uri || "",
       };
 
       const response = await fetch(
@@ -98,7 +102,7 @@ const saveMetadata = (e: MouseEvent) => {
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
       title="Managing Organization"
-      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+      description="Lorem ipsum dolor sit amet consectetur adipisicing elit."
       linkName="dataset:overview"
       :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
     />
@@ -117,25 +121,42 @@ const saveMetadata = (e: MouseEvent) => {
         class="pr-4"
         v-else
       >
-        <h3>Managing Organization</h3>
-
-        <p class="pb-8 pt-2">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
-          voluptatem, quibusdam, quos voluptas quae quas voluptatum
-        </p>
-
-        <n-form-item label="Name" path="managing_organization_name">
+        <n-form-item label="Name" path="name">
           <n-input
-            v-model:value="moduleData.managing_organization_name"
-            placeholder="World Data Center for Climate (WDCC)"
+            v-model:value="moduleData.name"
+            placeholder="California Medical Innovations Institute"
             clearable
           />
         </n-form-item>
 
-        <n-form-item label="ROR ID" path="managing_organization_ror_id">
+        <n-form-item
+          label="Identifier"
+          path="identifier"
+          :rule="{
+            message: 'Please enter a valid identifier.',
+            required: !!moduleData.identifier_scheme,
+            trigger: ['blur', 'input'],
+          }"
+        >
+          <n-input v-model:value="moduleData.identifier" placeholder="0156zyn36" clearable />
+        </n-form-item>
+
+        <n-form-item
+          label="Identifier Scheme"
+          path="identifier_scheme"
+          :rule="{
+            message: 'Please enter a valid identifier scheme.',
+            required: !!moduleData.identifier,
+            trigger: ['blur', 'input'],
+          }"
+        >
+          <n-input v-model:value="moduleData.identifier_scheme" placeholder="ROR" clearable />
+        </n-form-item>
+
+        <n-form-item label="Identifier Scheme URI" path="identifier_scheme_uri">
           <n-input
-            v-model:value="moduleData.managing_organization_ror_id"
-            placeholder="World Data Center for Climate (WDCC)"
+            v-model:value="moduleData.identifier_scheme_uri"
+            placeholder="https://ror.org/"
             clearable
           />
         </n-form-item>

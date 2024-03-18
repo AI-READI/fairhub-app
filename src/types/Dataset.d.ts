@@ -112,8 +112,10 @@ export interface DatasetDates {
 }
 
 export interface DatasetManagingOrganization {
-  managing_organization_name: string;
-  managing_organization_ror_id: string;
+  name: string;
+  identifier: string;
+  identifier_scheme: string;
+  identifier_scheme_uri: string;
 }
 
 export interface DatasetDeIdentLevel {
