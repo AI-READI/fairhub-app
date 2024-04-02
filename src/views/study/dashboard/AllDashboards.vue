@@ -113,6 +113,7 @@ onBeforeMount(() => {
 
 const columns: string[] = [
   "REDCap PID",
+  "Public",
   "Dashboard Name",
   "Dashboard Modules",
   "Dashboard Actions",
@@ -226,99 +227,107 @@ async function deleteDashboard(studyId: string, dashboardId: string | undefined)
       <FadeTransition>
         <LottieLoader v-if="isLoading" />
 
-        <div name="fade" tag="div" class="dashboard-choices" v-else>
-          <n-empty
-            v-if="dashboardConnectors.length === 0"
-            description="No Dashboard Found"
-            size="huge"
-            class="my-10"
-          >
-          </n-empty>
+        <TransitionGroup name="fade" tag="div" class="dashboard-choices" v-else>
+          <div v-if="dashboardConnectors === undefined || dashboardConnectors.length === 0">
+            <n-empty
+              v-if="dashboardConnectors.length === 0"
+              description="No Dashboard Found"
+              size="huge"
+              class="my-10"
+            >
+            </n-empty>
+          </div>
 
-          <n-table :bordered="true" :single-line="true" v-else>
-            <thead>
-              <tr class="p-0">
-                <th v-for="(item, index) in columns" :key="index">{{ item }}</th>
-              </tr>
-            </thead>
+          <div v-else>
+            <n-table :bordered="true" :single-line="true">
+              <thead>
+                <tr class="p-0">
+                  <th v-for="(item, index) in columns" :key="index">{{ item }}</th>
+                </tr>
+              </thead>
 
-            <tbody class="p-0">
-              <tr
-                v-for="(dashboard, dashboard_index) in dashboardConnectors"
-                :key="dashboard_index"
-              >
-                <td>{{ dashboard.redcap_pid }}</td>
+              <tbody class="p-0">
+                <tr
+                  v-for="(dashboard, dashboard_index) in dashboardConnectors"
+                  :key="dashboard_index"
+                >
+                  <td>{{ dashboard.redcap_pid }}</td>
 
-                <td>{{ dashboard.name }}</td>
+                  <td style="text-transform: Capitalize; text-align: center">
+                    {{ dashboard.public }}
+                  </td>
 
-                <td>
-                  <n-space>
-                    <n-tag
-                      v-for="(module, module_index) in dashboard.modules.filter(
-                        (module) => module.selected
-                      )"
-                      :key="module_index"
-                    >
-                      {{ module.name }}
-                    </n-tag>
-                  </n-space>
-                </td>
+                  <td>{{ dashboard.name }}</td>
 
-                <td>
-                  <div class="flex items-center space-x-2">
-                    <RouterLink
-                      :to="{
-                        name: 'study:dashboard:view-dashboard',
-                        params: {
-                          studyId: routeParams.studyId,
-                          dashboardId: dashboard.id,
-                        },
-                      }"
-                    >
-                      <n-button size="small" type="primary">
-                        <template #icon>
-                          <f-icon icon="material-symbols:add-link" />
-                        </template>
-                        View Dashboard
-                      </n-button>
-                    </RouterLink>
+                  <td>
+                    <n-space>
+                      <n-tag
+                        v-for="(module, module_index) in dashboard.modules.filter(
+                          (module) => module.selected
+                        )"
+                        :key="module_index"
+                      >
+                        {{ module.name }}
+                      </n-tag>
+                    </n-space>
+                  </td>
 
-                    <RouterLink
-                      :to="{
-                        name: 'study:dashboard:edit-dashboard',
-                        params: {
-                          studyId: routeParams.studyId,
-                          dashboardId: dashboard.id,
-                        },
-                      }"
-                    >
-                      <n-button size="small" type="primary">
-                        <template #icon>
-                          <f-icon icon="material-symbols:edit" />
-                        </template>
-                        Edit Dashboard
-                      </n-button>
-                    </RouterLink>
-
-                    <n-popconfirm
-                      @positive-click="deleteDashboard(routeParams.studyId, dashboard.id)"
-                    >
-                      <template #trigger>
-                        <n-button strong secondary type="error" size="small">
+                  <td>
+                    <div class="flex items-center space-x-2">
+                      <RouterLink
+                        :to="{
+                          name: 'study:dashboard:view-dashboard',
+                          params: {
+                            studyId: routeParams.studyId,
+                            dashboardId: dashboard.id,
+                          },
+                        }"
+                      >
+                        <n-button size="small" type="primary">
                           <template #icon>
-                            <f-icon icon="ph:trash-fill" />
+                            <f-icon icon="material-symbols:add-link" />
                           </template>
-                          Delete Dashboard
+                          View Dashboard
                         </n-button>
-                      </template>
-                      Are you sure you want to delete this dashboard?
-                    </n-popconfirm>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </n-table>
-        </div>
+                      </RouterLink>
+
+                      <RouterLink
+                        :to="{
+                          name: 'study:dashboard:edit-dashboard',
+                          params: {
+                            studyId: routeParams.studyId,
+                            dashboardId: dashboard.id,
+                          },
+                        }"
+                      >
+                        <n-button size="small" type="primary">
+                          <template #icon>
+                            <f-icon icon="material-symbols:edit" />
+                          </template>
+                          Edit Dashboard
+                        </n-button>
+                      </RouterLink>
+
+                      <n-popconfirm
+                        @positive-click="deleteDashboard(routeParams.studyId, dashboard.id)"
+                      >
+                        <template #trigger>
+                          <n-button strong secondary type="error" size="small">
+                            <template #icon>
+                              <f-icon icon="ph:trash-fill" />
+                            </template>
+                            Delete Dashboard
+                          </n-button>
+                        </template>
+                        Are you sure you want to delete this dashboard?
+                      </n-popconfirm>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </n-table>
+          </div>
+        </TransitionGroup>
       </FadeTransition>
     </div>
   </main>

@@ -38,7 +38,7 @@ export const compileDashboardModules = async (
               ?.pop()
               ?.replace(/\.\w+$/, "");
             if (visualization.type?.toLowerCase() === visualizationClass) {
-              const cls = charts[chartPath as keyof typeof charts]["default"];
+              const cls = await charts[chartPath as keyof typeof charts]["default"];
               const cfg = visualization.config;
               const renderer: VisualizationRenderer = { class: cls, config: cfg };
               visualizations.push(renderer);

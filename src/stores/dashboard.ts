@@ -3,6 +3,7 @@ import type { Ref } from "vue";
 import { toRaw } from "vue";
 
 import { compileDashboardModules } from "@/modules/dashboard/compile";
+import { DashboardModulesManifest } from "@/modules/dashboard/config/modules-manifest";
 import type { DashboardConnector, DashboardView } from "@/types/Dashboard";
 import type { DashboardModuleView } from "@/types/DashboardModule";
 import { baseURL } from "@/utils/constants";
@@ -19,6 +20,7 @@ export const useDashboardStore = defineStore("dashboard", () => {
     id: "",
     name: "",
     modules: [],
+    public: false,
     redcap_id: "",
     redcap_pid: "",
     reports: [],
@@ -27,6 +29,7 @@ export const useDashboardStore = defineStore("dashboard", () => {
     id: "",
     name: "",
     modules: [],
+    public: false,
     redcap_id: "",
     redcap_pid: "",
     reports: [],
@@ -70,6 +73,15 @@ export const useDashboardStore = defineStore("dashboard", () => {
     const dashboardConnectorResponse = await response.json();
 
     dashboardConnector.value = dashboardConnectorResponse as DashboardConnector;
+
+    dashboardConnector.value.modules.map((module) => {
+      DashboardModulesManifest.map((moduleConfig) => {
+        if (module.id === moduleConfig.id) {
+          module.available = moduleConfig.available;
+          return module;
+        }
+      });
+    });
 
     loading.value = false;
 

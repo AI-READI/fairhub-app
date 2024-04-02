@@ -7,7 +7,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import { useRedcapStore } from "@/stores/redcap";
-import type { RedcapProjectView } from "@/types/Redcap";
+import type { RedcapProjectAPI } from "@/types/Redcap";
 import { baseURL } from "@/utils/constants";
 
 const router = useRouter();
@@ -17,7 +17,7 @@ const { error, success } = useMessage();
 const authStore = useAuthStore();
 const redcapStore = useRedcapStore();
 
-const redcapProjectView: Ref<RedcapProjectView> = computed(() => redcapStore.redcapProjectView);
+const redcapProjectAPI: Ref<RedcapProjectAPI> = computed(() => redcapStore.redcapProjectAPI);
 const isLoading = computed(() => redcapStore.loading);
 
 const routeParams = {
@@ -44,7 +44,7 @@ const rules: FormRules = {
   ],
 };
 
-const editRedcapProjectView = (e: MouseEvent) => {
+const editRedcapProjectAPI = (e: MouseEvent) => {
   e.preventDefault();
 
   formRef.value?.validate(async (errors) => {
@@ -54,10 +54,11 @@ const editRedcapProjectView = (e: MouseEvent) => {
       const studyId = routeParams.studyId;
       const redcapId = routeParams.redcapId;
       const data = {
-        title: redcapProjectView.value.title,
-        api_active: redcapProjectView.value.api_active,
-        api_pid: redcapProjectView.value.api_pid,
-        api_url: redcapProjectView.value.api_url,
+        id: redcapProjectAPI.value.id,
+        title: redcapProjectAPI.value.title,
+        api_active: redcapProjectAPI.value.api_active,
+        api_pid: redcapProjectAPI.value.api_pid,
+        api_url: redcapProjectAPI.value.api_url,
       };
 
       try {
@@ -93,7 +94,7 @@ onBeforeMount(() => {
 
   const studyId = routeParams.studyId;
   const redcapId = routeParams.redcapId;
-  redcapStore.getRedcapProjectView(studyId, redcapId);
+  redcapStore.getRedcapProjectAPI(studyId, redcapId);
 });
 </script>
 
@@ -101,14 +102,14 @@ onBeforeMount(() => {
   <main class="flex h-full w-full flex-col space-y-8 pr-6">
     <HeadingText
       title="Edit REDCap Project API Link"
-      :description="`REDCap Project ID (pid): ${redcapProjectView.api_pid}`"
+      :description="`REDCap Project ID (pid): ${redcapProjectAPI.api_pid}`"
     />
 
     <n-divider />
 
     <n-form
       ref="formRef"
-      :model="redcapProjectView"
+      :model="redcapProjectAPI"
       :rules="rules"
       size="large"
       label-placement="top"
@@ -116,8 +117,8 @@ onBeforeMount(() => {
     >
       <n-form-item label="REDCap Project Title" path="title">
         <n-input
-          v-model:value="redcapProjectView.title"
-          :placeholder="redcapProjectView.title"
+          v-model:value="redcapProjectAPI.title"
+          :placeholder="redcapProjectAPI.title"
           clearable
           :loading="isLoading"
         />
@@ -125,8 +126,8 @@ onBeforeMount(() => {
 
       <n-form-item label="REDCap Project View PID" path="api_pid">
         <n-input
-          v-model:value="redcapProjectView.api_pid"
-          :placeholder="redcapProjectView.api_pid"
+          v-model:value="redcapProjectAPI.api_pid"
+          :placeholder="redcapProjectAPI.api_pid"
           clearable
           :loading="isLoading"
         />
@@ -134,8 +135,8 @@ onBeforeMount(() => {
 
       <n-form-item label="REDCap Project View URL" path="api_url">
         <n-input
-          v-model:value="redcapProjectView.api_url"
-          :placeholder="redcapProjectView.api_url"
+          v-model:value="redcapProjectAPI.api_url"
+          :placeholder="redcapProjectAPI.api_url"
           clearable
           :loading="isLoading"
         />
@@ -143,7 +144,7 @@ onBeforeMount(() => {
 
       <n-form-item label="REDCap Project View Active" path="api_active">
         <n-checkbox
-          v-model:checked="redcapProjectView.api_active"
+          v-model:checked="redcapProjectAPI.api_active"
           size="large"
           :indeterminate="isLoading"
           :disabled="isLoading"
@@ -154,7 +155,7 @@ onBeforeMount(() => {
       <n-divider />
 
       <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="editRedcapProjectView">
+        <n-button size="large" type="primary" @click="editRedcapProjectAPI">
           <template #icon>
             <f-icon icon="material-symbols:add" />
           </template>

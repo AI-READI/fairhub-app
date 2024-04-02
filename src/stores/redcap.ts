@@ -1,13 +1,13 @@
 import { defineStore } from "pinia";
 
-import type { RedcapProjectView } from "@/types/Redcap";
+import type { RedcapProjectAPI } from "@/types/Redcap";
 import { baseURL } from "@/utils/constants";
 
 export const useRedcapStore = defineStore("redcap", () => {
   const loading = ref(false);
 
-  const allRedcapProjectViews = ref<RedcapProjectView[]>([]);
-  const redcapProjectView = ref<RedcapProjectView>({
+  const allRedcapProjectAPIs = ref<RedcapProjectAPI[]>([]);
+  const redcapProjectAPI = ref<RedcapProjectAPI>({
     id: "",
     title: "",
     api_active: false,
@@ -15,7 +15,7 @@ export const useRedcapStore = defineStore("redcap", () => {
     api_url: "",
   });
 
-  const fetchAllRedcapProjectViews = async (studyId: string) => {
+  const fetchAllRedcapProjectAPIs = async (studyId: string) => {
     loading.value = true;
 
     const response = await fetch(`${baseURL}/study/${studyId}/redcap`, {
@@ -23,24 +23,24 @@ export const useRedcapStore = defineStore("redcap", () => {
     });
 
     if (!response.ok) {
-      throw new Error("RedcapProjectViews not found");
+      throw new Error("RedcapProjectAPIs not found");
     } else {
-      const allRedcapProjectViewsResponse = await response.json();
+      const allRedcapProjectAPIsResponse = await response.json();
 
-      console.log("response redcap projects views", allRedcapProjectViewsResponse);
+      console.log("response redcap projects views", allRedcapProjectAPIsResponse);
 
-      allRedcapProjectViews.value = allRedcapProjectViewsResponse as RedcapProjectView[];
+      allRedcapProjectAPIs.value = allRedcapProjectAPIsResponse as RedcapProjectAPI[];
 
-      console.log("redcap projects views", allRedcapProjectViews.value);
+      console.log("redcap projects views", allRedcapProjectAPIs.value);
 
       /** Sort by title for now */
-      allRedcapProjectViews.value.sort((a, b) => b.title.localeCompare(a.title));
+      allRedcapProjectAPIs.value.sort((a, b) => b.title.localeCompare(a.title));
     }
 
     loading.value = false;
   };
 
-  const getRedcapProjectView = async (studyId: string, redcapId: string) => {
+  const getRedcapProjectAPI = async (studyId: string, redcapId: string) => {
     loading.value = true;
 
     const response = await fetch(`${baseURL}/study/${studyId}/redcap/${redcapId}`, {
@@ -48,20 +48,20 @@ export const useRedcapStore = defineStore("redcap", () => {
     });
 
     if (!response.ok) {
-      throw new Error("RedcapProjectView GET not found");
+      throw new Error("RedcapProjectAPI GET not found");
     }
 
-    const redcapProjectViewResponse = await response.json();
+    const redcapProjectAPIResponse = await response.json();
 
-    console.log("response redcap project view", redcapProjectViewResponse);
+    console.log("response redcap project view", redcapProjectAPIResponse);
 
-    redcapProjectView.value = redcapProjectViewResponse as RedcapProjectView;
+    redcapProjectAPI.value = redcapProjectAPIResponse as RedcapProjectAPI;
 
-    console.log("redcap project view", redcapProjectView.value);
+    console.log("redcap project view", redcapProjectAPI.value);
 
     loading.value = false;
 
-    return redcapProjectView.value;
+    return redcapProjectAPI.value;
   };
 
   const deleteRedcapProjectAPI = async (studyId: string, redcapId: string) => {
@@ -75,7 +75,7 @@ export const useRedcapStore = defineStore("redcap", () => {
       throw new Error("DeleteRedcapProjectAPI POST not found");
     }
 
-    fetchAllRedcapProjectViews(studyId);
+    fetchAllRedcapProjectAPIs(studyId);
 
     loading.value = false;
 
@@ -83,11 +83,11 @@ export const useRedcapStore = defineStore("redcap", () => {
   };
 
   return {
-    allRedcapProjectViews,
+    allRedcapProjectAPIs,
     deleteRedcapProjectAPI,
-    fetchAllRedcapProjectViews,
-    getRedcapProjectView,
+    fetchAllRedcapProjectAPIs,
+    getRedcapProjectAPI,
     loading,
-    redcapProjectView,
+    redcapProjectAPI,
   };
 });

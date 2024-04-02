@@ -1,14 +1,15 @@
 {
-  "name": "Phenotype & Self-Reported Race by Self-Reported Sex",
-  "id": "phenotype-race-by-sex",
-  "title": "Participant Phenotype and Self-Reported Race by Self-Reported Sex",
-  "subtitle": "Participant Counts Aggregated by Phenotype & Self-Reported Race",
+  "name": "Phenotype Recruitment",
+  "id": "phenotype-recruitment",
+  "title": "Participant Phenotype Recruitment Over Time",
+  "subtitle": "Participant Phenotype Recruitment Counts",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "GroupedStackedBar",
+    "type": "Timeseries",
     "config": {
-      "id": "#phenotype-race-by-sex_grouped-stacked-bar",
+      "id": "#phenotype-recruitment_timeseries",
+      "rotate": true,
       "width": 1080,
       "height": 420,
       "position": {
@@ -31,12 +32,16 @@
       },
       "transitions": {
         "opacity": {
-          "from": 0.7,
+          "from": 0.6,
           "to": 1.0
         },
         "translate": {
           "from": "left",
           "to": "left"
+        },
+        "r": {
+          "from": 5,
+          "to": 8
         }
       },
       "animations": {
@@ -49,15 +54,20 @@
           "delay": 0,
           "duration": 600,
           "easing": "expOut"
+        },
+        "r": {
+          "delay": 0,
+          "duration": 600,
+          "easing": "expOut"
         }
       },
       "legend": {
-        "title": "Self-Reported Race",
-        "accessor": "subgroup",
-        "width": 200,
+        "title": "Phenotype",
+        "accessor": "group",
+        "width": 120,
         "height": 140,
         "itemsize": 20,
-        "fontsize": 10,
+        "fontsize": 12,
         "vposition": "bottom",
         "hposition": "left",
         "padding": {
@@ -118,14 +128,12 @@
           "squares"
         ]
       },
-      "sorting": {
-        "by": "group",
-        "on": "subgroup",
-        "ordering": "none"
-      },
+      "linewidth": 3,
+      "datefstr": "Week %W, '%y",
+      "ordering": "descending",
       "accessors": {
         "filterby": {
-          "name": "Self-Reported Sex",
+          "name": "Phenotype",
           "key": "filterby",
           "type": "String"
         },
@@ -134,19 +142,19 @@
           "key": "group",
           "type": "String"
         },
-        "subgroup": {
-          "name": "Self-Reported Race",
-          "key": "subgroup",
-          "type": "String"
-        },
         "color": {
-          "name": "Self-Reported Race",
-          "key": "subgroup",
+          "name": "Phenotype",
+          "key": "group",
           "type": "String"
         },
-        "value": {
-          "name": "Count (n)",
-          "key": "value",
+        "x": {
+          "name": "Date",
+          "key": "x",
+          "type": "Number"
+        },
+        "y": {
+          "name": "Cumulative Count (n)",
+          "key": "y",
           "type": "Number"
         }
       },

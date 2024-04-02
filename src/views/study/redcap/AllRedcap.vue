@@ -8,7 +8,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useFilterStore } from "@/stores/filter";
 import { useRedcapStore } from "@/stores/redcap";
 import { useStudyStore } from "@/stores/study";
-import type { RedcapProjectView } from "@/types/Redcap";
+import type { RedcapProjectAPI } from "@/types/Redcap";
 import type { Study } from "@/types/Study";
 
 const router = useRouter();
@@ -22,41 +22,41 @@ const redcapStore = useRedcapStore();
 
 const isLoading = computed(() => redcapStore.loading);
 const study: Ref<Study> = computed(() => studyStore.study);
-const redcapProjectViews: Ref<RedcapProjectView[]> = computed(() => {
-  const allRedcapProjectViews = redcapStore.allRedcapProjectViews;
+const redcapProjectAPIs: Ref<RedcapProjectAPI[]> = computed(() => {
+  const allRedcapProjectAPIs = redcapStore.allRedcapProjectAPIs;
 
-  const filteredRedcapProjectViews = [];
+  const filteredRedcapProjectAPIs = [];
 
-  for (const i in allRedcapProjectViews) {
-    const redcapProjectView = allRedcapProjectViews[i];
+  for (const i in allRedcapProjectAPIs) {
+    const redcapProjectAPI = allRedcapProjectAPIs[i];
     const permissions = filterStore.permissions;
 
     if (permissions.owner) {
       if (study.value.role === "owner") {
-        filteredRedcapProjectViews.push(redcapProjectView);
+        filteredRedcapProjectAPIs.push(redcapProjectAPI);
       }
     }
 
     if (permissions.admin) {
       if (study.value.role === "admin") {
-        filteredRedcapProjectViews.push(redcapProjectView);
+        filteredRedcapProjectAPIs.push(redcapProjectAPI);
       }
     }
 
     if (permissions.editor) {
       if (study.value.role === "editor") {
-        filteredRedcapProjectViews.push(redcapProjectView);
+        filteredRedcapProjectAPIs.push(redcapProjectAPI);
       }
     }
 
     if (permissions.viewer) {
       if (study.value.role === "viewer") {
-        filteredRedcapProjectViews.push(redcapProjectView);
+        filteredRedcapProjectAPIs.push(redcapProjectAPI);
       }
     }
   }
 
-  filteredRedcapProjectViews.sort((a: RedcapProjectView, b: RedcapProjectView) => {
+  filteredRedcapProjectAPIs.sort((a: RedcapProjectAPI, b: RedcapProjectAPI) => {
     if (sortOption.value === "title") {
       return b.title.localeCompare(a.title);
     } else if (sortOption.value === "api_pid") {
@@ -71,9 +71,9 @@ const redcapProjectViews: Ref<RedcapProjectView[]> = computed(() => {
   });
 
   if (sortOrder.value === "desc") {
-    filteredRedcapProjectViews.reverse();
+    filteredRedcapProjectAPIs.reverse();
   }
-  return filteredRedcapProjectViews;
+  return filteredRedcapProjectAPIs;
 });
 
 const sortOption = computed(() => filterStore.sort);
@@ -107,7 +107,7 @@ onBeforeMount(() => {
   const x = push.info("Available REDCap API Links are being loaded. Please wait...");
   const studyId = redcapRouteParams.studyId;
   studyStore.getStudy(studyId).then(() => {
-    redcapStore.fetchAllRedcapProjectViews(studyId).then(() => {
+    redcapStore.fetchAllRedcapProjectAPIs(studyId).then(() => {
       setTimeout(() => {
         x.clear();
       }, 600);
@@ -133,7 +133,7 @@ async function deleteRedcapProjectApiLink(studyId: string, redcapId: string) {
 
   if (success) {
     info("Project deleted.");
-    redcapStore.fetchAllRedcapProjectViews(studyId);
+    redcapStore.fetchAllRedcapProjectAPIs(studyId);
   }
 }
 </script>
@@ -246,7 +246,7 @@ async function deleteRedcapProjectApiLink(studyId: string, redcapId: string) {
       <LottieLoader v-if="isLoading" />
 
       <TransitionGroup name="fade" tag="div" class="redcap-choices" v-else>
-        <div v-if="redcapProjectViews === undefined || redcapProjectViews.length === 0">
+        <div v-if="redcapProjectAPIs === undefined || redcapProjectAPIs.length === 0">
           <n-empty description="No REDCap API links found" size="huge" class="my-10"> </n-empty>
         </div>
 
@@ -259,15 +259,15 @@ async function deleteRedcapProjectApiLink(studyId: string, redcapId: string) {
             </thead>
 
             <tbody class="p-0">
-              <tr v-for="(redcapProjectView, index) in redcapProjectViews" :key="index">
-                <td>{{ redcapProjectView.title }}</td>
+              <tr v-for="(redcapProjectAPI, index) in redcapProjectAPIs" :key="index">
+                <td>{{ redcapProjectAPI.title }}</td>
 
-                <td>{{ redcapProjectView.api_pid }}</td>
+                <td>{{ redcapProjectAPI.api_pid }}</td>
 
-                <td>{{ redcapProjectView.api_url }}</td>
+                <td>{{ redcapProjectAPI.api_url }}</td>
 
                 <td style="text-transform: Capitalize; text-align: center">
-                  {{ redcapProjectView.api_active }}
+                  {{ redcapProjectAPI.api_active }}
                 </td>
 
                 <td>
@@ -277,7 +277,7 @@ async function deleteRedcapProjectApiLink(studyId: string, redcapId: string) {
                         name: 'study:redcap:edit-redcap-project-api',
                         params: {
                           studyId: redcapRouteParams.studyId,
-                          redcapId: redcapProjectView.id,
+                          redcapId: redcapProjectAPI.id,
                         },
                       }"
                     >
@@ -291,7 +291,7 @@ async function deleteRedcapProjectApiLink(studyId: string, redcapId: string) {
 
                     <n-popconfirm
                       @positive-click="
-                        deleteRedcapProjectApiLink(redcapRouteParams.studyId, redcapProjectView.id)
+                        deleteRedcapProjectApiLink(redcapRouteParams.studyId, redcapProjectAPI.id)
                       "
                     >
                       <template #trigger>
@@ -315,7 +315,7 @@ async function deleteRedcapProjectApiLink(studyId: string, redcapId: string) {
                         name: 'study:redcap:connect-redcap-project-dashboard',
                         params: {
                           studyId: redcapRouteParams.studyId,
-                          redcapId: redcapProjectView.id,
+                          redcapId: redcapProjectAPI.id,
                         },
                       }"
                     >

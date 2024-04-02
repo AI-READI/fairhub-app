@@ -39,6 +39,7 @@ export type DashboardModuleConnector = {
   id: string;
   name: string;
   available: boolean;
+  public: boolean;
   report_key: string;
   selected: boolean;
 };

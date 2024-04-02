@@ -27,15 +27,15 @@ const routeParams = {
   studyId: route.params.studyId as string,
 };
 
-const studyId = routeParams.studyId;
-const dashboardId = routeParams.dashboardId;
-dashboardStore.getDashboardView(studyId, dashboardId);
-
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
     error("You are not logged in.");
     router.push({ name: "home" });
   }
+  const studyId = routeParams.studyId;
+  const dashboardId = routeParams.dashboardId;
+  dashboardStore.getDashboardView(studyId, dashboardId);
+  console.log(dashboardView.value);
 });
 </script>
 
@@ -52,7 +52,26 @@ onBeforeMount(() => {
     <n-divider />
 
     <FadeTransition>
-      <LottieLoader v-if="isLoading" />
+      <!-- <LottieLoader v-if="isLoading" /> -->
+      <n-space vertical v-if="isLoading">
+        <n-skeleton height="40px" width="100%" :sharp="false" />
+
+        <n-skeleton height="40px" width="70%" :sharp="false" />
+
+        <n-skeleton height="40px" width="30%" />
+
+        <n-skeleton height="40px" width="70%" :sharp="false" />
+
+        <n-skeleton height="40px" width="40%" />
+
+        <n-skeleton height="40px" width="60%" />
+
+        <n-skeleton height="40px" width="100%" :sharp="false" />
+
+        <n-skeleton height="40px" width="20%" />
+
+        <n-skeleton height="40px" width="60%" :sharp="false" />
+      </n-space>
 
       <TransitionGroup name="fade" tag="div" class="p-0" v-else>
         <div

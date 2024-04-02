@@ -1,15 +1,14 @@
 {
-  "name": "Data Collection Status by Site",
-  "id": "data-collection-status-by-site",
-  "title": "Data Collection Surveys: REDCap Instrument Status by Data Generation Site",
-  "subtitle": "Survey Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
+  "name": "Phenotype & Self-Reported Sex by Self-Reported Race",
+  "id": "phenotype-sex-by-race",
+  "title": "Participant Phenotype and Self-Reported Sex by Self-Reported Race",
+  "subtitle": "Participant Counts Aggregated by Phenotype & Self-Reported Sex",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "StackedBar",
+    "type": "GroupedStackedBar",
     "config": {
-      "id": "#data-collection-status-by-site_stacked-bar",
-      "rotate": true,
+      "id": "#phenotype-sex-by-race_grouped-stacked-bar",
       "width": 1080,
       "height": 420,
       "position": {
@@ -53,7 +52,7 @@
         }
       },
       "legend": {
-        "title": "Data Status",
+        "title": "Self-Reported Sex",
         "accessor": "subgroup",
         "width": 200,
         "height": 140,
@@ -126,22 +125,22 @@
       },
       "accessors": {
         "filterby": {
-          "name": "Site",
+          "name": "Self-Reported Race",
           "key": "filterby",
           "type": "String"
         },
         "group": {
-          "name": "Survey",
+          "name": "Phenotype",
           "key": "group",
           "type": "String"
         },
         "subgroup": {
-          "name": "Status",
+          "name": "Self-Reported Sex",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Status",
+          "name": "Self-Reported Sex",
           "key": "subgroup",
           "type": "String"
         },

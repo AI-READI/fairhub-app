@@ -1,14 +1,15 @@
 {
-  "name": "Phenotype & Self-Reported Race by Self-Reported Sex",
-  "id": "phenotype-race-by-sex",
-  "title": "Participant Phenotype and Self-Reported Race by Self-Reported Sex",
-  "subtitle": "Participant Counts Aggregated by Phenotype & Self-Reported Race",
+  "name": "Device Collection Status by Site",
+  "id": "device-collection-status-by-site",
+  "title": "Device Collection Surveys: REDCap Instrument Status by Data Generation Site",
+  "subtitle": "Survey Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "GroupedStackedBar",
+    "type": "StackedBar",
     "config": {
-      "id": "#phenotype-race-by-sex_grouped-stacked-bar",
+      "id": "#device-collection-status-by-site_stacked-bar",
+      "rotate": true,
       "width": 1080,
       "height": 420,
       "position": {
@@ -52,7 +53,7 @@
         }
       },
       "legend": {
-        "title": "Self-Reported Race",
+        "title": "Device Status",
         "accessor": "subgroup",
         "width": 200,
         "height": 140,
@@ -125,22 +126,22 @@
       },
       "accessors": {
         "filterby": {
-          "name": "Self-Reported Sex",
+          "name": "Site",
           "key": "filterby",
           "type": "String"
         },
         "group": {
-          "name": "Phenotype",
+          "name": "Device Survey",
           "key": "group",
           "type": "String"
         },
         "subgroup": {
-          "name": "Self-Reported Race",
+          "name": "Status",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Self-Reported Race",
+          "name": "Status",
           "key": "subgroup",
           "type": "String"
         },

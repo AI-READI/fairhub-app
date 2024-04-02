@@ -8,7 +8,7 @@
   "visualizations": [{
     "type": "Timeseries",
     "config": {
-      "id": "#race-recruitment-by-site_line",
+      "id": "#race-recruitment-by-site_timeseries",
       "rotate": true,
       "width": 1080,
       "height": 420,

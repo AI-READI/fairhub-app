@@ -6,7 +6,7 @@ import { onBeforeMount, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
-import type { RedcapProjectAPI } from "@/types/Redcap";
+import type { RedcapProjectAPIConnector } from "@/types/Redcap";
 import { baseURL } from "@/utils/constants";
 
 const router = useRouter();
@@ -21,7 +21,7 @@ const routeParams = {
 
 const formRef = ref<FormInst | null>(null);
 
-const redcapProjectAPI: Ref<RedcapProjectAPI> = ref({
+const redcapProjectAPI: Ref<RedcapProjectAPIConnector> = ref({
   title: "",
   api_active: false,
   api_key: "",

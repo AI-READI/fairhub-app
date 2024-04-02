@@ -1,14 +1,15 @@
 {
-  "name": "Phenotype & Self-Reported Race by Self-Reported Sex",
-  "id": "phenotype-race-by-sex",
-  "title": "Participant Phenotype and Self-Reported Race by Self-Reported Sex",
-  "subtitle": "Participant Counts Aggregated by Phenotype & Self-Reported Race",
+  "name": "Survey Completion Status",
+  "id": "survey-completion-status",
+  "title": "All Surveys: REDCap Instrument Completion Status",
+  "subtitle": "Instrument Completion Counts Aggregated by Status (Complete, Incomplete, or Unverified)",
   "width": 1280,
   "height": 720,
   "visualizations": [{
-    "type": "GroupedStackedBar",
+    "type": "StackedBar",
     "config": {
-      "id": "#phenotype-race-by-sex_grouped-stacked-bar",
+      "id": "#survey-completion-status_stacked-bar",
+      "rotate": true,
       "width": 1080,
       "height": 420,
       "position": {
@@ -52,7 +53,7 @@
         }
       },
       "legend": {
-        "title": "Self-Reported Race",
+        "title": "Data Status",
         "accessor": "subgroup",
         "width": 200,
         "height": 140,
@@ -125,22 +126,22 @@
       },
       "accessors": {
         "filterby": {
-          "name": "Self-Reported Sex",
+          "name": "Status",
           "key": "filterby",
           "type": "String"
         },
         "group": {
-          "name": "Phenotype",
+          "name": "Survey",
           "key": "group",
           "type": "String"
         },
         "subgroup": {
-          "name": "Self-Reported Race",
+          "name": "Status",
           "key": "subgroup",
           "type": "String"
         },
         "color": {
-          "name": "Self-Reported Race",
+          "name": "Status",
           "key": "subgroup",
           "type": "String"
         },
