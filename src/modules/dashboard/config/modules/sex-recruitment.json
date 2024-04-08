@@ -30,6 +30,12 @@
         "right": 240,
         "bottom": 0
       },
+      "axis": {
+        "scaling": {
+          "x": 1.0,
+          "y": 1.1
+        }
+      },
       "transitions": {
         "opacity": {
           "from": 0.6,

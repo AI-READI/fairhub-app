@@ -77,7 +77,11 @@ const reportDashboardModules = (report: RedcapReport) => {
 const checkboxGroupDefault = (report: RedcapReport) => {
   const ids = dashboardConnector.value.modules
     .filter(
-      (module) => module.report_key === report.report_key && module.selected && module.available
+      (module) =>
+        module.report_key === report.report_key &&
+        module.selected &&
+        module.available &&
+        /^[0-9]{1,12}$/.test(report.report_id)
     )
     .map((module) => module.id);
   return ids;
@@ -398,6 +402,32 @@ const editDashboard = (e: MouseEvent) => {
         );
       }
 
+      // Ensure All Modules Have An Associated Report ID
+      module_omitted = false;
+      modules.map((module) => {
+        const reports = dashboardConnector.value.reports;
+        for (var i = 0; i < reports.length; i++) {
+          const report = reports[i];
+          if (report.report_key === module.report_key && module.selected) {
+            if (
+              typeof report.report_id !== "string" ||
+              !/^[0-9]{1,12}$/.test(report.report_id) ||
+              report.report_id.length === 0
+            ) {
+              module.selected = false;
+              module_omitted = true;
+            }
+          }
+        }
+      });
+
+      // Module(s) Omitted; Non-Critical Error; Continue with Function but Warn User Modules Will Be Omitted
+      if (module_omitted) {
+        warning(
+          "One or more selected modules does not have an associated REDCap report ID and will not be included in this dashboard."
+        );
+      }
+
       const data = {
         name: dashboardConnector.value.name,
         dashboard_id: dashboardId,
@@ -407,6 +437,7 @@ const editDashboard = (e: MouseEvent) => {
         redcap_pid: dashboardConnector.value.redcap_pid,
         reports: reports,
       };
+      console.log(data);
 
       try {
         const response = await fetch(`${baseURL}/study/${studyId}/dashboard/${dashboardId}`, {

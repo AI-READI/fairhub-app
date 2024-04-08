@@ -27,8 +27,9 @@ class BarChart extends Chart {
 
     const self = this;
 
-    // Configure Stacked Bar Chart
+    // Configure Bar Chart
     self.rotate = config.rotate;
+    self.axis = config.axis;
     self.transitions = config.transitions;
     self.animations = config.animations;
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
@@ -112,14 +113,14 @@ class BarChart extends Chart {
 
     self.x = self.rotate
       ? D3.scaleLinear()
-          .domain([self.mapping.min, self.mapping.max])
+          .domain([self.mapping.min, Math.floor(self.mapping.max * self.axis.scaling.x)])
           .range([0, self.dataframe.width])
       : D3.scaleBand().domain(self.groups).range([0, self.dataframe.width]).paddingInner(0.05);
 
     self.y = self.rotate
       ? D3.scaleBand().domain(self.groups).range([self.dataframe.height, 0]).paddingInner(0.05)
       : D3.scaleLinear()
-          .domain([self.mapping.min, self.mapping.max])
+          .domain([self.mapping.min, Math.floor(self.mapping.max * self.axis.scaling.y)])
           .range([self.dataframe.height, 0]);
 
     self.xAxis = self.rotate
@@ -364,14 +365,14 @@ class BarChart extends Chart {
 
     self.x = self.rotate
       ? D3.scaleLinear()
-          .domain([self.mapping.min, self.mapping.max])
+          .domain([self.mapping.min, Math.floor(self.mapping.max * self.axis.scaling.x)])
           .range([0, self.dataframe.width])
       : D3.scaleBand().domain(self.groups).range([0, self.dataframe.width]).paddingInner(0.05);
 
     self.y = self.rotate
       ? D3.scaleBand().domain(self.groups).range([self.dataframe.height, 0]).paddingInner(0.05)
       : D3.scaleLinear()
-          .domain([self.mapping.min, self.mapping.max])
+          .domain([self.mapping.min, Math.floor(self.mapping.max * self.axis.scaling.y)])
           .range([self.dataframe.height, 0]);
 
     self.xAxis = self.rotate

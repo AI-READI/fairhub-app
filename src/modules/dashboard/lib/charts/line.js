@@ -27,6 +27,7 @@ class LineChart extends Chart {
     let self = this;
 
     // Configure Line Chart
+    self.axis = config.axis;
     self.linewidth = config.linewidth;
     self.pointradius = config.pointradius;
     self.accessors = config.accessors;
@@ -118,7 +119,7 @@ class LineChart extends Chart {
       self.projection !== undefined
         ? D3.scaleLinear().domain(self.projection.yDomain).range([self.dataframe.height, 0])
         : D3.scaleLinear()
-            .domain([self.mapping.min, self.mapping.max])
+            .domain([self.mapping.min, Math.floor(self.mapping.max * self.axis.scaling.y)])
             .range([self.dataframe.height, 0]);
 
     self.axisGrid = self.svg
@@ -354,7 +355,7 @@ class LineChart extends Chart {
       self.projection !== undefined
         ? D3.scaleLinear().domain(self.projection.yDomain).range([self.dataframe.height, 0])
         : D3.scaleLinear()
-            .domain([self.mapping.min, self.mapping.max])
+            .domain([self.mapping.min, Math.floor(self.mapping.max * self.axis.scaling.y)])
             .range([self.dataframe.height, 0]);
 
     self.axisGrid = self.svg

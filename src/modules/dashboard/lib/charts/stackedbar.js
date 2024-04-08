@@ -28,6 +28,7 @@ class StackedBarChart extends Chart {
 
     // Configure Stacked Bar Chart
     self.rotate = config.rotate;
+    self.axis = config.axis;
     self.bin = config.bin;
     self.transitions = config.transitions;
     self.animations = config.animations;
@@ -113,7 +114,7 @@ class StackedBarChart extends Chart {
 
     self.x = self.rotate
       ? D3.scaleLinear()
-          .domain([self.mapping.min, self.mapping.max])
+          .domain([self.mapping.min, Math.floor(self.mapping.max * self.axis.scaling.x)])
           .range([0, self.dataframe.width])
       : D3.scaleBand()
           .domain(self.mapping.groups)
@@ -126,7 +127,7 @@ class StackedBarChart extends Chart {
           .range([self.dataframe.height, 0])
           .paddingInner(0.05)
       : D3.scaleLinear()
-          .domain([self.mapping.min, self.mapping.max])
+          .domain([self.mapping.min, Math.floor(self.mapping.max * self.axis.scaling.y)])
           .range([self.dataframe.height, 0]);
 
     self.xAxis = self.rotate
@@ -394,7 +395,7 @@ class StackedBarChart extends Chart {
 
     self.x = self.rotate
       ? D3.scaleLinear()
-          .domain([self.mapping.min, self.mapping.max])
+          .domain([self.mapping.min, Math.floor(self.mapping.max * self.axis.scaling.x)])
           .range([0, self.dataframe.width])
       : D3.scaleBand()
           .domain(self.mapping.groups)
@@ -407,7 +408,7 @@ class StackedBarChart extends Chart {
           .range([self.dataframe.height, 0])
           .paddingInner(0.05)
       : D3.scaleLinear()
-          .domain([self.mapping.min, self.mapping.max])
+          .domain([self.mapping.min, Math.floor(self.mapping.max * self.axis.scaling.y)])
           .range([self.dataframe.height, 0]);
 
     self.xAxis = self.rotate

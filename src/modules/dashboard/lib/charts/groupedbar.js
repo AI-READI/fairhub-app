@@ -29,6 +29,7 @@ class GroupedBarChart extends Chart {
     const self = this;
 
     // Configure Stacked Bar Chart
+    self.axis = config.axis;
     self.transitions = config.transitions;
     self.animations = config.animations;
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
@@ -116,7 +117,7 @@ class GroupedBarChart extends Chart {
       .paddingInner(0.05);
 
     self.y = D3.scaleLinear()
-      .domain([self.mapping.min, self.mapping.max])
+      .domain([self.mapping.min, Math.floor(self.mapping.max * self.axis.scaling.y)])
       .range([self.dataframe.height, 0]);
 
     self.subgroupAxis = D3.scaleBand()
@@ -343,7 +344,7 @@ class GroupedBarChart extends Chart {
       .paddingInner(0.05);
 
     self.y = D3.scaleLinear()
-      .domain([self.mapping.min, self.mapping.max])
+      .domain([self.mapping.min, Math.floor(self.mapping.max * self.axis.scaling.y)])
       .range([self.dataframe.height, 0]);
 
     self.subgroupAxis = D3.scaleBand()
