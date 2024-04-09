@@ -11,7 +11,7 @@
       "id": "#current-medications-by-site_stacked-bar",
       "rotate": false,
       "width": 1080,
-      "height": 500,
+      "height": 520,
       "position": {
         "top": 0,
         "left": 0,
@@ -19,15 +19,15 @@
         "bottom": 0
       },
       "margin": {
-        "top": 20,
-        "left": 20,
-        "right": 20,
+        "top": 0,
+        "left": 0,
+        "right": 0,
         "bottom": 20
       },
       "padding": {
-        "top": 0,
+        "top": 20,
         "left": 0,
-        "right": 200,
+        "right": 36,
         "bottom": 0
       },
       "axis": {

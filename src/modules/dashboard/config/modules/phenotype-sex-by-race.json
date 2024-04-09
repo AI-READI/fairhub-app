@@ -10,7 +10,7 @@
     "config": {
       "id": "#phenotype-sex-by-race_grouped-stacked-bar",
       "width": 1080,
-      "height": 420,
+      "height": 520,
       "position": {
         "top": 0,
         "left": 0,
@@ -26,7 +26,7 @@
       "padding": {
         "top": 20,
         "left": 0,
-        "right": 240,
+        "right": 36,
         "bottom": 0
       },
       "axis": {
