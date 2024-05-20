@@ -6,6 +6,12 @@ import { theme } from "@/stores/settings";
 
 const themeOverrides: GlobalThemeOverrides = {
   Button: {},
+  common: {
+    primaryColor: "#0284c7",
+    primaryColorHover: "#0ea5e9",
+    primaryColorPressed: "#0369a1",
+    primaryColorSuppl: "#0ea5e9",
+  },
   Form: {
     feedbackPadding: "4px 0 8px 2px",
     labelFontWeight: "600",
