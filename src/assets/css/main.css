@@ -1,5 +1,4 @@
 @import "./base.css";
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -155,3 +154,12 @@ Transition styles for <transition />
   opacity: 0;
   transform: translateY(-20px);
 }
+
+/*.n-menu-item{*/
+/*  position: relative;*/
+/*}*/
+
+/*.n-menu-item *, .n-menu-item *::before,.n-menu-item *::after {*/
+/*  position: static;*/
+
+/*}*/
