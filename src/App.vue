@@ -35,7 +35,7 @@ const themeOverrides: GlobalThemeOverrides = {
 
             <DatasetSidebar />
 
-            <n-layout-content class="h-[calc(100vh-56px)] py-4 pl-6">
+            <n-layout-content class="view h-[calc(100vh-56px)] py-4 pl-6">
               <router-view v-slot="{ Component }">
                 <transition name="fade" appear mode="out-in">
                   <component :is="Component" />

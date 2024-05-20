@@ -1,4 +1,5 @@
 @import "./base.css";
+@import "./circles.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -163,3 +164,26 @@ Transition styles for <transition />
 /*  position: static;*/
 
 /*}*/
+
+.share-data{
+  background-image: url("../../assets/faq-bg.svg");
+      background-size: auto; /* Adjust as needed */
+    background-repeat: repeat; /* Adjust as needed */
+}
+
+.main-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.n-collapse .n-collapse-item:not(:first-child) {
+    border-top: 1px solid #0284c7;}
+
+.view:has(main.landing){
+  padding: 0;
+  margin: 0;
+}
