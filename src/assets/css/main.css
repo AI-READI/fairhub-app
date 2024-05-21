@@ -1,5 +1,4 @@
 @import "./base.css";
-@import "./circles.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -165,11 +164,12 @@ Transition styles for <transition />
 
 /*}*/
 
-.share-data{
-  background-image: url("../../assets/faq-bg.svg");
-      background-size: auto; /* Adjust as needed */
-    background-repeat: repeat; /* Adjust as needed */
-}
+/*.share-data{*/
+/*  background-image: url("../../assets/faq-bg.svg");*/
+/*      background-size: auto; !* Adjust as needed *!*/
+/*    background-repeat: repeat; !* Adjust as needed *!*/
+
+/*}*/
 
 .main-bg::before {
   content: "";
@@ -186,4 +186,25 @@ Transition styles for <transition />
 .view:has(main.landing){
   padding: 0;
   margin: 0;
+}
+
+
+.share-data {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.share-data::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../../assets/faq-bg.svg");
+    background-repeat: repeat; /* Adjust as needed */
+    background-position: center;
+    mask-image: linear-gradient(180deg, transparent, white 15%, white 80%, transparent);
+    z-index: -1;
 }

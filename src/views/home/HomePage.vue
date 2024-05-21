@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import HomePageAnimationJSON from "@/assets/animations/home_page.json";
 import { useAuthStore } from "@/stores/auth";
 const router = useRouter();
 const push = usePush();
@@ -54,86 +53,27 @@ const statistics = ref([
 
 <template>
   <main class="landing flex w-full flex-col">
-    <section
-      class="main-bg relative mx-auto flex w-full justify-center bg-transparent px-6 py-24 max-lg:flex-wrap"
-    >
-      <div class="background">
-        <span></span>
+    <section class="p-16">
+      <div>
+        <div class="mx-auto max-w-[85rem] sm:px-6 lg:px-8">
+          <div class="mx-auto mt-5 max-w-2xl text-center">
+            <h1
+              class="block bg-blue-400 bg-clip-text text-5xl font-bold text-transparent md:text-5xl lg:text-6xl"
+            >
+              Share and access <span class="text-sky-700">FAIR</span>
 
-        <span></span>
+              and <span class="text-sky-700">AI-ready</span> datasets
+            </h1>
+          </div>
 
-        <span></span>
+          <div class="mx-auto mt-4 max-w-3xl text-center">
+            <p class="text-center text-2xl font-normal text-gray-800">
+              FAIRhub is an open source platform for sharing and accessing FAIR and AI-ready
+              datasets.
+            </p>
+          </div>
 
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-      </div>
-
-      <div class="flex max-w-screen-xl px-8">
-        <div>
-          <n-tag round :bordered="false" type="warning" class="w-max">
-            <template #icon>
-              <f-icon icon="eos-icons:abstract-incomplete" />
-            </template>
-
-            Work in Progress
-          </n-tag>
-
-          <h1
-            class="relative bg-gradient-to-tl from-blue-400 to-emerald-400 bg-clip-text pb-4 pt-3 text-6xl font-bold text-transparent max-xl:text-5xl"
-          >
-            Share and access FAIR and AI-ready datasets
-          </h1>
-
-          <p class="text-2xl font-normal text-gray-800">
-            FAIRhub is an open source platform for sharing and accessing FAIR and AI-ready datasets.
-          </p>
-
-          <div class="flex w-max space-x-4 pt-4">
+          <div class="mt-8 flex justify-center gap-3">
             <n-button type="primary" @click="navigateToStudies" size="large">
               <template #icon>
                 <f-icon icon="el:share" />
@@ -142,7 +82,7 @@ const statistics = ref([
             </n-button>
 
             <a href="https://staging.data.fairhub.io" class="text-sky-600">
-              <n-button secondary size="large">
+              <n-button secondary type="info" size="large">
                 <template #icon>
                   <f-icon icon="tabler:view-360" />
                 </template>
@@ -151,17 +91,13 @@ const statistics = ref([
             </a>
           </div>
         </div>
-
-        <div class="w-2/5 max-lg:hidden">
-          <Vue3Lottie :animationData="HomePageAnimationJSON" :height="350" :width="350" />
-        </div>
       </div>
     </section>
 
-    <section class="py-24">
+    <section class="share-data py-24">
       <div class="mx-auto mb-5 flex max-w-screen-xl flex-col px-10">
         <h2
-          class="block bg-gradient-to-tl from-sky-700 to-sky-600 bg-clip-text pb-8 pt-3 text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
+          class="block bg-gradient-to-tl from-sky-700 to-sky-600 bg-clip-text pb-8 pt-3 text-center text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
         >
           About
         </h2>
@@ -177,11 +113,11 @@ const statistics = ref([
       </div>
     </section>
 
-    <section class="share-data bg-slate-100">
+    <section>
       <div class="py-24">
         <div class="mx-auto mb-5 max-w-screen-xl px-10">
           <h2
-            class="block bg-gradient-to-tl from-sky-700 to-sky-600 bg-clip-text pb-8 text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
+            class="block bg-gradient-to-tl from-sky-700 to-sky-600 bg-clip-text pb-8 text-center text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
           >
             Share Data
           </h2>
@@ -202,7 +138,7 @@ const statistics = ref([
         </div>
 
         <div
-          class="mx-auto flex max-w-screen-xl gap-10 px-4 max-2xl:px-10 max-xl:flex-wrap max-xl:justify-center max-lg:max-w-screen-md"
+          class="mx-auto flex max-w-screen-xl gap-10 pr-4 max-2xl:px-10 max-xl:flex-wrap max-xl:justify-center max-lg:max-w-screen-md md:max-w-[70rem]"
         >
           <div
             v-for="step in statistics"
@@ -239,10 +175,10 @@ const statistics = ref([
       </div>
     </section>
 
-    <section class="landing-sections py-24">
+    <section class="share-data py-24">
       <div class="mx-auto mb-5 flex max-w-screen-xl flex-col px-10">
         <h2
-          class="block bg-gradient-to-tl from-sky-700 to-sky-600 bg-clip-text pb-8 pt-3 text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
+          class="block bg-gradient-to-tl from-sky-700 to-sky-600 bg-clip-text pb-8 pt-3 text-center text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
         >
           Access Data
         </h2>
@@ -266,8 +202,8 @@ const statistics = ref([
       </div>
     </section>
 
-    <section class="bg-slate-50 px-10 py-16">
-      <div class="mx-auto flex w-full max-w-screen-xl flex-col">
+    <section class="px-10 py-16">
+      <div class="mx-auto flex w-full max-w-screen-xl flex-col px-10">
         <h2
           class="block bg-gradient-to-tl from-sky-700 to-sky-600 bg-clip-text pb-8 pt-3 text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
         >
@@ -275,11 +211,7 @@ const statistics = ref([
         </h2>
 
         <p class="max-w-screen-xl pb-10 text-xl font-medium">
-          We provide below a list of frequently asked questions. If you have additional questions or
-          suggestions, please open an issue on
-          <a href="https://github.com/AI-READI/fairhub.io" class="text-sky-600"
-            >the GitHub repository of FAIRhub</a
-          >.
+          We provide below a list of frequently asked questions.
         </p>
 
         <n-collapse>
@@ -336,6 +268,19 @@ const statistics = ref([
               effort from members of the AI-READI project. You can find and access the source code
               <a href="https://github.com/AI-READI/fairhub.io" class="text-sky-600"
                 >from the GitHub repository of FAIRhub</a
+              >.
+            </p>
+          </n-collapse-item>
+
+          <n-collapse-item name="4">
+            <template #header>
+              <p class="pl-2 text-xl font-semibold">How to make suggestions?</p>
+            </template>
+
+            <p class="w-[90%] pl-8 text-lg font-medium">
+              If you have additional questions or suggestions, please open an issue on
+              <a href="https://github.com/AI-READI/fairhub.io" class="text-sky-600"
+                >the GitHub repository of FAIRhub</a
               >.
             </p>
           </n-collapse-item>
