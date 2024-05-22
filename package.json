@@ -38,6 +38,7 @@
     }
   },
   "dependencies": {
+    "@azure/msal-browser": "^3.14.0",
     "@headlessui/vue": "^1.7.15",
     "@vavt/md-editor-extension": "^3.0.0",
     "@vueuse/core": "^10.4.1",
