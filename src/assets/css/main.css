@@ -205,6 +205,10 @@ Transition styles for <transition />
     background-image: url("../../assets/faq-bg.svg");
     background-repeat: repeat; /* Adjust as needed */
     background-position: center;
-    mask-image: linear-gradient(180deg, transparent, white 15%, white 80%, transparent);
+    mask-image: linear-gradient( white 15%, white 85%, transparent);
     z-index: -1;
+}
+
+.faq {
+  background: linear-gradient(0deg, rgba(255, 255, 255, 1) 3%, rgba(241, 245, 249, 1) 30%, rgba(241, 245, 249, 1) 88%, rgba(255, 255, 255, 1) 100%);
 }

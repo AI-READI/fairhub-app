@@ -53,23 +53,27 @@ const statistics = ref([
 
 <template>
   <main class="landing flex w-full flex-col">
-    <section class="p-16">
+    <section class="share-data p-16">
       <div>
         <div class="mx-auto max-w-[85rem] sm:px-6 lg:px-8">
           <div class="mx-auto mt-5 max-w-2xl text-center">
             <h1
               class="block bg-blue-400 bg-clip-text text-5xl font-bold text-transparent md:text-5xl lg:text-6xl"
             >
-              Share and access <span class="text-sky-700">FAIR</span>
+              <span class="pl-10">Share and Access </span>
 
-              and <span class="text-sky-700">AI-ready</span> datasets
+              <span class="text-sky-700">FAIR</span>
+
+              and <span class="text-sky-700">AI-ready</span> Datasets
             </h1>
           </div>
 
           <div class="mx-auto mt-4 max-w-3xl text-center">
             <p class="text-center text-2xl font-normal text-gray-800">
               FAIRhub is an open source platform for sharing and accessing FAIR and AI-ready
-              datasets.
+              datasets. Your clinical research data can be easily shared with the world through
+              FAIRhub in a way that it is optimally reusable by both researchers and AI
+              applications.
             </p>
           </div>
 
@@ -94,10 +98,10 @@ const statistics = ref([
       </div>
     </section>
 
-    <section class="share-data py-24">
+    <section class="py-24">
       <div class="mx-auto mb-5 flex max-w-screen-xl flex-col px-10">
         <h2
-          class="block bg-gradient-to-tl from-sky-700 to-sky-600 bg-clip-text pb-8 pt-3 text-center text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
+          class="block bg-gradient-to-tl from-orange-400 to-yellow-400 bg-clip-text pb-8 text-center text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
         >
           About
         </h2>
@@ -113,11 +117,11 @@ const statistics = ref([
       </div>
     </section>
 
-    <section>
+    <section class="faq">
       <div class="py-24">
         <div class="mx-auto mb-5 max-w-screen-xl px-10">
           <h2
-            class="block bg-gradient-to-tl from-sky-700 to-sky-600 bg-clip-text pb-8 text-center text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
+            class="block bg-gradient-to-tl from-orange-400 to-yellow-400 bg-clip-text pb-8 text-center text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
           >
             Share Data
           </h2>
@@ -128,13 +132,6 @@ const statistics = ref([
             AI-ready clinical research data. You can do that in few easy steps and start getting
             credit whenever your data is reused to fuel future discoveries!
           </p>
-
-          <n-button type="info" @click="navigateToStudies" size="large">
-            <template #icon>
-              <f-icon icon="el:share" />
-            </template>
-            Share Data
-          </n-button>
         </div>
 
         <div
@@ -168,17 +165,17 @@ const statistics = ref([
             </h3>
 
             <!-- eslint-disable vue/no-v-html -->
-            <p class="py-5" v-html="step.description"></p>
+            <p class="py-5 font-medium text-gray-800" v-html="step.description"></p>
             <!-- eslint-enable vue/no-v-html -->
           </div>
         </div>
       </div>
     </section>
 
-    <section class="share-data py-24">
+    <section class="py-20">
       <div class="mx-auto mb-5 flex max-w-screen-xl flex-col px-10">
         <h2
-          class="block bg-gradient-to-tl from-sky-700 to-sky-600 bg-clip-text pb-8 pt-3 text-center text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
+          class="block bg-gradient-to-tl from-orange-400 to-yellow-400 bg-clip-text pb-8 text-center text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
         >
           Access Data
         </h2>
@@ -189,7 +186,7 @@ const statistics = ref([
           today!
         </p>
 
-        <div class="flex w-max space-x-4 pt-4">
+        <div class="flex w-max space-x-4 self-center pt-8">
           <a href="https://staging.data.fairhub.io" class="text-sky-500">
             <n-button type="info" size="large">
               <template #icon>
@@ -202,10 +199,10 @@ const statistics = ref([
       </div>
     </section>
 
-    <section class="px-10 py-16">
+    <section class="bg-slate-50 px-10 py-16">
       <div class="mx-auto flex w-full max-w-screen-xl flex-col px-10">
         <h2
-          class="block bg-gradient-to-tl from-sky-700 to-sky-600 bg-clip-text pb-8 pt-3 text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
+          class="bg-gradient-to-tl from-orange-400 to-yellow-400 bg-clip-text pb-8 text-center text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
         >
           FAQ
         </h2>
