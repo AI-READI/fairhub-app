@@ -1,7 +1,6 @@
 {
   "recommendations": [
     "Vue.volar",
-    "Vue.vscode-typescript-vue-plugin",
     "aaron-bond.better-comments",
     "dbaeumer.vscode-eslint",
     "lottiefiles.vscode-lottie",
@@ -12,7 +11,6 @@
     "bradlc.vscode-tailwindcss",
     "austenc.tailwind-docs",
     "kamikillerto.vscode-colorize",
-    "wix.vscode-import-cost",
     "DavidAnson.vscode-markdownlint",
     "csstools.postcss"
   ]

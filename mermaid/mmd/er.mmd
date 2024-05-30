@@ -1,7 +1,8 @@
 erDiagram
     STUDY {
         string id PK "UUIDv4"
-        string title
+        string title "300 characters"
+        string acronym "14 characters"
         string image
         timestamp updated_on
         timestamp created_at
@@ -79,7 +80,8 @@ erDiagram
         string title
         string changelog
         boolean published "should be uneditable after publish"
-        string doi "identifier part only"
+        string doi "10.36478/fairhub.10230"
+        int identifier "autoincrement | unique"
         timestamp updated_on
         timestamp created_at
         timestamp published_on
@@ -105,6 +107,22 @@ erDiagram
         string id PK "UUIDv4"
         string user_id FK "USER.id"
         string token "passphrase"
+        timestamp created_at
+    }
+
+    PUBLISHED_DATASET {
+        string id PK "VERSION.identifier"
+        string study_id "STUDY.id"
+        string dataset_id "DATASET.id"
+        string version_id "VERSION.id"
+        string doi
+        string title "DATASET.title"
+        string description "DATASET.description"
+        string version_title "VERSION.title"
+        string study_title "STUDY.title"
+        json metadata
+        json files
+        json data "anything not in metadata"
         timestamp created_at
     }
 

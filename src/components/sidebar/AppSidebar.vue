@@ -95,6 +95,11 @@ const UpperMenuOptions = computed(() => [
         label: "Conditions",
       },
       {
+        icon: renderIcon("codicon:symbol-keyword"),
+        key: "study:metadata:keywords",
+        label: "Keywords",
+      },
+      {
         icon: renderIcon("iconoir:design-pencil"),
         key: "study:metadata:design",
         label: "Design",
@@ -144,33 +149,6 @@ const UpperMenuOptions = computed(() => [
         key: "study:enrollment",
         label: "Enrollment",
       },
-      {
-        icon: renderIcon("icons8:share"),
-        key: "study:metadata:ipd-sharing",
-        label: "IPD Sharing",
-      },
-      {
-        children: [
-          {
-            icon: renderIcon("bi:journal-medical"),
-            key: "study:metadata:references",
-            label: "Publications",
-          },
-          {
-            icon: renderIcon("fluent:link-12-filled"),
-            key: "study:metadata:links",
-            label: "Links",
-          },
-          {
-            icon: renderIcon("material-symbols:smb-share"),
-            key: "study:metadata:available-ipd",
-            label: "Available IPD",
-          },
-        ],
-        icon: renderIcon("ooui:reference"),
-        key: "study:references",
-        label: "References",
-      },
     ],
     icon: renderIcon("ooui:view-details-ltr"),
     key: "study:metadata",
@@ -196,9 +174,15 @@ const UpperMenuOptions = computed(() => [
     show: hideMenuOptions.value,
   },
   {
+    icon: renderIcon("material-symbols:api"),
+    key: "study:redcap:all-redcap-project-apis",
+    label: "REDCap",
+    show: hideMenuOptions.value,
+  },
+  {
     icon: renderIcon("material-symbols:dashboard-rounded"),
-    key: "study:dashboard",
-    label: "Dashboard",
+    key: "study:dashboard:all-dashboards",
+    label: "Dashboards",
     show: hideMenuOptions.value,
   },
   {
@@ -373,8 +357,6 @@ const defaultExpandedKeys = computed(() => {
   if (currentRoute.name) {
     const name = currentRoute.name as string;
 
-    console.log("appsidebar-name", name, name.startsWith("study:metadata"));
-
     if (name.startsWith("study:metadata")) {
       return ["study:metadata"];
     }
@@ -390,7 +372,7 @@ const selectAndExpand = (key: string) => {
   menuInstRef.value?.showOption(key);
 };
 
-router.beforeEach((to, from) => {
+router.beforeEach((to) => {
   if (typeof to.name !== "string") return;
   const name: string = to.meta && to.meta.menuItem ? (to.meta.menuItem as string) : to.name;
   selectAndExpand(name);

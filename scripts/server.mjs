@@ -42,6 +42,21 @@ const version_readme = [
   },
 ];
 
+const dataset_related_identifier = [
+  {
+    id: "42dec85c-22f2-4f4e-a5ad-f0121067f507",
+    created_at: 1697762742,
+    dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+    identifier: "10.1038/s41597-023-02463-x",
+    identifier_type: "DOI",
+    related_metadata_scheme: "DataCite",
+    relation_type: "IsCitedBy",
+    resource_type: "Dataset",
+    scheme_type: "DOI",
+    scheme_uri: "https://doi.org",
+  },
+];
+
 const generateMarkdown = async () => {
   const response = await fetch("https://jaspervdj.be/lorem-markdownum/markdown.txt");
 
@@ -206,6 +221,62 @@ const init = async () => {
       const text = await generateMarkdown();
 
       return h.response({ readme: text }).code(200);
+    },
+    method: "POST",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/metadata/related-identifier",
+    handler: (request, h) => {
+      const datasetid = "b5536454-f81b-455a-8c8a-6d56e9733c19";
+
+      const relatedIdentifiers = dataset_related_identifier.filter(
+        (ri) => ri.dataset_id === datasetid
+      );
+
+      return h.response(relatedIdentifiers).code(200);
+    },
+    method: "GET",
+  });
+
+  server.route({
+    path: "/api/study/{studyid}/dataset/{datasetid}/metadata/related-identifier",
+    handler: (request, h) => {
+      const payload = JSON.parse(request.payload);
+
+      console.log(payload);
+
+      for (const ri of payload) {
+        if (ri.id) {
+          const relatedIdentifier = dataset_related_identifier.find((r) => r.id === ri.id);
+
+          if (!relatedIdentifier) {
+            return h.response({ message: "related identifier not found" }).code(404);
+          }
+
+          relatedIdentifier.identifier = ri.identifier;
+          relatedIdentifier.identifier_type = ri.identifier_type;
+          relatedIdentifier.related_metadata_scheme = ri.related_metadata_scheme;
+          relatedIdentifier.relation_type = ri.relation_type;
+          relatedIdentifier.resource_type = ri.resource_type;
+          relatedIdentifier.scheme_type = ri.scheme_type;
+          relatedIdentifier.scheme_uri = ri.scheme_uri;
+        } else {
+          dataset_related_identifier.push({
+            id: nanoid(),
+            created_at: Date.now() / 1000,
+            dataset_id: "b5536454-f81b-455a-8c8a-6d56e9733c19",
+            identifier: ri.identifier,
+            identifier_type: ri.identifier_type,
+            related_metadata_scheme: ri.related_metadata_scheme,
+            relation_type: ri.relation_type,
+            resource_type: ri.resource_type,
+            scheme_type: ri.scheme_type,
+            scheme_uri: ri.scheme_uri,
+          });
+        }
+      }
+      return h.response({ message: "related identifier updated" }).code(200);
     },
     method: "POST",
   });

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { filesize } from "filesize";
+import { useRouter } from "vue-router";
 
 import { push } from "@/main";
 import { useAuthStore } from "@/stores/auth";
@@ -16,7 +17,6 @@ const studyStore = useStudyStore();
 
 const studies = computed(() => {
   const allStudies = studyStore.allStudies;
-  console.log("all studies", allStudies);
 
   const filteredStudies = [];
 
@@ -25,8 +25,6 @@ const studies = computed(() => {
     const permissions = filterStore.permissions;
 
     if (permissions.owner) {
-      console.log("owner", study.owner, authStore.user);
-
       if (study.role === "owner") {
         filteredStudies.push(study);
       }
@@ -68,8 +66,6 @@ const studies = computed(() => {
   if (sortOrder.value === "desc") {
     filteredStudies.reverse();
   }
-
-  console.log("sorted filtered studies", filteredStudies);
 
   return filteredStudies;
 });

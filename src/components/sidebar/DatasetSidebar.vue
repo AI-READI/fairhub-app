@@ -68,15 +68,9 @@ const dynamicUpperMenuOptions: MenuOption[] = [
         label: "Dates",
       },
       {
-        // also contains publication year
         icon: renderIcon("octicon:organization-16"),
-        key: "dataset:metadata:publisher",
-        label: "Publisher",
-      },
-      {
-        icon: renderIcon("solar:key-bold-duotone"),
-        key: "dataset:metadata:record-keys",
-        label: "Record Keys",
+        key: "dataset:metadata:managing-organization",
+        label: "Managing Organization",
       },
       {
         icon: renderIcon("tabler:id-badge-off"),
@@ -110,8 +104,8 @@ const dynamicUpperMenuOptions: MenuOption[] = [
       },
       {
         icon: renderIcon("fluent-mdl2:relationship"),
-        key: "dataset:metadata:related-items",
-        label: "Related Items",
+        key: "dataset:metadata:related-identifiers",
+        label: "Related Identifiers",
       },
       {
         // language, managing organization, size goes in here
@@ -123,6 +117,48 @@ const dynamicUpperMenuOptions: MenuOption[] = [
     icon: renderIcon("ooui:view-details-ltr"),
     key: "dataset:metadata",
     label: "Metadata",
+  },
+  {
+    children: [
+      {
+        icon: renderIcon("material-symbols-light:motion-photos-on-rounded"),
+        key: "dataset:healthsheet:motivation",
+        label: "Motivation",
+      },
+      {
+        icon: renderIcon("ph:compass-tool-duotone"),
+        key: "dataset:healthsheet:composition",
+        label: "Composition",
+      },
+      {
+        icon: renderIcon("fluent:collections-add-24-filled"),
+        key: "dataset:healthsheet:collection",
+        label: "Collection",
+      },
+      {
+        icon: renderIcon("carbon:process"),
+        key: "dataset:healthsheet:preprocessing",
+        label: "Preprocessing",
+      },
+      {
+        icon: renderIcon("icon-park-twotone:data-user"),
+        key: "dataset:healthsheet:uses",
+        label: "Uses",
+      },
+      {
+        icon: renderIcon("fluent-mdl2:distribute-down"),
+        key: "dataset:healthsheet:distribution",
+        label: "Distribution",
+      },
+      {
+        icon: renderIcon("pajamas:issue-type-maintenance"),
+        key: "dataset:healthsheet:maintenance",
+        label: "Maintenance",
+      },
+    ],
+    icon: renderIcon("mdi:file-document-edit-outline"),
+    key: "dataset:healthsheet",
+    label: "Healthsheet",
   },
   {
     icon: renderIcon("entypo:publish"),
@@ -206,7 +242,7 @@ const selectAndExpand = (key: string) => {
   menuInstRef.value?.showOption(key);
 };
 
-router.beforeEach((to, from) => {
+router.beforeEach((to) => {
   if (typeof to.name !== "string") return;
   const name: string = to.meta && to.meta.menuItem ? (to.meta.menuItem as string) : to.name;
   selectAndExpand(name);

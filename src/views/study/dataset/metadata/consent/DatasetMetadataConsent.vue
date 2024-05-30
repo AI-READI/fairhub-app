@@ -111,10 +111,8 @@ const saveMetadata = (e: MouseEvent) => {
     <PageBackNavigationHeader
       title="Consent"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
-      linkName="study:overview"
-      :linkParams="{
-        studyId: route.params.studyId,
-      }"
+      linkName="dataset:overview"
+      :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
     />
 
     <n-divider />
@@ -134,7 +132,7 @@ const saveMetadata = (e: MouseEvent) => {
         <n-form-item label="Type" path="type">
           <n-select
             v-model:value="moduleData.type"
-            placeholder="Not Known"
+            placeholder="No Restriction"
             clearable
             :options="FORM_JSON.datasetConsentTypeOptions"
           />

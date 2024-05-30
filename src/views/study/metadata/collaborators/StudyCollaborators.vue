@@ -1,21 +1,33 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
+import { nanoid } from "nanoid";
 
+import type { StudyCollaborators } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
+const router = useRouter();
 const push = usePush();
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData = ref<string[]>([]);
+const moduleData = reactive<StudyCollaborators>({
+  collaborators: [],
+});
+
+const loading = ref(false);
+const responseLoading = ref(false);
 
 onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
+  responseLoading.value = true;
+
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/collaborators`, {
     method: "GET",
   });
+
+  responseLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -23,40 +35,89 @@ onBeforeMount(async () => {
 
   const data = await response.json();
 
-  moduleData.value = data;
+  moduleData.collaborators = data.map((item: any) => {
+    return {
+      ...item,
+      origin: "remote",
+    };
+  });
 });
 
-const addCollaborator = () => {
-  moduleData.value.push("");
+const removeCollaborator = async (id: string) => {
+  const item = moduleData.collaborators.find((item) => item.id === id);
+
+  if (item && item.origin === "remote") {
+    const response = await fetch(
+      `${baseURL}/study/${route.params.studyId}/metadata/collaborators/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok) {
+      push.error("Failed to delete central contact");
+      throw new Error("Network response was not ok");
+    }
+  }
+
+  moduleData.collaborators = moduleData.collaborators.filter((item) => item.id !== id);
+
+  push.success("Collaborator deleted successfully");
 };
 
-const removeCollaborator = (index: number) => {
-  moduleData.value.splice(index, 1);
+const addCollaborator = () => {
+  moduleData.collaborators.push({
+    id: nanoid(),
+    name: "",
+    identifier: "",
+    identifier_scheme: "",
+    identifier_scheme_uri: "",
+    origin: "local",
+  });
 };
 
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
     if (!errors) {
-      // remove empty collaborators
-      const collaborators = moduleData.value.filter((collaborator) => collaborator !== "");
+      const data: any = moduleData.collaborators.map((item) => {
+        const entry = {
+          name: item.name,
+          identifier: item.identifier,
+          identifier_scheme: item.identifier_scheme,
+          identifier_scheme_uri: item.identifier_scheme_uri,
+        };
 
-      // remove collaborators with duplicate names
-      const uniqueCollaborators = [...new Set(collaborators)];
+        if (item.origin === "local") {
+          return entry;
+        } else {
+          return {
+            ...entry,
+            id: item.id,
+          };
+        }
+      });
+
+      loading.value = true;
 
       const response = await fetch(
         `${baseURL}/study/${route.params.studyId}/metadata/collaborators`,
         {
-          body: JSON.stringify(uniqueCollaborators),
-          method: "PUT",
+          body: JSON.stringify(data),
+          method: "POST",
         }
       );
 
+      loading.value = false;
+
       if (!response.ok) {
-        push.error("Something went wrong.");
-        return;
+        push.error("Something went wrong. Please try again later.");
+        throw new Error("Network response was not ok");
       } else {
         push.success("Study updated successfully.");
+
+        // refresh page
+        router.go(0);
       }
 
       console.log("success");
@@ -81,50 +142,108 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <p class="pb-8 pt-2">
-      Other organizations (if any) providing support. Support may include funding, design,
-      implementation, data analysis or reporting. The responsible party is responsible for
-      confirming all collaborators before listing them.
-    </p>
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
 
-    <n-form ref="formRef" :model="moduleData" size="large" label-placement="top" class="pr-4">
-      <n-form-item
-        v-for="(collaborator, index) in moduleData"
-        :key="index"
-        label="Full Name"
-        path="collaborator"
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
       >
-        <n-input v-model:value="moduleData[index]" placeholder="Historia Reiss" />
+        <CollapsibleCard
+          v-for="(item, index) in moduleData.collaborators"
+          :key="item.id"
+          class="mb-5 shadow-md"
+          :title="item.name || `Collaborator ${index + 1}`"
+          bordered
+        >
+          <template #header-extra>
+            <n-popconfirm @positive-click="removeCollaborator(item.id)">
+              <template #trigger>
+                <n-button type="error" secondary>
+                  <template #icon>
+                    <f-icon icon="ep:delete" />
+                  </template>
 
-        <n-popconfirm @positive-click="removeCollaborator(index)">
-          <template #trigger>
-            <n-button class="ml-5">
-              <f-icon icon="gridicons:trash" />
-            </n-button>
+                  Remove Collaborator
+                </n-button>
+              </template>
+
+              Are you sure you want to remove this Collaborator?
+            </n-popconfirm>
           </template>
 
-          Are you sure you want to remove this collaborator?
-        </n-popconfirm>
-      </n-form-item>
+          <n-form-item
+            label="Name"
+            :path="`collaborators[${index}].name`"
+            :rule="{
+              message: 'Please enter a name',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-input v-model:value="item.name" placeholder="Sasha Braus" clearable />
+          </n-form-item>
 
-      <n-button class="mb-10 w-full" dashed type="success" @click="addCollaborator">
-        <template #icon>
-          <f-icon icon="gridicons:create" />
-        </template>
+          <n-form-item
+            label="Identifier"
+            :path="`collaborators[${index}].identifier`"
+            :rule="{
+              message: 'Please enter an identifier',
+              required: item.identifier_scheme,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-input v-model:value="item.identifier" placeholder="0000-0003-2829-8032" clearable />
+          </n-form-item>
 
-        Add a Collaborator
-      </n-button>
+          <n-form-item
+            label="Identifier Scheme"
+            :path="`collaborators[${index}].identifier_scheme`"
+            :rule="{
+              message: 'Please enter an identifier scheme',
+              required: item.identifier,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-input v-model:value="item.identifier_scheme" placeholder="ORCID" clearable />
+          </n-form-item>
 
-      <n-divider />
+          <n-form-item
+            label="Identifier Scheme URI"
+            :path="`collaborators[${index}].identifier_scheme_uri`"
+          >
+            <n-input
+              v-model:value="item.identifier_scheme_uri"
+              placeholder="https://orcid.org"
+              clearable
+            />
+          </n-form-item>
+        </CollapsibleCard>
 
-      <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata">
+        <n-button class="my-10 w-full" dashed type="success" @click="addCollaborator">
           <template #icon>
-            <f-icon icon="material-symbols:save" />
+            <f-icon icon="gridicons:create" />
           </template>
-          Save Metadata
+
+          Add a Collaborator
         </n-button>
-      </div>
-    </n-form>
+
+        <n-divider />
+
+        <div class="flex justify-start">
+          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
   </main>
 </template>

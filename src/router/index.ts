@@ -17,7 +17,17 @@ import Integrations from "@/views/integrations/IntegrationPage.vue";
 import AllSettings from "@/views/settings/AllSettings.vue";
 import AllStudies from "@/views/studies/AllStudies.vue";
 import StudyContributors from "@/views/study/contributors/StudyContributors.vue";
-import DashBoard from "@/views/study/dashboard/DashBoard.vue";
+import AllDashboards from "@/views/study/dashboard/AllDashboards.vue";
+import ConnectDashboard from "@/views/study/dashboard/ConnectDashboard.vue";
+import EditDashboard from "@/views/study/dashboard/EditDashboard.vue";
+import ViewDashboard from "@/views/study/dashboard/ViewDashboard.vue";
+import DatasetHealthsheetCollection from "@/views/study/dataset/healthsheet/collection/DatasetHealthsheetCollection.vue";
+import DatasetHealthsheetComposition from "@/views/study/dataset/healthsheet/composition/DatasetHealthsheetComposition.vue";
+import DatasetHealthsheetDistribution from "@/views/study/dataset/healthsheet/distribution/DatasetHealthsheetDistribution.vue";
+import DatasetHealthsheetMaintenance from "@/views/study/dataset/healthsheet/maintenance/DatasetHealthsheetMaintenance.vue";
+import DatasetHealthsheetMotivation from "@/views/study/dataset/healthsheet/motivation/DatasetHealthsheetMotivation.vue";
+import DatasetHealthsheetPreprocessing from "@/views/study/dataset/healthsheet/preprocessing/DatasetHealthsheetPreprocessing.vue";
+import DatasetHealthsheetUses from "@/views/study/dataset/healthsheet/uses/DatasetHealthsheetUses.vue";
 import DatasetMetadataOther from "@/views/study/dataset/metadata/about/DatasetMetadataOther.vue";
 import DatasetMetadataAccess from "@/views/study/dataset/metadata/access/DatasetMetadataAccess.vue";
 import DatasetMetadataConsent from "@/views/study/dataset/metadata/consent/DatasetMetadataConsent.vue";
@@ -28,9 +38,8 @@ import DatasetMetadataDeIdentification from "@/views/study/dataset/metadata/deid
 import DatasetMetadataDescriptions from "@/views/study/dataset/metadata/descriptions/DatasetMetadataDescriptions.vue";
 import DatasetMetadataFunders from "@/views/study/dataset/metadata/funders/DatasetMetadataFunders.vue";
 import DatasetMetadataIdentifiers from "@/views/study/dataset/metadata/identifiers/DatasetMetadataIdentifiers.vue";
-import DatasetMetadataRecordKeys from "@/views/study/dataset/metadata/keys/DatasetMetadataRecordKeys.vue";
-import DatasetMetadataPublisher from "@/views/study/dataset/metadata/publisher/DatasetMetadataPublisher.vue";
-import DatasetMetadataRelatedItems from "@/views/study/dataset/metadata/related/DatasetMetadataRelatedItems.vue";
+import DatasetMetadataManagingOrganization from "@/views/study/dataset/metadata/managingorganization/DatasetMetadataManagingOrganization.vue";
+import DatasetMetadataRelatedIdentifiers from "@/views/study/dataset/metadata/related/DatasetMetadataRelatedIdentifiers.vue";
 import DatasetMetadataRights from "@/views/study/dataset/metadata/rights/DatasetMetadataRights.vue";
 import DatasetMetadataSubjects from "@/views/study/dataset/metadata/subjects/DatasetMetadataSubjects.vue";
 import DatasetMetadataTitle from "@/views/study/dataset/metadata/title/DatasetMetadataTitle.vue";
@@ -58,11 +67,8 @@ import StudyContacts from "@/views/study/metadata/enrollment/contacts/StudyConta
 import StudyLocations from "@/views/study/metadata/enrollment/locations/StudyLocations.vue";
 import StudyOfficials from "@/views/study/metadata/enrollment/officials/StudyOfficials.vue";
 import StudyIdentification from "@/views/study/metadata/identification/StudyIdentification.vue";
-import StudyIPDSharing from "@/views/study/metadata/ipdsharing/StudyIPDSharing.vue";
+import StudyKeywords from "@/views/study/metadata/keywords/StudyKeywords.vue";
 import StudyOversight from "@/views/study/metadata/oversight/StudyOversight.vue";
-import StudyAvailableIPD from "@/views/study/metadata/references/availableipd/StudyAvailableIPD.vue";
-import StudyLinks from "@/views/study/metadata/references/links/StudyLinks.vue";
-import StudyReferences from "@/views/study/metadata/references/publications/StudyReferences.vue";
 import StudySponsors from "@/views/study/metadata/sponsors/StudySponsors.vue";
 import StudyStatus from "@/views/study/metadata/status/StudyStatus.vue";
 import StudyArms from "@/views/study/metadata/treatment/arms/StudyArms.vue";
@@ -71,6 +77,9 @@ import NewStudy from "@/views/study/new/NewStudy.vue";
 import StudyOverview from "@/views/study/overview/StudyOverview.vue";
 import AddParticipant from "@/views/study/participants/AddParticipant.vue";
 import StudyParticipants from "@/views/study/participants/StudyParticipants.vue";
+import AddRedcap from "@/views/study/redcap/AddRedcap.vue";
+import AllRedcap from "@/views/study/redcap/AllRedcap.vue";
+import EditRedcap from "@/views/study/redcap/EditRedcap.vue";
 import StudyRouterView from "@/views/study/root/StudyRouterView.vue";
 
 const router = createRouter({
@@ -163,9 +172,49 @@ const router = createRouter({
           component: StudyFiles,
         },
         {
-          name: "study:dashboard",
+          path: "redcap",
+          children: [
+            {
+              name: "study:redcap:all-redcap-project-apis",
+              path: "all",
+              component: AllRedcap,
+            },
+            {
+              name: "study:redcap:add-redcap-project-api",
+              path: "add",
+              component: AddRedcap,
+            },
+            {
+              name: "study:redcap:edit-redcap-project-api",
+              path: ":redcapId/edit",
+              component: EditRedcap,
+            },
+            {
+              name: "study:redcap:connect-redcap-project-dashboard",
+              path: ":redcapId/dashboard",
+              component: ConnectDashboard,
+            },
+          ],
+        },
+        {
           path: "dashboard",
-          component: DashBoard,
+          children: [
+            {
+              name: "study:dashboard:all-dashboards",
+              path: "all",
+              component: AllDashboards,
+            },
+            {
+              name: "study:dashboard:view-dashboard",
+              path: ":dashboardId/view",
+              component: ViewDashboard,
+            },
+            {
+              name: "study:dashboard:edit-dashboard",
+              path: ":dashboardId/edit",
+              component: EditDashboard,
+            },
+          ],
         },
         {
           name: "study:contributors",
@@ -234,14 +283,9 @@ const router = createRouter({
                       component: DatasetMetadataDates,
                     },
                     {
-                      name: "dataset:metadata:publisher",
-                      path: "publisher",
-                      component: DatasetMetadataPublisher,
-                    },
-                    {
-                      name: "dataset:metadata:record-keys",
-                      path: "record-keys",
-                      component: DatasetMetadataRecordKeys,
+                      name: "dataset:metadata:managing-organization",
+                      path: "managing-organization",
+                      component: DatasetMetadataManagingOrganization,
                     },
                     {
                       name: "dataset:metadata:de-identification",
@@ -274,14 +318,54 @@ const router = createRouter({
                       component: DatasetMetadataFunders,
                     },
                     {
-                      name: "dataset:metadata:related-items",
-                      path: "related-items",
-                      component: DatasetMetadataRelatedItems,
+                      name: "dataset:metadata:related-identifiers",
+                      path: "related-identifiers",
+                      component: DatasetMetadataRelatedIdentifiers,
                     },
                     {
                       name: "dataset:metadata:about",
                       path: "about",
                       component: DatasetMetadataOther,
+                    },
+                  ],
+                },
+                {
+                  path: "healthsheet",
+                  children: [
+                    {
+                      name: "dataset:healthsheet:collection",
+                      path: "collection",
+                      component: DatasetHealthsheetCollection,
+                    },
+                    {
+                      name: "dataset:healthsheet:composition",
+                      path: "composition",
+                      component: DatasetHealthsheetComposition,
+                    },
+                    {
+                      name: "dataset:healthsheet:motivation",
+                      path: "motivation",
+                      component: DatasetHealthsheetMotivation,
+                    },
+                    {
+                      name: "dataset:healthsheet:preprocessing",
+                      path: "preprocessing",
+                      component: DatasetHealthsheetPreprocessing,
+                    },
+                    {
+                      name: "dataset:healthsheet:uses",
+                      path: "uses",
+                      component: DatasetHealthsheetUses,
+                    },
+                    {
+                      name: "dataset:healthsheet:distribution",
+                      path: "distribution",
+                      component: DatasetHealthsheetDistribution,
+                    },
+                    {
+                      name: "dataset:healthsheet:maintenance",
+                      path: "maintenance",
+                      component: DatasetHealthsheetMaintenance,
                     },
                   ],
                 },
@@ -389,6 +473,11 @@ const router = createRouter({
               component: StudyConditions,
             },
             {
+              name: "study:metadata:keywords",
+              path: "keywords",
+              component: StudyKeywords,
+            },
+            {
               name: "study:metadata:design",
               path: "design",
               component: StudyDesign,
@@ -422,26 +511,6 @@ const router = createRouter({
               name: "study:metadata:locations",
               path: "locations",
               component: StudyLocations,
-            },
-            {
-              name: "study:metadata:ipd-sharing",
-              path: "ipd-sharing",
-              component: StudyIPDSharing,
-            },
-            {
-              name: "study:metadata:references",
-              path: "references",
-              component: StudyReferences,
-            },
-            {
-              name: "study:metadata:links",
-              path: "links",
-              component: StudyLinks,
-            },
-            {
-              name: "study:metadata:available-ipd",
-              path: "available-ipd",
-              component: StudyAvailableIPD,
             },
           ],
         },

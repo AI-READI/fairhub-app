@@ -6,6 +6,12 @@ import { theme } from "@/stores/settings";
 
 const themeOverrides: GlobalThemeOverrides = {
   Button: {},
+  common: {
+    primaryColor: "#0284c7",
+    primaryColorHover: "#0ea5e9",
+    primaryColorPressed: "#0369a1",
+    primaryColorSuppl: "#0ea5e9",
+  },
   Form: {
     feedbackPadding: "4px 0 8px 2px",
     labelFontWeight: "600",
@@ -29,7 +35,7 @@ const themeOverrides: GlobalThemeOverrides = {
 
             <DatasetSidebar />
 
-            <n-layout-content class="h-[calc(100vh-56px)] py-4 pl-6">
+            <n-layout-content class="view h-[calc(100vh-56px)] py-4 pl-6">
               <router-view v-slot="{ Component }">
                 <transition name="fade" appear mode="out-in">
                   <component :is="Component" />

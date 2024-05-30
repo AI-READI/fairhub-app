@@ -35,14 +35,17 @@ const routeParams = {
 const readme = ref("");
 const saveLoading = ref(false);
 const autogenerateLoading = ref(false);
+const getSpinner = ref(false);
 
 onBeforeMount(async () => {
+  getSpinner.value = true;
   const response = await fetch(
     `${baseURL}/study/${routeParams.studyId}/dataset/${routeParams.datasetId}/version/${routeParams.versionId}/readme`,
     {
       method: "GET",
     }
   );
+  getSpinner.value = false;
 
   if (!response.ok) {
     throw new Error("Something went wrong.");
@@ -147,13 +150,18 @@ const autoGenerateReadme = async () => {
       </n-button>
     </div>
 
-    <MdEditor
-      v-model="readme"
-      language="en-US"
-      preview-theme="github"
-      :show-code-row-number="true"
-      :sanitize="sanitize"
-    />
+    <FadeTransition>
+      <LottieLoader v-if="getSpinner" />
+
+      <MdEditor
+        v-model="readme"
+        language="en-US"
+        preview-theme="github"
+        :show-code-row-number="true"
+        :sanitize="sanitize"
+        v-else
+      />
+    </FadeTransition>
 
     <n-divider />
 

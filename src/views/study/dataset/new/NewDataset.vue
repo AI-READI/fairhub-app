@@ -16,6 +16,8 @@ const routeParams = {
 
 const studyId = routeParams.studyId as string;
 
+const loader = ref(false);
+
 onBeforeMount(async () => {
   sidebarStore.setAppSidebarCollapsed(false);
 });
@@ -54,6 +56,8 @@ const createDataset = (e: MouseEvent) => {
         description: dataset.value.description,
       };
 
+      loader.value = true;
+
       const response = await fetch(`${baseURL}/study/${studyId}/dataset`, {
         body: JSON.stringify(body),
         headers: {
@@ -61,6 +65,8 @@ const createDataset = (e: MouseEvent) => {
         },
         method: "POST",
       });
+
+      loader.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong.");
@@ -115,7 +121,7 @@ const createDataset = (e: MouseEvent) => {
       <n-divider />
 
       <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="createDataset">
+        <n-button size="large" type="primary" @click="createDataset" :loading="loader">
           <template #icon>
             <f-icon icon="gridicons:create" />
           </template>

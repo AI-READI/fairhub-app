@@ -9,7 +9,8 @@ const route = useRoute();
 const router = useRouter();
 const push = usePush();
 
-const apiLoading = ref(false);
+const loading = ref(false);
+const responseLoading = ref(false);
 
 const formRef = ref<FormInst | null>(null);
 
@@ -18,7 +19,6 @@ const moduleData = reactive<StudyEligiblityModule>({
     exclusion_criteria: [],
     inclusion_criteria: [],
   },
-  gender: null,
   gender_based: null,
   gender_description: "",
   healthy_volunteers: null,
@@ -31,16 +31,12 @@ const moduleData = reactive<StudyEligiblityModule>({
     unit: null,
   },
   sampling_method: null,
+  sex: null,
   study_population: "",
-  study_type: "observational",
+  study_type: "Observational",
 });
 
 const rules: FormRules = {
-  gender: {
-    message: "Please select the gender of the study participants",
-    required: true,
-    trigger: ["blur", "input"],
-  },
   gender_based: {
     message: "Please select if the study was based on gender",
     required: true,
@@ -72,18 +68,23 @@ const rules: FormRules = {
       trigger: ["blur", "input"],
     },
   },
+  sex: {
+    message: "Please select the sex of the study participants",
+    required: true,
+    trigger: ["blur", "input"],
+  },
 };
 
 onBeforeMount(async () => {
   const studyId = route.params.studyId;
 
-  apiLoading.value = true;
+  responseLoading.value = true;
 
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/eligibility`, {
     method: "GET",
   });
 
-  apiLoading.value = false;
+  responseLoading.value = false;
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -96,7 +97,7 @@ onBeforeMount(async () => {
     inclusion_criteria: data.inclusion_criteria,
   };
 
-  moduleData.gender = data.gender;
+  moduleData.sex = data.sex;
   moduleData.gender_based = data.gender_based;
   moduleData.gender_description = data.gender_description;
   moduleData.healthy_volunteers = data.healthy_volunteers;
@@ -126,21 +127,20 @@ const saveMetadata = (e: MouseEvent) => {
     if (!errors) {
       const data = {
         exclusion_criteria: moduleData.criteria.exclusion_criteria,
-        gender: moduleData.gender,
         gender_based: moduleData.gender_based,
         gender_description: moduleData.gender_description || "",
-        healthy_volunteers:
-          moduleData.study_type === "Interventional" ? moduleData.healthy_volunteers : null,
+        healthy_volunteers: moduleData.healthy_volunteers,
         inclusion_criteria: moduleData.criteria.inclusion_criteria,
         maximum_age_unit: moduleData.maximum_age.unit,
         maximum_age_value: moduleData.maximum_age.age,
         minimum_age_unit: moduleData.minimum_age.unit,
         minimum_age_value: moduleData.minimum_age.age,
         sampling_method: moduleData.sampling_method || null,
+        sex: moduleData.sex,
         study_population: moduleData.study_population || "",
       };
 
-      console.log("data", data);
+      loading.value = true;
 
       const response = await fetch(
         `${baseURL}/study/${route.params.studyId}/metadata/eligibility`,
@@ -149,6 +149,8 @@ const saveMetadata = (e: MouseEvent) => {
           method: "PUT",
         }
       );
+
+      loading.value = false;
 
       if (!response.ok) {
         push.error("Something went wrong. Please try again later.");
@@ -182,7 +184,7 @@ const saveMetadata = (e: MouseEvent) => {
     <n-divider />
 
     <FadeTransition>
-      <LottieLoader v-if="apiLoading" />
+      <LottieLoader v-if="responseLoading" />
 
       <div v-else>
         <div v-if="!moduleData.study_type">
@@ -228,9 +230,9 @@ const saveMetadata = (e: MouseEvent) => {
             voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum
           </p>
 
-          <n-form-item label="Gender" path="gender">
+          <n-form-item label="Sex" path="sex">
             <n-select
-              v-model:value="moduleData.gender"
+              v-model:value="moduleData.sex"
               placeholder="Female"
               clearable
               :options="FORM_JSON.studyMetadataEligibilityGenderOptions"
@@ -328,7 +330,7 @@ const saveMetadata = (e: MouseEvent) => {
               path="healthy_volunteers"
               :rule="{
                 message: 'Please select if the volunteers are healthy',
-                required: moduleData.study_type === 'Interventional' ? true : false,
+                required: true,
                 trigger: ['blur', 'input'],
               }"
             >
@@ -416,7 +418,7 @@ const saveMetadata = (e: MouseEvent) => {
             </n-dynamic-input>
           </n-form-item>
 
-          <div v-if="moduleData.study_type === 'observational'">
+          <div v-if="moduleData.study_type === 'Observational'">
             <n-divider />
 
             <h3>Observational Studies</h3>
@@ -431,7 +433,7 @@ const saveMetadata = (e: MouseEvent) => {
               path="study_population"
               :rule="{
                 message: 'Please add the study population',
-                required: moduleData.study_type === 'observational' ? true : false,
+                required: moduleData.study_type === 'Observational' ? true : false,
                 trigger: ['blur', 'input'],
               }"
             >
@@ -447,7 +449,7 @@ const saveMetadata = (e: MouseEvent) => {
               path="sampling_method"
               :rule="{
                 message: 'Please add the sampling method',
-                required: moduleData.study_type === 'observational' ? true : false,
+                required: moduleData.study_type === 'Observational' ? true : false,
                 trigger: ['blur', 'input'],
               }"
             >
@@ -463,7 +465,7 @@ const saveMetadata = (e: MouseEvent) => {
           <n-divider />
 
           <div class="flex justify-start">
-            <n-button size="large" type="primary" @click="saveMetadata">
+            <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
               <template #icon>
                 <f-icon icon="material-symbols:save" />
               </template>

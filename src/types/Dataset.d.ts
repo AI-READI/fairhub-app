@@ -41,7 +41,6 @@ export interface DatasetIdentifier {
     | "url"
     | "urn"
     | "w3id"
-    | "other"
     | null;
 }
 
@@ -53,14 +52,7 @@ export interface DatasetDescription {
   id: string;
   description: string;
   origin: string;
-  type:
-    | "Abstract"
-    | "Methods"
-    | "SeriesInformation"
-    | "TableOfContents"
-    | "TechnicalInfo"
-    | "Other"
-    | null;
+  type: "Abstract" | "Methods" | "TechnicalInfo" | "Other" | null;
 }
 
 export interface DatasetDescriptions {
@@ -76,8 +68,9 @@ export interface DatasetPersonAffiliation {
 
 export interface DatasetCreator {
   id: string;
-  name: string;
   affiliations: DatasetPersonAffiliation[];
+  family_name: string;
+  given_name: string;
   name_identifier: string;
   name_identifier_scheme: string;
   name_identifier_scheme_uri: string;
@@ -91,9 +84,10 @@ export interface DatasetCreators {
 
 export interface DatasetContributor {
   id: string;
-  name: string;
   affiliations: DatasetPersonAffiliation[];
   contributor_type: string | null;
+  family_name: string;
+  given_name: string;
   name_identifier: string;
   name_identifier_scheme: string;
   name_identifier_scheme_uri: string;
@@ -117,15 +111,11 @@ export interface DatasetDates {
   dates: DatasetDate[];
 }
 
-export interface DatasetPublisher {
-  managing_organization_name: string;
-  managing_organization_ror_id: string;
-  publisher: string;
-}
-
-export interface DatasetRecordKeys {
-  details: string;
-  type: string | null;
+export interface DatasetManagingOrganization {
+  name: string;
+  identifier: string;
+  identifier_scheme: string;
+  identifier_scheme_uri: string;
 }
 
 export interface DatasetDeIdentLevel {
@@ -173,6 +163,8 @@ export interface DatasetRight {
   id: string;
   identifier: string;
   identifier_scheme: string;
+  identifier_scheme_uri: string;
+  license_text: string;
   origin: string;
   rights: string;
   uri: string;
@@ -200,64 +192,58 @@ export interface DatasetFunders {
 
 export interface DatasetOther {
   acknowledgement: string;
+  format: string[];
   language: string | null;
   resource_type: string;
   size: string[];
   standards_followed: string;
 }
 
-export interface DatasetRelatedItemIdentifier {
+export interface DatasetRelatedIdentifier {
   id: string;
   identifier: string;
-  metadata_scheme: string;
+  identifier_type: string | null;
   origin: string;
+  related_metadata_scheme: string;
+  relation_type: string | null;
+  resource_type: string | null;
   scheme_type: string;
   scheme_uri: string;
-  type: string | null;
 }
 
-export interface DatasetRelatedItemCreator {
-  id: string;
-  name: string;
-  name_type: string | null;
-  origin: string;
+export interface DatasetRelatedIdentifiers {
+  related_identifiers: DatasetRelatedIdentifier[];
 }
 
-export interface DatasetRelatedItemContributor {
-  id: string;
-  name: string;
-  contributor_type: string | null;
-  name_type: string | null;
-  origin: string;
+export interface DatasetHealthsheetRecord {
+  id: number;
+  question: string;
+  response: string;
 }
 
-export interface DatasetRelatedItemTitle {
-  id: string;
-  title: string;
-  origin: string;
-  type: string | null;
+export interface DatasetHealthsheetMotivation {
+  motivation: DatasetHealthsheetRecord[];
 }
 
-export interface DatasetRelatedItem {
-  id: string;
-  contributors: DatasetRelatedItemContributor[];
-  creators: DatasetRelatedItemCreator[];
-  edition: string;
-  first_page: string;
-  identifiers: DatasetRelatedItemIdentifier[];
-  issue: string;
-  last_page: string;
-  number_type: string | null;
-  number_value: string;
-  origin: string;
-  publication_year: number | null;
-  publisher: string;
-  relation_type: string | null;
-  titles: DatasetRelatedItemTitle[];
-  type: string | null;
-  volume: string;
+export interface DatasetHealthsheetComposition {
+  composition: DatasetHealthsheetRecord[];
 }
 
-export interface DatasetRelatedItems {
-  related_items: DatasetRelatedItem[];
+export interface DatasetHealthsheetCollection {
+  collection: DatasetHealthsheetRecord[];
+}
+
+export interface DatasetHealthsheetPreprocessing {
+  preprocessing: DatasetHealthsheetRecord[];
+}
+
+export interface DatasetHealthsheetUses {
+  uses: DatasetHealthsheetRecord[];
+}
+export interface DatasetHealthsheetDistribution {
+  distribution: DatasetHealthsheetRecord[];
+}
+
+export interface DatasetHealthsheetMaintenance {
+  maintenance: DatasetHealthsheetRecord[];
 }

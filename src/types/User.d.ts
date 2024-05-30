@@ -5,7 +5,6 @@ export interface UserProfile {
   institution: string;
   last_name: string;
   location: string;
-  password: string;
   profile_image: string;
   timezone: string;
 }
