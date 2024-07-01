@@ -2,6 +2,8 @@
 import type { GlobalThemeOverrides } from "naive-ui";
 import { materialTheme, Notifications, Notivue } from "notivue";
 
+import router from "@/router";
+import { useAuthStore } from "@/stores/auth";
 import { theme } from "@/stores/settings";
 
 const themeOverrides: GlobalThemeOverrides = {
@@ -17,6 +19,26 @@ const themeOverrides: GlobalThemeOverrides = {
     labelFontWeight: "600",
   },
 };
+
+router.beforeResolve(async (to) => {
+  const authStore = useAuthStore();
+  if (authStore.user.email_verified) {
+    return true;
+  }
+  if (
+    to.name == "auth:signup" ||
+    to.name == "auth:logout" ||
+    to.name == "auth:login" ||
+    to.name == "auth:confirm-email" ||
+    to.name == "auth:verify-email"
+  ) {
+    return true;
+  }
+  router.push({
+    name: "auth:confirm-email",
+    query: { email: authStore.user.email_address },
+  });
+});
 </script>
 
 <template>

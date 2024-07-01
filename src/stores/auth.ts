@@ -26,6 +26,7 @@ export const useAuthStore = defineStore(
       user.value.id = data.id;
       user.value.last_name = data.last_name;
       user.value.username = data.username;
+      user.value.email_verified = data.email_verified;
     };
 
     const setIsAuthenticated = (value: boolean) => {
