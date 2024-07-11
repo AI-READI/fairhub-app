@@ -150,11 +150,17 @@ const signIn = (e: MouseEvent) => {
         </n-button>
       </n-form>
 
-      <n-space justify="center">
-        <RouterLink class="ml-1 mt-6 text-center text-sm" to="#">
-          <n-button text type="warning"> Forgot your password? </n-button>
+      <div class="flex justify-center">
+        <RouterLink class="ml-1 mt-6 text-center text-sm" to="/auth/forgot-password">
+          <n-button text type="warning">Forgot your password?</n-button>
         </RouterLink>
-      </n-space>
+      </div>
+
+      <!--      <n-space justify="center">-->
+      <!--        <RouterLink class="ml-1 mt-6 text-center text-sm" to="#">-->
+      <!--          <n-button text type="warning"> Forgot your password? </n-button>-->
+      <!--        </RouterLink>-->
+      <!--      </n-space>-->
 
       <n-divider class="text-slate-400"> </n-divider>
 
