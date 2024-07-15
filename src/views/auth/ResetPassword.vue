@@ -82,6 +82,9 @@ const resetPassword = (e: MouseEvent) => {
         if (response.status === 403) {
           push.error("Either token expired or incorrect");
         }
+        if (response.status === 422) {
+          response.text().then((value) => push.error(value));
+        }
         push.error("Something went wrong, please try again later");
         throw new Error("Password error");
       }
