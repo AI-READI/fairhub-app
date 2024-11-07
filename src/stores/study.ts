@@ -43,7 +43,7 @@ export const useStudyStore = defineStore("study", () => {
 
     const studies = await response.json();
 
-    console.log("response studies", studies);
+    // console.log("response studies", studies);
 
     allStudies.value = studies as Study[];
 
@@ -68,7 +68,7 @@ export const useStudyStore = defineStore("study", () => {
     //   }
     // }
 
-    console.log("studies", allStudies.value);
+    // console.log("studies", allStudies.value);
 
     // allStudies.value.forEach((study) => {
     //   study.size = `${Math.round(Math.random() * 100)} MB`;
@@ -97,9 +97,9 @@ export const useStudyStore = defineStore("study", () => {
 
     study.value = s;
     // study.value.owner = s.owner_id;
-    console.log("response study", study.value);
+    // console.log("response study", study.value);
 
-    console.log("study", study.value);
+    // console.log("study", study.value);
 
     loading.value = false;
 

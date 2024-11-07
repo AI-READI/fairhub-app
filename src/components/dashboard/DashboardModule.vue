@@ -99,9 +99,6 @@ Visualization Background
 Visualization Elements
 */
 
-.visualization-container {
-  max-height: 760px;
-}
 .visualization-container svg {
   shape-rendering: geometricPrecision;
 }
