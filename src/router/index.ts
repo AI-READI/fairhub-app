@@ -11,7 +11,6 @@ import Documentation from "@/views/help/DocumentationPage.vue";
 import HelpPage from "@/views/help/HelpPage.vue";
 import ReportIssue from "@/views/help/ReportIssue.vue";
 import HomePage from "@/views/home/HomePage.vue";
-import Integrations from "@/views/integrations/IntegrationPage.vue";
 import AllSettings from "@/views/settings/AllSettings.vue";
 import AllStudies from "@/views/studies/AllStudies.vue";
 import StudyContributors from "@/views/study/contributors/StudyContributors.vue";
@@ -540,11 +539,6 @@ const router = createRouter({
       name: "user-profile",
       path: "/profile",
       component: UserProfile,
-    },
-    {
-      name: "integrations",
-      path: "/integrations",
-      component: Integrations,
     },
     { name: "not-found", path: "/:pathMatch(.*)", component: NotFound },
   ],

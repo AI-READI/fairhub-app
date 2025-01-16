@@ -27,20 +27,6 @@ const profileOptions = [
       ),
   },
   {
-    icon: renderIcon("carbon:chart-network"),
-    key: "integrations",
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            path: "/integrations",
-          },
-        },
-        { default: () => "Integrations" }
-      ),
-  },
-  {
     key: "d1",
     type: "divider",
   },
