@@ -242,20 +242,6 @@ const lowerMenuOptions: MenuOption[] = [
             { default: () => "Documentation" }
           ),
       },
-      {
-        icon: renderIcon("tabler:history"),
-        key: "changelog",
-        label: () =>
-          h(
-            RouterLink,
-            {
-              to: {
-                path: "/help/changelog",
-              },
-            },
-            { default: () => "Changelog" }
-          ),
-      },
     ],
     icon: renderIcon("tabler:help"),
     key: "help",

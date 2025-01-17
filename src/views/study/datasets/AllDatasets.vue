@@ -52,7 +52,7 @@ const navigateToDataset = (datasetId: string) => {
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <n-space justify="space-between">
-      <h2>All Datasets</h2>
+      <h2>Datasets</h2>
 
       <RouterLink
         :to="{
@@ -90,7 +90,7 @@ const navigateToDataset = (datasetId: string) => {
               :width="150"
             />
 
-            <p class="text-center">We could not find a previously published dataset.</p>
+            <p class="text-center">We could not find any datasets for this study.</p>
           </div>
 
           <div v-else>
