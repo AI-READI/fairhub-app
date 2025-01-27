@@ -12,7 +12,7 @@ import ReportIssue from "@/views/help/ReportIssue.vue";
 import HomePage from "@/views/home/HomePage.vue";
 import AllSettings from "@/views/settings/AllSettings.vue";
 import AllStudies from "@/views/studies/AllStudies.vue";
-import StudyContributors from "@/views/study/contributors/StudyContributors.vue";
+import StudyPermissions from "@/views/study/contributors/StudyPermissions.vue";
 import AllDashboards from "@/views/study/dashboard/AllDashboards.vue";
 import ConnectDashboard from "@/views/study/dashboard/ConnectDashboard.vue";
 import EditDashboard from "@/views/study/dashboard/EditDashboard.vue";
@@ -203,9 +203,9 @@ const router = createRouter({
           ],
         },
         {
-          name: "study:contributors",
+          name: "study:permissions",
           path: "contributors",
-          component: StudyContributors,
+          component: StudyPermissions,
         },
         {
           path: "datasets",

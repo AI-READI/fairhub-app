@@ -57,6 +57,25 @@ const UpperMenuOptions = computed(() => [
     label: "Overview",
     show: hideMenuOptions.value,
   },
+
+  {
+    icon: renderIcon("material-symbols:api"),
+    key: "study:redcap:all-redcap-project-apis",
+    label: "REDCap",
+    show: hideMenuOptions.value,
+  },
+  {
+    icon: renderIcon("oi:cloud-upload"),
+    key: "study:data-upload",
+    label: "Data Upload",
+    show: hideMenuOptions.value,
+  },
+  {
+    icon: renderIcon("fluent-mdl2:server-processes"),
+    key: "study:data-processing",
+    label: "Data Processing",
+    show: hideMenuOptions.value,
+  },
   {
     children: [
       {
@@ -162,11 +181,12 @@ const UpperMenuOptions = computed(() => [
     show: hideMenuOptions.value,
   },
   {
-    icon: renderIcon("fluent:people-checkmark-24-regular"),
-    key: "study:contributors",
-    label: "Contributors",
+    icon: renderIcon("icon-park-solid:permissions"),
+    key: "study:permissions",
+    label: "Permissions",
     show: hideMenuOptions.value,
   },
+
   {
     icon: renderIcon("ph:files-fill"),
     key: "study:files",
@@ -174,15 +194,15 @@ const UpperMenuOptions = computed(() => [
     show: hideMenuOptions.value,
   },
   {
-    icon: renderIcon("material-symbols:api"),
-    key: "study:redcap:all-redcap-project-apis",
-    label: "REDCap",
-    show: hideMenuOptions.value,
-  },
-  {
     icon: renderIcon("material-symbols:dashboard-rounded"),
     key: "study:dashboard:all-dashboards",
     label: "Dashboards",
+    show: hideMenuOptions.value,
+  },
+  {
+    icon: renderIcon("fluent:shifts-activity-24-filled"),
+    key: "study:activity",
+    label: "Activity",
     show: hideMenuOptions.value,
   },
   {
