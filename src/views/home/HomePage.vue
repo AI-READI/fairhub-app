@@ -70,7 +70,7 @@ const statistics = ref([
 
           <div class="mx-auto mt-4 max-w-3xl text-center">
             <p class="text-center text-2xl font-normal text-gray-800">
-              FAIRhub is an open source platform for sharing and accessing FAIR and AI-ready
+              FAIRhub is an open-source platform for sharing and accessing FAIR and AI-ready
               datasets. Your clinical research data can be easily shared with the world through
               FAIRhub in a way that it is optimally reusable by both researchers and AI
               applications.
@@ -85,12 +85,12 @@ const statistics = ref([
               Share Data
             </n-button>
 
-            <a href="https://staging.data.fairhub.io" class="text-sky-600">
+            <a href="https://staging.fairhub.io" target="_blank" class="text-sky-600">
               <n-button secondary type="info" size="large">
                 <template #icon>
                   <f-icon icon="tabler:view-360" />
                 </template>
-                View Published Datasets
+                Discover Data
               </n-button>
             </a>
           </div>
@@ -123,7 +123,7 @@ const statistics = ref([
           <h2
             class="block bg-gradient-to-tl from-orange-400 to-yellow-400 bg-clip-text pb-8 text-center text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
           >
-            Share Data
+            Access Data
           </h2>
 
           <p class="max-w-screen-xl pb-4 text-xl font-medium">
@@ -177,7 +177,7 @@ const statistics = ref([
         <h2
           class="block bg-gradient-to-tl from-orange-400 to-yellow-400 bg-clip-text pb-8 text-center text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
         >
-          Access Data
+          Share Data
         </h2>
 
         <p class="max-w-screen-xl text-xl font-medium">
@@ -187,12 +187,12 @@ const statistics = ref([
         </p>
 
         <div class="flex w-max space-x-4 self-center pt-8">
-          <a href="https://staging.data.fairhub.io" class="text-sky-500">
+          <a href="https://staging.fairhub.io" target="_blank" class="text-sky-500">
             <n-button type="info" size="large">
               <template #icon>
                 <f-icon icon="tabler:view-360" />
               </template>
-              View Published Datasets
+              Discover Data
             </n-button>
           </a>
         </div>
@@ -261,7 +261,7 @@ const statistics = ref([
             </template>
 
             <p class="w-[90%] pl-8 text-lg font-medium">
-              FAIRhub is developed as an open source platform from GitHub. It is a collaborative
+              FAIRhub is developed as an open-source platform from GitHub. It is a collaborative
               effort from members of the AI-READI project. You can find and access the source code
               <a href="https://github.com/AI-READI/fairhub.io" class="text-sky-600"
                 >from the GitHub repository of FAIRhub</a
