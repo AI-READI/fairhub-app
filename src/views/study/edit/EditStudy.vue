@@ -84,15 +84,20 @@ const saveChanges = (e: MouseEvent) => {
     }
   });
 };
+
+function cancelButton() {
+  router.push({
+    name: "study:overview",
+    params: {
+      studyId: routeParams.studyId,
+    },
+  });
+}
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-8">
-    <PageBackNavigationHeader
-      title="Update Study"
-      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
-      linkName="studies:all-studies"
-    />
+    <PageBackNavigationHeader title="Update Study" description="" linkName="studies:all-studies" />
 
     <n-form
       ref="formRef"
@@ -106,9 +111,28 @@ const saveChanges = (e: MouseEvent) => {
         <n-input v-model:value="study.title" placeholder="My study on the human body" clearable />
       </n-form-item>
 
-      <n-form-item label="Acronym" path="acronym">
-        <n-input v-model:value="study.acronym" placeholder="AI-READI" clearable />
+      <n-form-item label="Short description" path="acronym">
+        <n-input
+          v-model:value="study.acronym"
+          maxlength="200"
+          type="textarea"
+          placeholder="The Artificial Intelligence Ready and Equitable Atlas for Diabetes Insights (AI-READI) project seeks to create a flagship ethically-sourced dataset"
+          clearable
+          :status="study.acronym.length >= 200 ? 'error' : undefined"
+        />
       </n-form-item>
+
+      <div
+        class="flex justify-end text-sm text-gray-500"
+        :class="{
+          'text-red-500': study.acronym.length >= 200,
+          'text-gray-500': study.acronym.length < 200,
+        }"
+      >
+        Maximum {{ 200 - study.acronym.length }} characters
+      </div>
+
+      <n-divider />
 
       <!-- <n-form-item label="Image" path="Image">
         <n-input v-model:value="study.image" placeholder="Add an image" />
@@ -126,9 +150,14 @@ const saveChanges = (e: MouseEvent) => {
         class="rounded-xl bg-slate-50 p-3 shadow-md"
       /> -->
 
-      <n-divider />
+      <div class="flex justify-start gap-4">
+        <n-button type="error" size="large" @click="cancelButton">
+          <template #icon>
+            <f-icon icon="material-symbols:cancel-rounded" />
+          </template>
+          Cancel
+        </n-button>
 
-      <div class="flex justify-start">
         <n-button type="primary" size="large" @click="saveChanges">
           <template #icon>
             <f-icon icon="material-symbols:save-outline" />

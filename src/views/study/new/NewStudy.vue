@@ -7,6 +7,7 @@ import { useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import { baseURL } from "@/utils/constants";
+const route = useRoute();
 
 const router = useRouter();
 const push = usePush();
@@ -23,6 +24,10 @@ onBeforeMount(() => {
 });
 
 const formRef = ref<FormInst | null>(null);
+
+const routeParams = {
+  studyId: route.params.studyId as string,
+};
 
 const study = reactive({
   title: faker.commerce.productName(),
@@ -86,6 +91,15 @@ const createStudy = (e: MouseEvent) => {
     }
   });
 };
+
+function cancelButton() {
+  router.push({
+    name: "studies:all-studies",
+    params: {
+      studyId: routeParams.studyId,
+    },
+  });
+}
 </script>
 
 <template>
@@ -110,44 +124,68 @@ const createStudy = (e: MouseEvent) => {
         <n-input v-model:value="study.title" placeholder="My study on the human body" clearable />
       </n-form-item>
 
-      <n-form-item label="Acronym" path="acronym">
-        <n-input v-model:value="study.acronym" placeholder="AI-READI" clearable />
+      <n-form-item label="Short description" path="acronym">
+        <n-input
+          v-model:value="study.acronym"
+          maxlength="200"
+          type="textarea"
+          placeholder="The Artificial Intelligence Ready and Equitable Atlas for Diabetes Insights (AI-READI) project seeks to create a flagship ethically-sourced dataset"
+          clearable
+          :status="study.acronym.length >= 200 ? 'error' : undefined"
+        />
       </n-form-item>
 
-      <!-- <n-form-item label="Keywords" path="keywords">
-        <n-select
-          v-model:value="study.keywords"
-          placeholder="Salutogenesis"
-          multiple
-          tag
-          filterable
-          clearable
-          :options="keywordOptions"
-        />
-      </n-form-item> -->
+      <div
+        class="flex justify-end text-sm text-gray-500"
+        :class="{
+          'text-red-500': study.acronym.length >= 200,
+          'text-gray-500': study.acronym.length < 200,
+        }"
+      >
+        Maximum {{ 200 - study.acronym.length }} characters
+      </div>
 
-      <!-- <n-form-item label="Image" path="Image">
-        <n-input
-          v-model:value="study.image"
-          placeholder="Add a representative image to easily differentiate your study"
-        />
+      <!--       <n-form-item label="Keywords" path="keywords">-->
+      <!--        <n-select-->
+      <!--          v-model:value="study.keywords"-->
+      <!--          placeholder="Salutogenesis"-->
+      <!--          multiple-->
+      <!--          tag-->
+      <!--          filterable-->
+      <!--          clearable-->
+      <!--          :options="keywordOptions"-->
+      <!--        />-->
+      <!--      </n-form-item> -->
 
-        <n-button @click="generateImageURL" class="ml-4">
-          <template #icon>
-            <f-icon icon="mdi:auto-fix" />
-          </template>
-        </n-button>
-      </n-form-item> -->
+      <!--      <n-form-item label="Image" path="Image">-->
+      <!--        <n-input-->
+      <!--          v-model:value="study.image"-->
+      <!--          placeholder="Add a representative image to easily differentiate your study"-->
+      <!--        />-->
 
-      <!-- <n-image
-        :src="study.image || 'https://www.svgrepo.com/show/213127/image-warning.svg'"
-        width="300"
-        class="rounded-xl bg-slate-50 p-3 shadow-md"
-      /> -->
+      <!--        <n-button @click="generateImageURL" class="ml-4">-->
+      <!--          <template #icon>-->
+      <!--            <f-icon icon="mdi:auto-fix" />-->
+      <!--          </template>-->
+      <!--        </n-button>-->
+      <!--      </n-form-item>-->
+
+      <!--     <n-image-->
+      <!--        :src="study.image || 'https://www.svgrepo.com/show/213127/image-warning.svg'"-->
+      <!--        width="300"-->
+      <!--        class="rounded-xl bg-slate-50 p-3 shadow-md"-->
+      <!--      />-->
 
       <n-divider />
 
-      <div class="flex justify-start">
+      <div class="flex justify-start gap-4">
+        <n-button type="error" size="large" @click="cancelButton">
+          <template #icon>
+            <f-icon icon="material-symbols:cancel-rounded" />
+          </template>
+          Cancel
+        </n-button>
+
         <n-button size="large" type="primary" @click="createStudy" :loading="loader">
           <template #icon>
             <f-icon icon="material-symbols:add" />
