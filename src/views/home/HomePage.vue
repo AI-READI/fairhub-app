@@ -177,7 +177,7 @@ const statistics = ref([
         <h2
           class="block bg-gradient-to-tl from-orange-400 to-yellow-400 bg-clip-text pb-8 text-center text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
         >
-          Share Data
+          Access Data
         </h2>
 
         <p class="max-w-screen-xl text-xl font-medium">
