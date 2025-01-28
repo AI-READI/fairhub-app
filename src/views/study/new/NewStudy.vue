@@ -179,18 +179,18 @@ function cancelButton() {
       <n-divider />
 
       <div class="flex justify-start gap-4">
-        <n-button type="error" size="large" @click="cancelButton">
-          <template #icon>
-            <f-icon icon="material-symbols:cancel-rounded" />
-          </template>
-          Cancel
-        </n-button>
-
         <n-button size="large" type="primary" @click="createStudy" :loading="loader">
           <template #icon>
             <f-icon icon="material-symbols:add" />
           </template>
           Create Study
+        </n-button>
+
+        <n-button type="error" size="large" @click="cancelButton">
+          <template #icon>
+            <f-icon icon="material-symbols:cancel-rounded" />
+          </template>
+          Cancel
         </n-button>
       </div>
     </n-form>

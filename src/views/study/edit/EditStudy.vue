@@ -151,19 +151,19 @@ function cancelButton() {
       /> -->
 
       <div class="flex justify-start gap-4">
-        <n-button type="error" size="large" @click="cancelButton">
-          <template #icon>
-            <f-icon icon="material-symbols:cancel-rounded" />
-          </template>
-          Cancel
-        </n-button>
-
         <n-button type="primary" size="large" @click="saveChanges">
           <template #icon>
             <f-icon icon="material-symbols:save-outline" />
           </template>
 
           Update Study
+        </n-button>
+
+        <n-button type="error" size="large" @click="cancelButton">
+          <template #icon>
+            <f-icon icon="material-symbols:cancel-rounded" />
+          </template>
+          Cancel
         </n-button>
       </div>
     </n-form>
