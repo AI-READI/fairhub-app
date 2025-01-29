@@ -3,7 +3,6 @@ import type { FormInst } from "naive-ui";
 
 import type { UserProfile } from "@/types/User";
 import { baseURL } from "@/utils/constants";
-import { timezones } from "@/utils/constants";
 
 const loading = ref(false);
 const push = usePush();
@@ -166,9 +165,9 @@ const updatePassword = (e: MouseEvent) => {
   });
 };
 
-const handleUpdateValue = (value: string[]) => {
-  console.log(value);
-};
+// const handleUpdateValue = (value: string[]) => {
+//   console.log(value);
+// };
 
 // const file2Base64 = (file: File): Promise<string> => {
 //   return new Promise<string>((resolve, reject) => {
@@ -211,15 +210,6 @@ const linkToORCID = (value: string[]) => {
             :rules="rules"
             :model="userProfile"
           >
-            <n-form-item label="Username" path="username">
-              <n-input
-                v-model:value="userProfile.username"
-                placeholder="loid.forger"
-                type="text"
-                disabled
-              />
-            </n-form-item>
-
             <n-form-item label="Email address" path="email_address">
               <n-input
                 v-model:value="userProfile.email_address"
@@ -254,26 +244,6 @@ const linkToORCID = (value: string[]) => {
                 placeholder="University of California, San Diego"
                 type="text"
                 clearable
-              />
-            </n-form-item>
-
-            <n-form-item label="Location" path="location">
-              <n-input
-                v-model:value="userProfile.location"
-                placeholder="San Diego, CA"
-                type="text"
-                clearable
-              />
-            </n-form-item>
-
-            <n-form-item label="Timezone" path="timezone">
-              <n-select
-                filterable
-                clearable
-                placeholder="America/Los_Angeles"
-                :options="timezones"
-                @update:value="handleUpdateValue"
-                v-model:value="userProfile.timezone"
               />
             </n-form-item>
 
