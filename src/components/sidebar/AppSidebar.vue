@@ -68,13 +68,13 @@ const UpperMenuOptions = computed(() => [
   //   show: hideMenuOptions.value,
   // },
   {
-    children: [
-      {
-        icon: renderIcon("material-symbols:design-services-outline-sharp"),
-        key: "study:data-upload:design",
-        label: "Study Design",
-      },
-    ],
+    // children: [
+    //   {
+    //     icon: renderIcon("material-symbols:design-services-outline-sharp"),
+    //     key: "study:data-upload:design",
+    //     label: "Study Design",
+    //   },
+    // ],
     icon: renderIcon("oi:cloud-upload"),
     key: "study:data-upload",
     label: "Data Upload",
