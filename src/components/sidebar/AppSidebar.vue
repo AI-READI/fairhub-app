@@ -58,12 +58,12 @@ const UpperMenuOptions = computed(() => [
     show: hideMenuOptions.value,
   },
 
-  {
-    icon: renderIcon("material-symbols:api"),
-    key: "study:redcap:all-redcap-project-apis",
-    label: "REDCap",
-    show: hideMenuOptions.value,
-  },
+  // {
+  //   icon: renderIcon("material-symbols:api"),
+  //   key: "study:redcap:all-redcap-project-apis",
+  //   label: "REDCap",
+  //   show: hideMenuOptions.value,
+  // },
   {
     children: [
       {
