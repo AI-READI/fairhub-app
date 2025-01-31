@@ -11,6 +11,7 @@ export const useStudyStore = defineStore("study", () => {
     id: "",
     title: "",
     acronym: "",
+    created_at: 0,
     description: "",
     image: "",
     keywords: [],
