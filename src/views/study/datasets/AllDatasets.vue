@@ -113,19 +113,6 @@ const navigateToDataset = (datasetId: string) => {
                   <span>{{ dataset.description || "No description provided" }}</span>
                 </p>
 
-                <p>
-                  <span class="font-bold"> Number of particpants: </span>
-                  <!--                  <span>{{ dataset.published_versions || 0 }}</span>-->
-
-                  <span>0</span>
-                </p>
-
-                <p>
-                  <span class="font-bold"> Status: </span>
-                  <!--                  <span>{{ dataset.version.published? "Published || "In preparation }}</span>-->
-
-                  <span>In preparation</span>
-                </p>
                 <!-- <n-divider v-if="dataset.latest_version" /> -->
 
                 <!-- <p v-if="dataset.latest_version">
@@ -136,11 +123,33 @@ const navigateToDataset = (datasetId: string) => {
                 </p> -->
 
                 <p>
-                  <span class="font-bold"> Created on: </span>
+                  <span class="font-bold"> Created date: </span>
 
                   <span>
                     {{ displayHumanFriendlyDateAndTime(dataset.created_at) }}
                   </span>
+                </p>
+
+                <p>
+                  <span class="font-bold"> Last updated date: </span>
+
+                  <span>
+                    {{ displayHumanFriendlyDateAndTime(dataset.created_at) }}
+                  </span>
+                </p>
+
+                <p>
+                  <span class="font-bold"> Number of participants: </span>
+                  <!--                  <span>{{ dataset.published_versions || 0 }}</span>-->
+
+                  <span>0</span>
+                </p>
+
+                <p>
+                  <span class="font-bold"> Status: </span>
+                  <!--                  <span>{{ dataset.version.published? "Published || "In preparation }}</span>-->
+
+                  <span>In preparation</span>
                 </p>
               </div>
             </div>
