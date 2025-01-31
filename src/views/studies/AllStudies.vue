@@ -250,7 +250,13 @@ const navigateToStudy = (studyId: string) => {
               <n-divider />
 
               <p class="pt-2">
-                <span class="font-bold"> Last updated: </span>
+                <span class="font-bold"> Created date: </span>
+
+                <span> {{ displayHumanFriendlyDateAndTime(study.created_at) }} </span>
+              </p>
+
+              <p class="pt-2">
+                <span class="font-bold"> Last updated date: </span>
 
                 <span> {{ displayHumanFriendlyDateAndTime(study.updated_on) }} </span>
               </p>

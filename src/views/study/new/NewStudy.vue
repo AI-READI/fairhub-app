@@ -127,7 +127,7 @@ function cancelButton() {
       <n-form-item label="Short description" path="acronym">
         <n-input
           v-model:value="study.acronym"
-          maxlength="200"
+          maxlength="300"
           type="textarea"
           placeholder="The Artificial Intelligence Ready and Equitable Atlas for Diabetes Insights (AI-READI) project seeks to create a flagship ethically-sourced dataset"
           clearable
@@ -138,11 +138,11 @@ function cancelButton() {
       <div
         class="flex justify-end text-sm text-gray-500"
         :class="{
-          'text-red-500': study.acronym.length >= 200,
-          'text-gray-500': study.acronym.length < 200,
+          'text-red-500': study.acronym.length >= 300,
+          'text-gray-500': study.acronym.length < 300,
         }"
       >
-        Maximum {{ 200 - study.acronym.length }} characters
+        Maximum {{ 300 - study.acronym.length }} characters
       </div>
 
       <!--             <n-form-item label="Keywords" path="keywords">-->
