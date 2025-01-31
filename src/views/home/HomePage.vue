@@ -99,7 +99,7 @@ const statistics = ref([
     </section>
 
     <section class="py-24">
-      <div class="mx-auto mb-5 flex max-w-screen-xl flex-col px-10">
+      <div class="mx-auto mb-5 flex max-w-screen-xl flex-col items-center px-10">
         <h2
           class="block bg-gradient-to-tl from-orange-400 to-yellow-400 bg-clip-text pb-8 text-center text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
         >
@@ -114,6 +114,53 @@ const statistics = ref([
           shared with the world through FAIRhub in a way that it is optimally reusable by both by
           both researchers and AI applications.
         </p>
+
+        <!--        <div class="my-6 grid max-w-screen-xl grid-cols-1 gap-4 md:grid-cols-3">-->
+        <!--          <n-image-->
+        <!--            lazy-->
+        <!--            src="https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"-->
+        <!--          />-->
+
+        <!--          <n-image-->
+        <!--            lazy-->
+        <!--            class="rounded-lg max-md:hidden"-->
+
+        <!--            src="https://images.unsplash.com/photo-1579154204845-5d7f8d4dc785?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"-->
+        <!--          />-->
+
+        <!--          <n-image-->
+        <!--            lazy-->
+        <!--            class="rounded-lg max-md:hidden"-->
+
+        <!--            src="https://images.unsplash.com/photo-1582719201918-f1fa99cc3c1d?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"-->
+        <!--          />-->
+        <!--        </div>-->
+
+        <div class="my-6 grid max-w-screen-xl grid-cols-1 gap-4 md:grid-cols-3">
+          <div class="aspect-square overflow-hidden">
+            <n-image
+              lazy
+              class="h-full w-full rounded-lg object-cover"
+              src="https://images.unsplash.com/photo-1582719201918-f1fa99cc3c1d?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            />
+          </div>
+
+          <div class="hidden aspect-square overflow-hidden md:block">
+            <n-image
+              lazy
+              class="h-full w-full rounded-lg object-cover"
+              src="https://images.unsplash.com/photo-1583912267670-6575ad472688?q=80&w=2593&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            />
+          </div>
+
+          <div class="hidden aspect-square overflow-hidden md:block">
+            <n-image
+              lazy
+              class="h-full w-full rounded-lg object-cover"
+              src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            />
+          </div>
+        </div>
       </div>
     </section>
 
