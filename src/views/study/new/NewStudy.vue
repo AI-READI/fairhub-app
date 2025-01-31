@@ -145,36 +145,36 @@ function cancelButton() {
         Maximum {{ 200 - study.acronym.length }} characters
       </div>
 
-      <!--       <n-form-item label="Keywords" path="keywords">-->
-      <!--        <n-select-->
-      <!--          v-model:value="study.keywords"-->
-      <!--          placeholder="Salutogenesis"-->
-      <!--          multiple-->
-      <!--          tag-->
-      <!--          filterable-->
-      <!--          clearable-->
-      <!--          :options="keywordOptions"-->
-      <!--        />-->
-      <!--      </n-form-item> -->
+      <!--             <n-form-item label="Keywords" path="keywords">-->
+      <!--              <n-select-->
+      <!--                v-model:value="study.keywords"-->
+      <!--                placeholder="Salutogenesis"-->
+      <!--                multiple-->
+      <!--                tag-->
+      <!--                filterable-->
+      <!--                clearable-->
+      <!--                :options="keywordOptions"-->
+      <!--              />-->
+      <!--            </n-form-item>-->
 
-      <!--      <n-form-item label="Image" path="Image">-->
-      <!--        <n-input-->
-      <!--          v-model:value="study.image"-->
-      <!--          placeholder="Add a representative image to easily differentiate your study"-->
-      <!--        />-->
+      <n-form-item label="Image" path="Image">
+        <n-input
+          v-model:value="study.image"
+          placeholder="Add a representative image URL to easily differentiate your study, or click to the button on the right to automatically generate a one"
+        />
 
-      <!--        <n-button @click="generateImageURL" class="ml-4">-->
-      <!--          <template #icon>-->
-      <!--            <f-icon icon="mdi:auto-fix" />-->
-      <!--          </template>-->
-      <!--        </n-button>-->
-      <!--      </n-form-item>-->
+        <n-button @click="generateImageURL" class="ml-4">
+          <template #icon>
+            <f-icon icon="mdi:auto-fix" />
+          </template>
+        </n-button>
+      </n-form-item>
 
-      <!--     <n-image-->
-      <!--        :src="study.image || 'https://www.svgrepo.com/show/213127/image-warning.svg'"-->
-      <!--        width="300"-->
-      <!--        class="rounded-xl bg-slate-50 p-3 shadow-md"-->
-      <!--      />-->
+      <n-image
+        :src="study.image || 'https://www.svgrepo.com/show/213127/image-warning.svg'"
+        width="300"
+        class="rounded-xl bg-slate-50 p-3 shadow-md"
+      />
 
       <n-divider />
 

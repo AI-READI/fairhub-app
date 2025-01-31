@@ -132,9 +132,7 @@ function cancelButton() {
         Maximum {{ 200 - study.acronym.length }} characters
       </div>
 
-      <n-divider />
-
-      <!-- <n-form-item label="Image" path="Image">
+      <n-form-item label="Image" path="Image">
         <n-input v-model:value="study.image" placeholder="Add an image" />
 
         <n-button @click="generateImageURL" class="ml-4">
@@ -148,7 +146,9 @@ function cancelButton() {
         :src="study.image || 'https://www.svgrepo.com/show/213127/image-warning.svg'"
         width="300"
         class="rounded-xl bg-slate-50 p-3 shadow-md"
-      /> -->
+      />
+
+      <n-divider />
 
       <div class="flex justify-start gap-4">
         <n-button type="primary" size="large" @click="saveChanges">
