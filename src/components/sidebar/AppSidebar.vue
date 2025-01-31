@@ -52,6 +52,9 @@ const UpperMenuOptions = computed(() => [
     label: "My Studies",
   },
   {
+    type: "divider", // Divider after the 2nd element
+  },
+  {
     icon: renderIcon("material-symbols:overview-key-rounded"),
     key: "study:overview",
     label: "Overview",
