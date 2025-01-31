@@ -197,7 +197,7 @@ const UpperMenuOptions = computed(() => [
   {
     icon: renderIcon("ph:files-fill"),
     key: "study:files",
-    label: "Data",
+    label: "Uploaded files",
     show: hideMenuOptions.value,
   },
   {
