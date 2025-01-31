@@ -163,12 +163,12 @@ const generateNewEmail = () => {
   <main class="flex justify-center">
     <div class="mr-5 flex flex-col pb-10 pt-[10%]">
       <h1
-        class="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text font-extrabold text-transparent"
+        class="bg-gradient-to-r from-blue-500 to-blue-400 bg-clip-text text-4xl font-extrabold text-transparent"
       >
         Create an account on FAIRhub
       </h1>
 
-      <p class="py-2 text-xs">Sign up to manage and share your study data</p>
+      <p class="py-2 text-sm">Sign up to manage and share your study data</p>
 
       <n-divider />
 

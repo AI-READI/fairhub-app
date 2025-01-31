@@ -102,14 +102,14 @@ const signIn = (e: MouseEvent) => {
 
 <template>
   <main class="flex justify-center">
-    <div class="mr-5 flex flex-col pb-10 pt-[10%] max-lg:w-[70%] lg:w-[30%]">
+    <div class="mr-5 flex flex-col pb-10 pt-[10%]">
       <h1
-        class="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text font-extrabold text-transparent"
+        class="bg-gradient-to-r from-blue-500 to-blue-400 bg-clip-text text-4xl font-extrabold text-transparent sm:w-[533px]"
       >
         Login to FAIRhub
       </h1>
 
-      <p class="py-2 text-xs">Sign in to manage and share your study data</p>
+      <p class="py-2 text-sm">Sign in to manage and share your study data</p>
 
       <n-divider />
 
