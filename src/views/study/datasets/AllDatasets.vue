@@ -107,8 +107,25 @@ const navigateToDataset = (datasetId: string) => {
               <n-divider />
 
               <div class="flex flex-col space-y-4">
-                <p>{{ dataset.description || "No description provided" }}</p>
+                <p>
+                  <span class="font-bold"> Description: </span>
 
+                  <span>{{ dataset.description || "No description provided" }}</span>
+                </p>
+
+                <p>
+                  <span class="font-bold"> Number of particpants: </span>
+                  <!--                  <span>{{ dataset.published_versions || 0 }}</span>-->
+
+                  <span>0</span>
+                </p>
+
+                <p>
+                  <span class="font-bold"> Status: </span>
+                  <!--                  <span>{{ dataset.version.published? "Published || "In preparation }}</span>-->
+
+                  <span>In preparation</span>
+                </p>
                 <!-- <n-divider v-if="dataset.latest_version" /> -->
 
                 <!-- <p v-if="dataset.latest_version">
