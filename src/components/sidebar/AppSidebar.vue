@@ -87,6 +87,18 @@ const UpperMenuOptions = computed(() => [
     show: hideMenuOptions.value,
   },
   {
+    icon: renderIcon("ph:files-fill"),
+    key: "study:files",
+    label: "Uploaded Files",
+    show: hideMenuOptions.value,
+  },
+  {
+    icon: renderIcon("material-symbols:dashboard-rounded"),
+    key: "study:dashboard:all-dashboards",
+    label: "Dashboards",
+    show: hideMenuOptions.value,
+  },
+  {
     children: [
       {
         icon: renderIcon("tabler:id"),
@@ -185,6 +197,12 @@ const UpperMenuOptions = computed(() => [
     show: hideMenuOptions.value,
   },
   {
+    icon: renderIcon("material-symbols:dataset"),
+    key: "study:all-datasets",
+    label: "Datasets",
+    show: hideMenuOptions.value,
+  },
+  {
     icon: renderIcon("fluent:people-team-toolbox-24-regular"),
     key: "study:participants",
     label: "Participants",
@@ -194,25 +212,6 @@ const UpperMenuOptions = computed(() => [
     icon: renderIcon("icon-park-solid:permissions"),
     key: "study:permissions",
     label: "Permissions",
-    show: hideMenuOptions.value,
-  },
-
-  {
-    icon: renderIcon("ph:files-fill"),
-    key: "study:files",
-    label: "Uploaded Files",
-    show: hideMenuOptions.value,
-  },
-  {
-    icon: renderIcon("material-symbols:dashboard-rounded"),
-    key: "study:dashboard:all-dashboards",
-    label: "Dashboards",
-    show: hideMenuOptions.value,
-  },
-  {
-    icon: renderIcon("material-symbols:dataset"),
-    key: "study:all-datasets",
-    label: "Datasets",
     show: hideMenuOptions.value,
   },
   {
