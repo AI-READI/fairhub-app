@@ -92,12 +92,12 @@ const router = createRouter({
       path: "/auth",
       children: [
         {
-          name: "login",
+          name: "auth:login",
           path: "login",
           component: LoginPage,
         },
         {
-          name: "signup",
+          name: "auth:signup",
           path: "signup",
           component: SignUp,
         },
