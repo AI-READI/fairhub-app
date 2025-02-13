@@ -164,7 +164,7 @@ const UpperMenuOptions = computed(() => [
   {
     icon: renderIcon("fluent:people-checkmark-24-regular"),
     key: "study:contributors",
-    label: "Contributors",
+    label: "Permissions",
     show: hideMenuOptions.value,
   },
   {
