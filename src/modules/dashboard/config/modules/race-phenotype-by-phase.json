@@ -1,0 +1,161 @@
+{
+  "name": "Self-Reported Race & Phenotype by Phase",
+  "id": "race-phenotype-by-phase",
+  "title": "Self-Reported Race and Participant Phenotype by Phase",
+  "subtitle": "Participant Counts Aggregated by Phenotype & Self-Reported Race",
+  "width": 1280,
+  "height": 720,
+  "visualizations": [{
+    "type": "GroupedStackedBar",
+    "config": {
+      "id": "#race-phenotype-by-phase_grouped-stacked-bar",
+      "width": 1080,
+      "height": 520,
+      "position": {
+        "top": 0,
+        "left": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "margin": {
+        "top": 0,
+        "left": 0,
+        "right": 0,
+        "bottom": 20
+      },
+      "padding": {
+        "top": 20,
+        "left": 0,
+        "right": 36,
+        "bottom": 0
+      },      "axis": {
+        "scaling": {
+          "x": 1.0,
+          "y": 1.1
+        }
+      },
+      "transitions": {
+        "opacity": {
+          "from": 0.7,
+          "to": 1.0
+        },
+        "translate": {
+          "from": "left",
+          "to": "left"
+        }
+      },
+      "animations": {
+        "opacity": {
+          "delay": 0,
+          "duration": 200,
+          "easing": "expOut"
+        },
+        "translate": {
+          "delay": 0,
+          "duration": 600,
+          "easing": "expOut"
+        }
+      },
+      "legend": {
+        "title": "Phenotype",
+        "accessor": "subgroup",
+        "width": 200,
+        "height": 140,
+        "itemsize": 20,
+        "fontsize": 10,
+        "vposition": "bottom",
+        "hposition": "left",
+        "padding": {
+          "top": 0,
+          "left": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      },
+      "tooltip": {
+        "title": "Data Point Details",
+        "width": 720,
+        "height": 140,
+        "itemsize": 20,
+        "fontsize": 10,
+        "vposition": "bottom",
+        "hposition": "left",
+        "padding": {
+          "top": 0,
+          "left": 320,
+          "right": 0,
+          "bottom": 0
+        }
+      },
+      "filters": {
+        "width": 720,
+        "height": 140,
+        "itemsize": 20,
+        "fontsize": 10,
+        "vposition": "bottom",
+        "hposition": "left",
+        "padding": {
+          "top": 0,
+          "left": 320,
+          "right": 0,
+          "bottom": 0
+        }
+      },
+      "palette": [
+        "#5DD462",
+        "#FE7E6D",
+        "#C79F38",
+        "#82C5E6",
+        "#999EEB",
+        "#7F8C9F",
+        "#727272"
+      ],
+      "textures": {
+        "size": 11,
+        "fill": "transparent",
+        "stroke": "rgba(255, 255, 255, 0.8)",
+        "patterns": [
+          "woven",
+          "waves",
+          "nylon",
+          "crosses",
+          "caps",
+          "squares"
+        ]
+      },
+      "sorting": {
+        "by": "group",
+        "on": "subgroup",
+        "ordering": "none"
+      },
+      "accessors": {
+        "filterby": {
+          "name": "Phase",
+          "key": "filterby",
+          "type": "String"
+        },
+        "group": {
+          "name": "Self-Reported Race",
+          "key": "group",
+          "type": "String"
+        },
+        "subgroup": {
+          "name": "Phenotype",
+          "key": "subgroup",
+          "type": "String"
+        },
+        "color": {
+          "name": "Phenotype",
+          "key": "subgroup",
+          "type": "String"
+        },
+        "value": {
+          "name": "Count (n)",
+          "key": "value",
+          "type": "Number"
+        }
+      },
+      "data": []
+    }
+  }]
+}

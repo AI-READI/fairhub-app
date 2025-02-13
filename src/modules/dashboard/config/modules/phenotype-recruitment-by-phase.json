@@ -1,0 +1,170 @@
+{
+  "name": "Phenotype Recruitment by Phase",
+  "id": "phenotype-recruitment-by-phase",
+  "title": "Participant Phenotype Recruitment Over Time by Phase",
+  "subtitle": "Participant Phenotype Recruitment Counts by Data Generation Phase",
+  "width": 1280,
+  "height": 720,
+  "visualizations": [{
+    "type": "Timeseries",
+    "config": {
+      "id": "#phenotype-recruitment-by-phase_timeseries",
+      "rotate": true,
+      "width": 1080,
+      "height": 520,
+      "position": {
+        "top": 0,
+        "left": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "margin": {
+        "top": 0,
+        "left": 0,
+        "right": 0,
+        "bottom": 20
+      },
+      "padding": {
+        "top": 20,
+        "left": 0,
+        "right": 36,
+        "bottom": 0
+      },
+      "axis": {
+        "scaling": {
+          "x": 1.0,
+          "y": 1.1
+        }
+      },
+      "transitions": {
+        "opacity": {
+          "from": 0.6,
+          "to": 1.0
+        },
+        "translate": {
+          "from": "left",
+          "to": "left"
+        },
+        "r": {
+          "from": 5,
+          "to": 8
+        }
+      },
+      "animations": {
+        "opacity": {
+          "delay": 0,
+          "duration": 200,
+          "easing": "expOut"
+        },
+        "translate": {
+          "delay": 0,
+          "duration": 600,
+          "easing": "expOut"
+        },
+        "r": {
+          "delay": 0,
+          "duration": 600,
+          "easing": "expOut"
+        }
+      },
+      "legend": {
+        "title": "Phenotype",
+        "accessor": "group",
+        "width": 120,
+        "height": 140,
+        "itemsize": 20,
+        "fontsize": 12,
+        "vposition": "bottom",
+        "hposition": "left",
+        "padding": {
+          "top": 0,
+          "left": 0,
+          "right": 0,
+          "bottom": 0
+        }
+      },
+      "tooltip": {
+        "title": "Data Point Details",
+        "width": 720,
+        "height": 140,
+        "itemsize": 20,
+        "fontsize": 10,
+        "vposition": "bottom",
+        "hposition": "left",
+        "padding": {
+          "top": 0,
+          "left": 320,
+          "right": 0,
+          "bottom": 0
+        }
+      },
+      "filters": {
+        "width": 720,
+        "height": 140,
+        "itemsize": 20,
+        "fontsize": 10,
+        "vposition": "bottom",
+        "hposition": "left",
+        "padding": {
+          "top": 0,
+          "left": 320,
+          "right": 0,
+          "bottom": 0
+        }
+      },
+      "palette": [
+        "#5DD462",
+        "#FE7E6D",
+        "#C79F38",
+        "#82C5E6",
+        "#999EEB",
+        "#7F8C9F",
+        "#727272"
+      ],
+      "textures": {
+        "size": 11,
+        "fill": "transparent",
+        "stroke": "rgba(255, 255, 255, 0.8)",
+        "patterns": [
+          "woven",
+          "waves",
+          "nylon",
+          "crosses",
+          "caps",
+          "squares"
+        ]
+      },
+      "linewidth": 3,
+      "datefstr": "Week %W, '%y",
+      "ordering": "descending",
+      "accessors": {
+        "filterby": {
+          "name": "Phase",
+          "key": "filterby",
+          "type": "String"
+        },
+        "group": {
+          "name": "Phenotype",
+          "key": "group",
+          "type": "String"
+        },
+        "color": {
+          "name": "Phenotype",
+          "key": "group",
+          "type": "String"
+        },
+        "x": {
+          "name": "Date",
+          "key": "x",
+          "type": "Number"
+        },
+        "y": {
+          "name": "Cumulative Count (n)",
+          "key": "y",
+          "type": "Number"
+        }
+      },
+      "data": []
+    }
+  }]
+}
