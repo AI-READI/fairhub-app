@@ -95,9 +95,6 @@ const signIn = (e: MouseEvent) => {
         return;
       }
 
-      authStore.saveUserInformation(data);
-      authStore.setIsAuthenticated(true);
-
       const email_verified = data.email_verified || false;
 
       if (!email_verified) {
@@ -106,19 +103,21 @@ const signIn = (e: MouseEvent) => {
           message: "Please check your email for a verification link",
         });
 
-        router.push({ name: "auth:confirm-email", query: { email: emailAddress } });
-      } else {
-        push.success({
-          title: "Logged in successfully",
-          message: "Welcome back!",
-        });
-
-        router.push({ name: "studies:all-studies" });
+        return router.push({ name: "auth:confirm-email", query: { email: emailAddress } });
       }
-    } else {
-      console.log("error");
-      console.log(errors);
+
+      authStore.saveUserInformation(data);
+      authStore.setIsAuthenticated(true);
+
+      push.success({
+        title: "Logged in successfully",
+        message: "Welcome back!",
+      });
+
+      router.push({ name: "studies:all-studies" });
     }
+    console.log("error");
+    console.log(errors);
   });
 };
 </script>
