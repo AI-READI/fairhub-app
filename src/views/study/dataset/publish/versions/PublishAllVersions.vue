@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useSidebarStore } from "@/stores/sidebar";
+import { useStudyStore } from "@/stores/study";
 import type { Version } from "@/types/Version";
 import { baseURL } from "@/utils/constants";
 import { displayHumanFriendlyDateAndTime } from "@/utils/date";
@@ -10,6 +11,7 @@ const push = usePush();
 const router = useRouter();
 
 const sidebarStore = useSidebarStore();
+const studyStore = useStudyStore();
 
 const loading = ref(true);
 const versions = ref<Version[]>([]);
@@ -74,7 +76,13 @@ const deleteVersion = async (id: string) => {
           name: 'dataset:publish:versions:new',
         }"
       >
-        <n-button size="large" type="primary">
+        <n-button
+          size="large"
+          type="primary"
+          :disabled="
+            studyStore.currentStudyRole === 'viewer' || studyStore.currentStudyRole === 'editor'
+          "
+        >
           <template #icon>
             <f-icon icon="ion:add-circle-outline" />
           </template>
@@ -151,7 +159,15 @@ const deleteVersion = async (id: string) => {
 
                     <n-popconfirm @positive-click="deleteVersion(version.id)">
                       <template #trigger>
-                        <n-button strong secondary type="error">
+                        <n-button
+                          strong
+                          secondary
+                          type="error"
+                          :disabled="
+                            studyStore.currentStudyRole === 'viewer' ||
+                            studyStore.currentStudyRole === 'editor'
+                          "
+                        >
                           <template #icon>
                             <f-icon icon="ph:trash-fill" />
                           </template>
