@@ -3,12 +3,15 @@ import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
+import { useStudyStore } from "@/stores/study";
 import type { StudyArms } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const push = usePush();
+
+const studyStore = useStudyStore();
 
 const loading = ref(false);
 const responseLoading = ref(false);
@@ -180,7 +183,7 @@ const saveMetadata = (e: MouseEvent) => {
           size="large"
           label-placement="top"
           class="pr-4"
-          :disabled="!moduleData.study_type"
+          :disabled="!moduleData.study_type || studyStore.currentStudyRole === 'viewer'"
         >
           <CollapsibleCard
             v-for="(item, index) in moduleData.arms"
@@ -192,7 +195,11 @@ const saveMetadata = (e: MouseEvent) => {
             <template #header-extra>
               <n-popconfirm @positive-click="removeArmGroup(item.id)">
                 <template #trigger>
-                  <n-button type="error" secondary>
+                  <n-button
+                    type="error"
+                    secondary
+                    :disabled="studyStore.currentStudyRole === 'viewer'"
+                  >
                     <template #icon>
                       <f-icon icon="ep:delete" />
                     </template>
@@ -287,7 +294,7 @@ const saveMetadata = (e: MouseEvent) => {
             dashed
             type="success"
             @click="addArmGroup"
-            :disabled="!moduleData.study_type"
+            :disabled="!moduleData.study_type || studyStore.currentStudyRole === 'viewer'"
           >
             <template #icon>
               <f-icon icon="gridicons:create" />
@@ -299,7 +306,13 @@ const saveMetadata = (e: MouseEvent) => {
           <n-divider />
 
           <div class="flex justify-start">
-            <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+            <n-button
+              size="large"
+              type="primary"
+              @click="saveMetadata"
+              :loading="loading"
+              :disabled="!moduleData.study_type || studyStore.currentStudyRole === 'viewer'"
+            >
               <template #icon>
                 <f-icon icon="material-symbols:save" />
               </template>

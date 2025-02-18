@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import type { FormInst, FormRules } from "naive-ui";
 
+import { useStudyStore } from "@/stores/study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const push = usePush();
+
+const studyStore = useStudyStore();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -114,6 +117,7 @@ const saveMetadata = (e: MouseEvent) => {
         size="large"
         label-placement="top"
         class="pr-4"
+        :disabled="studyStore.currentStudyRole === 'viewer'"
         v-else
       >
         <SubHeadingText
@@ -151,7 +155,13 @@ const saveMetadata = (e: MouseEvent) => {
         <n-divider />
 
         <div class="flex justify-start">
-          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+          <n-button
+            size="large"
+            type="primary"
+            @click="saveMetadata"
+            :loading="loading"
+            :disabled="studyStore.currentStudyRole === 'viewer'"
+          >
             <template #icon>
               <f-icon icon="material-symbols:save" />
             </template>

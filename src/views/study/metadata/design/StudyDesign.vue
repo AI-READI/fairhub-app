@@ -2,12 +2,15 @@
 import type { FormInst, FormRules } from "naive-ui";
 
 import FORM_JSON from "@/assets/data/form.json";
+import { useStudyStore } from "@/stores/study";
 import type { StudyDesignModule } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const push = usePush();
+
+const studyStore = useStudyStore();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -320,6 +323,7 @@ const saveMetadata = (e: MouseEvent) => {
         :model="moduleData"
         :rules="rules"
         size="large"
+        :disabled="studyStore.currentStudyRole === 'viewer'"
         label-placement="top"
         class="pr-4"
         v-else
@@ -702,7 +706,13 @@ const saveMetadata = (e: MouseEvent) => {
         <n-divider />
 
         <div class="flex justify-start">
-          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+          <n-button
+            size="large"
+            type="primary"
+            @click="saveMetadata"
+            :loading="loading"
+            :disabled="studyStore.currentStudyRole === 'viewer'"
+          >
             <template #icon>
               <f-icon icon="material-symbols:save" />
             </template>
