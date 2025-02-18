@@ -2,12 +2,15 @@
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
+import { useStudyStore } from "@/stores/study";
 import type { DatasetDescriptions } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const push = usePush();
+
+const studyStore = useStudyStore();
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
@@ -173,6 +176,7 @@ const saveMetadata = (e: MouseEvent) => {
         size="large"
         label-placement="top"
         class="pr-4"
+        :disabled="studyStore.currentStudyRole === 'viewer'"
         v-else
       >
         <div
@@ -223,7 +227,12 @@ const saveMetadata = (e: MouseEvent) => {
 
           <n-popconfirm @positive-click="removeDescription(item.id)" class="self-justify-end">
             <template #trigger>
-              <n-button class="ml-0" size="large" type="error" :disabled="item.type === 'Abstract'">
+              <n-button
+                class="ml-0"
+                size="large"
+                type="error"
+                :disabled="item.type === 'Abstract' || studyStore.currentStudyRole === 'viewer'"
+              >
                 <f-icon icon="gridicons:trash" />
               </n-button>
             </template>
@@ -232,7 +241,13 @@ const saveMetadata = (e: MouseEvent) => {
           </n-popconfirm>
         </div>
 
-        <n-button class="mb-10 w-full" dashed type="success" @click="addDescription">
+        <n-button
+          class="mb-10 w-full"
+          dashed
+          type="success"
+          @click="addDescription"
+          :disabled="studyStore.currentStudyRole === 'viewer'"
+        >
           <template #icon>
             <f-icon icon="gridicons:create" />
           </template>
@@ -247,7 +262,13 @@ const saveMetadata = (e: MouseEvent) => {
     <n-divider />
 
     <div class="flex justify-start">
-      <n-button size="large" type="primary" @click="saveMetadata" :loading="submitLoading">
+      <n-button
+        size="large"
+        type="primary"
+        @click="saveMetadata"
+        :loading="submitLoading"
+        :disabled="studyStore.currentStudyRole === 'viewer'"
+      >
         <template #icon>
           <f-icon icon="material-symbols:save" />
         </template>

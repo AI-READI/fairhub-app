@@ -2,6 +2,7 @@
 import { faker } from "@faker-js/faker";
 
 import { useSidebarStore } from "@/stores/sidebar";
+import { useStudyStore } from "@/stores/study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
@@ -9,6 +10,7 @@ const router = useRouter();
 const push = usePush();
 
 const sidebarStore = useSidebarStore();
+const studyStore = useStudyStore();
 
 const routeParams = {
   studyId: route.params.studyId,
@@ -121,7 +123,15 @@ const createDataset = (e: MouseEvent) => {
       <n-divider />
 
       <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="createDataset" :loading="loader">
+        <n-button
+          size="large"
+          type="primary"
+          @click="createDataset"
+          :loading="loader"
+          :disabled="
+            studyStore.currentStudyRole === 'viewer' || studyStore.currentStudyRole === 'editor'
+          "
+        >
           <template #icon>
             <f-icon icon="gridicons:create" />
           </template>

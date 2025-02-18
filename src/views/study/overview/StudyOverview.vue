@@ -50,7 +50,9 @@ const editStudyDetails = () => {
           size="large"
           type="primary"
           @click="editStudyDetails"
-          :disabled="studyStore.currentStudyRole in ['editor', 'viewer']"
+          :disabled="
+            studyStore.currentStudyRole === 'viewer' || studyStore.currentStudyRole === 'editor'
+          "
         >
           <template #icon>
             <f-icon icon="material-symbols:edit" />

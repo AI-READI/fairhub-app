@@ -133,7 +133,9 @@ const saveChanges = (e: MouseEvent) => {
           type="primary"
           size="large"
           @click="saveChanges"
-          :disabled="studyStore.currentStudyRole in ['editor', 'viewer']"
+          :disabled="
+            studyStore.currentStudyRole === 'viewer' || studyStore.currentStudyRole === 'editor'
+          "
         >
           <template #icon>
             <f-icon icon="material-symbols:save-outline" />

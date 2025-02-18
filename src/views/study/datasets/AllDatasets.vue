@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useSidebarStore } from "@/stores/sidebar";
+import { useStudyStore } from "@/stores/study";
 import type { Dataset } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 // const baseURL = "http://localhost:3001/api";
@@ -10,6 +11,7 @@ const route = useRoute();
 const push = usePush();
 
 const sidebarStore = useSidebarStore();
+const studyStore = useStudyStore();
 
 const loading = ref(true);
 const datasets = ref<Dataset[]>([]);
@@ -59,10 +61,17 @@ const navigateToDataset = (datasetId: string) => {
           name: 'dataset:new',
         }"
       >
-        <n-button size="large" type="primary">
+        <n-button
+          size="large"
+          type="primary"
+          :disabled="
+            studyStore.currentStudyRole === 'viewer' || studyStore.currentStudyRole === 'editor'
+          "
+        >
           <template #icon>
             <f-icon icon="ion:add-circle-outline" />
           </template>
+
           Create a new dataset
         </n-button>
       </RouterLink>

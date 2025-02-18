@@ -5,6 +5,7 @@ import { NLayoutSider, NMenu, NSpace } from "naive-ui";
 import { computed, h } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 
+import { useAuthStore } from "@/stores/auth";
 import { useSidebarStore } from "@/stores/sidebar";
 import { useStudyStore } from "@/stores/study";
 
@@ -13,6 +14,7 @@ const router = useRouter();
 
 const sidebarStore = useSidebarStore();
 const studyStore = useStudyStore();
+const authStore = useAuthStore();
 
 const sidebarCollapsed = computed(() => sidebarStore.collapseAppSidebar);
 
@@ -370,11 +372,15 @@ watchEffect(() => {
     return;
   }
 
-  studyStore.getStudyRole(studyID.value as string);
+  if (authStore.isAuthenticated) {
+    studyStore.getStudyRole(studyID.value as string);
+  }
 });
 
 onMounted(() => {
-  studyStore.fetchAllStudies();
+  if (authStore.isAuthenticated) {
+    studyStore.fetchAllStudies();
+  }
 });
 </script>
 
@@ -391,7 +397,6 @@ onMounted(() => {
     class="z-10 h-[calc(100vh-56px)]"
   >
     <n-space vertical justify="space-between" class="h-full">
-      {{ route.params.studyId }} {{ studyStore.currentStudyRole }}
       <div class="flex flex-col justify-start divide-y">
         <n-menu
           ref="menuInstRef"

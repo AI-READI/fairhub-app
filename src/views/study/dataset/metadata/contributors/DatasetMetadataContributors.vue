@@ -3,12 +3,15 @@ import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
+import { useStudyStore } from "@/stores/study";
 import type { DatasetContributors } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const push = usePush();
+
+const studyStore = useStudyStore();
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
@@ -191,6 +194,7 @@ const saveMetadata = (e: MouseEvent) => {
         :model="moduleData"
         size="large"
         label-placement="top"
+        :disabled="studyStore.currentStudyRole === 'viewer'"
         class="pr-4"
         v-else
       >
@@ -206,7 +210,11 @@ const saveMetadata = (e: MouseEvent) => {
           <template #header-extra>
             <n-popconfirm @positive-click="removeContributor(item.id)">
               <template #trigger>
-                <n-button type="error" secondary>
+                <n-button
+                  type="error"
+                  secondary
+                  :disabled="studyStore.currentStudyRole === 'viewer'"
+                >
                   <template #icon>
                     <f-icon icon="ep:delete" />
                   </template>
@@ -338,7 +346,9 @@ const saveMetadata = (e: MouseEvent) => {
               v-model:value="item.affiliations"
               #="{ index: idx, value }"
               :on-create="addEntryToAffiliationsList"
-              :disabled="item.name_type === 'Organizational'"
+              :disabled="
+                item.name_type === 'Organizational' || studyStore.currentStudyRole === 'viewer'
+              "
               class="[&>div>*]:!self-center"
             >
               <div class="flex w-full flex-col space-y-4">
@@ -420,7 +430,13 @@ const saveMetadata = (e: MouseEvent) => {
           </n-form-item>
         </CollapsibleCard>
 
-        <n-button class="my-10 w-full" dashed type="success" @click="addContributor">
+        <n-button
+          class="my-10 w-full"
+          dashed
+          type="success"
+          @click="addContributor"
+          :disabled="studyStore.currentStudyRole === 'viewer'"
+        >
           <template #icon>
             <f-icon icon="gridicons:create" />
           </template>
@@ -431,7 +447,13 @@ const saveMetadata = (e: MouseEvent) => {
         <n-divider />
 
         <div class="flex justify-start">
-          <n-button size="large" type="primary" @click="saveMetadata" :loading="submitLoading">
+          <n-button
+            size="large"
+            type="primary"
+            @click="saveMetadata"
+            :loading="submitLoading"
+            :disabled="studyStore.currentStudyRole === 'viewer'"
+          >
             <template #icon>
               <f-icon icon="material-symbols:save" />
             </template>
