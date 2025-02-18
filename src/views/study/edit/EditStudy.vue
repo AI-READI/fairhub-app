@@ -129,7 +129,12 @@ const saveChanges = (e: MouseEvent) => {
       <n-divider />
 
       <div class="flex justify-start">
-        <n-button type="primary" size="large" @click="saveChanges">
+        <n-button
+          type="primary"
+          size="large"
+          @click="saveChanges"
+          :disabled="studyStore.currentStudyRole in ['editor', 'viewer']"
+        >
           <template #icon>
             <f-icon icon="material-symbols:save-outline" />
           </template>

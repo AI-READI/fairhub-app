@@ -3,15 +3,16 @@ import { Icon } from "@iconify/vue";
 import type { MenuInst, MenuOption } from "naive-ui";
 import { NLayoutSider, NMenu, NSpace } from "naive-ui";
 import { computed, h } from "vue";
-// import {ref} from "vue/dist/vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 
 import { useSidebarStore } from "@/stores/sidebar";
+import { useStudyStore } from "@/stores/study";
 
 const route = useRoute();
 const router = useRouter();
 
 const sidebarStore = useSidebarStore();
+const studyStore = useStudyStore();
 
 const sidebarCollapsed = computed(() => sidebarStore.collapseAppSidebar);
 
@@ -363,6 +364,18 @@ router.beforeEach((to) => {
   const name: string = to.meta && to.meta.menuItem ? (to.meta.menuItem as string) : to.name;
   selectAndExpand(name);
 });
+
+watchEffect(() => {
+  if (!route.params.studyId) {
+    return;
+  }
+
+  studyStore.getStudyRole(studyID.value as string);
+});
+
+onMounted(() => {
+  studyStore.fetchAllStudies();
+});
 </script>
 
 <template>
@@ -378,6 +391,7 @@ router.beforeEach((to) => {
     class="z-10 h-[calc(100vh-56px)]"
   >
     <n-space vertical justify="space-between" class="h-full">
+      {{ route.params.studyId }} {{ studyStore.currentStudyRole }}
       <div class="flex flex-col justify-start divide-y">
         <n-menu
           ref="menuInstRef"

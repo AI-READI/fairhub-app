@@ -308,7 +308,7 @@ const copyInviteURL = (token: string, emailAddress: string) => {
           <span>{{ owner.email_address || "xxx@fairhub.io" }}</span>
 
           <span v-if="owner.ORCID">
-            {{ "0000-0003-2829-8032" || "xxxx-xxxx-xxxx-xxxx" }}
+            {{ owner.ORCID || "xxxx-xxxx-xxxx-xxxx" }}
           </span>
         </div>
       </div>
