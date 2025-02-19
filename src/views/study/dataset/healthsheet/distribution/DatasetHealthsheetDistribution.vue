@@ -2,11 +2,14 @@
 import type { FormInst } from "naive-ui";
 
 import QUESTIONS_JSON from "@/assets/data/healthsheet/distribution.json";
+import { useStudyStore } from "@/stores/study";
 import type { DatasetHealthsheetDistribution } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const push = usePush();
+
+const studyStore = useStudyStore();
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
@@ -126,6 +129,7 @@ const saveMetadata = (e: MouseEvent) => {
         :model="moduleData"
         size="large"
         label-placement="top"
+        :disabled="studyStore.currentStudyRole === 'viewer'"
         class="pr-4"
         v-else
       >
@@ -146,7 +150,13 @@ const saveMetadata = (e: MouseEvent) => {
         <n-divider />
 
         <div class="flex justify-start">
-          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+          <n-button
+            size="large"
+            type="primary"
+            @click="saveMetadata"
+            :loading="loading"
+            :disabled="studyStore.currentStudyRole === 'viewer'"
+          >
             <template #icon>
               <f-icon icon="material-symbols:save" />
             </template>

@@ -2,11 +2,14 @@
 import type { FormInst } from "naive-ui";
 
 import QUESTIONS_JSON from "@/assets/data/healthsheet/maintenance.json";
+import { useStudyStore } from "@/stores/study";
 import type { DatasetHealthsheetMaintenance } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const push = usePush();
+
+const studyStore = useStudyStore();
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
