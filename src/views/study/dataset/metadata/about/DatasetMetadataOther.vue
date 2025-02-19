@@ -2,11 +2,14 @@
 import type { FormInst } from "naive-ui";
 
 import LANGUAGES_JSON from "@/assets/data/languages.json";
+import { useStudyStore } from "@/stores/study";
 import type { DatasetOther } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const push = usePush();
+
+const studyStore = useStudyStore();
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
@@ -149,6 +152,7 @@ const saveMetadata = (e: MouseEvent) => {
         size="large"
         label-placement="top"
         class="pr-4"
+        :disabled="studyStore.currentStudyRole === 'viewer'"
         v-else
       >
         <n-divider />
@@ -202,6 +206,7 @@ const saveMetadata = (e: MouseEvent) => {
         <n-dynamic-input
           v-model:value="moduleData.size"
           #="{ index: idx, value }"
+          :disabled="studyStore.currentStudyRole === 'viewer'"
           :on-create="addEntryToSize"
         >
           <n-form-item
@@ -230,6 +235,7 @@ const saveMetadata = (e: MouseEvent) => {
 
         <n-dynamic-input
           v-model:value="moduleData.format"
+          :disabled="studyStore.currentStudyRole === 'viewer'"
           #="{ index: idx, value }"
           :on-create="addEntryToFormat"
         >
@@ -288,7 +294,13 @@ const saveMetadata = (e: MouseEvent) => {
         <n-divider />
 
         <div class="flex justify-start">
-          <n-button size="large" type="primary" @click="saveMetadata" :loading="submitLoading">
+          <n-button
+            size="large"
+            type="primary"
+            @click="saveMetadata"
+            :loading="submitLoading"
+            :disabled="studyStore.currentStudyRole === 'viewer'"
+          >
             <template #icon>
               <f-icon icon="material-symbols:save" />
             </template>
