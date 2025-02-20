@@ -232,15 +232,31 @@ const navigateToStudy = (studyId: string) => {
                   <span> {{ filesize(study.size || 0) }} </span>
                 </div>
 
-                <n-divider v-if="study.description" />
+                <n-divider v-if="study.short_description" />
 
-                <p v-if="study.description">{{ study.description }}</p>
+                <div v-if="study.short_description">
+                  <span class="font-bold">Short description: </span>
+
+                  <span>{{ study.short_description }}</span>
+                </div>
+
+                <div>
+                  <span class="font-bold">Permission: </span>
+
+                  <span class="capitalize">{{ study.role }}</span>
+                </div>
               </div>
 
               <n-divider />
 
               <p class="pt-2">
-                <span class="font-bold"> Last updated: </span>
+                <span class="font-bold"> Created date: </span>
+
+                <span> {{ displayHumanFriendlyDateAndTime(study.created_at) }} </span>
+              </p>
+
+              <p class="pt-2">
+                <span class="font-bold"> Last updated date: </span>
 
                 <span> {{ displayHumanFriendlyDateAndTime(study.updated_on) }} </span>
               </p>

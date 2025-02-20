@@ -54,8 +54,11 @@ const handleSelect = (key: string | number) => {
   <header :class="{ 'debug-screens': development }">
     <n-space justify="space-between" align="center" class="pl-4 pr-2">
       <RouterLink to="/">
-        <div class="relative left-0 top-0 p-2 text-4xl font-black text-[#565656]">
-          <span class="text-4xl font-black text-primary-900"> fair</span>hub
+        <div class="relative left-0 top-0 p-2 font-black text-[#565656]">
+          <span
+            class="bg-gradient-to-r from-sky-700 to-blue-400 bg-clip-text text-2xl font-extrabold text-transparent"
+            >FAIRhub</span
+          >
         </div>
       </RouterLink>
 

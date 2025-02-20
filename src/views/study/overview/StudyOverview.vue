@@ -56,21 +56,39 @@ const editStudyDetails = () => {
 
       <n-divider />
 
+      <!--      <n-alert title="Metadata successfully completed" type="success">-->
+      <!--        <a href="/metadata/identification" class="text-blue-700 underline">Edit details</a>-->
+      <!--      </n-alert>-->
+
       <div class="flex w-full justify-between">
         <div class="pr-8">
           <h2>{{ study.title }}</h2>
 
-          <p class="py-4">{{ study.description }}</p>
+          <p class="py-4">
+            <span class="font-bold">Permission: </span>
+
+            <span class="capitalize">{{ study.role }}</span>
+          </p>
+
+          <p class="py-4">
+            <span class="font-bold">Created date: </span>
+
+            <span>{{ displayHumanFriendlyDateAndTime(study.created_at) }}</span>
+          </p>
+
+          <p class="py-4">
+            <span class="font-bold">Last updated date: </span>
+
+            <span>{{ displayHumanFriendlyDateAndTime(study.updated_on) }}</span>
+          </p>
 
           <n-space>
             <n-tag type="warning">{{ filesize(study.size || 0) }}</n-tag>
           </n-space>
 
-          <p class="py-4">
-            <span class="font-bold">Last updated: </span>
+          <p class="py-4"></p>
 
-            <span>{{ displayHumanFriendlyDateAndTime(study.updated_on) }}</span>
-          </p>
+          <!--          <n-button type="primary">View the data uploaded for this study</n-button>-->
         </div>
 
         <n-image :src="study.image" width="200" height="200" />
