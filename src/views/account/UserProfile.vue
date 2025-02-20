@@ -3,7 +3,6 @@ import type { FormInst } from "naive-ui";
 
 import type { UserProfile } from "@/types/User";
 import { baseURL } from "@/utils/constants";
-import { timezones } from "@/utils/constants";
 
 const loading = ref(false);
 const push = usePush();
@@ -166,9 +165,9 @@ const updatePassword = (e: MouseEvent) => {
   });
 };
 
-const handleUpdateValue = (value: string[]) => {
-  console.log(value);
-};
+// const handleUpdateValue = (value: string[]) => {
+//   console.log(value);
+// };
 
 // const file2Base64 = (file: File): Promise<string> => {
 //   return new Promise<string>((resolve, reject) => {
@@ -183,11 +182,21 @@ const handleUpdateValue = (value: string[]) => {
 //   if (!file.file) return;
 //   userProfile.value.profile_image = await file2Base64(file.file);
 // }
+
+function cancelButton() {
+  router.push({
+    name: "studies:all-studies",
+  });
+}
+
+const linkToORCID = (value: string[]) => {
+  console.log(value);
+};
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col">
-    <CollapsibleCard class="m-5" :title="`Your Profile`">
+    <CollapsibleCard class="m-5" :title="`Update your profile`">
       <!-- <h1>Your Profile</h1> -->
 
       <!-- <n-divider /> -->
@@ -201,16 +210,7 @@ const handleUpdateValue = (value: string[]) => {
             :rules="rules"
             :model="userProfile"
           >
-            <n-form-item label="Username" path="username">
-              <n-input
-                v-model:value="userProfile.username"
-                placeholder="loid.forger"
-                type="text"
-                disabled
-              />
-            </n-form-item>
-
-            <n-form-item label="Email Address" path="email_address">
+            <n-form-item label="Email address" path="email_address">
               <n-input
                 v-model:value="userProfile.email_address"
                 placeholder="loid.forger@ucsd.edu"
@@ -220,7 +220,7 @@ const handleUpdateValue = (value: string[]) => {
               />
             </n-form-item>
 
-            <n-form-item label="Given Name" path="first_name">
+            <n-form-item label="Given name" path="first_name">
               <n-input
                 v-model:value="userProfile.first_name"
                 type="text"
@@ -229,7 +229,7 @@ const handleUpdateValue = (value: string[]) => {
               />
             </n-form-item>
 
-            <n-form-item label="Family Name" path="last_name">
+            <n-form-item label="Family name" path="last_name">
               <n-input
                 v-model:value="userProfile.last_name"
                 type="text"
@@ -247,33 +247,39 @@ const handleUpdateValue = (value: string[]) => {
               />
             </n-form-item>
 
-            <n-form-item label="Location" path="location">
-              <n-input
-                v-model:value="userProfile.location"
-                placeholder="San Diego, CA"
-                type="text"
-                clearable
-              />
-            </n-form-item>
+            <div class="flex flex-col">
+              <h5>ORCID ID</h5>
 
-            <n-form-item label="Timezone" path="timezone">
-              <n-select
-                filterable
-                clearable
-                placeholder="America/Los_Angeles"
-                :options="timezones"
-                @update:value="handleUpdateValue"
-                v-model:value="userProfile.timezone"
-              />
-            </n-form-item>
+              <span class="text-sm"
+                >ORCID provides a persistent identifier that distinguishes you from other
+                researchers. Learn more at
+                <a class="underline" href="https://orcid.org/" target="_blank">orcid.org</a></span
+              >
 
-            <div class="flex justify-start">
+              <span class="pb-16 pt-4">
+                <n-button type="tertiary" @click="linkToORCID" :loading="loading">
+                  <template #icon>
+                    <f-icon class="text-green-500" icon="la:orcid" />
+                  </template>
+                  Connect your ORCID ID
+                </n-button>
+              </span>
+            </div>
+
+            <div class="flex justify-start gap-4">
               <n-button type="primary" size="large" @click="updateProfile" :loading="loading">
                 <template #icon>
                   <f-icon icon="material-symbols:save" />
                 </template>
 
                 Update Profile
+              </n-button>
+
+              <n-button type="error" size="large" @click="cancelButton">
+                <template #icon>
+                  <f-icon icon="material-symbols:cancel-rounded" />
+                </template>
+                Cancel
               </n-button>
             </div>
           </n-form>
@@ -294,7 +300,7 @@ const handleUpdateValue = (value: string[]) => {
       </div>
     </CollapsibleCard>
 
-    <CollapsibleCard class="m-5" :title="`Change Your Password`">
+    <CollapsibleCard class="m-5" :title="`Change your password`">
       <div class="flex w-full space-x-10">
         <div class="w-full pl-2 pr-4">
           <n-form
@@ -304,7 +310,7 @@ const handleUpdateValue = (value: string[]) => {
             :rules="passwordRules"
             :model="passwordForm"
           >
-            <n-form-item label="Current Password" path="old_password">
+            <n-form-item label="Current password" path="old_password">
               <n-input
                 type="password"
                 show-password-on="mousedown"
@@ -313,7 +319,7 @@ const handleUpdateValue = (value: string[]) => {
               />
             </n-form-item>
 
-            <n-form-item label="New Password" path="new_password">
+            <n-form-item label="New password" path="new_password">
               <n-input
                 type="password"
                 clearable
@@ -323,7 +329,7 @@ const handleUpdateValue = (value: string[]) => {
               />
             </n-form-item>
 
-            <n-form-item label="Confirm New Password" path="confirm_password">
+            <n-form-item label="Confirm new password" path="confirm_password">
               <n-input
                 type="password"
                 placeholder="Re-enter new password"
@@ -333,13 +339,20 @@ const handleUpdateValue = (value: string[]) => {
               />
             </n-form-item>
 
-            <div class="mt-4 flex justify-start">
+            <div class="mt-4 flex justify-start gap-4">
               <n-button type="primary" size="large" @click="updatePassword" :loading="loading">
                 <template #icon>
                   <f-icon icon="material-symbols:save" />
                 </template>
 
                 Update Password
+              </n-button>
+
+              <n-button type="error" size="large" @click="cancelButton">
+                <template #icon>
+                  <f-icon icon="material-symbols:cancel-rounded" />
+                </template>
+                Cancel
               </n-button>
             </div>
           </n-form>

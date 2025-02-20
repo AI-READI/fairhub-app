@@ -123,13 +123,15 @@ const signIn = (e: MouseEvent) => {
 </script>
 
 <template>
-  <main class="flex h-full w-full items-start py-4 pr-6">
-    <div class="mr-5 flex w-[30%] flex-col px-20 pb-10 pt-[10%]">
+  <main class="flex justify-center">
+    <div class="mr-5 flex flex-col pb-10 pt-[10%]">
       <h1
-        class="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text font-extrabold text-transparent"
+        class="bg-gradient-to-r from-blue-500 to-blue-400 bg-clip-text text-4xl font-extrabold text-transparent sm:w-[533px]"
       >
-        Login to fairhub.io
+        Login to FAIRhub
       </h1>
+
+      <p class="py-2 text-sm">Sign in to manage and share your study data</p>
 
       <n-divider />
 
@@ -189,14 +191,6 @@ const signIn = (e: MouseEvent) => {
           Sign Up
         </RouterLink>
       </div>
-    </div>
-
-    <div class="ml-5 h-full w-full flex-1">
-      <lazy-image
-        class="h-full w-full"
-        src="https://images.unsplash.com/photo-1581093577421-f561a654a353?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80"
-        blurhash="LGLq^Y~q8^Xnk?R:ITob00Dix^xb"
-      />
     </div>
   </main>
 </template>

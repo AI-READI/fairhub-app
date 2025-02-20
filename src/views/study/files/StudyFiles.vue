@@ -155,7 +155,7 @@ const navigateToFolder = async (folderPath: string = "") => {
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
-      title="Files"
+      title="Uploaded Files"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit."
       linkName="study:overview"
       :linkParams="{

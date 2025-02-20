@@ -10,11 +10,14 @@ import SignUp from "@/views/auth/SignUp.vue";
 import VerifyEmail from "@/views/auth/VerifyEmail.vue";
 import Documentation from "@/views/help/DocumentationPage.vue";
 import HelpPage from "@/views/help/HelpPage.vue";
+import PrivacyPolicy from "@/views/help/PrivacyPolicy.vue";
 import ReportIssue from "@/views/help/ReportIssue.vue";
+import TermsConditions from "@/views/help/TermsConditions.vue";
 import HomePage from "@/views/home/HomePage.vue";
 import AllSettings from "@/views/settings/AllSettings.vue";
 import AllStudies from "@/views/studies/AllStudies.vue";
-import StudyContributors from "@/views/study/contributors/StudyContributors.vue";
+import StudyActivity from "@/views/study/activity/StudyActivity.vue";
+import StudyPermissions from "@/views/study/contributors/StudyPermissions.vue";
 import AllDashboards from "@/views/study/dashboard/AllDashboards.vue";
 import ConnectDashboard from "@/views/study/dashboard/ConnectDashboard.vue";
 import EditDashboard from "@/views/study/dashboard/EditDashboard.vue";
@@ -75,10 +78,13 @@ import NewStudy from "@/views/study/new/NewStudy.vue";
 import StudyOverview from "@/views/study/overview/StudyOverview.vue";
 import AddParticipant from "@/views/study/participants/AddParticipant.vue";
 import StudyParticipants from "@/views/study/participants/StudyParticipants.vue";
+import StudyDataProcessing from "@/views/study/processing/StudyDataProcessing.vue";
 import AddRedcap from "@/views/study/redcap/AddRedcap.vue";
 import AllRedcap from "@/views/study/redcap/AllRedcap.vue";
 import EditRedcap from "@/views/study/redcap/EditRedcap.vue";
 import StudyRouterView from "@/views/study/root/StudyRouterView.vue";
+import StudyDataUpload from "@/views/study/upload/StudyDataUpload.vue";
+import StudyUploadDesign from "@/views/study/upload/upload-design/StudyUploadDesign.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -215,10 +221,33 @@ const router = createRouter({
           ],
         },
         {
-          name: "study:contributors",
-          path: "contributors",
-          component: StudyContributors,
+          name: "study:permissions",
+          path: "permissions",
+          component: StudyPermissions,
         },
+        {
+          name: "study:data-upload",
+          path: "data-upload",
+          children: [
+            {
+              name: "study:data-upload:design",
+              path: "data-upload-design",
+              component: StudyUploadDesign,
+            },
+          ],
+          component: StudyDataUpload,
+        },
+        {
+          name: "study:data-processing",
+          path: "data-processing",
+          component: StudyDataProcessing,
+        },
+        {
+          name: "study:activity",
+          path: "activity",
+          component: StudyActivity,
+        },
+
         {
           path: "datasets",
           children: [
@@ -532,6 +561,16 @@ const router = createRouter({
           name: "documentation",
           path: "documentation",
           component: Documentation,
+        },
+        {
+          name: "privacy-policy",
+          path: "privacy-policy",
+          component: PrivacyPolicy,
+        },
+        {
+          name: "terms-conditions",
+          path: "terms-conditions",
+          component: TermsConditions,
         },
         {
           name: "report-issue",

@@ -70,7 +70,7 @@ const statistics = ref([
 
           <div class="mx-auto mt-4 max-w-3xl text-center">
             <p class="text-center text-2xl font-normal text-gray-800">
-              FAIRhub is an open source platform for sharing and accessing FAIR and AI-ready
+              FAIRhub is an open-source platform for sharing and accessing FAIR and AI-ready
               datasets. Your clinical research data can be easily shared with the world through
               FAIRhub in a way that it is optimally reusable by both researchers and AI
               applications.
@@ -85,12 +85,12 @@ const statistics = ref([
               Share Data
             </n-button>
 
-            <a href="https://staging.data.fairhub.io" class="text-sky-600">
+            <a href="https://staging.fairhub.io" target="_blank" class="text-sky-600">
               <n-button secondary type="info" size="large">
                 <template #icon>
                   <f-icon icon="tabler:view-360" />
                 </template>
-                View Published Datasets
+                Discover Data
               </n-button>
             </a>
           </div>
@@ -99,7 +99,7 @@ const statistics = ref([
     </section>
 
     <section class="py-24">
-      <div class="mx-auto mb-5 flex max-w-screen-xl flex-col px-10">
+      <div class="mx-auto mb-5 flex max-w-screen-xl flex-col items-center px-10">
         <h2
           class="block bg-gradient-to-tl from-orange-400 to-yellow-400 bg-clip-text pb-8 text-center text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
         >
@@ -114,6 +114,53 @@ const statistics = ref([
           shared with the world through FAIRhub in a way that it is optimally reusable by both by
           both researchers and AI applications.
         </p>
+
+        <!--        <div class="my-6 grid max-w-screen-xl grid-cols-1 gap-4 md:grid-cols-3">-->
+        <!--          <n-image-->
+        <!--            lazy-->
+        <!--            src="https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"-->
+        <!--          />-->
+
+        <!--          <n-image-->
+        <!--            lazy-->
+        <!--            class="rounded-lg max-md:hidden"-->
+
+        <!--            src="https://images.unsplash.com/photo-1579154204845-5d7f8d4dc785?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"-->
+        <!--          />-->
+
+        <!--          <n-image-->
+        <!--            lazy-->
+        <!--            class="rounded-lg max-md:hidden"-->
+
+        <!--            src="https://images.unsplash.com/photo-1582719201918-f1fa99cc3c1d?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"-->
+        <!--          />-->
+        <!--        </div>-->
+
+        <div class="my-6 grid max-w-screen-xl grid-cols-1 gap-4 md:grid-cols-3">
+          <div class="aspect-square overflow-hidden">
+            <n-image
+              lazy
+              class="h-full w-full rounded-lg object-cover"
+              src="https://images.unsplash.com/photo-1582719201918-f1fa99cc3c1d?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            />
+          </div>
+
+          <div class="hidden aspect-square overflow-hidden md:block">
+            <n-image
+              lazy
+              class="h-full w-full rounded-lg object-cover"
+              src="https://images.unsplash.com/photo-1583912267670-6575ad472688?q=80&w=2593&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            />
+          </div>
+
+          <div class="hidden aspect-square overflow-hidden md:block">
+            <n-image
+              lazy
+              class="h-full w-full rounded-lg object-cover"
+              src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            />
+          </div>
+        </div>
       </div>
     </section>
 
@@ -123,7 +170,7 @@ const statistics = ref([
           <h2
             class="block bg-gradient-to-tl from-orange-400 to-yellow-400 bg-clip-text pb-8 text-center text-3xl font-bold text-transparent md:text-4xl lg:text-5xl"
           >
-            Share Data
+            Access Data
           </h2>
 
           <p class="max-w-screen-xl pb-4 text-xl font-medium">
@@ -187,12 +234,12 @@ const statistics = ref([
         </p>
 
         <div class="flex w-max space-x-4 self-center pt-8">
-          <a href="https://staging.data.fairhub.io" class="text-sky-500">
+          <a href="https://staging.fairhub.io" target="_blank" class="text-sky-500">
             <n-button type="info" size="large">
               <template #icon>
                 <f-icon icon="tabler:view-360" />
               </template>
-              View Published Datasets
+              Discover Data
             </n-button>
           </a>
         </div>
@@ -261,7 +308,7 @@ const statistics = ref([
             </template>
 
             <p class="w-[90%] pl-8 text-lg font-medium">
-              FAIRhub is developed as an open source platform from GitHub. It is a collaborative
+              FAIRhub is developed as an open-source platform from GitHub. It is a collaborative
               effort from members of the AI-READI project. You can find and access the source code
               <a href="https://github.com/AI-READI/fairhub.io" class="text-sky-600"
                 >from the GitHub repository of FAIRhub</a
