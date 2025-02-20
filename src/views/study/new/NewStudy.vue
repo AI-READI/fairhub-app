@@ -45,6 +45,13 @@ const rules: FormRules = {
       trigger: ["blur", "input"],
     },
   ],
+  short_description: [
+    {
+      message: "Please add a short description",
+      required: true,
+      trigger: ["blur", "input"],
+    },
+  ],
 };
 
 const generateImageURL = () => {
