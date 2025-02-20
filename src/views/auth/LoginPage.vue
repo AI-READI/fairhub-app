@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth";
-import { User } from "@/types/User";
+import type { User } from "@/types/User";
 import { baseURL } from "@/utils/constants";
 
 const push = usePush();

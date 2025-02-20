@@ -11,7 +11,7 @@ const router = useRouter();
 const loading = ref(false);
 const emailVerifiedLoading = ref(false);
 
-const interval = ref(null);
+const interval = ref<ReturnType<typeof setInterval> | null>(null);
 
 onBeforeMount(() => {
   if (!route.query.email) {
@@ -27,7 +27,9 @@ onBeforeMount(() => {
 
 onBeforeUnmount(() => {
   // Even though this is not necessary, it's good practice to clear intervals when the component is unmounted.
-  clearInterval(interval.value);
+  if (interval.value !== null) {
+    clearInterval(interval.value);
+  }
 });
 
 const resendVerificationEmail = async () => {
@@ -51,7 +53,7 @@ const resendVerificationEmail = async () => {
 
   loading.value = false;
 
-  if (!response.ok) {
+  if (!response?.ok) {
     push.error("Something went wrong. Please try again.");
 
     throw new Error("Network response was not ok");
@@ -72,7 +74,7 @@ const checkIfEmailIsVerified = async () => {
 
   emailVerifiedLoading.value = true;
 
-  let response: Response;
+  let response: Response | undefined;
 
   try {
     response = await fetch(`${baseURL}/auth/email-verification/check`, {
@@ -90,7 +92,7 @@ const checkIfEmailIsVerified = async () => {
 
   emailVerifiedLoading.value = false;
 
-  if (!response.ok) {
+  if (!response?.ok) {
     push.error("Something went wrong. Please try again.");
 
     throw new Error("Network response was not ok");
