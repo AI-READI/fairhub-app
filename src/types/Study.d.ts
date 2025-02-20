@@ -13,13 +13,13 @@ export interface StudyPublishedVersion {
 export interface Study {
   id: string;
   title: string;
-  acronym: string;
   created_at: number;
   description: string;
   image: string;
-  keywords: string[]; // study owner's id
-  owner: string;
+  keywords: string[];
+  owner: string; // study owner's id
   role: "owner" | "admin" | "editor" | "viewer";
+  short_description: string;
   size: number;
   updated_on: number;
 }

@@ -31,8 +31,8 @@ const routeParams = {
 
 const study = reactive({
   title: faker.commerce.productName(),
-  acronym: "",
   image: "",
+  short_description: "",
 });
 
 // const keywordOptions = FormJSON.keywordOptions;
@@ -59,8 +59,8 @@ const createStudy = (e: MouseEvent) => {
     if (!errors) {
       const data = {
         title: study.title,
-        acronym: study.acronym,
         image: study.image || generateImageURL(),
+        short_description: study.short_description,
       };
 
       loader.value = true;
@@ -124,25 +124,25 @@ function cancelButton() {
         <n-input v-model:value="study.title" placeholder="My study on the human body" clearable />
       </n-form-item>
 
-      <n-form-item label="Short description" path="acronym">
+      <n-form-item label="Short description" path="short_description">
         <n-input
-          v-model:value="study.acronym"
+          v-model:value="study.short_description"
           maxlength="300"
           type="textarea"
           placeholder="The Artificial Intelligence Ready and Equitable Atlas for Diabetes Insights (AI-READI) project seeks to create a flagship ethically-sourced dataset"
           clearable
-          :status="study.acronym.length >= 200 ? 'error' : undefined"
+          :status="study.short_description.length >= 300 ? 'error' : undefined"
         />
       </n-form-item>
 
       <div
         class="flex justify-end text-sm text-gray-500"
         :class="{
-          'text-red-500': study.acronym.length >= 300,
-          'text-gray-500': study.acronym.length < 300,
+          'text-red-500': study.short_description.length >= 300,
+          'text-gray-500': study.short_description.length < 300,
         }"
       >
-        Maximum {{ 300 - study.acronym.length }} characters
+        Maximum {{ 300 - study.short_description.length }} characters
       </div>
 
       <!--             <n-form-item label="Keywords" path="keywords">-->

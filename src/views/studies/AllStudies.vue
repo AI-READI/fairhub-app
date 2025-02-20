@@ -232,12 +232,12 @@ const navigateToStudy = (studyId: string) => {
                   <span> {{ filesize(study.size || 0) }} </span>
                 </div>
 
-                <n-divider v-if="study.acronym" />
+                <n-divider v-if="study.short_description" />
 
-                <div v-if="study.acronym">
+                <div v-if="study.short_description">
                   <span class="font-bold">Short description: </span>
 
-                  <span>{{ study.acronym }}</span>
+                  <span>{{ study.short_description }}</span>
                 </div>
 
                 <div>
