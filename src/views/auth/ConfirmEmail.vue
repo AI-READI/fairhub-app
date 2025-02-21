@@ -13,6 +13,8 @@ const emailVerifiedLoading = ref(false);
 
 const interval = ref<ReturnType<typeof setInterval> | null>(null);
 
+const lottieKey = ref(0);
+
 onBeforeMount(() => {
   if (!route.query.email) {
     router.push({ name: "auth:logout" });
@@ -23,6 +25,10 @@ onBeforeMount(() => {
   interval.value = setInterval(() => {
     checkIfEmailIsVerified();
   }, 3000);
+});
+
+onMounted(() => {
+  lottieKey.value++;
 });
 
 onBeforeUnmount(() => {
@@ -117,7 +123,12 @@ const checkIfEmailIsVerified = async () => {
       <n-space vertical>
         <h1 class="pb-4 text-center text-5xl font-bold">Confirm your email address</h1>
 
-        <Vue3Lottie :animationData="MailBoxAnimationJSON" :height="350" :width="350" />
+        <Vue3Lottie
+          :key="lottieKey"
+          :animationData="MailBoxAnimationJSON"
+          :height="350"
+          :width="350"
+        />
       </n-space>
 
       <n-space vertical align="center">
