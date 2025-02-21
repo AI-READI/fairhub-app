@@ -146,7 +146,7 @@ const signUp = (e: MouseEvent) => {
         message: "Please check your email for a verification link.",
       });
 
-      router.push("/auth/login");
+      router.push({ name: "auth:confirm-email", query: { email: emailAddress } });
     } else {
       console.log("error");
       console.log(errors);

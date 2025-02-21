@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth";
+import type { User } from "@/types/User";
 import { baseURL } from "@/utils/constants";
 
 const push = usePush();
@@ -81,7 +82,29 @@ const signIn = (e: MouseEvent) => {
         }
       }
 
-      const data = await response.json();
+      const data: User = await response.json();
+
+      if (!data) {
+        console.log("error");
+
+        push.error({
+          title: "Error",
+          message: "Something went wrong. Please try again later",
+        });
+
+        return;
+      }
+
+      const email_verified = data.email_verified || false;
+
+      if (!email_verified) {
+        push.error({
+          title: "Email not verified",
+          message: "Please check your email for a verification link",
+        });
+
+        return router.push({ name: "auth:confirm-email", query: { email: emailAddress } });
+      }
 
       authStore.saveUserInformation(data);
       authStore.setIsAuthenticated(true);
@@ -92,10 +115,9 @@ const signIn = (e: MouseEvent) => {
       });
 
       router.push({ name: "studies:all-studies" });
-    } else {
-      console.log("error");
-      console.log(errors);
     }
+    console.log("error");
+    console.log(errors);
   });
 };
 </script>
