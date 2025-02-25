@@ -133,6 +133,7 @@ export interface StudyKeyword {
 }
 
 export interface StudyKeywords {
+  conditions: StudyCondition[];
   keywords: StudyKeyword[];
 }
 

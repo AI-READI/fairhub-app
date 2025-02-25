@@ -103,43 +103,48 @@ const UpperMenuOptions = computed(() => [
       {
         icon: renderIcon("tabler:id"),
         key: "study:metadata:identification",
-        label: "Identification",
+        label: "Identification & Status",
       },
       {
-        icon: renderIcon("pajamas:status"),
-        key: "study:metadata:status",
-        label: "Status",
+        icon: renderIcon("codicon:symbol-keyword"),
+        key: "study:metadata:keywords",
+        label: "Study Description",
       },
+      // {
+      //   icon: renderIcon("pajamas:status"),
+      //   key: "study:metadata:status",
+      //   label: "Status",
+      // },
       {
         icon: renderIcon("carbon:user-sponsor"),
         key: "study:metadata:sponsors",
-        label: "Sponsors",
+        label: "Collaboration",
       },
-      {
-        icon: renderIcon("carbon:collaborate"),
-        key: "study:metadata:collaborators",
-        label: "Collaborators",
-      },
+      // {
+      //   icon: renderIcon("carbon:collaborate"),
+      //   key: "study:metadata:collaborators",
+      //   label: "Collaborators",
+      // },
       {
         icon: renderIcon("ic:baseline-local-police"),
         key: "study:metadata:oversight",
         label: "Oversight",
       },
-      {
-        icon: renderIcon("material-symbols:description"),
-        key: "study:metadata:description",
-        label: "Description",
-      },
-      {
-        icon: renderIcon("material-symbols:conditions-rounded"),
-        key: "study:metadata:conditions",
-        label: "Conditions",
-      },
-      {
-        icon: renderIcon("codicon:symbol-keyword"),
-        key: "study:metadata:keywords",
-        label: "Keywords",
-      },
+      // {
+      //   icon: renderIcon("material-symbols:description"),
+      //   key: "study:metadata:description",
+      //   label: "Description",
+      // },      // {
+      //   icon: renderIcon("material-symbols:description"),
+      //   key: "study:metadata:description",
+      //   label: "Description",
+      // },
+      // {
+      //   icon: renderIcon("material-symbols:conditions-rounded"),
+      //   key: "study:metadata:conditions",
+      //   label: "Conditions",
+      // },
+
       {
         icon: renderIcon("iconoir:design-pencil"),
         key: "study:metadata:design",
@@ -147,6 +152,11 @@ const UpperMenuOptions = computed(() => [
       },
       {
         children: [
+          {
+            icon: renderIcon("icon-park-outline:permissions"),
+            key: "study:metadata:eligibility",
+            label: "Eligibility",
+          },
           {
             icon: renderIcon("akar-icons:people-group"),
             key: "study:metadata:arms",
@@ -160,14 +170,10 @@ const UpperMenuOptions = computed(() => [
         ],
         icon: renderIcon("solar:medical-kit-bold"),
         key: "study:treatment",
-        label: "Treatment",
+        label: "Eligibility & Treatment",
         show: hideMenuOptions.value,
       },
-      {
-        icon: renderIcon("icon-park-outline:permissions"),
-        key: "study:metadata:eligibility",
-        label: "Eligibility",
-      },
+
       {
         children: [
           {

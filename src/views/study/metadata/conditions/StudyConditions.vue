@@ -132,7 +132,7 @@ const saveMetadata = (e: MouseEvent) => {
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
       title="Conditions"
-      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+      description=""
       linkName="study:overview"
       :linkParams="{
         studyId: route.params.studyId,
