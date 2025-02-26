@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import dayjs from "dayjs";
 import type { FormInst, FormRules } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
-import type { StudyIdentificationModule } from "@/types/Study";
+import type { StudyIdentificationModule, StudyStatusModule } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
@@ -15,7 +16,10 @@ const formRef = ref<FormInst | null>(null);
 const responseLoading = ref(false);
 const loading = ref(false);
 
-const moduleData: StudyIdentificationModule = reactive({
+const moduleData = reactive<StudyStatusModule & StudyIdentificationModule>({
+  completion_date: null,
+  completion_date_type: null,
+  overall_status: null,
   primary: {
     id: "",
     identifier: "",
@@ -24,6 +28,9 @@ const moduleData: StudyIdentificationModule = reactive({
     identifier_type: null,
   },
   secondary: [],
+  start_date: null,
+  start_date_type: null,
+  why_stopped: "",
 });
 
 const rules: FormRules = {
@@ -48,17 +55,26 @@ onBeforeMount(async () => {
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/identification`, {
     method: "GET",
   });
+  const responseStatus = await fetch(`${baseURL}/study/${studyId}/metadata/status`, {
+    method: "GET",
+  });
   responseLoading.value = false;
 
-  if (!response.ok) {
+  if (!response.ok || !responseStatus.ok) {
     throw new Error("Network response was not ok");
   }
 
   const data = await response.json();
+  const dataStatus = await responseStatus.json();
 
-  console.log(data);
+  console.log(data, dataStatus);
 
-  moduleData.primary = data.primary;
+  moduleData.completion_date = dataStatus.completion_date;
+  moduleData.completion_date_type = dataStatus.completion_date_type;
+  moduleData.overall_status = dataStatus.overall_status;
+  moduleData.start_date = dataStatus.start_date;
+  moduleData.start_date_type = dataStatus.start_date_type;
+  moduleData.why_stopped = dataStatus.why_stopped;
 
   moduleData.secondary = data.secondary.map((item: any) => ({
     ...item,
@@ -99,6 +115,17 @@ const addSecondaryIdentifier = () => {
   });
 };
 
+const dateTypeOptions = [
+  {
+    label: "Actual",
+    value: "Actual",
+  },
+  {
+    label: "Anticipated",
+    value: "Anticipated",
+  },
+];
+
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
@@ -129,7 +156,25 @@ const saveMetadata = (e: MouseEvent) => {
         }),
       };
 
+      const dataStatus = {
+        completion_date: moduleData.completion_date
+          ? dayjs(moduleData.completion_date).format("YYYY-MM-DD HH:mm:ss")
+          : null,
+        completion_date_type: moduleData.completion_date_type || null,
+        overall_status: moduleData.overall_status,
+        start_date: dayjs(moduleData.start_date).format("YYYY-MM-DD HH:mm:ss"),
+        start_date_type: moduleData.start_date_type,
+        why_stopped: moduleData.why_stopped || "",
+      };
       loading.value = true;
+
+      const responseStatus = await fetch(
+        `${baseURL}/study/${route.params.studyId}/metadata/status`,
+        {
+          body: JSON.stringify(dataStatus),
+          method: "PUT",
+        }
+      );
       const response = await fetch(
         `${baseURL}/study/${route.params.studyId}/metadata/identification`,
         {
@@ -139,7 +184,7 @@ const saveMetadata = (e: MouseEvent) => {
       );
       loading.value = false;
 
-      if (!response.ok) {
+      if (!response.ok || !responseStatus.ok) {
         push.error("Something went wrong.");
         return;
       } else {
@@ -161,7 +206,7 @@ const saveMetadata = (e: MouseEvent) => {
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
-      title="Identification"
+      title="Identification & Status"
       description=""
       linkName="study:overview"
       :linkParams="{
@@ -180,7 +225,7 @@ const saveMetadata = (e: MouseEvent) => {
         ref="formRef"
         :model="moduleData"
         :rules="rules"
-        size="large"
+        size="small"
         label-placement="top"
         class="pr-4"
         v-else
