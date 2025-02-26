@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FormInst } from "naive-ui";
+import type { FormInst, FormRules } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import type { StudyKeywords } from "@/types/Study";
@@ -11,8 +11,25 @@ const push = usePush();
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData = reactive<StudyKeywords>({
+type Descriptions = {
+  brief_summary: string;
+  detailed_description: string;
+};
+
+const rules: FormRules = {
+  brief_summary: [
+    {
+      message: "Please enter a brief summary",
+      required: true,
+      trigger: ["blur", "input"],
+    },
+  ],
+};
+
+const moduleData = reactive<StudyKeywords & Descriptions>({
+  brief_summary: "",
   conditions: [],
+  detailed_description: "",
   keywords: [],
 });
 
@@ -27,14 +44,22 @@ onBeforeMount(async () => {
   const response = await fetch(`${baseURL}/study/${studyId}/metadata/keywords`, {
     method: "GET",
   });
+  const responseDescription = await fetch(`${baseURL}/study/${studyId}/metadata/description`, {
+    method: "GET",
+  });
+  const responseConditions = await fetch(`${baseURL}/study/${studyId}/metadata/conditions`, {
+    method: "GET",
+  });
 
   responseLoading.value = false;
 
-  if (!response.ok) {
+  if (!response.ok || !responseDescription.ok || !responseConditions.ok) {
     throw new Error("Network response was not ok");
   }
 
   const data = await response.json();
+  const dataDescription = await responseDescription.json();
+  const dataCondition = await responseConditions.json();
 
   moduleData.keywords = data.map((item: any) => {
     return {
@@ -42,6 +67,15 @@ onBeforeMount(async () => {
       origin: "remote",
     };
   });
+  moduleData.conditions = dataCondition.map((item: any) => {
+    return {
+      ...item,
+      origin: "remote",
+    };
+  });
+
+  moduleData.brief_summary = dataDescription.brief_summary;
+  moduleData.detailed_description = dataDescription.detailed_description;
 });
 
 const removeKeyword = async (id: string) => {
@@ -112,6 +146,28 @@ const saveMetadata = (e: MouseEvent) => {
           };
         }
       });
+      const dataCondition: any = moduleData.conditions.map((item) => {
+        const entry = {
+          name: item.name,
+          classification_code: item.classification_code,
+          condition_uri: item.condition_uri,
+          scheme: item.scheme,
+          scheme_uri: item.scheme_uri,
+        };
+
+        if (item.origin === "local") {
+          return entry;
+        } else {
+          return {
+            ...entry,
+            id: item.id,
+          };
+        }
+      });
+      const dataDescription = {
+        brief_summary: moduleData.brief_summary,
+        detailed_description: moduleData.detailed_description || "",
+      };
 
       loading.value = true;
 
@@ -120,9 +176,24 @@ const saveMetadata = (e: MouseEvent) => {
         method: "POST",
       });
 
+      const responseCondition = await fetch(
+        `${baseURL}/study/${route.params.studyId}/metadata/conditions`,
+        {
+          body: JSON.stringify(dataCondition),
+          method: "POST",
+        }
+      );
+      const responseDescription = await fetch(
+        `${baseURL}/study/${route.params.studyId}/metadata/description`,
+        {
+          body: JSON.stringify(dataDescription),
+          method: "PUT",
+        }
+      );
+
       loading.value = false;
 
-      if (!response.ok) {
+      if (!response.ok || !responseCondition.ok || !responseDescription.ok) {
         push.error("Something went wrong. Please try again later.");
         throw new Error("Network response was not ok");
       } else {
@@ -138,6 +209,28 @@ const saveMetadata = (e: MouseEvent) => {
       console.log(errors);
     }
   });
+};
+
+const removeCondition = async (id: string) => {
+  const item = moduleData.conditions.find((item) => item.id === id);
+
+  if (item && item.origin === "remote") {
+    const response = await fetch(
+      `${baseURL}/study/${route.params.studyId}/metadata/conditions/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok) {
+      push.error("Failed to delete central contact");
+      throw new Error("Network response was not ok");
+    }
+  }
+
+  moduleData.conditions = moduleData.conditions.filter((item) => item.id !== id);
+
+  push.success("Condition deleted successfully");
 };
 </script>
 
