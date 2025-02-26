@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { FormInst, FormRules } from "naive-ui";
+import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
 import type { StudySponsors } from "@/types/Study";
@@ -12,6 +13,7 @@ const push = usePush();
 const formRef = ref<FormInst | null>(null);
 
 const moduleData = reactive<StudySponsors>({
+  collaborators: [],
   lead_sponsor: {
     name: "",
     identifier: "",
@@ -60,6 +62,7 @@ onBeforeMount(async () => {
   const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/sponsor`, {
     method: "GET",
   });
+
   responseLoading.value = false;
 
   if (!response.ok) {
@@ -91,11 +94,79 @@ onBeforeMount(async () => {
     last_name: data.responsible_party_investigator_last_name,
     type: data.responsible_party_type,
   };
+
+  const responseCollabs = await fetch(
+    `${baseURL}/study/${route.params.studyId}/metadata/collaborators`,
+    {
+      method: "GET",
+    }
+  );
+
+  responseLoading.value = false;
+
+  if (!responseCollabs.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const dataCollabs = await responseCollabs.json();
+
+  moduleData.collaborators = dataCollabs.map((item: any) => {
+    return {
+      ...item,
+      origin: "remote",
+    };
+  });
 });
 
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
+    if (!errors) {
+      const dataCollab: any = moduleData.collaborators.map((item) => {
+        const entry = {
+          name: item.name,
+          identifier: item.identifier,
+          identifier_scheme: item.identifier_scheme,
+          identifier_scheme_uri: item.identifier_scheme_uri,
+        };
+
+        if (item.origin === "local") {
+          return entry;
+        } else {
+          return {
+            ...entry,
+            id: item.id,
+          };
+        }
+      });
+
+      loading.value = true;
+
+      const responseCollab = await fetch(
+        `${baseURL}/study/${route.params.studyId}/metadata/collaborators`,
+        {
+          body: JSON.stringify(dataCollab),
+          method: "POST",
+        }
+      );
+
+      loading.value = false;
+
+      if (!responseCollab.ok) {
+        push.error("Something went wrong. Please try again later.");
+        throw new Error("Network response was not ok");
+      } else {
+        push.success("Study updated successfully.");
+
+        // refresh page
+        router.go(0);
+      }
+
+      console.log("success");
+    } else {
+      console.log("error");
+      console.log(errors);
+    }
     if (!errors) {
       const data = {
         lead_sponsor_identifier: moduleData.lead_sponsor.identifier,
@@ -146,6 +217,39 @@ const saveMetadata = (e: MouseEvent) => {
     }
   });
 };
+
+const removeCollaborator = async (id: string) => {
+  const item = moduleData.collaborators.find((item) => item.id === id);
+
+  if (item && item.origin === "remote") {
+    const response = await fetch(
+      `${baseURL}/study/${route.params.studyId}/metadata/collaborators/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok) {
+      push.error("Failed to delete central contact");
+      throw new Error("Network response was not ok");
+    }
+  }
+
+  moduleData.collaborators = moduleData.collaborators.filter((item) => item.id !== id);
+
+  push.success("Collaborator deleted successfully");
+};
+
+const addCollaborator = () => {
+  moduleData.collaborators.push({
+    id: nanoid(),
+    name: "",
+    identifier: "",
+    identifier_scheme: "",
+    identifier_scheme_uri: "",
+    origin: "local",
+  });
+};
 </script>
 
 <template>
@@ -165,7 +269,7 @@ const saveMetadata = (e: MouseEvent) => {
       ref="formRef"
       :model="moduleData"
       :rules="rules"
-      size="large"
+      size="small"
       label-placement="top"
       class="pr-4"
     >
@@ -440,7 +544,7 @@ const saveMetadata = (e: MouseEvent) => {
         <n-divider></n-divider>
       </n-card>
 
-      <h2 class="pt-8">Collaborators</h2>
+      <h2 class="pb-4 pt-8">Collaborators</h2>
 
       <CollapsibleCard
         v-for="(item, index) in moduleData.collaborators"

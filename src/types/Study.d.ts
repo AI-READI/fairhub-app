@@ -64,6 +64,7 @@ export interface StudyStatusModule {
 }
 
 export interface StudySponsors {
+  collaborators: StudyCollaborator[];
   lead_sponsor: {
     name: string;
     identifier: string;
@@ -133,7 +134,9 @@ export interface StudyKeyword {
 }
 
 export interface StudyKeywords {
+  brief_summary: string;
   conditions: StudyCondition[];
+  detailed_description: string;
   keywords: StudyKeyword[];
 }
 
