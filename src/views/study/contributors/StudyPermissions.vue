@@ -284,7 +284,7 @@ const copyInviteURL = (token: string, emailAddress: string) => {
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-6">
     <PageBackNavigationHeader
-      title="Contributors"
+      title="Permissions"
       description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
       linkName="study:overview"
       :linkParams="{

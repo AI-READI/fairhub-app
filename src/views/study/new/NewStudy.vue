@@ -7,6 +7,7 @@ import { useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth";
 import { baseURL } from "@/utils/constants";
+const route = useRoute();
 
 const router = useRouter();
 const push = usePush();
@@ -24,10 +25,14 @@ onBeforeMount(() => {
 
 const formRef = ref<FormInst | null>(null);
 
+const routeParams = {
+  studyId: route.params.studyId as string,
+};
+
 const study = reactive({
   title: faker.commerce.productName(),
-  acronym: "",
   image: "",
+  short_description: "",
 });
 
 // const keywordOptions = FormJSON.keywordOptions;
@@ -36,6 +41,13 @@ const rules: FormRules = {
   title: [
     {
       message: "Please add a study title",
+      required: true,
+      trigger: ["blur", "input"],
+    },
+  ],
+  short_description: [
+    {
+      message: "Please add a short description",
       required: true,
       trigger: ["blur", "input"],
     },
@@ -54,8 +66,8 @@ const createStudy = (e: MouseEvent) => {
     if (!errors) {
       const data = {
         title: study.title,
-        acronym: study.acronym,
         image: study.image || generateImageURL(),
+        short_description: study.short_description,
       };
 
       loader.value = true;
@@ -86,6 +98,15 @@ const createStudy = (e: MouseEvent) => {
     }
   });
 };
+
+function cancelButton() {
+  router.push({
+    name: "studies:all-studies",
+    params: {
+      studyId: routeParams.studyId,
+    },
+  });
+}
 </script>
 
 <template>
@@ -110,26 +131,43 @@ const createStudy = (e: MouseEvent) => {
         <n-input v-model:value="study.title" placeholder="My study on the human body" clearable />
       </n-form-item>
 
-      <n-form-item label="Acronym" path="acronym">
-        <n-input v-model:value="study.acronym" placeholder="AI-READI" clearable />
+      <n-form-item label="Short description" path="short_description">
+        <n-input
+          v-model:value="study.short_description"
+          maxlength="300"
+          type="textarea"
+          placeholder="The Artificial Intelligence Ready and Equitable Atlas for Diabetes Insights (AI-READI) project seeks to create a flagship ethically-sourced dataset"
+          clearable
+          :status="study.short_description.length >= 300 ? 'error' : undefined"
+        />
       </n-form-item>
 
-      <!-- <n-form-item label="Keywords" path="keywords">
-        <n-select
-          v-model:value="study.keywords"
-          placeholder="Salutogenesis"
-          multiple
-          tag
-          filterable
-          clearable
-          :options="keywordOptions"
-        />
-      </n-form-item> -->
+      <div
+        class="flex justify-end text-sm text-gray-500"
+        :class="{
+          'text-red-500': study.short_description.length >= 300,
+          'text-gray-500': study.short_description.length < 300,
+        }"
+      >
+        Maximum {{ 300 - study.short_description.length }} characters
+      </div>
 
-      <!-- <n-form-item label="Image" path="Image">
+      <!--             <n-form-item label="Keywords" path="keywords">-->
+      <!--              <n-select-->
+      <!--                v-model:value="study.keywords"-->
+      <!--                placeholder="Salutogenesis"-->
+      <!--                multiple-->
+      <!--                tag-->
+      <!--                filterable-->
+      <!--                clearable-->
+      <!--                :options="keywordOptions"-->
+      <!--              />-->
+      <!--            </n-form-item>-->
+
+      <n-form-item label="Image" path="Image">
         <n-input
           v-model:value="study.image"
-          placeholder="Add a representative image to easily differentiate your study"
+          placeholder="Add a representative image URL to easily differentiate your study, or click to the button on the right to automatically generate a one"
         />
 
         <n-button @click="generateImageURL" class="ml-4">
@@ -137,22 +175,29 @@ const createStudy = (e: MouseEvent) => {
             <f-icon icon="mdi:auto-fix" />
           </template>
         </n-button>
-      </n-form-item> -->
+      </n-form-item>
 
-      <!-- <n-image
+      <n-image
         :src="study.image || 'https://www.svgrepo.com/show/213127/image-warning.svg'"
         width="300"
         class="rounded-xl bg-slate-50 p-3 shadow-md"
-      /> -->
+      />
 
       <n-divider />
 
-      <div class="flex justify-start">
+      <div class="flex justify-start gap-4">
         <n-button size="large" type="primary" @click="createStudy" :loading="loader">
           <template #icon>
             <f-icon icon="material-symbols:add" />
           </template>
           Create Study
+        </n-button>
+
+        <n-button type="error" size="large" @click="cancelButton">
+          <template #icon>
+            <f-icon icon="material-symbols:cancel-rounded" />
+          </template>
+          Cancel
         </n-button>
       </div>
     </n-form>

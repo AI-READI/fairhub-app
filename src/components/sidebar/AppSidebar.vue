@@ -55,9 +55,50 @@ const UpperMenuOptions = computed(() => [
     label: "My Studies",
   },
   {
+    type: "divider", // Divider after the 2nd element
+  },
+  {
     icon: renderIcon("material-symbols:overview-key-rounded"),
     key: "study:overview",
     label: "Overview",
+    show: hideMenuOptions.value,
+  },
+
+  // {
+  //   icon: renderIcon("material-symbols:api"),
+  //   key: "study:redcap:all-redcap-project-apis",
+  //   label: "REDCap",
+  //   show: hideMenuOptions.value,
+  // },
+  {
+    // children: [
+    //   {
+    //     icon: renderIcon("material-symbols:design-services-outline-sharp"),
+    //     key: "study:data-upload:design",
+    //     label: "Study Design",
+    //   },
+    // ],
+    icon: renderIcon("oi:cloud-upload"),
+    key: "study:data-upload",
+    label: "Data Upload",
+    show: hideMenuOptions.value,
+  },
+  {
+    icon: renderIcon("fluent-mdl2:server-processes"),
+    key: "study:data-processing",
+    label: "Data Processing",
+    show: hideMenuOptions.value,
+  },
+  {
+    icon: renderIcon("ph:files-fill"),
+    key: "study:files",
+    label: "Uploaded Files",
+    show: hideMenuOptions.value,
+  },
+  {
+    icon: renderIcon("material-symbols:dashboard-rounded"),
+    key: "study:dashboard:all-dashboards",
+    label: "Dashboards",
     show: hideMenuOptions.value,
   },
   {
@@ -155,43 +196,31 @@ const UpperMenuOptions = computed(() => [
     ],
     icon: renderIcon("ooui:view-details-ltr"),
     key: "study:metadata",
-    label: "Metadata",
-    show: hideMenuOptions.value,
-  },
-  {
-    icon: renderIcon("fluent:people-team-toolbox-24-regular"),
-    key: "study:participants",
-    label: "Participants",
-    show: hideMenuOptions.value,
-  },
-  {
-    icon: renderIcon("fluent:people-checkmark-24-regular"),
-    key: "study:contributors",
-    label: "Contributors",
-    show: hideMenuOptions.value,
-  },
-  {
-    icon: renderIcon("ph:files-fill"),
-    key: "study:files",
-    label: "Files",
-    show: hideMenuOptions.value,
-  },
-  {
-    icon: renderIcon("material-symbols:api"),
-    key: "study:redcap:all-redcap-project-apis",
-    label: "REDCap",
-    show: hideMenuOptions.value,
-  },
-  {
-    icon: renderIcon("material-symbols:dashboard-rounded"),
-    key: "study:dashboard:all-dashboards",
-    label: "Dashboards",
+    label: "Study Information",
     show: hideMenuOptions.value,
   },
   {
     icon: renderIcon("material-symbols:dataset"),
     key: "study:all-datasets",
     label: "Datasets",
+    show: hideMenuOptions.value,
+  },
+  {
+    icon: renderIcon("fluent:people-team-toolbox-24-regular"),
+    key: "study:participants",
+    label: "Participants",
+    show: false,
+  },
+  {
+    icon: renderIcon("icon-park-solid:permissions"),
+    key: "study:permissions",
+    label: "Permissions",
+    show: hideMenuOptions.value,
+  },
+  {
+    icon: renderIcon("fluent:shifts-activity-24-filled"),
+    key: "study:activity",
+    label: "Activity",
     show: hideMenuOptions.value,
   },
   {
@@ -243,6 +272,34 @@ const lowerMenuOptions: MenuOption[] = [
               },
             },
             { default: () => "Documentation" }
+          ),
+      },
+      {
+        icon: renderIcon("material-symbols:policy-alert-outline"),
+        key: "privacy-policy",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                path: "/help/privacy-policy",
+              },
+            },
+            { default: () => "Privacy policy" }
+          ),
+      },
+      {
+        icon: renderIcon("codicon:terminal-powershell"),
+        key: "terms-conditions",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                path: "/help/terms-conditions",
+              },
+            },
+            { default: () => "Terms and conditions" }
           ),
       },
     ],

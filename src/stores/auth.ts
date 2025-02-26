@@ -12,6 +12,7 @@ export const useAuthStore = defineStore(
       id: "",
       username: "",
       email_address: "",
+      email_verified: false,
       first_name: "",
       last_name: "",
     });
@@ -25,6 +26,7 @@ export const useAuthStore = defineStore(
       user.value.id = data.id;
       user.value.last_name = data.last_name;
       user.value.username = data.username;
+      user.value.email_verified = data.email_verified;
     };
 
     const setIsAuthenticated = (value: boolean) => {
@@ -61,6 +63,7 @@ export const useAuthStore = defineStore(
           id: "",
           username: "",
           email_address: "",
+          email_verified: false,
           first_name: "",
           last_name: "",
         };
@@ -80,6 +83,7 @@ export const useAuthStore = defineStore(
         id: "",
         username: "",
         email_address: "",
+        email_verified: false,
         first_name: "",
         last_name: "",
       };
