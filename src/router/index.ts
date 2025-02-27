@@ -61,6 +61,7 @@ import EditStudy from "@/views/study/edit/EditStudy.vue";
 import StudyFiles from "@/views/study/files/StudyFiles.vue";
 import StudyCollaborators from "@/views/study/metadata/collaborators/StudyCollaborators.vue";
 import StudyConditions from "@/views/study/metadata/conditions/StudyConditions.vue";
+import StudyDesc from "@/views/study/metadata/desc/StudyDesc.vue";
 import StudyDescription from "@/views/study/metadata/description/StudyDescription.vue";
 import StudyDesign from "@/views/study/metadata/design/StudyDesign.vue";
 import StudyEligibility from "@/views/study/metadata/eligibility/StudyEligibility.vue";
@@ -68,10 +69,9 @@ import StudyContacts from "@/views/study/metadata/enrollment/contacts/StudyConta
 import StudyLocations from "@/views/study/metadata/enrollment/locations/StudyLocations.vue";
 import StudyOfficials from "@/views/study/metadata/enrollment/officials/StudyOfficials.vue";
 import StudyIdentification from "@/views/study/metadata/identification/StudyIdentification.vue";
-import StudyKeywords from "@/views/study/metadata/keywords/StudyKeywords.vue";
 import StudyOversight from "@/views/study/metadata/oversight/StudyOversight.vue";
-import StudySponsors from "@/views/study/metadata/sponsors/StudySponsors.vue";
 import StudyStatus from "@/views/study/metadata/status/StudyStatus.vue";
+import StudyTeam from "@/views/study/metadata/team/StudyTeam.vue";
 import StudyArms from "@/views/study/metadata/treatment/arms/StudyArms.vue";
 import StudyInterventions from "@/views/study/metadata/treatment/interventions/StudyInterventions.vue";
 import NewStudy from "@/views/study/new/NewStudy.vue";
@@ -477,7 +477,7 @@ const router = createRouter({
             {
               name: "study:metadata:sponsors",
               path: "sponsor",
-              component: StudySponsors,
+              component: StudyTeam,
             },
             {
               name: "study:metadata:collaborators",
@@ -492,7 +492,7 @@ const router = createRouter({
             {
               name: "study:metadata:description",
               path: "description",
-              component: StudyDescription,
+              component: StudyDesc,
             },
             {
               name: "study:metadata:conditions",
@@ -502,7 +502,7 @@ const router = createRouter({
             {
               name: "study:metadata:keywords",
               path: "keywords",
-              component: StudyKeywords,
+              component: StudyDescription,
             },
             {
               name: "study:metadata:design",

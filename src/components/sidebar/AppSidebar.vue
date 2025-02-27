@@ -101,50 +101,25 @@ const UpperMenuOptions = computed(() => [
   {
     children: [
       {
-        icon: renderIcon("tabler:id"),
-        key: "study:metadata:identification",
-        label: "Identification & Status",
-      },
-      {
         icon: renderIcon("codicon:symbol-keyword"),
         key: "study:metadata:keywords",
         label: "Study Description",
       },
-      // {
-      //   icon: renderIcon("pajamas:status"),
-      //   key: "study:metadata:status",
-      //   label: "Status",
-      // },
-      {
-        icon: renderIcon("carbon:user-sponsor"),
-        key: "study:metadata:sponsors",
-        label: "Collaboration",
-      },
-      // {
-      //   icon: renderIcon("carbon:collaborate"),
-      //   key: "study:metadata:collaborators",
-      //   label: "Collaborators",
-      // },
       {
         icon: renderIcon("ic:baseline-local-police"),
         key: "study:metadata:oversight",
         label: "Oversight",
       },
-      // {
-      //   icon: renderIcon("material-symbols:description"),
-      //   key: "study:metadata:description",
-      //   label: "Description",
-      // },      // {
-      //   icon: renderIcon("material-symbols:description"),
-      //   key: "study:metadata:description",
-      //   label: "Description",
-      // },
-      // {
-      //   icon: renderIcon("material-symbols:conditions-rounded"),
-      //   key: "study:metadata:conditions",
-      //   label: "Conditions",
-      // },
-
+      {
+        icon: renderIcon("pajamas:status"),
+        key: "study:metadata:status",
+        label: "Status",
+      },
+      {
+        icon: renderIcon("carbon:user-sponsor"),
+        key: "study:metadata:sponsors",
+        label: "Team",
+      },
       {
         icon: renderIcon("iconoir:design-pencil"),
         key: "study:metadata:design",
