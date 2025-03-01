@@ -3,7 +3,7 @@ import type { FormInst, FormRules } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
-import type { StudySponsors } from "@/types/Study";
+import type { StudyTeam } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
@@ -12,30 +12,32 @@ const push = usePush();
 
 const formRef = ref<FormInst | null>(null);
 
-const moduleData = reactive<StudySponsors>({
+const moduleData = reactive<StudyTeam>({
   collaborators: [],
-  lead_sponsor: {
-    name: "",
-    identifier: "",
-    identifier_scheme: "",
-    identifier_scheme_uri: "",
-  },
-  responsible_party: {
-    title: "",
-    affiliation: {
+  sponsors: {
+    lead_sponsor: {
       name: "",
       identifier: "",
       identifier_scheme: "",
-      scheme_uri: "",
+      identifier_scheme_uri: "",
     },
-    first_name: "",
-    identifier: {
-      scheme: "",
-      scheme_uri: "",
-      value: "",
+    responsible_party: {
+      title: "",
+      affiliation: {
+        name: "",
+        identifier: "",
+        identifier_scheme: "",
+        scheme_uri: "",
+      },
+      first_name: "",
+      identifier: {
+        scheme: "",
+        scheme_uri: "",
+        value: "",
+      },
+      last_name: "",
+      type: null,
     },
-    last_name: "",
-    type: null,
   },
 });
 
@@ -59,7 +61,7 @@ const responseLoading = ref(false);
 
 onBeforeMount(async () => {
   responseLoading.value = true;
-  const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/sponsor`, {
+  const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/team`, {
     method: "GET",
   });
 
@@ -71,88 +73,94 @@ onBeforeMount(async () => {
 
   const data = await response.json();
 
-  moduleData.lead_sponsor = {
-    name: data.lead_sponsor_name,
-    identifier: data.lead_sponsor_identifier,
-    identifier_scheme: data.lead_sponsor_identifier_scheme,
-    identifier_scheme_uri: data.lead_sponsor_identifier_scheme_uri,
+  moduleData.collaborators = (data.collaborators ?? []).map((item: any) => ({
+    ...item,
+    origin: "remote",
+  }));
+
+  moduleData.sponsors = data.sponsors;
+
+  moduleData.sponsors.lead_sponsor = {
+    name: data.sponsors.lead_sponsor_name,
+    identifier: data.sponsors.lead_sponsor_identifier,
+    identifier_scheme: data.sponsors.lead_sponsor_identifier_scheme,
+    identifier_scheme_uri: data.sponsors.lead_sponsor_identifier_scheme_uri,
   };
-  moduleData.responsible_party = {
-    title: data.responsible_party_investigator_title,
+  moduleData.sponsors.responsible_party = {
+    title: data.sponsors.responsible_party_investigator_title,
     affiliation: {
-      name: data.responsible_party_investigator_affiliation_name,
-      identifier: data.responsible_party_investigator_affiliation_identifier_value,
-      identifier_scheme: data.responsible_party_investigator_affiliation_identifier_scheme,
-      scheme_uri: data.responsible_party_investigator_affiliation_identifier_scheme_uri,
+      name: data.sponsors.responsible_party_investigator_affiliation_name,
+      identifier: data.sponsors.responsible_party_investigator_affiliation_identifier_value,
+      identifier_scheme: data.sponsors.responsible_party_investigator_affiliation_identifier_scheme,
+      scheme_uri: data.sponsors.responsible_party_investigator_affiliation_identifier_scheme_uri,
     },
-    first_name: data.responsible_party_investigator_first_name,
+    first_name: data.sponsors.responsible_party_investigator_first_name,
     identifier: {
-      scheme: data.responsible_party_investigator_identifier_scheme,
-      scheme_uri: data.responsible_party_investigator_identifier_scheme_uri,
-      value: data.responsible_party_investigator_identifier_value,
+      scheme: data.sponsors.responsible_party_investigator_identifier_scheme,
+      scheme_uri: data.sponsors.responsible_party_investigator_identifier_scheme_uri,
+      value: data.sponsors.responsible_party_investigator_identifier_value,
     },
-    last_name: data.responsible_party_investigator_last_name,
-    type: data.responsible_party_type,
+    last_name: data.sponsors.responsible_party_investigator_last_name,
+    type: data.sponsors.responsible_party_type,
   };
-
-  const responseCollabs = await fetch(
-    `${baseURL}/study/${route.params.studyId}/metadata/collaborators`,
-    {
-      method: "GET",
-    }
-  );
-
   responseLoading.value = false;
-
-  if (!responseCollabs.ok) {
-    throw new Error("Network response was not ok");
-  }
-
-  const dataCollabs = await responseCollabs.json();
-
-  moduleData.collaborators = dataCollabs.map((item: any) => {
-    return {
-      ...item,
-      origin: "remote",
-    };
-  });
 });
 
 const saveMetadata = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
     if (!errors) {
-      const dataCollab: any = moduleData.collaborators.map((item) => {
-        const entry = {
-          name: item.name,
-          identifier: item.identifier,
-          identifier_scheme: item.identifier_scheme,
-          identifier_scheme_uri: item.identifier_scheme_uri,
-        };
-
-        if (item.origin === "local") {
-          return entry;
-        } else {
-          return {
-            ...entry,
-            id: item.id,
+      const data = {
+        collaborators: moduleData.collaborators.map((item) => {
+          const entry = {
+            name: item.name,
+            identifier: item.identifier,
+            identifier_scheme: item.identifier_scheme,
+            identifier_scheme_uri: item.identifier_scheme_uri,
           };
-        }
-      });
 
+          if (item.origin === "local") {
+            return entry;
+          } else {
+            return {
+              ...entry,
+              id: item.id,
+            };
+          }
+        }),
+        lead_sponsor_identifier: moduleData.sponsors.lead_sponsor.identifier,
+        lead_sponsor_identifier_scheme: moduleData.sponsors.lead_sponsor.identifier_scheme,
+        lead_sponsor_identifier_scheme_uri: moduleData.sponsors.lead_sponsor.identifier_scheme_uri,
+        lead_sponsor_name: moduleData.sponsors.lead_sponsor.name,
+        responsible_party_investigator_affiliation_identifier_scheme:
+          moduleData.sponsors.responsible_party.affiliation.identifier_scheme,
+        responsible_party_investigator_affiliation_identifier_scheme_uri:
+          moduleData.sponsors.responsible_party.affiliation.scheme_uri,
+        responsible_party_investigator_affiliation_identifier_value:
+          moduleData.sponsors.responsible_party.affiliation.identifier,
+        responsible_party_investigator_affiliation_name:
+          moduleData.sponsors.responsible_party.affiliation.name,
+        responsible_party_investigator_first_name: moduleData.sponsors.responsible_party.first_name,
+        responsible_party_investigator_identifier_scheme:
+          moduleData.sponsors.responsible_party.identifier.scheme,
+        responsible_party_investigator_identifier_scheme_uri:
+          moduleData.sponsors.responsible_party.identifier.scheme_uri,
+        responsible_party_investigator_identifier_value:
+          moduleData.sponsors.responsible_party.identifier.value,
+        responsible_party_investigator_last_name: moduleData.sponsors.responsible_party.last_name,
+        responsible_party_investigator_title: moduleData.sponsors.responsible_party.title,
+        responsible_party_type: moduleData.sponsors.responsible_party.type,
+      };
       loading.value = true;
 
-      const responseCollab = await fetch(
-        `${baseURL}/study/${route.params.studyId}/metadata/collaborators`,
-        {
-          body: JSON.stringify(dataCollab),
-          method: "POST",
-        }
-      );
+      const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/team`, {
+        body: JSON.stringify(data),
+        method: "POST",
+      });
 
       loading.value = false;
 
-      if (!responseCollab.ok) {
+      if (!response.ok) {
         push.error("Something went wrong. Please try again later.");
         throw new Error("Network response was not ok");
       } else {
@@ -165,54 +173,8 @@ const saveMetadata = (e: MouseEvent) => {
       console.log("success");
     } else {
       console.log("error");
-      console.log(errors);
-    }
-    if (!errors) {
-      const data = {
-        lead_sponsor_identifier: moduleData.lead_sponsor.identifier,
-        lead_sponsor_identifier_scheme: moduleData.lead_sponsor.identifier_scheme,
-        lead_sponsor_identifier_scheme_uri: moduleData.lead_sponsor.identifier_scheme_uri,
-        lead_sponsor_name: moduleData.lead_sponsor.name,
-        responsible_party_investigator_affiliation_identifier_scheme:
-          moduleData.responsible_party.affiliation.identifier_scheme,
-        responsible_party_investigator_affiliation_identifier_scheme_uri:
-          moduleData.responsible_party.affiliation.scheme_uri,
-        responsible_party_investigator_affiliation_identifier_value:
-          moduleData.responsible_party.affiliation.identifier,
-        responsible_party_investigator_affiliation_name:
-          moduleData.responsible_party.affiliation.name,
-        responsible_party_investigator_first_name: moduleData.responsible_party.first_name,
-        responsible_party_investigator_identifier_scheme:
-          moduleData.responsible_party.identifier.scheme,
-        responsible_party_investigator_identifier_scheme_uri:
-          moduleData.responsible_party.identifier.scheme_uri,
-        responsible_party_investigator_identifier_value:
-          moduleData.responsible_party.identifier.value,
-        responsible_party_investigator_last_name: moduleData.responsible_party.last_name,
-        responsible_party_investigator_title: moduleData.responsible_party.title,
-        responsible_party_type: moduleData.responsible_party.type,
-      };
+      console.log("moduleData before sending:", JSON.stringify(moduleData, null, 2));
 
-      loading.value = true;
-      const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/sponsor`, {
-        body: JSON.stringify(data),
-        method: "PUT",
-      });
-      loading.value = false;
-
-      if (!response.ok) {
-        push.error("Something went wrong.");
-        return;
-      } else {
-        push.success("Study updated successfully.");
-
-        // refresh page
-        router.go(0);
-      }
-
-      console.log("success");
-    } else {
-      console.log("error");
       console.log(errors);
     }
   });
@@ -255,7 +217,7 @@ const addCollaborator = () => {
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
-      title="Collaboration"
+      title="Team"
       description=""
       linkName="study:overview"
       :linkParams="{
@@ -286,9 +248,9 @@ const addCollaborator = () => {
             voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum
           </p>
 
-          <n-form-item label="Type" path="responsible_party.type">
+          <n-form-item label="Type" path="sponsors.responsible_party.type">
             <n-select
-              v-model:value="moduleData.responsible_party.type"
+              v-model:value="moduleData.sponsors.responsible_party.type"
               placeholder="Principal Investigator"
               clearable
               :options="FORM_JSON.studyMetadataSponsorsResponsiblePartyTypeOptions"
@@ -299,17 +261,17 @@ const addCollaborator = () => {
             <n-form-item
               class="w-full"
               label="Given Name"
-              path="responsible_party.first_name"
+              path="sponsors.responsible_party.first_name"
               :rule="{
                 message: 'Please input an investigator name',
                 required:
-                  moduleData.responsible_party.type === 'Principal Investigator' ||
-                  moduleData.responsible_party.type === 'Sponsor-Investigator',
+                  moduleData.sponsors.responsible_party.type === 'Principal Investigator' ||
+                  moduleData.sponsors.responsible_party.type === 'Sponsor-Investigator',
                 trigger: ['blur', 'input'],
               }"
             >
               <n-input
-                v-model:value="moduleData.responsible_party.first_name"
+                v-model:value="moduleData.sponsors.responsible_party.first_name"
                 placeholder="Annie"
                 clearable
               />
@@ -318,19 +280,19 @@ const addCollaborator = () => {
             <n-form-item
               label="Family Name"
               class="w-full"
-              path="responsible_party.last_name"
+              path="sponsors.responsible_party.last_name"
               :rule="{
                 message: 'Please input a name',
                 required:
-                  moduleData.responsible_party.type === 'Principal Investigator' ||
-                  moduleData.responsible_party.type === 'Sponsor-Investigator'
+                  moduleData.sponsors.responsible_party.type === 'Principal Investigator' ||
+                  moduleData.sponsors.responsible_party.type === 'Sponsor-Investigator'
                     ? true
                     : false,
                 trigger: ['blur', 'input'],
               }"
             >
               <n-input
-                v-model:value="moduleData.responsible_party.last_name"
+                v-model:value="moduleData.sponsors.responsible_party.last_name"
                 placeholder="Leonhart"
                 clearable
               />
@@ -339,17 +301,17 @@ const addCollaborator = () => {
 
           <n-form-item
             label="Title"
-            path="responsible_party.title"
+            path="sponsors.responsible_party.title"
             :rule="{
               message: 'Please add an investigator title',
               required:
-                moduleData.responsible_party.type === 'Principal Investigator' ||
-                moduleData.responsible_party.type === 'Sponsor-Investigator',
+                moduleData.sponsors.responsible_party.type === 'Principal Investigator' ||
+                moduleData.sponsors.responsible_party.type === 'Sponsor-Investigator',
               trigger: ['blur', 'input'],
             }"
           >
             <n-input
-              v-model:value="moduleData.responsible_party.title"
+              v-model:value="moduleData.sponsors.responsible_party.title"
               placeholder="Warrior Candidate"
               clearable
             />
@@ -358,18 +320,18 @@ const addCollaborator = () => {
           <div class="flex items-center space-x-4">
             <n-form-item
               label="Affiliation"
-              path="responsible_party.affiliation.name"
+              path="sponsors.responsible_party.affiliation.name"
               :rule="{
                 message: `Please add the investigator's affiliation`,
                 required:
-                  moduleData.responsible_party.type === 'Principal Investigator' ||
-                  moduleData.responsible_party.type === 'Sponsor-Investigator',
+                  moduleData.sponsors.responsible_party.type === 'Principal Investigator' ||
+                  moduleData.sponsors.responsible_party.type === 'Sponsor-Investigator',
                 trigger: ['blur', 'input'],
               }"
               class="w-full"
             >
               <n-input
-                v-model:value="moduleData.responsible_party.affiliation.name"
+                v-model:value="moduleData.sponsors.responsible_party.affiliation.name"
                 placeholder="Marleyan Military"
                 clearable
               />
@@ -377,16 +339,16 @@ const addCollaborator = () => {
 
             <n-form-item
               label="Affiliation Identifier"
-              path="responsible_party.affiliation.identifier"
+              path="sponsors.responsible_party.affiliation.identifier"
               :rule="{
                 message: `Please add the investigator's affiliation identifier`,
-                required: moduleData.responsible_party.affiliation.identifier_scheme,
+                required: moduleData.sponsors.responsible_party.affiliation.identifier_scheme,
                 trigger: ['blur', 'input'],
               }"
               class="w-full"
             >
               <n-input
-                v-model:value="moduleData.responsible_party.affiliation.identifier"
+                v-model:value="moduleData.sponsors.responsible_party.affiliation.identifier"
                 placeholder="0156zyn36"
                 clearable
               />
@@ -396,16 +358,16 @@ const addCollaborator = () => {
           <div class="flex items-center space-x-4">
             <n-form-item
               label="Affiliation Identifier Scheme"
-              path="responsible_party.affiliation.identifier_scheme"
+              path="sponsors.responsible_party.affiliation.identifier_scheme"
               :rule="{
                 message: `Please add the investigator's affiliation identifier scheme`,
-                required: moduleData.responsible_party.affiliation.identifier,
+                required: moduleData.sponsors.responsible_party.affiliation.identifier,
                 trigger: ['blur', 'input'],
               }"
               class="w-full"
             >
               <n-input
-                v-model:value="moduleData.responsible_party.affiliation.identifier_scheme"
+                v-model:value="moduleData.sponsors.responsible_party.affiliation.identifier_scheme"
                 placeholder="ROR"
                 clearable
               />
@@ -413,11 +375,11 @@ const addCollaborator = () => {
 
             <n-form-item
               label="Affiliation Identifier Scheme URI"
-              path="responsible_party.affiliation.scheme_uri"
+              path="sponsors.responsible_party.affiliation.scheme_uri"
               class="w-full"
             >
               <n-input
-                v-model:value="moduleData.responsible_party.affiliation.scheme_uri"
+                v-model:value="moduleData.sponsors.responsible_party.affiliation.scheme_uri"
                 placeholder="https://ror.org"
                 clearable
               />
@@ -429,12 +391,12 @@ const addCollaborator = () => {
             path="responsible_party.identifier.value"
             :rule="{
               message: `Please add the investigator's identifier`,
-              required: moduleData.responsible_party.identifier.scheme,
+              required: moduleData.sponsors.responsible_party.identifier.scheme,
               trigger: ['blur', 'input'],
             }"
           >
             <n-input
-              v-model:value="moduleData.responsible_party.identifier.value"
+              v-model:value="moduleData.sponsors.responsible_party.identifier.value"
               placeholder="0000-0003-2829-8032"
               clearable
             />
@@ -446,13 +408,13 @@ const addCollaborator = () => {
               path="responsible_party.identifier.scheme"
               :rule="{
                 message: `Please add the investigator's identifier scheme`,
-                required: moduleData.responsible_party.identifier.value,
+                required: moduleData.sponsors.responsible_party.identifier.value,
                 trigger: ['blur', 'input'],
               }"
               class="w-full"
             >
               <n-input
-                v-model:value="moduleData.responsible_party.identifier.scheme"
+                v-model:value="moduleData.sponsors.responsible_party.identifier.scheme"
                 placeholder="ORCID"
                 clearable
               />
@@ -464,7 +426,7 @@ const addCollaborator = () => {
               class="w-full"
             >
               <n-input
-                v-model:value="moduleData.responsible_party.identifier.scheme_uri"
+                v-model:value="moduleData.sponsors.responsible_party.identifier.scheme_uri"
                 placeholder="https://orcid.org"
                 clearable
               />
@@ -479,7 +441,7 @@ const addCollaborator = () => {
 
           <n-form-item
             label="Name"
-            path="lead_sponsor.name"
+            path="sponsors.lead_sponsor.name"
             :rule="{
               message: 'Please enter a lead sponsor name',
               required: true,
@@ -487,7 +449,7 @@ const addCollaborator = () => {
             }"
           >
             <n-input
-              v-model:value="moduleData.lead_sponsor.name"
+              v-model:value="moduleData.sponsors.lead_sponsor.name"
               placeholder="Willy Tybur"
               clearable
             />
@@ -498,12 +460,12 @@ const addCollaborator = () => {
             path="lead_sponsor.identifier"
             :rule="{
               message: 'Please enter a lead sponsor identifier',
-              required: moduleData.lead_sponsor.identifier_scheme,
+              required: moduleData.sponsors.lead_sponsor.identifier_scheme,
               trigger: ['blur', 'input'],
             }"
           >
             <n-input
-              v-model:value="moduleData.lead_sponsor.identifier"
+              v-model:value="moduleData.sponsors.lead_sponsor.identifier"
               placeholder="04aj4c18"
               clearable
             />
@@ -515,13 +477,13 @@ const addCollaborator = () => {
               path="lead_sponsor.identifier_scheme"
               :rule="{
                 message: 'Please enter a lead sponsor identifier scheme',
-                required: moduleData.lead_sponsor.identifier,
+                required: moduleData.sponsors.lead_sponsor.identifier,
                 trigger: ['blur', 'input'],
               }"
               class="w-full"
             >
               <n-input
-                v-model:value="moduleData.lead_sponsor.identifier_scheme"
+                v-model:value="moduleData.sponsors.lead_sponsor.identifier_scheme"
                 placeholder="ROR"
                 clearable
               />
@@ -533,7 +495,7 @@ const addCollaborator = () => {
               path="lead_sponsor.identifier_scheme_uri"
             >
               <n-input
-                v-model:value="moduleData.lead_sponsor.identifier_scheme_uri"
+                v-model:value="moduleData.sponsors.lead_sponsor.identifier_scheme_uri"
                 placeholder="https://ror.org"
                 clearable
               />

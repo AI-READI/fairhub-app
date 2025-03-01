@@ -63,8 +63,7 @@ export interface StudyStatusModule {
   why_stopped: string;
 }
 
-export interface StudySponsors {
-  collaborators: StudyCollaborator[];
+export interface StudySponsor {
   lead_sponsor: {
     name: string;
     identifier: string;
@@ -98,10 +97,17 @@ export interface StudyCollaborator {
   identifier_scheme_uri: string;
   origin: string;
 }
-export interface StudyCollaborators {
-  collaborators: StudyCollaborator[];
-}
 
+//
+// export interface StudyCollaborators {
+//   collaborators: StudyCollaborator[];
+// }
+//
+
+export interface StudyTeam {
+  collaborators: StudyCollaborator[];
+  sponsors: StudySponsor;
+}
 export interface StudyOversightModule {
   fda_regulated_device: string | null;
   fda_regulated_drug: string | null;
