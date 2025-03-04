@@ -45,15 +45,6 @@ export interface StudyIdentifier {
   identifier_type: string | null;
 }
 
-export interface SecondaryStudyIdentifier extends StudyIdentifier {
-  origin: string;
-}
-
-export interface StudyIdentificationModule {
-  primary: StudyIdentifier;
-  secondary: SecondaryStudyIdentifier[];
-}
-
 export interface StudyStatusModule {
   completion_date: string | null;
   completion_date_type: string | null;
@@ -98,12 +89,6 @@ export interface StudyCollaborator {
   origin: string;
 }
 
-//
-// export interface StudyCollaborators {
-//   collaborators: StudyCollaborator[];
-// }
-//
-
 export interface StudyTeam {
   collaborators: StudyCollaborator[];
   sponsors: StudySponsor;
@@ -125,6 +110,11 @@ export interface StudyCondition {
   scheme_uri: string;
 }
 
+export interface StudyBriefDescription {
+  brief_summary: string;
+  detailed_description: string;
+}
+
 export interface StudyConditions {
   conditions: StudyCondition[];
 }
@@ -139,10 +129,19 @@ export interface StudyKeyword {
   scheme_uri: string;
 }
 
-export interface StudyKeywords {
-  brief_summary: string;
+export interface SecondaryStudyIdentifier extends StudyIdentifier {
+  origin: string;
+}
+
+export interface StudyIdentificationModule {
+  primary: StudyIdentifier;
+  secondary: SecondaryStudyIdentifier[];
+}
+
+export interface StudyDescription {
   conditions: StudyCondition[];
-  detailed_description: string;
+  description: StudyBriefDescription;
+  identification: StudyIdentificationModule;
   keywords: StudyKeyword[];
 }
 
@@ -326,3 +325,5 @@ export interface StudyFile {
 export interface StudyFiles {
   files: StudyFile[];
 }
+
+export class StudyCollaborators {}

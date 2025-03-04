@@ -59,16 +59,12 @@ import DatasetRouterView from "@/views/study/dataset/root/DatasetRouterView.vue"
 import AllDatasets from "@/views/study/datasets/AllDatasets.vue";
 import EditStudy from "@/views/study/edit/EditStudy.vue";
 import StudyFiles from "@/views/study/files/StudyFiles.vue";
-import StudyCollaborators from "@/views/study/metadata/collaborators/StudyCollaborators.vue";
-import StudyConditions from "@/views/study/metadata/conditions/StudyConditions.vue";
-import StudyDesc from "@/views/study/metadata/desc/StudyDesc.vue";
 import StudyDescription from "@/views/study/metadata/description/StudyDescription.vue";
 import StudyDesign from "@/views/study/metadata/design/StudyDesign.vue";
 import StudyEligibility from "@/views/study/metadata/eligibility/StudyEligibility.vue";
 import StudyContacts from "@/views/study/metadata/enrollment/contacts/StudyContacts.vue";
 import StudyLocations from "@/views/study/metadata/enrollment/locations/StudyLocations.vue";
 import StudyOfficials from "@/views/study/metadata/enrollment/officials/StudyOfficials.vue";
-import StudyIdentification from "@/views/study/metadata/identification/StudyIdentification.vue";
 import StudyOversight from "@/views/study/metadata/oversight/StudyOversight.vue";
 import StudyStatus from "@/views/study/metadata/status/StudyStatus.vue";
 import StudyTeam from "@/views/study/metadata/team/StudyTeam.vue";
@@ -465,25 +461,16 @@ const router = createRouter({
           path: "metadata",
           children: [
             {
-              name: "study:metadata:identification",
-              path: "identification",
-              component: StudyIdentification,
-            },
-            {
               name: "study:metadata:status",
               path: "status",
               component: StudyStatus,
             },
             {
-              name: "study:metadata:sponsors",
-              path: "sponsor",
+              name: "study:metadata:team",
+              path: "team",
               component: StudyTeam,
             },
-            {
-              name: "study:metadata:collaborators",
-              path: "collaborators",
-              component: StudyCollaborators,
-            },
+
             {
               name: "study:metadata:oversight",
               path: "oversight",
@@ -492,16 +479,6 @@ const router = createRouter({
             {
               name: "study:metadata:description",
               path: "description",
-              component: StudyDesc,
-            },
-            {
-              name: "study:metadata:conditions",
-              path: "conditions",
-              component: StudyConditions,
-            },
-            {
-              name: "study:metadata:keywords",
-              path: "keywords",
               component: StudyDescription,
             },
             {

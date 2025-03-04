@@ -102,7 +102,7 @@ const UpperMenuOptions = computed(() => [
     children: [
       {
         icon: renderIcon("codicon:symbol-keyword"),
-        key: "study:metadata:keywords",
+        key: "study:metadata:description",
         label: "Study Description",
       },
       {
@@ -110,6 +110,12 @@ const UpperMenuOptions = computed(() => [
         key: "study:metadata:oversight",
         label: "Oversight",
       },
+      // {
+      //   icon: renderIcon("tabler:id"),
+      //   key: "study:metadata:identification",
+      //   label: "Status",
+      // },
+
       {
         icon: renderIcon("pajamas:status"),
         key: "study:metadata:status",
@@ -117,7 +123,7 @@ const UpperMenuOptions = computed(() => [
       },
       {
         icon: renderIcon("carbon:user-sponsor"),
-        key: "study:metadata:sponsors",
+        key: "study:metadata:team",
         label: "Team",
       },
       {
