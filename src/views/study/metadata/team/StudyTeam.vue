@@ -129,28 +129,32 @@ const saveMetadata = (e: MouseEvent) => {
           }
         }),
 
-        lead_sponsor_identifier: moduleData.sponsors.lead_sponsor.identifier,
-        lead_sponsor_identifier_scheme: moduleData.sponsors.lead_sponsor.identifier_scheme,
-        lead_sponsor_identifier_scheme_uri: moduleData.sponsors.lead_sponsor.identifier_scheme_uri,
-        lead_sponsor_name: moduleData.sponsors.lead_sponsor.name,
-        responsible_party_investigator_affiliation_identifier_scheme:
-          moduleData.sponsors.responsible_party.affiliation.identifier_scheme,
-        responsible_party_investigator_affiliation_identifier_scheme_uri:
-          moduleData.sponsors.responsible_party.affiliation.scheme_uri,
-        responsible_party_investigator_affiliation_identifier_value:
-          moduleData.sponsors.responsible_party.affiliation.identifier,
-        responsible_party_investigator_affiliation_name:
-          moduleData.sponsors.responsible_party.affiliation.name,
-        responsible_party_investigator_first_name: moduleData.sponsors.responsible_party.first_name,
-        responsible_party_investigator_identifier_scheme:
-          moduleData.sponsors.responsible_party.identifier.scheme,
-        responsible_party_investigator_identifier_scheme_uri:
-          moduleData.sponsors.responsible_party.identifier.scheme_uri,
-        responsible_party_investigator_identifier_value:
-          moduleData.sponsors.responsible_party.identifier.value,
-        responsible_party_investigator_last_name: moduleData.sponsors.responsible_party.last_name,
-        responsible_party_investigator_title: moduleData.sponsors.responsible_party.title,
-        responsible_party_type: moduleData.sponsors.responsible_party.type,
+        sponsors: {
+          lead_sponsor_identifier: moduleData.sponsors.lead_sponsor.identifier,
+          lead_sponsor_identifier_scheme: moduleData.sponsors.lead_sponsor.identifier_scheme,
+          lead_sponsor_identifier_scheme_uri:
+            moduleData.sponsors.lead_sponsor.identifier_scheme_uri,
+          lead_sponsor_name: moduleData.sponsors.lead_sponsor.name,
+          responsible_party_investigator_affiliation_identifier_scheme:
+            moduleData.sponsors.responsible_party.affiliation.identifier_scheme,
+          responsible_party_investigator_affiliation_identifier_scheme_uri:
+            moduleData.sponsors.responsible_party.affiliation.scheme_uri,
+          responsible_party_investigator_affiliation_identifier_value:
+            moduleData.sponsors.responsible_party.affiliation.identifier,
+          responsible_party_investigator_affiliation_name:
+            moduleData.sponsors.responsible_party.affiliation.name,
+          responsible_party_investigator_first_name:
+            moduleData.sponsors.responsible_party.first_name,
+          responsible_party_investigator_identifier_scheme:
+            moduleData.sponsors.responsible_party.identifier.scheme,
+          responsible_party_investigator_identifier_scheme_uri:
+            moduleData.sponsors.responsible_party.identifier.scheme_uri,
+          responsible_party_investigator_identifier_value:
+            moduleData.sponsors.responsible_party.identifier.value,
+          responsible_party_investigator_last_name: moduleData.sponsors.responsible_party.last_name,
+          responsible_party_investigator_title: moduleData.sponsors.responsible_party.title,
+          responsible_party_type: moduleData.sponsors.responsible_party.type,
+        },
       };
       loading.value = true;
 
