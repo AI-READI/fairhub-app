@@ -128,6 +128,7 @@ const saveMetadata = (e: MouseEvent) => {
             };
           }
         }),
+
         lead_sponsor_identifier: moduleData.sponsors.lead_sponsor.identifier,
         lead_sponsor_identifier_scheme: moduleData.sponsors.lead_sponsor.identifier_scheme,
         lead_sponsor_identifier_scheme_uri: moduleData.sponsors.lead_sponsor.identifier_scheme_uri,
@@ -388,7 +389,7 @@ const addCollaborator = () => {
 
           <n-form-item
             label="Identifier"
-            path="responsible_party.identifier.value"
+            path="sponsors.responsible_party.identifier.value"
             :rule="{
               message: `Please add the investigator's identifier`,
               required: moduleData.sponsors.responsible_party.identifier.scheme,
@@ -405,7 +406,7 @@ const addCollaborator = () => {
           <div class="flex items-center space-x-4">
             <n-form-item
               label="Identifier Scheme"
-              path="responsible_party.identifier.scheme"
+              path="sponsors.responsible_party.identifier.scheme"
               :rule="{
                 message: `Please add the investigator's identifier scheme`,
                 required: moduleData.sponsors.responsible_party.identifier.value,

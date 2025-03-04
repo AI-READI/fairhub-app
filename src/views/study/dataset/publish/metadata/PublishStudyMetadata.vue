@@ -258,7 +258,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'study:metadata:sponsors',
+                name: 'study:metadata:team',
                 params: {
                   studyId: routeParams.studyId,
                 },
@@ -460,7 +460,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'study:metadata:keywords',
+                name: 'study:metadata:description',
                 params: {
                   studyId: routeParams.studyId,
                 },
