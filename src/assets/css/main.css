@@ -212,3 +212,7 @@ Transition styles for <transition />
 .faq {
   background: linear-gradient(0deg, rgba(255, 255, 255, 1) 3%, rgba(241, 245, 249, 1) 30%, rgba(241, 245, 249, 1) 88%, rgba(255, 255, 255, 1) 100%);
 }
+
+.status .n-form-item-blank{
+  display:block
+}
