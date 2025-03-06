@@ -45,15 +45,6 @@ export interface StudyIdentifier {
   identifier_type: string | null;
 }
 
-export interface SecondaryStudyIdentifier extends StudyIdentifier {
-  origin: string;
-}
-
-export interface StudyIdentificationModule {
-  primary: StudyIdentifier;
-  secondary: SecondaryStudyIdentifier[];
-}
-
 export interface StudyStatusModule {
   completion_date: string | null;
   completion_date_type: string | null;
@@ -63,7 +54,7 @@ export interface StudyStatusModule {
   why_stopped: string;
 }
 
-export interface StudySponsors {
+export interface StudySponsor {
   lead_sponsor: {
     name: string;
     identifier: string;
@@ -97,10 +88,11 @@ export interface StudyCollaborator {
   identifier_scheme_uri: string;
   origin: string;
 }
-export interface StudyCollaborators {
-  collaborators: StudyCollaborator[];
-}
 
+export interface StudyTeam {
+  collaborators: StudyCollaborator[];
+  sponsors: StudySponsor;
+}
 export interface StudyOversightModule {
   fda_regulated_device: string | null;
   fda_regulated_drug: string | null;
@@ -118,6 +110,11 @@ export interface StudyCondition {
   scheme_uri: string;
 }
 
+export interface StudyBriefDescription {
+  brief_summary: string;
+  detailed_description: string;
+}
+
 export interface StudyConditions {
   conditions: StudyCondition[];
 }
@@ -132,7 +129,19 @@ export interface StudyKeyword {
   scheme_uri: string;
 }
 
-export interface StudyKeywords {
+export interface SecondaryStudyIdentifier extends StudyIdentifier {
+  origin: string;
+}
+
+export interface StudyIdentificationModule {
+  primary: StudyIdentifier;
+  secondary: SecondaryStudyIdentifier[];
+}
+
+export interface StudyDescription {
+  conditions: StudyCondition[];
+  description: StudyBriefDescription;
+  identification: StudyIdentificationModule;
   keywords: StudyKeyword[];
 }
 
@@ -316,3 +325,5 @@ export interface StudyFile {
 export interface StudyFiles {
   files: StudyFile[];
 }
+
+export class StudyCollaborators {}

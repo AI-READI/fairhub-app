@@ -104,10 +104,21 @@ const UpperMenuOptions = computed(() => [
   {
     children: [
       {
-        icon: renderIcon("tabler:id"),
-        key: "study:metadata:identification",
-        label: "Identification",
+        icon: renderIcon("codicon:symbol-keyword"),
+        key: "study:metadata:description",
+        label: "Study Description",
       },
+      {
+        icon: renderIcon("ic:baseline-local-police"),
+        key: "study:metadata:oversight",
+        label: "Oversight",
+      },
+      // {
+      //   icon: renderIcon("tabler:id"),
+      //   key: "study:metadata:identification",
+      //   label: "Status",
+      // },
+
       {
         icon: renderIcon("pajamas:status"),
         key: "study:metadata:status",
@@ -115,33 +126,8 @@ const UpperMenuOptions = computed(() => [
       },
       {
         icon: renderIcon("carbon:user-sponsor"),
-        key: "study:metadata:sponsors",
-        label: "Sponsors",
-      },
-      {
-        icon: renderIcon("carbon:collaborate"),
-        key: "study:metadata:collaborators",
-        label: "Collaborators",
-      },
-      {
-        icon: renderIcon("ic:baseline-local-police"),
-        key: "study:metadata:oversight",
-        label: "Oversight",
-      },
-      {
-        icon: renderIcon("material-symbols:description"),
-        key: "study:metadata:description",
-        label: "Description",
-      },
-      {
-        icon: renderIcon("material-symbols:conditions-rounded"),
-        key: "study:metadata:conditions",
-        label: "Conditions",
-      },
-      {
-        icon: renderIcon("codicon:symbol-keyword"),
-        key: "study:metadata:keywords",
-        label: "Keywords",
+        key: "study:metadata:team",
+        label: "Team",
       },
       {
         icon: renderIcon("iconoir:design-pencil"),
@@ -150,6 +136,11 @@ const UpperMenuOptions = computed(() => [
       },
       {
         children: [
+          {
+            icon: renderIcon("icon-park-outline:permissions"),
+            key: "study:metadata:eligibility",
+            label: "Eligibility",
+          },
           {
             icon: renderIcon("akar-icons:people-group"),
             key: "study:metadata:arms",
@@ -163,14 +154,10 @@ const UpperMenuOptions = computed(() => [
         ],
         icon: renderIcon("solar:medical-kit-bold"),
         key: "study:treatment",
-        label: "Treatment",
+        label: "Eligibility & Treatment",
         show: hideMenuOptions.value,
       },
-      {
-        icon: renderIcon("icon-park-outline:permissions"),
-        key: "study:metadata:eligibility",
-        label: "Eligibility",
-      },
+
       {
         children: [
           {
@@ -449,6 +436,7 @@ onMounted(() => {
     :collapsed="sidebarCollapsed"
     collapse-mode="width"
     :collapsed-width="64"
+    :width="300"
     :native-scrollbar="true"
     @update:collapsed="toggleSidebar"
     class="z-10 h-[calc(100vh-56px)]"
@@ -459,6 +447,7 @@ onMounted(() => {
           ref="menuInstRef"
           v-model:value="selectedKeyRef"
           :collapsed-width="64"
+          :width="300"
           :collapsed-icon-size="22"
           :default-expanded-keys="defaultExpandedKeys"
           :collapsed="sidebarCollapsed"

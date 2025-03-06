@@ -133,7 +133,7 @@ const saveMetadata = (e: MouseEvent) => {
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
       title="Status"
-      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+      description=""
       linkName="study:overview"
       :linkParams="{
         studyId: route.params.studyId,
@@ -164,23 +164,26 @@ const saveMetadata = (e: MouseEvent) => {
           />
         </n-form-item>
 
-        <n-form-item label="Start Date" path="start_date">
-          <n-date-picker
-            v-model:formatted-value="moduleData.start_date"
-            type="date"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            clearable
-          />
-        </n-form-item>
+        <div class="flex items-center gap-4">
+          <n-form-item class="status w-full" label="Start Date" path="start_date">
+            <n-date-picker
+              v-model:formatted-value="moduleData.start_date"
+              type="date"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              clearable
+            />
+          </n-form-item>
 
-        <n-form-item label="Start Date Type" path="start_date_type">
-          <n-select
-            v-model:value="moduleData.start_date_type"
-            placeholder="Actual"
-            clearable
-            :options="dateTypeOptions"
-          />
-        </n-form-item>
+          <n-form-item class="w-full" label="Start Date Type" path="start_date_type">
+            <n-select
+              class="block"
+              v-model:value="moduleData.start_date_type"
+              placeholder="Actual"
+              clearable
+              :options="dateTypeOptions"
+            />
+          </n-form-item>
+        </div>
 
         <n-form-item
           label="Why Stopped"
@@ -204,23 +207,25 @@ const saveMetadata = (e: MouseEvent) => {
           />
         </n-form-item>
 
-        <n-form-item label="Completion Date" path="completion_date">
-          <n-date-picker
-            v-model:formatted-value="moduleData.completion_date"
-            type="date"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            clearable
-          />
-        </n-form-item>
+        <div class="flex items-center gap-4">
+          <n-form-item class="status w-full" label="Completion Date" path="completion_date">
+            <n-date-picker
+              v-model:formatted-value="moduleData.completion_date"
+              type="date"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              clearable
+            />
+          </n-form-item>
 
-        <n-form-item label="Completion Date Type" path="completion_date_type">
-          <n-select
-            v-model:value="moduleData.completion_date_type"
-            placeholder="Anticipated"
-            clearable
-            :options="dateTypeOptions"
-          />
-        </n-form-item>
+          <n-form-item class="w-full" label="Completion Date Type" path="completion_date_type">
+            <n-select
+              v-model:value="moduleData.completion_date_type"
+              placeholder="Anticipated"
+              clearable
+              :options="dateTypeOptions"
+            />
+          </n-form-item>
+        </div>
 
         <n-divider />
 
