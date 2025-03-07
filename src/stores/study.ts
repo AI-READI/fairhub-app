@@ -110,7 +110,7 @@ export const useStudyStore = defineStore("study", () => {
     }
     const study = allStudies.value.find((study) => study.id === studyId);
 
-    currentStudyRole.value = study.role || "";
+    currentStudyRole.value = study?.role || "";
     return currentStudyRole.value;
   };
 

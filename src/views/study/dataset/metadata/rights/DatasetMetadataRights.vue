@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { config, MdEditor } from "md-editor-v3";
-import { type FormInst } from "naive-ui";
+import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import licensesJSON from "@/assets/data/licenses.json";
