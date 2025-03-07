@@ -20,6 +20,7 @@ export const useStudyStore = defineStore("study", () => {
     size: 0,
     updated_on: 0,
   });
+  const currentStudyRole = ref("");
 
   const fetchAllStudies = async () => {
     loading.value = true;
@@ -53,30 +54,20 @@ export const useStudyStore = defineStore("study", () => {
     //     const s: Study = {
     //       id: faker.string.uuid(),
     //       title: faker.lorem.sentence(),
+    //       acronym: faker.lorem.word(),
     //       description: faker.lorem.paragraph(),
     //       image: faker.image.urlPicsumPhotos(),
     //       keywords: Array.from({ length: 3 }, () => faker.lorem.word()),
-    //       last_updated: faker.date.past().toISOString(),
-    //       owner: {
-    //         email: "sanjay@email.org",
-    //         first_name: faker.person.firstName(),
-    //         last_name: faker.person.lastName(),
-    //         orcid: faker.string.uuid(),
-    //       },
-    //       size: "4 GB",
+    //       owner: "test@mail.com",
+    //       role: "viewer",
+    //       updated_on: faker.date.past().getTime(),
     //     };
     //     allStudies.value.push(s);
     //   }
     // }
 
-    // console.log("studies", allStudies.value);
-
-    // allStudies.value.forEach((study) => {
-    //   study.size = `${Math.round(Math.random() * 100)} MB`;
-    // });
-
     /** Sort by name for now */
-    allStudies.value.sort((a, b) => a.title.localeCompare(b.title));
+    // allStudies.value.sort((a, b) => a.title.localeCompare(b.title));
 
     loading.value = false;
   };
@@ -97,6 +88,9 @@ export const useStudyStore = defineStore("study", () => {
     const s = data as Study;
 
     study.value = s;
+
+    currentStudyRole.value = s.role;
+
     // study.value.owner = s.owner_id;
     // console.log("response study", study.value);
 
@@ -107,5 +101,18 @@ export const useStudyStore = defineStore("study", () => {
     return study.value;
   };
 
-  return { allStudies, fetchAllStudies, getStudy, loading, study };
+  const getStudyRole = async (studyId: string) => {
+    loading.value = true;
+
+    // Fetch all studies if there are none
+    if (allStudies.value.length === 0) {
+      await fetchAllStudies();
+    }
+    const study = allStudies.value.find((study) => study.id === studyId);
+
+    currentStudyRole.value = study?.role || "";
+    return currentStudyRole.value;
+  };
+
+  return { allStudies, currentStudyRole, fetchAllStudies, getStudy, getStudyRole, loading, study };
 });

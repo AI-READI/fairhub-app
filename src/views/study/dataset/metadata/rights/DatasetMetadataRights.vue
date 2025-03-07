@@ -4,6 +4,7 @@ import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import licensesJSON from "@/assets/data/licenses.json";
+import { useStudyStore } from "@/stores/study";
 import type { DatasetRights } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 import { sanitize } from "@/utils/helpers";
@@ -28,6 +29,9 @@ config({
 const route = useRoute();
 const router = useRouter();
 const push = usePush();
+
+const studyStore = useStudyStore();
+
 const displayLicenseEditor = ref(false);
 const draftLicense = ref("");
 const licenseName = ref("");
@@ -246,6 +250,7 @@ const updateLicense = async (value: string) => {
         label-placement="top"
         class="pr-4"
         v-else
+        :disabled="studyStore.currentStudyRole === 'viewer'"
       >
         <n-form-item label="Rights" path="rights">
           <n-select
@@ -283,7 +288,13 @@ const updateLicense = async (value: string) => {
         <n-divider />
 
         <div class="flex justify-start">
-          <n-button size="large" type="primary" @click="saveMetadata" :loading="submitLoading">
+          <n-button
+            size="large"
+            type="primary"
+            @click="saveMetadata"
+            :loading="submitLoading"
+            :disabled="studyStore.currentStudyRole === 'viewer'"
+          >
             <template #icon>
               <f-icon icon="material-symbols:save" />
             </template>

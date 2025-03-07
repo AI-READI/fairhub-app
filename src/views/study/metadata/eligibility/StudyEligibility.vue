@@ -2,12 +2,15 @@
 import type { FormInst, FormRules } from "naive-ui";
 
 import FORM_JSON from "@/assets/data/form.json";
+import { useStudyStore } from "@/stores/study";
 import type { StudyEligiblityModule } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const push = usePush();
+
+const studyStore = useStudyStore();
 
 const loading = ref(false);
 const responseLoading = ref(false);
@@ -219,7 +222,7 @@ const saveMetadata = (e: MouseEvent) => {
           :model="moduleData"
           :rules="rules"
           size="large"
-          :disabled="!moduleData.study_type"
+          :disabled="!moduleData.study_type || studyStore.currentStudyRole === 'viewer'"
           label-placement="top"
           class="pr-4"
         >
@@ -369,6 +372,7 @@ const saveMetadata = (e: MouseEvent) => {
               v-model:value="moduleData.criteria.inclusion_criteria"
               #="{ index: idx, value }"
               :on-create="addEntryToCriteria"
+              :disabled="studyStore.currentStudyRole === 'viewer'"
             >
               <n-form-item
                 ignore-path-change
@@ -402,6 +406,7 @@ const saveMetadata = (e: MouseEvent) => {
               v-model:value="moduleData.criteria.exclusion_criteria"
               #="{ index: idx, value }"
               :on-create="addEntryToCriteria"
+              :disabled="studyStore.currentStudyRole === 'viewer'"
             >
               <n-form-item
                 ignore-path-change
@@ -465,7 +470,13 @@ const saveMetadata = (e: MouseEvent) => {
           <n-divider />
 
           <div class="flex justify-start">
-            <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+            <n-button
+              size="large"
+              type="primary"
+              @click="saveMetadata"
+              :loading="loading"
+              :disabled="studyStore.currentStudyRole === 'viewer'"
+            >
               <template #icon>
                 <f-icon icon="material-symbols:save" />
               </template>

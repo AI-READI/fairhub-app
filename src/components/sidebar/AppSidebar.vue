@@ -3,15 +3,18 @@ import { Icon } from "@iconify/vue";
 import type { MenuInst, MenuOption } from "naive-ui";
 import { NLayoutSider, NMenu, NSpace } from "naive-ui";
 import { computed, h } from "vue";
-// import {ref} from "vue/dist/vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 
+import { useAuthStore } from "@/stores/auth";
 import { useSidebarStore } from "@/stores/sidebar";
+import { useStudyStore } from "@/stores/study";
 
 const route = useRoute();
 const router = useRouter();
 
 const sidebarStore = useSidebarStore();
+const studyStore = useStudyStore();
+const authStore = useAuthStore();
 
 const sidebarCollapsed = computed(() => sidebarStore.collapseAppSidebar);
 
@@ -406,6 +409,22 @@ router.beforeEach((to) => {
   if (typeof to.name !== "string") return;
   const name: string = to.meta && to.meta.menuItem ? (to.meta.menuItem as string) : to.name;
   selectAndExpand(name);
+});
+
+watchEffect(() => {
+  if (!route.params.studyId) {
+    return;
+  }
+
+  if (authStore.isAuthenticated) {
+    studyStore.getStudyRole(studyID.value as string);
+  }
+});
+
+onMounted(() => {
+  if (authStore.isAuthenticated) {
+    studyStore.fetchAllStudies();
+  }
 });
 </script>
 

@@ -2,11 +2,14 @@
 import type { FormInst } from "naive-ui";
 
 import FORM_JSON from "@/assets/data/form.json";
+import { useStudyStore } from "@/stores/study";
 import type { DatasetDeIdentLevel } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const push = usePush();
+
+const studyStore = useStudyStore();
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
@@ -127,6 +130,7 @@ const saveMetadata = (e: MouseEvent) => {
         :rules="rules"
         size="large"
         label-placement="top"
+        :disabled="studyStore.currentStudyRole === 'viewer'"
         class="pr-4"
       >
         <n-form-item label="Type" path="type">
@@ -198,7 +202,13 @@ const saveMetadata = (e: MouseEvent) => {
         <n-divider />
 
         <div class="flex justify-start">
-          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+          <n-button
+            size="large"
+            type="primary"
+            @click="saveMetadata"
+            :loading="loading"
+            :disabled="studyStore.currentStudyRole === 'viewer'"
+          >
             <template #icon>
               <f-icon icon="material-symbols:save" />
             </template>

@@ -46,10 +46,18 @@ const editStudyDetails = () => {
       <div class="flex items-center justify-between">
         <h1>Overview</h1>
 
-        <n-button size="large" type="primary" @click="editStudyDetails">
+        <n-button
+          size="large"
+          type="primary"
+          @click="editStudyDetails"
+          :disabled="
+            studyStore.currentStudyRole === 'viewer' || studyStore.currentStudyRole === 'editor'
+          "
+        >
           <template #icon>
             <f-icon icon="material-symbols:edit" />
           </template>
+
           Edit Study
         </n-button>
       </div>

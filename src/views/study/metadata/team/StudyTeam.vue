@@ -3,12 +3,14 @@ import type { FormInst, FormRules } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
+import { useStudyStore } from "@/stores/study";
 import type { StudyTeam } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const push = usePush();
+const studyStore = useStudyStore();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -593,7 +595,13 @@ const addCollaborator = () => {
       </n-button>
 
       <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+        <n-button
+          size="large"
+          :disabled="studyStore.currentStudyRole === 'viewer'"
+          type="primary"
+          @click="saveMetadata"
+          :loading="loading"
+        >
           <template #icon>
             <f-icon icon="material-symbols:save" />
           </template>

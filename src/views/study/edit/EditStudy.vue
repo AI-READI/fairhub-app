@@ -158,7 +158,14 @@ function cancelButton() {
       <n-divider />
 
       <div class="flex justify-start gap-4">
-        <n-button type="primary" size="large" @click="saveChanges">
+        <n-button
+          type="primary"
+          size="large"
+          @click="saveChanges"
+          :disabled="
+            studyStore.currentStudyRole === 'viewer' || studyStore.currentStudyRole === 'editor'
+          "
+        >
           <template #icon>
             <f-icon icon="material-symbols:save-outline" />
           </template>

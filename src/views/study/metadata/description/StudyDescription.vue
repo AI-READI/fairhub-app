@@ -3,12 +3,15 @@ import type { FormInst, FormRules } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
+import { useStudyStore } from "@/stores/study";
 import type { StudyDescription } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
 const router = useRouter();
 const push = usePush();
+
+const studyStore = useStudyStore();
 
 const formRef = ref<FormInst | null>(null);
 
@@ -314,6 +317,7 @@ const removeSecondaryIdentifier = async (id: string) => {
         size="large"
         label-placement="top"
         class="pr-4"
+        :disabled="studyStore.currentStudyRole === 'viewer'"
         v-else
       >
         <h2 class="pb-4">Description</h2>
@@ -687,7 +691,13 @@ const removeSecondaryIdentifier = async (id: string) => {
         </n-card>
 
         <div class="flex justify-start pt-8">
-          <n-button size="large" type="primary" @click="saveMetadata" :loading="loading">
+          <n-button
+            size="large"
+            type="primary"
+            :disabled="studyStore.currentStudyRole === 'viewer'"
+            @click="saveMetadata"
+            :loading="loading"
+          >
             <template #icon>
               <f-icon icon="material-symbols:save" />
             </template>
