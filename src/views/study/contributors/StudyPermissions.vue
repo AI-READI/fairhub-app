@@ -181,6 +181,7 @@ const owner = computed(() => {
     return {
       name: "",
       email_address: "",
+      lastName: "",
       ORCID: "",
       role: "",
       status: "",
@@ -256,18 +257,6 @@ const removeContributor = async (id: string) => {
   window.location.reload();
 };
 
-const getFirstLetters = (name: string) => {
-  if (!name) {
-    return ":)";
-  }
-
-  const names = name.toUpperCase().split(" ");
-  return names
-    .map((name) => name.charAt(0))
-    .slice(0, 2)
-    .join("");
-};
-
 const copyInviteURL = (token: string, emailAddress: string) => {
   if (!token) {
     return;
@@ -279,6 +268,25 @@ const copyInviteURL = (token: string, emailAddress: string) => {
 
   push.success("Invite link copied to clipboard!");
 };
+
+function ownerFullName() {
+  if (owner.value.name || owner.value.lastName) {
+    return `${owner.value.name.trim()} ${owner.value.lastName.trim()}`;
+  }
+  return "Anonymous";
+}
+
+function ownerFullNameIcon() {
+  if (!(owner.value.name || owner.value.lastName)) {
+    return ":)";
+  }
+  if (owner.value.name || owner.value.lastName) {
+    return [owner.value.name, owner.value.lastName]
+      .map((s) => (s ? s.toUpperCase().charAt(0) : ""))
+      .join("");
+  }
+  return ";)";
+}
 </script>
 
 <template>
@@ -299,11 +307,11 @@ const copyInviteURL = (token: string, emailAddress: string) => {
 
       <div class="flex items-start justify-start space-x-4 pt-4">
         <n-avatar class="mt-1 flex items-center justify-center bg-sky-900" size="large">
-          {{ getFirstLetters(owner.name as string) }}
+          {{ ownerFullNameIcon() }}
         </n-avatar>
 
         <div class="flex flex-col">
-          <span class="text-base">{{ owner.name || "Anonymous" }}</span>
+          {{ ownerFullName() }}
 
           <span>{{ owner.email_address || "xxx@fairhub.io" }}</span>
 

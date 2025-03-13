@@ -28,6 +28,7 @@ export interface StudyContributor {
   id: string;
   name?: string;
   email_address: string;
+  lastName?: string;
   ORCID?: string;
   role: string;
   status: "invited" | "accepted" | "declined";
