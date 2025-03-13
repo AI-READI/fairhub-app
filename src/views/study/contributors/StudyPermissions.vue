@@ -269,24 +269,21 @@ const copyInviteURL = (token: string, emailAddress: string) => {
   push.success("Invite link copied to clipboard!");
 };
 
-const firstName = owner.value.name;
-const lastName = owner.value.lastName;
-
 function ownerFullName() {
-  if (firstName || lastName) {
-    return `${firstName?.trim()} ${lastName?.trim()}`;
+  if (owner.value.name || owner.value.lastName) {
+    return `${owner.value.name?.trim()} ${owner.value.lastName?.trim()}`;
   }
   return "Anonymous";
 }
 
 function ownerFullNameIcon() {
-  if (!(firstName || lastName)) {
-    return ":)";
+  if (!(owner.value.name || owner.value.lastName)) {
+    return ";)";
   }
-  if (firstName || lastName) {
-    return [firstName, lastName].map((s) => (s ? s.toUpperCase().charAt(0) : "")).join("");
-  }
-  return ";)";
+
+  return [owner.value.name, owner.value.lastName]
+    .map((s) => (s ? s.toUpperCase().charAt(0) : ""))
+    .join("");
 }
 </script>
 
