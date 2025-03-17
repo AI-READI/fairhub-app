@@ -26,6 +26,8 @@ router.beforeResolve(async (to) => {
     return true;
   }
   if (
+    to.name == "home" ||
+    to.name == "" ||
     to.name == "auth:signup" ||
     to.name == "auth:logout" ||
     to.name == "auth:login" ||
