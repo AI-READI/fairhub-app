@@ -64,12 +64,6 @@ const UpperMenuOptions = computed(() => [
     show: hideMenuOptions.value,
   },
 
-  // {
-  //   icon: renderIcon("material-symbols:api"),
-  //   key: "study:redcap:all-redcap-project-apis",
-  //   label: "REDCap",
-  //   show: hideMenuOptions.value,
-  // },
   {
     // children: [
     //   {
@@ -96,11 +90,18 @@ const UpperMenuOptions = computed(() => [
     show: hideMenuOptions.value,
   },
   {
+    icon: renderIcon("material-symbols:api"),
+    key: "study:redcap:all-redcap-project-apis",
+    label: "REDCap",
+    show: hideMenuOptions.value,
+  },
+  {
     icon: renderIcon("material-symbols:dashboard-rounded"),
     key: "study:dashboard:all-dashboards",
     label: "Dashboards",
     show: hideMenuOptions.value,
   },
+
   {
     children: [
       {
