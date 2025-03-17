@@ -38,12 +38,12 @@ import DatasetMetadataDates from "@/views/study/dataset/metadata/dates/DatasetMe
 import DatasetMetadataDeIdentification from "@/views/study/dataset/metadata/deidentification/DatasetMetadataDeIdentification.vue";
 import DatasetMetadataDescriptions from "@/views/study/dataset/metadata/descriptions/DatasetMetadataDescriptions.vue";
 import DatasetMetadataFunders from "@/views/study/dataset/metadata/funders/DatasetMetadataFunders.vue";
+import DatasetGeneralInformation from "@/views/study/dataset/metadata/general-information/DatasetGeneralInformation.vue";
 import DatasetMetadataIdentifiers from "@/views/study/dataset/metadata/identifiers/DatasetMetadataIdentifiers.vue";
 import DatasetMetadataManagingOrganization from "@/views/study/dataset/metadata/managingorganization/DatasetMetadataManagingOrganization.vue";
 import DatasetMetadataRelatedIdentifiers from "@/views/study/dataset/metadata/related/DatasetMetadataRelatedIdentifiers.vue";
 import DatasetMetadataRights from "@/views/study/dataset/metadata/rights/DatasetMetadataRights.vue";
 import DatasetMetadataSubjects from "@/views/study/dataset/metadata/subjects/DatasetMetadataSubjects.vue";
-import DatasetMetadataTitle from "@/views/study/dataset/metadata/title/DatasetMetadataTitle.vue";
 import NewDataset from "@/views/study/dataset/new/NewDataset.vue";
 import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue";
 import PublishChangelog from "@/views/study/dataset/publish/changelog/PublishChangelog.vue";
@@ -281,9 +281,9 @@ const router = createRouter({
                       component: DatasetMetadataIdentifiers,
                     },
                     {
-                      name: "dataset:metadata:title",
-                      path: "title",
-                      component: DatasetMetadataTitle,
+                      name: "dataset:metadata:general-information",
+                      path: "general-information",
+                      component: DatasetGeneralInformation,
                     },
                     {
                       name: "dataset:metadata:descriptions",
