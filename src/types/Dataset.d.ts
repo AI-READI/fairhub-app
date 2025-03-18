@@ -17,6 +17,35 @@ export interface DatasetTitles {
   titles: DatasetTitle[];
 }
 
+export interface DatasetDescription {
+  id: string;
+  description: string;
+  origin: string;
+  type: "Abstract" | "Methods" | "TechnicalInfo" | "Other" | null;
+}
+
+export interface DatasetDescriptions {
+  descriptions: DatasetDescription[];
+}
+
+export interface DatasetDate {
+  id: string;
+  date: number | null;
+  information: string;
+  origin: string;
+  type: string | null;
+}
+
+export interface DatasetDates {
+  dates: DatasetDate[];
+}
+
+export interface DatasetGeneralInformation {
+  dates: DatasetDate[];
+  descriptions: DatasetDescription[];
+  titles: DatasetTitle[];
+}
+
 export interface DatasetIdentifier {
   id: string;
   identifier: string;
@@ -46,17 +75,6 @@ export interface DatasetIdentifier {
 
 export interface DatasetIdentifiers {
   identifiers: DatasetIdentifier[];
-}
-
-export interface DatasetDescription {
-  id: string;
-  description: string;
-  origin: string;
-  type: "Abstract" | "Methods" | "TechnicalInfo" | "Other" | null;
-}
-
-export interface DatasetDescriptions {
-  descriptions: DatasetDescription[];
 }
 
 export interface DatasetPersonAffiliation {
@@ -99,33 +117,11 @@ export interface DatasetContributors {
   contributors: DatasetContributor[];
 }
 
-export interface DatasetDate {
-  id: string;
-  date: number | null;
-  information: string;
-  origin: string;
-  type: string | null;
-}
-
-export interface DatasetDates {
-  dates: DatasetDate[];
-}
-
 export interface DatasetManagingOrganization {
   name: string;
   identifier: string;
   identifier_scheme: string;
   identifier_scheme_uri: string;
-}
-
-export interface DatasetDeIdentLevel {
-  dates: boolean;
-  details: string;
-  direct: boolean;
-  hipaa: boolean;
-  k_anon: boolean;
-  nonarr: boolean;
-  type: string | null;
 }
 
 export interface DatasetConsent {
@@ -149,6 +145,22 @@ export interface DatasetSubject {
 }
 
 export interface DatasetSubjects {
+  subjects: DatasetSubject[];
+}
+
+export interface DatasetDeIdentLevel {
+  dates: boolean;
+  details: string;
+  direct: boolean;
+  hipaa: boolean;
+  k_anon: boolean;
+  nonarr: boolean;
+  type: string | null;
+}
+
+export interface DatasetDataManagement {
+  consent: DatasetConsent;
+  deident: DatasetDeIdentLevel;
   subjects: DatasetSubject[];
 }
 

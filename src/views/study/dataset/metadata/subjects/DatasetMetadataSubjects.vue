@@ -57,7 +57,7 @@ onBeforeMount(async () => {
   });
 });
 
-const removeDate = async (id: string) => {
+const removeSubject = async (id: string) => {
   const item = moduleData.subjects.find((item) => item.id === id);
 
   if (item && item.origin === "remote") {
@@ -179,7 +179,7 @@ const saveMetadata = (e: MouseEvent) => {
         >
           <template #header-extra>
             <n-popconfirm
-              @positive-click="removeDate(item.id)"
+              @positive-click="removeSubject(item.id)"
               :disabled="studyStore.currentStudyRole === 'viewer'"
             >
               <template #trigger>

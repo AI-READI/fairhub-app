@@ -34,9 +34,7 @@ import DatasetMetadataAccess from "@/views/study/dataset/metadata/access/Dataset
 import DatasetMetadataConsent from "@/views/study/dataset/metadata/consent/DatasetMetadataConsent.vue";
 import DatasetMetadataContributors from "@/views/study/dataset/metadata/contributors/DatasetMetadataContributors.vue";
 import DatasetMetadataCreator from "@/views/study/dataset/metadata/creators/DatasetMetadataCreator.vue";
-import DatasetMetadataDates from "@/views/study/dataset/metadata/dates/DatasetMetadataDates.vue";
 import DatasetMetadataDeIdentification from "@/views/study/dataset/metadata/deidentification/DatasetMetadataDeIdentification.vue";
-import DatasetMetadataDescriptions from "@/views/study/dataset/metadata/descriptions/DatasetMetadataDescriptions.vue";
 import DatasetMetadataFunders from "@/views/study/dataset/metadata/funders/DatasetMetadataFunders.vue";
 import DatasetGeneralInformation from "@/views/study/dataset/metadata/general-information/DatasetGeneralInformation.vue";
 import DatasetMetadataIdentifiers from "@/views/study/dataset/metadata/identifiers/DatasetMetadataIdentifiers.vue";
@@ -86,7 +84,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      name: "home",
+      name: "",
       path: "/",
       component: HomePage,
     },
@@ -286,11 +284,6 @@ const router = createRouter({
                       component: DatasetGeneralInformation,
                     },
                     {
-                      name: "dataset:metadata:descriptions",
-                      path: "descriptions",
-                      component: DatasetMetadataDescriptions,
-                    },
-                    {
                       name: "dataset:metadata:contributors",
                       path: "contributors",
                       component: DatasetMetadataContributors,
@@ -299,11 +292,6 @@ const router = createRouter({
                       name: "dataset:metadata:creators",
                       path: "creators",
                       component: DatasetMetadataCreator,
-                    },
-                    {
-                      name: "dataset:metadata:dates",
-                      path: "dates",
-                      component: DatasetMetadataDates,
                     },
                     {
                       name: "dataset:metadata:managing-organization",
