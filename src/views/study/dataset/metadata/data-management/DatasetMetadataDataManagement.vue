@@ -243,7 +243,7 @@ const addSubject = () => {
 
           <n-form-item
             label="Does the consent allows only non-commercial use of the data?"
-            path="consent.noncommercial"
+            path="noncommercial"
             show-require-mark
           >
             <n-switch
@@ -260,7 +260,7 @@ const addSubject = () => {
 
           <n-form-item
             label="Does the consent allow only use of the data in a specific geographic location?"
-            path="consent.geog_restrict"
+            path="geog_restrict"
             show-require-mark
           >
             <n-switch
@@ -277,7 +277,7 @@ const addSubject = () => {
 
           <n-form-item
             label="Does the consent allow only use of the data for a specific type of research?"
-            path="consent.research_type"
+            path="research_type"
             show-require-mark
           >
             <n-switch
@@ -294,7 +294,7 @@ const addSubject = () => {
 
           <n-form-item
             label="Does the consent allow only use of the data for genetic research?"
-            path="consent.genetic_only"
+            path="genetic_only"
             show-require-mark
           >
             <n-switch
@@ -311,7 +311,7 @@ const addSubject = () => {
 
           <n-form-item
             label="Does the consent allow only use of the data for research that does not involve the development of methods or algorithms?"
-            path="consent.no_methods"
+            path="no_methods"
             show-require-mark
           >
             <n-switch
@@ -338,7 +338,7 @@ const addSubject = () => {
 
         <n-divider />
 
-        <h2 class="pb-4">Subject</h2>
+        <h2 class="pb-4">Subjects</h2>
 
         <n-card class="bg-gray-50">
           <CollapsibleCard
@@ -448,11 +448,7 @@ const addSubject = () => {
             />
           </n-form-item>
 
-          <n-form-item
-            label="Were direct identifiers removed?"
-            path="deident.direct"
-            show-require-mark
-          >
+          <n-form-item label="Were direct identifiers removed?" path="direct" show-require-mark>
             <n-switch
               v-model:value="moduleData.deident.direct"
               :round="true"
@@ -467,7 +463,7 @@ const addSubject = () => {
 
           <n-form-item
             label="Were US HIPAA de-identification rules applied?"
-            path="deident.hipaa"
+            path="hipaa"
             show-require-mark
           >
             <n-switch
@@ -484,7 +480,7 @@ const addSubject = () => {
 
           <n-form-item
             label="Were dates rebased and/or replaced by integers?"
-            path="deident.dates"
+            path="dates"
             show-require-mark
           >
             <n-switch
@@ -499,11 +495,7 @@ const addSubject = () => {
             </n-switch>
           </n-form-item>
 
-          <n-form-item
-            label="Were narrative text fields removed?"
-            path="deident.nonarr"
-            show-require-mark
-          >
+          <n-form-item label="Were narrative text fields removed?" path="nonarr" show-require-mark>
             <n-switch
               v-model:value="moduleData.deident.nonarr"
               :round="true"
@@ -516,11 +508,7 @@ const addSubject = () => {
             </n-switch>
           </n-form-item>
 
-          <n-form-item
-            label="Was k-anonymisation (k>=2) achieved?"
-            path="deident.k_anon"
-            show-require-mark
-          >
+          <n-form-item label="Was k-anonymisation (k>=2) achieved?" path="k_anon" show-require-mark>
             <n-switch
               v-model:value="moduleData.deident.k_anon"
               :round="true"
@@ -533,7 +521,7 @@ const addSubject = () => {
             </n-switch>
           </n-form-item>
 
-          <n-form-item label="Details" path="deident.details">
+          <n-form-item label="Details" path="details">
             <n-input
               v-model:value="moduleData.deident.details"
               type="textarea"

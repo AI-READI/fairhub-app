@@ -30,7 +30,7 @@ import DatasetHealthsheetMotivation from "@/views/study/dataset/healthsheet/moti
 import DatasetHealthsheetPreprocessing from "@/views/study/dataset/healthsheet/preprocessing/DatasetHealthsheetPreprocessing.vue";
 import DatasetHealthsheetUses from "@/views/study/dataset/healthsheet/uses/DatasetHealthsheetUses.vue";
 import DatasetMetadataOther from "@/views/study/dataset/metadata/about/DatasetMetadataOther.vue";
-import DatasetMetadataAccess from "@/views/study/dataset/metadata/access/DatasetMetadataAccess.vue";
+import DatasetMetadataAccessRights from "@/views/study/dataset/metadata/access-rights/DatasetMetadataAccessRights.vue";
 import DatasetMetadataContributors from "@/views/study/dataset/metadata/contributors/DatasetMetadataContributors.vue";
 import DatasetMetadataDataManagement from "@/views/study/dataset/metadata/data-management/DatasetMetadataDataManagement.vue";
 import DatasetMetadataDeIdentification from "@/views/study/dataset/metadata/deidentification/DatasetMetadataDeIdentification.vue";
@@ -314,9 +314,9 @@ const router = createRouter({
                       component: DatasetMetadataSubjects,
                     },
                     {
-                      name: "dataset:metadata:access",
-                      path: "access",
-                      component: DatasetMetadataAccess,
+                      name: "dataset:metadata:access-rights",
+                      path: "access-rights",
+                      component: DatasetMetadataAccessRights,
                     },
                     {
                       name: "dataset:metadata:rights",

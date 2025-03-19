@@ -208,6 +208,10 @@ export interface DatasetRight {
 export interface DatasetRights {
   rights: DatasetRight[];
 }
+export interface DatasetAccessRights {
+  access: DatasetAccess;
+  rights: DatasetRight[];
+}
 
 export interface DatasetOther {
   acknowledgement: string;
