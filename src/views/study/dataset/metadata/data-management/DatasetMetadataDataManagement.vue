@@ -83,7 +83,7 @@ onBeforeMount(async () => {
     no_methods: data.consent.no_methods,
     noncommercial: data.consent.noncommercial,
     research_type: data.consent.research_type,
-    type: null,
+    type: data.consent.type,
   };
   moduleData.deident = {
     dates: data.deident.dates,

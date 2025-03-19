@@ -289,8 +289,8 @@ const router = createRouter({
                       component: DatasetMetadataContributors,
                     },
                     {
-                      name: "dataset:metadata:creators",
-                      path: "creators",
+                      name: "dataset:metadata:team",
+                      path: "team",
                       component: DatasetMetadataTeam,
                     },
                     {

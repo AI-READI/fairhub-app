@@ -215,7 +215,7 @@ const updateLicense = async (value: string) => {
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
       title="Access & Rights"
-      description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum"
+      description=""
       linkName="dataset:overview"
       :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
     />

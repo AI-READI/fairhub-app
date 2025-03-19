@@ -273,7 +273,7 @@ const saveMetadata = (e: MouseEvent) => {
         v-else
         ref="formRef"
         :model="moduleData"
-        size="large"
+        size="small"
         label-placement="top"
         class="pr-4"
         :disabled="studyStore.currentStudyRole === 'viewer'"
