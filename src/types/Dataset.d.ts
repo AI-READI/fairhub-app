@@ -134,6 +134,29 @@ export interface DatasetConsent {
   type: string | null;
 }
 
+export interface DatasetFunder {
+  id: string;
+  name: string;
+  award_number: string;
+  award_title: string;
+  award_uri: string;
+  identifier: string;
+  identifier_scheme_uri: string;
+  identifier_type: string | null;
+  origin: string;
+}
+
+export interface DatasetFunders {
+  funders: DatasetFunder[];
+}
+
+export interface DatasetTeam {
+  contributors: DatasetContributor[];
+  creators: DatasetCreator[];
+  funders: DatasetFunder[];
+  managing_organization: DatasetManagingOrganization;
+}
+
 export interface DatasetSubject {
   id: string;
   classification_code: string;
@@ -184,22 +207,6 @@ export interface DatasetRight {
 
 export interface DatasetRights {
   rights: DatasetRight[];
-}
-
-export interface DatasetFunder {
-  id: string;
-  name: string;
-  award_number: string;
-  award_title: string;
-  award_uri: string;
-  identifier: string;
-  identifier_scheme_uri: string;
-  identifier_type: string | null;
-  origin: string;
-}
-
-export interface DatasetFunders {
-  funders: DatasetFunder[];
 }
 
 export interface DatasetOther {

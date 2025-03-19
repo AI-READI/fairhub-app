@@ -31,9 +31,8 @@ import DatasetHealthsheetPreprocessing from "@/views/study/dataset/healthsheet/p
 import DatasetHealthsheetUses from "@/views/study/dataset/healthsheet/uses/DatasetHealthsheetUses.vue";
 import DatasetMetadataOther from "@/views/study/dataset/metadata/about/DatasetMetadataOther.vue";
 import DatasetMetadataAccess from "@/views/study/dataset/metadata/access/DatasetMetadataAccess.vue";
-import DatasetMetadataConsent from "@/views/study/dataset/metadata/consent/DatasetMetadataConsent.vue";
 import DatasetMetadataContributors from "@/views/study/dataset/metadata/contributors/DatasetMetadataContributors.vue";
-import DatasetMetadataCreator from "@/views/study/dataset/metadata/creators/DatasetMetadataCreator.vue";
+import DatasetMetadataDataManagement from "@/views/study/dataset/metadata/data-management/DatasetMetadataDataManagement.vue";
 import DatasetMetadataDeIdentification from "@/views/study/dataset/metadata/deidentification/DatasetMetadataDeIdentification.vue";
 import DatasetMetadataFunders from "@/views/study/dataset/metadata/funders/DatasetMetadataFunders.vue";
 import DatasetGeneralInformation from "@/views/study/dataset/metadata/general-information/DatasetGeneralInformation.vue";
@@ -42,6 +41,7 @@ import DatasetMetadataManagingOrganization from "@/views/study/dataset/metadata/
 import DatasetMetadataRelatedIdentifiers from "@/views/study/dataset/metadata/related/DatasetMetadataRelatedIdentifiers.vue";
 import DatasetMetadataRights from "@/views/study/dataset/metadata/rights/DatasetMetadataRights.vue";
 import DatasetMetadataSubjects from "@/views/study/dataset/metadata/subjects/DatasetMetadataSubjects.vue";
+import DatasetMetadataTeam from "@/views/study/dataset/metadata/team/DatasetMetadataTeam.vue";
 import NewDataset from "@/views/study/dataset/new/NewDataset.vue";
 import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue";
 import PublishChangelog from "@/views/study/dataset/publish/changelog/PublishChangelog.vue";
@@ -291,7 +291,7 @@ const router = createRouter({
                     {
                       name: "dataset:metadata:creators",
                       path: "creators",
-                      component: DatasetMetadataCreator,
+                      component: DatasetMetadataTeam,
                     },
                     {
                       name: "dataset:metadata:managing-organization",
@@ -304,9 +304,9 @@ const router = createRouter({
                       component: DatasetMetadataDeIdentification,
                     },
                     {
-                      name: "dataset:metadata:consent",
-                      path: "consent",
-                      component: DatasetMetadataConsent,
+                      name: "dataset:metadata:data-management",
+                      path: "data-management",
+                      component: DatasetMetadataDataManagement,
                     },
                     {
                       name: "dataset:metadata:subjects",
