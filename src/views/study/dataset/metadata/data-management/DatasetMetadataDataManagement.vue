@@ -223,7 +223,6 @@ const addSubject = () => {
         v-else
         ref="formRef"
         :model="moduleData"
-        :rules="rules"
         size="small"
         :disabled="studyStore.currentStudyRole === 'viewer'"
         label-placement="top"

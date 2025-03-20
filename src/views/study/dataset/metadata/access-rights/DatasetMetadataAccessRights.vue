@@ -42,19 +42,6 @@ const getLicenseLoading = ref(false);
 
 const formRef = ref<FormInst | null>(null);
 
-const rules: FormRules = {
-  description: {
-    message: "Please enter a description",
-    required: true,
-    trigger: ["blur", "input"],
-  },
-  type: {
-    message: "Please select a type",
-    required: true,
-    trigger: ["blur", "input"],
-  },
-};
-
 onBeforeMount(async () => {
   responseLoading.value = true;
 
@@ -237,7 +224,15 @@ const updateLicense = async (value: string) => {
         <h2 class="pb-4">Access</h2>
 
         <n-card class="bg-gray-50">
-          <n-form-item label="Type" path="type">
+          <n-form-item
+            label="Type"
+            path="access.type"
+            :rule="{
+              message: 'Please select a type.',
+              required: true,
+              trigger: ['blur', 'input'],
+            }"
+          >
             <n-select
               v-model:value="moduleData.access.type"
               placeholder="Public On Screen Access and Download"
@@ -246,7 +241,15 @@ const updateLicense = async (value: string) => {
             />
           </n-form-item>
 
-          <n-form-item label="Description" path="description">
+          <n-form-item
+            label="Description"
+            path="access.description"
+            :rule="{
+              message: 'Please enter a description.',
+              required: true,
+              trigger: ['blur', 'input'],
+            }"
+          >
             <n-input
               v-model:value="moduleData.access.description"
               placeholder="A textual description of the access being offered, for example identifying the groups to which access is granted, the criteria on which a case-by-case decision would be based, any further restrictions on on-screen access, etc."
@@ -255,7 +258,7 @@ const updateLicense = async (value: string) => {
             />
           </n-form-item>
 
-          <n-form-item label="URL" path="url">
+          <n-form-item label="URL" path="access.url">
             <n-input
               v-model:value="moduleData.access.url"
               placeholder="A url of a web page that provides details of the accesss available, possibly including the practical details required or a form to use to apply for access."
@@ -263,7 +266,7 @@ const updateLicense = async (value: string) => {
             />
           </n-form-item>
 
-          <n-form-item label="URL Last Checked" path="url_last_checked">
+          <n-form-item label="URL Last Checked" path="access.url_last_checked">
             <n-date-picker
               v-model:value="moduleData.access.url_last_checked"
               type="date"
@@ -322,7 +325,6 @@ const updateLicense = async (value: string) => {
             <template #icon>
               <f-icon icon="material-symbols:save" />
             </template>
-
             Save Metadata
           </n-button>
         </div>
