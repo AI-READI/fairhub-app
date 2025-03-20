@@ -31,16 +31,10 @@ import DatasetHealthsheetPreprocessing from "@/views/study/dataset/healthsheet/p
 import DatasetHealthsheetUses from "@/views/study/dataset/healthsheet/uses/DatasetHealthsheetUses.vue";
 import DatasetMetadataOther from "@/views/study/dataset/metadata/about/DatasetMetadataOther.vue";
 import DatasetMetadataAccessRights from "@/views/study/dataset/metadata/access-rights/DatasetMetadataAccessRights.vue";
-import DatasetMetadataContributors from "@/views/study/dataset/metadata/contributors/DatasetMetadataContributors.vue";
 import DatasetMetadataDataManagement from "@/views/study/dataset/metadata/data-management/DatasetMetadataDataManagement.vue";
-import DatasetMetadataDeIdentification from "@/views/study/dataset/metadata/deidentification/DatasetMetadataDeIdentification.vue";
-import DatasetMetadataFunders from "@/views/study/dataset/metadata/funders/DatasetMetadataFunders.vue";
 import DatasetGeneralInformation from "@/views/study/dataset/metadata/general-information/DatasetGeneralInformation.vue";
 import DatasetMetadataIdentifiers from "@/views/study/dataset/metadata/identifiers/DatasetMetadataIdentifiers.vue";
-import DatasetMetadataManagingOrganization from "@/views/study/dataset/metadata/managingorganization/DatasetMetadataManagingOrganization.vue";
 import DatasetMetadataRelatedIdentifiers from "@/views/study/dataset/metadata/related/DatasetMetadataRelatedIdentifiers.vue";
-import DatasetMetadataRights from "@/views/study/dataset/metadata/rights/DatasetMetadataRights.vue";
-import DatasetMetadataSubjects from "@/views/study/dataset/metadata/subjects/DatasetMetadataSubjects.vue";
 import DatasetMetadataTeam from "@/views/study/dataset/metadata/team/DatasetMetadataTeam.vue";
 import NewDataset from "@/views/study/dataset/new/NewDataset.vue";
 import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue";
@@ -284,24 +278,9 @@ const router = createRouter({
                       component: DatasetGeneralInformation,
                     },
                     {
-                      name: "dataset:metadata:contributors",
-                      path: "contributors",
-                      component: DatasetMetadataContributors,
-                    },
-                    {
                       name: "dataset:metadata:team",
                       path: "team",
                       component: DatasetMetadataTeam,
-                    },
-                    {
-                      name: "dataset:metadata:managing-organization",
-                      path: "managing-organization",
-                      component: DatasetMetadataManagingOrganization,
-                    },
-                    {
-                      name: "dataset:metadata:de-identification",
-                      path: "de-identification",
-                      component: DatasetMetadataDeIdentification,
                     },
                     {
                       name: "dataset:metadata:data-management",
@@ -309,24 +288,9 @@ const router = createRouter({
                       component: DatasetMetadataDataManagement,
                     },
                     {
-                      name: "dataset:metadata:subjects",
-                      path: "subjects",
-                      component: DatasetMetadataSubjects,
-                    },
-                    {
                       name: "dataset:metadata:access-rights",
                       path: "access-rights",
                       component: DatasetMetadataAccessRights,
-                    },
-                    {
-                      name: "dataset:metadata:rights",
-                      path: "rights",
-                      component: DatasetMetadataRights,
-                    },
-                    {
-                      name: "dataset:metadata:funders",
-                      path: "funders",
-                      component: DatasetMetadataFunders,
                     },
                     {
                       name: "dataset:metadata:related-identifiers",
