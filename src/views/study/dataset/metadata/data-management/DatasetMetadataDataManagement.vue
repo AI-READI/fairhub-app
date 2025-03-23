@@ -231,7 +231,15 @@ const addSubject = () => {
         <h2 class="pb-4">Consent</h2>
 
         <n-card class="bg-gray-50">
-          <n-form-item label="Type" path="consent.type">
+          <n-form-item
+            label="Type"
+            :rule="{
+              message: 'Please select a type',
+              required: true,
+              trigger: ['blur', 'input'],
+            }"
+            path="consent.type"
+          >
             <n-select
               v-model:value="moduleData.consent.type"
               placeholder="No Restriction"
@@ -438,7 +446,15 @@ const addSubject = () => {
         <h2 class="pb-4">De-identification</h2>
 
         <n-card class="bg-gray-50">
-          <n-form-item label="Type" path="deident.type">
+          <n-form-item
+            :rule="{
+              message: 'Please select a type',
+              required: true,
+              trigger: ['blur', 'input'],
+            }"
+            label="Type"
+            path="deident.type"
+          >
             <n-select
               v-model:value="moduleData.deident.type"
               placeholder="No De-identification applied"
