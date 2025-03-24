@@ -5,7 +5,7 @@ import FORM_JSON from "@/assets/data/form.json";
 import LottieLoader from "@/components/loader/LottieLoader.vue";
 import FadeTransition from "@/components/transitions/FadeTransition.vue";
 import { useStudyStore } from "@/stores/study";
-import { DatasetGeneralInformation } from "@/types/Dataset";
+import type { DatasetGeneralInformation } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();

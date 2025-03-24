@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
 import { useStudyStore } from "@/stores/study";
-import { DatasetDataManagement } from "@/types/Dataset";
+import type { DatasetDataManagement } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
@@ -43,14 +43,6 @@ const moduleData = reactive<DatasetDataManagement>({
 });
 
 const formRef = ref<FormInst | null>(null);
-
-const rules: FormRules = {
-  type: {
-    message: "Please select a type",
-    required: true,
-    trigger: ["blur", "input"],
-  },
-};
 
 const getLoading = ref(false);
 const loading = ref(false);

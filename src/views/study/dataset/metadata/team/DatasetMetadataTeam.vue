@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
 import { useStudyStore } from "@/stores/study";
-import { DatasetTeam } from "@/types/Dataset";
+import type { DatasetTeam } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
@@ -317,13 +317,6 @@ const saveMetadata = (e: MouseEvent) => {
       console.log(errors);
     }
   });
-};
-const rules: FormRules = {
-  name: {
-    message: "Please enter a name.",
-    required: true,
-    trigger: ["blur", "input"],
-  },
 };
 </script>
 

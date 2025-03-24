@@ -6,7 +6,7 @@ import { nanoid } from "nanoid";
 import FORM_JSON from "@/assets/data/form.json";
 import licensesJSON from "@/assets/data/licenses.json";
 import { useStudyStore } from "@/stores/study";
-import { DatasetAccessRights } from "@/types/Dataset";
+import type { DatasetAccessRights } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 import { sanitize } from "@/utils/helpers";
 
