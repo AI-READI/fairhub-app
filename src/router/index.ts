@@ -30,20 +30,12 @@ import DatasetHealthsheetMotivation from "@/views/study/dataset/healthsheet/moti
 import DatasetHealthsheetPreprocessing from "@/views/study/dataset/healthsheet/preprocessing/DatasetHealthsheetPreprocessing.vue";
 import DatasetHealthsheetUses from "@/views/study/dataset/healthsheet/uses/DatasetHealthsheetUses.vue";
 import DatasetMetadataOther from "@/views/study/dataset/metadata/about/DatasetMetadataOther.vue";
-import DatasetMetadataAccess from "@/views/study/dataset/metadata/access/DatasetMetadataAccess.vue";
-import DatasetMetadataConsent from "@/views/study/dataset/metadata/consent/DatasetMetadataConsent.vue";
-import DatasetMetadataContributors from "@/views/study/dataset/metadata/contributors/DatasetMetadataContributors.vue";
-import DatasetMetadataCreator from "@/views/study/dataset/metadata/creators/DatasetMetadataCreator.vue";
-import DatasetMetadataDates from "@/views/study/dataset/metadata/dates/DatasetMetadataDates.vue";
-import DatasetMetadataDeIdentification from "@/views/study/dataset/metadata/deidentification/DatasetMetadataDeIdentification.vue";
-import DatasetMetadataDescriptions from "@/views/study/dataset/metadata/descriptions/DatasetMetadataDescriptions.vue";
-import DatasetMetadataFunders from "@/views/study/dataset/metadata/funders/DatasetMetadataFunders.vue";
+import DatasetMetadataAccessRights from "@/views/study/dataset/metadata/access-rights/DatasetMetadataAccessRights.vue";
+import DatasetMetadataDataManagement from "@/views/study/dataset/metadata/data-management/DatasetMetadataDataManagement.vue";
+import DatasetGeneralInformation from "@/views/study/dataset/metadata/general-information/DatasetGeneralInformation.vue";
 import DatasetMetadataIdentifiers from "@/views/study/dataset/metadata/identifiers/DatasetMetadataIdentifiers.vue";
-import DatasetMetadataManagingOrganization from "@/views/study/dataset/metadata/managingorganization/DatasetMetadataManagingOrganization.vue";
 import DatasetMetadataRelatedIdentifiers from "@/views/study/dataset/metadata/related/DatasetMetadataRelatedIdentifiers.vue";
-import DatasetMetadataRights from "@/views/study/dataset/metadata/rights/DatasetMetadataRights.vue";
-import DatasetMetadataSubjects from "@/views/study/dataset/metadata/subjects/DatasetMetadataSubjects.vue";
-import DatasetMetadataTitle from "@/views/study/dataset/metadata/title/DatasetMetadataTitle.vue";
+import DatasetMetadataTeam from "@/views/study/dataset/metadata/team/DatasetMetadataTeam.vue";
 import NewDataset from "@/views/study/dataset/new/NewDataset.vue";
 import DatasetOverview from "@/views/study/dataset/overview/DatasetOverview.vue";
 import PublishChangelog from "@/views/study/dataset/publish/changelog/PublishChangelog.vue";
@@ -86,7 +78,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      name: "home",
+      name: "",
       path: "/",
       component: HomePage,
     },
@@ -281,64 +273,24 @@ const router = createRouter({
                       component: DatasetMetadataIdentifiers,
                     },
                     {
-                      name: "dataset:metadata:title",
-                      path: "title",
-                      component: DatasetMetadataTitle,
+                      name: "dataset:metadata:general-information",
+                      path: "general-information",
+                      component: DatasetGeneralInformation,
                     },
                     {
-                      name: "dataset:metadata:descriptions",
-                      path: "descriptions",
-                      component: DatasetMetadataDescriptions,
+                      name: "dataset:metadata:team",
+                      path: "team",
+                      component: DatasetMetadataTeam,
                     },
                     {
-                      name: "dataset:metadata:contributors",
-                      path: "contributors",
-                      component: DatasetMetadataContributors,
+                      name: "dataset:metadata:data-management",
+                      path: "data-management",
+                      component: DatasetMetadataDataManagement,
                     },
                     {
-                      name: "dataset:metadata:creators",
-                      path: "creators",
-                      component: DatasetMetadataCreator,
-                    },
-                    {
-                      name: "dataset:metadata:dates",
-                      path: "dates",
-                      component: DatasetMetadataDates,
-                    },
-                    {
-                      name: "dataset:metadata:managing-organization",
-                      path: "managing-organization",
-                      component: DatasetMetadataManagingOrganization,
-                    },
-                    {
-                      name: "dataset:metadata:de-identification",
-                      path: "de-identification",
-                      component: DatasetMetadataDeIdentification,
-                    },
-                    {
-                      name: "dataset:metadata:consent",
-                      path: "consent",
-                      component: DatasetMetadataConsent,
-                    },
-                    {
-                      name: "dataset:metadata:subjects",
-                      path: "subjects",
-                      component: DatasetMetadataSubjects,
-                    },
-                    {
-                      name: "dataset:metadata:access",
-                      path: "access",
-                      component: DatasetMetadataAccess,
-                    },
-                    {
-                      name: "dataset:metadata:rights",
-                      path: "rights",
-                      component: DatasetMetadataRights,
-                    },
-                    {
-                      name: "dataset:metadata:funders",
-                      path: "funders",
-                      component: DatasetMetadataFunders,
+                      name: "dataset:metadata:access-rights",
+                      path: "access-rights",
+                      component: DatasetMetadataAccessRights,
                     },
                     {
                       name: "dataset:metadata:related-identifiers",

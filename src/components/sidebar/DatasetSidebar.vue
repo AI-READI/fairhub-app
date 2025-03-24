@@ -37,70 +37,29 @@ const dynamicUpperMenuOptions: MenuOption[] = [
   {
     children: [
       {
+        icon: renderIcon("material-symbols:description-outline"),
+        key: "dataset:metadata:general-information",
+        label: "General information",
+      },
+      {
         icon: renderIcon("mdi:identifier"),
         key: "dataset:metadata:identifiers",
         label: "Identifiers",
       },
       {
-        icon: renderIcon("fluent:text-case-title-16-filled"),
-        key: "dataset:metadata:title",
-        label: "Titles",
-      },
-      {
-        icon: renderIcon("material-symbols:description-outline"),
-        key: "dataset:metadata:descriptions",
-        label: "Descriptions",
-      },
-      {
-        // contains both creators and contributors
-        icon: renderIcon("fa6-solid:person"),
-        key: "dataset:metadata:creators",
-        label: "Creators",
-      },
-      {
         icon: renderIcon("ic:baseline-people"),
-        key: "dataset:metadata:contributors",
-        label: "Contributors",
+        key: "dataset:metadata:team",
+        label: "Team",
       },
       {
-        icon: renderIcon("solar:calendar-date-outline"),
-        key: "dataset:metadata:dates",
-        label: "Dates",
-      },
-      {
-        icon: renderIcon("octicon:organization-16"),
-        key: "dataset:metadata:managing-organization",
-        label: "Managing Organization",
-      },
-      {
-        icon: renderIcon("tabler:id-badge-off"),
-        key: "dataset:metadata:de-identification",
-        label: "De-identification",
-      },
-      {
-        icon: renderIcon("icon-park-twotone:permissions"),
-        key: "dataset:metadata:consent",
-        label: "Consent",
-      },
-      {
-        icon: renderIcon("ep:list"),
-        key: "dataset:metadata:subjects",
-        label: "Subjects",
+        icon: renderIcon("hugeicons:folder-management"),
+        key: "dataset:metadata:data-management",
+        label: "Data management",
       },
       {
         icon: renderIcon("mdi:cloud-access"),
-        key: "dataset:metadata:access",
-        label: "Access",
-      },
-      {
-        icon: renderIcon("icon-park-twotone:right-user"),
-        key: "dataset:metadata:rights",
-        label: "Rights",
-      },
-      {
-        icon: renderIcon("solar:hand-money-linear"),
-        key: "dataset:metadata:funders",
-        label: "Funders",
+        key: "dataset:metadata:access-rights",
+        label: "Access & Rights",
       },
       {
         icon: renderIcon("fluent-mdl2:relationship"),

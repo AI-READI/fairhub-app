@@ -53,7 +53,7 @@ onBeforeMount(async () => {
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-6">
     <PageBackNavigationHeader
-      title="Overview"
+      title="Data collection"
       description="View an overview of your dataset"
       linkName="study:all-datasets"
       :linkParams="{ studyId: routeParams.studyId }"
