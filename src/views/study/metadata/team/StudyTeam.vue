@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FormInst, FormRules } from "naive-ui";
+import type { FormInst } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
@@ -43,21 +43,6 @@ const moduleData = reactive<StudyTeam>({
   },
 });
 
-const rules: FormRules = {
-  lead_sponsor_name: {
-    message: "Please enter a lead sponsor name",
-    required: true,
-    trigger: ["blur", "input"],
-  },
-  responsible_party: {
-    type: {
-      message: "Please select a study type",
-      required: true,
-      trigger: ["blur", "change"],
-    },
-  },
-};
-
 const loading = ref(false);
 const responseLoading = ref(false);
 
@@ -80,7 +65,7 @@ onBeforeMount(async () => {
     origin: "remote",
   }));
 
-  moduleData.sponsors = data.sponsors;
+  // moduleData.sponsors = data.sponsors;
 
   moduleData.sponsors.lead_sponsor = {
     name: data.sponsors.lead_sponsor_name,
@@ -130,7 +115,6 @@ const saveMetadata = (e: MouseEvent) => {
             };
           }
         }),
-
         sponsors: {
           lead_sponsor_identifier: moduleData.sponsors.lead_sponsor.identifier,
           lead_sponsor_identifier_scheme: moduleData.sponsors.lead_sponsor.identifier_scheme,
@@ -255,7 +239,15 @@ const addCollaborator = () => {
             voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum
           </p>
 
-          <n-form-item label="Type" path="sponsors.responsible_party.type">
+          <n-form-item
+            label="Type"
+            :rule="{
+              message: 'Please select a study type',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+            path="sponsors.responsible_party.type"
+          >
             <n-select
               v-model:value="moduleData.sponsors.responsible_party.type"
               placeholder="Principal Investigator"
@@ -464,7 +456,7 @@ const addCollaborator = () => {
 
           <n-form-item
             label="Identifier"
-            path="lead_sponsor.identifier"
+            path="sponsors.lead_sponsor.identifier"
             :rule="{
               message: 'Please enter a lead sponsor identifier',
               required: moduleData.sponsors.lead_sponsor.identifier_scheme,
@@ -481,7 +473,7 @@ const addCollaborator = () => {
           <div class="flex items-center space-x-4">
             <n-form-item
               label="Identifier Scheme"
-              path="lead_sponsor.identifier_scheme"
+              path="sponsors.lead_sponsor.identifier_scheme"
               :rule="{
                 message: 'Please enter a lead sponsor identifier scheme',
                 required: moduleData.sponsors.lead_sponsor.identifier,
