@@ -65,8 +65,6 @@ onBeforeMount(async () => {
     origin: "remote",
   }));
 
-  // moduleData.sponsors = data.sponsors;
-
   moduleData.sponsors.lead_sponsor = {
     name: data.sponsors.lead_sponsor_name,
     identifier: data.sponsors.lead_sponsor_identifier,
@@ -218,14 +216,7 @@ const addCollaborator = () => {
 
     <n-divider />
 
-    <n-form
-      ref="formRef"
-      :model="moduleData"
-      :rules="rules"
-      size="small"
-      label-placement="top"
-      class="pr-4"
-    >
+    <n-form ref="formRef" :model="moduleData" size="small" label-placement="top" class="pr-4">
       <h1 class="pb-4">Collaboration</h1>
 
       <n-card class="rounded-xl bg-gray-50">
