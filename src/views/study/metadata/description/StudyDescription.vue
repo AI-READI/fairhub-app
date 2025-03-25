@@ -80,8 +80,13 @@ onBeforeMount(async () => {
       origin: "remote",
     };
   });
-  moduleData.identification.primary = data.identification.primary;
-
+  moduleData.identification.primary = {
+    id: data.identification.primary.id,
+    identifier: data.identification.primary.identifier,
+    identifier_domain: data.identification.primary.identifier_domain,
+    identifier_link: data.identification.primary.identifier_link,
+    identifier_type: data.identification.primary.identifier_type,
+  };
   moduleData.identification.secondary = data.identification.secondary.map((item: any) => ({
     ...item,
     origin: "remote",
