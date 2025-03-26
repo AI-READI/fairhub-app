@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
+import type { MenuOption } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
@@ -203,7 +204,6 @@ const addCollaborator = () => {
 };
 
 const scrollbarRef = ref<any>(null);
-import type { MenuOption } from "naive-ui";
 
 const menuOptions: MenuOption[] = [
   { key: "sponsors", label: "Sponsors" },
@@ -229,14 +229,22 @@ const scrollToSection = (key: string) => {
 
     <n-divider />
 
-    <div class="flex flex-row-reverse">
-      <div class="w-[300px]">
-        <n-menu :options="menuOptions" @update:value="scrollToSection" style="width: 150px" />
+    <div class="flex flex-row-reverse max-lg:flex-col">
+      <div class="w-[300px] max-w-xl max-lg:hidden lg:block">
+        <n-menu :options="menuOptions" @update:value="scrollToSection" class="w-[100%]" />
       </div>
 
-      <n-scrollbar ref="scrollbarRef" style="max-height: 80vh">
-        <n-form ref="formRef" :model="moduleData" size="small" label-placement="top" class="pr-4">
-          <h1 class="pb-4">Collaboration</h1>
+      <div class="w-full lg:hidden">
+        <n-collapse accordion class="max-w-xxl rounded-md bg-gray-100 py-1 lg:hidden">
+          <n-collapse-item title="On this page" name="menu">
+            <n-menu class="metadata" :options="menuOptions" @update:value="scrollToSection" />
+          </n-collapse-item>
+        </n-collapse>
+      </div>
+
+      <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
+        <n-form ref="formRef" :model="moduleData" size="small" label-placement="top" class="">
+          <h1 class="py-4">Collaboration</h1>
 
           <n-card class="rounded-xl bg-gray-50">
             <h2 class="sponsors pb-8">Sponsors</h2>
