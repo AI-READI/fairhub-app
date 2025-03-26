@@ -529,90 +529,92 @@ const scrollToSection = (key: string) => {
 
           <h2 class="collaborators pb-4 pt-8">Collaborators</h2>
 
-          <CollapsibleCard
-            v-for="(item, index) in moduleData.collaborators"
-            :key="item.id"
-            class="mb-5 shadow-md"
-            :title="item.name || `Collaborator ${index + 1}`"
-            bordered
-          >
-            <template #header-extra>
-              <n-popconfirm @positive-click="removeCollaborator(item.id)">
-                <template #trigger>
-                  <n-button type="error" secondary>
-                    <template #icon>
-                      <f-icon icon="ep:delete" />
-                    </template>
-
-                    Remove Collaborator
-                  </n-button>
-                </template>
-
-                Are you sure you want to remove this Collaborator?
-              </n-popconfirm>
-            </template>
-
-            <n-form-item
-              label="Name"
-              :path="`collaborators[${index}].name`"
-              :rule="{
-                message: 'Please enter a name',
-                required: true,
-                trigger: ['blur', 'change'],
-              }"
+          <n-card class="rounded-xl bg-gray-50">
+            <CollapsibleCard
+              v-for="(item, index) in moduleData.collaborators"
+              :key="item.id"
+              class="mb-5 shadow-md"
+              :title="item.name || `Collaborator ${index + 1}`"
+              bordered
             >
-              <n-input v-model:value="item.name" placeholder="Sasha Braus" clearable />
-            </n-form-item>
+              <template #header-extra>
+                <n-popconfirm @positive-click="removeCollaborator(item.id)">
+                  <template #trigger>
+                    <n-button type="error" secondary>
+                      <template #icon>
+                        <f-icon icon="ep:delete" />
+                      </template>
 
-            <n-form-item
-              label="Identifier"
-              :path="`collaborators[${index}].identifier`"
-              :rule="{
-                message: 'Please enter an identifier',
-                required: item.identifier_scheme,
-                trigger: ['blur', 'change'],
-              }"
-            >
-              <n-input
-                v-model:value="item.identifier"
-                placeholder="0000-0003-2829-8032"
-                clearable
-              />
-            </n-form-item>
+                      Remove Collaborator
+                    </n-button>
+                  </template>
 
-            <n-form-item
-              label="Identifier Scheme"
-              :path="`collaborators[${index}].identifier_scheme`"
-              :rule="{
-                message: 'Please enter an identifier scheme',
-                required: item.identifier,
-                trigger: ['blur', 'change'],
-              }"
-            >
-              <n-input v-model:value="item.identifier_scheme" placeholder="ORCID" clearable />
-            </n-form-item>
+                  Are you sure you want to remove this Collaborator?
+                </n-popconfirm>
+              </template>
 
-            <n-form-item
-              label="Identifier Scheme URI"
-              :path="`collaborators[${index}].identifier_scheme_uri`"
-            >
-              <n-input
-                v-model:value="item.identifier_scheme_uri"
-                placeholder="https://orcid.org"
-                clearable
-              />
-            </n-form-item>
-          </CollapsibleCard>
+              <n-form-item
+                label="Name"
+                :path="`collaborators[${index}].name`"
+                :rule="{
+                  message: 'Please enter a name',
+                  required: true,
+                  trigger: ['blur', 'change'],
+                }"
+              >
+                <n-input v-model:value="item.name" placeholder="Sasha Braus" clearable />
+              </n-form-item>
 
-          <n-button class="my-10 w-full" dashed type="success" @click="addCollaborator">
-            <template #icon>
-              <f-icon icon="gridicons:create" />
-            </template>
+              <n-form-item
+                label="Identifier"
+                :path="`collaborators[${index}].identifier`"
+                :rule="{
+                  message: 'Please enter an identifier',
+                  required: item.identifier_scheme,
+                  trigger: ['blur', 'change'],
+                }"
+              >
+                <n-input
+                  v-model:value="item.identifier"
+                  placeholder="0000-0003-2829-8032"
+                  clearable
+                />
+              </n-form-item>
 
-            Add a Collaborator
-          </n-button>
+              <n-form-item
+                label="Identifier Scheme"
+                :path="`collaborators[${index}].identifier_scheme`"
+                :rule="{
+                  message: 'Please enter an identifier scheme',
+                  required: item.identifier,
+                  trigger: ['blur', 'change'],
+                }"
+              >
+                <n-input v-model:value="item.identifier_scheme" placeholder="ORCID" clearable />
+              </n-form-item>
 
-          <div class="flex justify-start">
+              <n-form-item
+                label="Identifier Scheme URI"
+                :path="`collaborators[${index}].identifier_scheme_uri`"
+              >
+                <n-input
+                  v-model:value="item.identifier_scheme_uri"
+                  placeholder="https://orcid.org"
+                  clearable
+                />
+              </n-form-item>
+            </CollapsibleCard>
+
+            <n-button class="my-10 w-full" dashed type="success" @click="addCollaborator">
+              <template #icon>
+                <f-icon icon="gridicons:create" />
+              </template>
+
+              Add a Collaborator
+            </n-button>
+          </n-card>
+
+          <div class="flex justify-start pt-4">
             <n-button
               size="large"
               :disabled="studyStore.currentStudyRole === 'viewer'"
