@@ -348,7 +348,6 @@ const scrollToSection = (key: string) => {
             :rules="rules"
             size="large"
             label-placement="top"
-            class="pr-4"
             :disabled="studyStore.currentStudyRole === 'viewer'"
             v-else
           >
