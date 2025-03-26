@@ -216,3 +216,7 @@ Transition styles for <transition />
 .status .n-form-item-blank{
   display:block
 }
+
+.n-menu.metadata .n-menu-item-content-header{
+    color: #0284c7;
+}

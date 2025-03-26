@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FormInst, FormRules } from "naive-ui";
+import type { FormInst, FormRules, MenuOption } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
@@ -297,6 +297,19 @@ const removeSecondaryIdentifier = async (id: string) => {
     (item) => item.id !== id
   );
 };
+const menuOptions: MenuOption[] = [
+  { key: "description", label: "Description" },
+  { key: "keywords", label: "Keywords" },
+  { key: "conditions", label: "Conditions" },
+  { key: "identification", label: "Identification" },
+];
+
+const scrollbarRef = ref<any>(null);
+
+const scrollToSection = (key: string) => {
+  const section = document.querySelector(`.${key}`) as HTMLElement;
+  scrollbarRef.value?.scrollTo({ behavior: "smooth", top: section.offsetTop });
+};
 </script>
 
 <template>
@@ -312,405 +325,458 @@ const removeSecondaryIdentifier = async (id: string) => {
 
     <n-divider />
 
-    <FadeTransition>
-      <LottieLoader v-if="responseLoading" />
+    <div class="flex flex-row-reverse max-lg:flex-col">
+      <div class="w-[300px] max-w-xl max-lg:hidden lg:block">
+        <n-menu :options="menuOptions" @update:value="scrollToSection" class="w-[100%]" />
+      </div>
 
-      <n-form
-        ref="formRef"
-        :model="moduleData"
-        :rules="rules"
-        size="large"
-        label-placement="top"
-        class="pr-4"
-        :disabled="studyStore.currentStudyRole === 'viewer'"
-        v-else
-      >
-        <h2 class="pb-4">Description</h2>
+      <div class="w-full lg:hidden">
+        <n-collapse accordion class="max-w-xxl rounded-md bg-gray-100 py-1 lg:hidden">
+          <n-collapse-item title="On this page" name="menu">
+            <n-menu class="metadata" :options="menuOptions" @update:value="scrollToSection" />
+          </n-collapse-item>
+        </n-collapse>
+      </div>
 
-        <n-card class="rounded-xl bg-gray-50">
-          <SubHeadingText
-            title="Brief Summary"
-            description="Short description of the clinical study, written in language intended for the lay public."
-          />
+      <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
+        <FadeTransition>
+          <LottieLoader v-if="responseLoading" />
 
-          <n-form-item label="Brief_summary" path="description.brief_summary" :show-label="false">
-            <n-input
-              v-model:value="moduleData.description.brief_summary"
-              type="textarea"
-              maxlength="5000"
-              show-count
-              placeholder="Short description of the clinical study, written in language intended for the lay public."
-              :rows="4"
-            />
-          </n-form-item>
-
-          <SubHeadingText
-            title="Detailed Description"
-            description="Extended description of the study, including more technical information (as compared to the Brief Summary), if desired. Do not include the entire protocol; do not duplicate information recorded in other data elements, such as Eligibility Criteria or outcome measures"
-          />
-
-          <n-form-item label="Detailed Description" path="detailed_description" :show-label="false">
-            <n-input
-              v-model:value="moduleData.description.detailed_description"
-              type="textarea"
-              placeholder="Add your detailed description here"
-              :rows="10"
-            />
-          </n-form-item>
-        </n-card>
-
-        <n-divider></n-divider>
-
-        <h2 class="py-4">Keywords</h2>
-
-        <CollapsibleCard
-          v-for="(item, index) in moduleData.keywords"
-          :key="item.id"
-          class="mb-5 shadow-md"
-          :title="item.name || `Keyword ${index + 1}`"
-          bordered
-        >
-          <template #header-extra>
-            <n-popconfirm @positive-click="removeKeyword(item.id)">
-              <template #trigger>
-                <n-button type="error" secondary>
-                  <template #icon>
-                    <f-icon icon="ep:delete" />
-                  </template>
-
-                  Remove Keyword
-                </n-button>
-              </template>
-
-              Are you sure you want to remove this Keyword?
-            </n-popconfirm>
-          </template>
-
-          <n-form-item
-            label="Name"
-            :path="`keywords[${index}].name`"
-            :rule="{
-              message: 'Please enter a name',
-              required: true,
-              trigger: ['blur', 'change'],
-            }"
+          <n-form
+            ref="formRef"
+            :model="moduleData"
+            :rules="rules"
+            size="large"
+            label-placement="top"
+            class="pr-4"
+            :disabled="studyStore.currentStudyRole === 'viewer'"
+            v-else
           >
-            <n-input v-model:value="item.name" placeholder="Artificial intelligence" clearable />
-          </n-form-item>
+            <h2 class="description py-4">Description</h2>
 
-          <n-form-item
-            label="Identifier"
-            :path="`keywords[${index}].classification_code`"
-            :rule="{
-              message: 'Please enter an identifier',
-              required: item.scheme,
-              trigger: ['blur', 'change'],
-            }"
-          >
-            <n-input v-model:value="item.classification_code" placeholder="D001185" clearable />
-          </n-form-item>
+            <n-card class="rounded-xl bg-gray-50">
+              <SubHeadingText
+                title="Brief Summary"
+                description="Short description of the clinical study, written in language intended for the lay public."
+              />
 
-          <n-form-item
-            label="Identifier Scheme"
-            :path="`keywords[${index}].scheme`"
-            :rule="{
-              message: 'Please enter a scheme',
-              required: item.classification_code,
-              trigger: ['blur', 'change'],
-            }"
-          >
-            <n-input v-model:value="item.scheme" placeholder="MeSH" clearable />
-          </n-form-item>
+              <n-form-item
+                label="Brief_summary"
+                path="description.brief_summary"
+                :show-label="false"
+              >
+                <n-input
+                  v-model:value="moduleData.description.brief_summary"
+                  type="textarea"
+                  maxlength="5000"
+                  show-count
+                  placeholder="Short description of the clinical study, written in language intended for the lay public."
+                  :rows="4"
+                />
+              </n-form-item>
 
-          <n-form-item label="Scheme URI" :path="`keywords[${index}].scheme_uri`">
-            <n-input
-              v-model:value="item.scheme_uri"
-              placeholder="ttps://meshb.nlm.nih.gov/"
-              clearable
-            />
-          </n-form-item>
+              <SubHeadingText
+                title="Detailed Description"
+                description="Extended description of the study, including more technical information (as compared to the Brief Summary), if desired. Do not include the entire protocol; do not duplicate information recorded in other data elements, such as Eligibility Criteria or outcome measures"
+              />
 
-          <n-form-item label="Keyword URI" :path="`keywords[${index}].keyword_uri`">
-            <n-input
-              v-model:value="item.keyword_uri"
-              placeholder="https://meshb.nlm.nih.gov/record/ui?ui=D001185"
-              clearable
-            />
-          </n-form-item>
-        </CollapsibleCard>
+              <n-form-item
+                label="Detailed Description"
+                path="detailed_description"
+                :show-label="false"
+              >
+                <n-input
+                  v-model:value="moduleData.description.detailed_description"
+                  type="textarea"
+                  placeholder="Add your detailed description here"
+                  :rows="10"
+                />
+              </n-form-item>
+            </n-card>
 
-        <n-button class="my-10 w-full" dashed type="success" @click="addKeyword">
-          <template #icon>
-            <f-icon icon="gridicons:create" />
-          </template>
+            <n-divider></n-divider>
 
-          Add a Keyword
-        </n-button>
+            <h2 class="keywords py-4">Keywords</h2>
 
-        <n-divider></n-divider>
+            <n-card class="rounded-xl bg-gray-50">
+              <CollapsibleCard
+                v-for="(item, index) in moduleData.keywords"
+                :key="item.id"
+                class="mb-5 shadow-md"
+                :title="item.name || `Keyword ${index + 1}`"
+                bordered
+              >
+                <template #header-extra>
+                  <n-popconfirm @positive-click="removeKeyword(item.id)">
+                    <template #trigger>
+                      <n-button type="error" secondary>
+                        <template #icon>
+                          <f-icon icon="ep:delete" />
+                        </template>
 
-        <h2 class="py-3">Conditions</h2>
-
-        <CollapsibleCard
-          v-for="(item, index) in moduleData.conditions"
-          :key="item.id"
-          class="mb-5 shadow-md"
-          :title="item.name || `Condition ${index + 1}`"
-          bordered
-        >
-          <template #header-extra>
-            <n-popconfirm @positive-click="removeCondition(item.id)">
-              <template #trigger>
-                <n-button type="error" secondary>
-                  <template #icon>
-                    <f-icon icon="ep:delete" />
-                  </template>
-
-                  Remove Condition
-                </n-button>
-              </template>
-
-              Are you sure you want to remove this Condition?
-            </n-popconfirm>
-          </template>
-
-          <n-form-item
-            label="Name"
-            :path="`conditions[${index}].name`"
-            :rule="{
-              message: 'Please enter a name',
-              required: true,
-              trigger: ['blur', 'change'],
-            }"
-          >
-            <n-input v-model:value="item.name" placeholder="Diabetes mellitus" clearable />
-          </n-form-item>
-
-          <n-form-item
-            label="Identifier"
-            :path="`conditions[${index}].classification_code`"
-            :rule="{
-              message: 'Please enter an identifier',
-              required: item.scheme,
-              trigger: ['blur', 'change'],
-            }"
-          >
-            <n-input v-model:value="item.classification_code" placeholder="45636-8" clearable />
-          </n-form-item>
-
-          <n-form-item
-            label="Identifier Scheme"
-            :path="`conditions[${index}].scheme`"
-            :rule="{
-              message: 'Please enter a scheme',
-              required: item.classification_code,
-              trigger: ['blur', 'change'],
-            }"
-          >
-            <n-input v-model:value="item.scheme" placeholder="LOINC" clearable />
-          </n-form-item>
-
-          <n-form-item label="Scheme URI" :path="`conditions[${index}].scheme_uri`">
-            <n-input v-model:value="item.scheme_uri" placeholder="https://loinc.org" clearable />
-          </n-form-item>
-
-          <n-form-item label="Condition URI" :path="`conditions[${index}].condition_uri`">
-            <n-input
-              v-model:value="item.condition_uri"
-              placeholder="https://loinc.org/45636-8"
-              clearable
-            />
-          </n-form-item>
-        </CollapsibleCard>
-
-        <n-button class="my-10 w-full" dashed type="success" @click="addCondition">
-          <template #icon>
-            <f-icon icon="gridicons:create" />
-          </template>
-
-          Add a Condition
-        </n-button>
-
-        <h2 class="py-3">Identification</h2>
-
-        <n-card class="rounded-xl bg-gray-50">
-          <h3>Primary Identifier</h3>
-
-          <p class="pb-8 pt-2">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
-            voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum
-          </p>
-
-          <n-form-item label="Identifier" path="identification.primary.identifier">
-            <n-input
-              v-model:value="moduleData.identification.primary.identifier"
-              placeholder="1-R01-MH99999-01A1"
-              clearable
-            />
-          </n-form-item>
-
-          <n-form-item
-            label="Type"
-            path="identification.primary.identifier_type"
-            :rule="{
-              message: 'Please select a identifier type',
-              required: true,
-              trigger: ['blur', 'change'],
-            }"
-          >
-            <n-select
-              v-model:value="moduleData.identification.primary.identifier_type"
-              placeholder="NIH Grant Number"
-              clearable
-              :options="FORM_JSON.studyMetadataIdentificationPrimaryIdentifierTypeOptions"
-            />
-          </n-form-item>
-
-          <n-form-item
-            label="Domain"
-            path="identification.primary.identifier_domain"
-            placeholder="ClinicalTrials.gov"
-            :rule="{
-              message: 'Please enter a domain',
-              required:
-                moduleData.identification.primary.identifier_type &&
-                (moduleData.identification.primary.identifier_type ===
-                  'Other Grant/Funding Number' ||
-                  moduleData.identification.primary.identifier_type === 'Other Identifier' ||
-                  moduleData.identification.primary.identifier_type === 'Registry Identifier'),
-              trigger: ['blur', 'input'],
-            }"
-          >
-            <n-input
-              v-model:value="moduleData.identification.primary.identifier_domain"
-              placeholder="Add a domain"
-              clearable
-            />
-          </n-form-item>
-
-          <n-form-item label="Link" path="identification.primary.identifier_link">
-            <n-input
-              v-model:value="moduleData.identification.primary.identifier_link"
-              placeholder="https://clinicaltrials.gov"
-              clearable
-            />
-          </n-form-item>
-
-          <n-divider />
-
-          <h3>Alternative Identifiers</h3>
-
-          <p class="pb-8 pt-2">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
-            voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum
-          </p>
-
-          <CollapsibleCard
-            v-for="(item, index) in moduleData.identification.secondary"
-            :key="item.id"
-            class="mb-5 shadow-md"
-            :title="`Alternative Identifier ${index + 1}`"
-            bordered
-          >
-            <template #header-extra>
-              <n-popconfirm @positive-click="removeSecondaryIdentifier(item.id)">
-                <template #trigger>
-                  <n-button type="error" secondary>
-                    <template #icon>
-                      <f-icon icon="ep:delete" />
+                        Remove Keyword
+                      </n-button>
                     </template>
 
-                    Remove Identifier
-                  </n-button>
+                    Are you sure you want to remove this Keyword?
+                  </n-popconfirm>
                 </template>
 
-                Are you sure you want to remove this identifier?
-              </n-popconfirm>
-            </template>
+                <n-form-item
+                  label="Name"
+                  :path="`keywords[${index}].name`"
+                  :rule="{
+                    message: 'Please enter a name',
+                    required: true,
+                    trigger: ['blur', 'change'],
+                  }"
+                >
+                  <n-input
+                    v-model:value="item.name"
+                    placeholder="Artificial intelligence"
+                    clearable
+                  />
+                </n-form-item>
 
-            <n-form-item
-              label="Identifier"
-              :path="`identification.secondary[${index}].identifier`"
-              :rule="{
-                message: 'Please enter a study identifier',
-                required: true,
-                trigger: ['blur', 'input'],
-              }"
-            >
-              <n-input v-model:value="item.identifier" placeholder="1-R01-MH99999-01A1" clearable />
-            </n-form-item>
+                <n-form-item
+                  label="Identifier"
+                  :path="`keywords[${index}].classification_code`"
+                  :rule="{
+                    message: 'Please enter an identifier',
+                    required: item.scheme,
+                    trigger: ['blur', 'change'],
+                  }"
+                >
+                  <n-input
+                    v-model:value="item.classification_code"
+                    placeholder="D001185"
+                    clearable
+                  />
+                </n-form-item>
 
-            <n-form-item
-              label="Type"
-              :path="`identification.secondary[${index}].identifier_type`"
-              :rule="{
-                message: 'Please select a study type',
-                required: true,
-                trigger: ['blur', 'change'],
-              }"
-            >
-              <n-select
-                v-model:value="item.identifier_type"
-                placeholder="Other Grant/Funding Number"
-                clearable
-                :options="FORM_JSON.studyMetadataIdentificationPrimaryIdentifierTypeOptions"
-              />
-            </n-form-item>
+                <n-form-item
+                  label="Identifier Scheme"
+                  :path="`keywords[${index}].scheme`"
+                  :rule="{
+                    message: 'Please enter a scheme',
+                    required: item.classification_code,
+                    trigger: ['blur', 'change'],
+                  }"
+                >
+                  <n-input v-model:value="item.scheme" placeholder="MeSH" clearable />
+                </n-form-item>
 
-            <n-form-item
-              label="Domain"
-              :path="`identification.secondary[${index}].identifier_domain`"
-              :rule="{
-                message: 'Please enter a domain',
-                required:
-                  item.identifier_type &&
-                  (item.identifier_type === 'Other Grant/Funding Number' ||
-                    item.identifier_type === 'Other Identifier' ||
-                    item.identifier_type === 'Registry Identifier'),
-                trigger: ['blur', 'input'],
-              }"
-            >
-              <n-input
-                v-model:value="item.identifier_domain"
+                <n-form-item label="Scheme URI" :path="`keywords[${index}].scheme_uri`">
+                  <n-input
+                    v-model:value="item.scheme_uri"
+                    placeholder="ttps://meshb.nlm.nih.gov/"
+                    clearable
+                  />
+                </n-form-item>
+
+                <n-form-item label="Keyword URI" :path="`keywords[${index}].keyword_uri`">
+                  <n-input
+                    v-model:value="item.keyword_uri"
+                    placeholder="https://meshb.nlm.nih.gov/record/ui?ui=D001185"
+                    clearable
+                  />
+                </n-form-item>
+              </CollapsibleCard>
+
+              <n-button class="my-10 w-full" dashed type="success" @click="addKeyword">
+                <template #icon>
+                  <f-icon icon="gridicons:create" />
+                </template>
+
+                Add a Keyword
+              </n-button>
+            </n-card>
+
+            <n-divider></n-divider>
+
+            <h2 class="conditions py-3">Conditions</h2>
+
+            <n-card class="rounded-xl bg-gray-50">
+              <CollapsibleCard
+                v-for="(item, index) in moduleData.conditions"
+                :key="item.id"
+                class="mb-5 shadow-md"
+                :title="item.name || `Condition ${index + 1}`"
+                bordered
+              >
+                <template #header-extra>
+                  <n-popconfirm @positive-click="removeCondition(item.id)">
+                    <template #trigger>
+                      <n-button type="error" secondary>
+                        <template #icon>
+                          <f-icon icon="ep:delete" />
+                        </template>
+
+                        Remove Condition
+                      </n-button>
+                    </template>
+
+                    Are you sure you want to remove this Condition?
+                  </n-popconfirm>
+                </template>
+
+                <n-form-item
+                  label="Name"
+                  :path="`conditions[${index}].name`"
+                  :rule="{
+                    message: 'Please enter a name',
+                    required: true,
+                    trigger: ['blur', 'change'],
+                  }"
+                >
+                  <n-input v-model:value="item.name" placeholder="Diabetes mellitus" clearable />
+                </n-form-item>
+
+                <n-form-item
+                  label="Identifier"
+                  :path="`conditions[${index}].classification_code`"
+                  :rule="{
+                    message: 'Please enter an identifier',
+                    required: item.scheme,
+                    trigger: ['blur', 'change'],
+                  }"
+                >
+                  <n-input
+                    v-model:value="item.classification_code"
+                    placeholder="45636-8"
+                    clearable
+                  />
+                </n-form-item>
+
+                <n-form-item
+                  label="Identifier Scheme"
+                  :path="`conditions[${index}].scheme`"
+                  :rule="{
+                    message: 'Please enter a scheme',
+                    required: item.classification_code,
+                    trigger: ['blur', 'change'],
+                  }"
+                >
+                  <n-input v-model:value="item.scheme" placeholder="LOINC" clearable />
+                </n-form-item>
+
+                <n-form-item label="Scheme URI" :path="`conditions[${index}].scheme_uri`">
+                  <n-input
+                    v-model:value="item.scheme_uri"
+                    placeholder="https://loinc.org"
+                    clearable
+                  />
+                </n-form-item>
+
+                <n-form-item label="Condition URI" :path="`conditions[${index}].condition_uri`">
+                  <n-input
+                    v-model:value="item.condition_uri"
+                    placeholder="https://loinc.org/45636-8"
+                    clearable
+                  />
+                </n-form-item>
+              </CollapsibleCard>
+
+              <n-button class="my-10 w-full" dashed type="success" @click="addCondition">
+                <template #icon>
+                  <f-icon icon="gridicons:create" />
+                </template>
+
+                Add a Condition
+              </n-button>
+            </n-card>
+
+            <n-divider></n-divider>
+
+            <h2 class="identification py-3">Identification</h2>
+
+            <n-card class="rounded-xl bg-gray-50">
+              <h3>Primary Identifier</h3>
+
+              <p class="pb-8 pt-2">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
+                voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum
+              </p>
+
+              <n-form-item label="Identifier" path="identification.primary.identifier">
+                <n-input
+                  v-model:value="moduleData.identification.primary.identifier"
+                  placeholder="1-R01-MH99999-01A1"
+                  clearable
+                />
+              </n-form-item>
+
+              <n-form-item
+                label="Type"
+                path="identification.primary.identifier_type"
+                :rule="{
+                  message: 'Please select a identifier type',
+                  required: true,
+                  trigger: ['blur', 'change'],
+                }"
+              >
+                <n-select
+                  v-model:value="moduleData.identification.primary.identifier_type"
+                  placeholder="NIH Grant Number"
+                  clearable
+                  :options="FORM_JSON.studyMetadataIdentificationPrimaryIdentifierTypeOptions"
+                />
+              </n-form-item>
+
+              <n-form-item
+                label="Domain"
+                path="identification.primary.identifier_domain"
                 placeholder="ClinicalTrials.gov"
-                clearable
-              />
-            </n-form-item>
+                :rule="{
+                  message: 'Please enter a domain',
+                  required:
+                    moduleData.identification.primary.identifier_type &&
+                    (moduleData.identification.primary.identifier_type ===
+                      'Other Grant/Funding Number' ||
+                      moduleData.identification.primary.identifier_type === 'Other Identifier' ||
+                      moduleData.identification.primary.identifier_type === 'Registry Identifier'),
+                  trigger: ['blur', 'input'],
+                }"
+              >
+                <n-input
+                  v-model:value="moduleData.identification.primary.identifier_domain"
+                  placeholder="Add a domain"
+                  clearable
+                />
+              </n-form-item>
 
-            <n-form-item label="Link" :path="`identification.secondary[${index}].identifier_link`">
-              <n-input
-                v-model:value="item.identifier_link"
-                placeholder="https://clinicaltrials.gov"
-                clearable
-              />
-            </n-form-item>
-          </CollapsibleCard>
+              <n-form-item label="Link" path="identification.primary.identifier_link">
+                <n-input
+                  v-model:value="moduleData.identification.primary.identifier_link"
+                  placeholder="https://clinicaltrials.gov"
+                  clearable
+                />
+              </n-form-item>
 
-          <n-button class="my-10 w-full" dashed type="success" @click="addSecondaryIdentifier">
-            <template #icon>
-              <f-icon icon="gridicons:create" />
-            </template>
+              <n-divider />
 
-            Add an alternative identifier
-          </n-button>
-        </n-card>
+              <h3>Alternative Identifiers</h3>
 
-        <div class="flex justify-start pt-8">
-          <n-button
-            size="large"
-            type="primary"
-            :disabled="studyStore.currentStudyRole === 'viewer'"
-            @click="saveMetadata"
-            :loading="loading"
-          >
-            <template #icon>
-              <f-icon icon="material-symbols:save" />
-            </template>
+              <p class="pb-8 pt-2">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
+                voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum
+              </p>
 
-            Save Metadata
-          </n-button>
-        </div>
-      </n-form>
-    </FadeTransition>
+              <CollapsibleCard
+                v-for="(item, index) in moduleData.identification.secondary"
+                :key="item.id"
+                class="mb-5 shadow-md"
+                :title="`Alternative Identifier ${index + 1}`"
+                bordered
+              >
+                <template #header-extra>
+                  <n-popconfirm @positive-click="removeSecondaryIdentifier(item.id)">
+                    <template #trigger>
+                      <n-button type="error" secondary>
+                        <template #icon>
+                          <f-icon icon="ep:delete" />
+                        </template>
+
+                        Remove Identifier
+                      </n-button>
+                    </template>
+
+                    Are you sure you want to remove this identifier?
+                  </n-popconfirm>
+                </template>
+
+                <n-form-item
+                  label="Identifier"
+                  :path="`identification.secondary[${index}].identifier`"
+                  :rule="{
+                    message: 'Please enter a study identifier',
+                    required: true,
+                    trigger: ['blur', 'input'],
+                  }"
+                >
+                  <n-input
+                    v-model:value="item.identifier"
+                    placeholder="1-R01-MH99999-01A1"
+                    clearable
+                  />
+                </n-form-item>
+
+                <n-form-item
+                  label="Type"
+                  :path="`identification.secondary[${index}].identifier_type`"
+                  :rule="{
+                    message: 'Please select a study type',
+                    required: true,
+                    trigger: ['blur', 'change'],
+                  }"
+                >
+                  <n-select
+                    v-model:value="item.identifier_type"
+                    placeholder="Other Grant/Funding Number"
+                    clearable
+                    :options="FORM_JSON.studyMetadataIdentificationPrimaryIdentifierTypeOptions"
+                  />
+                </n-form-item>
+
+                <n-form-item
+                  label="Domain"
+                  :path="`identification.secondary[${index}].identifier_domain`"
+                  :rule="{
+                    message: 'Please enter a domain',
+                    required:
+                      item.identifier_type &&
+                      (item.identifier_type === 'Other Grant/Funding Number' ||
+                        item.identifier_type === 'Other Identifier' ||
+                        item.identifier_type === 'Registry Identifier'),
+                    trigger: ['blur', 'input'],
+                  }"
+                >
+                  <n-input
+                    v-model:value="item.identifier_domain"
+                    placeholder="ClinicalTrials.gov"
+                    clearable
+                  />
+                </n-form-item>
+
+                <n-form-item
+                  label="Link"
+                  :path="`identification.secondary[${index}].identifier_link`"
+                >
+                  <n-input
+                    v-model:value="item.identifier_link"
+                    placeholder="https://clinicaltrials.gov"
+                    clearable
+                  />
+                </n-form-item>
+              </CollapsibleCard>
+
+              <n-button class="my-10 w-full" dashed type="success" @click="addSecondaryIdentifier">
+                <template #icon>
+                  <f-icon icon="gridicons:create" />
+                </template>
+
+                Add an alternative identifier
+              </n-button>
+            </n-card>
+
+            <div class="flex justify-start pt-8">
+              <n-button
+                size="large"
+                type="primary"
+                :disabled="studyStore.currentStudyRole === 'viewer'"
+                @click="saveMetadata"
+                :loading="loading"
+              >
+                <template #icon>
+                  <f-icon icon="material-symbols:save" />
+                </template>
+
+                Save Metadata
+              </n-button>
+            </div>
+          </n-form>
+        </FadeTransition>
+      </n-scrollbar>
+    </div>
   </main>
 </template>
