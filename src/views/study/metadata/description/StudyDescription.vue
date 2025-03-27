@@ -325,20 +325,20 @@ const scrollToSection = (key: string) => {
 
     <n-divider />
 
-    <div class="flex flex-row-reverse max-lg:flex-col">
-      <div class="w-[300px] max-w-xl max-lg:hidden lg:block">
-        <n-menu :options="menuOptions" @update:value="scrollToSection" class="w-[100%]" />
-      </div>
+    <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
+      <div class="flex flex-row-reverse max-lg:flex-col">
+        <div class="w-[300px] max-w-xl max-lg:hidden lg:block">
+          <n-menu :options="menuOptions" @update:value="scrollToSection" class="w-[100%]" />
+        </div>
 
-      <div class="w-full lg:hidden">
-        <n-collapse accordion class="max-w-xxl rounded-md bg-gray-100 py-1 lg:hidden">
-          <n-collapse-item title="On this page" name="menu">
-            <n-menu class="metadata" :options="menuOptions" @update:value="scrollToSection" />
-          </n-collapse-item>
-        </n-collapse>
-      </div>
+        <div class="w-full lg:hidden">
+          <n-collapse accordion class="max-w-xxl rounded-md bg-gray-100 py-1 lg:hidden">
+            <n-collapse-item title="On this page" name="menu">
+              <n-menu class="metadata" :options="menuOptions" @update:value="scrollToSection" />
+            </n-collapse-item>
+          </n-collapse>
+        </div>
 
-      <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
         <FadeTransition>
           <LottieLoader v-if="responseLoading" />
 
@@ -775,7 +775,7 @@ const scrollToSection = (key: string) => {
             </div>
           </n-form>
         </FadeTransition>
-      </n-scrollbar>
-    </div>
+      </div>
+    </n-scrollbar>
   </main>
 </template>
