@@ -178,7 +178,7 @@ const menuOptions: MenuOption[] = [
   { key: "gender", label: "Gender" },
   { key: "age", label: "Age" },
   { key: "eligibility-criteria", label: "Eligibility Criteria" },
-  { key: "observational-sStudies", label: "Observational Studies" },
+  { key: "observational-studies", label: "Observational Studies" },
 ];
 
 const scrollToSection = (key: string) => {
@@ -201,8 +201,8 @@ const scrollToSection = (key: string) => {
     <n-divider />
 
     <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
-      <div class="flex flex-row-reverse max-lg:flex-col">
-        <div class="w-[300px] max-w-xl max-lg:hidden lg:block">
+      <div class="flex flex-row-reverse justify-between max-lg:flex-col">
+        <div class="max-2xl:w-[400px] max-lg:hidden lg:block 2xl:w-[250px]">
           <n-menu :options="menuOptions" @update:value="scrollToSection" class="w-[100%]" />
         </div>
 
@@ -254,7 +254,7 @@ const scrollToSection = (key: string) => {
               label-placement="top"
               class="pr-4"
             >
-              <h3>Gender</h3>
+              <h3 class="gender">Gender</h3>
 
               <p class="pb-8 pt-2">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
@@ -299,7 +299,7 @@ const scrollToSection = (key: string) => {
 
               <n-divider />
 
-              <h3>Age</h3>
+              <h3 class="age">Age</h3>
 
               <p class="pb-8 pt-2">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
@@ -376,7 +376,7 @@ const scrollToSection = (key: string) => {
                 <n-divider />
               </div>
 
-              <h3>Eligibility Criteria</h3>
+              <h3 class="eligibility-criteria">Eligibility Criteria</h3>
 
               <p class="pb-8 pt-2">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
@@ -454,7 +454,7 @@ const scrollToSection = (key: string) => {
               <div v-if="moduleData.study_type === 'Observational'">
                 <n-divider />
 
-                <h3>Observational Studies</h3>
+                <h3 class="observational-studies">Observational Studies</h3>
 
                 <p class="pb-8 pt-2">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
