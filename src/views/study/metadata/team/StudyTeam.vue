@@ -230,7 +230,9 @@ const scrollToSection = (key: string) => {
     <n-divider />
 
     <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
-      <div class="flex flex-row-reverse justify-between max-lg:flex-col">
+      <LottieLoader v-if="responseLoading" />
+
+      <div v-else class="flex flex-row-reverse max-lg:flex-col">
         <div class="w-[300px] max-w-xl max-lg:hidden lg:block">
           <n-menu
             :options="menuOptions"
@@ -248,15 +250,13 @@ const scrollToSection = (key: string) => {
         </div>
 
         <FadeTransition>
-          <LottieLoader v-if="responseLoading" />
-
           <n-form
             ref="formRef"
-            v-else
             :disabled="studyStore.currentStudyRole === 'viewer'"
             :model="moduleData"
             size="small"
             label-placement="top"
+            class="w-full"
           >
             <h1 class="py-4">Collaboration</h1>
 

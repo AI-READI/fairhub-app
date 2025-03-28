@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { MenuOption } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
@@ -152,17 +151,17 @@ const saveMetadata = (e: MouseEvent) => {
   });
 };
 
-const scrollbarRef = ref<any>(null);
-
-const menuOptions: MenuOption[] = [
-  { key: "primary-Identifier", label: "Primary Identifier" },
-  { key: "alternative-identifiers", label: "Alternative Identifiers" },
-];
-
-const scrollToSection = (key: string) => {
-  const section = document.querySelector(`.${key}`) as HTMLElement;
-  scrollbarRef.value?.scrollTo({ behavior: "smooth", top: section.offsetTop });
-};
+// const scrollbarRef = ref<any>(null);
+//
+// const menuOptions: MenuOption[] = [
+//   { key: "primary-Identifier", label: "Primary Identifier" },
+//   { key: "alternative-identifiers", label: "Alternative Identifiers" },
+// ];
+//
+// const scrollToSection = (key: string) => {
+//   const section = document.querySelector(`.${key}`) as HTMLElement;
+//   scrollbarRef.value?.scrollTo({ behavior: "smooth", top: section.offsetTop });
+// };
 </script>
 
 <template>

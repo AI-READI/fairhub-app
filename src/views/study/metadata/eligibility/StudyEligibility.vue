@@ -204,7 +204,7 @@ const scrollToSection = (key: string) => {
       <LottieLoader v-if="responseLoading" />
 
       <div v-else class="flex flex-row-reverse justify-between max-lg:flex-col">
-        <div class="max-2xl:w-[400px] max-lg:hidden lg:block 2xl:w-[250px]">
+        <div class="max-2xl:w-[500px] max-lg:hidden lg:block 2xl:w-[250px]">
           <n-menu :options="menuOptions" @update:value="scrollToSection" class="w-[100%]" />
         </div>
 
@@ -254,7 +254,7 @@ const scrollToSection = (key: string) => {
               label-placement="top"
               class="pr-4"
             >
-              <h3 class="gender">Gender</h3>
+              <h3 class="gender pt-4">Gender</h3>
 
               <p class="pb-8 pt-2">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia

@@ -327,7 +327,7 @@ const scrollToSection = (key: string) => {
 
     <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
       <div class="flex flex-row-reverse max-lg:flex-col">
-        <div class="w-[300px] max-w-xl max-lg:hidden lg:block">
+        <div class="max-2xl:w-[300px] max-lg:hidden lg:block 2xl:w-[250px]">
           <n-menu
             :options="menuOptions"
             @update:value="scrollToSection"
@@ -354,6 +354,7 @@ const scrollToSection = (key: string) => {
             label-placement="top"
             :disabled="studyStore.currentStudyRole === 'viewer'"
             v-else
+            class="w-full"
           >
             <h2 class="description py-4">Description</h2>
 

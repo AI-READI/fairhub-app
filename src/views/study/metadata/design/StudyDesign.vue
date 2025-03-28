@@ -330,8 +330,10 @@ const scrollToSection = (key: string) => {
     <n-divider />
 
     <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
-      <div class="flex flex-row-reverse max-lg:flex-col">
-        <div class="max-2xl:w-[400px] max-lg:hidden lg:block 2xl:w-[250px]">
+      <LottieLoader v-if="responseLoading" />
+
+      <div v-else class="flex flex-row-reverse max-lg:flex-col">
+        <div class="max-2xl:w-[300px] max-lg:hidden lg:block 2xl:w-[250px]">
           <n-menu
             :options="menuOptions"
             @update:value="scrollToSection"
@@ -348,8 +350,6 @@ const scrollToSection = (key: string) => {
         </div>
 
         <FadeTransition>
-          <LottieLoader v-if="responseLoading" />
-
           <n-form
             ref="formRef"
             :model="moduleData"
@@ -357,10 +357,9 @@ const scrollToSection = (key: string) => {
             size="large"
             :disabled="studyStore.currentStudyRole === 'viewer'"
             label-placement="top"
-            class="pr-4"
-            v-else
+            class="w-full pr-4"
           >
-            <h3 class="study-type">Study Type</h3>
+            <h3 class="study-type pt-4">Study Type</h3>
 
             <p class="pb-8 pt-2">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
