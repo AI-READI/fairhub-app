@@ -308,7 +308,7 @@ const scrollToSection = (key: string) => {
             label-placement="top"
             :disabled="studyStore.currentStudyRole === 'viewer'"
           >
-            <h2 class="py-4">Titles</h2>
+            <h2 class="titles py-4">Titles</h2>
 
             <n-card class="bg-gray-50">
               <div
@@ -391,7 +391,7 @@ const scrollToSection = (key: string) => {
 
             <n-divider />
 
-            <h2 class="py-4">Description</h2>
+            <h2 class="description py-4">Description</h2>
 
             <n-card class="bg-gray-50">
               <div
@@ -473,7 +473,7 @@ const scrollToSection = (key: string) => {
               </n-button>
             </n-card>
 
-            <h2 class="py-4">Dates</h2>
+            <h2 class="dates py-4">Dates</h2>
 
             <n-card class="bg-gray-50">
               <CollapsibleCard

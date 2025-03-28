@@ -159,7 +159,7 @@ const saveMetadata = (e: MouseEvent) => {
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
       title="Related Identifiers"
-      description="Identifiers of related resources."
+      description=""
       linkName="dataset:overview"
       :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
     />

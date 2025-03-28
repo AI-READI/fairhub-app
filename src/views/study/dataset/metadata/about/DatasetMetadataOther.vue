@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FormInst } from "naive-ui";
+import type { FormInst, MenuOption } from "naive-ui";
 
 import LANGUAGES_JSON from "@/assets/data/languages.json";
 import { useStudyStore } from "@/stores/study";
@@ -131,184 +131,214 @@ const saveMetadata = (e: MouseEvent) => {
     }
   });
 };
+const scrollbarRef = ref<any>(null);
+
+const menuOptions: MenuOption[] = [
+  { key: "resource-type", label: "Resource Type" },
+  { key: "language", label: "Language" },
+  { key: "size", label: "Size" },
+  { key: "format", label: "Format" },
+  { key: "standards-followed", label: "Standards Followed" },
+  { key: "acknowledgement", label: "Acknowledgement" },
+];
+
+const scrollToSection = (key: string) => {
+  const section = document.querySelector(`.${key}`) as HTMLElement;
+  scrollbarRef.value?.scrollTo({ behavior: "smooth", top: section.offsetTop });
+};
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
       title="Additional Metadata"
-      description="Some metadata that didn't really fit in other sections."
+      description=""
       linkName="dataset:overview"
       :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
     />
 
-    <FadeTransition>
+    <n-divider />
+
+    <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
       <LottieLoader v-if="responseLoading" />
 
-      <n-form
-        ref="formRef"
-        :model="moduleData"
-        :rules="rules"
-        size="large"
-        label-placement="top"
-        class="pr-4"
-        :disabled="studyStore.currentStudyRole === 'viewer'"
-        v-else
-      >
-        <n-divider />
+      <div v-else class="flex flex-row-reverse justify-between max-lg:flex-col">
+        <div class="max-2xl:w-[400px] max-lg:hidden lg:block 2xl:w-[250px]">
+          <n-menu :options="menuOptions" @update:value="scrollToSection" class="w-[100%]" />
+        </div>
 
-        <h3>Resource Type</h3>
+        <div class="w-full lg:hidden">
+          <n-collapse accordion class="max-w-xxl rounded-md bg-gray-100 py-1 lg:hidden">
+            <n-collapse-item title="On this page" name="menu">
+              <n-menu class="metadata" :options="menuOptions" @update:value="scrollToSection" />
+            </n-collapse-item>
+          </n-collapse>
+        </div>
 
-        <p class="pb-8 pt-2">
-          The recommended content is a single term of some detail about the domain or content of the
-          dataset so that a pair can be formed with the type subproperty. For example, a resource
-          name of `Diabetes` yields `Diabetes dataset`.
-        </p>
-
-        <n-form-item label="Name" path="resource_type">
-          <n-input
-            v-model:value="moduleData.resource_type"
-            placeholder="Diabetes"
-            clearable
-            :input-props="{ 'data-1p-ignore': true }"
-          />
-        </n-form-item>
-
-        <n-form-item label="Type">
-          <n-input value="Dataset" disabled clearable />
-        </n-form-item>
-
-        <n-divider />
-
-        <h3>Language</h3>
-
-        <p class="pb-8 pt-2">The primary language used in the dataset.</p>
-
-        <n-form-item label="Language" path="Language">
-          <n-select
-            v-model:value="moduleData.language"
-            placeholder="Not Known"
-            clearable
-            filterable
-            :options="languageOptions"
-          />
-        </n-form-item>
-
-        <n-divider />
-
-        <h3>Size</h3>
-
-        <p class="pb-8 pt-2">
-          Size (e.g., bytes, pages, inches, etc.) or duration (extent), e.g., hours, minutes, days,
-          etc., of a resource
-        </p>
-
-        <n-dynamic-input
-          v-model:value="moduleData.size"
-          #="{ index: idx, value }"
-          :disabled="studyStore.currentStudyRole === 'viewer'"
-          :on-create="addEntryToSize"
-        >
-          <n-form-item
-            ignore-path-change
-            :show-feedback="false"
-            :show-label="false"
-            :path="`size[${idx}]`"
-            class="w-full"
-          >
-            <n-input
-              v-model:value="moduleData.size[idx]"
-              placeholder="45 minutes"
-              @keydown.enter.prevent
-            />
-          </n-form-item>
-        </n-dynamic-input>
-
-        <n-divider />
-
-        <h3>Format</h3>
-
-        <p class="pb-8 pt-2">
-          Technical format of the data files in the dataset. Use file extension or MIME type where
-          possible, e.g., PDF, XML, MPG or application/pdf, text/xml, video/mpeg.
-        </p>
-
-        <n-dynamic-input
-          v-model:value="moduleData.format"
-          :disabled="studyStore.currentStudyRole === 'viewer'"
-          #="{ index: idx, value }"
-          :on-create="addEntryToFormat"
-        >
-          <n-form-item
-            ignore-path-change
-            :show-feedback="false"
-            :show-label="false"
-            :path="`format[${idx}]`"
-            class="w-full"
-          >
-            <n-input
-              v-model:value="moduleData.format[idx]"
-              placeholder="CSV"
-              @keydown.enter.prevent
-            />
-          </n-form-item>
-        </n-dynamic-input>
-
-        <n-divider />
-
-        <h3>Standards Followed</h3>
-
-        <p class="pb-8 pt-2">
-          Mention the standards followed to structure the dataset, format the data files, etc. Make
-          sure to include identifiers of the standards when available and/or link to the associated
-          documentation.
-        </p>
-
-        <n-form-item label="Name" path="standards_followed">
-          <n-input
-            v-model:value="moduleData.standards_followed"
-            placeholder="Lorem "
-            clearable
-            type="textarea"
-          />
-        </n-form-item>
-
-        <n-divider />
-
-        <h3>Acknowledgement</h3>
-
-        <p class="pb-8 pt-2">
-          Brief description of how to acknowledge the dataset, in APA format (refer to the
-          ACKNOWLEDGEMENT.txt file for additional details).
-        </p>
-
-        <n-form-item label="Name" path="acknowledgement">
-          <n-input
-            v-model:value="moduleData.acknowledgement"
-            placeholder="Lorem "
-            clearable
-            type="textarea"
-          />
-        </n-form-item>
-
-        <n-divider />
-
-        <div class="flex justify-start">
-          <n-button
+        <FadeTransition>
+          <n-form
+            ref="formRef"
+            :model="moduleData"
+            :rules="rules"
             size="large"
-            type="primary"
-            @click="saveMetadata"
-            :loading="submitLoading"
+            label-placement="top"
+            class="w-full pr-4"
             :disabled="studyStore.currentStudyRole === 'viewer'"
           >
-            <template #icon>
-              <f-icon icon="material-symbols:save" />
-            </template>
+            <h3 class="resource-type">Resource Type</h3>
 
-            Save Metadata
-          </n-button>
-        </div>
-      </n-form>
-    </FadeTransition>
+            <p class="pb-8 pt-2">
+              The recommended content is a single term of some detail about the domain or content of
+              the dataset so that a pair can be formed with the type subproperty. For example, a
+              resource name of `Diabetes` yields `Diabetes dataset`.
+            </p>
+
+            <n-form-item label="Name" path="resource_type">
+              <n-input
+                v-model:value="moduleData.resource_type"
+                placeholder="Diabetes"
+                clearable
+                :input-props="{ 'data-1p-ignore': true }"
+              />
+            </n-form-item>
+
+            <n-form-item label="Type">
+              <n-input value="Dataset" disabled clearable />
+            </n-form-item>
+
+            <n-divider />
+
+            <h3 class="language">Language</h3>
+
+            <p class="pb-8 pt-2">The primary language used in the dataset.</p>
+
+            <n-form-item label="Language" path="Language">
+              <n-select
+                v-model:value="moduleData.language"
+                placeholder="Not Known"
+                clearable
+                filterable
+                :options="languageOptions"
+              />
+            </n-form-item>
+
+            <n-divider />
+
+            <h3 class="size">Size</h3>
+
+            <p class="pb-8 pt-2">
+              Size (e.g., bytes, pages, inches, etc.) or duration (extent), e.g., hours, minutes,
+              days, etc., of a resource
+            </p>
+
+            <n-dynamic-input
+              v-model:value="moduleData.size"
+              #="{ index: idx, value }"
+              :disabled="studyStore.currentStudyRole === 'viewer'"
+              :on-create="addEntryToSize"
+            >
+              <n-form-item
+                ignore-path-change
+                :show-feedback="false"
+                :show-label="false"
+                :path="`size[${idx}]`"
+                class="w-full"
+              >
+                <n-input
+                  v-model:value="moduleData.size[idx]"
+                  placeholder="45 minutes"
+                  @keydown.enter.prevent
+                />
+              </n-form-item>
+            </n-dynamic-input>
+
+            <n-divider />
+
+            <h3 class="format">Format</h3>
+
+            <p class="pb-8 pt-2">
+              Technical format of the data files in the dataset. Use file extension or MIME type
+              where possible, e.g., PDF, XML, MPG or application/pdf, text/xml, video/mpeg.
+            </p>
+
+            <n-dynamic-input
+              v-model:value="moduleData.format"
+              :disabled="studyStore.currentStudyRole === 'viewer'"
+              #="{ index: idx, value }"
+              :on-create="addEntryToFormat"
+            >
+              <n-form-item
+                ignore-path-change
+                :show-feedback="false"
+                :show-label="false"
+                :path="`format[${idx}]`"
+                class="w-full"
+              >
+                <n-input
+                  v-model:value="moduleData.format[idx]"
+                  placeholder="CSV"
+                  @keydown.enter.prevent
+                />
+              </n-form-item>
+            </n-dynamic-input>
+
+            <n-divider />
+
+            <h3 class="standards-followed">Standards Followed</h3>
+
+            <p class="pb-8 pt-2">
+              Mention the standards followed to structure the dataset, format the data files, etc.
+              Make sure to include identifiers of the standards when available and/or link to the
+              associated documentation.
+            </p>
+
+            <n-form-item label="Name" path="standards_followed">
+              <n-input
+                v-model:value="moduleData.standards_followed"
+                placeholder="Lorem "
+                clearable
+                type="textarea"
+              />
+            </n-form-item>
+
+            <n-divider />
+
+            <h3 class="acknowledgement">Acknowledgement</h3>
+
+            <p class="pb-8 pt-2">
+              Brief description of how to acknowledge the dataset, in APA format (refer to the
+              ACKNOWLEDGEMENT.txt file for additional details).
+            </p>
+
+            <n-form-item label="Name" path="acknowledgement">
+              <n-input
+                v-model:value="moduleData.acknowledgement"
+                placeholder="Lorem "
+                clearable
+                type="textarea"
+              />
+            </n-form-item>
+
+            <n-divider />
+
+            <div class="flex justify-start">
+              <n-button
+                size="large"
+                type="primary"
+                @click="saveMetadata"
+                :loading="submitLoading"
+                :disabled="studyStore.currentStudyRole === 'viewer'"
+              >
+                <template #icon>
+                  <f-icon icon="material-symbols:save" />
+                </template>
+
+                Save Metadata
+              </n-button>
+            </div>
+          </n-form>
+        </FadeTransition>
+      </div>
+    </n-scrollbar>
   </main>
 </template>

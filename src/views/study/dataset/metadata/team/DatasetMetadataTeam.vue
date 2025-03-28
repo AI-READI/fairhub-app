@@ -325,8 +325,8 @@ const scrollbarRef = ref<any>(null);
 const menuOptions: MenuOption[] = [
   { key: "creators", label: "Creators" },
   { key: "contributors", label: "Contributors" },
-  { key: "funders", label: "Funders" },
   { key: "managing-organization", label: "Managing organization" },
+  { key: "funders", label: "Funders" },
 ];
 
 const scrollToSection = (key: string) => {

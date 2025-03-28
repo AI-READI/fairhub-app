@@ -244,7 +244,7 @@ const scrollToSection = (key: string) => {
             size="small"
             :disabled="studyStore.currentStudyRole === 'viewer'"
             label-placement="top"
-            class="w-full pr-4"
+            class="w-full"
           >
             <h2 class="access pb-4">Access</h2>
 

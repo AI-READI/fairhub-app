@@ -225,7 +225,7 @@ const scrollToSection = (key: string) => {
       <LottieLoader v-if="getLoading" />
 
       <div v-else class="flex flex-row-reverse max-lg:flex-col">
-        <div class="max-2xl:w-[400px] max-lg:hidden lg:block 2xl:w-[250px]">
+        <div class="w-[250px] max-lg:hidden lg:block">
           <n-menu
             :options="menuOptions"
             @update:value="scrollToSection"
@@ -248,7 +248,7 @@ const scrollToSection = (key: string) => {
             size="small"
             :disabled="studyStore.currentStudyRole === 'viewer'"
             label-placement="top"
-            class="w-full pr-4"
+            class="w-full"
           >
             <h2 class="consent pb-4">Consent</h2>
 
