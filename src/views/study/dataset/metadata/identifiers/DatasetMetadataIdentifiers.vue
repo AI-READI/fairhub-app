@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MenuOption } from "naive-ui";
+import type { MenuOption } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
