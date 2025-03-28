@@ -230,15 +230,19 @@ const scrollToSection = (key: string) => {
     <n-divider />
 
     <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
-      <div class="flex flex-row-reverse max-lg:flex-col">
-        <div class="w-[400px] max-w-xl max-lg:hidden lg:block">
-          <n-menu :options="menuOptions" @update:value="scrollToSection" class="w-[100%]" />
+      <div class="flex flex-row-reverse justify-between max-lg:flex-col">
+        <div class="w-[300px] max-w-xl max-lg:hidden lg:block">
+          <n-menu
+            :options="menuOptions"
+            @update:value="scrollToSection"
+            class="metadata w-[100%]"
+          />
         </div>
 
         <div class="w-full lg:hidden">
           <n-collapse accordion class="max-w-xxl rounded-md bg-gray-100 py-1 lg:hidden">
             <n-collapse-item title="On this page" name="menu">
-              <n-menu class="metadata" :options="menuOptions" @update:value="scrollToSection" />
+              <n-menu :options="menuOptions" @update:value="scrollToSection" />
             </n-collapse-item>
           </n-collapse>
         </div>
@@ -249,16 +253,16 @@ const scrollToSection = (key: string) => {
           <n-form
             ref="formRef"
             v-else
+            :disabled="studyStore.currentStudyRole === 'viewer'"
             :model="moduleData"
             size="small"
             label-placement="top"
-            class=""
           >
             <h1 class="py-4">Collaboration</h1>
 
-            <n-card class="rounded-xl bg-gray-50">
-              <h2 class="sponsors pb-8">Sponsors</h2>
+            <h2 class="sponsors pb-8">Sponsors</h2>
 
+            <n-card class="rounded-xl bg-gray-50">
               <n-space vertical size="large" class="pr-6">
                 <h3>Responsible Party</h3>
 

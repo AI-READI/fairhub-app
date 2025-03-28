@@ -328,7 +328,11 @@ const scrollToSection = (key: string) => {
     <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
       <div class="flex flex-row-reverse max-lg:flex-col">
         <div class="w-[300px] max-w-xl max-lg:hidden lg:block">
-          <n-menu :options="menuOptions" @update:value="scrollToSection" class="w-[100%]" />
+          <n-menu
+            :options="menuOptions"
+            @update:value="scrollToSection"
+            class="metadata w-[100%]"
+          />
         </div>
 
         <div class="w-full lg:hidden">
@@ -346,7 +350,7 @@ const scrollToSection = (key: string) => {
             ref="formRef"
             :model="moduleData"
             :rules="rules"
-            size="large"
+            size="small"
             label-placement="top"
             :disabled="studyStore.currentStudyRole === 'viewer'"
             v-else
