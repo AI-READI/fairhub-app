@@ -164,7 +164,11 @@ const scrollToSection = (key: string) => {
 
       <div v-else class="flex flex-row-reverse justify-between max-lg:flex-col">
         <div class="max-2xl:w-[400px] max-lg:hidden lg:block 2xl:w-[250px]">
-          <n-menu :options="menuOptions" @update:value="scrollToSection" class="w-[100%]" />
+          <n-menu
+            :options="menuOptions"
+            @update:value="scrollToSection"
+            class="metadata w-[100%]"
+          />
         </div>
 
         <div class="w-full pb-4 lg:hidden">
@@ -182,7 +186,7 @@ const scrollToSection = (key: string) => {
             :rules="rules"
             size="large"
             label-placement="top"
-            class="w-full pr-4"
+            class="w-full"
             :disabled="studyStore.currentStudyRole === 'viewer'"
           >
             <h3 class="resource-type">Resource Type</h3>

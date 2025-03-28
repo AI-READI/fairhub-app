@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { MenuOption } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
@@ -151,17 +152,17 @@ const saveMetadata = (e: MouseEvent) => {
   });
 };
 
-// const scrollbarRef = ref<any>(null);
-//
-// const menuOptions: MenuOption[] = [
-//   { key: "primary-Identifier", label: "Primary Identifier" },
-//   { key: "alternative-identifiers", label: "Alternative Identifiers" },
-// ];
-//
-// const scrollToSection = (key: string) => {
-//   const section = document.querySelector(`.${key}`) as HTMLElement;
-//   scrollbarRef.value?.scrollTo({ behavior: "smooth", top: section.offsetTop });
-// };
+const scrollbarRef = ref<any>(null);
+
+const menuOptions: MenuOption[] = [
+  { key: "primary-Identifier", label: "Primary Identifier" },
+  { key: "alternative-identifiers", label: "Alternative Identifiers" },
+];
+
+const scrollToSection = (key: string) => {
+  const section = document.querySelector(`.${key}`) as HTMLElement;
+  scrollbarRef.value?.scrollTo({ behavior: "smooth", top: section.offsetTop });
+};
 </script>
 
 <template>
@@ -175,130 +176,152 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <div></div>
-
-    <h3>Primary Identifier</h3>
-
-    <p class="pb-8 pt-2">
-      The primary identifier for your dataset is generated automatically when you publish a version
-      of your dataset. You can find the identifier for the latest published version of your dataset
-      on the
-      <RouterLink :to="{ name: 'dataset:overview', params: routeParams }" class="hover:underline">
-        dataset overview
-      </RouterLink>
-      page.
-    </p>
-
-    <n-divider />
-
-    <h3>Alternative Identifiers</h3>
-
-    <p class="pb-8 pt-2">
-      If you would like to add alternative identifiers for your dataset, you can do so here. These
-      will be attached to your dataset at the time of publication.
-    </p>
-
-    <FadeTransition>
+    <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
       <LottieLoader v-if="getLoading" />
 
-      <n-form
-        v-else
-        ref="formRef"
-        :model="moduleData"
-        size="large"
-        label-placement="top"
-        class="pr-4"
-        :disabled="studyStore.currentStudyRole === 'viewer'"
-      >
-        <div
-          class="flex w-full flex-row items-center justify-between space-x-8"
-          v-for="(item, index) in moduleData.identifiers"
-          :key="index"
-        >
-          <n-space vertical class="w-full">
-            <div class="flex w-full flex-row items-center justify-between space-x-4">
-              <n-form-item
-                label="Name"
-                :path="`identifiers[${index}].identifier`"
-                :rule="{
-                  message: 'Please enter the identifier',
-                  required: true,
-                  trigger: ['blur', 'change'],
-                }"
-                class="w-full"
-              >
-                <n-input
-                  v-model:value="item.identifier"
-                  placeholder="10.1038/s41597-023-02463-x"
-                  clearable
-                />
-              </n-form-item>
-
-              <n-form-item
-                label="Type"
-                :path="`identifiers[${index}].type`"
-                :rule="{
-                  message: 'Please select the type of this identifier',
-                  required: true,
-                  trigger: ['blur', 'input'],
-                }"
-                class="w-full"
-              >
-                <n-select
-                  v-model:value="item.type"
-                  placeholder="DOI"
-                  clearable
-                  :options="FORM_JSON.datasetIdentifierTypeOptions"
-                />
-              </n-form-item>
-            </div>
-          </n-space>
-
-          <n-popconfirm @positive-click="removeIdentifier(item.id)" class="self-justify-end">
-            <template #trigger>
-              <n-button
-                class="ml-0"
-                size="large"
-                type="error"
-                :disabled="studyStore.currentStudyRole === 'viewer'"
-              >
-                <f-icon icon="gridicons:trash" />
-              </n-button>
-            </template>
-
-            Are you sure you want to remove this identifier?
-          </n-popconfirm>
+      <div v-else class="flex flex-row-reverse justify-between max-lg:flex-col">
+        <div class="max-2xl:w-[300px] max-lg:hidden lg:block 2xl:w-[250px]">
+          <n-menu
+            :options="menuOptions"
+            @update:value="scrollToSection"
+            class="metadata w-[100%]"
+          />
         </div>
 
-        <n-button
-          class="mb-10 w-full"
-          dashed
-          type="success"
-          @click="addIdentifier"
-          :disabled="studyStore.currentStudyRole === 'viewer'"
-        >
-          <template #icon>
-            <f-icon icon="gridicons:create" />
-          </template>
+        <div class="w-full pb-4 lg:hidden">
+          <n-collapse accordion class="max-w-xxl rounded-md bg-gray-100 py-1 lg:hidden">
+            <n-collapse-item title="On this page" name="menu">
+              <n-menu class="metadata" :options="menuOptions" @update:value="scrollToSection" />
+            </n-collapse-item>
+          </n-collapse>
+        </div>
 
-          Add a new identifier
-        </n-button>
-      </n-form>
-    </FadeTransition>
+        <div class="w-full">
+          <h3 class="primary-Identifier">Primary Identifier</h3>
 
-    <div class="flex justify-start">
-      <n-button
-        size="large"
-        type="primary"
-        @click="saveMetadata"
-        :loading="submitLoading"
-        :disabled="studyStore.currentStudyRole === 'viewer'"
-      >
-        <template #icon>
-          <f-icon icon="material-symbols:save" />
-        </template>
-        Save changes
-      </n-button>
-    </div>
+          <p class="pb-8 pt-2">
+            The primary identifier for your dataset is generated automatically when you publish a
+            version of your dataset. You can find the identifier for the latest published version of
+            your dataset on the
+            <RouterLink
+              :to="{ name: 'dataset:overview', params: routeParams }"
+              class="hover:underline"
+            >
+              dataset overview
+            </RouterLink>
+            page.
+          </p>
+
+          <n-divider />
+
+          <h3 class="alternative-identifiers">Alternative Identifiers</h3>
+
+          <p class="pb-8 pt-2">
+            If you would like to add alternative identifiers for your dataset, you can do so here.
+            These will be attached to your dataset at the time of publication.
+          </p>
+
+          <FadeTransition>
+            <n-form
+              ref="formRef"
+              :model="moduleData"
+              size="large"
+              label-placement="top"
+              class="pr-4"
+              :disabled="studyStore.currentStudyRole === 'viewer'"
+            >
+              <div
+                class="flex w-full flex-row items-center justify-between space-x-8"
+                v-for="(item, index) in moduleData.identifiers"
+                :key="index"
+              >
+                <n-space vertical class="w-full">
+                  <div class="flex w-full flex-row items-center justify-between space-x-4">
+                    <n-form-item
+                      label="Name"
+                      :path="`identifiers[${index}].identifier`"
+                      :rule="{
+                        message: 'Please enter the identifier',
+                        required: true,
+                        trigger: ['blur', 'change'],
+                      }"
+                      class="w-full"
+                    >
+                      <n-input
+                        v-model:value="item.identifier"
+                        placeholder="10.1038/s41597-023-02463-x"
+                        clearable
+                      />
+                    </n-form-item>
+
+                    <n-form-item
+                      label="Type"
+                      :path="`identifiers[${index}].type`"
+                      :rule="{
+                        message: 'Please select the type of this identifier',
+                        required: true,
+                        trigger: ['blur', 'input'],
+                      }"
+                      class="w-full"
+                    >
+                      <n-select
+                        v-model:value="item.type"
+                        placeholder="DOI"
+                        clearable
+                        :options="FORM_JSON.datasetIdentifierTypeOptions"
+                      />
+                    </n-form-item>
+                  </div>
+                </n-space>
+
+                <n-popconfirm @positive-click="removeIdentifier(item.id)" class="self-justify-end">
+                  <template #trigger>
+                    <n-button
+                      class="ml-0"
+                      size="large"
+                      type="error"
+                      :disabled="studyStore.currentStudyRole === 'viewer'"
+                    >
+                      <f-icon icon="gridicons:trash" />
+                    </n-button>
+                  </template>
+
+                  Are you sure you want to remove this identifier?
+                </n-popconfirm>
+              </div>
+
+              <n-button
+                class="mb-10 w-full"
+                dashed
+                type="success"
+                @click="addIdentifier"
+                :disabled="studyStore.currentStudyRole === 'viewer'"
+              >
+                <template #icon>
+                  <f-icon icon="gridicons:create" />
+                </template>
+
+                Add a new identifier
+              </n-button>
+            </n-form>
+          </FadeTransition>
+
+          <div class="flex justify-start">
+            <n-button
+              size="large"
+              type="primary"
+              @click="saveMetadata"
+              :loading="submitLoading"
+              :disabled="studyStore.currentStudyRole === 'viewer'"
+            >
+              <template #icon>
+                <f-icon icon="material-symbols:save" />
+              </template>
+              Save changes
+            </n-button>
+          </div>
+        </div>
+      </div>
+    </n-scrollbar>
   </main>
 </template>

@@ -203,9 +203,13 @@ const scrollToSection = (key: string) => {
     <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
       <LottieLoader v-if="responseLoading" />
 
-      <div v-else class="flex flex-row-reverse justify-between max-lg:flex-col">
+      <div v-else class="flex flex-row-reverse max-lg:flex-col">
         <div class="max-2xl:w-[500px] max-lg:hidden lg:block 2xl:w-[250px]">
-          <n-menu :options="menuOptions" @update:value="scrollToSection" class="w-[100%]" />
+          <n-menu
+            :options="menuOptions"
+            @update:value="scrollToSection"
+            class="metadata w-[100%]"
+          />
         </div>
 
         <div class="w-full pb-4 lg:hidden">
@@ -252,7 +256,7 @@ const scrollToSection = (key: string) => {
               size="large"
               :disabled="!moduleData.study_type || studyStore.currentStudyRole === 'viewer'"
               label-placement="top"
-              class="pr-4"
+              class="w-full"
             >
               <h3 class="gender">Gender</h3>
 
