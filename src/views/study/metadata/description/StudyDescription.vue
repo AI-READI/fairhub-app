@@ -335,7 +335,7 @@ const scrollToSection = (key: string) => {
           />
         </div>
 
-        <div class="w-full lg:hidden">
+        <div class="w-full pb-4 lg:hidden">
           <n-collapse accordion class="max-w-xxl rounded-md bg-gray-100 py-1 lg:hidden">
             <n-collapse-item title="On this page" name="menu">
               <n-menu class="metadata" :options="menuOptions" @update:value="scrollToSection" />
@@ -356,7 +356,7 @@ const scrollToSection = (key: string) => {
             v-else
             class="w-full"
           >
-            <h2 class="description py-4">Description</h2>
+            <h2 class="description pb-4">Description</h2>
 
             <n-card class="rounded-xl bg-gray-50">
               <SubHeadingText

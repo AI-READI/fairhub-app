@@ -241,7 +241,7 @@ const scrollToSection = (key: string) => {
           />
         </div>
 
-        <div class="w-full lg:hidden">
+        <div class="w-full pb-4 lg:hidden">
           <n-collapse accordion class="max-w-xxl rounded-md bg-gray-100 py-1 lg:hidden">
             <n-collapse-item title="On this page" name="menu">
               <n-menu :options="menuOptions" @update:value="scrollToSection" />
@@ -258,7 +258,7 @@ const scrollToSection = (key: string) => {
             label-placement="top"
             class="w-full"
           >
-            <h1 class="py-4">Collaboration</h1>
+            <h1 class="pb-4">Collaboration</h1>
 
             <h2 class="sponsors pb-8">Sponsors</h2>
 
