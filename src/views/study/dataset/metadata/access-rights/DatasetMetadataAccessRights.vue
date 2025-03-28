@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { MdEditor } from "md-editor-v3";
-import type { FormInst } from "naive-ui";
+import type { FormInst, MenuOption } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
@@ -196,6 +196,18 @@ const updateLicense = async (value: string) => {
     }
   }
 };
+
+const scrollbarRef = ref<any>(null);
+
+const menuOptions: MenuOption[] = [
+  { key: "access", label: "Access" },
+  { key: "rights", label: "Rights" },
+];
+
+const scrollToSection = (key: string) => {
+  const section = document.querySelector(`.${key}`) as HTMLElement;
+  scrollbarRef.value?.scrollTo({ behavior: "smooth", top: section.offsetTop });
+};
 </script>
 
 <template>
@@ -209,126 +221,143 @@ const updateLicense = async (value: string) => {
 
     <n-divider />
 
-    <FadeTransition>
+    <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
       <LottieLoader v-if="responseLoading" />
 
-      <n-form
-        ref="formRef"
-        :model="moduleData"
-        size="small"
-        :disabled="studyStore.currentStudyRole === 'viewer'"
-        label-placement="top"
-        class="pr-4"
-        v-else
-      >
-        <h2 class="pb-4">Access</h2>
-
-        <n-card class="bg-gray-50">
-          <n-form-item
-            label="Type"
-            path="access.type"
-            :rule="{
-              message: 'Please select a type.',
-              required: true,
-              trigger: ['blur', 'input'],
-            }"
-          >
-            <n-select
-              v-model:value="moduleData.access.type"
-              placeholder="Public On Screen Access and Download"
-              clearable
-              :options="FORM_JSON.datasetAccessTypeOptions"
-            />
-          </n-form-item>
-
-          <n-form-item
-            label="Description"
-            path="access.description"
-            :rule="{
-              message: 'Please enter a description.',
-              required: true,
-              trigger: ['blur', 'input'],
-            }"
-          >
-            <n-input
-              v-model:value="moduleData.access.description"
-              placeholder="A textual description of the access being offered, for example identifying the groups to which access is granted, the criteria on which a case-by-case decision would be based, any further restrictions on on-screen access, etc."
-              type="textarea"
-              clearable
-            />
-          </n-form-item>
-
-          <n-form-item label="URL" path="access.url">
-            <n-input
-              v-model:value="moduleData.access.url"
-              placeholder="A url of a web page that provides details of the accesss available, possibly including the practical details required or a form to use to apply for access."
-              clearable
-            />
-          </n-form-item>
-
-          <n-form-item label="URL Last Checked" path="access.url_last_checked">
-            <n-date-picker
-              v-model:value="moduleData.access.url_last_checked"
-              type="date"
-              clearable
-            />
-          </n-form-item>
-        </n-card>
-
-        <n-divider />
-
-        <h2 class="pb-4">Rights</h2>
-
-        <n-card class="bg-gray-50">
-          <n-form-item label="Rights" path="rights">
-            <n-select
-              v-model="licenseName"
-              placeholder="MIT License Modern Variant."
-              clearable
-              filterable
-              :options="licensesJSON.map((option) => ({ label: option.name, value: option.name }))"
-              @update:value="updateLicense"
-              :value="licenseName !== '' ? licenseName : ''"
-              :rule="{
-                required: true,
-                message: 'Please select a license',
-                trigger: ['blur', 'change'],
-              }"
-            />
-          </n-form-item>
-
-          <FadeTransition>
-            <LottieLoader v-if="getLicenseLoading" />
-
-            <div>
-              <div v-if="displayLicenseEditor" class="pb-5">
-                <MdEditor
-                  v-model="draftLicense"
-                  language="en-US"
-                  preview-theme="github"
-                  :show-code-row-number="true"
-                  :sanitize="sanitize"
-                />
-              </div>
-            </div>
-          </FadeTransition>
-        </n-card>
-
-        <div class="flex justify-start pt-4">
-          <n-button
-            size="large"
-            type="primary"
-            @click="saveMetadata"
-            :loading="submitLoading"
-            :disabled="studyStore.currentStudyRole === 'viewer'"
-          >
-            <template #icon>
-              <f-icon icon="material-symbols:save" />
-            </template>
-            Save Metadata
-          </n-button>
+      <div v-else class="flex flex-row-reverse justify-between max-lg:flex-col">
+        <div class="max-2xl:w-[400px] max-lg:hidden lg:block 2xl:w-[250px]">
+          <n-menu :options="menuOptions" @update:value="scrollToSection" class="w-[100%]" />
         </div>
-      </n-form>
-    </FadeTransition>
+
+        <div class="w-full lg:hidden">
+          <n-collapse accordion class="max-w-xxl rounded-md bg-gray-100 py-1 lg:hidden">
+            <n-collapse-item title="On this page" name="menu">
+              <n-menu class="metadata" :options="menuOptions" @update:value="scrollToSection" />
+            </n-collapse-item>
+          </n-collapse>
+        </div>
+
+        <FadeTransition>
+          <n-form
+            ref="formRef"
+            :model="moduleData"
+            size="small"
+            :disabled="studyStore.currentStudyRole === 'viewer'"
+            label-placement="top"
+            class="w-full pr-4"
+          >
+            <h2 class="access pb-4">Access</h2>
+
+            <n-card class="bg-gray-50">
+              <n-form-item
+                label="Type"
+                path="access.type"
+                :rule="{
+                  message: 'Please select a type.',
+                  required: true,
+                  trigger: ['blur', 'input'],
+                }"
+              >
+                <n-select
+                  v-model:value="moduleData.access.type"
+                  placeholder="Public On Screen Access and Download"
+                  clearable
+                  :options="FORM_JSON.datasetAccessTypeOptions"
+                />
+              </n-form-item>
+
+              <n-form-item
+                label="Description"
+                path="access.description"
+                :rule="{
+                  message: 'Please enter a description.',
+                  required: true,
+                  trigger: ['blur', 'input'],
+                }"
+              >
+                <n-input
+                  v-model:value="moduleData.access.description"
+                  placeholder="A textual description of the access being offered, for example identifying the groups to which access is granted, the criteria on which a case-by-case decision would be based, any further restrictions on on-screen access, etc."
+                  type="textarea"
+                  clearable
+                />
+              </n-form-item>
+
+              <n-form-item label="URL" path="access.url">
+                <n-input
+                  v-model:value="moduleData.access.url"
+                  placeholder="A url of a web page that provides details of the accesss available, possibly including the practical details required or a form to use to apply for access."
+                  clearable
+                />
+              </n-form-item>
+
+              <n-form-item label="URL Last Checked" path="access.url_last_checked">
+                <n-date-picker
+                  v-model:value="moduleData.access.url_last_checked"
+                  type="date"
+                  clearable
+                />
+              </n-form-item>
+            </n-card>
+
+            <n-divider />
+
+            <h2 class="rights pb-4">Rights</h2>
+
+            <n-card class="bg-gray-50">
+              <n-form-item label="Rights" path="rights">
+                <n-select
+                  v-model="licenseName"
+                  placeholder="MIT License Modern Variant."
+                  clearable
+                  filterable
+                  :options="
+                    licensesJSON.map((option) => ({ label: option.name, value: option.name }))
+                  "
+                  @update:value="updateLicense"
+                  :value="licenseName !== '' ? licenseName : ''"
+                  :rule="{
+                    required: true,
+                    message: 'Please select a license',
+                    trigger: ['blur', 'change'],
+                  }"
+                />
+              </n-form-item>
+
+              <FadeTransition>
+                <LottieLoader v-if="getLicenseLoading" />
+
+                <div>
+                  <div v-if="displayLicenseEditor" class="pb-5">
+                    <MdEditor
+                      v-model="draftLicense"
+                      language="en-US"
+                      preview-theme="github"
+                      :show-code-row-number="true"
+                      :sanitize="sanitize"
+                    />
+                  </div>
+                </div>
+              </FadeTransition>
+            </n-card>
+
+            <div class="flex justify-start pt-4">
+              <n-button
+                size="large"
+                type="primary"
+                @click="saveMetadata"
+                :loading="submitLoading"
+                :disabled="studyStore.currentStudyRole === 'viewer'"
+              >
+                <template #icon>
+                  <f-icon icon="material-symbols:save" />
+                </template>
+                Save Metadata
+              </n-button>
+            </div>
+          </n-form>
+        </FadeTransition>
+      </div>
+    </n-scrollbar>
   </main>
 </template>

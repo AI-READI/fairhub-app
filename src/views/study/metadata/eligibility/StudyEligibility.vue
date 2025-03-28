@@ -201,7 +201,9 @@ const scrollToSection = (key: string) => {
     <n-divider />
 
     <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
-      <div class="flex flex-row-reverse justify-between max-lg:flex-col">
+      <LottieLoader v-if="responseLoading" />
+
+      <div v-else class="flex flex-row-reverse justify-between max-lg:flex-col">
         <div class="max-2xl:w-[400px] max-lg:hidden lg:block 2xl:w-[250px]">
           <n-menu :options="menuOptions" @update:value="scrollToSection" class="w-[100%]" />
         </div>
@@ -215,9 +217,7 @@ const scrollToSection = (key: string) => {
         </div>
 
         <FadeTransition>
-          <LottieLoader v-if="responseLoading" />
-
-          <div v-else>
+          <div>
             <div v-if="!moduleData.study_type">
               <n-alert
                 title="A study type should be added before you can add eligibility details."

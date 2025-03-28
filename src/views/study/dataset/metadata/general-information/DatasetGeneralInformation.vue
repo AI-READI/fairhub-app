@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { MenuOption } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
@@ -253,6 +254,18 @@ const saveMetadata = (e: MouseEvent) => {
     }
   });
 };
+const scrollbarRef = ref<any>(null);
+
+const menuOptions: MenuOption[] = [
+  { key: "titles", label: "Titles" },
+  { key: "description", label: "Description" },
+  { key: "dates", label: "Dates" },
+];
+
+const scrollToSection = (key: string) => {
+  const section = document.querySelector(`.${key}`) as HTMLElement;
+  scrollbarRef.value?.scrollTo({ behavior: "smooth", top: section.offsetTop });
+};
 </script>
 
 <template>
@@ -266,281 +279,302 @@ const saveMetadata = (e: MouseEvent) => {
 
     <n-divider />
 
-    <FadeTransition>
+    <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
       <LottieLoader v-if="loading" />
 
-      <n-form
-        v-else
-        ref="formRef"
-        :model="moduleData"
-        size="small"
-        label-placement="top"
-        class="pr-4"
-        :disabled="studyStore.currentStudyRole === 'viewer'"
-      >
-        <h2 class="py-4">Titles</h2>
+      <div v-else class="flex flex-row-reverse justify-end max-lg:flex-col">
+        <div class="w-[250px] max-w-xl max-lg:hidden lg:block">
+          <n-menu
+            :options="menuOptions"
+            @update:value="scrollToSection"
+            class="metadata w-[100%]"
+          />
+        </div>
 
-        <n-card class="bg-gray-50">
-          <div
-            class="flex w-full flex-row items-center justify-between space-x-8"
-            v-for="(item, index) in moduleData.titles"
-            :key="index"
+        <div class="w-full lg:hidden">
+          <n-collapse accordion class="max-w-xxl rounded-md bg-gray-100 py-1 lg:hidden">
+            <n-collapse-item title="On this page" name="menu">
+              <n-menu :options="menuOptions" @update:value="scrollToSection" />
+            </n-collapse-item>
+          </n-collapse>
+        </div>
+
+        <FadeTransition>
+          <n-form
+            ref="formRef"
+            class="w-full"
+            :model="moduleData"
+            size="small"
+            label-placement="top"
+            :disabled="studyStore.currentStudyRole === 'viewer'"
           >
-            <n-space vertical class="w-full">
-              <div class="flex w-full flex-row items-center justify-between space-x-4">
+            <h2 class="py-4">Titles</h2>
+
+            <n-card class="bg-gray-50">
+              <div
+                class="flex w-full flex-row items-center justify-between space-x-8"
+                v-for="(item, index) in moduleData.titles"
+                :key="index"
+              >
+                <n-space vertical class="w-full">
+                  <div class="flex w-full flex-row items-center justify-between space-x-4">
+                    <n-form-item
+                      label="Name"
+                      :path="`titles[${index}].title`"
+                      :rule="{
+                        message: 'Please enter the title',
+                        required: true,
+                        trigger: ['blur', 'change'],
+                      }"
+                      class="w-full"
+                    >
+                      <n-input
+                        v-model:value="item.title"
+                        placeholder="10.1038/s41597-023-02463-x"
+                        clearable
+                      />
+                    </n-form-item>
+
+                    <n-form-item
+                      label="Type"
+                      :path="`titles[${index}].type`"
+                      :rule="{
+                        message: 'Please select the type of this title',
+                        required: true,
+                        trigger: ['blur', 'input'],
+                      }"
+                      class="w-full"
+                    >
+                      <n-select
+                        v-model:value="item.type"
+                        placeholder="DOI"
+                        clearable
+                        :disabled="item.type === 'MainTitle'"
+                        :options="FORM_JSON.datasetTitleTypeOptions"
+                      />
+                    </n-form-item>
+                  </div>
+                </n-space>
+
+                <n-popconfirm @positive-click="removeTitle(item.id)" class="self-justify-end">
+                  <template #trigger>
+                    <n-button
+                      class="ml-0"
+                      size="large"
+                      type="error"
+                      :disabled="
+                        item.type === 'MainTitle' || studyStore.currentStudyRole === 'viewer'
+                      "
+                    >
+                      <f-icon icon="gridicons:trash" />
+                    </n-button>
+                  </template>
+
+                  Are you sure you want to remove this title?
+                </n-popconfirm>
+              </div>
+
+              <n-button
+                class="mb-10 w-full"
+                dashed
+                type="success"
+                @click="addTitle"
+                :disabled="studyStore.currentStudyRole === 'viewer'"
+              >
+                <template #icon>
+                  <f-icon icon="gridicons:create" />
+                </template>
+
+                Add a new title
+              </n-button>
+            </n-card>
+
+            <n-divider />
+
+            <h2 class="py-4">Description</h2>
+
+            <n-card class="bg-gray-50">
+              <div
+                class="flex w-full flex-row items-center justify-between space-x-8"
+                v-for="(item, index) in moduleData.descriptions"
+                :key="index"
+              >
+                <n-space vertical class="w-full">
+                  <div class="flex w-full flex-row items-start justify-between space-x-4">
+                    <n-form-item
+                      label="Description"
+                      :path="`descriptions[${index}].description`"
+                      :rule="{
+                        message: 'Please enter the description',
+                        required: true,
+                        trigger: ['blur', 'change'],
+                      }"
+                      class="w-full"
+                    >
+                      <n-input
+                        v-model:value="item.description"
+                        placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                        type="textarea"
+                        clearable
+                      />
+                    </n-form-item>
+
+                    <n-form-item
+                      label="Type"
+                      :path="`descriptions[${index}].type`"
+                      :rule="{
+                        message: 'Please select the type of this description',
+                        required: true,
+                        trigger: ['blur', 'input'],
+                      }"
+                      class="w-full"
+                    >
+                      <n-select
+                        v-model:value="item.type"
+                        placeholder="Methods"
+                        clearable
+                        :disabled="item.type === 'Abstract'"
+                        :options="FORM_JSON.datasetDescriptionTypeOptions"
+                      />
+                    </n-form-item>
+                  </div>
+                </n-space>
+
+                <n-popconfirm @positive-click="removeDescription(item.id)" class="self-justify-end">
+                  <template #trigger>
+                    <n-button
+                      class="ml-0"
+                      size="large"
+                      type="error"
+                      :disabled="
+                        item.type === 'Abstract' || studyStore.currentStudyRole === 'viewer'
+                      "
+                    >
+                      <f-icon icon="gridicons:trash" />
+                    </n-button>
+                  </template>
+
+                  Are you sure you want to remove this description?
+                </n-popconfirm>
+              </div>
+
+              <n-button
+                class="mb-10 w-full"
+                dashed
+                type="success"
+                @click="addDescription"
+                :disabled="studyStore.currentStudyRole === 'viewer'"
+              >
+                <template #icon>
+                  <f-icon icon="gridicons:create" />
+                </template>
+
+                Add a new description
+              </n-button>
+            </n-card>
+
+            <h2 class="py-4">Dates</h2>
+
+            <n-card class="bg-gray-50">
+              <CollapsibleCard
+                v-for="(item, index) in moduleData.dates"
+                :key="item.id"
+                class="mb-5 shadow-md"
+                :title="item.type || `Date ${index + 1}`"
+                bordered
+              >
+                <template #header-extra>
+                  <n-popconfirm @positive-click="removeDate(item.id)">
+                    <template #trigger>
+                      <n-button
+                        type="error"
+                        secondary
+                        :disabled="studyStore.currentStudyRole === 'viewer'"
+                      >
+                        <template #icon>
+                          <f-icon icon="ep:delete" />
+                        </template>
+
+                        Remove date
+                      </n-button>
+                    </template>
+
+                    Are you sure you want to remove this date?
+                  </n-popconfirm>
+                </template>
+
                 <n-form-item
-                  label="Name"
-                  :path="`titles[${index}].title`"
+                  label="Date Value"
+                  :path="`dates[${index}].date`"
                   :rule="{
-                    message: 'Please enter the title',
+                    message: 'Please select a date',
                     required: true,
-                    trigger: ['blur', 'change'],
+                    type: 'number',
+                    trigger: ['blur', 'input'],
                   }"
-                  class="w-full"
                 >
-                  <n-input
-                    v-model:value="item.title"
-                    placeholder="10.1038/s41597-023-02463-x"
-                    clearable
-                  />
+                  <n-date-picker v-model:value="item.date" type="date" clearable />
                 </n-form-item>
 
                 <n-form-item
                   label="Type"
-                  :path="`titles[${index}].type`"
+                  :path="`dates[${index}].type`"
                   :rule="{
-                    message: 'Please select the type of this title',
-                    required: true,
-                    trigger: ['blur', 'input'],
-                  }"
-                  class="w-full"
-                >
-                  <n-select
-                    v-model:value="item.type"
-                    placeholder="DOI"
-                    clearable
-                    :disabled="item.type === 'MainTitle'"
-                    :options="FORM_JSON.datasetTitleTypeOptions"
-                  />
-                </n-form-item>
-              </div>
-            </n-space>
-
-            <n-popconfirm @positive-click="removeTitle(item.id)" class="self-justify-end">
-              <template #trigger>
-                <n-button
-                  class="ml-0"
-                  size="large"
-                  type="error"
-                  :disabled="item.type === 'MainTitle' || studyStore.currentStudyRole === 'viewer'"
-                >
-                  <f-icon icon="gridicons:trash" />
-                </n-button>
-              </template>
-
-              Are you sure you want to remove this title?
-            </n-popconfirm>
-          </div>
-
-          <n-button
-            class="mb-10 w-full"
-            dashed
-            type="success"
-            @click="addTitle"
-            :disabled="studyStore.currentStudyRole === 'viewer'"
-          >
-            <template #icon>
-              <f-icon icon="gridicons:create" />
-            </template>
-
-            Add a new title
-          </n-button>
-        </n-card>
-
-        <n-divider />
-
-        <h2 class="py-4">Description</h2>
-
-        <n-card class="bg-gray-50">
-          <div
-            class="flex w-full flex-row items-center justify-between space-x-8"
-            v-for="(item, index) in moduleData.descriptions"
-            :key="index"
-          >
-            <n-space vertical class="w-full">
-              <div class="flex w-full flex-row items-start justify-between space-x-4">
-                <n-form-item
-                  label="Description"
-                  :path="`descriptions[${index}].description`"
-                  :rule="{
-                    message: 'Please enter the description',
+                    message: 'Please select the ',
                     required: true,
                     trigger: ['blur', 'change'],
                   }"
-                  class="w-full"
                 >
+                  <n-select
+                    v-model:value="item.type"
+                    placeholder="Accepted"
+                    clearable
+                    :options="FORM_JSON.datasetDateTypeOptions"
+                  />
+                </n-form-item>
+
+                <n-form-item label="Information" :path="`dates[${index}].information`">
                   <n-input
-                    v-model:value="item.description"
+                    v-model:value="item.information"
                     placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
                     type="textarea"
                     clearable
                   />
                 </n-form-item>
+              </CollapsibleCard>
 
-                <n-form-item
-                  label="Type"
-                  :path="`descriptions[${index}].type`"
-                  :rule="{
-                    message: 'Please select the type of this description',
-                    required: true,
-                    trigger: ['blur', 'input'],
-                  }"
-                  class="w-full"
-                >
-                  <n-select
-                    v-model:value="item.type"
-                    placeholder="Methods"
-                    clearable
-                    :disabled="item.type === 'Abstract'"
-                    :options="FORM_JSON.datasetDescriptionTypeOptions"
-                  />
-                </n-form-item>
-              </div>
-            </n-space>
-
-            <n-popconfirm @positive-click="removeDescription(item.id)" class="self-justify-end">
-              <template #trigger>
-                <n-button
-                  class="ml-0"
-                  size="large"
-                  type="error"
-                  :disabled="item.type === 'Abstract' || studyStore.currentStudyRole === 'viewer'"
-                >
-                  <f-icon icon="gridicons:trash" />
-                </n-button>
-              </template>
-
-              Are you sure you want to remove this description?
-            </n-popconfirm>
-          </div>
-
-          <n-button
-            class="mb-10 w-full"
-            dashed
-            type="success"
-            @click="addDescription"
-            :disabled="studyStore.currentStudyRole === 'viewer'"
-          >
-            <template #icon>
-              <f-icon icon="gridicons:create" />
-            </template>
-
-            Add a new description
-          </n-button>
-        </n-card>
-
-        <h2 class="py-4">Dates</h2>
-
-        <n-card class="bg-gray-50">
-          <CollapsibleCard
-            v-for="(item, index) in moduleData.dates"
-            :key="item.id"
-            class="mb-5 shadow-md"
-            :title="item.type || `Date ${index + 1}`"
-            bordered
-          >
-            <template #header-extra>
-              <n-popconfirm @positive-click="removeDate(item.id)">
-                <template #trigger>
-                  <n-button
-                    type="error"
-                    secondary
-                    :disabled="studyStore.currentStudyRole === 'viewer'"
-                  >
-                    <template #icon>
-                      <f-icon icon="ep:delete" />
-                    </template>
-
-                    Remove date
-                  </n-button>
+              <n-button
+                class="my-10 w-full"
+                dashed
+                type="success"
+                @click="addDate"
+                :disabled="studyStore.currentStudyRole === 'viewer'"
+              >
+                <template #icon>
+                  <f-icon icon="gridicons:create" />
                 </template>
 
-                Are you sure you want to remove this date?
-              </n-popconfirm>
-            </template>
+                Add a new date
+              </n-button>
+            </n-card>
 
-            <n-form-item
-              label="Date Value"
-              :path="`dates[${index}].date`"
-              :rule="{
-                message: 'Please select a date',
-                required: true,
-                type: 'number',
-                trigger: ['blur', 'input'],
-              }"
-            >
-              <n-date-picker v-model:value="item.date" type="date" clearable />
-            </n-form-item>
-
-            <n-form-item
-              label="Type"
-              :path="`dates[${index}].type`"
-              :rule="{
-                message: 'Please select the ',
-                required: true,
-                trigger: ['blur', 'change'],
-              }"
-            >
-              <n-select
-                v-model:value="item.type"
-                placeholder="Accepted"
-                clearable
-                :options="FORM_JSON.datasetDateTypeOptions"
-              />
-            </n-form-item>
-
-            <n-form-item label="Information" :path="`dates[${index}].information`">
-              <n-input
-                v-model:value="item.information"
-                placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                type="textarea"
-                clearable
-              />
-            </n-form-item>
-          </CollapsibleCard>
-
-          <n-button
-            class="my-10 w-full"
-            dashed
-            type="success"
-            @click="addDate"
-            :disabled="studyStore.currentStudyRole === 'viewer'"
-          >
-            <template #icon>
-              <f-icon icon="gridicons:create" />
-            </template>
-
-            Add a new date
-          </n-button>
-        </n-card>
-
-        <div class="flex justify-start pt-4">
-          <n-button
-            size="large"
-            type="primary"
-            @click="saveMetadata"
-            :loading="submitLoading"
-            :disabled="studyStore.currentStudyRole === 'viewer'"
-          >
-            <template #icon>
-              <f-icon icon="material-symbols:save" />
-            </template>
-            Save changes
-          </n-button>
-        </div>
-      </n-form>
-    </FadeTransition>
-
-    <n-divider />
+            <div class="flex justify-start pt-4">
+              <n-button
+                size="large"
+                type="primary"
+                @click="saveMetadata"
+                :loading="submitLoading"
+                :disabled="studyStore.currentStudyRole === 'viewer'"
+              >
+                <template #icon>
+                  <f-icon icon="material-symbols:save" />
+                </template>
+                Save changes
+              </n-button>
+            </div>
+          </n-form>
+        </FadeTransition>
+      </div>
+    </n-scrollbar>
   </main>
 </template>
