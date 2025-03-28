@@ -306,6 +306,8 @@ const scrollToSection = (key: string) => {
             </n-form>
           </FadeTransition>
 
+          <n-divider />
+
           <div class="flex justify-start">
             <n-button
               size="large"

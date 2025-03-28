@@ -762,6 +762,8 @@ const scrollToSection = (key: string) => {
               </n-button>
             </n-card>
 
+            <n-divider />
+
             <div class="flex justify-start pt-8">
               <n-button
                 size="large"

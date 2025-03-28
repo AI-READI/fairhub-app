@@ -345,6 +345,8 @@ const scrollToSection = (key: string) => {
               </FadeTransition>
             </n-card>
 
+            <n-divider />
+
             <div class="flex justify-start pt-4">
               <n-button
                 size="large"
