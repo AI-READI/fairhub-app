@@ -32,7 +32,7 @@ import DatasetHealthsheetUses from "@/views/study/dataset/healthsheet/uses/Datas
 import DatasetMetadataOther from "@/views/study/dataset/metadata/about/DatasetMetadataOther.vue";
 import DatasetMetadataAccessRights from "@/views/study/dataset/metadata/access-rights/DatasetMetadataAccessRights.vue";
 import DatasetMetadataDataManagement from "@/views/study/dataset/metadata/data-management/DatasetMetadataDataManagement.vue";
-import DatasetGeneralInformation from "@/views/study/dataset/metadata/general-information/DatasetGeneralInformation.vue";
+import DatasetMetadataGeneralInformation from "@/views/study/dataset/metadata/general-information/DatasetMetadataGeneralInformation.vue";
 import DatasetMetadataIdentifiers from "@/views/study/dataset/metadata/identifiers/DatasetMetadataIdentifiers.vue";
 import DatasetMetadataRelatedIdentifiers from "@/views/study/dataset/metadata/related/DatasetMetadataRelatedIdentifiers.vue";
 import DatasetMetadataTeam from "@/views/study/dataset/metadata/team/DatasetMetadataTeam.vue";
@@ -275,7 +275,7 @@ const router = createRouter({
                     {
                       name: "dataset:metadata:general-information",
                       path: "general-information",
-                      component: DatasetGeneralInformation,
+                      component: DatasetMetadataGeneralInformation,
                     },
                     {
                       name: "dataset:metadata:team",

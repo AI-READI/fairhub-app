@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
+import type { MenuOption } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
@@ -201,6 +202,18 @@ const addCollaborator = () => {
     origin: "local",
   });
 };
+
+const scrollbarRef = ref<any>(null);
+
+const menuOptions: MenuOption[] = [
+  { key: "sponsors", label: "Sponsors" },
+  { key: "collaborators", label: "Collaborators" },
+];
+
+const scrollToSection = (key: string) => {
+  const section = document.querySelector(`.${key}`) as HTMLElement;
+  scrollbarRef.value?.scrollTo({ behavior: "smooth", top: section.offsetTop });
+};
 </script>
 
 <template>
@@ -216,382 +229,425 @@ const addCollaborator = () => {
 
     <n-divider />
 
-    <n-form ref="formRef" :model="moduleData" size="small" label-placement="top" class="pr-4">
-      <h1 class="pb-4">Collaboration</h1>
+    <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
+      <LottieLoader v-if="responseLoading" />
 
-      <n-card class="rounded-xl bg-gray-50">
-        <h2 class="pb-8">Sponsors</h2>
+      <div v-else class="flex flex-row-reverse max-lg:flex-col">
+        <div class="w-[300px] max-w-xl max-lg:hidden lg:block">
+          <n-menu
+            :options="menuOptions"
+            @update:value="scrollToSection"
+            class="metadata w-[100%]"
+          />
+        </div>
 
-        <n-space vertical size="large" class="pr-6">
-          <h3>Responsible Party</h3>
+        <div class="w-full pb-4 lg:hidden">
+          <n-collapse accordion class="max-w-xxl rounded-md bg-gray-100 py-1 lg:hidden">
+            <n-collapse-item title="On this page" name="menu">
+              <n-menu :options="menuOptions" @update:value="scrollToSection" />
+            </n-collapse-item>
+          </n-collapse>
+        </div>
 
-          <p class="pb-8 pt-2">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
-            voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum
-          </p>
-
-          <n-form-item
-            label="Type"
-            :rule="{
-              message: 'Please select a study type',
-              required: true,
-              trigger: ['blur', 'change'],
-            }"
-            path="sponsors.responsible_party.type"
+        <FadeTransition>
+          <n-form
+            ref="formRef"
+            :disabled="studyStore.currentStudyRole === 'viewer'"
+            :model="moduleData"
+            size="small"
+            label-placement="top"
+            class="w-full"
           >
-            <n-select
-              v-model:value="moduleData.sponsors.responsible_party.type"
-              placeholder="Principal Investigator"
-              clearable
-              :options="FORM_JSON.studyMetadataSponsorsResponsiblePartyTypeOptions"
-            />
-          </n-form-item>
+            <h1 class="pb-4">Collaboration</h1>
 
-          <div class="flex items-center space-x-4">
-            <n-form-item
-              class="w-full"
-              label="Given Name"
-              path="sponsors.responsible_party.first_name"
-              :rule="{
-                message: 'Please input an investigator name',
-                required:
-                  moduleData.sponsors.responsible_party.type === 'Principal Investigator' ||
-                  moduleData.sponsors.responsible_party.type === 'Sponsor-Investigator',
-                trigger: ['blur', 'input'],
-              }"
-            >
-              <n-input
-                v-model:value="moduleData.sponsors.responsible_party.first_name"
-                placeholder="Annie"
-                clearable
-              />
-            </n-form-item>
+            <h2 class="sponsors pb-8">Sponsors</h2>
 
-            <n-form-item
-              label="Family Name"
-              class="w-full"
-              path="sponsors.responsible_party.last_name"
-              :rule="{
-                message: 'Please input a name',
-                required:
-                  moduleData.sponsors.responsible_party.type === 'Principal Investigator' ||
-                  moduleData.sponsors.responsible_party.type === 'Sponsor-Investigator'
-                    ? true
-                    : false,
-                trigger: ['blur', 'input'],
-              }"
-            >
-              <n-input
-                v-model:value="moduleData.sponsors.responsible_party.last_name"
-                placeholder="Leonhart"
-                clearable
-              />
-            </n-form-item>
-          </div>
+            <n-card class="rounded-xl bg-gray-50">
+              <n-space vertical size="large" class="pr-6">
+                <h3>Responsible Party</h3>
 
-          <n-form-item
-            label="Title"
-            path="sponsors.responsible_party.title"
-            :rule="{
-              message: 'Please add an investigator title',
-              required:
-                moduleData.sponsors.responsible_party.type === 'Principal Investigator' ||
-                moduleData.sponsors.responsible_party.type === 'Sponsor-Investigator',
-              trigger: ['blur', 'input'],
-            }"
-          >
-            <n-input
-              v-model:value="moduleData.sponsors.responsible_party.title"
-              placeholder="Warrior Candidate"
-              clearable
-            />
-          </n-form-item>
+                <p class="pb-8 pt-2">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia
+                  voluptatibus, voluptatem, quibusdam, quos voluptas quae quas voluptatum
+                </p>
 
-          <div class="flex items-center space-x-4">
-            <n-form-item
-              label="Affiliation"
-              path="sponsors.responsible_party.affiliation.name"
-              :rule="{
-                message: `Please add the investigator's affiliation`,
-                required:
-                  moduleData.sponsors.responsible_party.type === 'Principal Investigator' ||
-                  moduleData.sponsors.responsible_party.type === 'Sponsor-Investigator',
-                trigger: ['blur', 'input'],
-              }"
-              class="w-full"
-            >
-              <n-input
-                v-model:value="moduleData.sponsors.responsible_party.affiliation.name"
-                placeholder="Marleyan Military"
-                clearable
-              />
-            </n-form-item>
+                <n-form-item
+                  label="Type"
+                  :rule="{
+                    message: 'Please select a study type',
+                    required: true,
+                    trigger: ['blur', 'change'],
+                  }"
+                  path="sponsors.responsible_party.type"
+                >
+                  <n-select
+                    v-model:value="moduleData.sponsors.responsible_party.type"
+                    placeholder="Principal Investigator"
+                    clearable
+                    :options="FORM_JSON.studyMetadataSponsorsResponsiblePartyTypeOptions"
+                  />
+                </n-form-item>
 
-            <n-form-item
-              label="Affiliation Identifier"
-              path="sponsors.responsible_party.affiliation.identifier"
-              :rule="{
-                message: `Please add the investigator's affiliation identifier`,
-                required: moduleData.sponsors.responsible_party.affiliation.identifier_scheme,
-                trigger: ['blur', 'input'],
-              }"
-              class="w-full"
-            >
-              <n-input
-                v-model:value="moduleData.sponsors.responsible_party.affiliation.identifier"
-                placeholder="0156zyn36"
-                clearable
-              />
-            </n-form-item>
-          </div>
+                <div class="flex items-center space-x-4">
+                  <n-form-item
+                    class="w-full"
+                    label="Given Name"
+                    path="sponsors.responsible_party.first_name"
+                    :rule="{
+                      message: 'Please input an investigator name',
+                      required:
+                        moduleData.sponsors.responsible_party.type === 'Principal Investigator' ||
+                        moduleData.sponsors.responsible_party.type === 'Sponsor-Investigator',
+                      trigger: ['blur', 'input'],
+                    }"
+                  >
+                    <n-input
+                      v-model:value="moduleData.sponsors.responsible_party.first_name"
+                      placeholder="Annie"
+                      clearable
+                    />
+                  </n-form-item>
 
-          <div class="flex items-center space-x-4">
-            <n-form-item
-              label="Affiliation Identifier Scheme"
-              path="sponsors.responsible_party.affiliation.identifier_scheme"
-              :rule="{
-                message: `Please add the investigator's affiliation identifier scheme`,
-                required: moduleData.sponsors.responsible_party.affiliation.identifier,
-                trigger: ['blur', 'input'],
-              }"
-              class="w-full"
-            >
-              <n-input
-                v-model:value="moduleData.sponsors.responsible_party.affiliation.identifier_scheme"
-                placeholder="ROR"
-                clearable
-              />
-            </n-form-item>
+                  <n-form-item
+                    label="Family Name"
+                    class="w-full"
+                    path="sponsors.responsible_party.last_name"
+                    :rule="{
+                      message: 'Please input a name',
+                      required:
+                        moduleData.sponsors.responsible_party.type === 'Principal Investigator' ||
+                        moduleData.sponsors.responsible_party.type === 'Sponsor-Investigator'
+                          ? true
+                          : false,
+                      trigger: ['blur', 'input'],
+                    }"
+                  >
+                    <n-input
+                      v-model:value="moduleData.sponsors.responsible_party.last_name"
+                      placeholder="Leonhart"
+                      clearable
+                    />
+                  </n-form-item>
+                </div>
 
-            <n-form-item
-              label="Affiliation Identifier Scheme URI"
-              path="sponsors.responsible_party.affiliation.scheme_uri"
-              class="w-full"
-            >
-              <n-input
-                v-model:value="moduleData.sponsors.responsible_party.affiliation.scheme_uri"
-                placeholder="https://ror.org"
-                clearable
-              />
-            </n-form-item>
-          </div>
+                <n-form-item
+                  label="Title"
+                  path="sponsors.responsible_party.title"
+                  :rule="{
+                    message: 'Please add an investigator title',
+                    required:
+                      moduleData.sponsors.responsible_party.type === 'Principal Investigator' ||
+                      moduleData.sponsors.responsible_party.type === 'Sponsor-Investigator',
+                    trigger: ['blur', 'input'],
+                  }"
+                >
+                  <n-input
+                    v-model:value="moduleData.sponsors.responsible_party.title"
+                    placeholder="Warrior Candidate"
+                    clearable
+                  />
+                </n-form-item>
 
-          <n-form-item
-            label="Identifier"
-            path="sponsors.responsible_party.identifier.value"
-            :rule="{
-              message: `Please add the investigator's identifier`,
-              required: moduleData.sponsors.responsible_party.identifier.scheme,
-              trigger: ['blur', 'input'],
-            }"
-          >
-            <n-input
-              v-model:value="moduleData.sponsors.responsible_party.identifier.value"
-              placeholder="0000-0003-2829-8032"
-              clearable
-            />
-          </n-form-item>
+                <div class="flex items-center space-x-4">
+                  <n-form-item
+                    label="Affiliation"
+                    path="sponsors.responsible_party.affiliation.name"
+                    :rule="{
+                      message: `Please add the investigator's affiliation`,
+                      required:
+                        moduleData.sponsors.responsible_party.type === 'Principal Investigator' ||
+                        moduleData.sponsors.responsible_party.type === 'Sponsor-Investigator',
+                      trigger: ['blur', 'input'],
+                    }"
+                    class="w-full"
+                  >
+                    <n-input
+                      v-model:value="moduleData.sponsors.responsible_party.affiliation.name"
+                      placeholder="Marleyan Military"
+                      clearable
+                    />
+                  </n-form-item>
 
-          <div class="flex items-center space-x-4">
-            <n-form-item
-              label="Identifier Scheme"
-              path="sponsors.responsible_party.identifier.scheme"
-              :rule="{
-                message: `Please add the investigator's identifier scheme`,
-                required: moduleData.sponsors.responsible_party.identifier.value,
-                trigger: ['blur', 'input'],
-              }"
-              class="w-full"
-            >
-              <n-input
-                v-model:value="moduleData.sponsors.responsible_party.identifier.scheme"
-                placeholder="ORCID"
-                clearable
-              />
-            </n-form-item>
+                  <n-form-item
+                    label="Affiliation Identifier"
+                    path="sponsors.responsible_party.affiliation.identifier"
+                    :rule="{
+                      message: `Please add the investigator's affiliation identifier`,
+                      required: moduleData.sponsors.responsible_party.affiliation.identifier_scheme,
+                      trigger: ['blur', 'input'],
+                    }"
+                    class="w-full"
+                  >
+                    <n-input
+                      v-model:value="moduleData.sponsors.responsible_party.affiliation.identifier"
+                      placeholder="0156zyn36"
+                      clearable
+                    />
+                  </n-form-item>
+                </div>
 
-            <n-form-item
-              label="Identifier Scheme URI"
-              path="responsible_party.identifier.scheme_uri"
-              class="w-full"
-            >
-              <n-input
-                v-model:value="moduleData.sponsors.responsible_party.identifier.scheme_uri"
-                placeholder="https://orcid.org"
-                clearable
-              />
-            </n-form-item>
-          </div>
+                <div class="flex items-center space-x-4">
+                  <n-form-item
+                    label="Affiliation Identifier Scheme"
+                    path="sponsors.responsible_party.affiliation.identifier_scheme"
+                    :rule="{
+                      message: `Please add the investigator's affiliation identifier scheme`,
+                      required: moduleData.sponsors.responsible_party.affiliation.identifier,
+                      trigger: ['blur', 'input'],
+                    }"
+                    class="w-full"
+                  >
+                    <n-input
+                      v-model:value="
+                        moduleData.sponsors.responsible_party.affiliation.identifier_scheme
+                      "
+                      placeholder="ROR"
+                      clearable
+                    />
+                  </n-form-item>
 
-          <n-divider />
+                  <n-form-item
+                    label="Affiliation Identifier Scheme URI"
+                    path="sponsors.responsible_party.affiliation.scheme_uri"
+                    class="w-full"
+                  >
+                    <n-input
+                      v-model:value="moduleData.sponsors.responsible_party.affiliation.scheme_uri"
+                      placeholder="https://ror.org"
+                      clearable
+                    />
+                  </n-form-item>
+                </div>
 
-          <h3>Lead Sponsor</h3>
+                <n-form-item
+                  label="Identifier"
+                  path="sponsors.responsible_party.identifier.value"
+                  :rule="{
+                    message: `Please add the investigator's identifier`,
+                    required: moduleData.sponsors.responsible_party.identifier.scheme,
+                    trigger: ['blur', 'input'],
+                  }"
+                >
+                  <n-input
+                    v-model:value="moduleData.sponsors.responsible_party.identifier.value"
+                    placeholder="0000-0003-2829-8032"
+                    clearable
+                  />
+                </n-form-item>
 
-          <p class="pb-8 pt-2">The entity or individual who is the sponsor of the clinical study</p>
+                <div class="flex items-center space-x-4">
+                  <n-form-item
+                    label="Identifier Scheme"
+                    path="sponsors.responsible_party.identifier.scheme"
+                    :rule="{
+                      message: `Please add the investigator's identifier scheme`,
+                      required: moduleData.sponsors.responsible_party.identifier.value,
+                      trigger: ['blur', 'input'],
+                    }"
+                    class="w-full"
+                  >
+                    <n-input
+                      v-model:value="moduleData.sponsors.responsible_party.identifier.scheme"
+                      placeholder="ORCID"
+                      clearable
+                    />
+                  </n-form-item>
 
-          <n-form-item
-            label="Name"
-            path="sponsors.lead_sponsor.name"
-            :rule="{
-              message: 'Please enter a lead sponsor name',
-              required: true,
-              trigger: ['blur', 'input'],
-            }"
-          >
-            <n-input
-              v-model:value="moduleData.sponsors.lead_sponsor.name"
-              placeholder="Willy Tybur"
-              clearable
-            />
-          </n-form-item>
+                  <n-form-item
+                    label="Identifier Scheme URI"
+                    path="responsible_party.identifier.scheme_uri"
+                    class="w-full"
+                  >
+                    <n-input
+                      v-model:value="moduleData.sponsors.responsible_party.identifier.scheme_uri"
+                      placeholder="https://orcid.org"
+                      clearable
+                    />
+                  </n-form-item>
+                </div>
 
-          <n-form-item
-            label="Identifier"
-            path="sponsors.lead_sponsor.identifier"
-            :rule="{
-              message: 'Please enter a lead sponsor identifier',
-              required: moduleData.sponsors.lead_sponsor.identifier_scheme,
-              trigger: ['blur', 'input'],
-            }"
-          >
-            <n-input
-              v-model:value="moduleData.sponsors.lead_sponsor.identifier"
-              placeholder="04aj4c18"
-              clearable
-            />
-          </n-form-item>
+                <n-divider />
 
-          <div class="flex items-center space-x-4">
-            <n-form-item
-              label="Identifier Scheme"
-              path="sponsors.lead_sponsor.identifier_scheme"
-              :rule="{
-                message: 'Please enter a lead sponsor identifier scheme',
-                required: moduleData.sponsors.lead_sponsor.identifier,
-                trigger: ['blur', 'input'],
-              }"
-              class="w-full"
-            >
-              <n-input
-                v-model:value="moduleData.sponsors.lead_sponsor.identifier_scheme"
-                placeholder="ROR"
-                clearable
-              />
-            </n-form-item>
+                <h3>Lead Sponsor</h3>
 
-            <n-form-item
-              class="w-full"
-              label="Identifier Scheme URI"
-              path="lead_sponsor.identifier_scheme_uri"
-            >
-              <n-input
-                v-model:value="moduleData.sponsors.lead_sponsor.identifier_scheme_uri"
-                placeholder="https://ror.org"
-                clearable
-              />
-            </n-form-item>
-          </div>
-        </n-space>
+                <p class="pb-8 pt-2">
+                  The entity or individual who is the sponsor of the clinical study
+                </p>
 
-        <n-divider></n-divider>
-      </n-card>
+                <n-form-item
+                  label="Name"
+                  path="sponsors.lead_sponsor.name"
+                  :rule="{
+                    message: 'Please enter a lead sponsor name',
+                    required: true,
+                    trigger: ['blur', 'input'],
+                  }"
+                >
+                  <n-input
+                    v-model:value="moduleData.sponsors.lead_sponsor.name"
+                    placeholder="Willy Tybur"
+                    clearable
+                  />
+                </n-form-item>
 
-      <h2 class="pb-4 pt-8">Collaborators</h2>
+                <n-form-item
+                  label="Identifier"
+                  path="sponsors.lead_sponsor.identifier"
+                  :rule="{
+                    message: 'Please enter a lead sponsor identifier',
+                    required: moduleData.sponsors.lead_sponsor.identifier_scheme,
+                    trigger: ['blur', 'input'],
+                  }"
+                >
+                  <n-input
+                    v-model:value="moduleData.sponsors.lead_sponsor.identifier"
+                    placeholder="04aj4c18"
+                    clearable
+                  />
+                </n-form-item>
 
-      <CollapsibleCard
-        v-for="(item, index) in moduleData.collaborators"
-        :key="item.id"
-        class="mb-5 shadow-md"
-        :title="item.name || `Collaborator ${index + 1}`"
-        bordered
-      >
-        <template #header-extra>
-          <n-popconfirm @positive-click="removeCollaborator(item.id)">
-            <template #trigger>
-              <n-button type="error" secondary>
-                <template #icon>
-                  <f-icon icon="ep:delete" />
+                <div class="flex items-center space-x-4">
+                  <n-form-item
+                    label="Identifier Scheme"
+                    path="sponsors.lead_sponsor.identifier_scheme"
+                    :rule="{
+                      message: 'Please enter a lead sponsor identifier scheme',
+                      required: moduleData.sponsors.lead_sponsor.identifier,
+                      trigger: ['blur', 'input'],
+                    }"
+                    class="w-full"
+                  >
+                    <n-input
+                      v-model:value="moduleData.sponsors.lead_sponsor.identifier_scheme"
+                      placeholder="ROR"
+                      clearable
+                    />
+                  </n-form-item>
+
+                  <n-form-item
+                    class="w-full"
+                    label="Identifier Scheme URI"
+                    path="lead_sponsor.identifier_scheme_uri"
+                  >
+                    <n-input
+                      v-model:value="moduleData.sponsors.lead_sponsor.identifier_scheme_uri"
+                      placeholder="https://ror.org"
+                      clearable
+                    />
+                  </n-form-item>
+                </div>
+              </n-space>
+
+              <n-divider></n-divider>
+            </n-card>
+
+            <h2 class="collaborators pb-4 pt-8">Collaborators</h2>
+
+            <n-card class="rounded-xl bg-gray-50">
+              <CollapsibleCard
+                v-for="(item, index) in moduleData.collaborators"
+                :key="item.id"
+                class="mb-5 shadow-md"
+                :title="item.name || `Collaborator ${index + 1}`"
+                bordered
+              >
+                <template #header-extra>
+                  <n-popconfirm @positive-click="removeCollaborator(item.id)">
+                    <template #trigger>
+                      <n-button type="error" secondary>
+                        <template #icon>
+                          <f-icon icon="ep:delete" />
+                        </template>
+
+                        Remove Collaborator
+                      </n-button>
+                    </template>
+
+                    Are you sure you want to remove this Collaborator?
+                  </n-popconfirm>
                 </template>
 
-                Remove Collaborator
+                <n-form-item
+                  label="Name"
+                  :path="`collaborators[${index}].name`"
+                  :rule="{
+                    message: 'Please enter a name',
+                    required: true,
+                    trigger: ['blur', 'change'],
+                  }"
+                >
+                  <n-input v-model:value="item.name" placeholder="Sasha Braus" clearable />
+                </n-form-item>
+
+                <n-form-item
+                  label="Identifier"
+                  :path="`collaborators[${index}].identifier`"
+                  :rule="{
+                    message: 'Please enter an identifier',
+                    required: item.identifier_scheme,
+                    trigger: ['blur', 'change'],
+                  }"
+                >
+                  <n-input
+                    v-model:value="item.identifier"
+                    placeholder="0000-0003-2829-8032"
+                    clearable
+                  />
+                </n-form-item>
+
+                <n-form-item
+                  label="Identifier Scheme"
+                  :path="`collaborators[${index}].identifier_scheme`"
+                  :rule="{
+                    message: 'Please enter an identifier scheme',
+                    required: item.identifier,
+                    trigger: ['blur', 'change'],
+                  }"
+                >
+                  <n-input v-model:value="item.identifier_scheme" placeholder="ORCID" clearable />
+                </n-form-item>
+
+                <n-form-item
+                  label="Identifier Scheme URI"
+                  :path="`collaborators[${index}].identifier_scheme_uri`"
+                >
+                  <n-input
+                    v-model:value="item.identifier_scheme_uri"
+                    placeholder="https://orcid.org"
+                    clearable
+                  />
+                </n-form-item>
+              </CollapsibleCard>
+
+              <n-button class="my-10 w-full" dashed type="success" @click="addCollaborator">
+                <template #icon>
+                  <f-icon icon="gridicons:create" />
+                </template>
+
+                Add a Collaborator
               </n-button>
-            </template>
+            </n-card>
 
-            Are you sure you want to remove this Collaborator?
-          </n-popconfirm>
-        </template>
+            <n-divider />
 
-        <n-form-item
-          label="Name"
-          :path="`collaborators[${index}].name`"
-          :rule="{
-            message: 'Please enter a name',
-            required: true,
-            trigger: ['blur', 'change'],
-          }"
-        >
-          <n-input v-model:value="item.name" placeholder="Sasha Braus" clearable />
-        </n-form-item>
+            <div class="flex justify-start pt-4">
+              <n-button
+                size="large"
+                :disabled="studyStore.currentStudyRole === 'viewer'"
+                type="primary"
+                @click="saveMetadata"
+                :loading="loading"
+              >
+                <template #icon>
+                  <f-icon icon="material-symbols:save" />
+                </template>
 
-        <n-form-item
-          label="Identifier"
-          :path="`collaborators[${index}].identifier`"
-          :rule="{
-            message: 'Please enter an identifier',
-            required: item.identifier_scheme,
-            trigger: ['blur', 'change'],
-          }"
-        >
-          <n-input v-model:value="item.identifier" placeholder="0000-0003-2829-8032" clearable />
-        </n-form-item>
-
-        <n-form-item
-          label="Identifier Scheme"
-          :path="`collaborators[${index}].identifier_scheme`"
-          :rule="{
-            message: 'Please enter an identifier scheme',
-            required: item.identifier,
-            trigger: ['blur', 'change'],
-          }"
-        >
-          <n-input v-model:value="item.identifier_scheme" placeholder="ORCID" clearable />
-        </n-form-item>
-
-        <n-form-item
-          label="Identifier Scheme URI"
-          :path="`collaborators[${index}].identifier_scheme_uri`"
-        >
-          <n-input
-            v-model:value="item.identifier_scheme_uri"
-            placeholder="https://orcid.org"
-            clearable
-          />
-        </n-form-item>
-      </CollapsibleCard>
-
-      <n-button class="my-10 w-full" dashed type="success" @click="addCollaborator">
-        <template #icon>
-          <f-icon icon="gridicons:create" />
-        </template>
-
-        Add a Collaborator
-      </n-button>
-
-      <div class="flex justify-start">
-        <n-button
-          size="large"
-          :disabled="studyStore.currentStudyRole === 'viewer'"
-          type="primary"
-          @click="saveMetadata"
-          :loading="loading"
-        >
-          <template #icon>
-            <f-icon icon="material-symbols:save" />
-          </template>
-
-          Save Metadata
-        </n-button>
+                Save Metadata
+              </n-button>
+            </div>
+          </n-form>
+        </FadeTransition>
       </div>
-    </n-form>
+    </n-scrollbar>
   </main>
 </template>
