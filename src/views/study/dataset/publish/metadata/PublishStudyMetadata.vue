@@ -36,6 +36,17 @@ onBeforeMount(async () => {
   study_metadata.value = data;
 });
 
+function handleBackButton() {
+  router.push({
+    name: "dataset:publish:version:participants",
+    params: {
+      datasetId: routeParams.datasetId,
+      studyId: routeParams.studyId,
+      versionId: routeParams.versionId,
+    },
+  });
+}
+
 function handleNextButton() {
   router.push({
     name: "dataset:publish:version:dataset-metadata",
@@ -127,7 +138,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'study:metadata:identification',
+                name: 'study:metadata:description',
                 params: {
                   studyId: routeParams.studyId,
                 },
@@ -298,7 +309,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'study:metadata:collaborators',
+                name: 'study:metadata:team',
                 params: {
                   studyId: routeParams.studyId,
                 },
@@ -432,7 +443,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'study:metadata:conditions',
+                name: 'study:metadata:description',
                 params: {
                   studyId: routeParams.studyId,
                 },
@@ -973,7 +984,14 @@ function handleNextButton() {
 
     <n-divider />
 
-    <div class="flex items-center justify-end">
+    <div class="flex items-center justify-between gap-4">
+      <n-button size="large" type="primary" @click="handleBackButton">
+        <template #icon>
+          <f-icon icon="ic:round-arrow-back-ios" />
+        </template>
+        Back
+      </n-button>
+
       <n-button size="large" type="primary" @click="handleNextButton">
         <template #icon>
           <f-icon icon="ic:round-arrow-forward-ios" />

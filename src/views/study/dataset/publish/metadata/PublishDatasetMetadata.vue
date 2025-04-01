@@ -43,6 +43,16 @@ function handleNextButton() {
     },
   });
 }
+function handleBackButton() {
+  router.push({
+    name: "dataset:publish:version:study-metadata",
+    params: {
+      datasetId: routeParams.datasetId,
+      studyId: routeParams.studyId,
+      versionId: routeParams.versionId,
+    },
+  });
+}
 
 // const formatDate = (timestamp: string) => {
 //   if (timestamp) {
@@ -140,7 +150,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'dataset:metadata:title',
+                name: 'dataset:metadata:general-information',
                 params: {
                   studyId: routeParams.studyId,
                   datasetId: routeParams.datasetId,
@@ -183,7 +193,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'dataset:metadata:descriptions',
+                name: 'dataset:metadata:general-information',
                 params: {
                   studyId: routeParams.studyId,
                   datasetId: routeParams.datasetId,
@@ -232,7 +242,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'dataset:metadata:creators',
+                name: 'dataset:metadata:team',
                 params: {
                   studyId: routeParams.studyId,
                   datasetId: routeParams.datasetId,
@@ -285,7 +295,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'dataset:metadata:contributors',
+                name: 'dataset:metadata:team',
                 params: {
                   studyId: routeParams.studyId,
                   datasetId: routeParams.datasetId,
@@ -328,7 +338,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'dataset:metadata:dates',
+                name: 'dataset:metadata:general-information',
                 params: {
                   studyId: routeParams.studyId,
                   datasetId: routeParams.datasetId,
@@ -367,7 +377,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'dataset:metadata:managing-organization',
+                name: 'dataset:metadata:team',
                 params: {
                   studyId: routeParams.studyId,
                   datasetId: routeParams.datasetId,
@@ -416,7 +426,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'dataset:metadata:de-identification',
+                name: 'dataset:metadata:data-management',
                 params: {
                   studyId: routeParams.studyId,
                   datasetId: routeParams.datasetId,
@@ -459,7 +469,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'dataset:metadata:consent',
+                name: 'dataset:metadata:data-management',
                 params: {
                   studyId: routeParams.studyId,
                   datasetId: routeParams.datasetId,
@@ -497,7 +507,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'dataset:metadata:subjects',
+                name: 'dataset:metadata:data-management',
                 params: {
                   studyId: routeParams.studyId,
                   datasetId: routeParams.datasetId,
@@ -528,7 +538,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'dataset:metadata:access',
+                name: 'dataset:metadata:access-rights',
                 params: {
                   studyId: routeParams.studyId,
                   datasetId: routeParams.datasetId,
@@ -571,7 +581,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'dataset:metadata:rights',
+                name: 'dataset:metadata:access-rights',
                 params: {
                   studyId: routeParams.studyId,
                   datasetId: routeParams.datasetId,
@@ -614,7 +624,7 @@ function handleNextButton() {
           <template #action>
             <RouterLink
               :to="{
-                name: 'dataset:metadata:funders',
+                name: 'dataset:metadata:team',
                 params: {
                   studyId: routeParams.studyId,
                   datasetId: routeParams.datasetId,
@@ -755,7 +765,14 @@ function handleNextButton() {
 
     <n-divider />
 
-    <div class="flex items-center justify-end">
+    <div class="flex items-center justify-between gap-4">
+      <n-button size="large" type="primary" @click="handleBackButton">
+        <template #icon>
+          <f-icon icon="ic:round-arrow-back-ios" />
+        </template>
+        Back
+      </n-button>
+
       <n-button size="large" type="primary" @click="handleNextButton">
         <template #icon>
           <f-icon icon="ic:round-arrow-forward-ios" />
