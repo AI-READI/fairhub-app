@@ -4,8 +4,10 @@ import log from "@/middleware/log";
 import NotFound from "@/views/404/NotFound.vue";
 import UserProfile from "@/views/account/UserProfile.vue";
 import ConfirmEmail from "@/views/auth/ConfirmEmail.vue";
+import ForgotPassword from "@/views/auth/ForgotPassword.vue";
 import LoginPage from "@/views/auth/LoginPage.vue";
 import LogOut from "@/views/auth/LogOut.vue";
+import ResetPassword from "@/views/auth/ResetPassword.vue";
 import SignUp from "@/views/auth/SignUp.vue";
 import VerifyEmail from "@/views/auth/VerifyEmail.vue";
 import Documentation from "@/views/help/DocumentationPage.vue";
@@ -109,6 +111,16 @@ const router = createRouter({
           name: "auth:logout",
           path: "logout",
           component: LogOut,
+        },
+        {
+          name: "auth:forgot-password",
+          path: "forgot-password",
+          component: ForgotPassword,
+        },
+        {
+          name: "auth:reset-password",
+          path: "reset-password",
+          component: ResetPassword,
         },
       ],
     },
