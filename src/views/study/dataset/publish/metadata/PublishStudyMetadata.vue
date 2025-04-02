@@ -571,14 +571,6 @@ function handleNextButton() {
                   {{ study_metadata.design.target_duration }}
                 </td>
               </tr>
-
-              <tr>
-                <th>Number of study groups/cohorts</th>
-
-                <td>
-                  {{ study_metadata.design.number_groups_cohorts }}
-                </td>
-              </tr>
             </tbody>
           </n-table>
 
