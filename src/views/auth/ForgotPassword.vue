@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth";
+import { baseURL } from "@/utils/constants";
 
 const push = usePush();
 const router = useRouter();
-import { baseURL } from "@/utils/constants";
 const authStore = useAuthStore();
 const loading = ref(false);
 
@@ -19,41 +19,15 @@ const formValue = ref({
   email_address: process.env.NODE_ENV === "development" ? "test@fairhub.io" : "",
 });
 
-const invalidEmailAddress = computed(() => !formValue.value.email_address.includes("@")); //add email validation
+const rules: FormRules = {
+  email_address: {
+    message: "Please enter your email address",
+    required: true,
+    trigger: ["blur", "input"],
+  },
+};
 
-// const forgotPassword = async () => {
-//   const email_address = formValue.value.email_address;
-//
-//   if (!email_address) {
-//     return;
-//   }
-//
-//   let response: Response | undefined;
-//
-//   try {
-//     response = await fetch(`${baseURL}/auth/forgot-password`, {
-//       body: JSON.stringify({
-//         email_address,
-//       }),
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       method: "POST",
-//     });
-//   } catch (error) {
-//     console.log("error happened");
-//   }
-//
-//   if (!response.ok) {
-//     push.error("Something went wrong. Please try again later.");
-//     throw new Error("Network response was not ok");
-//   } else {
-//     push.success(`We sent an email to ${email_address} with a link to get back into your account.`);
-//
-//     // refresh page
-//     router.go(1);
-//   }
-// };
+const invalidEmailAddress = computed(() => !formValue.value.email_address.includes("@")); //add email validation
 
 const forgotPassword = (e: MouseEvent) => {
   e.preventDefault();
@@ -98,20 +72,6 @@ const forgotPassword = (e: MouseEvent) => {
           });
         }
       }
-      //
-      // const data: User = await response.json();
-      //
-      // if (!data) {
-      //   console.log("error");
-      //
-      //   push.error({
-      //     title: "Error",
-      //     message: "Something went wrong. Please try again later",
-      //   });
-      //
-      //   return;
-      // }
-
       push.success({
         message: `We sent an email to ${email_address} with a link to get back into your account.`,
       });

@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import type { FormInst } from "naive-ui";
+
+import { baseURL } from "@/utils/constants";
+
 const push = usePush();
 const route = useRoute();
 const router = useRouter();
-import { baseURL } from "@/utils/constants";
 
 onBeforeMount(async () => {
   if (!route.query.token) {
@@ -69,17 +72,12 @@ const handlePasswordInput = () => {
   }
 };
 
-const passwordForm = ref({
-  confirm_password: "",
-  new_password: "",
-});
-
 const passwordRules: FormRules = {
   confirm_password: {
     required: true,
     trigger: ["blur", "input"],
     validator: (rule, value) => {
-      if (value !== passwordForm.value.new_password) {
+      if (value !== formValue.value.new_password) {
         return new Error("Passwords do not match");
       }
       return true;
@@ -212,7 +210,7 @@ const resetPassword = (e: MouseEvent) => {
           @click="resetPassword"
           type="primary"
           size="large"
-          :disabled="invalidEmailAddress"
+          :disabled="true"
           class="my-5 w-full"
         >
           <template #icon>
