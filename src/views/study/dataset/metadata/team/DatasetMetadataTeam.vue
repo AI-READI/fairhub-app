@@ -309,7 +309,10 @@ const saveMetadata = (e: MouseEvent) => {
         push.success("Creators saved successfully.");
 
         // refresh page
-        router.go(0);
+        router.push({
+          name: "dataset:metadata:data-management",
+          params: { datasetId: datasetId, studyId },
+        });
       }
 
       console.log("success");
@@ -333,13 +336,19 @@ const scrollToSection = (key: string) => {
   const section = document.querySelector(`.${key}`) as HTMLElement;
   scrollbarRef.value?.scrollTo({ behavior: "smooth", top: section.offsetTop });
 };
+const previousPage = () => {
+  router.push({
+    name: "dataset:metadata:identifiers",
+    params: { datasetId: datasetId, studyId },
+  });
+};
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
       title="Team"
-      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      description=""
       linkName="dataset:overview"
       :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
     />
@@ -1075,7 +1084,20 @@ const scrollToSection = (key: string) => {
 
             <n-divider />
 
-            <div class="flex justify-start pt-4">
+            <div class="flex justify-between gap-4">
+              <n-button
+                size="large"
+                @click="previousPage"
+                type="primary"
+                :disabled="studyStore.currentStudyRole === 'viewer'"
+              >
+                <template #icon>
+                  <f-icon icon="ic:round-arrow-back-ios" />
+                </template>
+
+                Back
+              </n-button>
+
               <n-button
                 size="large"
                 type="primary"
@@ -1084,10 +1106,10 @@ const scrollToSection = (key: string) => {
                 :disabled="studyStore.currentStudyRole === 'viewer'"
               >
                 <template #icon>
-                  <f-icon icon="material-symbols:save" />
+                  <f-icon icon="ic:round-arrow-forward-ios" />
                 </template>
 
-                Save Metadata
+                Next
               </n-button>
             </div>
           </n-form>

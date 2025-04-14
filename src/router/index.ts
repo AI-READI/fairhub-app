@@ -34,6 +34,7 @@ import DatasetMetadataAccessRights from "@/views/study/dataset/metadata/access-r
 import DatasetMetadataDataManagement from "@/views/study/dataset/metadata/data-management/DatasetMetadataDataManagement.vue";
 import DatasetMetadataGeneralInformation from "@/views/study/dataset/metadata/general-information/DatasetMetadataGeneralInformation.vue";
 import DatasetMetadataIdentifiers from "@/views/study/dataset/metadata/identifiers/DatasetMetadataIdentifiers.vue";
+import InformativePage from "@/views/study/dataset/metadata/informative-page/InformativePage.vue";
 import DatasetMetadataRelatedIdentifiers from "@/views/study/dataset/metadata/related/DatasetMetadataRelatedIdentifiers.vue";
 import DatasetMetadataTeam from "@/views/study/dataset/metadata/team/DatasetMetadataTeam.vue";
 import NewDataset from "@/views/study/dataset/new/NewDataset.vue";
@@ -271,6 +272,11 @@ const router = createRouter({
                       name: "dataset:metadata:identifiers",
                       path: "identifiers",
                       component: DatasetMetadataIdentifiers,
+                    },
+                    {
+                      name: "dataset:metadata:informative",
+                      path: "informative",
+                      component: InformativePage,
                     },
                     {
                       name: "dataset:metadata:general-information",

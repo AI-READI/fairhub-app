@@ -244,8 +244,10 @@ const saveMetadata = (e: MouseEvent) => {
 
       push.success("Dataset titles updated successfully");
 
-      // refresh page
-      router.go(0);
+      router.push({
+        name: "dataset:metadata:identifiers",
+        params: { datasetId: datasetId, studyId },
+      });
 
       console.log("success");
     } else {
@@ -266,15 +268,22 @@ const scrollToSection = (key: string) => {
   const section = document.querySelector(`.${key}`) as HTMLElement;
   scrollbarRef.value?.scrollTo({ behavior: "smooth", top: section.offsetTop });
 };
+
+const previousPage = () => {
+  router.push({
+    name: "study:all-datasets",
+    params: { studyId },
+  });
+};
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col pr-6">
     <PageBackNavigationHeader
-      title="General information"
+      title="Dataset collection"
       description=""
-      linkName="dataset:overview"
-      :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
+      linkName="study:all-datasets"
+      :linkParams="{ studyId: routeParams.studyId }"
     />
 
     <n-divider />
@@ -308,6 +317,10 @@ const scrollToSection = (key: string) => {
             label-placement="top"
             :disabled="studyStore.currentStudyRole === 'viewer'"
           >
+            <h1 class="py-4">General information</h1>
+
+            <p>Let’s start with some high-level questions so we can understand your dataset.</p>
+
             <h2 class="titles py-4">Titles</h2>
 
             <n-card class="bg-gray-50">
@@ -560,7 +573,19 @@ const scrollToSection = (key: string) => {
 
             <n-divider />
 
-            <div class="flex justify-start pt-4">
+            <div class="flex justify-between gap-4 pt-4">
+              <n-button
+                size="large"
+                type="primary"
+                @click="previousPage"
+                :disabled="studyStore.currentStudyRole === 'viewer'"
+              >
+                <template #icon>
+                  <f-icon icon="ic:round-arrow-back-ios" />
+                </template>
+                Back
+              </n-button>
+
               <n-button
                 size="large"
                 type="primary"
@@ -569,9 +594,9 @@ const scrollToSection = (key: string) => {
                 :disabled="studyStore.currentStudyRole === 'viewer'"
               >
                 <template #icon>
-                  <f-icon icon="material-symbols:save" />
+                  <f-icon icon="ic:round-arrow-forward-ios" />
                 </template>
-                Save changes
+                Next
               </n-button>
             </div>
           </n-form>

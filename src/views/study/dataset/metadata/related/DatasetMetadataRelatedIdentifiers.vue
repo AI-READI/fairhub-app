@@ -143,7 +143,10 @@ const saveMetadata = (e: MouseEvent) => {
         push.success("Identifiers saved successfully.");
 
         // refresh page
-        router.go(0);
+        router.push({
+          name: "dataset:metadata:about",
+          params: { datasetId: datasetId, studyId },
+        });
       }
 
       console.log("success");
@@ -151,6 +154,13 @@ const saveMetadata = (e: MouseEvent) => {
       console.log("error");
       console.log(errors);
     }
+  });
+};
+
+const previousPage = () => {
+  router.push({
+    name: "dataset:metadata:access-rights",
+    params: { datasetId: datasetId, studyId },
   });
 };
 </script>
@@ -341,7 +351,20 @@ const saveMetadata = (e: MouseEvent) => {
 
         <n-divider />
 
-        <div class="flex justify-start">
+        <div class="flex justify-between gap-4">
+          <n-button
+            size="large"
+            type="primary"
+            @click="previousPage"
+            :disabled="studyStore.currentStudyRole === 'viewer'"
+          >
+            <template #icon>
+              <f-icon icon="ic:round-arrow-back-ios" />
+            </template>
+
+            Back
+          </n-button>
+
           <n-button
             size="large"
             type="primary"
@@ -350,10 +373,10 @@ const saveMetadata = (e: MouseEvent) => {
             :disabled="studyStore.currentStudyRole === 'viewer'"
           >
             <template #icon>
-              <f-icon icon="material-symbols:save" />
+              <f-icon icon="ic:round-arrow-forward-ios" />
             </template>
 
-            Save Metadata
+            Next
           </n-button>
         </div>
       </n-form>

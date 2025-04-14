@@ -10,6 +10,7 @@ const route = useRoute();
 const push = usePush();
 
 const studyStore = useStudyStore();
+const router = useRouter();
 
 const routeParams = {
   datasetId: route.params.datasetId as string,
@@ -123,7 +124,10 @@ const saveMetadata = (e: MouseEvent) => {
       }
 
       push.success("Metadata saved successfully");
-
+      router.push({
+        name: "dataset:metadata:informative",
+        params: { datasetId: datasetId, studyId },
+      });
       console.log("success");
     } else {
       console.log("error");
@@ -145,6 +149,13 @@ const menuOptions: MenuOption[] = [
 const scrollToSection = (key: string) => {
   const section = document.querySelector(`.${key}`) as HTMLElement;
   scrollbarRef.value?.scrollTo({ behavior: "smooth", top: section.offsetTop });
+};
+
+const previousPage = () => {
+  router.push({
+    name: "dataset:metadata:related-identifiers",
+    params: { datasetId: datasetId, studyId },
+  });
 };
 </script>
 
@@ -325,7 +336,20 @@ const scrollToSection = (key: string) => {
 
             <n-divider />
 
-            <div class="flex justify-start">
+            <div class="flex justify-between gap-4">
+              <n-button
+                size="large"
+                type="primary"
+                @click="previousPage"
+                :disabled="studyStore.currentStudyRole === 'viewer'"
+              >
+                <template #icon>
+                  <f-icon icon="ic:round-arrow-back-ios" />
+                </template>
+
+                Back
+              </n-button>
+
               <n-button
                 size="large"
                 type="primary"
@@ -334,10 +358,10 @@ const scrollToSection = (key: string) => {
                 :disabled="studyStore.currentStudyRole === 'viewer'"
               >
                 <template #icon>
-                  <f-icon icon="material-symbols:save" />
+                  <f-icon icon="ic:round-arrow-forward-ios" />
                 </template>
 
-                Save Metadata
+                Next
               </n-button>
             </div>
           </n-form>

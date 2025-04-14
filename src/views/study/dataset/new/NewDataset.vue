@@ -80,19 +80,33 @@ const createDataset = (e: MouseEvent) => {
 
       console.log(data);
 
-      router.push({ name: "dataset:overview", params: { datasetId: data.id, studyId } });
-      push.success("Dataset created successfully.");
+      router.push({
+        name: "dataset:metadata:general-information",
+        params: { datasetId: data.id, studyId },
+      });
+      // push.success("Dataset created successfully.");
     } else {
       console.log("error");
       console.log(errors);
     }
   });
 };
+const previousPage = () => {
+  router.push({
+    name: "study:all-datasets",
+    params: { studyId },
+  });
+};
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col">
-    <h1>Create a new dataset</h1>
+    <h1 class="pb-4">Prepare dataset</h1>
+
+    <p>
+      You will be guided through all the steps of the publishing process before submitting your
+      final version.
+    </p>
 
     <n-divider />
 
@@ -122,7 +136,21 @@ const createDataset = (e: MouseEvent) => {
 
       <n-divider />
 
-      <div class="flex justify-start">
+      <div class="flex justify-between gap-4">
+        <n-button
+          size="large"
+          type="primary"
+          @click="previousPage"
+          :disabled="
+            studyStore.currentStudyRole === 'viewer' || studyStore.currentStudyRole === 'editor'
+          "
+        >
+          <template #icon>
+            <f-icon icon="ic:round-arrow-back-ios" />
+          </template>
+          Back
+        </n-button>
+
         <n-button
           size="large"
           type="primary"
@@ -133,9 +161,9 @@ const createDataset = (e: MouseEvent) => {
           "
         >
           <template #icon>
-            <f-icon icon="gridicons:create" />
+            <f-icon icon="solar:round-arrow-right-bold" />
           </template>
-          Create Dataset
+          Start publish process
         </n-button>
       </div>
     </n-form>

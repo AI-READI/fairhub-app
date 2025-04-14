@@ -72,7 +72,7 @@ const navigateToDataset = (datasetId: string) => {
             <f-icon icon="ion:add-circle-outline" />
           </template>
 
-          Create a new dataset
+          Share a new dataset
         </n-button>
       </RouterLink>
     </n-space>

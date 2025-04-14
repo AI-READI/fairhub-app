@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FadeTransition from "@/components/transitions/FadeTransition.vue";
 import { useSidebarStore } from "@/stores/sidebar";
 import type { Dataset } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
@@ -8,6 +9,7 @@ const route = useRoute();
 const push = usePush();
 
 const sidebarStore = useSidebarStore();
+const router = useRouter();
 
 const dataset = ref<Dataset>({
   id: "",
@@ -21,8 +23,6 @@ const routeParams = {
   datasetId: route.params.datasetId as string,
   studyId: route.params.studyId as string,
 };
-
-const router = useRouter();
 
 const studyId = routeParams.studyId;
 const datasetId = routeParams.datasetId;
@@ -51,15 +51,21 @@ onBeforeMount(async () => {
   dataset.value = data;
 });
 
-const previousPhase = (e: MouseEvent) => {
+const navigateHealthsheet = () => {
   router.push({
-    name: "study:all-datasets",
-    params: { studyId },
+    name: "dataset:healthsheet:motivation",
+    params: { datasetId: datasetId, studyId },
   });
 };
-const nextPhase = (e: MouseEvent) => {
+const navigatePublish = () => {
   router.push({
-    name: "dataset:metadata:general-information",
+    name: "dataset:publish:versions",
+    params: { datasetId: datasetId, studyId },
+  });
+};
+const previousPage = () => {
+  router.push({
+    name: "dataset:metadata:about",
     params: { datasetId: datasetId, studyId },
   });
 };
@@ -69,37 +75,37 @@ const nextPhase = (e: MouseEvent) => {
   <main class="flex h-full w-full flex-col space-y-8 pr-6">
     <PageBackNavigationHeader
       title="Data collection"
-      description=""
+      description="View an overview of your dataset"
       linkName="study:all-datasets"
       :linkParams="{ studyId: routeParams.studyId }"
     />
 
     <n-divider />
 
-    <n-card class="flex items-center justify-center rounded-md bg-gray-50 py-8">
-      <h1 class="flex justify-center">Dataset preparation introduction</h1>
+    <FadeTransition>
+      <n-card class="flex max-w-screen-2xl items-center rounded-lg p-8">
+        <h1>Select the task you would like to perform below:</h1>
 
-      <p class="max-w-screen-xl pt-8">
-        Several information are required to share a dataset. You will be guided through all the
-        steps for achieving that before uploading the resulting dataset. Once completed, you will
-        upload the final dataset.
-      </p>
+        <div class="flex flex-row justify-between gap-8 pt-16">
+          <n-button @click="navigateHealthsheet" type="default" class="my-8 h-16"
+            >Fill out the healthsheet information</n-button
+          >
 
-      <div class="flex justify-between gap-4 pt-32">
-        <n-button @click="previousPhase" size="large" type="primary">
-          <template #icon>
-            <f-icon icon="ic:round-arrow-back-ios" />
-          </template>
-          Back
-        </n-button>
+          <n-button @click="navigatePublish" type="default" class="my-8 h-16"
+            >Start to publish a new version</n-button
+          >
+        </div>
+      </n-card>
+    </FadeTransition>
 
-        <n-button size="large" @click="nextPhase" type="primary">
-          <template #icon>
-            <f-icon icon="ic:round-arrow-forward-ios" />
-          </template>
-          Next
-        </n-button>
-      </div>
-    </n-card>
+    <div class="flex justify-between gap-4">
+      <n-button @click="previousPage" size="large" type="primary">
+        <template #icon>
+          <f-icon icon="ic:round-arrow-back-ios" />
+        </template>
+
+        Back
+      </n-button>
+    </div>
   </main>
 </template>

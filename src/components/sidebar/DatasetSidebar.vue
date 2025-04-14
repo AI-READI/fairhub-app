@@ -37,6 +37,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
   {
     children: [
       {
+        disabled: false,
         icon: renderIcon("material-symbols:description-outline"),
         key: "dataset:metadata:general-information",
         label: "General information",
@@ -64,7 +65,7 @@ const dynamicUpperMenuOptions: MenuOption[] = [
       {
         icon: renderIcon("fluent-mdl2:relationship"),
         key: "dataset:metadata:related-identifiers",
-        label: "Related Identifiers",
+        label: "Related identifiers",
       },
       {
         // language, managing organization, size goes in here
