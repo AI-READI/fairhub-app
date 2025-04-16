@@ -22,8 +22,6 @@ const routeParams = {
   studyId: route.params.studyId as string,
 };
 
-const router = useRouter();
-
 const studyId = routeParams.studyId;
 const datasetId = routeParams.datasetId;
 
@@ -50,56 +48,29 @@ onBeforeMount(async () => {
 
   dataset.value = data;
 });
-
-const previousPhase = (e: MouseEvent) => {
-  router.push({
-    name: "study:all-datasets",
-    params: { studyId },
-  });
-};
-const nextPhase = (e: MouseEvent) => {
-  router.push({
-    name: "dataset:metadata:general-information",
-    params: { datasetId: datasetId, studyId },
-  });
-};
 </script>
 
 <template>
   <main class="flex h-full w-full flex-col space-y-8 pr-6">
     <PageBackNavigationHeader
       title="Data collection"
-      description=""
+      description="View an overview of your dataset"
       linkName="study:all-datasets"
       :linkParams="{ studyId: routeParams.studyId }"
     />
 
     <n-divider />
 
-    <n-card class="flex items-center justify-center rounded-md bg-gray-50 py-8">
-      <h1 class="flex justify-center">Dataset preparation introduction</h1>
+    <FadeTransition>
+      <LottieLoader v-if="loading" />
 
-      <p class="max-w-screen-xl pt-8">
-        Several information are required to share a dataset. You will be guided through all the
-        steps for achieving that before uploading the resulting dataset. Once completed, you will
-        upload the final dataset.
-      </p>
+      <div class="flex w-full justify-between" v-else>
+        <div class="pr-8">
+          <h2>{{ dataset.title || "Untitled Dataset" }}</h2>
 
-      <div class="flex justify-between gap-4 pt-32">
-        <n-button @click="previousPhase" size="large" type="primary">
-          <template #icon>
-            <f-icon icon="ic:round-arrow-back-ios" />
-          </template>
-          Back
-        </n-button>
-
-        <n-button size="large" @click="nextPhase" type="primary">
-          <template #icon>
-            <f-icon icon="ic:round-arrow-forward-ios" />
-          </template>
-          Next
-        </n-button>
+          <p class="py-4">{{ dataset.description || "No description provided" }}</p>
+        </div>
       </div>
-    </n-card>
+    </FadeTransition>
   </main>
 </template>

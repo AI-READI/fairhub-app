@@ -47,7 +47,7 @@ onBeforeMount(async () => {
 const navigateToDataset = (datasetId: string) => {
   sidebarStore.setAppSidebarCollapsed(true);
 
-  router.push({ name: "dataset:overview", params: { datasetId } });
+  router.push({ name: "dataset:metadata:general-information", params: { datasetId } });
 };
 </script>
 
