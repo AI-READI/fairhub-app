@@ -155,7 +155,7 @@ const UpperMenuOptions = computed(() => [
         ],
         icon: renderIcon("solar:medical-kit-bold"),
         key: "study:treatment",
-        label: "Eligibility & Treatment",
+        label: "Treatment",
         show: hideMenuOptions.value,
       },
 
