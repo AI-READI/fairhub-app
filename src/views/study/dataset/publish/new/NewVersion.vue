@@ -2,6 +2,7 @@
 import { faker } from "@faker-js/faker";
 
 import { useSidebarStore } from "@/stores/sidebar";
+import { DatasetMetadataValidation } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
@@ -17,6 +18,7 @@ const routeParams = {
 
 const studyId = routeParams.studyId as string;
 const datasetId = routeParams.datasetId as string;
+const responseLoading = ref(false);
 
 const loading = ref(false);
 
@@ -25,6 +27,8 @@ const formRef = ref<FormInst | null>(null);
 const version = ref({
   title: faker.commerce.productName(),
 });
+
+const moduleData = reactive<DatasetMetadataValidation[]>([]);
 
 const rules: FormRules = {
   title: [
@@ -38,6 +42,31 @@ const rules: FormRules = {
 
 onBeforeMount(async () => {
   sidebarStore.setAppSidebarCollapsed(true);
+  responseLoading.value = true;
+
+  const response = await fetch(
+    `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata-validation`,
+    {
+      method: "GET",
+    }
+  );
+  responseLoading.value = false;
+
+  if (!response.ok) {
+    push.error("Something went wrong.");
+
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+
+  console.log(data);
+
+  moduleData.splice(0, moduleData.length, ...(data ?? []).map((item: any) => ({ ...item })));
+
+  //
+  // aboutList = moduleData.map((item: any) => item.about);
+  // datasetSubjects = moduleData.map((item: any) => item.dataset_subjects);
 });
 
 const createVersion = (e: MouseEvent) => {
@@ -96,7 +125,41 @@ const createVersion = (e: MouseEvent) => {
 
     <n-divider />
 
+    <div class="mr-4 flex flex-col gap-2 pb-4" :key="index" v-for="(item, index) in moduleData">
+      <n-alert :title="item.message" class="w-full" type="error">
+        <!--        {{ item }}-->
+        <!--      <div v-for="(field, index) in item?.metadata" :key="index">{{ field.name }}</div>-->
+
+        <div
+          v-for="(field, index) in item?.metadata"
+          :key="index"
+          class="flex flex-col gap-4 text-sm"
+        >
+          <RouterLink
+            :to="{
+              name: `study:metadata:${field.identifier}`,
+              params: {
+                studyId: routeParams.studyId,
+                datasetId: routeParams.datasetId,
+              },
+            }"
+          >
+            <n-button size="tiny" type="info" ghost>
+              Add missing {{ field.identifier }} {{ field.name }}
+            </n-button>
+          </RouterLink>
+
+          <!--          <RouterLink :to="{ name: 'study:metadata:eligibility', params: { studyId: 'test-id' } }">-->
+          <!--            <n-button size="tiny" type="info" ghost> Add missing eligibility criteria </n-button>-->
+          <!--          </RouterLink>-->
+        </div>
+      </n-alert>
+    </div>
+
+    <LottieLoader v-if="responseLoading" />
+
     <n-form
+      v-else
       ref="formRef"
       :model="version"
       :rules="rules"
@@ -111,7 +174,7 @@ const createVersion = (e: MouseEvent) => {
       <n-divider />
 
       <div class="flex justify-start">
-        <n-button size="large" type="primary" @click="createVersion" :loading="loading">
+        <n-button disabled size="large" type="primary" @click="createVersion" :loading="loading">
           <template #icon>
             <f-icon icon="gridicons:create" />
           </template>

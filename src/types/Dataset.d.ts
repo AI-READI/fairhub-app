@@ -238,6 +238,16 @@ export interface DatasetRelatedIdentifiers {
   related_identifiers: DatasetRelatedIdentifier[];
 }
 
+export interface FieldValidation {
+  name: string;
+  identifier: string;
+}
+
+export interface DatasetMetadataValidation {
+  message: string;
+  metadata: FieldValidation[];
+}
+
 export interface DatasetHealthsheetRecord {
   id: number;
   question: string;
