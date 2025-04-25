@@ -2,7 +2,7 @@
 import { faker } from "@faker-js/faker";
 
 import { useSidebarStore } from "@/stores/sidebar";
-import { DatasetMetadataValidation } from "@/types/Dataset";
+import type { DatasetMetadataValidation } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
@@ -112,6 +112,21 @@ const createVersion = (e: MouseEvent) => {
     }
   });
 };
+
+function uniqueMetadataIdentifiers(fullMetadata: any) {
+  const uniqueIdentifier = new Set();
+
+  const uniqueFields = fullMetadata.filter((field: any) => {
+    const key = field.identifier; // or field.field if that's your unique identifier
+    if (!uniqueIdentifier.has(key)) {
+      uniqueIdentifier.add(key);
+      return true;
+    }
+    return false;
+  });
+
+  return uniqueFields;
+}
 </script>
 
 <template>
@@ -125,19 +140,16 @@ const createVersion = (e: MouseEvent) => {
 
     <n-divider />
 
-    <div class="mr-4 flex flex-col gap-2 pb-4" :key="index" v-for="(item, index) in moduleData">
+    <div class="mr-4 flex gap-2 pb-4" :key="index" v-for="(item, index) in moduleData">
       <n-alert :title="item.message" class="w-full" type="error">
-        <!--        {{ item }}-->
-        <!--      <div v-for="(field, index) in item?.metadata" :key="index">{{ field.name }}</div>-->
-
         <div
-          v-for="(field, index) in item?.metadata"
-          :key="index"
-          class="flex flex-col gap-4 text-sm"
+          class="mb-2 flex text-sm"
+          v-for="f in uniqueMetadataIdentifiers(item.metadata)"
+          :key="f.name"
         >
           <RouterLink
             :to="{
-              name: `study:metadata:${field.identifier}`,
+              name: `study:metadata:team`,
               params: {
                 studyId: routeParams.studyId,
                 datasetId: routeParams.datasetId,
@@ -145,13 +157,9 @@ const createVersion = (e: MouseEvent) => {
             }"
           >
             <n-button size="tiny" type="info" ghost>
-              Add missing {{ field.identifier }} {{ field.name }}
+              Add Missing {{ f.identifier }} Details
             </n-button>
           </RouterLink>
-
-          <!--          <RouterLink :to="{ name: 'study:metadata:eligibility', params: { studyId: 'test-id' } }">-->
-          <!--            <n-button size="tiny" type="info" ghost> Add missing eligibility criteria </n-button>-->
-          <!--          </RouterLink>-->
         </div>
       </n-alert>
     </div>
