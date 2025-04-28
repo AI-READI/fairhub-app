@@ -144,12 +144,13 @@ function uniqueMetadataIdentifiers(fullMetadata: any) {
       <n-alert :title="item.message" class="w-full" type="error">
         <div
           class="mb-2 flex text-sm"
-          v-for="f in uniqueMetadataIdentifiers(item.metadata)"
-          :key="f.name"
+          v-for="field in uniqueMetadataIdentifiers(item.metadata)"
+          :key="field.identifier"
         >
           <RouterLink
+            @click="storeErrorFields(field.name)"
             :to="{
-              name: `study:metadata:team`,
+              name: `${item.route_identifier}:${field.route}`,
               params: {
                 studyId: routeParams.studyId,
                 datasetId: routeParams.datasetId,
@@ -157,7 +158,7 @@ function uniqueMetadataIdentifiers(fullMetadata: any) {
             }"
           >
             <n-button size="tiny" type="info" ghost>
-              Add Missing {{ f.identifier }} Details
+              Add Missing {{ field.identifier }} Details
             </n-button>
           </RouterLink>
         </div>
