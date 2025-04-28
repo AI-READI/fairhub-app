@@ -32,7 +32,7 @@ const routeParams = {
 const study = reactive({
   title: faker.commerce.productName(),
   image: "",
-  short_description: "",
+  short_description: faker.commerce.productDescription(),
 });
 
 // const keywordOptions = FormJSON.keywordOptions;
