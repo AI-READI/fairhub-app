@@ -240,7 +240,7 @@ export interface DatasetRelatedIdentifiers {
 
 export interface FieldValidation {
   name: string;
-  identifier: string;
+  metadata_header: string;
   route: string;
 }
 

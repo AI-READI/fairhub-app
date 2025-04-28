@@ -117,7 +117,7 @@ function uniqueMetadataIdentifiers(fullMetadata: any) {
   const uniqueIdentifier = new Set();
 
   const uniqueFields = fullMetadata.filter((field: any) => {
-    const key = field.identifier; // or field.field if that's your unique identifier
+    const key = field.metadata_header; // or field.field if that's your unique identifier
     if (!uniqueIdentifier.has(key)) {
       uniqueIdentifier.add(key);
       return true;
@@ -144,8 +144,8 @@ function uniqueMetadataIdentifiers(fullMetadata: any) {
       <n-alert :title="item.message" class="w-full" type="error">
         <div
           class="mb-2 flex text-sm"
-          v-for="field in uniqueMetadataIdentifiers(item.metadata)"
-          :key="field.identifier"
+          v-for="(field, index) in uniqueMetadataIdentifiers(item.metadata)"
+          :key="index"
         >
           <RouterLink
             @click="storeErrorFields(field.name)"
@@ -158,7 +158,7 @@ function uniqueMetadataIdentifiers(fullMetadata: any) {
             }"
           >
             <n-button size="tiny" type="info" ghost>
-              Add Missing {{ field.identifier }} Details
+              Add Missing {{ field.metadata_header }} Details
             </n-button>
           </RouterLink>
         </div>
