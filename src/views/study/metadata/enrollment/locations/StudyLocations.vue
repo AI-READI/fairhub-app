@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 
 import COUNTRIES_JSON from "@/assets/data/countries.json";
 import FORM_JSON from "@/assets/data/form.json";
+import { useErrorStore } from "@/stores/errorField";
 import { useStudyStore } from "@/stores/study";
 import type { StudyLocations } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
@@ -14,12 +15,23 @@ const push = usePush();
 
 const studyStore = useStudyStore();
 
+const errorStore = useErrorStore();
+
+const errorFields = errorStore.errorFields;
 const formRef = ref<FormInst | null>(null);
 
 const moduleData = reactive<StudyLocations>({
   location_list: [],
 });
 
+const showAlert = ref(false);
+
+router.beforeEach((to) => {
+  const isValidationRoute =
+    to.path ===
+    `${baseURL}/study/${to.params.studyId}/dataset/${to.params.datasetId}/publish:versions:new`;
+  showAlert.value = isValidationRoute;
+});
 const countryOptions = computed(() => {
   return COUNTRIES_JSON.map((item) => {
     return {
@@ -178,6 +190,10 @@ const saveMetadata = (e: MouseEvent) => {
         v-else
         :disabled="studyStore.currentStudyRole === 'viewer'"
       >
+        <n-alert v-if="showAlert" type="error" class="pb-4">
+          <p>Error Fields: {{ errorFields }}</p>
+        </n-alert>
+
         <CollapsibleCard
           v-for="(item, index) in moduleData.location_list"
           :key="item.id"

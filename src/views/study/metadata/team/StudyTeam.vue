@@ -21,7 +21,7 @@ const errorFields = errorStore.errorFields;
 const alertStore = useAlertStore();
 
 router.beforeEach((to, from) => {
-  alertStore.setShowAlert(from.name === "dataset:publish:versions:new");
+  alertStore.setShowAlert(from?.name === "dataset:publish:versions:new");
 });
 
 const moduleData = reactive<StudyTeam>({
@@ -269,7 +269,9 @@ const scrollToSection = (key: string) => {
           >
             <div v-if="alertStore.showAlert" class="pb-4">
               <n-alert type="error">
-                <p>Please fill the following required field(s): {{ errorFields }}</p>
+                <p class="text-sm">
+                  Please fill the following required field(s): {{ errorFields }}
+                </p>
               </n-alert>
             </div>
 
