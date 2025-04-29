@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { faker } from "@faker-js/faker";
 
+import { useErrorStore } from "@/stores/errorField";
 import { useSidebarStore } from "@/stores/sidebar";
 import type { DatasetMetadataValidation } from "@/types/Dataset";
 import { baseURL } from "@/utils/constants";
@@ -10,6 +11,8 @@ const router = useRouter();
 const push = usePush();
 
 const sidebarStore = useSidebarStore();
+
+const errorStore = useErrorStore();
 
 const routeParams = {
   datasetId: route.params.datasetId,
@@ -127,6 +130,10 @@ function uniqueMetadataIdentifiers(fullMetadata: any) {
 
   return uniqueFields;
 }
+
+const storeErrorFields = (error: string) => {
+  errorStore.setErrorFields(error);
+};
 </script>
 
 <template>
