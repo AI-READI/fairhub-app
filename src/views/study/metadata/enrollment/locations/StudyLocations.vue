@@ -4,7 +4,6 @@ import { nanoid } from "nanoid";
 
 import COUNTRIES_JSON from "@/assets/data/countries.json";
 import FORM_JSON from "@/assets/data/form.json";
-import { useErrorStore } from "@/stores/errorField";
 import { useStudyStore } from "@/stores/study";
 import type { StudyLocations } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
@@ -14,10 +13,9 @@ const router = useRouter();
 const push = usePush();
 
 const studyStore = useStudyStore();
+const routeState = window.history.state;
+const missingFieldsList = (routeState?.missingFields || []).map((f) => f).join(", ");
 
-const errorStore = useErrorStore();
-
-const errorFields = errorStore.errorFields;
 const formRef = ref<FormInst | null>(null);
 
 const moduleData = reactive<StudyLocations>({
@@ -190,9 +188,14 @@ const saveMetadata = (e: MouseEvent) => {
         v-else
         :disabled="studyStore.currentStudyRole === 'viewer'"
       >
-        <n-alert v-if="showAlert" type="error" class="pb-4">
-          <p>Error Fields: {{ errorFields }}</p>
-        </n-alert>
+        <div v-if="routeState?.missingFields && routeState.missingFields.length">
+          <n-alert type="error">
+            Please fill the following required field(s):
+            <span class="italic">
+              {{ missingFieldsList }}
+            </span>
+          </n-alert>
+        </div>
 
         <CollapsibleCard
           v-for="(item, index) in moduleData.location_list"

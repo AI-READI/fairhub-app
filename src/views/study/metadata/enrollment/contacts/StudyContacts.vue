@@ -11,6 +11,8 @@ const router = useRouter();
 const push = usePush();
 
 const studyStore = useStudyStore();
+const routeState = window.history.state;
+const missingFieldsList = (routeState?.missingFields || []).map((f) => f).join(", ");
 
 const formRef = ref<FormInst | null>(null);
 
@@ -177,6 +179,15 @@ const saveMetadata = (e: MouseEvent) => {
         class="pr-4"
         v-else
       >
+        <div v-if="routeState?.missingFields && routeState.missingFields.length">
+          <n-alert type="error">
+            Please fill the following required field(s):
+            <span class="italic">
+              {{ missingFieldsList }}
+            </span>
+          </n-alert>
+        </div>
+
         <CollapsibleCard
           v-for="(item, index) in moduleData.central_contact_list"
           :key="item.id"

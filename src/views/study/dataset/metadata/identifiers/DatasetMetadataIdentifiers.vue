@@ -21,6 +21,9 @@ const routeParams = {
 const studyId = routeParams.studyId;
 const datasetId = routeParams.datasetId;
 
+const routeState = window.history.state;
+const missingFieldsList = (routeState?.missingFields || []).map((f) => f).join(", ");
+
 const formRef = ref<FormInst | null>(null);
 const moduleData = reactive<DatasetIdentifiers>({
   identifiers: [],
@@ -197,6 +200,15 @@ const scrollToSection = (key: string) => {
         </div>
 
         <div class="w-full">
+          <div v-if="routeState?.missingFields && routeState.missingFields.length">
+            <n-alert type="error">
+              Please fill the following required field(s):
+              <span class="italic">
+                {{ missingFieldsList }}
+              </span>
+            </n-alert>
+          </div>
+
           <h3 class="primary-Identifier">Primary Identifier</h3>
 
           <p class="pb-8 pt-2">

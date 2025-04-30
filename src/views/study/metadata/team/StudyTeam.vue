@@ -17,9 +17,6 @@ const formRef = ref<FormInst | null>(null);
 
 const routeState = window.history.state;
 const missingFieldsList = (routeState?.missingFields || []).map((f) => f).join(", ");
-console.log(routeState?.missingFields.length, "lklll");
-// const errorFields = errorStore.errorFields;
-// const alertStore = useAlertStore();
 
 const moduleData = reactive<StudyTeam>({
   collaborators: [],

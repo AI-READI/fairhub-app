@@ -22,6 +22,9 @@ const routeParams = {
 const studyId = routeParams.studyId;
 const datasetId = routeParams.datasetId;
 
+const routeState = window.history.state;
+const missingFieldsList = (routeState?.missingFields || []).map((f) => f).join(", ");
+
 const formRef = ref<FormInst | null>(null);
 
 const moduleData = reactive<DatasetTeam>({
@@ -375,6 +378,15 @@ const scrollToSection = (key: string) => {
             class="w-full pr-4"
             :disabled="studyStore.currentStudyRole === 'viewer'"
           >
+            <div class="pb-4" v-if="routeState?.missingFields && routeState.missingFields.length">
+              <n-alert type="error">
+                Please fill the following required field(s):
+                <span class="italic">
+                  {{ missingFieldsList }}
+                </span>
+              </n-alert>
+            </div>
+
             <h2 class="creators pb-4">Creators</h2>
 
             <n-card class="bg-gray-50">

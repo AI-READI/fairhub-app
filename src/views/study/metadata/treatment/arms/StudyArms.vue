@@ -18,6 +18,9 @@ const responseLoading = ref(false);
 
 const formRef = ref<FormInst | null>(null);
 
+const routeState = window.history.state;
+const missingFieldsList = (routeState?.missingFields || []).map((f) => f).join(", ");
+
 const moduleData = reactive<StudyArms>({
   arms: [],
   study_type: "",
@@ -149,7 +152,16 @@ const saveMetadata = (e: MouseEvent) => {
     <FadeTransition>
       <LottieLoader v-if="responseLoading" />
 
-      <div v-else>
+      <div v-else class="flex flex-col gap-4">
+        <div v-if="routeState?.missingFields && routeState.missingFields.length">
+          <n-alert type="error">
+            Please fill the following required field(s):
+            <span class="italic">
+              {{ missingFieldsList }}
+            </span>
+          </n-alert>
+        </div>
+
         <div v-if="!moduleData.study_type">
           <n-alert
             title="A study type should be added before you can add study arms."

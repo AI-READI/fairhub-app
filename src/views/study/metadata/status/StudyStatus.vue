@@ -8,7 +8,6 @@ import type { StudyStatusModule } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const routeState = window.history.state;
-
 const missingFieldsList = (routeState?.missingFields || []).map((f) => f).join(", ");
 
 const route = useRoute();
@@ -159,7 +158,7 @@ const saveMetadata = (e: MouseEvent) => {
         :disabled="studyStore.currentStudyRole === 'viewer'"
         v-else
       >
-        <div class="pb-4" v-if="routeState.missingfields && routeState.missingfields.length">
+        <div class="pb-4" v-if="routeState?.missingFields && routeState.missingFields.length">
           <n-alert type="error">
             Please fill the following required field(s):
             <span class="italic">
