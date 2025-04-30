@@ -3,26 +3,23 @@ import type { FormInst, MenuOption } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
-import { useErrorStore } from "@/stores/errorField";
-import { useAlertStore } from "@/stores/showAlert";
 import { useStudyStore } from "@/stores/study";
 import type { StudyTeam } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
+
 const router = useRouter();
 const push = usePush();
 const studyStore = useStudyStore();
 
 const formRef = ref<FormInst | null>(null);
 
-const errorStore = useErrorStore();
-const errorFields = errorStore.errorFields;
-const alertStore = useAlertStore();
-
-router.beforeEach((to, from) => {
-  alertStore.setShowAlert(from?.name === "dataset:publish:versions:new");
-});
+const routeState = window.history.state;
+const missingFieldsList = (routeState?.missingFields || []).map((f) => f).join(", ");
+console.log(routeState?.missingFields.length, "lklll");
+// const errorFields = errorStore.errorFields;
+// const alertStore = useAlertStore();
 
 const moduleData = reactive<StudyTeam>({
   collaborators: [],
@@ -267,11 +264,12 @@ const scrollToSection = (key: string) => {
             label-placement="top"
             class="w-full"
           >
-            <div v-if="alertStore.showAlert" class="pb-4">
+            <div class="pb-4" v-if="routeState?.missingFields && routeState.missingFields.length">
               <n-alert type="error">
-                <p class="text-sm">
-                  Please fill the following required field(s): {{ errorFields }}
-                </p>
+                Please fill the following required field(s):
+                <span class="italic">
+                  {{ missingFieldsList }}
+                </span>
               </n-alert>
             </div>
 

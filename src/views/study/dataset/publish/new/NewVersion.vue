@@ -131,8 +131,8 @@ function uniqueMetadataIdentifiers(fullMetadata: any) {
   return uniqueFields;
 }
 
-const storeErrorFields = (error: string) => {
-  errorStore.setErrorFields(error);
+const getNamesForHeader = (metadata, header) => {
+  return metadata.filter((m) => m.metadata_header === header).map((m) => m.name);
 };
 </script>
 
@@ -155,12 +155,14 @@ const storeErrorFields = (error: string) => {
           :key="index"
         >
           <RouterLink
-            @click="storeErrorFields(field.name)"
             :to="{
               name: `${item.route_identifier}:${field.route}`,
               params: {
                 studyId: routeParams.studyId,
                 datasetId: routeParams.datasetId,
+              },
+              state: {
+                missingFields: getNamesForHeader(item.metadata, field.metadata_header),
               },
             }"
           >
