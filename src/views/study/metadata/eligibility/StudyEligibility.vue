@@ -203,7 +203,7 @@ const scrollToSection = (key: string) => {
     <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
       <LottieLoader v-if="responseLoading" />
 
-      <div v-else class="flex flex-row-reverse max-lg:flex-col">
+      <div v-else class="flex flex-row-reverse justify-end max-lg:flex-col">
         <div class="max-2xl:w-[500px] max-lg:hidden lg:block 2xl:w-[250px]">
           <n-menu
             :options="menuOptions"
