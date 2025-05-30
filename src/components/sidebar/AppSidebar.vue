@@ -78,12 +78,6 @@ const UpperMenuOptions = computed(() => [
     show: hideMenuOptions.value,
   },
   {
-    icon: renderIcon("fluent-mdl2:server-processes"),
-    key: "study:data-processing",
-    label: "Data Processing",
-    show: hideMenuOptions.value,
-  },
-  {
     icon: renderIcon("ph:files-fill"),
     key: "study:files",
     label: "Uploaded Files",

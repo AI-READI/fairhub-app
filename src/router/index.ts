@@ -66,7 +66,6 @@ import NewStudy from "@/views/study/new/NewStudy.vue";
 import StudyOverview from "@/views/study/overview/StudyOverview.vue";
 import AddParticipant from "@/views/study/participants/AddParticipant.vue";
 import StudyParticipants from "@/views/study/participants/StudyParticipants.vue";
-import StudyDataProcessing from "@/views/study/processing/StudyDataProcessing.vue";
 import AddRedcap from "@/views/study/redcap/AddRedcap.vue";
 import AllRedcap from "@/views/study/redcap/AllRedcap.vue";
 import EditRedcap from "@/views/study/redcap/EditRedcap.vue";
@@ -224,11 +223,6 @@ const router = createRouter({
             },
           ],
           component: StudyDataUpload,
-        },
-        {
-          name: "study:data-processing",
-          path: "data-processing",
-          component: StudyDataProcessing,
         },
         {
           name: "study:activity",
