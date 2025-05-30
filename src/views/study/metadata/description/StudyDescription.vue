@@ -14,6 +14,7 @@ const push = usePush();
 const studyStore = useStudyStore();
 const routeState = window.history.state;
 const missingFieldsList = (routeState?.missingFields || []).map((f) => f).join(", ");
+const metadata_header = routeState?.metadata_header || "";
 
 const formRef = ref<FormInst | null>(null);
 
@@ -360,9 +361,7 @@ const scrollToSection = (key: string) => {
             <div class="pb-4" v-if="routeState?.missingFields && routeState.missingFields.length">
               <n-alert type="error">
                 Please fill the following required field(s):
-                <span class="italic">
-                  {{ missingFieldsList }}
-                </span>
+                <span class="italic"> {{ metadata_header }}:{{ missingFieldsList }} </span>
               </n-alert>
             </div>
 

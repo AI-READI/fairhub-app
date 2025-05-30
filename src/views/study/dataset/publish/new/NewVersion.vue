@@ -128,9 +128,9 @@ function uniqueMetadataIdentifiers(fullMetadata: any) {
   return uniqueFields;
 }
 
-const getNamesForHeader = (metadata, header) => {
+function getNamesForHeader(metadata, header) {
   return metadata.filter((m) => m.metadata_header === header).map((m) => m.name);
-};
+}
 </script>
 
 <template>
@@ -159,6 +159,7 @@ const getNamesForHeader = (metadata, header) => {
                 datasetId: routeParams.datasetId,
               },
               state: {
+                metadata_header: field.metadata_header,
                 missingFields: getNamesForHeader(item.metadata, field.metadata_header),
               },
             }"
