@@ -314,17 +314,18 @@ export interface StudyLocations {
   location_list: StudyLocation[];
 }
 
-export interface StudyFile {
-  id: string;
+export interface MetadataFile {
   name: string;
   content_length: number;
-  // created_at: number;
   is_directory: boolean;
-  updated_on: number;
+  updated_on: string;
 }
 
-export interface StudyFiles {
-  files: StudyFile[];
+interface Directory {
+  name: string;
+  content_length?: number;
+  is_directory: boolean;
+  updated_on: string;
 }
 
 export class StudyCollaborators {}
