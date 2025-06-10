@@ -77,6 +77,8 @@ const fetchDirectory = async (folderPath: string = "") => {
 
   if (!response.ok) {
     push.error("Something went wrong.");
+    getLoading.value = false;
+
     throw new Error("Network response was not ok");
   }
 
