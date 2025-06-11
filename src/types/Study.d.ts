@@ -324,6 +324,7 @@ export interface MetadataFile {
 interface Directory {
   name: string;
   content_length?: number;
+  files: (Directory | MetadataFile)[];
   is_directory: boolean;
   updated_on: string;
 }
