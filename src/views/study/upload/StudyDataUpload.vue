@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const route = useRoute();
+const studyId = route.params.studyId;
+</script>
 <template>
   <main class="flex w-full flex-col pr-6">
     <div>
@@ -37,7 +41,9 @@
 
               <li>All required fields should be present and properly formatted</li>
 
-              <li>Sensitive data should be properly anonymized</li>
+              <!--              <li>Sensitive data should be properly anonymized</li>-->
+
+              <li>Data expected for open sharing should be properly anonymized</li>
 
               <li>File names should be clear and descriptive</li>
             </ul>
@@ -115,21 +121,19 @@
               You'll need this URL when setting up Azure Storage Explorer.
             </p>
 
-            <div class="flex items-center gap-2">
-              <p class="flex-1 rounded bg-gray-50 p-3 font-mono text-sm">
-                https://envisionportal.blob.core.windows.net/AI-READI/{{ studyId }}
-              </p>
+            <div class="flex-1 rounded bg-gray-50 p-3 font-mono text-sm">
+              https://envisionportal.blob.core.windows.net/AI-READI/test-files/{{ studyId }}
 
-              <n-button
-                icon="i-mdi-content-copy"
-                type="neutral"
-                variant="ghost"
+              <button
                 @click="
-                  copyToClipboard(
+                  navigator.clipboard.writeText(
                     `https://envisionportal.blob.core.windows.net/study-data/${studyId}`
                   )
                 "
-              />
+                class="bg-transparent pl-12"
+              >
+                <f-icon icon="ooui:copy-rtl" class="text-xl text-blue-500 hover:text-blue-400" />
+              </button>
             </div>
 
             <p class="mt-2 text-sm text-gray-500">
