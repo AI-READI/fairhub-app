@@ -1,6 +1,12 @@
 <script setup lang="ts">
 const route = useRoute();
 const studyId = route.params.studyId;
+
+function copy() {
+  navigator?.clipboard?.writeText(
+    `https://envisionportal.blob.core.windows.net/study-data/${studyId}`
+  );
+}
 </script>
 <template>
   <main class="flex w-full flex-col pr-6">
@@ -71,7 +77,9 @@ const studyId = route.params.studyId;
 
             <div class="flex gap-4">
               <n-button
-                to="https://azure.microsoft.com/en-us/products/storage/storage-explorer/#download"
+                tag="a"
+                href="https://azure.microsoft.com/en-us/products/storage/storage-explorer/#download"
+                target="_blank"
                 type="default"
                 class="bg-sky-100 text-sky-500"
                 size="medium"
@@ -82,14 +90,28 @@ const studyId = route.params.studyId;
                 Windows
               </n-button>
 
-              <n-button type="default" class="bg-sky-100 text-sky-500" size="medium">
+              <n-button
+                tag="a"
+                href="https://azure.microsoft.com/en-us/products/storage/storage-explorer/#download"
+                target="_blank"
+                type="default"
+                class="bg-sky-100 text-sky-500"
+                size="medium"
+              >
                 <template #icon>
                   <f-icon icon="wpf:macos" />
                 </template>
                 macOS
               </n-button>
 
-              <n-button class="bg-sky-100 text-sky-500" size="medium">
+              <n-button
+                tag="a"
+                href="https://azure.microsoft.com/en-us/products/storage/storage-explorer/#download"
+                target="_blank"
+                type="default"
+                class="bg-sky-100 text-sky-500"
+                size="medium"
+              >
                 <template #icon>
                   <f-icon icon="mdi:linux" />
                 </template>
@@ -121,19 +143,27 @@ const studyId = route.params.studyId;
               You'll need this URL when setting up Azure Storage Explorer.
             </p>
 
-            <div class="flex-1 rounded bg-gray-50 p-3 font-mono text-sm">
-              https://envisionportal.blob.core.windows.net/AI-READI/test-files/{{ studyId }}
+            <div class="relative rounded bg-gray-50 p-3 font-mono text-sm">
+              <!-- Copy icon absolutely placed -->
+              <div class="absolute right-2 top-2 z-10">
+                <n-tooltip placement="bottom" trigger="click">
+                  <template #trigger>
+                    <button @click="copy" class="bg-transparent p-1">
+                      <f-icon
+                        icon="ooui:copy-rtl"
+                        class="text-xl text-blue-500 hover:text-blue-400"
+                      />
+                    </button>
+                  </template>
 
-              <button
-                @click="
-                  navigator.clipboard.writeText(
-                    `https://envisionportal.blob.core.windows.net/study-data/${studyId}`
-                  )
-                "
-                class="bg-transparent pl-12"
-              >
-                <f-icon icon="ooui:copy-rtl" class="text-xl text-blue-500 hover:text-blue-400" />
-              </button>
+                  <span>Copied</span>
+                </n-tooltip>
+              </div>
+
+              <!-- Text starts top-left and avoids the icon with right padding -->
+              <span class="block break-all pr-10">
+                https://envisionportal.blob.core.windows.net/AI-READI/test-files/{{ studyId }}
+              </span>
             </div>
 
             <p class="mt-2 text-sm text-gray-500">

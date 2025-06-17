@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import { filesize } from "filesize";
-import { DataTableColumns, NDivider } from "naive-ui";
+import type { DataTableColumns } from "naive-ui";
+import { NDivider } from "naive-ui";
 
 import type { Directory } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
