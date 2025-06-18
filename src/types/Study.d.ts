@@ -328,5 +328,3 @@ interface Directory {
   is_directory: boolean;
   updated_on: string;
 }
-
-export class StudyCollaborators {}
