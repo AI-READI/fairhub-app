@@ -2,70 +2,55 @@
 import { Icon } from "@iconify/vue";
 import { filesize } from "filesize";
 import type { DataTableColumns } from "naive-ui";
+import { NDivider } from "naive-ui";
 
-import type { StudyFile, StudyFiles } from "@/types/Study";
+import type { Directory } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
-import { displayHumanFriendlyDateAndTime } from "@/utils/date";
 
-const route = useRoute();
 const push = usePush();
-
-const directory = ref<StudyFiles>({
-  files: [],
-});
+const route = useRoute();
+const router = useRouter();
+const directory = ref<Directory[]>([]);
+const studyId = route.params.studyId;
+const getLoading = ref(false);
+const selectedFolderPath = ref(route.query.path?.toString() || "");
 
 const columns = ref<DataTableColumns>([
-  // {
-  //   title: "",
-  //   key: "icon",
-  //   render(row: any) {
-  //     return h(Icon, {
-  //       height: 24,
-  //       icon: row.is_directory ? "flat-color-icons:folder" : "flat-color-icons:file",
-  //       width: 24,
-  //     });
-  //   },
-  // },
   {
     title: "Name",
     key: "name",
     render(row: any) {
-      return h(
-        "div",
-        {
-          class: "flex items-center space-x-2",
-        },
-        [
-          h(Icon, {
-            height: 24,
-            icon: row.is_directory ? "flat-color-icons:folder" : "flat-color-icons:file",
-            width: 24,
-          }),
-          h(
-            "span",
-            {
-              class: {
-                "text-blue-500 cursor-pointer hover:underline hover:text-blue-700 transition-colors":
-                  row.is_directory,
-                "text-gray-500": !row.is_directory,
-              },
-              onClick: () => {
-                if (row.is_directory) {
-                  navigateToFolder(row.name);
-                }
-              },
+      return h("div", { class: "flex items-center space-x-2" }, [
+        h(Icon, {
+          height: 24,
+          icon: row.is_directory ? "flat-color-icons:folder" : "flat-color-icons:file",
+          width: 24,
+        }),
+        h(
+          "span",
+          {
+            class: {
+              "text-blue-500 cursor-pointer hover:underline hover:text-blue-700 transition-colors":
+                row.is_directory,
+              "text-gray-500": !row.is_directory,
             },
-            splitPath(row.name).pop()
-          ),
-        ]
-      );
+            onClick: () => {
+              if (row.is_directory) {
+                navigateToFolder(`${selectedFolderPath.value}/${row.name}`);
+              }
+            },
+          },
+          splitPath(row.name).pop()
+        ),
+      ]);
     },
   },
   {
     title: "Updated",
     key: "updated_on",
     render(row: any) {
-      return displayHumanFriendlyDateAndTime(row.updated_on);
+      const date = new Date(row.updated_on + "Z");
+      return date.toLocaleString(); // or toLocaleDateString() / toLocaleTimeString()
     },
   },
   {
@@ -77,38 +62,6 @@ const columns = ref<DataTableColumns>([
   },
 ]);
 
-const getLoading = ref(false);
-const selectedFolderPath = ref("");
-
-onBeforeMount(async () => {
-  getLoading.value = true;
-
-  const studyId = route.params.studyId;
-
-  const response = await fetch(`${baseURL}/study/${studyId}/files`, {
-    method: "GET",
-  });
-
-  if (!response.ok) {
-    push.error("Something went wrong.");
-    throw new Error("Network response was not ok");
-  }
-
-  const data: StudyFile[] = await response.json();
-
-  const processedData = data.map((file: any) => {
-    return {
-      ...file,
-    };
-  });
-
-  directory.value = {
-    files: processedData,
-  };
-
-  getLoading.value = false;
-});
-
 const splitPath = (path: string) => {
   return path.split("/").filter((item) => item);
 };
@@ -117,39 +70,49 @@ const currentFolderPath = computed(() => {
   return splitPath(selectedFolderPath.value);
 });
 
-const navigateToFolder = async (folderPath: string = "") => {
-  getLoading.value = true;
-
-  selectedFolderPath.value = folderPath;
-
-  const studyId = route.params.studyId;
-
+const fetchDirectory = async (folderPath: string = "") => {
   const response = await fetch(
     `${baseURL}/study/${studyId}/files?path=${encodeURIComponent(folderPath)}`,
-    {
-      method: "GET",
-    }
+    { method: "GET" }
   );
 
   if (!response.ok) {
     push.error("Something went wrong.");
+    getLoading.value = false;
+
     throw new Error("Network response was not ok");
   }
 
-  const data: StudyFile[] = await response.json();
+  const data = await response.json();
+  directory.value = (data ?? []).map((item: any) => ({
+    ...item,
+    origin: "remote",
+  }));
+};
 
-  const processedData = data.map((file: any) => {
-    return {
-      ...file,
-    };
-  });
+const navigateToFolder = async (folderPath: string = "") => {
+  getLoading.value = true;
 
-  directory.value = {
-    files: processedData,
-  };
+  // Update browser URL query param without reloading the page
+  const query = { ...route.query };
+  if (folderPath) {
+    query.path = folderPath;
+  } else {
+    delete query.path;
+  }
+  router.push({ query });
+
+  await fetchDirectory(folderPath);
+  selectedFolderPath.value = folderPath;
 
   getLoading.value = false;
 };
+
+onBeforeMount(async () => {
+  getLoading.value = true;
+  await fetchDirectory(selectedFolderPath.value);
+  getLoading.value = false;
+});
 </script>
 
 <template>
@@ -166,16 +129,16 @@ const navigateToFolder = async (folderPath: string = "") => {
     <n-divider />
 
     <n-breadcrumb class="mb-5">
-      <n-breadcrumb-item @click="navigateToFolder('/')">
-        <f-icon icon="iconamoon:home-duotone" />
+      <n-breadcrumb-item @click="navigateToFolder('')">
+        <f-icon icon="iconamoon:home-duotone" width="23" color="0284c7" height="20" />
 
-        <span> pooled-data-pilot </span>
+        <span> {{ studyId }}</span>
       </n-breadcrumb-item>
 
       <n-breadcrumb-item
         v-for="(item, index) in currentFolderPath"
         :key="index"
-        @click="navigateToFolder(currentFolderPath.filter((_, i) => i <= index).join('/'))"
+        @click="navigateToFolder(currentFolderPath.slice(0, index + 1).join('/'))"
       >
         {{ item }}
       </n-breadcrumb-item>
@@ -184,7 +147,7 @@ const navigateToFolder = async (folderPath: string = "") => {
     <FadeTransition>
       <LottieLoader v-if="getLoading" />
 
-      <n-data-table :columns="columns" :data="directory.files" :bordered="false" v-else />
+      <n-data-table :columns="columns" :data="directory" :bordered="false" v-else />
     </FadeTransition>
   </main>
 </template>
