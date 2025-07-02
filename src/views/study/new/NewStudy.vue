@@ -15,6 +15,7 @@ const push = usePush();
 const loader = ref(false);
 
 const authStore = useAuthStore();
+const showForm = ref(false);
 
 onBeforeMount(() => {
   if (!authStore.isAuthenticated) {
@@ -31,11 +32,18 @@ const routeParams = {
 
 const study = reactive({
   title: faker.commerce.productName(),
+  clinical_id: null,
   image: "",
   short_description: "",
 });
 
-// const keywordOptions = FormJSON.keywordOptions;
+function validateClinicalId(_: any, value: string) {
+  const id = value || "";
+  if (!/^NCT\d{8}$/.test(id)) {
+    return new Error('Identifier must start with "NCT" and be followed by 8 digits');
+  }
+  return true;
+}
 
 const rules: FormRules = {
   title: [
@@ -163,25 +171,29 @@ function cancelButton() {
       <!--                :options="keywordOptions"-->
       <!--              />-->
       <!--            </n-form-item>-->
+      <div class="font-bold">ClinicalTrials.gov Identification</div>
 
-      <n-form-item label="Image" path="Image">
+      <div class="py-2">You can import your study metadata from clinicaltrials.gov.</div>
+
+      <n-checkbox class="pb-4" v-model:checked="showForm">
+        I have a ClinicalTrials.gov ID
+      </n-checkbox>
+
+      <n-form-item
+        v-if="showForm"
+        :rule="{
+          required: true,
+          validator: validateClinicalId,
+          trigger: ['blur', 'input'],
+        }"
+        path="clinical_id"
+        label="Clinical id"
+      >
         <n-input
-          v-model:value="study.image"
-          placeholder="Add a representative image URL to easily differentiate your study, or click to the button on the right to automatically generate a one"
+          v-model:value="study.clinical_id"
+          placeholder="Insert your ClinicalTrials.gov study id"
         />
-
-        <n-button @click="generateImageURL" class="ml-4">
-          <template #icon>
-            <f-icon icon="mdi:auto-fix" />
-          </template>
-        </n-button>
       </n-form-item>
-
-      <n-image
-        :src="study.image || 'https://www.svgrepo.com/show/213127/image-warning.svg'"
-        width="300"
-        class="rounded-xl bg-slate-50 p-3 shadow-md"
-      />
 
       <n-divider />
 

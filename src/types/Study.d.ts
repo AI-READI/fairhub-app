@@ -13,6 +13,7 @@ export interface StudyPublishedVersion {
 export interface Study {
   id: string;
   title: string;
+  clinical_id: string | null;
   created_at: number;
   description: string;
   image: string;
