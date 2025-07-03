@@ -34,7 +34,7 @@ const study = reactive({
   title: faker.commerce.productName(),
   clinical_id: null,
   image: "",
-  short_description: "",
+  short_description: faker.commerce.productDescription(),
 });
 
 function validateClinicalId(_: any, value: string) {
@@ -74,6 +74,7 @@ const createStudy = (e: MouseEvent) => {
     if (!errors) {
       const data = {
         title: study.title,
+        clinical_id: study.clinical_id,
         image: study.image || generateImageURL(),
         short_description: study.short_description,
       };

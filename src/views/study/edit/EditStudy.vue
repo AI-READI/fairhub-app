@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { FormInst } from "naive-ui";
 import { useDialog } from "naive-ui";
-import { nanoid } from "nanoid";
 import { ref } from "vue";
 
 import { useAuthStore } from "@/stores/auth";
@@ -14,8 +13,6 @@ const push = usePush();
 
 const authStore = useAuthStore();
 const studyStore = useStudyStore();
-const identifiervalue = ref([]);
-const showModal = ref(false);
 
 const routeParams = {
   studyId: route.params.studyId as string,
@@ -23,7 +20,7 @@ const routeParams = {
 
 const study = reactive({
   title: "",
-  clinical_id: "NCT06002048",
+  clinical_id: null as string | null,
   identification: {
     primary: {
       id: "",
@@ -63,18 +60,13 @@ onBeforeMount(async () => {
 
 const formRef = ref<FormInst | null>(null);
 
-const generateImageURL = () => {
-  study.image = `https://api.dicebear.com/6.x/shapes/svg?seed=${nanoid()}`;
-};
-
 const saveChanges = (e: MouseEvent) => {
   e.preventDefault();
   formRef.value?.validate(async (errors) => {
     if (!errors) {
       const data = {
         title: study.title,
-        clinical_id: study.clinical_id,
-        image: study.image || generateImageURL(),
+        clinical_id: study.identification.primary.identifier,
         is_overwrite: study.is_overwrite,
         short_description: study.short_description,
       };
@@ -110,13 +102,14 @@ function cancelButton() {
   });
 }
 
-function onOverwriteToggle(checked) {
+function onOverwriteToggle(checked: any) {
   if (checked) {
     // Ask for confirmation before enabling
     dialog.warning({
       title: "Are you sure?",
       content:
-        "Updating current clinical study id will overwrite the study metadata as well. Proceed?",
+        "Updating current clinical study id will overwrite the study metadata as well. This includes information such as descriptions, oversight details, design structure,\n" +
+        "        enrollment settings, and associated records. Proceed?",
       negativeText: "Cancel",
       onNegativeClick: () => {
         // Forcefully uncheck if user cancels
@@ -168,7 +161,10 @@ function onOverwriteToggle(checked) {
 
       <div class="pb-2 text-sm font-bold">ClinicalTrials.gov</div>
 
-      <p>You can add or update your Clinical study id</p>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam quod quia voluptatibus,
+        voluptatem
+      </p>
 
       <n-checkbox
         v-model:checked="study.is_overwrite"
@@ -179,7 +175,9 @@ function onOverwriteToggle(checked) {
       </n-checkbox>
 
       <n-alert type="warning" v-if="study.is_overwrite"
-        >Updating clinical study id will overwrite your current study metadata fields.</n-alert
+        >Updating clinical study id will overwrite your current study metadata entrances. This
+        includes information such as descriptions, oversight details, design structure, enrollment
+        settings, and associated records.</n-alert
       >
 
       <n-dialog-provider />
