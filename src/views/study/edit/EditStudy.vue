@@ -75,7 +75,9 @@ const saveChanges = (e: MouseEvent) => {
         body: JSON.stringify(data),
         method: "PUT",
       });
-
+      if (response.status == 404) {
+        push.error("No clinical study was found with the provided identifier");
+      }
       if (!response.ok) {
         push.error("Something went wrong.");
         return;

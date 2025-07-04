@@ -87,7 +87,9 @@ const createStudy = (e: MouseEvent) => {
       });
 
       loader.value = false;
-
+      if (response.status == 404) {
+        push.error("No clinical study was found with the provided identifier");
+      }
       if (!response.ok) {
         push.error("Something went wrong. Please try again later.");
 
