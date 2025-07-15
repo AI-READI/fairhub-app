@@ -110,12 +110,21 @@ const saveMetadata = (e: MouseEvent) => {
       loading.value = false;
 
       if (!response.ok) {
-        push.error({
-          title: "Failed to save status",
-          message: "Something went wrong. Please try again later.",
-        });
-
-        throw new Error("Network response was not ok");
+        if (response.status == 400) {
+          const errorData = await response.json();
+          console.log(errorData.message);
+          push.error({
+            title: "Failed to save status",
+            message: errorData.message,
+          });
+          throw new Error(errorData.message);
+        } else {
+          push.error({
+            title: "Failed to save status",
+            message: "Something went wrong. Please try again later.",
+          });
+          throw new Error("Network response was not ok!");
+        }
       }
 
       push.success("Status saved successfully");
