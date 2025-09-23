@@ -38,7 +38,25 @@ onBeforeMount(async () => {
   }
 
   const data = await response.json();
+  datasets.value = data;
+  // loop datasets to fetch versions for each
+  for (const dataset of data) {
+    const responseVersion = await fetch(
+      `${baseURL}/study/${studyId}/dataset/${dataset.id}/version`,
+      { method: "GET" }
+    );
 
+    if (!responseVersion.ok) {
+      push.error(`Something went wrong (versions for dataset ${dataset.id}).`);
+      continue;
+    }
+
+    const dataVersion = await responseVersion.json();
+
+    // attach versions to each dataset
+    dataset.versions = dataVersion;
+    console.log(data, dataVersion);
+  }
   console.log(data);
 
   datasets.value = data;
@@ -48,6 +66,12 @@ const navigateToDataset = (datasetId: string) => {
   sidebarStore.setAppSidebarCollapsed(true);
 
   router.push({ name: "dataset:overview", params: { datasetId } });
+};
+
+const navigateToNewVersion = (datasetId: string) => {
+  sidebarStore.setAppSidebarCollapsed(true);
+
+  router.push({ name: "dataset:publish:versions:new", params: { datasetId } });
 };
 </script>
 
@@ -122,15 +146,6 @@ const navigateToDataset = (datasetId: string) => {
                   <span>{{ dataset.description || "No description provided" }}</span>
                 </p>
 
-                <!-- <n-divider v-if="dataset.latest_version" /> -->
-
-                <!-- <p v-if="dataset.latest_version">
-                  <span class="font-bold"> Latest version: </span>
-                  <span>
-                    {{ dataset.latest_version }}
-                  </span>
-                </p> -->
-
                 <p>
                   <span class="font-bold"> Created date: </span>
 
@@ -160,6 +175,21 @@ const navigateToDataset = (datasetId: string) => {
 
                   <span>In preparation</span>
                 </p>
+              </div>
+
+              <div class="flex justify-end gap-4 pb-8">
+                <n-button type="primary" @click="navigateToNewVersion"
+                  >Publish a new version</n-button
+                >
+
+                <a href="https://fairhub.io" target="_blank" class="text-sky-600">
+                  <n-button secondary type="info" size="medium">
+                    <template #icon>
+                      <f-icon icon="el:share" />
+                    </template>
+                    View on fairhub.io
+                  </n-button>
+                </a>
               </div>
             </div>
           </div>
