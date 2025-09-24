@@ -21,11 +21,9 @@ const routeParams = {
 };
 
 onBeforeMount(async () => {
-  const studyId = routeParams.studyId as string;
-
   sidebarStore.setAppSidebarCollapsed(false);
 
-  const response = await fetch(`${baseURL}/study/${studyId}/dataset`, {
+  const response = await fetch(`${baseURL}/study/${routeParams.studyId}/dataset`, {
     method: "GET",
   });
 
@@ -40,9 +38,9 @@ onBeforeMount(async () => {
   const data = await response.json();
   datasets.value = data;
   // loop datasets to fetch versions for each
-  for (const dataset of data) {
+  for (const dataset of datasets.value) {
     const responseVersion = await fetch(
-      `${baseURL}/study/${studyId}/dataset/${dataset.id}/version`,
+      `${baseURL}/study/${routeParams.studyId}/dataset/${dataset.id}/version`,
       { method: "GET" }
     );
 
@@ -55,11 +53,8 @@ onBeforeMount(async () => {
 
     // attach versions to each dataset
     dataset.versions = dataVersion;
-    console.log(data, dataVersion);
   }
   console.log(data);
-
-  datasets.value = data;
 });
 
 const navigateToDataset = (datasetId: string) => {
@@ -69,10 +64,32 @@ const navigateToDataset = (datasetId: string) => {
 };
 
 const navigateToNewVersion = (datasetId: string) => {
-  sidebarStore.setAppSidebarCollapsed(true);
-
-  router.push({ name: "dataset:publish:versions:new", params: { datasetId } });
+  router.push({
+    name: "dataset:publish:versions:new",
+    params: {
+      datasetId,
+      studyId: routeParams.studyId,
+    },
+  });
 };
+
+const navigateToDatasetVersion = (datasetId: string) => {
+  router.push({
+    name: "dataset:publish:versions",
+    params: {
+      datasetId,
+      studyId: routeParams.studyId,
+    },
+  });
+};
+
+const draftAndNonExistingVersions = computed(() =>
+  datasets.value.filter((d) => !d.versions?.some((v) => v.published))
+);
+
+const publishedVersions = computed(() =>
+  datasets.value.filter((d) => d.versions?.some((v) => v.published))
+);
 </script>
 
 <template>
@@ -96,7 +113,7 @@ const navigateToNewVersion = (datasetId: string) => {
             <f-icon icon="ion:add-circle-outline" />
           </template>
 
-          Create a new dataset
+          Publish a new dataset
         </n-button>
       </RouterLink>
     </n-space>
@@ -128,66 +145,111 @@ const navigateToNewVersion = (datasetId: string) => {
 
           <div v-else>
             <div
-              v-for="(dataset, index) in datasets"
-              :key="index"
+              v-for="d in draftAndNonExistingVersions"
+              :key="d.id"
               class="mb-5 flex w-full flex-col rounded-md border border-slate-200 px-6 py-4 shadow-sm transition-all hover:cursor-pointer hover:border-slate-300 hover:bg-slate-100"
-              @click="navigateToDataset(dataset.id)"
+              @click="navigateToNewVersion(d.id)"
             >
               <div class="flex justify-between pt-2">
-                <h3>{{ dataset.title || "Untitled Dataset" }}</h3>
+                <h3>{{ d.title || "Untitled Dataset" }}</h3>
               </div>
 
               <n-divider />
 
               <div class="flex flex-col space-y-4">
                 <p>
-                  <span class="font-bold"> Description: </span>
+                  <span class="font-bold">Description:</span>
 
-                  <span>{{ dataset.description || "No description provided" }}</span>
+                  <span>{{ d.description || "No description provided" }}</span>
                 </p>
 
                 <p>
-                  <span class="font-bold"> Created date: </span>
+                  <span class="font-bold">Created date:</span>
+
+                  <span>{{ displayHumanFriendlyDateAndTime(d.created_at) }}</span>
+                </p>
+
+                <p>
+                  <span class="font-bold">Last updated date:</span>
+
+                  <span>{{ displayHumanFriendlyDateAndTime(d.updated_on) }}</span>
+                </p>
+
+                <p>
+                  <span class="font-bold">Status:</span>
 
                   <span>
-                    {{ displayHumanFriendlyDateAndTime(dataset.created_at) }}
+                    {{ d.versions?.some((v) => v.published) ? "Published" : " In preparation" }}
                   </span>
-                </p>
-
-                <p>
-                  <span class="font-bold"> Last updated date: </span>
-
-                  <span>
-                    {{ displayHumanFriendlyDateAndTime(dataset.created_at) }}
-                  </span>
-                </p>
-
-                <p>
-                  <span class="font-bold"> Number of participants: </span>
-                  <!--                  <span>{{ dataset.published_versions || 0 }}</span>-->
-
-                  <span>0</span>
-                </p>
-
-                <p>
-                  <span class="font-bold"> Status: </span>
-                  <!--                  <span>{{ dataset.version.published? "Published || "In preparation }}</span>-->
-
-                  <span>In preparation</span>
                 </p>
               </div>
 
               <div class="flex justify-end gap-4 pb-8">
-                <n-button type="primary" @click="navigateToNewVersion"
-                  >Publish a new version</n-button
-                >
+                <n-button type="primary" @click.stop="navigateToNewVersion(d.id)">
+                  Publish a new version
+                </n-button>
 
                 <a href="https://fairhub.io" target="_blank" class="text-sky-600">
                   <n-button secondary type="info" size="medium">
-                    <template #icon>
-                      <f-icon icon="el:share" />
-                    </template>
-                    View on fairhub.io
+                    <template #icon><f-icon icon="el:share" /></template>
+                    View on FAIRhub.io
+                  </n-button>
+                </a>
+              </div>
+            </div>
+
+            <!-- 2. published section -->
+            <h3 v-if="publishedVersions.length" class="mb-2 text-lg font-bold">
+              Published Datasets
+            </h3>
+
+            <div
+              v-for="d in publishedVersions"
+              :key="d.id"
+              class="mb-5 flex w-full flex-col rounded-md border border-slate-200 px-6 py-4 shadow-sm transition-all hover:cursor-pointer hover:border-slate-300 hover:bg-slate-100"
+              @click="navigateToDataset(d.id)"
+            >
+              <div class="flex justify-between pt-2">
+                <h3>{{ d.title || "Untitled Dataset" }}</h3>
+              </div>
+
+              <n-divider />
+
+              <div class="flex flex-col space-y-4">
+                <p>
+                  <span class="font-bold">Description:</span>
+
+                  <span>{{ d.description || "No description provided" }}</span>
+                </p>
+
+                <p>
+                  <span class="font-bold">Created date:</span>
+
+                  <span>{{ displayHumanFriendlyDateAndTime(d.created_at) }}</span>
+                </p>
+
+                <p>
+                  <span class="font-bold">Last updated date:</span>
+
+                  <span>{{ displayHumanFriendlyDateAndTime(d.updated_on) }}</span>
+                </p>
+
+                <p>
+                  <span class="font-bold">Status:</span>
+
+                  <span> Published</span>
+                </p>
+              </div>
+
+              <div class="flex justify-end gap-4 pb-8">
+                <n-button type="primary" @click.stop="navigateToDatasetVersion(d.id)">
+                  View all versions
+                </n-button>
+
+                <a href="https://fairhub.io" target="_blank" class="text-sky-600">
+                  <n-button secondary type="info" size="medium">
+                    <template #icon><f-icon icon="el:share" /></template>
+                    View on FAIRhub.io
                   </n-button>
                 </a>
               </div>

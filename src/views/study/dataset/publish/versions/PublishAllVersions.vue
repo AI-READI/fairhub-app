@@ -205,7 +205,7 @@ const deleteVersion = async (id: string) => {
                         <f-icon icon="ph:eye-fill" />
                       </template>
 
-                      View dataset on data.fairhub.io
+                      View dataset on fairhub.io
                     </n-button>
                   </a>
                 </template>
