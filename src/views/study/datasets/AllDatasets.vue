@@ -38,22 +38,6 @@ onBeforeMount(async () => {
   const data = await response.json();
   datasets.value = data;
   // loop datasets to fetch versions for each
-  for (const dataset of datasets.value) {
-    const responseVersion = await fetch(
-      `${baseURL}/study/${routeParams.studyId}/dataset/${dataset.id}/version`,
-      { method: "GET" }
-    );
-
-    if (!responseVersion.ok) {
-      push.error(`Something went wrong (versions for dataset ${dataset.id}).`);
-      continue;
-    }
-
-    const dataVersion = await responseVersion.json();
-
-    // attach versions to each dataset
-    dataset.versions = dataVersion;
-  }
   console.log(data);
 });
 
@@ -84,12 +68,10 @@ const navigateToDatasetVersion = (datasetId: string) => {
 };
 
 const draftAndNonExistingVersions = computed(() =>
-  datasets.value.filter((d) => !d.versions?.some((v) => v.published))
+  datasets.value.filter((d) => d.latest_version === null)
 );
 
-const publishedVersions = computed(() =>
-  datasets.value.filter((d) => d.versions?.some((v) => v.published))
-);
+const publishedVersions = computed(() => datasets.value.filter((d) => d.latest_version !== null));
 </script>
 
 <template>
@@ -188,13 +170,6 @@ const publishedVersions = computed(() =>
                 <n-button type="primary" @click.stop="navigateToNewVersion(d.id)">
                   Publish a new version
                 </n-button>
-
-                <a href="https://fairhub.io" target="_blank" class="text-sky-600">
-                  <n-button secondary type="info" size="medium">
-                    <template #icon><f-icon icon="el:share" /></template>
-                    View on FAIRhub.io
-                  </n-button>
-                </a>
               </div>
             </div>
 
