@@ -169,6 +169,10 @@ const publishedVersions = computed(() => datasets.value.filter((d) => d.latest_v
               </div>
 
               <div class="flex justify-end gap-4 pb-8">
+                <n-button type="primary" @click.stop="navigateToDataset(d.id)">
+                  View dataset workflow
+                </n-button>
+
                 <n-button type="primary" @click.stop="navigateToNewVersion(d.id)">
                   Publish a new version
                 </n-button>
