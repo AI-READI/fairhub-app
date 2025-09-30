@@ -1,9 +1,12 @@
+import { Version } from "@/types/Version";
+
 export interface Dataset {
   id: string;
   title: string;
   created_at: number;
   description: string;
-  updated_at: number;
+  latest_version?: Version[] | null;
+  updated_on: number;
 }
 
 export interface DatasetTitle {
