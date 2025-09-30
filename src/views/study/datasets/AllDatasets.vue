@@ -154,7 +154,7 @@ const publishedVersions = computed(() => datasets.value.filter((d) => d.latest_v
                 <p>
                   <span class="font-bold">Last updated date:</span>
 
-                  <span>{{ displayHumanFriendlyDateAndTime(d.updated_at) }}</span>
+                  <span>{{ displayHumanFriendlyDateAndTime(d.updated_on) }}</span>
                 </p>
 
                 <p>
@@ -208,7 +208,7 @@ const publishedVersions = computed(() => datasets.value.filter((d) => d.latest_v
                 <p>
                   <span class="font-bold">Last updated date:</span>
 
-                  <span>{{ displayHumanFriendlyDateAndTime(d.updated_at) }}</span>
+                  <span>{{ displayHumanFriendlyDateAndTime(d.updated_on) }}</span>
                 </p>
 
                 <p>

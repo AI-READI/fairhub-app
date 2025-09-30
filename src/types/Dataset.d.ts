@@ -6,7 +6,7 @@ export interface Dataset {
   created_at: number;
   description: string;
   latest_version?: Version[] | null;
-  updated_at: number;
+  updated_on: number;
 }
 
 export interface DatasetTitle {
