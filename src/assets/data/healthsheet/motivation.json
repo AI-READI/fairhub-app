@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "question": "For what purpose was the dataset created?",
+    "response": ""
+  },
+  {
+    "id": 2,
+    "question": "Who created this dataset (e.g. which team, research group) and on behalf of which entity (e.g. company, institution, organization)?",
+    "response": ""
+  },
+  {
+    "id": 3,
+    "question": "What support was needed to make this dataset?",
+    "response": ""
+  },
+  {
+    "id": 4,
+    "question": "Any other comments?",
+    "response": ""
+  }
+]

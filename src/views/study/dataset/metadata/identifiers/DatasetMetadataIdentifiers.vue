@@ -1,0 +1,329 @@
+<script setup lang="ts">
+import type { MenuOption } from "naive-ui";
+import { nanoid } from "nanoid";
+
+import FORM_JSON from "@/assets/data/form.json";
+import { useStudyStore } from "@/stores/study";
+import type { DatasetIdentifiers } from "@/types/Dataset";
+import { baseURL } from "@/utils/constants";
+
+const route = useRoute();
+const router = useRouter();
+const push = usePush();
+
+const studyStore = useStudyStore();
+
+const routeParams = {
+  datasetId: route.params.datasetId as string,
+  studyId: route.params.studyId as string,
+};
+
+const studyId = routeParams.studyId;
+const datasetId = routeParams.datasetId;
+
+const formRef = ref<FormInst | null>(null);
+const moduleData = reactive<DatasetIdentifiers>({
+  identifiers: [],
+});
+
+const getLoading = ref(false);
+const submitLoading = ref(false);
+
+onBeforeMount(async () => {
+  getLoading.value = true;
+
+  const response = await fetch(
+    `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/alternative-identifier`,
+    {
+      method: "GET",
+    }
+  );
+
+  getLoading.value = false;
+
+  if (!response.ok) {
+    push.error("Something went wrong.");
+
+    throw new Error("Something went wrong.");
+  }
+
+  const data = await response.json();
+
+  moduleData.identifiers = data.map((item: any) => {
+    return {
+      ...item,
+      origin: "remote",
+    };
+  });
+});
+
+const removeIdentifier = async (item_id: string) => {
+  const item = moduleData.identifiers.find((item) => item.id === item_id);
+
+  if (item && item.origin === "remote") {
+    const response = await fetch(
+      `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/alternative-identifier/${item.id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok) {
+      push.error("Something went wrong.");
+
+      throw new Error("Something went wrong.");
+    }
+  }
+
+  push.success("Alternative identifier removed successfully");
+
+  moduleData.identifiers = moduleData.identifiers.filter((item) => item.id !== item_id);
+};
+
+const addIdentifier = () => {
+  moduleData.identifiers.push({
+    id: nanoid(),
+    identifier: "",
+    origin: "local",
+    type: null,
+  });
+};
+
+const saveMetadata = (e: MouseEvent) => {
+  e.preventDefault();
+  formRef.value?.validate(async (errors) => {
+    if (!errors) {
+      const tempIdentifiers = moduleData.identifiers;
+
+      for (const item of tempIdentifiers) {
+        // remove any items that have a duplicate title and type
+        if (
+          tempIdentifiers.filter((i) => i.identifier === item.identifier && i.type === item.type)
+            .length > 1
+        ) {
+          tempIdentifiers.splice(tempIdentifiers.indexOf(item), 1);
+        }
+      }
+
+      const data = tempIdentifiers.map((item) => {
+        const entry = {
+          identifier: item.identifier,
+          type: item.type,
+        };
+
+        if (item.origin === "local") {
+          return entry;
+        } else {
+          return {
+            ...entry,
+            id: item.id,
+          };
+        }
+      });
+
+      submitLoading.value = true;
+
+      const response = await fetch(
+        `${baseURL}/study/${studyId}/dataset/${datasetId}/metadata/alternative-identifier`,
+        {
+          body: JSON.stringify(data),
+          method: "POST",
+        }
+      );
+
+      submitLoading.value = false;
+
+      if (!response.ok) {
+        push.error("Something went wrong.");
+
+        throw new Error("Something went wrong.");
+      }
+
+      push.success("Dataset alternative identifiers updated successfully");
+
+      // refresh page
+      router.go(0);
+
+      console.log("success");
+    } else {
+      console.log("error");
+      console.log(errors);
+    }
+  });
+};
+
+const scrollbarRef = ref<any>(null);
+
+const menuOptions: MenuOption[] = [
+  { key: "primary-Identifier", label: "Primary Identifier" },
+  { key: "alternative-identifiers", label: "Alternative Identifiers" },
+];
+
+const scrollToSection = (key: string) => {
+  const section = document.querySelector(`.${key}`) as HTMLElement;
+  scrollbarRef.value?.scrollTo({ behavior: "smooth", top: section.offsetTop });
+};
+</script>
+
+<template>
+  <main class="flex h-full w-full flex-col pr-6">
+    <PageBackNavigationHeader
+      title="Identifiers"
+      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      linkName="dataset:overview"
+      :linkParams="{ studyId: routeParams.studyId, datasetId: routeParams.datasetId }"
+    />
+
+    <n-divider />
+
+    <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
+      <LottieLoader v-if="getLoading" />
+
+      <div v-else class="flex flex-row-reverse justify-between max-lg:flex-col">
+        <div class="max-2xl:w-[300px] max-lg:hidden lg:block 2xl:w-[250px]">
+          <n-menu
+            :options="menuOptions"
+            @update:value="scrollToSection"
+            class="metadata w-[100%]"
+          />
+        </div>
+
+        <div class="w-full pb-4 lg:hidden">
+          <n-collapse accordion class="max-w-xxl rounded-md bg-gray-100 py-1 lg:hidden">
+            <n-collapse-item title="On this page" name="menu">
+              <n-menu class="metadata" :options="menuOptions" @update:value="scrollToSection" />
+            </n-collapse-item>
+          </n-collapse>
+        </div>
+
+        <div class="w-full">
+          <h3 class="primary-Identifier">Primary Identifier</h3>
+
+          <p class="pb-8 pt-2">
+            The primary identifier for your dataset is generated automatically when you publish a
+            version of your dataset. You can find the identifier for the latest published version of
+            your dataset on the
+            <RouterLink
+              :to="{ name: 'dataset:overview', params: routeParams }"
+              class="hover:underline"
+            >
+              dataset overview
+            </RouterLink>
+            page.
+          </p>
+
+          <n-divider />
+
+          <h3 class="alternative-identifiers">Alternative Identifiers</h3>
+
+          <p class="pb-8 pt-2">
+            If you would like to add alternative identifiers for your dataset, you can do so here.
+            These will be attached to your dataset at the time of publication.
+          </p>
+
+          <FadeTransition>
+            <n-form
+              ref="formRef"
+              :model="moduleData"
+              size="large"
+              label-placement="top"
+              class="pr-4"
+              :disabled="studyStore.currentStudyRole === 'viewer'"
+            >
+              <div
+                class="flex w-full flex-row items-center justify-between space-x-8"
+                v-for="(item, index) in moduleData.identifiers"
+                :key="index"
+              >
+                <n-space vertical class="w-full">
+                  <div class="flex w-full flex-row items-center justify-between space-x-4">
+                    <n-form-item
+                      label="Name"
+                      :path="`identifiers[${index}].identifier`"
+                      :rule="{
+                        message: 'Please enter the identifier',
+                        required: true,
+                        trigger: ['blur', 'change'],
+                      }"
+                      class="w-full"
+                    >
+                      <n-input
+                        v-model:value="item.identifier"
+                        placeholder="10.1038/s41597-023-02463-x"
+                        clearable
+                      />
+                    </n-form-item>
+
+                    <n-form-item
+                      label="Type"
+                      :path="`identifiers[${index}].type`"
+                      :rule="{
+                        message: 'Please select the type of this identifier',
+                        required: true,
+                        trigger: ['blur', 'input'],
+                      }"
+                      class="w-full"
+                    >
+                      <n-select
+                        v-model:value="item.type"
+                        placeholder="DOI"
+                        clearable
+                        :options="FORM_JSON.datasetIdentifierTypeOptions"
+                      />
+                    </n-form-item>
+                  </div>
+                </n-space>
+
+                <n-popconfirm @positive-click="removeIdentifier(item.id)" class="self-justify-end">
+                  <template #trigger>
+                    <n-button
+                      class="ml-0"
+                      size="large"
+                      type="error"
+                      :disabled="studyStore.currentStudyRole === 'viewer'"
+                    >
+                      <f-icon icon="gridicons:trash" />
+                    </n-button>
+                  </template>
+
+                  Are you sure you want to remove this identifier?
+                </n-popconfirm>
+              </div>
+
+              <n-button
+                class="mb-10 w-full"
+                dashed
+                type="success"
+                @click="addIdentifier"
+                :disabled="studyStore.currentStudyRole === 'viewer'"
+              >
+                <template #icon>
+                  <f-icon icon="gridicons:create" />
+                </template>
+
+                Add a new identifier
+              </n-button>
+            </n-form>
+          </FadeTransition>
+
+          <n-divider />
+
+          <div class="flex justify-start">
+            <n-button
+              size="large"
+              type="primary"
+              @click="saveMetadata"
+              :loading="submitLoading"
+              :disabled="studyStore.currentStudyRole === 'viewer'"
+            >
+              <template #icon>
+                <f-icon icon="material-symbols:save" />
+              </template>
+              Save changes
+            </n-button>
+          </div>
+        </div>
+      </div>
+    </n-scrollbar>
+  </main>
+</template>

@@ -1,6 +1,5 @@
 <script lang="ts">
 import { NButton, NDropdown } from "naive-ui";
-import { useMessage } from "naive-ui";
 import type { PropType } from "vue";
 import { defineComponent } from "vue";
 
@@ -10,6 +9,9 @@ export default defineComponent({
     NDropdown,
   },
   props: {
+    animated: { type: Boolean },
+    inverted: { type: Boolean },
+    keyboard: { type: Boolean },
     mode: {
       type: String,
       validator: function (value: string) {
@@ -17,36 +19,33 @@ export default defineComponent({
       },
     },
     size: { type: String as PropType<"small" | "medium" | "large"> },
-    animated: { type: Boolean },
-    keyboard: { type: Boolean },
-    inverted: { type: Boolean },
   },
   setup() {
-    const message = useMessage();
+    const push = usePush();
     return {
+      handleSelect(key: string | number) {
+        console.log("here");
+        push.info(String(key));
+      },
       options: [
         {
-          label: "Marina Bay Sands",
-          key: "marina bay sands",
           disabled: true,
+          key: "marina bay sands",
+          label: "Marina Bay Sands",
         },
         {
-          label: "Brown's Hotel, London",
           key: "brown's hotel, london",
+          label: "Brown's Hotel, London",
         },
         {
-          label: "Atlantis Bahamas, Nassau",
           key: "atlantis nahamas, nassau",
+          label: "Atlantis Bahamas, Nassau",
         },
         {
-          label: "The Beverly Hills Hotel, Los Angeles",
           key: "the beverly hills hotel, los angeles",
+          label: "The Beverly Hills Hotel, Los Angeles",
         },
       ],
-
-      handleSelect(key: string | number) {
-        message.info(String(key));
-      },
     };
   },
 });

@@ -3,8 +3,8 @@ import ColorsGrid from "./ColorsGrid.vue";
 
 const props = defineProps({
   colors: {
-    type: Object,
     required: true,
+    type: Object,
   },
 });
 
@@ -30,6 +30,7 @@ const getRootColors = () => {
         <ColorsGrid :colors="color" :title="key" />
       </div>
     </div>
+
     <ColorsGrid
       :colors="getRootColors()"
       title="Root Colors"

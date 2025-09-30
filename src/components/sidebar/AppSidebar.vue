@@ -1,190 +1,307 @@
 <script setup lang="ts">
-import {
-  DocumentFlowchart24Regular,
-  PeopleAdd24Regular,
-  PeopleCheckmark16Regular,
-  PeopleTeamToolbox24Regular,
-  Settings24Regular,
-} from "@vicons/fluent";
-import { BugReportOutlined, DashboardRound } from "@vicons/material";
-import { Help, History, Home2, ListDetails } from "@vicons/tabler";
-import type { MenuOption } from "naive-ui";
-import { NIcon, NLayoutSider, NMenu, NSpace } from "naive-ui";
-import type { Component } from "vue";
-import { computed, h, ref } from "vue";
-import { RouterLink, useRoute } from "vue-router";
+import { Icon } from "@iconify/vue";
+import type { MenuInst, MenuOption } from "naive-ui";
+import { NLayoutSider, NMenu, NSpace } from "naive-ui";
+import { computed, h } from "vue";
+import { RouterLink, useRoute, useRouter } from "vue-router";
 
-const sidebarCollapsed = ref(false);
+import { useAuthStore } from "@/stores/auth";
+import { useSidebarStore } from "@/stores/sidebar";
+import { useStudyStore } from "@/stores/study";
 
-function renderIcon(icon: Component) {
-  return () => h(NIcon, null, { default: () => h(icon) });
+const route = useRoute();
+const router = useRouter();
+
+const sidebarStore = useSidebarStore();
+const studyStore = useStudyStore();
+const authStore = useAuthStore();
+
+const sidebarCollapsed = computed(() => sidebarStore.collapseAppSidebar);
+
+function renderIcon(icon: string) {
+  return () => h(Icon, { icon });
 }
 
-// const menuOptions = [
-//   {
-//     label: "All Studies",
-//     key: "hear-the-wind-sing",
-//     icon: renderIcon(BookIcon),
-//   },
-//   {
-//     label: "Pinball 1973",
-//     key: "pinball-1973",
-//     icon: renderIcon(BookIcon),
-//     disabled: true,
-//     children: [
-//       {
-//         label: "Rat",
-//         key: "rat",
-//       },
-//     ],
-//   },
-//   {
-//     label: "A Wild Sheep Chase",
-//     key: "a-wild-sheep-chase",
-//     disabled: true,
-//     icon: renderIcon(BookIcon),
-//   },
-//   {
-//     label: "Dance Dance Dance",
-//     key: "Dance Dance Dance",
-//     icon: renderIcon(BookIcon),
-//     children: [
-//       {
-//         type: "group",
-//         label: "People",
-//         key: "people",
-//         children: [
-//           {
-//             label: "Narrator",
-//             key: "narrator",
-//             icon: renderIcon(PersonIcon),
-//           },
-//           {
-//             label: "Sheep Man",
-//             key: "sheep-man",
-//             icon: renderIcon(PersonIcon),
-//           },
-//         ],
-//       },
-//       {
-//         label: "Beverage",
-//         key: "beverage",
-//         icon: renderIcon(WineIcon),
-//         children: [
-//           {
-//             label: "Whisky",
-//             key: "whisky",
-//           },
-//         ],
-//       },
-//       {
-//         label: "Food",
-//         key: "food",
-//         children: [
-//           {
-//             label: "Sandwich",
-//             key: "sandwich",
-//           },
-//         ],
-//       },
-//       {
-//         label: "The past increases. The future recedes.",
-//         key: "the-past-increases-the-future-recedes",
-//       },
-//     ],
-//   },
-// ];
+const studyID = computed(() => {
+  if (!route.params.studyId) {
+    return "null";
+  }
 
-const upperMenuOptions: MenuOption[] = [
+  return route.params.studyId;
+});
+
+const hideMenuOptions = computed(() => {
+  const hiddenRoutes = [
+    "/studies",
+    "/studies/new",
+    "/settings",
+    "/help/report-issue",
+    "/help/documentation",
+    "/help/changelog",
+    "/profile",
+    "/integrations",
+  ];
+  if (hiddenRoutes.includes(route.path)) {
+    return false;
+  } else {
+    return true;
+  }
+});
+
+const UpperMenuOptions = computed(() => [
   {
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: "home",
+    icon: renderIcon("tabler:home-2"),
+    key: "studies:all-studies",
+    label: "My Studies",
+  },
+  {
+    type: "divider", // Divider after the 2nd element
+  },
+  {
+    icon: renderIcon("material-symbols:overview-key-rounded"),
+    key: "study:overview",
+    label: "Overview",
+    show: hideMenuOptions.value,
+  },
+
+  {
+    // children: [
+    //   {
+    //     icon: renderIcon("material-symbols:design-services-outline-sharp"),
+    //     key: "study:data-upload:design",
+    //     label: "Study Design",
+    //   },
+    // ],
+    icon: renderIcon("oi:cloud-upload"),
+    key: "study:data-upload",
+    label: "Data Upload",
+    show: hideMenuOptions.value,
+  },
+  {
+    icon: renderIcon("ph:files-fill"),
+    key: "study:files",
+    label: "Uploaded Files",
+    show: hideMenuOptions.value,
+  },
+  {
+    icon: renderIcon("material-symbols:api"),
+    key: "study:redcap:all-redcap-project-apis",
+    label: "REDCap",
+    show: hideMenuOptions.value,
+  },
+  {
+    icon: renderIcon("material-symbols:dashboard-rounded"),
+    key: "study:dashboard:all-dashboards",
+    label: "Dashboards",
+    show: hideMenuOptions.value,
+  },
+
+  {
+    children: [
+      {
+        icon: renderIcon("codicon:symbol-keyword"),
+        key: "study:metadata:description",
+        label: "Study Description",
+      },
+      {
+        icon: renderIcon("ic:baseline-local-police"),
+        key: "study:metadata:oversight",
+        label: "Oversight",
+      },
+      // {
+      //   icon: renderIcon("tabler:id"),
+      //   key: "study:metadata:identification",
+      //   label: "Status",
+      // },
+
+      {
+        icon: renderIcon("pajamas:status"),
+        key: "study:metadata:status",
+        label: "Status",
+      },
+      {
+        icon: renderIcon("carbon:user-sponsor"),
+        key: "study:metadata:team",
+        label: "Team",
+      },
+      {
+        icon: renderIcon("iconoir:design-pencil"),
+        key: "study:metadata:design",
+        label: "Design",
+      },
+      {
+        children: [
+          {
+            icon: renderIcon("icon-park-outline:permissions"),
+            key: "study:metadata:eligibility",
+            label: "Eligibility",
           },
-        },
-        { default: () => "Home" }
-      ),
-    key: "home",
-    icon: renderIcon(Home2),
-  },
-  {
-    label: "Study Info",
-    key: "study-info",
-    icon: renderIcon(ListDetails),
-  },
-  {
-    label: "Participants and Data",
-    key: "participants-and-data",
-    icon: renderIcon(PeopleTeamToolbox24Regular),
-  },
-  {
-    label: "Contributors",
-    key: "contributors",
-    icon: renderIcon(PeopleCheckmark16Regular),
-  },
-  {
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            path: "/dashboard",
+          {
+            icon: renderIcon("akar-icons:people-group"),
+            key: "study:metadata:arms",
+            label: "Arms",
           },
-        },
-        { default: () => "Dashboard" }
-      ),
-    key: "dashboard",
-    icon: renderIcon(DashboardRound),
+          {
+            icon: renderIcon("mdi:drugs"),
+            key: "study:metadata:interventions",
+            label: "Interventions",
+          },
+        ],
+        icon: renderIcon("solar:medical-kit-bold"),
+        key: "study:treatment",
+        label: "Treatment",
+        show: hideMenuOptions.value,
+      },
+
+      {
+        children: [
+          {
+            icon: renderIcon("teenyicons:contact-outline"),
+            key: "study:metadata:contacts",
+            label: "Central Contacts",
+          },
+          {
+            icon: renderIcon("material-symbols:social-leaderboard-outline-rounded"),
+            key: "study:metadata:officials",
+            label: "Overall Officials",
+          },
+          {
+            icon: renderIcon("fluent:location-16-filled"),
+            key: "study:metadata:locations",
+            label: "Locations",
+          },
+        ],
+        icon: renderIcon("ep:list"),
+        key: "study:enrollment",
+        label: "Enrollment",
+      },
+    ],
+    icon: renderIcon("ooui:view-details-ltr"),
+    key: "study:metadata",
+    label: "Study Information",
+    show: hideMenuOptions.value,
   },
   {
+    icon: renderIcon("material-symbols:dataset"),
+    key: "study:all-datasets",
+    label: "Datasets",
+    show: hideMenuOptions.value,
+  },
+  {
+    icon: renderIcon("fluent:people-team-toolbox-24-regular"),
+    key: "study:participants",
+    label: "Participants",
+    show: false,
+  },
+  {
+    icon: renderIcon("icon-park-solid:permissions"),
+    key: "study:permissions",
+    label: "Permissions",
+    show: hideMenuOptions.value,
+  },
+  {
+    icon: renderIcon("fluent:shifts-activity-24-filled"),
+    key: "study:activity",
+    label: "Activity",
+    show: hideMenuOptions.value,
+  },
+  {
+    icon: renderIcon("material-symbols:published-with-changes-rounded"),
+    key: "publish-study",
     label: () =>
       h(
         RouterLink,
         {
           to: {
-            name: "add-participant",
+            name: "publish-select-dataset",
             params: {
-              lang: "en-US",
+              studyId: studyID.value,
             },
           },
         },
-        { default: () => "Add Participant" }
+        { default: () => "Publish" }
       ),
-    key: "add-participant",
-    icon: renderIcon(PeopleAdd24Regular),
+    show: false,
   },
-];
+]);
 
 const lowerMenuOptions: MenuOption[] = [
   {
-    label: "Report an Issue",
-    key: "report-an-issue",
-    icon: renderIcon(BugReportOutlined),
-  },
-  {
-    label: "Help",
-    key: "help",
-    icon: renderIcon(Help),
     children: [
       {
-        label: "Documentation",
-        key: "documentation",
-        icon: renderIcon(DocumentFlowchart24Regular),
+        icon: renderIcon("material-symbols:bug-report-outline"),
+        key: "report-issue",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                path: "/help/report-issue",
+              },
+            },
+            { default: () => "Report an Issue" }
+          ),
       },
       {
-        label: "Changelog",
-        key: "changelog",
-        icon: renderIcon(History),
+        icon: renderIcon("fluent:document-flowchart-24-regular"),
+        key: "documentation",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                path: "/help/documentation",
+              },
+            },
+            { default: () => "Documentation" }
+          ),
+      },
+      {
+        icon: renderIcon("material-symbols:policy-alert-outline"),
+        key: "privacy-policy",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                path: "/help/privacy-policy",
+              },
+            },
+            { default: () => "Privacy policy" }
+          ),
+      },
+      {
+        icon: renderIcon("codicon:terminal-powershell"),
+        key: "terms-conditions",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                path: "/help/terms-conditions",
+              },
+            },
+            { default: () => "Terms and conditions" }
+          ),
       },
     ],
+    icon: renderIcon("tabler:help"),
+    key: "help",
+    label: "Help",
   },
   {
-    label: "Settings",
+    icon: renderIcon("fluent:settings-24-regular"),
     key: "settings",
-    icon: renderIcon(Settings24Regular),
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: "all-settings",
+          },
+        },
+        { default: () => "Settings" }
+      ),
   },
 ];
 
@@ -194,8 +311,54 @@ const lowerMenuOptions: MenuOption[] = [
  * @returns {void}
  */
 const toggleSidebar = (collapsed: boolean) => {
-  sidebarCollapsed.value = collapsed;
+  sidebarStore.setAppSidebarCollapsed(collapsed);
   return;
+};
+
+const navigateTo = (value: string) => {
+  const routeName = value.split(":")[0];
+
+  if (routeName === "studies") {
+    sidebarStore.setAppSidebarCollapsed(false);
+
+    router.push({
+      name: value,
+    });
+
+    return;
+  }
+
+  if (routeName === "study") {
+    sidebarStore.setAppSidebarCollapsed(false);
+
+    router.push({
+      name: value,
+      params: {
+        studyId: studyID.value,
+      },
+    });
+
+    return;
+  }
+
+  if (routeName === "datasets") {
+    sidebarStore.setAppSidebarCollapsed(false);
+
+    router.push({
+      name: value,
+      params: {
+        studyId: studyID.value,
+      },
+    });
+
+    return;
+  }
+
+  if (routeName === "dataset") {
+    sidebarStore.setAppSidebarCollapsed(true);
+
+    return;
+  }
 };
 
 /**
@@ -204,10 +367,59 @@ const toggleSidebar = (collapsed: boolean) => {
  */
 const hideSidebar = computed(() => {
   const currentRoute = useRoute();
+
   if (currentRoute.path === "/") {
     return false;
   }
+
+  if (currentRoute.path.startsWith("/auth/")) {
+    return false;
+  }
+
   return true;
+});
+
+const defaultExpandedKeys = computed(() => {
+  const currentRoute = useRoute();
+
+  if (currentRoute.name) {
+    const name = currentRoute.name as string;
+
+    if (name.startsWith("study:metadata")) {
+      return ["study:metadata"];
+    }
+  }
+  return [];
+});
+
+const selectedKeyRef = ref("1");
+const menuInstRef = ref<MenuInst | null>(null);
+
+const selectAndExpand = (key: string) => {
+  selectedKeyRef.value = key;
+  menuInstRef.value?.showOption(key);
+};
+
+router.beforeEach((to) => {
+  if (typeof to.name !== "string") return;
+  const name: string = to.meta && to.meta.menuItem ? (to.meta.menuItem as string) : to.name;
+  selectAndExpand(name);
+});
+
+watchEffect(() => {
+  if (!route.params.studyId) {
+    return;
+  }
+
+  if (authStore.isAuthenticated) {
+    studyStore.getStudyRole(studyID.value as string);
+  }
+});
+
+onMounted(() => {
+  if (authStore.isAuthenticated) {
+    studyStore.fetchAllStudies();
+  }
 });
 </script>
 
@@ -219,20 +431,29 @@ const hideSidebar = computed(() => {
     :collapsed="sidebarCollapsed"
     collapse-mode="width"
     :collapsed-width="64"
-    :width="240"
+    :width="300"
     :native-scrollbar="true"
     @update:collapsed="toggleSidebar"
-    class="h-[calc(100vh-56px)]"
+    class="z-10 h-[calc(100vh-56px)]"
   >
     <n-space vertical justify="space-between" class="h-full">
-      <n-menu
-        :collapsed-width="64"
-        :collapsed-icon-size="22"
-        :collapsed="sidebarCollapsed"
-        :options="upperMenuOptions"
-      />
+      <div class="flex flex-col justify-start divide-y">
+        <n-menu
+          ref="menuInstRef"
+          v-model:value="selectedKeyRef"
+          :collapsed-width="64"
+          :width="300"
+          :collapsed-icon-size="22"
+          :default-expanded-keys="defaultExpandedKeys"
+          :collapsed="sidebarCollapsed"
+          :options="UpperMenuOptions"
+          @update:value="navigateTo"
+        />
+      </div>
 
       <n-menu
+        ref="menuInstRef"
+        v-model:value="selectedKeyRef"
         :collapsed-width="64"
         :collapsed-icon-size="22"
         :collapsed="sidebarCollapsed"

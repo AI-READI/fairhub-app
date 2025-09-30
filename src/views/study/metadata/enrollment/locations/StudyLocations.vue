@@ -1,0 +1,350 @@
+<script setup lang="ts">
+import type { FormInst } from "naive-ui";
+import { nanoid } from "nanoid";
+
+import COUNTRIES_JSON from "@/assets/data/countries.json";
+import FORM_JSON from "@/assets/data/form.json";
+import { useStudyStore } from "@/stores/study";
+import type { StudyLocations } from "@/types/Study";
+import { baseURL } from "@/utils/constants";
+
+const route = useRoute();
+const router = useRouter();
+const push = usePush();
+
+const studyStore = useStudyStore();
+
+const formRef = ref<FormInst | null>(null);
+
+const moduleData = reactive<StudyLocations>({
+  location_list: [],
+});
+
+const countryOptions = computed(() => {
+  return COUNTRIES_JSON.map((item) => {
+    return {
+      label: item.name,
+      value: item.name,
+    };
+  });
+});
+
+const loading = ref(false);
+const responseLoading = ref(false);
+
+onBeforeMount(async () => {
+  const studyId = route.params.studyId;
+
+  responseLoading.value = true;
+
+  const response = await fetch(`${baseURL}/study/${studyId}/metadata/location`, {
+    method: "GET",
+  });
+
+  responseLoading.value = false;
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+
+  moduleData.location_list = data.map((item: any) => {
+    return {
+      ...item,
+      contact_list: [],
+      origin: "remote",
+    };
+  });
+});
+
+const removeLocation = async (id: string) => {
+  const item = moduleData.location_list.find((item) => item.id === id);
+
+  if (item && item.origin === "remote") {
+    const response = await fetch(
+      `${baseURL}/study/${route.params.studyId}/metadata/location/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok) {
+      push.error("Failed to delete location");
+      throw new Error("Network response was not ok");
+    }
+  }
+
+  moduleData.location_list = moduleData.location_list.filter((item) => item.id !== id);
+
+  push.success("Location removed");
+};
+
+const addLocation = () => {
+  moduleData.location_list.push({
+    id: nanoid(),
+    city: "",
+    contact_list: [],
+    country: null,
+    facility: "",
+    identifier: "",
+    identifier_scheme: "",
+    identifier_scheme_uri: "",
+    origin: "local",
+    state: "",
+    status: null,
+    zip: "",
+  });
+};
+
+const saveMetadata = (e: MouseEvent) => {
+  e.preventDefault();
+  formRef.value?.validate(async (errors) => {
+    if (!errors) {
+      const data = moduleData.location_list.map((item) => {
+        const entry = {
+          city: item.city,
+          country: item.country,
+          facility: item.facility,
+          identifier: item.identifier || "",
+          identifier_scheme: item.identifier_scheme || "",
+          identifier_scheme_uri: item.identifier_scheme_uri || "",
+          state: item.state || "",
+          status: item.status,
+          zip: item.zip || "",
+        };
+
+        if (item.origin === "local") {
+          return entry;
+        } else {
+          return {
+            ...entry,
+            id: item.id,
+          };
+        }
+      });
+
+      loading.value = true;
+
+      const response = await fetch(`${baseURL}/study/${route.params.studyId}/metadata/location`, {
+        body: JSON.stringify(data),
+
+        method: "POST",
+      });
+
+      loading.value = false;
+
+      if (!response.ok) {
+        push.error("Something went wrong. Please try again later.");
+        throw new Error("Network response was not ok");
+      } else {
+        push.success("Study updated successfully.");
+
+        // refresh page
+        router.go(0);
+      }
+
+      console.log("success");
+    } else {
+      console.log("error");
+      console.log(errors);
+    }
+  });
+};
+</script>
+
+<template>
+  <main class="flex h-full w-full flex-col pr-6">
+    <PageBackNavigationHeader
+      title="Locations"
+      description=""
+      linkName="study:overview"
+      :linkParams="{
+        studyId: route.params.studyId,
+      }"
+    />
+
+    <n-divider />
+
+    <FadeTransition>
+      <LottieLoader v-if="responseLoading" />
+
+      <n-form
+        ref="formRef"
+        :model="moduleData"
+        size="large"
+        label-placement="top"
+        class="pr-4"
+        v-else
+        :disabled="studyStore.currentStudyRole === 'viewer'"
+      >
+        <CollapsibleCard
+          v-for="(item, index) in moduleData.location_list"
+          :key="item.id"
+          class="mb-5 shadow-md"
+          :title="item.facility || `City ${index + 1}`"
+          bordered
+        >
+          <template #header-extra>
+            <n-popconfirm @positive-click="removeLocation(item.id)">
+              <template #trigger>
+                <n-button
+                  type="error"
+                  secondary
+                  :disabled="studyStore.currentStudyRole === 'viewer'"
+                >
+                  <template #icon>
+                    <f-icon icon="ep:delete" />
+                  </template>
+
+                  Remove Location
+                </n-button>
+              </template>
+
+              Are you sure you want to remove this Location?
+            </n-popconfirm>
+          </template>
+
+          <n-form-item
+            label="Name of Facility"
+            :path="`location_list[${index}].facility`"
+            :rule="{
+              message: 'Please enter a name for the facility',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-input v-model:value="item.facility" placeholder="Wall Rose" clearable />
+          </n-form-item>
+
+          <n-form-item
+            label="Status of Facility"
+            :path="`location_list[${index}].status`"
+            :rule="{
+              message: 'Please select a status for the facility',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-select
+              v-model:value="item.status"
+              placeholder="Recruiting"
+              clearable
+              :options="FORM_JSON.studyMetadataStatusOptions"
+            />
+          </n-form-item>
+
+          <n-form-item
+            label="City"
+            :path="`location_list[${index}].city`"
+            :rule="{
+              message: 'Please enter a city',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-input v-model:value="item.city" placeholder="Paradis" clearable />
+          </n-form-item>
+
+          <n-form-item label="State" :path="`location_list[${index}].state`">
+            <n-input v-model:value="item.state" placeholder="Ohio" clearable />
+          </n-form-item>
+
+          <n-form-item label="Zip Code" :path="`location_list[${index}].zip`">
+            <n-input v-model:value="item.zip" placeholder="43215" clearable />
+          </n-form-item>
+
+          <n-form-item
+            label="Country"
+            :path="`location_list[${index}].country`"
+            :rule="{
+              message: 'Please enter a country',
+              required: true,
+              trigger: ['blur', 'change'],
+            }"
+          >
+            <n-select
+              v-model:value="item.country"
+              placeholder="United States of America"
+              clearable
+              filterable
+              :options="countryOptions"
+            />
+          </n-form-item>
+
+          <div class="flex items-center space-x-4">
+            <n-form-item
+              label="Name Identifier"
+              :path="`location_list[${index}].identifier`"
+              :rule="{
+                message: 'Please enter an identifier',
+                required: item.identifier_scheme,
+                trigger: ['blur', 'change'],
+              }"
+              class="w-full"
+            >
+              <n-input v-model:value="item.identifier" placeholder="0156zyn36" clearable />
+            </n-form-item>
+
+            <n-form-item
+              label="Name Identifier Scheme"
+              :path="`location_list[${index}].identifier_scheme`"
+              :rule="{
+                message: 'Please enter an identifier scheme',
+                required: item.identifier,
+                trigger: ['blur', 'change'],
+              }"
+              class="w-full"
+            >
+              <n-input v-model:value="item.identifier_scheme" placeholder="ROR" clearable />
+            </n-form-item>
+
+            <n-form-item
+              label="Name Identifier Scheme URI"
+              :path="`location_list[${index}].identifier_scheme_uri`"
+              class="w-full"
+            >
+              <n-input
+                v-model:value="item.identifier_scheme_uri"
+                placeholder="https://ror.org"
+                clearable
+              />
+            </n-form-item>
+          </div>
+        </CollapsibleCard>
+
+        <n-button
+          class="my-10 w-full"
+          dashed
+          type="success"
+          @click="addLocation"
+          :disabled="studyStore.currentStudyRole === 'viewer'"
+        >
+          <template #icon>
+            <f-icon icon="gridicons:create" />
+          </template>
+
+          Add a Location
+        </n-button>
+
+        <n-divider />
+
+        <div class="flex justify-start">
+          <n-button
+            size="large"
+            type="primary"
+            @click="saveMetadata"
+            :loading="loading"
+            :disabled="studyStore.currentStudyRole === 'viewer'"
+          >
+            <template #icon>
+              <f-icon icon="material-symbols:save" />
+            </template>
+
+            Save Metadata
+          </n-button>
+        </div>
+      </n-form>
+    </FadeTransition>
+  </main>
+</template>

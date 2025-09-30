@@ -3,14 +3,14 @@ import { NEmpty } from "naive-ui";
 
 export default {
   title: "Components/Empty",
-  component: NEmpty,
   argTypes: {
+    "show-icon": { control: { type: "boolean" } },
     size: {
       control: { type: "select" },
       options: ["small", "medium", "large"],
     },
-    "show-icon": { control: { type: "boolean" } },
   },
+  component: NEmpty,
 };
 
 const BasicTemplate = (args) => ({

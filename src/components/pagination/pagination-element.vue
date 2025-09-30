@@ -8,13 +8,13 @@ export default defineComponent({
     NPagination,
   },
   props: {
+    disabled: { type: Boolean },
     mode: {
       type: String,
       validator: function (value: string) {
         return ["basic", "slot", "picker"].indexOf(value) !== -1;
       },
     },
-    disabled: { type: Boolean },
     simple: { type: Boolean },
     size: { type: String as PropType<"small" | "medium" | "large"> },
   },
@@ -45,6 +45,7 @@ export default defineComponent({
     :page-count="100"
     v-if="mode === 'slot'"
   />
+
   <n-pagination v-model:page="page" :page-count="100" :page-slot="8" v-if="mode === 'slot'" />
 
   <n-pagination

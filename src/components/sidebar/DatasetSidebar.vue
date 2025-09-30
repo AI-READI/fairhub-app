@@ -1,0 +1,236 @@
+<script setup lang="ts">
+import { Icon } from "@iconify/vue";
+import type { MenuInst, MenuOption } from "naive-ui";
+import { NLayoutSider, NMenu, NSpace } from "naive-ui";
+import { computed, h, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
+const route = useRoute();
+const router = useRouter();
+
+const sidebarCollapsed = ref(false);
+
+function renderIcon(icon: string) {
+  return () => h(Icon, { icon });
+}
+
+const studyID = computed(() => {
+  if (route.params.studyId === undefined) {
+    return "null";
+  }
+  return route.params.studyId;
+});
+
+const datasetId = computed(() => {
+  if (route.params.datasetId === undefined) {
+    return "null";
+  }
+  return route.params.datasetId;
+});
+
+const dynamicUpperMenuOptions: MenuOption[] = [
+  {
+    icon: renderIcon("material-symbols:overview-key-outline"),
+    key: "dataset:overview",
+    label: "Overview",
+  },
+  {
+    children: [
+      {
+        icon: renderIcon("material-symbols:description-outline"),
+        key: "dataset:metadata:general-information",
+        label: "General information",
+      },
+      {
+        icon: renderIcon("mdi:identifier"),
+        key: "dataset:metadata:identifiers",
+        label: "Identifiers",
+      },
+      {
+        icon: renderIcon("ic:baseline-people"),
+        key: "dataset:metadata:team",
+        label: "Team",
+      },
+      {
+        icon: renderIcon("hugeicons:folder-management"),
+        key: "dataset:metadata:data-management",
+        label: "Data management",
+      },
+      {
+        icon: renderIcon("mdi:cloud-access"),
+        key: "dataset:metadata:access-rights",
+        label: "Access & Rights",
+      },
+      {
+        icon: renderIcon("fluent-mdl2:relationship"),
+        key: "dataset:metadata:related-identifiers",
+        label: "Related Identifiers",
+      },
+      {
+        // language, managing organization, size goes in here
+        icon: renderIcon("pajamas:overview"),
+        key: "dataset:metadata:about",
+        label: "About",
+      },
+    ],
+    icon: renderIcon("ooui:view-details-ltr"),
+    key: "dataset:metadata",
+    label: "Metadata",
+  },
+  {
+    children: [
+      {
+        icon: renderIcon("material-symbols-light:motion-photos-on-rounded"),
+        key: "dataset:healthsheet:motivation",
+        label: "Motivation",
+      },
+      {
+        icon: renderIcon("ph:compass-tool-duotone"),
+        key: "dataset:healthsheet:composition",
+        label: "Composition",
+      },
+      {
+        icon: renderIcon("fluent:collections-add-24-filled"),
+        key: "dataset:healthsheet:collection",
+        label: "Collection",
+      },
+      {
+        icon: renderIcon("carbon:process"),
+        key: "dataset:healthsheet:preprocessing",
+        label: "Preprocessing",
+      },
+      {
+        icon: renderIcon("icon-park-twotone:data-user"),
+        key: "dataset:healthsheet:uses",
+        label: "Uses",
+      },
+      {
+        icon: renderIcon("fluent-mdl2:distribute-down"),
+        key: "dataset:healthsheet:distribution",
+        label: "Distribution",
+      },
+      {
+        icon: renderIcon("pajamas:issue-type-maintenance"),
+        key: "dataset:healthsheet:maintenance",
+        label: "Maintenance",
+      },
+    ],
+    icon: renderIcon("mdi:file-document-edit-outline"),
+    key: "dataset:healthsheet",
+    label: "Healthsheet",
+  },
+  {
+    icon: renderIcon("entypo:publish"),
+    key: "dataset:publish:versions",
+    label: "Publish",
+  },
+];
+
+/**
+ * A function that toggles the sidebar
+ * @param {boolean} collapsed Event emitted by the sidebar when the collapse button is clicked
+ * @returns {void}
+ */
+const toggleSidebar = (collapsed: boolean) => {
+  sidebarCollapsed.value = collapsed;
+  return;
+};
+
+const navigateTo = (value: string) => {
+  console.log("navigateTo", value);
+  const routeName = value.split(":")[0];
+
+  // if (routeName === "study") {
+  //   router.push({
+  //     name: value,
+  //     params: {
+  //       studyId: studyID.value,
+  //     },
+  //   });
+
+  //   return;
+  // }
+
+  if (routeName === "dataset") {
+    router.push({
+      name: value,
+      params: {
+        datasetId: datasetId.value,
+        studyId: studyID.value,
+      },
+    });
+
+    return;
+  }
+};
+
+/**
+ * A computed property that returns true if the sidebar should be completely hidden
+ * @returns {boolean}
+ */
+const showSidebar = computed(() => {
+  const currentRoute = useRoute();
+
+  const routeName = currentRoute.name as string;
+
+  if (!routeName) {
+    return false;
+  }
+
+  console.log("routeName", routeName, route.path);
+
+  // These routes should not show the sidebar
+  const hiddenRoutes = ["dataset:new", "dataset:edit"];
+
+  if (hiddenRoutes.includes(routeName)) {
+    return false;
+  }
+
+  if (routeName.startsWith("dataset:")) {
+    return true;
+  }
+
+  return false;
+});
+
+const selectedKeyRef = ref("1");
+const menuInstRef = ref<MenuInst | null>(null);
+
+const selectAndExpand = (key: string) => {
+  selectedKeyRef.value = key;
+  menuInstRef.value?.showOption(key);
+};
+
+router.beforeEach((to) => {
+  if (typeof to.name !== "string") return;
+  const name: string = to.meta && to.meta.menuItem ? (to.meta.menuItem as string) : to.name;
+  selectAndExpand(name);
+});
+</script>
+
+<template>
+  <n-layout-sider
+    v-if="showSidebar"
+    bordered
+    show-trigger
+    :collapsed="sidebarCollapsed"
+    collapse-mode="width"
+    :collapsed-width="64"
+    :native-scrollbar="true"
+    @update:collapsed="toggleSidebar"
+    class="h-[calc(100vh-56px)]"
+  >
+    <n-space vertical justify="space-between" class="h-full">
+      <n-menu
+        ref="menuInstRef"
+        v-model:value="selectedKeyRef"
+        :collapsed-width="64"
+        :collapsed-icon-size="22"
+        :default-expanded-keys="['dataset:metadata']"
+        :collapsed="sidebarCollapsed"
+        :options="dynamicUpperMenuOptions"
+        @update:value="navigateTo"
+      />
+    </n-space>
+  </n-layout-sider>
+</template>

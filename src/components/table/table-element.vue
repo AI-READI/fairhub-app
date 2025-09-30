@@ -8,14 +8,14 @@ export default defineComponent({
     NTable,
   },
   props: {
+    bordered: { type: Boolean },
+    cascade: { type: Boolean },
     mode: {
       type: String,
       validator: function (value: string) {
         return ["basic", "border", "size", "stripe"].indexOf(value) !== -1;
       },
     },
-    bordered: { type: Boolean },
-    cascade: { type: Boolean },
     size: { type: String as PropType<"small" | "medium" | "large"> },
   },
 });
@@ -32,25 +32,39 @@ export default defineComponent({
     <thead>
       <tr>
         <th>Basic</th>
+
         <th>Abormal</th>
+
         <th>Abolish</th>
+
         <th>...</th>
+
         <th>It's hard to learn words</th>
       </tr>
     </thead>
+
     <tbody>
       <tr>
         <td>1</td>
+
         <td>2</td>
+
         <td>3</td>
+
         <td>...</td>
+
         <td>I can't remember those words.</td>
       </tr>
+
       <tr>
         <td>...</td>
+
         <td>...</td>
+
         <td>...</td>
+
         <td>...</td>
+
         <td>...</td>
       </tr>
     </tbody>
@@ -66,25 +80,39 @@ export default defineComponent({
     <thead>
       <tr>
         <th>border</th>
+
         <th>Abormal</th>
+
         <th>Abolish</th>
+
         <th>...</th>
+
         <th>It's hard to learn words</th>
       </tr>
     </thead>
+
     <tbody>
       <tr>
         <td>1</td>
+
         <td>2</td>
+
         <td>3</td>
+
         <td>...</td>
+
         <td>I can't remember those words.</td>
       </tr>
+
       <tr>
         <td>...</td>
+
         <td>...</td>
+
         <td>...</td>
+
         <td>...</td>
+
         <td>...</td>
       </tr>
     </tbody>
@@ -95,25 +123,39 @@ export default defineComponent({
       <thead>
         <tr>
           <th>size</th>
+
           <th>Abnormal</th>
+
           <th>Abolish</th>
+
           <th>...</th>
+
           <th>It's hard to learn words</th>
         </tr>
       </thead>
+
       <tbody>
         <tr>
           <td>1</td>
+
           <td>2</td>
+
           <td>3</td>
+
           <td>...</td>
+
           <td>I can't remember those words.</td>
         </tr>
+
         <tr>
           <td>...</td>
+
           <td>...</td>
+
           <td>...</td>
+
           <td>...</td>
+
           <td>...</td>
         </tr>
       </tbody>
@@ -125,32 +167,51 @@ export default defineComponent({
       <thead>
         <tr>
           <th>stripe</th>
+
           <th>Abormal</th>
+
           <th>Abolish</th>
+
           <th>...</th>
+
           <th>It's hard to learn words</th>
         </tr>
       </thead>
+
       <tbody>
         <tr>
           <td>1</td>
+
           <td>2</td>
+
           <td>3</td>
+
           <td>...</td>
+
           <td>I can't remember those words.</td>
         </tr>
+
         <tr>
           <td>...</td>
+
           <td>...</td>
+
           <td>...</td>
+
           <td>...</td>
+
           <td>...</td>
         </tr>
+
         <tr>
           <td>...</td>
+
           <td>...</td>
+
           <td>...</td>
+
           <td>...</td>
+
           <td>...</td>
         </tr>
       </tbody>

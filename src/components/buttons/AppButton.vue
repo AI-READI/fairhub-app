@@ -2,6 +2,7 @@
   <button type="button" :class="classes" @click="onClick" :style="style">
     {{ label }}
   </button>
+
   <n-button>naive-ui</n-button>
 </template>
 
@@ -13,14 +14,19 @@ import { computed, reactive } from "vue";
 export default {
   name: "my-button",
 
+  emits: ["click"],
+
   props: {
-    label: {
+    backgroundColor: {
       type: String,
+    },
+    label: {
       required: true,
+      type: String,
     },
     primary: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
     size: {
       type: String,
@@ -28,12 +34,7 @@ export default {
         return ["small", "medium", "large"].indexOf(value) !== -1;
       },
     },
-    backgroundColor: {
-      type: String,
-    },
   },
-
-  emits: ["click"],
 
   setup(props, { emit }) {
     props = reactive(props);
@@ -44,12 +45,12 @@ export default {
         "storybook-button--secondary": !props.primary,
         [`storybook-button--${props.size || "medium"}`]: true,
       })),
-      style: computed(() => ({
-        backgroundColor: props.backgroundColor,
-      })),
       onClick() {
         emit("click");
       },
+      style: computed(() => ({
+        backgroundColor: props.backgroundColor,
+      })),
     };
   },
 };

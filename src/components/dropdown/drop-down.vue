@@ -9,6 +9,9 @@ export default defineComponent({
   components: { DropdownMain, NMessageProvider },
 
   props: {
+    animated: { type: Boolean },
+    inverted: { type: Boolean },
+    keyboard: { type: Boolean },
     mode: {
       type: String,
       validator: function (value: string) {
@@ -16,9 +19,6 @@ export default defineComponent({
       },
     },
     size: { type: String as PropType<"small" | "medium" | "large"> },
-    animated: { type: Boolean },
-    keyboard: { type: Boolean },
-    inverted: { type: Boolean },
   },
 });
 </script>

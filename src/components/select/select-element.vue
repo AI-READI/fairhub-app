@@ -9,30 +9,29 @@ export default defineComponent({
     NSpace,
   },
   props: {
+    clearable: { type: Boolean },
+    disabled: { type: Boolean },
     mode: {
       type: String,
       validator: function (value: string) {
         return ["basic", "size"].indexOf(value) !== -1;
       },
     },
-    disabled: { type: Boolean },
-    clearable: { type: Boolean },
     size: { type: String as PropType<"tiny" | "small" | "medium" | "large"> },
   },
 
   setup() {
     return {
-      value: ref(null),
       options: [
         {
+          disabled: true,
           label: "Everybody's Got Something to Hide Except Me and My Monkey",
           value: "song0",
-          disabled: true,
         },
         {
+          disabled: true,
           label: "You Won't See",
           value: "song3",
-          disabled: true,
         },
         {
           label: "In My Life",
@@ -43,6 +42,7 @@ export default defineComponent({
           value: "song12",
         },
       ],
+      value: ref(null),
     };
   },
 });
@@ -57,8 +57,11 @@ export default defineComponent({
     :options="options"
     v-if="mode === 'basic'"
   />
+
   <n-select v-model:value="value" :options="options" v-if="mode === 'basic'" />
+
   <n-button v-if="mode === 'size'">Size</n-button>
+
   <n-space vertical v-if="mode === 'size'">
     <n-select
       v-model:value="value"
@@ -67,6 +70,7 @@ export default defineComponent({
       :mode="mode"
       v-if="mode === 'size'"
     />
+
     <n-select
       v-model:value="value"
       size="large"

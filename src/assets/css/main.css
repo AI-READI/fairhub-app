@@ -1,0 +1,222 @@
+@import "./base.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.sb-show-main {
+  @apply bg-transparent font-sans;
+}
+
+.sbdocs.sbdocs-content > * {
+  @apply !font-sans !text-slate-700;
+}
+
+.story-content {
+  @apply w-full text-slate-700;
+  @apply mx-auto max-w-5xl;
+}
+
+.story-content > h1 {
+  @apply pb-4 text-3xl !font-semibold !text-slate-700;
+}
+
+.story-content > h2,
+.story-content > div > h2 {
+  @apply pb-4 text-2xl !font-semibold !text-slate-700;
+}
+
+.story-content > p {
+  @apply !pb-4 text-base;
+}
+
+.story-content > hr {
+  @apply !mt-4 mb-8 border-t-2 !border-slate-200;
+}
+
+.sbdocs.sbdocs-p > strong {
+  @apply font-bold;
+}
+
+.n-base-select-option__content {
+  @apply flex w-full flex-grow;
+}
+
+.n-base-select-menu .n-base-select-option.n-base-select-option--show-checkmark {
+  @apply pr-2;
+}
+
+@layer base {
+  /* inter var - latin */
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 100 900;
+    src: url("/fonts/inter-var-latin.woff2") format("woff2");
+  }
+
+  h1 {
+    @apply !font-primary text-2xl font-bold md:text-4xl;
+  }
+
+  h2 {
+    @apply !font-primary text-xl font-bold md:text-3xl;
+  }
+
+  h3 {
+    @apply !font-primary text-lg font-bold md:text-2xl;
+  }
+
+  h4 {
+    @apply !font-primary text-base font-bold md:text-lg;
+  }
+
+  p {
+    @apply !font-primary text-sm text-slate-600 md:text-base;
+  }
+
+  body {
+    @apply !font-primary text-sm md:text-base;
+  }
+
+  .bg-dark a.custom-link {
+    @apply border-gray-200 hover:border-gray-200/0;
+  }
+
+  pre {
+    @apply text-xs;
+  }
+}
+
+@layer utilities {
+  .animated-underline {
+    background-image: linear-gradient(#33333300, #33333300),
+      linear-gradient(to right, var(--clr-primary-400), var(--clr-primary-500));
+    background-size: 100% 2px, 0 2px;
+    background-position: 100% 100%, 0 100%;
+    background-repeat: no-repeat;
+    transition: 0.3s ease;
+    transition-property: background-size, color, background-color, border-color;
+  }
+  .animated-underline:hover,
+  .animated-underline:focus-visible {
+    background-size: 0 2px, 100% 2px;
+  }
+
+  .bg-primary {
+    @apply bg-primary-500;
+  }
+
+  .bg-secondary {
+    @apply bg-secondary-500;
+  }
+
+  .border-primary {
+    @apply border-primary-500;
+  }
+
+  .border-secondary {
+    @apply border-secondary-500;
+  }
+
+  .text-primary {
+    @apply text-primary-500;
+  }
+
+  .text-secondary {
+    @apply text-secondary-500;
+  }
+}
+
+/* ------------------------------------------
+Transition styles for <transition />
+--------------------------------------------- */
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease-in-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  /* transform: translateY(-20px); */
+}
+
+.lightfadeleft-enter-active,
+.lightfadeleft-leave-active {
+  transition: all 0.3s ease-in-out;
+  overflow-x: hidden;
+  opacity: 0.7;
+}
+
+.lightfadeleft-enter-from,
+.lightfadeleft-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/*.n-menu-item{*/
+/*  position: relative;*/
+/*}*/
+
+/*.n-menu-item *, .n-menu-item *::before,.n-menu-item *::after {*/
+/*  position: static;*/
+
+/*}*/
+
+/*.share-data{*/
+/*  background-image: url("../../assets/faq-bg.svg");*/
+/*      background-size: auto; !* Adjust as needed *!*/
+/*    background-repeat: repeat; !* Adjust as needed *!*/
+
+/*}*/
+
+.main-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.n-collapse .n-collapse-item:not(:first-child) {
+    border-top: 1px solid #0284c7;}
+
+.view:has(main.landing){
+  padding: 0;
+  margin: 0;
+}
+
+
+.share-data {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.share-data::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../../assets/faq-bg.svg");
+    background-repeat: repeat; /* Adjust as needed */
+    background-position: center;
+    mask-image: linear-gradient( white 15%, white 85%, transparent);
+    z-index: -1;
+}
+
+.faq {
+  background: linear-gradient(0deg, rgba(255, 255, 255, 1) 3%, rgba(241, 245, 249, 1) 30%, rgba(241, 245, 249, 1) 88%, rgba(255, 255, 255, 1) 100%);
+}
+
+.status .n-form-item-blank{
+  display:block
+}
+
+.n-menu.metadata .n-menu-item{
+    margin: 0;
+}

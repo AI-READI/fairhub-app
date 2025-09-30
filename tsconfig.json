@@ -1,19 +1,70 @@
 {
   "compilerOptions": {
-    "jsx": "preserve",
+    "target": "esnext",
+    "module": "esnext",
+    "types": ["node"],
+    "lib": ["esnext", "dom"],
+    "skipLibCheck": true,
     "allowJs": true,
-    "types": ["naive-ui/volar", "node"]
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "moduleResolution": "node",
+    // "typeRoots": ["./node_modules/@types", "./types"],
+    "composite": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "allowSyntheticDefaultImports": true
+    // "strict": true
   },
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.config.json"
-    },
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.vitest.json"
-    }
-  ]
+  "include": [
+    "./env.d.ts",
+    "src/**/*",
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "src/**/*.json",
+    "./auto-imports.d.ts"
+  ],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
+
+// {
+//   "compilerOptions": {
+//     "jsx": "preserve",
+//     "allowJs": true,
+//     "types": ["naive-ui/volar", "node"],
+//     "resolveJsonModule": true,
+//     "esModuleInterop": true,
+//     "typeRoots": ["./node_modules/@types", "src/types"],
+//     "paths": {
+//       "@/*": ["./src/*"]
+//     }
+//   },
+//   "composite": true,
+//   "files": [],
+//   "include": [
+//     "env.d.ts",
+//     "src/**/*",
+//     "src/**/*.vue",
+//     "src/**/*.json",
+//     "src/types",
+//     "./auto-imports.d.ts"
+//   ],
+//   "references": [
+//     {
+//       "path": "./tsconfig.config.json"
+//     },
+//     {
+//       "path": "./tsconfig.app.json"
+//     },
+//     {
+//       "path": "./tsconfig.vitest.json"
+//     }
+//   ]
+// }

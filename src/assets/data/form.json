@@ -1,0 +1,1433 @@
+{
+  "datasetRecordKeysTypeOptions": [],
+  "datasetRelatedItemRelationTypeOptions": [],
+  "datasetRelatedItemNumberTypeOptions": [],
+  "keywordOptions": [
+    {
+      "label": "Artifical Intelligence",
+      "value": "Artifical Intelligence"
+    },
+    {
+      "label": "Dataset",
+      "value": "Dataset"
+    },
+    {
+      "label": "Diabetes",
+      "value": "Diabetes"
+    },
+    {
+      "label": "Ethics",
+      "value": "Ethics"
+    },
+    {
+      "label": "Health",
+      "value": "Health"
+    },
+    {
+      "label": "Machine Learning",
+      "value": "Machine Learning"
+    }
+  ],
+  "datasetTitleTypeOptions": [
+    {
+      "label": "Main Title",
+      "value": "MainTitle",
+      "disabled": true
+    },
+    {
+      "label": "Alternative Title",
+      "value": "AlternativeTitle",
+      "disabled": false
+    },
+    {
+      "label": "Subtitle",
+      "value": "Subtitle",
+      "disabled": false
+    },
+    {
+      "label": "Translated Title",
+      "value": "TranslatedTitle",
+      "disabled": false
+    },
+    {
+      "label": "Other",
+      "value": "Other",
+      "disabled": false
+    }
+  ],
+  "datasetIdentifierTypeOptions": [
+    {
+      "label": "ARK",
+      "value": "ARK"
+    },
+    {
+      "label": "arXiv",
+      "value": "arXiv"
+    },
+    {
+      "label": "Bibcode",
+      "value": "bibcode"
+    },
+    {
+      "label": "DOI",
+      "value": "DOI"
+    },
+    {
+      "label": "EAN13",
+      "value": "EAN13"
+    },
+    {
+      "label": "EISSN",
+      "value": "EISSN"
+    },
+    {
+      "label": "Handle",
+      "value": "Handle"
+    },
+    {
+      "label": "IGSN",
+      "value": "IGSN"
+    },
+    {
+      "label": "ISBN",
+      "value": "ISBN"
+    },
+    {
+      "label": "ISSN",
+      "value": "ISSN"
+    },
+    {
+      "label": "ISTC",
+      "value": "ISTC"
+    },
+    {
+      "label": "LISSN",
+      "value": "LISSN"
+    },
+    {
+      "label": "LSID",
+      "value": "LSID"
+    },
+    {
+      "label": "PMID",
+      "value": "PMID"
+    },
+    {
+      "label": "PURL",
+      "value": "PURL"
+    },
+    {
+      "label": "UPC",
+      "value": "UPC"
+    },
+    {
+      "label": "URL",
+      "value": "URL"
+    },
+    {
+      "label": "URN",
+      "value": "URN"
+    },
+    {
+      "label": "W3ID",
+      "value": "w3id"
+    }
+  ],
+  "datasetDescriptionTypeOptions": [
+    {
+      "label": "Abstract",
+      "value": "Abstract",
+      "disabled": true
+    },
+    {
+      "label": "Methods",
+      "value": "Methods",
+      "disabled": false
+    },
+    {
+      "label": "Technical Info",
+      "value": "TechnicalInfo",
+      "disabled": false
+    },
+    {
+      "label": "Other",
+      "value": "Other",
+      "disabled": false
+    }
+  ],
+  "datasetNameTypeOptions": [
+    {
+      "label": "Personal",
+      "value": "Personal"
+    },
+    {
+      "label": "Organizational",
+      "value": "Organizational"
+    }
+  ],
+  "datasetDateTypeOptions": [
+    {
+      "label": "Accepted",
+      "value": "Accepted",
+      "description": "The date that the publisher accepted the resource into their system."
+    },
+    {
+      "label": "Available",
+      "value": "Available",
+      "description": "The date the resource is made publicly available. May be a range."
+    },
+    {
+      "label": "Copyrighted",
+      "value": "Copyrighted",
+      "description": "The specific, documented date at which the resource receives a copyrighted status, if applicable."
+    },
+    {
+      "label": "Collected",
+      "value": "Collected",
+      "description": "The date or date range in which the resource content was collected."
+    },
+    {
+      "label": "Created",
+      "value": "Created",
+      "description": "The date the resource itself was put together; this could refer to a timeframe in ancient history, a date range, or a single date for a final component, e.g., the finalised file with all the data."
+    },
+    {
+      "label": "Issued",
+      "value": "Issued",
+      "description": "The date that the resource is published or distributed, e.g., to a data centre"
+    },
+    {
+      "label": "Submitted",
+      "value": "Submitted",
+      "description": "The date the creator submits the resource to the publisher. This could be different from Accepted if the publisher then applies a selection process."
+    },
+    {
+      "label": "Updated",
+      "value": "Updated",
+      "description": "The date of the last update to the resource, when the resource is being added to. May be a range."
+    },
+    {
+      "label": "Valid",
+      "value": "Valid",
+      "description": "The date or date range during which the dataset or resource is accurate."
+    },
+    {
+      "label": "Withdrawn",
+      "value": "Withdrawn",
+      "description": "The date the resource is removed."
+    },
+    {
+      "label": "Controlled Access In Force",
+      "value": "ControlledAccessInForce",
+      "description": "The date the resource is made available under controlled access of some form. May be a range. To indicate the end of such a period, use Available."
+    },
+    {
+      "label": "Other",
+      "value": "Other",
+      "description": "Date type not defined elsewhere."
+    }
+  ],
+  "datasetContributorTypeOptions": [
+    {
+      "label": "Contact Person",
+      "value": "ContactPerson",
+      "description": "Person with knowledge of how to access, troubleshoot, or otherwise field issues related to the resource"
+    },
+    {
+      "label": "Data Collector",
+      "value": "DataCollector",
+      "description": "Person/institution responsible for finding or gathering/collecting data under the guidelines of the author(s) or Principal Investigator (PI)"
+    },
+    {
+      "label": "Data Curator",
+      "value": "DataCurator",
+      "description": "Person tasked with reviewing, enhancing, cleaning, or standardizing metadata and the associated data submitted for storage, use, and maintenance within a data centre or repository"
+    },
+    {
+      "label": "Data Manager",
+      "value": "DataManager",
+      "description": "Person (or organisation with a staff of data managers, such as a data centre) responsible for maintaining the finished resource"
+    },
+    {
+      "label": "Distributor",
+      "value": "Distributor",
+      "description": "Institution tasked with responsibility to generate/disseminate copies of the resource in either electronic or print form"
+    },
+    {
+      "label": "Editor",
+      "value": "Editor",
+      "description": "A person who oversees the details related to the publication format of the resource"
+    },
+    {
+      "label": "Hosting Institution",
+      "value": "HostingInstitution",
+      "description": "Typically, the organisation allowing the resource to be available on the internet through the provision of its hardware/software/operating support"
+    },
+    {
+      "label": "Producer",
+      "value": "Producer",
+      "description": "Typically, a person or organisation responsible for the artistry and form of a media product"
+    },
+    {
+      "label": "Project Leader",
+      "value": "ProjectLeader",
+      "description": "Person officially designated as head of project team or sub-project team instrumental in the work necessary to development of the resource"
+    },
+    {
+      "label": "Project Manager",
+      "value": "ProjectManager",
+      "description": "Person officially designated as manager of a project. Project may consist of one or many project teams and sub-teams."
+    },
+    {
+      "label": "Project Member",
+      "value": "ProjectMember",
+      "description": "Person on the membership list of a designated project/project team"
+    },
+    {
+      "label": "Registration Agency",
+      "value": "RegistrationAgency",
+      "description": "Institution/organisation officially appointed by a Registration Authority to handle specific tasks within a defined area of responsibility"
+    },
+    {
+      "label": "Registration Authority",
+      "value": "RegistrationAuthority",
+      "description": "A standards-setting body from which Registration Agencies obtain official recognition and guidance"
+    },
+    {
+      "label": "Related Person",
+      "value": "RelatedPerson",
+      "description": "A person without a specifically defined role in the development of the resource, but who is someone the author wishes to recognize"
+    },
+    {
+      "label": "Researcher",
+      "value": "Researcher",
+      "description": "A person involved in analysing data or the results of an experiment or formal study. May indicate an intern or assistant to one of the authors who helped with research but who was not so `key” as `o be listed as an author."
+    },
+    {
+      "label": "Research Group",
+      "value": "ResearchGroup",
+      "description": "Typically refers to a group of individuals with a lab, department, or division that has a specifically defined focus of activity."
+    },
+    {
+      "label": "Rights Holder",
+      "value": "RightsHolder",
+      "description": "Person or institution owning or managing property rights, including intellectual property rights over the resource"
+    },
+    {
+      "label": "Sponsor",
+      "value": "Sponsor",
+      "description": "Person or organisation that issued a contract or under the auspices of which a work has been written, printed, published, developed, etc."
+    },
+    {
+      "label": "Supervisor",
+      "value": "Supervisor",
+      "description": "Designated administrator over one or more groups/teams working to produce a resource, or over one or more steps of a development process"
+    },
+    {
+      "label": "Work Package Leader",
+      "value": "WorkPackageLeader",
+      "description": "A Work Package is a recognized data product, not all of which is included in publication. The package, instead, may include notes, discarded documents, etc. The Work Package Leader is"
+    },
+    {
+      "label": "Other",
+      "value": "Other",
+      "description": "Any person or institution making a significant contribution to the development and/or maintenance of the resource, but whose contribution is not adequately described by any of the other values for contributorType"
+    },
+    {
+      "label": "Study Lead",
+      "value": "StudyLead",
+      "description": "The individual who, if not the sponsor themselves, leads and co-ordinates the scientific and clinical activity within a clinical study, including co-ordinating the work of principal investigators at clinical sites. May be known as the Co-ordinating Investigator, the Study Chair, Study Director or similar terms."
+    },
+    {
+      "label": "Clinical Trial Site Principal Investigator",
+      "value": "CTSitePrincipalInvestigator",
+      "description": "The individual responsible for the safe conduct of a clinical trial at a particular clinical site."
+    },
+    {
+      "label": "Clinical Study Manager",
+      "value": "ClinicalStudyManager",
+      "description": "An individual responsible for the operational management of a clinical study. Similar to a Project Manager but a study manager is heavily involved in the management of data and data collection."
+    },
+    {
+      "label": "Trial Sponsor",
+      "value": "TrialSponsor",
+      "description": "The organisation or individual that has the formal, legal role of a clinical trial sponsor, and is legally responsible for all aspects of a clinical trial."
+    },
+    {
+      "label": "Sponsor Contact",
+      "value": "SponsorContact",
+      "description": "An individual representing the sponsor and acting as an initial contact point."
+    },
+    {
+      "label": "Public Contact",
+      "value": "PublicContact",
+      "description": "An individual designated as dealing with non-scientific queries from the public or press."
+    },
+    {
+      "label": "Recruitment Contact",
+      "value": "RecruitmentContact",
+      "description": "An individual designated as providing periodic updates on recruitment information or status, at all sites, usually for monitoring purposes."
+    },
+    {
+      "label": "Study Funder",
+      "value": "StudyFunder",
+      "description": "An organisation providing some or all of the additional funds required for the study."
+    },
+    {
+      "label": "Funder Contact",
+      "value": "FunderContact",
+      "description": "An individual representing the funder and acting as an initial contact point."
+    },
+    {
+      "label": "Independent Monitoring Committee Member",
+      "value": "IndependentMonitoringCommitteeMember",
+      "description": "A member of a safety monitoring committee for a clinical trial, independent of the researchers and research activity."
+    },
+    {
+      "label": "Medicinal Product Supplier",
+      "value": "MedicinalProductSupplier",
+      "description": "Organisation that provides one or more of the medicines investigated in a clinical study."
+    },
+    {
+      "label": "Medical Device Supplier",
+      "value": "MedicalDeviceSupplier",
+      "description": "Organisation that provides one or more of the medical devices in a clinical study."
+    },
+    {
+      "label": "Logistics Support Organisation",
+      "value": "LogisticsSupportOrganisation",
+      "description": "Organisation that provides logistical input, e.g. provides a drug distribution service."
+    },
+    {
+      "label": "Scientific Support Organisation",
+      "value": "ScientificSupportOrganisation",
+      "description": "Organisation that provides scientific support, e.g. a national or international research network."
+    },
+    {
+      "label": "Central Laboratory",
+      "value": "CentralLaboratory",
+      "description": "Organisation that provides a central specialist laboratory testing facility.."
+    },
+    {
+      "label": "Central Imaging Facility",
+      "value": "CentralImagingFacility",
+      "description": "Organisation that provides a central specialist imaging or scanning facility."
+    },
+    {
+      "label": "Clinical Organisation",
+      "value": "ClinicalOrganisation",
+      "description": "Organisation, usually a primary or secondary health care organisation, that manages one or more of the sites where a clinical study takes place."
+    },
+    {
+      "label": "Clinical Site",
+      "value": "ClinicalSite",
+      "description": "Organisation or location, usually in a primary or secondary health care organisation, that is one of the sites where a clinical study takes place."
+    },
+    {
+      "label": "Collaborating Organisation",
+      "value": "CollaboratingOrganisation",
+      "description": "May be listed as a secondary sponsor, an organisation other than the lead sponsor involved in supporting a study."
+    },
+    {
+      "label": "Sponsor Investigator",
+      "value": "SponsorInvestigator",
+      "description": "An individual with the role of sponsor as well as being the co-ordinating investigator for the study."
+    },
+    {
+      "label": "Results Contact",
+      "value": "ResultsContact",
+      "description": "The individual, occasionally organisation, to be contacted for further information on the study results."
+    },
+    {
+      "label": "Research Group Member",
+      "value": "ResearchGroupMember",
+      "description": "From PubMed, an 'investigator' is an individual (e.g., collaborator or investigator) who is not an author of a paper but is listed as a member of a collective/corporate group that is an author of the paper."
+    }
+  ],
+  "datasetDeIdentTypeOptions": [
+    {
+      "label": "No De-identification",
+      "value": "NoDeIdentification",
+      "description": "Confirmed that no de-identification measures have been applied to the data set."
+    },
+    {
+      "label": "De-identification Applied",
+      "value": "DeIdentificationApplied",
+      "description": "Some de-identification measures have been applied. Details should be described in comments and / or indicated in the linked boolean fields, or in separate documents."
+    },
+    {
+      "label": "De-identification Applied & Primary Outcomes Re-assessed",
+      "value": "DeIdentificationAppliedPrimaryOutcomesReAssessed",
+      "description": "Some de-identification measures have been applied and are described. In addition the data has been re-analysed against the primary outcomes and the results described."
+    }
+  ],
+  "datasetConsentTypeOptions": [
+    {
+      "label": "No Explicit Consent",
+      "value": "NoExplicitConsent",
+      "description": "No specific consent was given for the sharing of data or its re-use beyond the study in which it was originally collected."
+    },
+    {
+      "label": "No Restriction",
+      "value": "NoRestriction",
+      "description": "No explicit restriction in the consent documents, though a broad consent to re-use is assumed, or this category is meaningless."
+    },
+    {
+      "label": "General Research Use",
+      "value": "GeneralResearchUse",
+      "description": "Consent indicates that use is allowed for general research use for any research purpose."
+    },
+    {
+      "label": "Health Medical Biomedical Research",
+      "value": "HealthMedicalBiomedicalResearch",
+      "description": "Consent indicates that use is allowed for health/medical/biomedical purposes; does not include the study of population origins or ancestry, or the development of methods / algorithms (e.g. for ML)"
+    },
+    {
+      "label": "Disease Specific Research",
+      "value": "DiseaseSpecificResearch",
+      "description": "Consent indicates that use, for health / medical / biomedical research is allowed provided it is related to a specified disease (area). The disease (area) must be named or coded in the associated comments field."
+    },
+    {
+      "label": "Consent Specified Not Elsewhere Categorised",
+      "value": "ConsentSpecifiedNotElsewhereCategorised",
+      "description": "A descriptive statement regarding consent is available, but it does not fit into categories 1 - 5"
+    }
+  ],
+  "datasetAccessTypeOptions": [
+    {
+      "label": "Public On Screen Access",
+      "value": "PublicOnScreenAccess",
+      "description": "Completely open access on the web but content not available in any other format."
+    },
+    {
+      "label": "Public On Screen Access and Download",
+      "value": "PublicOnScreenAccessAndDownload",
+      "description": "Completely open access, material viewable and also directly available as a file download."
+    },
+    {
+      "label": "Public On Screen and API Access",
+      "value": "PublicOnScreenAndApiAccess",
+      "description": "Completely open access, material viewable and also available through an API."
+    },
+    {
+      "label": "Public Download - Self Attestation Required",
+      "value": "PublicDownloadSelfAttestationRequired",
+      "description": "Public and downloadable (only) once the user identifies and/or describes themselves."
+    },
+    {
+      "label": "Public On Screen Access - Self Attestation Required",
+      "value": "PublicOnScreenAccessSelfAttestationRequired",
+      "description": "Public and viewable (only) once the user identifies and/or describes themselves."
+    },
+    {
+      "label": "Restricted Download",
+      "value": "RestrictedDownload",
+      "description": "The user is an authenticated member of a defined group and can download the material (includes pay-walled journal articles)."
+    },
+    {
+      "label": "Restricted On Screen Access",
+      "value": "RestrictedOnScreenAccess",
+      "description": "The user is an authenticated member of a defined group but can only view the material. Analysis tools may be available."
+    },
+    {
+      "label": "Case By Case Download",
+      "value": "CaseByCaseDownload",
+      "description": "Based on a review of an individual request, often also requiring supporting documentation."
+    },
+    {
+      "label": "Case By Case On Screen Access",
+      "value": "CaseByCaseOnScreenAccess",
+      "description": "Based on a review of an individual request, often also requiring supporting documentation. Analysis tools may be available."
+    },
+    {
+      "label": "Non Public Access - No Details",
+      "value": "NonPublicAccessNoDetails",
+      "description": "The site asserts that the resource is not publicly available but provides no further details."
+    },
+    {
+      "label": "Other",
+      "value": "Other",
+      "description": "None of the listed options."
+    }
+  ],
+  "datasetFunderIdentifierTypeOptions": [
+    { "value": "Crossref Funder ID", "label": "Crossref Funder ID" },
+    { "value": "GRID", "label": "GRID" },
+    { "value": "ISNI", "label": "ISNI" },
+    { "value": "ROR", "label": "ROR" },
+    { "value": "Other", "label": "Other" }
+  ],
+  "datasetRelatedIdentifierResourceTypeOptions": [
+    {
+      "label": "Audio-visual",
+      "value": "Audiovisual",
+      "description": "A series of visual representations imparting an impression of motion when shown in succession. May or may not include sound."
+    },
+    {
+      "label": "Book",
+      "value": "Book",
+      "description": "A medium for recording information in the form of writing or images, typically composed of many pages bound together and protected by a cover"
+    },
+    {
+      "label": "Book Chapter",
+      "value": "BookChapter",
+      "description": "One of the main divisions of a book."
+    },
+    {
+      "label": "Collection",
+      "value": "Collection",
+      "description": "An aggregation of resources, which may encompass collections of one resourceType as well as those of mixed types. A collection is described as a group; its parts may also be separately described. "
+    },
+    {
+      "label": "Computational Notebook",
+      "value": "ComputationalNotebook",
+      "description": "A virtual notebook environment used for literate programming"
+    },
+    {
+      "label": "Conference Paper",
+      "value": "ConferencePaper",
+      "description": "Article that is written with the goal of being accepted to a conference"
+    },
+    {
+      "label": "Conference Proceeding",
+      "value": "ConferenceProceeding",
+      "description": "Collection of  academic papers  published in the  context of an  academic conference"
+    },
+    {
+      "label": "Data Paper",
+      "value": "DataPaper",
+      "description": "A factual and objective publication with a focused intent to identify and describe specific data, sets of data, or data collections to facilitate discoverability"
+    },
+    {
+      "label": "Dataset",
+      "value": "Dataset",
+      "description": "Data encoded in a defined structure"
+    },
+    {
+      "label": "Dissertation",
+      "value": "Dissertation",
+      "description": "A written essay,  treatise, or thesis, especially one written by a candidate for the degree of Doctor of Philosophy"
+    },
+    {
+      "label": "Event",
+      "value": "Event",
+      "description": "A non-persistent, time-based occurrence"
+    },
+    {
+      "label": "Image",
+      "value": "Image",
+      "description": "A visual representation other than text"
+    },
+    {
+      "label": "Interactive Resource",
+      "value": "InteractiveResource",
+      "description": "A resource requiring interaction from the user to be understood, executed, or experienced"
+    },
+    {
+      "label": "Journal",
+      "value": "Journal",
+      "description": "A scholarly  publication consisting of articles that is  published regularly throughout the year."
+    },
+    {
+      "label": "Journal Article",
+      "value": "JournalArticle",
+      "description": "A written composition on a topic of interest, which forms a separate part of a journal."
+    },
+    {
+      "label": "Model",
+      "value": "Model",
+      "description": "An abstract, conceptual, graphical, mathematical or visualization model that represents empirical objects, phenomena, or physical processes"
+    },
+    {
+      "label": "Output Management Plan",
+      "value": "OutputManagementPlan",
+      "description": "A formal document that outlines how  research outputs are to be handled both during a research  project and after the project is completed"
+    },
+    {
+      "label": "Peer Review",
+      "value": "PeerReview",
+      "description": "Evaluation of  scientific, academic, or professional work by others working in the same field"
+    },
+    {
+      "label": "Physical Object",
+      "value": "PhysicalObject",
+      "description": "An inanimate, three dimensional object or substance"
+    },
+    {
+      "label": "Preprint",
+      "value": "Preprint",
+      "description": "A version of a  scholarly or scientific paper that precedes formal peer review and publication in a peer-reviewed scholarly or scientific journal "
+    },
+    {
+      "label": "Report",
+      "value": "Report",
+      "description": "A document that presents information in an organized  format for a specific audience and purpose"
+    },
+    {
+      "label": "Service",
+      "value": "Service",
+      "description": "An organized system of apparatus, appliances, staff, etc., for supplying some function(s) required by end users"
+    },
+    {
+      "label": "Software",
+      "value": "Software",
+      "description": "A computer program other than a computational notebook, in either source code (text) or compiled form. Use this type for general software components supporting scholarly research. Use the “ComputationalNoteb ook” value for virtual notebooks."
+    },
+    {
+      "label": "Sound",
+      "value": "Sound",
+      "description": "A resource primarily intended to be heard"
+    },
+    {
+      "label": "Standard",
+      "value": "Standard",
+      "description": "Something  established by  authority, custom, or general consent as a model, example, or point of reference"
+    },
+    {
+      "label": "Text",
+      "value": "Text",
+      "description": "A resource consisting primarily of words for reading that is not covered by any other textual resource type in this list"
+    },
+    {
+      "label": "Workflow",
+      "value": "Workflow",
+      "description": "A structured series of steps which can be executed to produce a final outcome, allowing users a means to specify and enact their work in a more reproducible manner"
+    },
+    {
+      "label": "Other",
+      "value": "Other",
+      "description": "If selected, supply a value for ResourceType."
+    }
+  ],
+  "datasetRelatedIdentifierRelationTypeOptions": [
+    {
+      "label": "Is Cited By",
+      "value": "IsCitedBy",
+      "description": "indicates that B includes A in a citation"
+    },
+    {
+      "label": "Cites",
+      "value": "Cites",
+      "description": "indicates that A includes B in a citation"
+    },
+    {
+      "label": "Is Supplement To",
+      "value": "IsSupplementTo",
+      "description": "indicates that A is a supplement to B"
+    },
+    {
+      "label": "Is Supplemented By",
+      "value": "IsSupplementedBy",
+      "description": "indicates that B is a supplement to A"
+    },
+    {
+      "label": "Is Continued By",
+      "value": "IsContinuedBy",
+      "description": "indicates A is continued by the work B"
+    },
+    {
+      "label": "Continues",
+      "value": "Continues",
+      "description": "indicates A is a continuation of the work B"
+    },
+    {
+      "label": "Describes",
+      "value": "Describes",
+      "description": "indicates A describes B"
+    },
+    {
+      "label": "Is Described By",
+      "value": "IsDescribedBy",
+      "description": "indicates A is described by B"
+    },
+    {
+      "label": "Has Metadata",
+      "value": "HasMetadata",
+      "description": "indicates resource A has additional metadata B"
+    },
+    {
+      "label": "Is Metadata For",
+      "value": "IsMetadataFor",
+      "description": "indicates additional metadata A for a resource B"
+    },
+    {
+      "label": "Has Version",
+      "value": "HasVersion",
+      "description": "indicates A has a version (B)"
+    },
+    {
+      "label": "Is Version Of",
+      "value": "IsVersionOf",
+      "description": "indicates A is a version of B"
+    },
+    {
+      "label": "Is New Version Of",
+      "value": "IsNewVersionOf",
+      "description": "indicates A is a new edition of B, where the new edition has been modified or updated"
+    },
+    {
+      "label": "Is Previous Version Of",
+      "value": "IsPreviousVersionOf",
+      "description": "indicates A is a previous edition of B"
+    },
+    {
+      "label": "Is Part Of",
+      "value": "IsPartOf",
+      "description": "indicates A is a portion of B; may be used for elements of a series"
+    },
+    {
+      "label": "Ha sPart",
+      "value": "HasPart",
+      "description": "indicates A includes the part B"
+    },
+    {
+      "label": "Is Published In",
+      "value": "IsPublishedIn",
+      "description": "indicates A is published inside B, but is independent of other things published inside of B"
+    },
+    {
+      "label": "Is Referenced By",
+      "value": "IsReferencedBy",
+      "description": "indicates A is used as a source of information by B"
+    },
+    {
+      "label": "References",
+      "value": "References",
+      "description": "indicates B is used as a source of information for A"
+    },
+    {
+      "label": "Is Documented By",
+      "value": "IsDocumentedBy",
+      "description": "indicates B is documentation about/ explaining A; e.g. points to software documentation"
+    },
+    {
+      "label": "Documents",
+      "value": "Documents",
+      "description": "indicates A is documentation about B; e.g. points to software documentation"
+    },
+    {
+      "label": "Is Compiled By",
+      "value": "IsCompiledBy",
+      "description": "indicates B is used to compile or create A"
+    },
+    {
+      "label": "Compiles",
+      "value": "Compiles",
+      "description": "indicates B is the result of a compile or creation event using  A"
+    },
+    {
+      "label": "Is Variant Form Of",
+      "value": "IsVariantFormOf",
+      "description": "indicates A is a variant or different form of B"
+    },
+    {
+      "label": "Is Original Form Of",
+      "value": "IsOriginalFormOf",
+      "description": "indicates A is the original form of B"
+    },
+    {
+      "label": "Is Identical To",
+      "value": "IsIdenticalTo",
+      "description": "indicates that A is identical to B, for use when there is a need to register two separate instances of the same resource"
+    },
+    {
+      "label": "Is Reviewed By",
+      "value": "IsReviewedBy",
+      "description": "indicates that A is reviewed by B"
+    },
+    {
+      "label": "Reviews",
+      "value": "Reviews",
+      "description": "indicates that A is a review of B"
+    },
+    {
+      "label": "Is Derived From",
+      "value": "IsDerivedFrom",
+      "description": "indicates B is a source upon which A is based"
+    },
+    {
+      "label": "Is Source Of",
+      "value": "IsSourceOf",
+      "description": "indicates A is a source upon which B is based"
+    },
+    {
+      "label": "Is Required By",
+      "value": "IsRequiredBy",
+      "description": "Indicates A is required by B"
+    },
+    {
+      "label": "Requires",
+      "value": "Requires",
+      "description": "Indicates A requires B"
+    },
+    {
+      "label": "Obsoletes",
+      "value": "Obsoletes",
+      "description": "Indicates A replaces B"
+    },
+    {
+      "label": "Is Obsoleted By",
+      "value": "IsObsoletedBy",
+      "description": "Indicates A is replaced by B"
+    },
+    {
+      "label": "Is Collected By",
+      "value": "IsCollectedBy",
+      "description": "Indicates A is collected by B"
+    },
+    {
+      "label": "Collects",
+      "value": "Collects",
+      "description": "Indicates A collects B"
+    }
+  ],
+  "studyMetadataIdentificationPrimaryIdentifierTypeOptions": [
+    {
+      "label": "NIH Grant Number",
+      "value": "NIH Grant Number"
+    },
+    {
+      "label": "Other Grant/Funding Number",
+      "value": "Other Grant/Funding Number"
+    },
+    {
+      "label": "EudraCT Number",
+      "value": "EudraCT Number"
+    },
+    {
+      "label": "Registry Identifier",
+      "value": "Registry Identifier"
+    },
+    {
+      "label": "Other Identifier",
+      "value": "Other Identifier"
+    }
+  ],
+  "studyMetadataSponsorsResponsiblePartyTypeOptions": [
+    {
+      "description": "An entity or organization that initiates the study.",
+      "label": "Sponsor",
+      "value": "Sponsor"
+    },
+    {
+      "description": "The individual designated as a responsible party by the sponsor.",
+      "label": "Principal Investigator",
+      "value": "Principal Investigator"
+    },
+    {
+      "description": "The individual who both initiates and conducts the study.",
+      "label": "Sponsor-Investigator",
+      "value": "Sponsor-Investigator"
+    }
+  ],
+  "studyMetadataStudyTypeOptions": [
+    {
+      "description": "A clinical trial. Participants are assigned prospectively to an intervention or interventions according to a protocol to evaluate the effect of the intervention(s) on biomedical or other health related outcomes.",
+      "label": "Interventional",
+      "value": "Interventional"
+    },
+    {
+      "description": "Studies in human beings in which biomedical and/or health outcomes are assessed in pre-defined groups of individuals. Participants in the study may receive diagnostic, therapeutic, or other interventions, but the investigator does not assign specific interventions to the study participants. This includes when participants receive interventions as part of routine medical care, and a researcher studies the effect of the intervention.",
+      "label": "Observational",
+      "value": "Observational"
+    },
+    {
+      "description": "An investigational drug product (including biological product) available through expanded access for patients who do not qualify for enrollment in a clinical trial. Expanded Access includes all expanded access types under section 561 of the Federal Food, Drug, and Cosmetic Act: (1) for individual patients, including emergency use; (2) for intermediate-size patient populations; and (3) under a treatment IND or treatment protocol. (For more information on data requirements for this Study Type, see Expanded Access Data Element $defs).",
+      "disabled": true,
+      "label": "Expanded Access",
+      "value": "Expanded Access"
+    }
+  ],
+  "studyMetadataAllocationOptions": [
+    {
+      "description": "For a single-arm trial.",
+      "label": "N/A",
+      "value": "N/A"
+    },
+    {
+      "description": "Participants are assigned to intervention groups by chance.",
+      "label": "Randomized",
+      "value": "Randomized"
+    },
+    {
+      "description": "Participants are expressly assigned to intervention groups through a non-random method, such as physician choice.",
+      "label": "Non-randomized",
+      "value": "Non-randomized"
+    }
+  ],
+  "studyMetadataInterventionModelOptions": [
+    {
+      "description": "One or more interventions are being evaluated for treating a disease, syndrome, or condition.",
+      "label": "Treatment",
+      "value": "Treatment"
+    },
+    {
+      "description": "One or more interventions are being assessed for preventing the development of a specific disease or health condition.",
+      "label": "Prevention",
+      "value": "Prevention"
+    },
+    {
+      "description": "One or more interventions are being evaluated for identifying a disease or health condition.",
+      "label": "Diagnostic",
+      "value": "Diagnostic"
+    },
+    {
+      "description": "One or more interventions are evaluated for maximizing comfort, minimizing side effects, or mitigating against a decline in the participant's health or function.",
+      "label": "Supportive Care",
+      "value": "Supportive Care"
+    },
+    {
+      "description": "One or more interventions are assessed or examined for identifying a condition, or risk factors for a condition, in people who are not yet known to have the condition or risk factor.",
+      "label": "Screening",
+      "value": "Screening"
+    },
+    {
+      "description": "One or more interventions for evaluating the delivery, processes, management, organization, or financing of healthcare.",
+      "label": "Health Services Research",
+      "value": "Health Services Research"
+    },
+    {
+      "description": "One or more interventions for examining the basic mechanism of action (for example, physiology or biomechanics of an intervention).",
+      "label": "Basic Science",
+      "value": "Basic Science"
+    },
+    {
+      "description": "An intervention of a device product is being evaluated in a small clinical trial (generally fewer than 10 participants) to determine the feasibility of the product, or a clinical trial to test a prototype device for feasibility and not health outcomes.",
+      "label": "Device Feasibility",
+      "value": "Device Feasibility"
+    }
+  ],
+  "studyMetadataPrimaryPurposeOptions": [
+    {
+      "description": "Clinical trials with a single arm.",
+      "label": "Single Group Assignment",
+      "value": "Single Group Assignment"
+    },
+    {
+      "description": "Participants are assigned to one of two or more groups in parallel for the duration of the study.",
+      "label": "Parallel Assignment",
+      "value": "Parallel Assignment"
+    },
+    {
+      "description": "Participants receive one of two (or more) alternative interventions during the initial phase of the study and receive the other intervention during the second phase of the study.",
+      "label": "Crossover Assignment",
+      "value": "Crossover Assignment"
+    },
+    {
+      "description": "Two or more interventions, each alone and in combination, are evaluated in parallel against a control group.",
+      "label": "Factorial Assignment",
+      "value": "Factorial Assignment"
+    },
+    {
+      "description": "Groups of participants are assigned to receive interventions based on prior milestones being reached in the study, such as in some dose escalation and adaptive design studies.",
+      "label": "Sequential Assignment",
+      "value": "Sequential Assignment"
+    }
+  ],
+  "studyMetadataHumanSubjectReviewStatusOptions": [
+    {
+      "label": "Request not yet submitted",
+      "value": "Request not yet submitted"
+    },
+    {
+      "label": "Submitted, pending",
+      "value": "Submitted, pending"
+    },
+    {
+      "label": "Submitted, approved",
+      "value": "Submitted, approved"
+    },
+    {
+      "label": "Exempt",
+      "value": "Exempt"
+    },
+    {
+      "label": "Submitted, denied",
+      "value": "Submitted, denied"
+    },
+    {
+      "label": "Submission not required",
+      "value": "Submission not required"
+    }
+  ],
+  "studyMetadataObservationalModelsOptions": [
+    {
+      "label": "Cohort",
+      "value": "Cohort"
+    },
+    {
+      "label": "Case-Control",
+      "value": "Case-Control"
+    },
+    {
+      "label": "Case-Only",
+      "value": "Case-Only"
+    },
+    {
+      "label": "Case-Crossover",
+      "value": "Case-Crossover"
+    },
+    {
+      "label": "Ecologic or Community",
+      "value": "Ecologic or Community"
+    },
+    {
+      "label": "Family-Based",
+      "value": "Family-Based"
+    },
+    {
+      "label": "Other",
+      "value": "Other"
+    }
+  ],
+  "studyMetadataTimePerspectiveOptions": [
+    {
+      "label": "Retrospective",
+      "value": "Retrospective"
+    },
+    {
+      "label": "Prospective",
+      "value": "Prospective"
+    },
+    {
+      "label": "Cross-sectional",
+      "value": "Cross-sectional"
+    },
+    {
+      "label": "Other",
+      "value": "Other"
+    }
+  ],
+  "studyMetadataPhaseOptions": [
+    {
+      "label": "Early Phase 1",
+      "value": "Early Phase 1"
+    },
+    {
+      "label": "Phase 1",
+      "value": "Phase 1"
+    },
+    {
+      "label": "Phase 1/2",
+      "value": "Phase 1/2"
+    },
+    {
+      "label": "Phase 2",
+      "value": "Phase 2"
+    },
+    {
+      "label": "Phase 2/3",
+      "value": "Phase 2/3"
+    },
+    {
+      "label": "Phase 3",
+      "value": "Phase 3"
+    },
+    {
+      "label": "Phase 4",
+      "value": "Phase 4"
+    },
+    {
+      "label": "N/A",
+      "value": "N/A"
+    }
+  ],
+  "studyMetadataBioSpecRetentionOptions": [
+    {
+      "label": "None Retained",
+      "value": "None Retained"
+    },
+    {
+      "label": "Samples With DNA",
+      "value": "Samples With DNA"
+    },
+    {
+      "label": "Samples Without DNA",
+      "value": "Samples Without DNA"
+    }
+  ],
+  "studyMetadataEnrollmentTypeOptions": [
+    {
+      "label": "Actual",
+      "value": "Actual"
+    },
+    {
+      "label": "Anticipated",
+      "value": "Anticipated"
+    }
+  ],
+  "studyMetadataInterventionsTypeOptions": [
+    {
+      "label": "Drug",
+      "value": "Drug"
+    },
+    {
+      "label": "Device",
+      "value": "Device"
+    },
+    {
+      "label": "Biological/Vaccine",
+      "value": "Biological/Vaccine"
+    },
+    {
+      "label": "Procedure/Surgery",
+      "value": "Procedure/Surgery"
+    },
+    {
+      "label": "Radiation",
+      "value": "Radiation"
+    },
+    {
+      "label": "Genetic",
+      "value": "Genetic"
+    },
+    {
+      "label": "Dietary Supplement",
+      "value": "Dietary Supplement"
+    },
+    {
+      "label": "Combination Product",
+      "value": "Combination Product"
+    },
+    {
+      "label": "Diagnostic Test",
+      "value": "Diagnostic Test"
+    },
+    {
+      "label": "Other",
+      "value": "Other"
+    }
+  ],
+  "studyMetadataArmsTypeOptions": [
+    {
+      "label": "Experimental",
+      "value": "Experimental"
+    },
+    {
+      "label": "Active Comparator",
+      "value": "Active Comparator"
+    },
+    {
+      "label": "Placebo Comparator",
+      "value": "Placebo Comparator"
+    },
+    {
+      "label": "Sham Comparator",
+      "value": "Sham Comparator"
+    },
+    {
+      "label": "No Intervention",
+      "value": "No Intervention"
+    },
+    {
+      "label": "Other",
+      "value": "Other"
+    }
+  ],
+  "studyMetadataEligibilityGenderOptions": [
+    {
+      "label": "All",
+      "value": "All"
+    },
+    {
+      "label": "Female",
+      "value": "Female"
+    },
+    {
+      "label": "Male",
+      "value": "Male"
+    }
+  ],
+  "studyMetadataEligibilityGenderBasedOptions": [
+    {
+      "label": "Yes",
+      "value": "Yes"
+    },
+    {
+      "label": "No",
+      "value": "No"
+    }
+  ],
+  "studyMetadataEligibilityAgeUnitOptions": [
+    {
+      "label": "Years",
+      "value": "Years"
+    },
+    {
+      "label": "Months",
+      "value": "Months"
+    },
+    {
+      "label": "Weeks",
+      "value": "Weeks"
+    },
+    {
+      "label": "Days",
+      "value": "Days"
+    },
+    {
+      "label": "Hours",
+      "value": "Hours"
+    },
+    {
+      "label": "Minutes",
+      "value": "Minutes"
+    },
+    {
+      "label": "N/A",
+      "value": "N/A"
+    }
+  ],
+  "studyMetadataEligibilityHealthyVolunteersOptions": [
+    {
+      "label": "Yes",
+      "value": "Yes"
+    },
+    {
+      "label": "No",
+      "value": "No"
+    }
+  ],
+  "studyMetadataEligibilitySamplingMethodOptions": [
+    {
+      "label": "Probability Sample",
+      "value": "Probability Sample"
+    },
+    {
+      "label": "Non-Probability Sample",
+      "value": "Non-Probability Sample"
+    }
+  ],
+  "studyMetadataContactsOverallOfficialRole": [
+    {
+      "label": "Study Chair",
+      "value": "Study Chair"
+    },
+    {
+      "label": "Study Director",
+      "value": "Study Director"
+    },
+    {
+      "label": "Study Principal Investigator",
+      "value": "Study Principal Investigator"
+    }
+  ],
+  "studyMetadataStatusOptions": [
+    {
+      "description": "Study halted prematurely, prior to enrollment of the first participant.",
+      "label": "Withdrawn",
+      "value": "Withdrawn"
+    },
+    {
+      "description": "Participants are currently being recruited, whether or not any participants have yet been enrolled.",
+      "label": "Recruiting",
+      "value": "Recruiting"
+    },
+    {
+      "description": "Study is continuing, meaning participants are receiving an intervention or being examined, but new participants are not currently being recruited or enrolled.",
+      "label": "Active, not recruiting",
+      "value": "Active, not recruiting"
+    },
+    {
+      "description": "Participants are not yet being recruited.",
+      "label": "Not yet recruiting",
+      "value": "Not yet recruiting"
+    },
+    {
+      "description": "Study halted prematurely but potentially will resume.",
+      "label": "Suspended",
+      "value": "Suspended"
+    },
+    {
+      "description": "Participants are being (or will be) selected from a predetermined population.",
+      "label": "Enrolling by invitation",
+      "value": "Enrolling by invitation"
+    },
+    {
+      "description": "The study has concluded normally; participants are no longer receiving an intervention or being examined (that is, last participant's last visit has occurred).",
+      "label": "Completed",
+      "value": "Completed"
+    },
+    {
+      "description": "Study halted prematurely and will not resume; participants are no longer being examined or receiving intervention.",
+      "label": "Terminated",
+      "value": "Terminated"
+    }
+  ],
+  "studyMetadataIPDSharingOptions": [
+    {
+      "label": "Yes",
+      "value": "Yes"
+    },
+    {
+      "label": "No",
+      "value": "No"
+    },
+    {
+      "label": "Undecided",
+      "value": "Undecided"
+    }
+  ],
+  "studyMetadataIPDSharingInfoTypeOptions": [
+    {
+      "label": "Study Protocol",
+      "value": "Study Protocol"
+    },
+    {
+      "label": "Statistical Analysis Plan (SAP)",
+      "value": "Statistical Analysis Plan (SAP)"
+    },
+    {
+      "label": "Informed Consent Form (ICF)",
+      "value": "Informed Consent Form (ICF)"
+    },
+    {
+      "label": "Clinical Study Report (CSR)",
+      "value": "Clinical Study Report (CSR)"
+    },
+    {
+      "label": "Analytic Code",
+      "value": "Analytic Code"
+    }
+  ],
+  "studyMetadataReferencesIPDTypeOptions": [
+    {
+      "label": "Individual Participant Data Set",
+      "value": "Individual Participant Data Set"
+    },
+    {
+      "label": "Study Protocol",
+      "value": "Study Protocol"
+    },
+    {
+      "label": "Statistical Analysis Plan",
+      "value": "Statistical Analysis Plan"
+    },
+    {
+      "label": "Informed Consent Form",
+      "value": "Informed Consent Form"
+    },
+    {
+      "label": "Clinical Study Report",
+      "value": "Clinical Study Report"
+    },
+    {
+      "label": "Analytic Code",
+      "value": "Analytic Code"
+    },
+    {
+      "label": "Other",
+      "value": "Other"
+    }
+  ],
+  "studyMetadataReferencesGenericOptions": [
+    {
+      "label": "Yes",
+      "value": "Yes"
+    },
+    {
+      "label": "No",
+      "value": "No"
+    }
+  ]
+}

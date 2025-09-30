@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "question": "Will the dataset be distributed to third parties outside of the entity (e.g. company, institution, organization) on behalf of which the dataset was created?",
+    "response": ""
+  },
+  {
+    "id": 2,
+    "question": "How will the dataset will be distributed (e.g. tarball on website, API, GitHub)?",
+    "response": ""
+  },
+  {
+    "id": 3,
+    "question": "When will the dataset be distributed?",
+    "response": ""
+  },
+  {
+    "id": 4,
+    "question": "Will the dataset be distributed under a copyright or other intellectual property (IP) license, and/or under applicable terms of use (ToU)?",
+    "response": ""
+  },
+  {
+    "id": 5,
+    "question": "Have any third parties imposed IP-based or other restrictions on the data associated with the instances?",
+    "response": ""
+  },
+  {
+    "id": 6,
+    "question": "Do any export controls or other regulatory restrictions apply to the dataset or to individual instances?",
+    "response": ""
+  },
+  {
+    "id": 7,
+    "question": "Any other comments?",
+    "response": ""
+  }
+]

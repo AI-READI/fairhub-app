@@ -1,0 +1,175 @@
+erDiagram
+      DATASET_ALTERNATIVE_IDENTIFIER {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string identifier
+        string type "NULLABLE"
+        timestamp created_at
+    }
+
+    DATASET_TITLE {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string title
+        string type "NULLABLE"
+        timestamp created_at
+    }
+
+    DATASET_CONTRIBUTOR {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string given_name
+        string family_name "NULLABLE"
+        string name_type "NULLABLE"
+        string name_identifier
+        string name_identifier_scheme
+        string name_identifier_scheme_uri
+        boolean creator "true if creator, false if contributor"
+        string contributor_type "NULLABLE | required if contributor"
+        json affiliations "[{name: 'x', identifier: 'x', scheme: 'x', scheme_uri: 'x'}, ...}]"
+        timestamp created_at
+    }
+
+    DATASET_DATE {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        timestamp date "NULLABLE"
+        string type "NULLABLE"
+        string information
+        timestamp created_at
+    }
+
+    DATASET_DE_IDENT_LEVEL {
+        string dataset_id PK,FK "DATASET.id"
+        string type "NULLABLE"
+        boolean direct
+        boolean hipaa
+        boolean dates
+        boolean nonarr
+        boolean k_anon
+        string details
+    }
+
+    DATASET_CONSENT {
+        string dataset_id PK,FK "DATASET.id"
+        string type "NULLABLE"
+        boolean noncommercial
+        boolean geog_restrict
+        boolean research_type
+        boolean genetic_only
+        boolean no_methods
+        string details
+    }
+
+    DATASET_DESCRIPTION {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string description
+        string type "NULLABLE"
+        timestamp created_at
+    }
+
+    DATASET_SUBJECT {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string subject
+        string scheme
+        string scheme_uri
+        string value_uri
+        string classification_code
+        timestamp created_at
+    }
+
+    DATASET_ACCESS {
+        string dataset_id PK,FK "DATASET.id"
+        string type "NULLABLE"
+        string description
+        string url
+        timestamp url_last_checked "milliseconds format"
+    }
+
+    DATASET_RIGHTS {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string rights
+        string uri
+        string identifier
+        string identifier_scheme
+        string identifier_scheme_uri
+        string license_text
+        timestamp created_at
+    }
+
+    DATASET_FUNDER {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string name
+        string identifier
+        string identifier_type "NULLABLE"
+        string identifier_scheme_uri
+        string award_number
+        string award_uri
+        string award_title
+        timestamp created_at
+    }
+
+    DATASET_MANAGING_ORGANIZATION {
+        string dataset_id PK,FK "DATASET.id"
+        string name
+        string identifier
+        string identifier_scheme
+        string identifier_scheme_uri
+    }
+
+     DATASET_OTHER {
+        string dataset_id PK,FK "DATASET.id"
+        string resource_type
+        string language "NULLABLE"
+        string standards_followed "Used for the README file"
+        string acknowledgement "Used for the README file"
+        string[] size
+        string[] format
+    }
+
+    DATASET_RELATED_IDENTIFIER {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string identifier
+        string identifier_type "NULLABLE"
+        string relation_type "NULLABLE"
+        string related_metadata_scheme
+        string scheme_uri
+        string scheme_type
+        string resource_type "NULLABLE"
+        timestamp created_at
+    }
+
+    DATASET_HEALTHSHEET {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        json motivation
+        json composition
+        json collection
+        json preprocessing
+        json uses
+        json distribution
+        json maintenance
+    }
+
+    DATASET_ALTERNATIVE_IDENTIFIER }o--|| DATASET : "is identified by"
+    DATASET_TITLE }o--|| DATASET : "has title"
+    DATASET_DESCRIPTION }o--|| DATASET : "has description"
+    DATASET_CONTRIBUTOR }o--|| DATASET : "has contributor"
+    DATASET_DATE }o--|| DATASET : "has date"
+    DATASET_DE_IDENT_LEVEL ||--|| DATASET : "has deidentification level"
+    DATASET_CONSENT ||--|| DATASET : "has consent"
+
+    DATASET ||--o{ DATASET_SUBJECT : "has subject"
+    DATASET ||--|| DATASET_ACCESS : "has access"
+    DATASET ||--o{ DATASET_RIGHTS : "has rights"
+    DATASET ||--o{ DATASET_FUNDER : "has funder"
+    DATASET ||--o{ DATASET_RELATED_IDENTIFIER : "has related identifiers"
+    DATASET ||--|| DATASET_OTHER : "has other details"
+    DATASET ||--|| DATASET_MANAGING_ORGANIZATION : "has managing organization"
+
+    DATASET_HEALTHSHEET ||--|| DATASET : "has healthsheet"

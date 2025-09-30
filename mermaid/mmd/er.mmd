@@ -1,0 +1,151 @@
+erDiagram
+    STUDY {
+        string id PK "UUIDv4"
+        string title "300 characters"
+        string short_description "14 characters"
+        string image
+        timestamp updated_on
+        timestamp created_at
+    }
+
+    USER {
+        string id PK "UUIDv4"
+        string username
+        string password "hashed"
+        string email_address
+        boolean email_verified 
+        timestamp created_at
+    }
+
+    USER_DETAILS {
+        string user_id PK,FK "USER.id"
+        string first_name "`Given name` in UI"
+        string last_name "`Family name` in UI"
+        string institution
+        string orcid
+        string location "Do we really need this?"
+        string timezone "Might not need this either"
+    }
+
+    NOTIFICATION {
+        string id PK "UUIDv4"
+        string user_id FK "USER.id"
+        string title
+        string message
+        string type "info|warning|error|success"
+        string target "url for the item"
+        boolean read
+        timestamp created_at
+    }
+
+    STUDY_CONTRIBUTOR {
+        string study_id PK "UUIDv4"
+        string user_id PK,FK "USER.id"
+        string permission "owner|admin|editor|viewer"
+        timestamp created_at
+    }
+
+    INVITE {
+        string id PK "UUIDv4"
+        string user_id FK "USER.id"
+        string email_address
+        string study_id FK "STUDY.id or nullable"
+        string permission "owner|admin|editor|viewer or nullable" 
+        string token "passphrase"
+        timestamp created_at
+        info info "study_id and email_address combo should be unique"
+    }
+
+    PARTICIPANT {
+        string id PK "UUIDv4"
+        string study_id FK "STUDY.id"
+        string first_name "`Given name` in UI"
+        string last_name "`Family name` in UI"
+        string address
+        int age "fields will come from redcap"
+        timestamp updated_on
+        timestamp created_at
+    }
+
+    DATASET {
+        string id PK "UUIDv4"
+        string study_id FK "STUDY.id"
+        timestamp updated_on
+        timestamp created_at
+    }
+
+    VERSION {
+        string id PK "UUIDv4"
+        string dataset_id FK "DATASET.id"
+        string title
+        string changelog
+        boolean published "should be uneditable after publish"
+        string doi "10.36478/fairhub.10230"
+        int identifier "autoincrement | unique"
+        timestamp updated_on
+        timestamp created_at
+        timestamp published_on
+    }
+
+    VERSION_README {
+        string version_id PK,FK "VERSION.id"
+        string content
+    }
+
+    VERSION_PARTICIPANT {
+        string version_id PK,FK
+        string participant_id PK,FK
+    }
+
+    TOKEN_BLACKLIST {
+        string jti PK "UUIDv4"
+        timestamp exp "Expiration time"
+        string user_id FK "USER.id"
+    }
+
+    EMAIL_VERIFICATION {
+        string id PK "UUIDv4"
+        string user_id FK "USER.id"
+        string token "passphrase"
+        timestamp created_at
+    }
+
+    PUBLISHED_DATASET {
+        string id PK "VERSION.identifier"
+        string study_id "STUDY.id"
+        string dataset_id "DATASET.id"
+        string version_id "VERSION.id"
+        string doi
+        string title "DATASET.title"
+        string description "DATASET.description"
+        string version_title "VERSION.title"
+        string study_title "STUDY.title"
+        json metadata
+        json files
+        json data "anything not in metadata"
+        timestamp created_at
+    }
+
+
+    STUDY_CONTRIBUTOR }o--|| STUDY : contributes
+    INVITE }o--|| STUDY : "invited to"
+    STUDY_METADATA ||--|| STUDY : "has metadata"
+
+    STUDY ||--o{ DATASET : publishes
+
+    DATASET_METADATA ||--|| DATASET : "has metadata"
+
+    DATASET ||--o{ VERSION : creates
+
+    USER ||--|| USER_DETAILS : "has"
+    USER ||--o{ TOKEN_BLACKLIST : "has"
+    USER ||--o{ NOTIFICATION : "has"
+
+    USER ||--o{ EMAIL_VERIFICATION : "has"
+
+    USER ||--o{ STUDY_CONTRIBUTOR : "part of"
+    PARTICIPANT }o--|| STUDY : participates
+    
+    VERSION ||--o{ VERSION_PARTICIPANT : has
+    VERSION_PARTICIPANT }o--|| PARTICIPANT : "part of"
+    VERSION ||--|| VERSION_README : "has readme"

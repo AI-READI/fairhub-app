@@ -4,8 +4,8 @@ import { ref } from "vue";
 
 export default {
   title: "Components/Date Picker",
-  component: NDatePicker,
   argTypes: {
+    disabled: { control: { type: "boolean" } },
     size: {
       control: { type: "select" },
       options: ["small", "medium", "large"],
@@ -14,8 +14,8 @@ export default {
       control: { type: "select" },
       options: ["success", "warning", "error"],
     },
-    disabled: { control: { type: "boolean" } },
   },
+  component: NDatePicker,
 };
 
 const DateTimeTemplate = (args) => ({

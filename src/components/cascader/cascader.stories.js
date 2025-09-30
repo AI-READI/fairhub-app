@@ -1,10 +1,11 @@
 import Cascader from "./cascade-element.vue";
 
 export default {
-  components: { Cascader },
   title: "Components/Cascader",
-  component: Cascader,
   argTypes: {
+    mode: {
+      table: { disable: true },
+    },
     size: {
       control: { type: "select" },
       options: ["small", "medium", "large"],
@@ -13,10 +14,9 @@ export default {
       control: { type: "select" },
       options: ["success", "warning", "error"],
     },
-    mode: {
-      table: { disable: true },
-    },
   },
+  component: Cascader,
+  components: { Cascader },
 };
 const Template = (args) => ({
   components: { Cascader },

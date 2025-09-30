@@ -3,6 +3,6 @@
   "include": ["vite.config.*", "vitest.config.*", "cypress.config.*", "theme.json"],
   "compilerOptions": {
     "composite": true,
-    "types": ["naive-ui/volar", "node"]
+    "types": ["node"]
   }
 }

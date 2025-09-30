@@ -1,0 +1,265 @@
+erDiagram
+    STUDY_IDENTIFICATION {
+        string id PK "UUIDv4"
+        string study_id FK "STUDY.id"
+        string identifier
+        string identifier_type "NULLABLE"
+        string identifier_domain
+        string identifier_link
+        boolean secondary
+        timestamp created_at
+    }
+
+    STUDY_DESCRIPTION {
+        string study_id PK,FK "STUDY.id"
+        string brief_summary "should act as a default description"
+        string detailed_description
+    }
+
+    STUDY_STATUS {
+        string study_id PK,FK "STUDY.id"
+        string overall_status "NULLABLE"
+        string why_stopped
+        string start_date "NULLABLE"
+        string start_date_type "NULLABLE"
+        string completion_date "NULLABLE"
+        string completion_date_type "NULLABLE"
+    }
+
+    STUDY_SPONSORS {
+        string study_id PK,FK "STUDY.id"
+        string responsible_party_type "NULLABLE"
+        string responsible_party_investigator_first_name
+        string responsible_party_investigator_last_name
+        string responsible_party_investigator_title
+        string responsible_party_investigator_identifier_value
+        string responsible_party_investigator_identifier_scheme
+        string responsible_party_investigator_identifier_scheme_uri
+        string responsible_party_investigator_affiliation_name
+        string responsible_party_investigator_affiliation_identifier_value
+        string responsible_party_investigator_affiliation_identifier_scheme
+        string responsible_party_investigator_affiliation_identifier_scheme_uri
+        string lead_sponsor_name
+        string lead_sponsor_identifier
+        string lead_sponsor_identifier_scheme
+        string lead_sponsor_identifier_scheme_uri
+    }
+
+    STUDY_COLLABORATORS {
+        string id PK "UUIDv4"
+        string study_id FK "STUDY.id"
+        string name
+        string identifier
+        string scheme
+        string scheme_uri
+        timestamp created_at
+    }
+
+    STUDY_OVERSIGHT {
+        string study_id PK,FK "STUDY.id"
+        string fda_regulated_drug "NULLABLE"
+        string fda_regulated_device "NULLABLE"
+        string human_subject_review_status "NULLABLE"
+        string has_dmc "NULLABLE"
+    }
+
+    STUDY_CONDITIONS {
+        string id PK "UUIDv4"
+        string study_id FK "STUDY.id"
+        string name
+        string classification_code
+        string scheme
+        string scheme_uri
+        string condition_uri
+        timestamp created_at
+    }
+
+    STUDY_KEYWORDS {
+        string id PK "UUIDv4"
+        string study_id FK "STUDY.id"
+        string name
+        string classification_code
+        string scheme
+        string scheme_uri
+        string keyword_uri
+        timestamp created_at
+    }
+
+    STUDY_DESIGN {
+        string study_id PK,FK "STUDY.id"
+        string study_type "NULLABLE"
+        string design_allocation "NULLABLE"
+        string design_intervention_model "NULLABLE"
+        string design_intervention_model_description
+        string design_primary_purpose "NULLABLE"
+        string design_masking "NULLABLE"
+        string design_masking_description "NULLABLE"
+        string[] design_who_masked_list "NULLABLE"
+        string[] phase_list "NULLABLE"
+        int enrollment_count "NULLABLE"
+        string enrollment_type "NULLABLE"
+        int number_arms "NULLABLE"
+        string[] design_observational_model_list "NULLABLE"
+        string[] design_time_perspective_list "NULLABLE"
+        string bio_spec_retention "NULLABLE"
+        string bio_spec_description "NULLABLE"
+        string target_duration "NULLABLE"
+        string is_patient_registry "NULLABLE"
+    }
+
+    STUDY_ARM {
+        string id PK "UUIDv4"
+        string study_id FK "STUDY.id"
+        string label
+        string type "NULLABLE"
+        string description
+        string[] intervention_list
+        timestamp created_at
+    }
+
+    STUDY_INTERVENTION {
+        string id PK "UUIDv4"
+        string study_id FK "STUDY.id"
+        string type "NULLABLE"
+        string name
+        string description
+        string[] other_name_list
+        timestamp created_at
+    }
+
+    STUDY_ELIGIBILTY {
+        string study_id PK,FK "STUDY.id"
+        string sex "NULLABLE"
+        string gender_based "NULLABLE"
+        string gender_description
+        int miminum_age_value "NULLABLE"
+        string miminum_age_unit "NULLABLE"
+        int maximum_age_value "NULLABLE"
+        string maximum_age_unit "NULLABLE"
+        string healthy_volunteers "NULLABLE"
+        string[] inclusion_criteria "Will be combined to become EligibilityCriteria" 
+        string[] exclusion_criteria "Will be combined to become EligibilityCriteria"
+        string study_population
+        string sampling_method "NULLABLE"
+    }
+
+    STUDY_CENTRAL_CONTACT {
+        string id PK "UUIDv4"
+        string study_id FK "STUDY.id"
+        string first_name
+        string last_name
+        string degree
+        string identifier
+        string identifier_scheme
+        string identifier_scheme_uri
+        string affiliation
+        string affiliation_identifier
+        string affiliation_identifier_scheme
+        string affiliation_identifier_scheme_uri
+        string phone
+        string phone_ext
+        string email_address
+        timestamp created_at
+    }
+
+    STUDY_OVERALL_OFFICIAL {
+        string id PK "UUIDv4"
+        string study_id FK "STUDY.id"
+        string first_name
+        string last_name
+        string degree
+        string identifier
+        string identifier_scheme
+        string identifier_scheme_uri
+        string affiliation
+        string affiliation_identifier
+        string affiliation_identifier_scheme
+        string affiliation_identifier_scheme_uri
+        string role "NULLABLE"
+        timestamp created_at
+    }
+
+    STUDY_LOCATION {
+        string id PK "UUIDv4"
+        string study_id FK "STUDY.id"
+        string facility
+        string status "NULLABLE"
+        string city
+        string state
+        string zip
+        string country
+        string identifier
+        string identifier_scheme
+        string identifier_scheme_uri
+        timestamp created_at
+    }
+
+    STUDY_LOCATION_CONTACT_LIST {
+        string id PK "UUIDv4"
+        string location_id FK "STUDY_LOCATION.id"
+        string first_name
+        string last_name
+        string identifier
+        string identifier_scheme
+        string identifier_scheme_uri
+        string role
+        string phone
+        string phone_ext
+        string email_address
+        timestamp created_at
+    }
+
+    STUDY_OTHER {
+        string study_id PK,FK "STUDY.id"
+        number size "size of the files in the data lake"
+    }
+
+    STUDY_DASHBOARD {
+        string id PK
+        string study_id FK "STUDY.id"
+        string redcap_id FK "STUDY_REDCAP.id"
+        string name "NULLABLE"
+        json modules "NULLABLE"
+        int redcap_pid "NULLABLE"
+        json reports "NULLABLE"
+        timestamp created_at
+        timestamp updated_on
+    }
+
+    STUDY_REDCAP {
+        string id PK
+        string study_id FK "STUDY.id"
+        string title "NULLABLE"
+        int api_pid
+        string api_url
+        string api_key
+        boolean api_active
+        timestamp created_at
+        timestamp updated_on
+    }
+
+    
+    STUDY_SPONSORS||--|| STUDY : "sponsors"
+    STUDY_COLLABORATORS }o--|| STUDY : "collaborates with"
+    STUDY_OVERSIGHT ||--|| STUDY : "oversees"
+    STUDY_DESIGN ||--|| STUDY : "is designed as"
+    STUDY_ARM }o--|| STUDY : "is armed as"
+    STUDY_INTERVENTION }o--|| STUDY : "is defined as"
+    STUDY_ELIGIBILTY ||--|| STUDY : "is eligible"
+    STUDY_LOCATION }o--|| STUDY : "is done at"
+    STUDY_CONDITIONS }o--|| STUDY : "is classified as"
+
+    STUDY ||--o{ STUDY_KEYWORDS : "is classified as"
+    STUDY ||--o{ STUDY_CENTRAL_CONTACT : "is contacted by"
+    STUDY ||--o{ STUDY_OVERALL_OFFICIAL : "is lead by"
+    STUDY ||--|| STUDY_DESCRIPTION : "describes"
+    STUDY ||--o{ STUDY_IDENTIFICATION : "identifies"
+    STUDY ||--|| STUDY_STATUS : "has status"
+
+    STUDY_LOCATION ||--o{ STUDY_LOCATION_CONTACT_LIST : "has contact"
+
+    STUDY ||--|| STUDY_OTHER : "has other information"
+
+
+    STUDY ||--o{ STUDY_DASHBOARD : "has dashboard"
+    STUDY ||--o{ STUDY_REDCAP : "has redcap API"

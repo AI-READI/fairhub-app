@@ -6,11 +6,16 @@ const { fontFamily } = require("tailwindcss/defaultTheme");
 // eslint-disable-next-line no-undef
 module.exports = {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx,mdx,stories.js,stories.mdx}"],
+  corePlugins: {
+    preflight: false,
+  },
+  plugins: [
+    require("tailwindcss-debug-screens"),
+    require("@tailwindcss/typography"),
+    require("prettier-plugin-tailwindcss"),
+  ],
   theme: {
     extend: {
-      fontFamily: {
-        primary: ["Inter", ...fontFamily.sans],
-      },
       colors: {
         primary: {
           50: "#57E0FF",
@@ -37,14 +42,9 @@ module.exports = {
           900: "#2D1301",
         },
       },
+      fontFamily: {
+        primary: ["Inter", ...fontFamily.sans],
+      },
     },
   },
-  corePlugins: {
-    preflight: false,
-  },
-  plugins: [
-    require("tailwindcss-debug-screens"),
-    require("@tailwindcss/typography"),
-    require("prettier-plugin-tailwindcss"),
-  ],
 };
