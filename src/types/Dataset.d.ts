@@ -5,7 +5,7 @@ export interface Dataset {
   title: string;
   created_at: number;
   description: string;
-  latest_version?: Version[];
+  latest_version?: Version[] | null;
   updated_at: number;
 }
 
