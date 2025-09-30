@@ -12,7 +12,7 @@ export const useDatasetStore = defineStore("dataset", () => {
     title: "",
     created_at: 0,
     description: "",
-    updated_at: 0,
+    updated_on: 0,
   });
 
   const fetchAllDatasets = async (_studyId: string) => {
@@ -28,7 +28,7 @@ export const useDatasetStore = defineStore("dataset", () => {
           title: "Dataset 1",
           created_at: 0,
           description: "Dataset 1 description",
-          updated_at: 0,
+          updated_on: 0,
         },
       ];
     }
