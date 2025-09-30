@@ -130,7 +130,7 @@ const publishedVersions = computed(() => datasets.value.filter((d) => d.latest_v
               v-for="d in draftAndNonExistingVersions"
               :key="d.id"
               class="mb-5 flex w-full flex-col rounded-md border border-slate-200 px-6 py-4 shadow-sm transition-all hover:cursor-pointer hover:border-slate-300 hover:bg-slate-100"
-              @click="navigateToNewVersion(d.id)"
+              @click="navigateToDataset(d.id)"
             >
               <div class="flex justify-between pt-2">
                 <h3>{{ d.title || "Untitled Dataset" }}</h3>
