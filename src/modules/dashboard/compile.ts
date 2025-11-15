@@ -6,50 +6,62 @@ export const compileDashboardModules = async (
   modules: any[],
   reports: any[]
 ) => {
-  // Structure Dashboard Module Config & Initialize Visualizations
+  const modulesById = new Map(modules.map((m) => [m.id, m]));
+  const reportsByKey = new Map(reports.map((r) => [r.report_key, r.report_id]));
+
+  // Pre-parse chart names once (they never change during iteration)
+  const chartConstructors: Record<string, any> = {};
+  for (const chartPath in charts) {
+    const name = chartPath
+      .split("/")
+      .pop()!
+      .replace(/\.\w+$/, "")
+      .toLowerCase();
+    chartConstructors[name] = charts[chartPath].default;
+  }
+
+  // Process Visualization Configs
   for (const path in configs) {
-    const config = configs[path as keyof typeof configs]["default"] as DashboardModuleView;
-    for (let i = 0; i < modules.length; i++) {
-      const module = modules[i];
-      //
-      if (module.selected && module.id === config.id) {
-        // Assign Basic Properties
-        module.title = config.title;
-        module.subtitle = config.subtitle;
-        module.width = config.width;
-        module.height = config.height;
-        // Assign Module Report ID
-        for (let j = 0; j < reports.length; j++) {
-          const report = reports[j];
-          if (report.report_key === module.report_key) {
-            module.report_id = report.report_id;
-            break;
-          }
-        }
-        // Collect and Initialize Visualizations
-        const visualizations = <VisualizationRenderer[]>[];
-        for (let j = 0; j < config.visualizations.length; j++) {
-          const visualization = config.visualizations[j];
-          const data = module.visualizations[j].data;
-          visualization.config.data = data;
-          for (const chartPath in charts) {
-            const visualizationClass = chartPath
-              ?.split("/")
-              ?.pop()
-              ?.replace(/\.\w+$/, "");
-            if (visualization.type?.toLowerCase() === visualizationClass) {
-              const cls = await charts[chartPath as keyof typeof charts]["default"];
-              const cfg = visualization.config;
-              const renderer: VisualizationRenderer = { class: cls, config: cfg };
-              visualizations.push(renderer);
-              break;
-            }
-          }
-        }
-        // Assign Visualizations
-        module.visualizations = visualizations;
+    const config: DashboardModuleView = configs[path].default;
+
+    const module = modulesById.get(config.id);
+    if (!module || !module.selected) continue;
+
+    // Basic properties
+    module.loading = true;
+    module.title = config.title;
+    module.subtitle = config.subtitle;
+    module.width = config.width;
+    module.height = config.height;
+
+    // Report ID
+    module.report_id = reportsByKey.get(module.report_key);
+
+    // Visualizations
+    const visualizations: VisualizationRenderer[] = [];
+    const moduleViz = module.visualizations;
+
+    for (let i = 0; i < config.visualizations.length; i++) {
+      const visualization = config.visualizations[i];
+
+      // Inject data
+      visualization.config.data = moduleViz[i].data;
+
+      // Resolve chart class
+      const chartType: string = visualization.type.toLowerCase();
+      const cls = chartConstructors[chartType];
+
+      if (cls) {
+        visualizations.push({
+          class: cls,
+          config: visualization.config,
+          type: chartType,
+        });
       }
     }
+
+    module.visualizations = visualizations;
   }
+
   return modules;
 };

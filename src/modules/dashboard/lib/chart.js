@@ -29,6 +29,7 @@ class Chart {
     const self = this;
 
     // Configurable Parameters
+    self.loading = true;
     self.id = config.id;
     self.width = config.width;
     self.height = config.height;
@@ -121,7 +122,10 @@ class Chart {
         const missing = Object.keys(object).filter(
           (k) => !Object.keys(accumulator[group]).includes(k)
         );
-        accumulator[group] = { ...accumulator[group], ...this.selectKeys(object, missing) };
+        accumulator[group] = {
+          ...accumulator[group],
+          ...this.selectKeys(object, missing),
+        };
         return accumulator;
       }, new Map())
     );
@@ -153,22 +157,54 @@ class Chart {
     Todo: Obviate this on the back-end API with some NumPy fun.
     */
 
-    // Reduce Function
-    const cartesian = (a, b) =>
-      a.reduce((r, v) => r.concat([b].flat().map((w) => [].concat(v, w))), []);
+    // Collect keys that need splitting
+    const keys = [];
+    const values = [];
 
-    // Split Function
-    const splits = Object.entries(obj)
-      .map(([k, v]) => (typeof v === "string" ? [k, v.split(delimiter)] : [k, v]))
-      .filter(([, value]) => value !== null);
+    for (const k in obj) {
+      const v = obj[k];
+      if (typeof v === "string" && v.includes(delimiter)) {
+        const parts = v.split(delimiter);
+        if (parts.length > 1) {
+          keys.push(k);
+          values.push(parts);
+          continue;
+        }
+      }
+      keys.push(k);
+      values.push([v]); // wrap single value for uniform cartesian
+    }
 
-    const keys = splits.map(([key]) => key);
-    const result = splits
-      .map(([, values]) => values)
-      .reduce(cartesian)
-      .map((a) => Object.assign(...a.map((v, i) => ({ [keys[i]]: v }))));
+    // If no key had multiple values → return original object as 1-element array
+    let needsCartesian = false;
+    for (let i = 0; i < values.length; i++) {
+      if (values[i].length > 1) {
+        needsCartesian = true;
+        break;
+      }
+    }
+    if (!needsCartesian) return [obj];
 
-    return result;
+    // Cartesian product (iterative, no concat chains)
+    let results = [{}];
+
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const vals = values[i];
+
+      const newResults = [];
+      for (let r = 0; r < results.length; r++) {
+        const base = results[r];
+        for (let v = 0; v < vals.length; v++) {
+          const copy = { ...base, [key]: vals[v] };
+          newResults.push(copy);
+        }
+      }
+
+      results = newResults;
+    }
+
+    return results;
   }
 
   explodeDatumStringDelimitedValues(data) {
@@ -194,15 +230,37 @@ class Chart {
     Todo: Obviate this on the back-end API with some NumPy fun.
     */
 
-    let self = this;
-    let split = [];
+    const out = [];
+
     for (let i = 0; i < data.length; i++) {
-      const datum = { ...data[i] }; // Remove proxy
-      for (const _ in datum) {
-        split.push(...self.splitObjectStringValuesByCartesian(datum)); // Call to method above
+      const datum = data[i];
+
+      // Fast path:
+      // If no value contains delimiter, skip expensive splitting
+      let requiresSplit = false;
+      for (const key in datum) {
+        const v = datum[key];
+        if (typeof v === "string" && v.includes("|")) {
+          requiresSplit = true;
+          break;
+        }
+      }
+
+      if (!requiresSplit) {
+        out.push(datum);
+        continue;
+      }
+
+      // Slow path:
+      // Apply cartesian expansion only once per datum
+      const exploded = this.splitObjectStringValuesByCartesian(datum);
+      for (let j = 0; j < exploded.length; j++) {
+        out.push(exploded[j]);
       }
     }
-    return unique.object.objects(split);
+
+    // Maintain original unique behavior
+    return unique.object.objects(out);
   }
 
   /*

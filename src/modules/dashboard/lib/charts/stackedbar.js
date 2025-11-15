@@ -25,6 +25,7 @@ class StackedBarChart extends Chart {
     super(config);
 
     const self = this;
+    self.loading = true;
 
     // Configure Stacked Bar Chart
     self.rotate = config.rotate;
@@ -32,6 +33,7 @@ class StackedBarChart extends Chart {
     self.bin = config.bin;
     self.transitions = config.transitions;
     self.animations = config.animations;
+    self.onReady = config.onReady;
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
     self.filters = Object.hasOwn(config, "filters") ? config.filters : undefined;
@@ -351,12 +353,18 @@ class StackedBarChart extends Chart {
           })
         : null;
 
+    self.loading = false;
+    if (self.onReady) {
+      self.onReady();
+    }
+
     return self;
   }
 
   update(filter) {
     let self = this;
 
+    self.loading = true;
     self.clear();
 
     /*
@@ -633,6 +641,11 @@ class StackedBarChart extends Chart {
             width: self.filters.width,
           })
         : null;
+
+    self.loading = false;
+    if (self.onReady) {
+      self.onReady();
+    }
 
     return self;
   }

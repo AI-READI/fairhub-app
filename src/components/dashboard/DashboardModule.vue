@@ -1,29 +1,56 @@
 <script lang="ts">
+import { onMounted, onUpdated, reactive, ref, toRaw, watch } from "vue";
+
 import type { VisualizationRenderer } from "@/types/DashboardModule";
 
 export default {
   name: "DashboardModule",
-  props: ["vrenderers"],
-  setup(props: any) {
-    const visualizations: any[] = reactive([]);
-    // const vrenderers: VisualizationRenderer[] = [];
+  emits: ["loading"],
+  props: {
+    vrenderers: {
+      required: true,
+      type: Array as () => VisualizationRenderer[],
+    },
+  },
+
+  setup(
+    props: { vrenderers: VisualizationRenderer[] },
+    { emit }: { emit: (event: string, val: boolean) => void }
+  ) {
+    const visualizations = reactive<any[]>([]);
+    const loading = ref(true);
+
+    // forward loading state to parent
+    watch(loading, (val) => emit("loading", val));
+
     onMounted(() => {
-      const vrenderers = props.vrenderers as VisualizationRenderer[];
-      for (let i = 0; i < vrenderers.length; i++) {
-        let vrenderer = vrenderers[i];
-        let cls = vrenderer.class;
-        let cfg = vrenderer.config;
-        let instance = new cls(cfg).update();
+      let pending = props.vrenderers.length;
+
+      for (const vr of props.vrenderers) {
+        const instance = new vr.class({
+          ...vr.config,
+          onReady: () => {
+            pending--;
+            if (pending === 0) {
+              loading.value = false;
+            }
+          },
+        });
+
         visualizations.push(instance);
       }
     });
+
     onUpdated(() => {
-      for (let i = 0; i < visualizations.length; i++) {
-        const visualization = toRaw(visualizations[i]) as any;
-        visualization.update();
+      for (const v of visualizations) {
+        toRaw(v).update();
       }
     });
-    return { visualizations: visualizations };
+
+    return {
+      loading,
+      visualizations,
+    };
   },
 };
 </script>

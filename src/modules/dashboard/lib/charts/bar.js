@@ -26,12 +26,14 @@ class BarChart extends Chart {
     super(config);
 
     const self = this;
-
+    self.loading = true;
     // Configure Bar Chart
     self.rotate = config.rotate;
     self.axis = config.axis;
     self.transitions = config.transitions;
     self.animations = config.animations;
+    self.onReady = config.onReady;
+    if (config.onReady) config.onReady();
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
     self.filters = Object.hasOwn(config, "filters") ? config.filters : undefined;
@@ -321,12 +323,18 @@ class BarChart extends Chart {
           })
         : null;
 
+    self.loading = false;
+    if (self.onReady) {
+      self.onReady();
+    }
+
     return self;
   }
 
   update(filter) {
     let self = this;
 
+    self.loading = true;
     self.clear();
 
     /*
@@ -573,6 +581,11 @@ class BarChart extends Chart {
             width: self.filters.width,
           })
         : null;
+
+    self.loading = false;
+    if (self.onReady) {
+      self.onReady();
+    }
 
     return self;
   }

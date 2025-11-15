@@ -23,7 +23,7 @@ export interface VisualizationRenderer {
     | StackedbarChart;
   config: ChartConfig;
   data?: VdatumGeneric[];
-  type?: string;
+  type: string;
 }
 
 export interface VisualizationData {
@@ -47,6 +47,7 @@ export type DashboardModuleConnector = {
 export interface DashboardModuleView extends DashboardModuleConnector {
   title: string;
   height: number;
+  loading?: boolean;
   report_id?: string | number;
   subtitle: string;
   visualizations: VisualizationRenderer[];

@@ -25,6 +25,7 @@ class LineChart extends Chart {
     super(config);
 
     let self = this;
+    self.loading = true;
 
     // Configure Line Chart
     self.axis = config.axis;
@@ -33,6 +34,7 @@ class LineChart extends Chart {
     self.accessors = config.accessors;
     self.transitions = config.transitions;
     self.animations = config.animations;
+    self.onReady = config.onReady;
     self.projection = Object.hasOwn(config, "projection") ? config.projection : undefined;
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
@@ -305,6 +307,11 @@ class LineChart extends Chart {
           })
         : null;
 
+    self.loading = false;
+    if (self.onReady) {
+      self.onReady();
+    }
+
     return self;
   }
 
@@ -312,6 +319,7 @@ class LineChart extends Chart {
   update(filter) {
     let self = this;
 
+    self.loading = true;
     self.clear();
 
     /*
@@ -540,6 +548,11 @@ class LineChart extends Chart {
             width: self.filters.width,
           })
         : null;
+
+    self.loading = false;
+    if (self.onReady) {
+      self.onReady();
+    }
 
     return self;
   }

@@ -18,10 +18,13 @@ const { error } = useMessage();
 const authStore = useAuthStore();
 const studyStore = useStudyStore();
 const dashboardStore = useDashboardStore();
-
 const study: Ref<Study> = computed(() => studyStore.study);
-const isLoading = computed(() => dashboardStore.loading);
+const moduleLoading = ref<Record<string, boolean>>({});
+const isLoading = computed(
+  () => dashboardStore.loading || Object.values(moduleLoading.value).some((v) => v === true)
+);
 const dashboardView: Ref<DashboardView> = computed(() => dashboardStore.dashboardView);
+
 const routeParams = {
   dashboardId: route.params.dashboardId as string,
   studyId: route.params.studyId as string,
@@ -35,7 +38,6 @@ onBeforeMount(() => {
   const studyId = routeParams.studyId;
   const dashboardId = routeParams.dashboardId;
   dashboardStore.getDashboardView(studyId, dashboardId);
-  console.log(dashboardView.value);
 });
 </script>
 
@@ -85,7 +87,11 @@ onBeforeMount(() => {
 
             <p class="pt-2">{{ module.subtitle }}<br /></p>
 
-            <DashboardModule :key="module.id" :vrenderers="module.visualizations" />
+            <DashboardModule
+              :key="module.id"
+              :vrenderers="module.visualizations"
+              @loading="(val: boolean) => (moduleLoading[module.id] = val)"
+            />
 
             <n-descriptions label-placement="left" label-align="left" size="small">
               <n-descriptions-item

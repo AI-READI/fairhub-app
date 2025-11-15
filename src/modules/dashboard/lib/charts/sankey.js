@@ -18,6 +18,7 @@ class SankeyChart extends Chart {
     super(config);
 
     // Configure Sankey Chart
+    this.loading = true;
     this.opacity = config.opacity;
     this.node = config.node;
     this.link = config.link;
@@ -31,10 +32,12 @@ class SankeyChart extends Chart {
       right: Sankey.sankeyRight,
     }[this.node.alignment];
 
+    this.loading = false;
     return this;
   }
 
   update() {
+    this.loading = true;
     // Grab SVG Generated From Vue Template
     this.svg = D3.select(`${self.id}_visualization`).classed("sankey-chart", true);
 
@@ -173,6 +176,8 @@ class SankeyChart extends Chart {
       .attr("font-size", this.node.fontsize)
       .attr("x", (d) => d.x0)
       .attr("y", (d) => d.y0 - this.node.fontsize / 2);
+
+    this.loading = false;
 
     return this;
   }

@@ -27,6 +27,7 @@ class TimeSeriesChart extends Chart {
     super(config);
 
     let self = this;
+    self.loading = true;
 
     // Configure Time Series Chart
     self.axis = config.axis;
@@ -35,6 +36,7 @@ class TimeSeriesChart extends Chart {
     self.accessors = config.accessors;
     self.transitions = config.transitions;
     self.animations = config.animations;
+    self.onReady = config.onReady;
     self.datefstr = Object.hasOwn(config, "datefstr") ? config.datefstr : "%X";
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
@@ -288,6 +290,11 @@ class TimeSeriesChart extends Chart {
           })
         : null;
 
+    self.loading = false;
+    if (self.onReady) {
+      self.onReady();
+    }
+
     return self;
   }
 
@@ -500,6 +507,11 @@ class TimeSeriesChart extends Chart {
             width: self.filters.width,
           })
         : null;
+
+    self.loading = false;
+    if (self.onReady) {
+      self.onReady();
+    }
 
     return self;
   }

@@ -26,10 +26,12 @@ class DoughnutChart extends Chart {
     super(config);
 
     let self = this;
+    self.loading = true;
 
     // Configure Doughnut Chart
     self.transitions = config.transitions;
     self.animations = config.animations;
+    self.onReady = config.onReady;
     self.legend = Object.hasOwn(config, "legend") ? config.legend : undefined;
     self.tooltip = Object.hasOwn(config, "tooltip") ? config.tooltip : undefined;
     self.filters = Object.hasOwn(config, "filters") ? config.filters : undefined;
@@ -263,12 +265,19 @@ class DoughnutChart extends Chart {
             width: self.filters.width,
           })
         : null;
+
+    self.loading = false;
+    if (self.onReady) {
+      self.onReady();
+    }
+
     return self;
   }
 
   update(filter) {
     let self = this;
 
+    self.loading = true;
     self.clear();
 
     /*
@@ -465,6 +474,11 @@ class DoughnutChart extends Chart {
             width: self.filters.width,
           })
         : null;
+
+    self.loading = false;
+    if (self.onReady) {
+      self.onReady();
+    }
 
     return self;
   }
