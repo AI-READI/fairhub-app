@@ -20,6 +20,9 @@ const routeParams = {
 const studyId = routeParams.studyId;
 const datasetId = routeParams.datasetId;
 
+const routeState = window.history.state;
+const missingFieldsList = (routeState?.missingFields || []).map((f) => f).join(", ");
+
 const moduleData = reactive<DatasetDataManagement>({
   consent: {
     details: "",
@@ -250,6 +253,15 @@ const scrollToSection = (key: string) => {
             label-placement="top"
             class="w-full"
           >
+            <div class="pb-4" v-if="routeState?.missingFields && routeState.missingFields.length">
+              <n-alert type="error">
+                Please fill the following required field(s):
+                <span class="italic">
+                  {{ missingFieldsList }}
+                </span>
+              </n-alert>
+            </div>
+
             <h2 class="consent pb-4">Consent</h2>
 
             <n-card class="bg-gray-50">

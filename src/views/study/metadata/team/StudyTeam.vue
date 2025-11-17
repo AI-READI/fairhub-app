@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { FormInst } from "naive-ui";
-import type { MenuOption } from "naive-ui";
+import type { FormInst, MenuOption } from "naive-ui";
 import { nanoid } from "nanoid";
 
 import FORM_JSON from "@/assets/data/form.json";
@@ -9,11 +8,16 @@ import type { StudyTeam } from "@/types/Study";
 import { baseURL } from "@/utils/constants";
 
 const route = useRoute();
+
 const router = useRouter();
 const push = usePush();
 const studyStore = useStudyStore();
 
 const formRef = ref<FormInst | null>(null);
+
+const routeState = window.history.state;
+const missingFieldsList = (routeState?.missingFields || []).map((f) => f).join(", ");
+const metadata_header = routeState?.metadata_header || "";
 
 const moduleData = reactive<StudyTeam>({
   collaborators: [],
@@ -258,6 +262,13 @@ const scrollToSection = (key: string) => {
             label-placement="top"
             class="w-full"
           >
+            <div class="pb-4" v-if="routeState?.missingFields && routeState.missingFields.length">
+              <n-alert type="error">
+                Please fill the following required field(s):
+                <span class="italic"> {{ metadata_header }}:{{ missingFieldsList }} </span>
+              </n-alert>
+            </div>
+
             <h1 class="pb-4">Collaboration</h1>
 
             <h2 class="sponsors pb-8">Sponsors</h2>

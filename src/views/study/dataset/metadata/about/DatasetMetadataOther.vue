@@ -19,6 +19,9 @@ const routeParams = {
 const studyId = routeParams.studyId;
 const datasetId = routeParams.datasetId;
 
+const routeState = window.history.state;
+const missingFieldsList = (routeState?.missingFields || []).map((f) => f).join(", ");
+
 const moduleData = ref<DatasetOther>({
   acknowledgement: "",
   format: [],
@@ -189,6 +192,15 @@ const scrollToSection = (key: string) => {
             class="w-full"
             :disabled="studyStore.currentStudyRole === 'viewer'"
           >
+            <div class="pb-4" v-if="routeState?.missingFields && routeState.missingFields.length">
+              <n-alert type="error">
+                Please fill the following required field(s):
+                <span class="italic">
+                  {{ missingFieldsList }}
+                </span>
+              </n-alert>
+            </div>
+
             <h3 class="resource-type">Resource Type</h3>
 
             <p class="pb-8 pt-2">

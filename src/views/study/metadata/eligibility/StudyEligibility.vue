@@ -11,6 +11,8 @@ const router = useRouter();
 const push = usePush();
 
 const studyStore = useStudyStore();
+const routeState = window.history.state;
+const missingFieldsList = (routeState?.missingFields || []).map((f) => f).join(", ");
 
 const loading = ref(false);
 const responseLoading = ref(false);
@@ -203,8 +205,8 @@ const scrollToSection = (key: string) => {
     <n-scrollbar ref="scrollbarRef" class="max-h-[80vh]">
       <LottieLoader v-if="responseLoading" />
 
-      <div v-else class="flex flex-row-reverse max-lg:flex-col">
-        <div class="max-2xl:w-[500px] max-lg:hidden lg:block 2xl:w-[250px]">
+      <div v-else class="flex flex-row-reverse justify-end max-lg:flex-col">
+        <div class="max-2xl:w-[500px] max-lg:hidden lg:block 2xl:w-[750px]">
           <n-menu
             :options="menuOptions"
             @update:value="scrollToSection"
@@ -221,8 +223,17 @@ const scrollToSection = (key: string) => {
         </div>
 
         <FadeTransition>
-          <div>
-            <div v-if="!moduleData.study_type">
+          <div class="w-full">
+            <div v-if="!moduleData.study_type" class="flex flex-col gap-4">
+              <div v-if="routeState?.missingFields && routeState.missingFields.length">
+                <n-alert type="error">
+                  Please fill the following required field(s):
+                  <span class="italic">
+                    {{ missingFieldsList }}
+                  </span>
+                </n-alert>
+              </div>
+
               <n-alert
                 title="A study type should be added before you can add eligibility details."
                 type="error"
@@ -256,7 +267,6 @@ const scrollToSection = (key: string) => {
               size="large"
               :disabled="!moduleData.study_type || studyStore.currentStudyRole === 'viewer'"
               label-placement="top"
-              class="w-full"
             >
               <h3 class="gender">Gender</h3>
 

@@ -14,6 +14,8 @@ const studyStore = useStudyStore();
 const formRef = ref<FormInst | null>(null);
 
 // date type: dayjs().format("YYYY-MM-DD HH:mm:ss")
+const routeState = window.history.state;
+const missingFieldsList = (routeState?.missingFields || []).map((f) => f).join(", ");
 
 const moduleData = ref<StudyOversightModule>({
   fda_regulated_device: null,
@@ -128,6 +130,15 @@ const saveMetadata = (e: MouseEvent) => {
         :disabled="studyStore.currentStudyRole === 'viewer'"
         v-else
       >
+        <div class="pb-4" v-if="routeState?.missingFields && routeState.missingFields.length">
+          <n-alert type="error">
+            Please fill the following required field(s):
+            <span class="italic">
+              {{ missingFieldsList }}
+            </span>
+          </n-alert>
+        </div>
+
         <n-form-item label="Human Subject Review Status" path="human_subject_review_status">
           <n-select
             v-model:value="moduleData.human_subject_review_status"

@@ -13,6 +13,8 @@ const router = useRouter();
 const push = usePush();
 
 const studyStore = useStudyStore();
+const routeState = window.history.state;
+const missingFieldsList = (routeState?.missingFields || []).map((f) => f).join(", ");
 
 const formRef = ref<FormInst | null>(null);
 
@@ -20,6 +22,14 @@ const moduleData = reactive<StudyLocations>({
   location_list: [],
 });
 
+const showAlert = ref(false);
+
+router.beforeEach((to) => {
+  const isValidationRoute =
+    to.path ===
+    `${baseURL}/study/${to.params.studyId}/dataset/${to.params.datasetId}/publish:versions:new`;
+  showAlert.value = isValidationRoute;
+});
 const countryOptions = computed(() => {
   return COUNTRIES_JSON.map((item) => {
     return {
@@ -178,6 +188,15 @@ const saveMetadata = (e: MouseEvent) => {
         v-else
         :disabled="studyStore.currentStudyRole === 'viewer'"
       >
+        <div v-if="routeState?.missingFields && routeState.missingFields.length">
+          <n-alert type="error">
+            Please fill the following required field(s):
+            <span class="italic">
+              {{ missingFieldsList }}
+            </span>
+          </n-alert>
+        </div>
+
         <CollapsibleCard
           v-for="(item, index) in moduleData.location_list"
           :key="item.id"
