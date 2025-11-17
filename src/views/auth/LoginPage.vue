@@ -176,6 +176,7 @@ const signIn = (e: MouseEvent) => {
 
       <n-space justify="center">
         <RouterLink class="ml-1 mt-6 text-center text-sm" to="#">
+          <!--to="/auth/forgot-password        -->
           <n-button text type="warning"> Forgot your password? </n-button>
         </RouterLink>
       </n-space>

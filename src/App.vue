@@ -33,6 +33,8 @@ router.beforeResolve(async (to) => {
     to.name == "auth:login" ||
     to.name == "auth:confirm-email" ||
     to.name == "auth:verify-email"
+    // to.name == "auth:forgot-password" ||
+    // to.name == "auth:reset-password"
   ) {
     return true;
   }
